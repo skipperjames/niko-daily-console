@@ -56,7 +56,9 @@ function fmtHot(n) {
  */
 const fetchers = {
     '微博热搜': async () => {
-        const d = await getJSON('https://weibo.com/ajax/side/hotSearch');
+        // 关键：必须带 Referer: https://weibo.com/（否则 403）。先预热首页建立会话更稳。
+        try { await getJSON('https://weibo.com/', {}, 6000); } catch (e) {}
+        const d = await getJSON('https://weibo.com/ajax/side/hotSearch', { Referer: 'https://weibo.com/' });
         const list = (d && d.data && d.data.realtime) || [];
         return list.slice(0, 15).map(it => ({
             title: (it.word || it.note || '').trim(),
