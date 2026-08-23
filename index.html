@@ -3871,31 +3871,21 @@
         .hot-view-tab:hover { border-color: #888; }
         .hot-view-tab.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
 
-        /* 热点板块细分导航（文案库/梗文化已合并进热点板块） */
-        .hot-section-tabs {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-            padding: 3px;
-            border-radius: 10px;
-            background: #f1f3f5;
-            align-self: flex-start;
+        /* 热点板块内嵌预览卡片（文案库/梗文化 Top10） */
+        .hot-preview-card {
+            background: #fff; border: 1px solid #eef0f3; border-radius: 10px;
+            padding: 12px 14px; margin-bottom: 10px;
         }
-        body.dark-mode .hot-section-tabs { background: #222; }
-        .hot-section-tab {
-            padding: 6px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            color: #555;
-            transition: all 0.2s;
-        }
-        body.dark-mode .hot-section-tab { color: #aaa; }
-        .hot-section-tab:hover { color: #333; }
-        body.dark-mode .hot-section-tab:hover { color: #ddd; }
-        .hot-section-tab.active { background: #fff; color: #1f2937; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
-        body.dark-mode .hot-section-tab.active { background: #374151; color: #fff; }
+        body.dark-mode .hot-preview-card { background: #232335; border-color: #2e2e42; }
+        .hot-preview-main { font-size: 14px; line-height: 1.6; color: #1f2937; word-break: break-all; }
+        body.dark-mode .hot-preview-main { color: #e5e7eb; }
+        .hot-preview-term { color: #666; font-size: 12.5px; margin-left: 6px; }
+        body.dark-mode .hot-preview-term { color: #aaa; }
+        .hot-preview-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .hot-preview-meta .chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #f1f3f5; color: #666; }
+        body.dark-mode .hot-preview-meta .chip { background: #2e2e42; color: #aaa; }
+        .hot-preview-note { font-size: 12px; color: #999; }
+        .hot-preview-empty { padding: 30px 0; text-align: center; color: #999; font-size: 13px; }
 
         /* 实时热搜直达链接区 */
         .hot-live-links {
@@ -7358,18 +7348,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                 </div>
 
-                <!-- 热点板块细分导航：热点榜 / 文案库 / 梗文化（后两者已并入热点板块） -->
-                <div class="hot-section-tabs" id="hotSectionTabs">
-                    <span class="hot-section-tab active" data-sec="hot" onclick="switchHotSection('hot')">🌐 热点榜</span>
-                    <span class="hot-section-tab" data-sec="copy" onclick="switchHotSection('copy')">✍️ 文案库</span>
-                    <span class="hot-section-tab" data-sec="meme" onclick="switchHotSection('meme')">🈯 梗文化</span>
-                </div>
-
-                <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 -->
+                <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 / 文案库 / 梗文化（同一级别） -->
                 <div class="hot-view-tabs">
                     <span class="hot-view-tab active" id="viewTabHot" onclick="switchHotView('hot')">🔥 行业热点</span>
                     <span class="hot-view-tab" id="viewTabAi" onclick="switchHotView('ai')">🤖 AI快报</span>
                     <span class="hot-view-tab" id="viewTabComp" onclick="switchHotView('comp')">🎯 竞品买量监控</span>
+                    <span class="hot-view-tab" id="viewTabCopy" onclick="switchHotView('copy')">✍️ 文案库</span>
+                    <span class="hot-view-tab" id="viewTabMeme" onclick="switchHotView('meme')">🈯 梗文化</span>
                 </div>
 
                 <!-- AI 每日热点摘要（来自云端 hotspot.json，由每日自动化搜索+分析生成） -->
@@ -7619,6 +7604,24 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="ai-mytools-empty" id="aiMyToolsEmpty"></div>
                         <div class="ai-mytools-grid" id="aiMyTools"></div>
                     </div>
+                </div>
+
+                <!-- 文案库（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
+                <div id="hotViewCopy" class="comp-view">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                        <h3 style="font-size:15px;font-weight:600;">✍️ 文案库 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
+                        <button class="btn" onclick="switchPage('copy')" style="padding:7px 14px;" title="进入完整版文案库：搜索/分类/我的收藏/添加">📂 打开完整版</button>
+                    </div>
+                    <div id="hotCopyList"></div>
+                </div>
+
+                <!-- 梗文化（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
+                <div id="hotViewMeme" class="comp-view">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                        <h3 style="font-size:15px;font-weight:600;">🈯 梗文化 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
+                        <button class="btn" onclick="switchPage('meme')" style="padding:7px 14px;" title="进入完整版梗文化：搜索/地区/我的收藏/添加">📂 打开完整版</button>
+                    </div>
+                    <div id="hotMemeList"></div>
                 </div>
             </div>
 
@@ -9213,7 +9216,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 页面切换
         function switchPage(page) {
             currentPage = page;
-            if (typeof syncHotSectionTab === 'function') syncHotSectionTab(page); // 热点板块细分 Tab 同步
             document.querySelectorAll('.sidebar-left .nav-item').forEach((item, idx) => {
                 const pages = ['today', 'plan', 'hot', 'notes', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
                 // 文案库/梗文化已合并进热点板块：切到 copy/meme 时「热点」保持高亮
@@ -12306,34 +12308,59 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchHotView(view) {
             const isComp = view === 'comp';
             const isAi = view === 'ai';
-            document.getElementById('viewTabHot').classList.toggle('active', !isComp && !isAi);
+            const isCopy = view === 'copy';
+            const isMeme = view === 'meme';
+            const isHot = !isComp && !isAi && !isCopy && !isMeme;
+            document.getElementById('viewTabHot').classList.toggle('active', isHot);
             document.getElementById('viewTabComp').classList.toggle('active', isComp);
             document.getElementById('viewTabAi').classList.toggle('active', isAi);
-            document.getElementById('hotViewMain').style.display = (!isComp && !isAi) ? 'flex' : 'none';
+            document.getElementById('viewTabCopy').classList.toggle('active', isCopy);
+            document.getElementById('viewTabMeme').classList.toggle('active', isMeme);
+            document.getElementById('hotViewMain').style.display = isHot ? 'flex' : 'none';
             document.getElementById('compViewMain').classList.toggle('active', isComp);
             document.getElementById('aiViewMain').classList.toggle('active', isAi);
+            document.getElementById('hotViewCopy').classList.toggle('active', isCopy);
+            document.getElementById('hotViewMeme').classList.toggle('active', isMeme);
             if (isComp) { renderAdsIntel(); renderCompetitors(); }
             if (isAi) renderAiReport();
+            if (isCopy) renderHotCopyPreview();
+            if (isMeme) renderHotMemePreview();
         }
 
-        // 热点板块细分切换：热点榜 / 文案库 / 梗文化（文案库、梗文化已合并进热点板块）
-        function switchHotSection(sec) {
-            if (sec === 'hot') {
-                setHotSectionTab('hot');
-                switchHotView('hot');
-            } else {
-                setHotSectionTab(sec);
-                switchPage(sec); // copy → 文案库页，meme → 梗文化页（侧边栏「热点」保持高亮）
-            }
+        // 热点板块内嵌预览：文案库 Top10（读取 copyRecommend，字段 text/note/category/region/recDate）
+        function renderHotCopyPreview() {
+            const box = document.getElementById('hotCopyList');
+            if (!box) return;
+            const rec = (typeof copyRecommend !== 'undefined' && copyRecommend) ? copyRecommend : [];
+            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">文案库暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
+            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
+            box.innerHTML = rec.slice(0, 10).map(c => `
+                <div class="hot-preview-card">
+                    <div class="hot-preview-main">${escapeHtml(c.text)}</div>
+                    <div class="hot-preview-meta">
+                        ${REG[c.region] ? '<span class="chip">' + REG[c.region] + '</span>' : ''}
+                        ${c.category ? '<span class="chip">' + escapeHtml(c.category) + '</span>' : ''}
+                        ${c.recDate ? '<span class="chip">🤖 ' + escapeHtml(c.recDate) + '</span>' : ''}
+                        ${c.note ? '<span class="hot-preview-note">' + escapeHtml(c.note) + '</span>' : ''}
+                    </div>
+                </div>`).join('');
         }
-        function setHotSectionTab(sec) {
-            document.querySelectorAll('.hot-section-tab').forEach(t => {
-                t.classList.toggle('active', t.getAttribute('data-sec') === sec);
-            });
-        }
-        // 从侧边栏/其他入口进入 copy/meme 时，热点细分 Tab 同步高亮
-        function syncHotSectionTab(page) {
-            if (page === 'hot' || page === 'copy' || page === 'meme') setHotSectionTab(page);
+
+        // 热点板块内嵌预览：梗文化 Top10（读取 memeRecommend，字段 term/meaning/region/recDate）
+        function renderHotMemePreview() {
+            const box = document.getElementById('hotMemeList');
+            if (!box) return;
+            const rec = (typeof memeRecommend !== 'undefined' && memeRecommend) ? memeRecommend : [];
+            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">梗文化暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
+            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
+            box.innerHTML = rec.slice(0, 10).map(m => `
+                <div class="hot-preview-card">
+                    <div class="hot-preview-main">${escapeHtml(m.term)}<span class="hot-preview-term">${escapeHtml((m.meaning || '').slice(0, 40))}</span></div>
+                    <div class="hot-preview-meta">
+                        ${REG[m.region] ? '<span class="chip">' + REG[m.region] + '</span>' : ''}
+                        ${m.recDate ? '<span class="chip">🤖 ' + escapeHtml(m.recDate) + '</span>' : ''}
+                    </div>
+                </div>`).join('');
         }
 
         // 竞品筛选状态
@@ -20066,7 +20093,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608232336";
+        window.NIKO_VERSION = "202608232357";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
