@@ -1,54 +1,252 @@
 {
-  "version": 2,
-  "fetchedAt": "2026-08-20T16:30:00+08:00",
-  "date": "2026-08-20",
-  "summary": "今日热点：12306回应\"买票占座放零食\"登微博热搜第一；朱雀三号实现火箭陆地回收，航天再进一步；黄金一夜暴涨3.91%破4500美元；日本成田机场马航客机引擎冒烟关闭跑道；朝鲜向东海发射短程弹道导弹；日本民众排队5小时买中国相机；B站《父母巧施连环计》《遗忘之海》公测；小红书「不吃压力」8.3亿播放；快手「保安电梯战神」1111万热度。",
+  "version": 1,
+  "fetchedAt": "2026-08-23T22:46:05+08:00",
+  "date": "2026-08-23",
+  "summary": "今日热点：台湾节目嘉宾称\"北京没有冰箱\"遭群嘲登热搜第一；世界人形机器人运动会开幕，中国机器人百米跑出9秒39打破博尔特纪录；日本茨城5.9级地震致37人受伤，多地爆发反高市早苗示威；韩国大法院长绕开总统推荐大法官引宪政风波，现代3.9万工人全线罢工阻拦机器人上岗。",
   "regions": {
     "国内": [
-      { "title": "12306回应买票占座放零食", "desc": "两女孩买3张硬座票1座放零食，站票大姐想坐被拒；12306回应座位使用权归购票人，舆论争议座位让不让", "platform": "微博热搜", "hot": "59万", "link": "https://s.weibo.com/top/summary" },
-      { "title": "我国首次实现火箭陆地回收", "desc": "朱雀三号遥二一子级在甘肃腾格里沙漠成功着陆，从海上回收迈向陆地回收", "platform": "抖音热榜", "hot": "1168万", "link": "https://www.douyin.com/hot" },
-      { "title": "空枪李嘉诚儿子绑架案", "desc": "朱一龙主演《空枪》上映首日票房破5000万，原型1996年张子强绑架李泽钜案", "platform": "微博热搜", "hot": "热", "link": "https://s.weibo.com/top/summary" },
-      { "title": "公积金新政来了有哪些利好", "desc": "9月20日起施行：租房提取不再设收入比例门槛，新增装修、物业费可提取", "platform": "百度热搜", "hot": "热", "link": "https://top.baidu.com/board?tab=realtime" },
-      { "title": "5万以下的燃油车正在被遗忘", "desc": "上半年5万以下车型销量同比下滑55%，市场份额从2.8%降至1.4%", "platform": "百度热搜", "hot": "热", "link": "https://top.baidu.com/board?tab=realtime" },
-      { "title": "金价彻底反弹了", "desc": "现货黄金涨3.91%报4503美元/盎司，创6月以来新高", "platform": "微博热搜", "hot": "7.9万", "link": "https://s.weibo.com/top/summary" },
-      { "title": "升学宴致5死主家未提前报备宴席", "desc": "四川宜宾升学宴雨棚积水致女儿墙倒塌5死17伤，家属称3名幼子失去妈妈", "platform": "微博热搜", "hot": "7.9万", "link": "https://s.weibo.com/top/summary" },
-      { "title": "名侦探柯南大结局已经画好了", "desc": "作者青山刚昌证实大结局分镜稿全部画完，称结局很有趣", "platform": "抖音热榜", "hot": "917万", "link": "https://www.douyin.com/hot" },
-      { "title": "为什么七夕朋友圈秀恩爱的变少了", "desc": "七夕晚会扎堆、苏翊鸣晒9图、肖战张凌赫周深同台，但朋友圈秀恩爱明显变少成全民话题", "platform": "微博热搜", "hot": "12.2万", "link": "https://s.weibo.com/top/summary" },
-      { "title": "华为天才少年回应离职后卖玉米", "desc": "百万年薪天才少年宁博宇离职发帖卖玉米引猜测，本人澄清只是帮亲戚卖", "platform": "百度热搜", "hot": "热", "link": "https://top.baidu.com/board?tab=realtime" },
-      { "title": "女子凌晨倒掉24瓶爱心水被拍下", "desc": "爱心供水点凌晨被女子倒掉24瓶水，监控拍下引发全网讨论", "platform": "微博热搜", "hot": "7.9万", "link": "https://s.weibo.com/top/summary" },
-      { "title": "2026年涉汛谣言大起底", "desc": "公安部公布15起涉汛涉灾网络谣言典型案例，AI伪造视频成主要手段", "platform": "抖音热榜", "hot": "880万", "link": "https://www.douyin.com/hot" },
-      { "title": "一款抗癌疫苗引爆美股医药股", "desc": "Moderna与默沙东mRNA个性化癌症疫苗临床积极，Moderna股价暴涨超126%", "platform": "百度热搜", "hot": "热", "link": "https://top.baidu.com/board?tab=realtime" },
-      { "title": "985大学开在县城考进大山了", "desc": "多所985/双一流高校布局县域校区引热议，教育与区域平衡再成焦点", "platform": "百度热搜", "hot": "热", "link": "https://top.baidu.com/board?tab=realtime" },
-      { "title": "父母巧施连环计", "desc": "B站UP主二创短剧爆款，580万播放；演绎家庭关系反转剧情", "platform": "B站热搜", "hot": "580万", "link": "https://www.bilibili.com/v/popular/rank/all" },
-      { "title": "PC今日公测《遗忘之海》PV初航乐章", "desc": "遗忘之海今日公测，PV首播登B站热门846万播放", "platform": "B站热搜", "hot": "846万", "link": "https://www.bilibili.com/v/popular/rank/all" },
-      { "title": "中式志怪搜打撤《诡影藏锋》首曝PV", "desc": "中式志怪题材+轻量化缝合玩法，PV实机演示B站热门811万播放", "platform": "B站热搜", "hot": "811万", "link": "https://www.bilibili.com/v/popular/rank/all" },
-      { "title": "不吃压力", "desc": "阿凡提式\"不吃压力\"哲学在年轻人中爆火，小红书话题播放8.3亿", "platform": "小红书热门", "hot": "8.3亿", "link": "https://www.xiaohongshu.com/explore" },
-      { "title": "极致省钱大法", "desc": "把穷过成行为艺术，#极致省钱大法 8.2亿阅读，三端同步登顶", "platform": "小红书热门", "hot": "8.2亿", "link": "https://www.xiaohongshu.com/explore" },
-      { "title": "婚礼上一个人坐一桌", "desc": "成年人的独处自由，#婚礼上一个人坐一桌 8.2亿阅读", "platform": "小红书热门", "hot": "8.2亿", "link": "https://www.xiaohongshu.com/explore" },
-      { "title": "保安电梯战神", "desc": "快手实时热榜第一，1111万热度", "platform": "快手热榜", "hot": "1111万", "link": "https://www.kuaishou.com/?isHome=1" },
-      { "title": "中国水网到底有多广", "desc": "快手文娱科普，1079万热度", "platform": "快手热榜", "hot": "1079万", "link": "https://www.kuaishou.com/?isHome=1" },
-      { "title": "三角洲火崽崽超绝联动", "desc": "三角洲行动快手联动，1034万热度", "platform": "快手热榜", "hot": "1034万", "link": "https://www.kuaishou.com/?isHome=1" },
-      { "title": "婚纱是你的理想娶你是我的梦想", "desc": "快手情感类热门，970万热度", "platform": "快手热榜", "hot": "970万", "link": "https://www.kuaishou.com/?isHome=1" }
+      {
+        "title": "台湾节目嘉宾说北京没有冰箱引群嘲",
+        "desc": "绿媒嘉宾称\"北京没有冰箱、不喝冷饮\"，反智言论登微博热搜第一，被指与此前\"吃不起茶叶蛋\"如出一辙；上半年我国清凉家电出口超300亿元",
+        "platform": "微博热搜",
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
+      },
+      {
+        "title": "中国机器人打破博尔特百米成绩",
+        "desc": "第二届世界人形机器人运动会北京开幕，天卓队机器人百米预赛跑出9秒39，大幅刷新赛会纪录并超越人类百米世界纪录",
+        "platform": "微博热搜",
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
+      },
+      {
+        "title": "宋雨琦方起诉白鹿粉丝",
+        "desc": "宋雨琦出道九年首次启动法律维权，对微博、B站12个侵权账号完成取证，话题空降热搜登顶文娱榜",
+        "platform": "微博热搜",
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
+      },
+      {
+        "title": "张婧仪大理素颜爬山",
+        "desc": "与卡地亚红毯造型反差强烈，相关话题两天两次登顶热搜主榜，累计阅读量突破2.3亿次",
+        "platform": "微博热搜",
+        "hot": "2.3亿",
+        "link": "https://s.weibo.com/top/summary"
+      },
+      {
+        "title": "王传君回应眼妆上热搜",
+        "desc": "《披荆斩棘2026》一公舞台野性眼妆引发热议，本人回应妆容是展现野兽力量感而自己要求",
+        "platform": "微博热搜",
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
+      },
+      {
+        "title": "座位是给人坐的 不是来放零食的",
+        "desc": "百度热搜实时榜第一，12306座位话题延续：两女孩买3张硬座票1座放零食引发让座争议",
+        "platform": "百度热搜",
+        "hot": "1",
+        "link": "https://top.baidu.com/board?tab=realtime"
+      },
+      {
+        "title": "三大台风将如何影响中国",
+        "desc": "台风沙德尔升级为超强台风级，第20号台风简拉维生成，华南及浙闽沿海需防强降雨及次生灾害",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://top.baidu.com/board?tab=realtime"
+      },
+      {
+        "title": "人民日报：处置甲醛白菜必须从速从严",
+        "desc": "多地曝出\"蘸了甲醛的白菜\"，人民日报评论要求从速从严处置，引发食品安全讨论",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://top.baidu.com/board?tab=realtime"
+      },
+      {
+        "title": "DeepSeek再度调价",
+        "desc": "DeepSeek宣布再次调整API价格，登上百度热搜，AI大模型价格战持续",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://top.baidu.com/board?tab=realtime"
+      },
+      {
+        "title": "中国男篮时隔12年再进U18亚洲杯决赛",
+        "desc": "U18男篮亚洲杯半决赛晋级，决赛对手为澳大利亚；韩U18同晚74分惨败澳大利亚出局",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://top.baidu.com/board?tab=realtime"
+      },
+      {
+        "title": "六旬大爷AI动画《赛博英雄传》登B站热搜前三",
+        "desc": "从业近40年动画人赵彬用AI制作20分钟动画，上线5日全网播放破千万，跻身B站热搜前三、抖音总热榜第5",
+        "platform": "B站热搜",
+        "hot": "1000万+",
+        "link": "https://search.bilibili.com/all?keyword=%E8%B5%9B%E5%8D%9A%E8%8B%B1%E9%9B%84%E4%BC%A0"
+      },
+      {
+        "title": "韦东奕B站上架教辅 销量破2.6万册",
+        "desc": "北大教师韦东奕时隔一年更新B站并发自编练习册，两日销量破2.6万册，北大确认系本人操作，引发\"学者带货掉价\"讨论",
+        "platform": "B站热搜",
+        "hot": "2.6万册",
+        "link": "https://search.bilibili.com/all?keyword=%E9%9F%A6%E4%B8%9C%E5%A5%95"
+      },
+      {
+        "title": "交警巡逻偶遇\"三级头\"",
+        "desc": "淮南交警巡逻发现群众戴形似游戏道具的\"三级头\"骑电动车，提醒骑乘务必规范佩戴3C认证安全头盔",
+        "platform": "抖音热榜",
+        "hot": "热",
+        "link": "https://www.douyin.com/hot"
+      },
+      {
+        "title": "网红温婉偷税被罚后换号复活",
+        "desc": "因偷税漏税和售\"飞丝羽绒服\"被打假的温婉，大号被封后疑通过矩阵账号继续售高仿服装，平台称直播间有实时审核",
+        "platform": "抖音热榜",
+        "hot": "热",
+        "link": "https://www.douyin.com/hot"
+      }
     ],
     "日本": [
-      { "title": "成田机场马航客机引擎冒黑烟 跑道关闭", "desc": "20日上午马航客机在成田机场准备起飞时左引擎故障冒黑烟，A跑道紧急关闭，无伤亡报告", "platform": "日本Yahoo/时事", "hot": "热", "link": "https://www.yahoo.co.jp/" },
-      { "title": "日本连续3个月出现贸易逆差", "desc": "7月贸易逆差6345亿日元，进口额同比增27.8%创历史新高，原油进口额增87.8%", "platform": "日本经济新闻", "hot": "热", "link": "https://www.nikkei.com/" },
-      { "title": "栃木县列车撞人事故致4死", "desc": "鹿沼市车站4名铁路除草作业人员与特急列车碰撞，送医时均已失去意识", "platform": "日本Yahoo/时事", "hot": "热", "link": "https://www.yahoo.co.jp/" },
-      { "title": "日本防卫省2027财年预算申请再创新高", "desc": "拟申请防卫预算增至10万亿日元，研发水中发射型高超音速导弹并引入AI辅助指挥", "platform": "日本动态", "hot": "热", "link": "https://new.qq.com/rain/a/20260820A08K3D00" },
-      { "title": "日本跨党派议员团计划访华", "desc": "五党议员代表团24-27日访华，系去年11月以来关系恶化后首次", "platform": "日本动态", "hot": "热", "link": "https://new.qq.com/rain/a/20260820A08K3D00" },
-      { "title": "日本民众排队5小时买中国相机", "desc": "影石Insta360东京开店，日本消费者背着佳能松下排队5小时，半天销售额超300万日元", "platform": "日本动态", "hot": "热", "link": "https://new.qq.com/rain/a/20260820A08K3D00" },
-      { "title": "名侦探柯南大结局已画好", "desc": "青山刚昌证实大结局分镜稿完成，追了30年的粉丝终于看到终点线", "platform": "日漫话题", "hot": "热", "link": "https://www.douyin.com/hot" },
-      { "title": "日本防相出访澳印推销武器", "desc": "小泉进次郎本周访澳印，推进澳方采购升级版最上级护卫舰，专家指为再军事化铺路", "platform": "日本动态", "hot": "热", "link": "https://new.qq.com/rain/a/20260820A08K3D00" }
+      {
+        "title": "茨城县5.9级地震已致37人受伤",
+        "desc": "23日凌晨茨城南部发生5.9级地震，东京都、神奈川等地至少37人受伤，横滨一名80多岁女性伤势严重，关东部分铁路一度停运",
+        "platform": "日本Yahoo/时事",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "日本爆发多场反高市早苗示威",
+        "desc": "从冲绳到熊本多地民众集会，高呼\"撤回发言，立即辞职\"，抗议涉台错误言论与军事扩张，冲绳忧家园再成\"冲突前线\"",
+        "platform": "日本Yahoo/时事",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "高市早苗引用《论语》为丑闻辩解",
+        "desc": "就涉嫌制作诽谤视频及发行\"早苗代币\"指控再次全盘否认，引用\"民无信不立\"辩解，被批讽刺至极",
+        "platform": "日本Yahoo/朝日",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "高市早苗称不忍杀死蟑螂遭群嘲",
+        "desc": "在社媒分享官邸生活称\"下不了手杀蟑螂\"，网友讽刺：连虫子都不忍杀，却解除了杀伤性武器出口禁令",
+        "platform": "日本Yahoo/凤凰",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "15个地方政府要求修订日美地位协定",
+        "desc": "设有美军基地的都道府县知事会递交文件，要求推进修订1960年以来从未修订的《日美地位协定》，防美军活动引发事故",
+        "platform": "日本Yahoo/参考消息",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "日本多地民间团体集会抗议政府",
+        "desc": "东京、茨城、山形、山口等多地集会，呼吁捍卫和平宪法、反对战争，矛头指向高市内阁扩军修宪动向",
+        "platform": "日本Yahoo/央视",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "石破茂呼吁正视历史勿重蹈覆辙",
+        "desc": "前首相石破茂在反战演讲中批评近三任首相8月15日均未提\"反省\"一词，强调须正视并深入研究战争历史",
+        "platform": "日本Yahoo/时事",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "日本拟打机床牌换中国稀土",
+        "desc": "日方试图以高端机床等产业筹码换取中国稀土供应，中国7月对日稀土磁体出口仅111吨同比腰斩，重稀土储备或年底耗尽",
+        "platform": "日本Yahoo/经济",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "日本百货店加速消失 行业减收超八成",
+        "desc": "主要58家百货店2025年度销售额同比减2.7%，超八成减收；西武涩谷店9月底关闭，全国\"百货店空白县\"增至4个",
+        "platform": "日本Yahoo/日经",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "花滑奥运冠军三浦璃来与木原龙一宣布订婚",
+        "desc": "2026米兰冬奥双人滑冠军组合通过社媒宣布订婚，两人冰场求婚成功，今年2月逆转夺冠、4月退役，年龄相差9岁",
+        "platform": "日本Yahoo/体坛",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      }
     ],
     "韩国": [
-      { "title": "朝鲜向东海发射短程弹道导弹", "desc": "韩军方称朝鲜向东海发射多枚短程弹道导弹，飞行约300公里；此前韩美宣布缩减UFS联合军演", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "中韩外长会谈在首尔举行", "desc": "王毅应韩国外长赵显邀请访问韩国，双方愿推动中韩战略合作伙伴关系迈上新台阶", "platform": "韩联社/央视", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "金与正回应特朗普会面表态", "desc": "特朗普称预计今年再见金正恩；金与正表示对华盛顿沟通消息一无所知，并批评缩减军演表态", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "BTS柾国账号被黑案中国籍嫌疑人获刑20年", "desc": "中国籍嫌疑人因入侵BTS田柾国等艺人账号被判20年，引发网络安全与跨国司法讨论", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "Naver工会要求总部参与集体谈判", "desc": "约300名工会成员集会要求子公司劳资谈判合并、总部直接参与，引用Naver Jet谈判破裂案例", "platform": "朝鲜日报", "hot": "热", "link": "https://www.chosun.com/" },
-      { "title": "韩国警方追查首尔大学附近性骚扰案", "desc": "警方正在追查首尔大学附近一男性，涉嫌性骚扰（最新动态）", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "韩美联合军演缩减引发国内讨论", "desc": "UFS演习规模缩减，朝方称首尔陷入取消演习的窘境；国内对安保态势讨论升温", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" },
-      { "title": "韩美产业部长通话称取得有意义进展", "desc": "产业部长称与美方谈判取得有意义进展，涉贸易与产业合作议题", "platform": "韩联社", "hot": "热", "link": "https://en.yna.co.kr/" }
+      {
+        "title": "韩国大法院长绕过总统强推法官人选被批违宪",
+        "desc": "大法院院长赵熙大未与总统李在明会商，直接推荐大邱地院副庭长任大法官，青瓦台定性为宪政史上前所未有的违规操作",
+        "platform": "韩联社/动态",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "青瓦台因游客过多遭严重损坏",
+        "desc": "青瓦台向公众开放后墙壁瓦片裂缝、木材腐烂、管道爆裂，翻新工程超一年未完工，李在明入住官邸日期未定",
+        "platform": "韩联社/动态",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "现代3.9万工人全线罢工 阻拦2.5万台机器人上岗",
+        "desc": "时隔十年首次全线全面罢工，蔚山、全州、牙山三大整车厂同步停摆；核心诉求是阻拦现代集团2028年前部署2.5万台Atlas人形机器人，单日损失超2.3万亿韩元",
+        "platform": "韩联社/Naver",
+        "hot": "热",
+        "link": "https://www.naver.com/"
+      },
+      {
+        "title": "中国籍嫌疑人入侵BTS柾国账号获刑20年",
+        "desc": "韩联社报道，入侵BTS田柾国及财阀高管账号的中国籍嫌疑人被判处20年有期徒刑",
+        "platform": "韩联社",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "韩国小姐选美冠军出炉 禹瑞允夺冠",
+        "desc": "第70届韩国小姐总决赛在首尔COEX举行，22岁的篮球名宿之女禹瑞允摘得最高荣誉\"真\"，本科就读于美国塔夫茨大学",
+        "platform": "韩联社/动态",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "济州岛失踪案再曝警员谎报调查结果",
+        "desc": "37岁女子张美兰5月失踪警方曾谎称已联系上；同一警员在另一起失踪案以\"已找到\"谎报，男子失踪51天后遗体被发现",
+        "platform": "韩联社/动态",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "韩国狗肉馆迎最后一批食客",
+        "desc": "禁食狗肉法案2027年2月生效，今夏成狗肉合法交易最后一个伏季，多地老食客排队喝\"最后的告别汤\"，超八成民众支持禁令",
+        "platform": "韩联社/Naver",
+        "hot": "热",
+        "link": "https://www.naver.com/"
+      },
+      {
+        "title": "韩国集装箱船首航北极航线",
+        "desc": "\"PanStar Acro\"号经北方海路驶往欧洲，系韩国首次北极商业航行，预计航程40-45天，可将韩欧航时缩短35%",
+        "platform": "韩联社/观察者",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "白荷娜/李绍希首进世锦赛女双决赛",
+        "desc": "新德里羽毛球世锦赛女双半决赛2-0击败中国组合李怡婧/罗徐敏，决赛将战世界第一刘圣书/谭宁",
+        "platform": "韩联社/体育",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "BIBI回应大尺度表演争议",
+        "desc": "女歌手BIBI首度回应\"Waterbomb Seoul 2026\"音乐节争议：\"花了钱进场的人，我一定要让他们开心\"",
+        "platform": "韩联社/动态",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      }
     ]
   }
 }
