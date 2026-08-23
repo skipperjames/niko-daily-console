@@ -11360,7 +11360,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         .catch(() => { clearTimeout(timer); resolve(null); });
                 } catch (e) { if (timer) clearTimeout(timer); resolve(null); }
             });
-            tryFetch('https://skipperjames.github.io/niko-app/hotspot.json?t=' + Date.now()).then(d => {
+            tryFetch('https://skipperjames.github.io/niko-daily-console/hotspot.json?t=' + Date.now()).then(d => {
                 if (d && applyCloudHot(d)) { finish(true); return; }
                 // 线上失败 → 本地缓存
                 const cached = safeStorage.get('niko_hot_cloud', null);
@@ -20066,7 +20066,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608232332";
+        window.NIKO_VERSION = "202608232336";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
