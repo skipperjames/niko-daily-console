@@ -3871,6 +3871,32 @@
         .hot-view-tab:hover { border-color: #888; }
         .hot-view-tab.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
 
+        /* 热点板块细分导航（文案库/梗文化已合并进热点板块） */
+        .hot-section-tabs {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            padding: 3px;
+            border-radius: 10px;
+            background: #f1f3f5;
+            align-self: flex-start;
+        }
+        body.dark-mode .hot-section-tabs { background: #222; }
+        .hot-section-tab {
+            padding: 6px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.2s;
+        }
+        body.dark-mode .hot-section-tab { color: #aaa; }
+        .hot-section-tab:hover { color: #333; }
+        body.dark-mode .hot-section-tab:hover { color: #ddd; }
+        .hot-section-tab.active { background: #fff; color: #1f2937; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+        body.dark-mode .hot-section-tab.active { background: #374151; color: #fff; }
+
         /* 实时热搜直达链接区 */
         .hot-live-links {
             display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
@@ -6900,8 +6926,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div class="nav-item active" onclick="switchPage('today')">📌 今日</div>
             <div class="nav-item" onclick="switchPage('plan')">📋 计划</div>
             <div class="nav-item" onclick="switchPage('hot')">🔥 热点</div>
-            <div class="nav-item" onclick="switchPage('meme')">🈯 梗文化</div>
-            <div class="nav-item" onclick="switchPage('copy')">✍️ 文案库</div>
             <div class="nav-item" onclick="switchPage('notes')">🗂️ 便签看板</div>
             <div class="nav-item" onclick="switchPage('book')">📚 读书</div>
             <div class="nav-item" onclick="switchPage('diary')">📔 日记</div>
@@ -7332,6 +7356,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="btn" onclick="markAllHotRead()" id="hotMarkAllReadBtn" style="padding:8px 14px;" title="把当前所有热点标记为已读">👁 全部已读</button>
                         <button class="btn primary" onclick="refreshHot()" id="hotFullRefreshBtn" style="padding:8px 20px;">🔄 刷新热点</button>
                     </div>
+                </div>
+
+                <!-- 热点板块细分导航：热点榜 / 文案库 / 梗文化（后两者已并入热点板块） -->
+                <div class="hot-section-tabs" id="hotSectionTabs">
+                    <span class="hot-section-tab active" data-sec="hot" onclick="switchHotSection('hot')">🌐 热点榜</span>
+                    <span class="hot-section-tab" data-sec="copy" onclick="switchHotSection('copy')">✍️ 文案库</span>
+                    <span class="hot-section-tab" data-sec="meme" onclick="switchHotSection('meme')">🈯 梗文化</span>
                 </div>
 
                 <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 -->
@@ -9182,9 +9213,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 页面切换
         function switchPage(page) {
             currentPage = page;
+            if (typeof syncHotSectionTab === 'function') syncHotSectionTab(page); // 热点板块细分 Tab 同步
             document.querySelectorAll('.sidebar-left .nav-item').forEach((item, idx) => {
-                const pages = ['today', 'plan', 'hot', 'meme', 'copy', 'notes', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
-                item.classList.toggle('active', pages[idx] === page);
+                const pages = ['today', 'plan', 'hot', 'notes', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
+                // 文案库/梗文化已合并进热点板块：切到 copy/meme 时「热点」保持高亮
+                const isHotChild = (page === 'meme' || page === 'copy') && pages[idx] === 'hot';
+                item.classList.toggle('active', pages[idx] === page || isHotChild);
             });
             // 同步底部 Tab 栏激活态（手机端）
             document.querySelectorAll('.niko-mobile-tab').forEach(t => {
@@ -12280,6 +12314,26 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('aiViewMain').classList.toggle('active', isAi);
             if (isComp) { renderAdsIntel(); renderCompetitors(); }
             if (isAi) renderAiReport();
+        }
+
+        // 热点板块细分切换：热点榜 / 文案库 / 梗文化（文案库、梗文化已合并进热点板块）
+        function switchHotSection(sec) {
+            if (sec === 'hot') {
+                setHotSectionTab('hot');
+                switchHotView('hot');
+            } else {
+                setHotSectionTab(sec);
+                switchPage(sec); // copy → 文案库页，meme → 梗文化页（侧边栏「热点」保持高亮）
+            }
+        }
+        function setHotSectionTab(sec) {
+            document.querySelectorAll('.hot-section-tab').forEach(t => {
+                t.classList.toggle('active', t.getAttribute('data-sec') === sec);
+            });
+        }
+        // 从侧边栏/其他入口进入 copy/meme 时，热点细分 Tab 同步高亮
+        function syncHotSectionTab(page) {
+            if (page === 'hot' || page === 'copy' || page === 'meme') setHotSectionTab(page);
         }
 
         // 竞品筛选状态
@@ -20012,7 +20066,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608210031";
+        window.NIKO_VERSION = "202608232332";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
