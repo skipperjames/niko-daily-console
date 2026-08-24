@@ -2232,6 +2232,153 @@
         /* ============================================================
                    计划页面 (日历 + 看板)
                    ============================================================ */
+
+        /* ============================
+           日历事件条 + 详情任务项 — 设计 v2
+           背景色 = 分类色（淡化版，醒目可视）
+           左侧色条 = 分类色原色（强化分类识别）
+           状态 = 通过 checkbox 颜色 + 删除线 + 透明度表达，不再霸占整块背景
+           优先级需高于 .status-todo/.status-in-progress/.status-done 的旧状态背景
+           ============================ */
+        .event-item.track-content,
+        .day-task-item.track-content {
+            background: rgba(124, 58, 237, 0.22) !important;   /* 紫 */
+            border-left: 6px solid #7c3aed !important;
+            color: #1f2937;
+        }
+        .event-item.track-deals,
+        .day-task-item.track-deals {
+            background: rgba(234, 88, 12, 0.22) !important;    /* 橙 */
+            border-left: 6px solid #ea580c !important;
+            color: #1f2937;
+        }
+        .event-item.track-film,
+        .day-task-item.track-film {
+            background: rgba(219, 39, 119, 0.22) !important;   /* 玫红 */
+            border-left: 6px solid #db2777 !important;
+            color: #1f2937;
+        }
+        .event-item.track-renovation,
+        .day-task-item.track-renovation {
+            background: rgba(8, 145, 178, 0.22) !important;    /* 湖蓝 */
+            border-left: 6px solid #0891b2 !important;
+            color: #1f2937;
+        }
+        .event-item.track-fitness,
+        .day-task-item.track-fitness {
+            background: rgba(101, 163, 13, 0.24) !important;   /* 橄榄绿 */
+            border-left: 6px solid #65a30d !important;
+            color: #1f2937;
+        }
+        .event-item.track-relationship,
+        .day-task-item.track-relationship {
+            background: rgba(192, 38, 211, 0.22) !important;   /* 品红 */
+            border-left: 6px solid #c026d3 !important;
+            color: #1f2937;
+        }
+        /* 状态色：仅作用于 checkbox + 删除线 + 透明度，不再覆盖背景 */
+        .event-item.status-todo .event-checkbox,
+        .day-task-item.status-todo .task-checkbox {
+            background: #fff;
+            border: 2px solid #f59e0b;
+        }
+        .event-item.status-in-progress .event-checkbox,
+        .day-task-item.status-in-progress .task-checkbox {
+            background: #fff;
+            border: 2px solid #3b82f6;
+        }
+        .event-item.status-in-progress .event-title::after,
+        .day-task-item.status-in-progress .task-title-text::after {
+            content: '▶';
+            color: #3b82f6;
+            font-size: 10px;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        .event-item.status-done,
+        .day-task-item.status-done {
+            opacity: 0.55;
+        }
+        .event-item.status-done .event-title,
+        .event-item.status-done .event-time,
+        .day-task-item.status-done .task-title-text {
+            text-decoration: line-through;
+            text-decoration-color: rgba(0,0,0,0.4);
+        }
+        .event-item.status-done .event-checkbox,
+        .day-task-item.status-done .task-checkbox {
+            background: #10b981;
+            border-color: #10b981;
+            position: relative;
+        }
+        .event-item.status-done .event-checkbox::after,
+        .day-task-item.status-done .task-checkbox::after {
+            content: '✓';
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 深色模式：分类淡化背景 + 亮左边条 */
+        body.dark-mode .event-item.track-content,
+        body.dark-mode .day-task-item.track-content {
+            background: rgba(167, 139, 250, 0.20) !important;
+            border-left: 6px solid #a78bfa !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-deals,
+        body.dark-mode .day-task-item.track-deals {
+            background: rgba(251, 146, 60, 0.22) !important;
+            border-left: 6px solid #fb923c !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-film,
+        body.dark-mode .day-task-item.track-film {
+            background: rgba(244, 114, 182, 0.20) !important;
+            border-left: 6px solid #f472b6 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-renovation,
+        body.dark-mode .day-task-item.track-renovation {
+            background: rgba(34, 211, 238, 0.22) !important;
+            border-left: 6px solid #22d3ee !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-fitness,
+        body.dark-mode .day-task-item.track-fitness {
+            background: rgba(132, 204, 22, 0.22) !important;
+            border-left: 6px solid #84cc16 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-relationship,
+        body.dark-mode .day-task-item.track-relationship {
+            background: rgba(232, 121, 249, 0.20) !important;
+            border-left: 6px solid #e879f9 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.status-todo .event-checkbox,
+        body.dark-mode .day-task-item.status-todo .task-checkbox {
+            background: #1f2937;
+            border-color: #f59e0b;
+        }
+        body.dark-mode .event-item.status-in-progress .event-checkbox,
+        body.dark-mode .day-task-item.status-in-progress .task-checkbox {
+            background: #1f2937;
+            border-color: #3b82f6;
+        }
+        body.dark-mode .event-item.status-done .event-title,
+        body.dark-mode .event-item.status-done .event-time,
+        body.dark-mode .day-task-item.status-done .task-title-text {
+            text-decoration-color: rgba(255,255,255,0.4);
+        }
+        body.dark-mode .event-item.status-done,
+        body.dark-mode .day-task-item.status-done {
+            opacity: 0.5;
+        }
         #planPage {
             padding: 16px 24px;
             gap: 12px;
@@ -2521,7 +2668,7 @@
             cursor: grab;
             transition: all 0.15s;
             user-select: none;
-            color: #fff;
+            color: #1f2937;
             position: relative;
             overflow: hidden;
         }
@@ -19192,9 +19339,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 .task-card.status-todo { background: linear-gradient(135deg, ${hexToRgba(todoColor,0.08)}, ${hexToRgba(todoColor,0.15)}) !important; border-color: ${hexToRgba(todoColor,0.5)} !important; }
                 .task-card.status-in-progress { background: linear-gradient(135deg, ${hexToRgba(inProgressColor,0.08)}, ${hexToRgba(inProgressColor,0.15)}) !important; border-color: ${hexToRgba(inProgressColor,0.5)} !important; }
                 .task-card.status-done { background: linear-gradient(135deg, ${hexToRgba(doneColor,0.08)}, ${hexToRgba(doneColor,0.15)}) !important; border-color: ${hexToRgba(doneColor,0.5)} !important; }
-                .event-item.status-todo { background: ${todoColor} !important; }
-                .event-item.status-in-progress { background: ${inProgressColor} !important; }
-                .event-item.status-done { background: ${doneColor} !important; opacity: 0.7 !important; }
+                /* 日历事件条：分类色（轨道色）= 背景；状态仅影响 checkbox、左侧细线（不抢背景） */
+                .event-item.status-todo { box-shadow: inset 3px 0 0 ${todoColor}; }
+                .event-item.status-in-progress { box-shadow: inset 3px 0 0 ${inProgressColor}; }
+                .event-item.status-done { opacity: 0.55; }
                 .board-card.status-todo { background: ${hexToRgba(todoColor,0.08)} !important; border-color: ${hexToRgba(todoColor,0.5)} !important; }
                 .board-card.status-in-progress { background: ${hexToRgba(inProgressColor,0.08)} !important; border-color: ${hexToRgba(inProgressColor,0.5)} !important; }
                 .board-card.status-done { background: ${hexToRgba(doneColor,0.08)} !important; border-color: ${hexToRgba(doneColor,0.5)} !important; }
@@ -20539,7 +20687,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241100";
+        window.NIKO_VERSION = "202608241301";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
