@@ -2232,6 +2232,153 @@
         /* ============================================================
                    计划页面 (日历 + 看板)
                    ============================================================ */
+
+        /* ============================
+           日历事件条 + 详情任务项 — 设计 v2
+           背景色 = 分类色（淡化版，醒目可视）
+           左侧色条 = 分类色原色（强化分类识别）
+           状态 = 通过 checkbox 颜色 + 删除线 + 透明度表达，不再霸占整块背景
+           优先级需高于 .status-todo/.status-in-progress/.status-done 的旧状态背景
+           ============================ */
+        .event-item.track-content,
+        .day-task-item.track-content {
+            background: rgba(124, 58, 237, 0.22) !important;   /* 紫 */
+            border-left: 6px solid #7c3aed !important;
+            color: #1f2937;
+        }
+        .event-item.track-deals,
+        .day-task-item.track-deals {
+            background: rgba(234, 88, 12, 0.22) !important;    /* 橙 */
+            border-left: 6px solid #ea580c !important;
+            color: #1f2937;
+        }
+        .event-item.track-film,
+        .day-task-item.track-film {
+            background: rgba(219, 39, 119, 0.22) !important;   /* 玫红 */
+            border-left: 6px solid #db2777 !important;
+            color: #1f2937;
+        }
+        .event-item.track-renovation,
+        .day-task-item.track-renovation {
+            background: rgba(8, 145, 178, 0.22) !important;    /* 湖蓝 */
+            border-left: 6px solid #0891b2 !important;
+            color: #1f2937;
+        }
+        .event-item.track-fitness,
+        .day-task-item.track-fitness {
+            background: rgba(101, 163, 13, 0.24) !important;   /* 橄榄绿 */
+            border-left: 6px solid #65a30d !important;
+            color: #1f2937;
+        }
+        .event-item.track-relationship,
+        .day-task-item.track-relationship {
+            background: rgba(192, 38, 211, 0.22) !important;   /* 品红 */
+            border-left: 6px solid #c026d3 !important;
+            color: #1f2937;
+        }
+        /* 状态色：仅作用于 checkbox + 删除线 + 透明度，不再覆盖背景 */
+        .event-item.status-todo .event-checkbox,
+        .day-task-item.status-todo .task-checkbox {
+            background: #fff;
+            border: 2px solid #f59e0b;
+        }
+        .event-item.status-in-progress .event-checkbox,
+        .day-task-item.status-in-progress .task-checkbox {
+            background: #fff;
+            border: 2px solid #3b82f6;
+        }
+        .event-item.status-in-progress .event-title::after,
+        .day-task-item.status-in-progress .task-title-text::after {
+            content: '▶';
+            color: #3b82f6;
+            font-size: 10px;
+            margin-left: 4px;
+            opacity: 0.7;
+        }
+        .event-item.status-done,
+        .day-task-item.status-done {
+            opacity: 0.55;
+        }
+        .event-item.status-done .event-title,
+        .event-item.status-done .event-time,
+        .day-task-item.status-done .task-title-text {
+            text-decoration: line-through;
+            text-decoration-color: rgba(0,0,0,0.4);
+        }
+        .event-item.status-done .event-checkbox,
+        .day-task-item.status-done .task-checkbox {
+            background: #10b981;
+            border-color: #10b981;
+            position: relative;
+        }
+        .event-item.status-done .event-checkbox::after,
+        .day-task-item.status-done .task-checkbox::after {
+            content: '✓';
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* 深色模式：分类淡化背景 + 亮左边条 */
+        body.dark-mode .event-item.track-content,
+        body.dark-mode .day-task-item.track-content {
+            background: rgba(167, 139, 250, 0.20) !important;
+            border-left: 6px solid #a78bfa !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-deals,
+        body.dark-mode .day-task-item.track-deals {
+            background: rgba(251, 146, 60, 0.22) !important;
+            border-left: 6px solid #fb923c !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-film,
+        body.dark-mode .day-task-item.track-film {
+            background: rgba(244, 114, 182, 0.20) !important;
+            border-left: 6px solid #f472b6 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-renovation,
+        body.dark-mode .day-task-item.track-renovation {
+            background: rgba(34, 211, 238, 0.22) !important;
+            border-left: 6px solid #22d3ee !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-fitness,
+        body.dark-mode .day-task-item.track-fitness {
+            background: rgba(132, 204, 22, 0.22) !important;
+            border-left: 6px solid #84cc16 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.track-relationship,
+        body.dark-mode .day-task-item.track-relationship {
+            background: rgba(232, 121, 249, 0.20) !important;
+            border-left: 6px solid #e879f9 !important;
+            color: #e5e7eb;
+        }
+        body.dark-mode .event-item.status-todo .event-checkbox,
+        body.dark-mode .day-task-item.status-todo .task-checkbox {
+            background: #1f2937;
+            border-color: #f59e0b;
+        }
+        body.dark-mode .event-item.status-in-progress .event-checkbox,
+        body.dark-mode .day-task-item.status-in-progress .task-checkbox {
+            background: #1f2937;
+            border-color: #3b82f6;
+        }
+        body.dark-mode .event-item.status-done .event-title,
+        body.dark-mode .event-item.status-done .event-time,
+        body.dark-mode .day-task-item.status-done .task-title-text {
+            text-decoration-color: rgba(255,255,255,0.4);
+        }
+        body.dark-mode .event-item.status-done,
+        body.dark-mode .day-task-item.status-done {
+            opacity: 0.5;
+        }
         #planPage {
             padding: 16px 24px;
             gap: 12px;
@@ -2521,7 +2668,7 @@
             cursor: grab;
             transition: all 0.15s;
             user-select: none;
-            color: #fff;
+            color: #1f2937;
             position: relative;
             overflow: hidden;
         }
@@ -3408,6 +3555,29 @@
                 width: 100%; gap: 6px; flex-wrap: wrap; justify-content: flex-start;
             }
         }
+
+        /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边 + 角标 ⚠ */
+        .event-item.overdue-event,
+        .day-task-item.overdue-event {
+            box-shadow: inset 0 0 0 1px var(--status-overdue, #ef4444), 0 0 4px rgba(239,68,68,0.35) !important;
+            position: relative;
+        }
+        .event-item.overdue-event::after,
+        .day-task-item.overdue-event::after {
+            content: '⚠';
+            position: absolute;
+            top: 1px;
+            right: 3px;
+            color: var(--status-overdue, #ef4444);
+            font-size: 10px;
+            z-index: 2;
+            text-shadow: 0 0 2px rgba(0,0,0,0.6);
+            pointer-events: none;
+        }
+        body.dark-mode .event-item.overdue-event::after,
+        body.dark-mode .day-task-item.overdue-event::after {
+            text-shadow: 0 0 2px rgba(0,0,0,0.9);
+        }
 /* ===== 媒体热点专属CSS ===== */
         .hot-card .hot-header {
             display: flex;
@@ -3870,6 +4040,22 @@
         body.dark-mode .hot-view-tab { background: #222; color: #aaa; }
         .hot-view-tab:hover { border-color: #888; }
         .hot-view-tab.active { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+
+        /* 热点板块内嵌预览卡片（文案库/梗文化 Top10） */
+        .hot-preview-card {
+            background: #fff; border: 1px solid #eef0f3; border-radius: 10px;
+            padding: 12px 14px; margin-bottom: 10px;
+        }
+        body.dark-mode .hot-preview-card { background: #232335; border-color: #2e2e42; }
+        .hot-preview-main { font-size: 14px; line-height: 1.6; color: #1f2937; word-break: break-all; }
+        body.dark-mode .hot-preview-main { color: #e5e7eb; }
+        .hot-preview-term { color: #666; font-size: 12.5px; margin-left: 6px; }
+        body.dark-mode .hot-preview-term { color: #aaa; }
+        .hot-preview-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+        .hot-preview-meta .chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #f1f3f5; color: #666; }
+        body.dark-mode .hot-preview-meta .chip { background: #2e2e42; color: #aaa; }
+        .hot-preview-note { font-size: 12px; color: #999; }
+        .hot-preview-empty { padding: 30px 0; text-align: center; color: #999; font-size: 13px; }
 
         /* 实时热搜直达链接区 */
         .hot-live-links {
@@ -5254,6 +5440,93 @@
             }
             .notes-sidebar.collapsed .trigger-text { display: none; }
             .nb-wall { columns: 2 160px; }
+        }
+/* ===== 知识库（PARA）专属CSS ===== */
+        .kb-wrap { display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
+        .kb-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; flex-shrink:0; }
+        .kb-head h1 { font-size:22px; font-weight:600; display:flex; align-items:center; gap:10px; }
+        .kb-sub { font-size:12px; color:#888; font-weight:400; }
+        .kb-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .kb-actions input {
+            width: 200px; padding: 8px 12px; border-radius: 8px; border:1px solid #e2e5ea;
+            font-size: 16px; background:#fff; color:#1f2937; outline:none;
+        }
+        body.dark-mode .kb-actions input { background:#232335; border-color:#2e2e42; color:#e5e7eb; }
+        .kb-para-tabs { display:flex; gap:8px; flex-wrap:wrap; flex-shrink:0; }
+        .kb-para-tab {
+            padding:7px 16px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:500;
+            background:#f1f3f5; color:#555; border:1px solid transparent; transition:all .2s;
+        }
+        body.dark-mode .kb-para-tab { background:#222; color:#aaa; }
+        .kb-para-tab:hover { border-color:#888; }
+        .kb-para-tab.active { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+        .kb-cats { display:flex; gap:6px; flex-wrap:wrap; flex-shrink:0; }
+        .kb-cat {
+            font-size:12px; padding:4px 12px; border-radius:14px; cursor:pointer;
+            background:#fff; border:1px solid #e2e5ea; color:#666;
+        }
+        body.dark-mode .kb-cat { background:#232335; border-color:#2e2e42; color:#bbb; }
+        .kb-cat.active { background:#eef2ff; border-color:#c7d2fe; color:#667eea; font-weight:600; }
+        body.dark-mode .kb-cat.active { background:#312e81; border-color:#4338ca; color:#a5b4fc; }
+        .kb-stats { font-size:12px; color:#999; flex-shrink:0; }
+        .kb-list { display:flex; flex-direction:column; gap:10px; overflow-y:auto; min-height:0; }
+        .kb-card {
+            background:#fff; border:1px solid #eef0f3; border-radius:12px; padding:14px 16px;
+            cursor:pointer; transition:box-shadow .2s; position:relative; border-left:4px solid #c7d2fe;
+        }
+        body.dark-mode .kb-card { background:#232335; border-color:#2e2e42; }
+        .kb-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); }
+        body.dark-mode .kb-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.4); }
+        .kb-card.pinned { border-left-width:4px; }
+        .kb-card-title { font-size:14.5px; font-weight:600; color:#1f2937; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        body.dark-mode .kb-card-title { color:#e5e7eb; }
+        .kb-card-body { font-size:12.5px; color:#666; margin-top:6px; line-height:1.7;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        body.dark-mode .kb-card-body { color:#aaa; }
+        .kb-card-meta { display:flex; align-items:center; gap:8px; margin-top:9px; flex-wrap:wrap; font-size:11px; color:#999; }
+        .kb-tag { font-size:11px; padding:2px 9px; border-radius:10px; background:#f1f3f5; color:#667eea; }
+        body.dark-mode .kb-tag { background:#2e2e42; color:#a5b4fc; }
+        .kb-badge { font-size:10.5px; padding:2px 8px; border-radius:8px; color:#fff; }
+        .kb-card-actions { position:absolute; top:10px; right:12px; display:flex; gap:6px; opacity:0; transition:opacity .2s; }
+        .kb-card:hover .kb-card-actions { opacity:1; }
+        .kb-icon-btn { border:none; background:#f1f3f5; border-radius:6px; padding:4px 7px; cursor:pointer; font-size:13px; }
+        body.dark-mode .kb-icon-btn { background:#2e2e42; }
+        .kb-empty { padding:40px 0; text-align:center; color:#999; font-size:13px; }
+        .kb-detail-title { font-size:18px; font-weight:700; color:#1f2937; margin-bottom:10px; }
+        body.dark-mode .kb-detail-title { color:#f3f4f6; }
+        .kb-detail-body { font-size:13.5px; line-height:1.9; color:#333; word-break:break-word; }
+        body.dark-mode .kb-detail-body { color:#d1d5db; }
+        .kb-detail-body h1,.kb-detail-body h2,.kb-detail-body h3 { margin:10px 0 6px; }
+        .kb-detail-body ul,.kb-detail-body ol { padding-left:20px; }
+        .kb-detail-body code { background:#f1f3f5; padding:1px 6px; border-radius:4px; font-size:12px; }
+        body.dark-mode .kb-detail-body code { background:#2e2e42; }
+        .kb-detail-body pre { background:#f6f7f9; padding:10px; border-radius:8px; overflow-x:auto; }
+        body.dark-mode .kb-detail-body pre { background:#1c1c2e; }
+        .kb-detail-body a { color:#3b82f6; }
+        .kb-detail-src { margin-top:14px; padding-top:12px; border-top:1px dashed #e2e5ea; font-size:12px; color:#888; }
+        body.dark-mode .kb-detail-src { border-color:#2e2e42; }
+        .kb-form-item { margin-bottom:12px; }
+        .kb-form-item label { display:block; font-size:12px; color:#888; margin-bottom:5px; }
+        .kb-form-item input,.kb-form-item select,.kb-form-item textarea {
+            width:100%; padding:9px 12px; border-radius:8px; border:1px solid #e2e5ea; font-size:16px;
+            background:#fff; color:#1f2937; outline:none; box-sizing:border-box;
+        }
+        body.dark-mode .kb-form-item input,body.dark-mode .kb-form-item select,body.dark-mode .kb-form-item textarea {
+            background:#232335; border-color:#2e2e42; color:#e5e7eb;
+        }
+        .kb-form-row { display:flex; gap:10px; }
+        .kb-form-row .kb-form-item { flex:1; }
+        .kb-import-item { display:flex; align-items:flex-start; gap:8px; padding:9px 6px; border-bottom:1px dashed #eef0f3; }
+        body.dark-mode .kb-import-item { border-color:#2e2e42; }
+        .kb-import-item .t { font-size:13px; color:#1f2937; line-height:1.5; flex:1; }
+        body.dark-mode .kb-import-item .t { color:#d1d5db; }
+        .kb-import-item .s { font-size:11px; color:#999; }
+
+        @media (max-width:768px) {
+            .kb-actions input { width:100%; }
+            .kb-head { align-items:flex-start; }
+            .kb-actions .btn { padding:9px 12px; font-size:13px; }
+            .kb-para-tab { padding:8px 13px; font-size:12.5px; }
         }
 /* ===== 读书看板专属CSS ===== */
         .book-view-tabs {
@@ -6899,15 +7172,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div class="nav-title">System</div>
             <div class="nav-item active" onclick="switchPage('today')">📌 今日</div>
             <div class="nav-item" onclick="switchPage('plan')">📋 计划</div>
-            <div class="nav-item" onclick="switchPage('hot')">🔥 热点 <span class="nav-badge">新</span></div>
-            <div class="nav-item" onclick="switchPage('meme')">🈯 梗文化</div>
-            <div class="nav-item" onclick="switchPage('copy')">✍️ 文案库</div>
+            <div class="nav-item" onclick="switchPage('hot')">🔥 热点</div>
             <div class="nav-item" onclick="switchPage('notes')">🗂️ 便签看板</div>
+            <div class="nav-item" onclick="switchPage('knowledge')">🧠 知识库</div>
             <div class="nav-item" onclick="switchPage('book')">📚 读书</div>
             <div class="nav-item" onclick="switchPage('diary')">📔 日记</div>
             <div class="nav-item" onclick="switchPage('member')">💰 会员</div>
             <div class="nav-item" onclick="switchPage('game')">🎮 游戏时间</div>
-            <div class="nav-item" onclick="switchPage('compound')">📈 复利面板 <span class="nav-badge">新</span></div>
+            <div class="nav-item" onclick="switchPage('compound')">📈 复利面板</div>
             <div class="nav-item" onclick="switchPage('parenting')">👶 育儿手册</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
@@ -6940,6 +7212,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="nav-more-item" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
         <div class="nav-more-item" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
         <div class="nav-more-item" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
+        <div class="nav-more-item" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
         <div class="nav-more-item" onclick="switchPage('member');hideNavMore()">💰 会员</div>
         <div class="nav-more-item" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
         <div class="nav-more-item" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
@@ -6947,13 +7220,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="nav-more-item" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
     </div>
 
-    <!-- 手机端底部 Tab 栏：一键直达最常用 5 个板块 -->
+    <!-- 手机端底部 Tab 栏：一键直达最常用 5 个板块（2026-08-20 调整：便签→复利面板，因复利需高频查看） -->
     <div class="niko-mobile-tabbar" id="nikoMobileTabbar">
         <div class="niko-mobile-tab active" data-page="today" onclick="switchPage('today')"><span class="tab-icon">📌</span><span>今日</span></div>
         <div class="niko-mobile-tab" data-page="plan" onclick="switchPage('plan')"><span class="tab-icon">📋</span><span>计划</span></div>
         <div class="niko-mobile-tab" data-page="diary" onclick="switchPage('diary')"><span class="tab-icon">📔</span><span>日记</span></div>
-        <div class="niko-mobile-tab" data-page="notes" onclick="switchPage('notes')"><span class="tab-icon">🗂️</span><span>便签</span></div>
         <div class="niko-mobile-tab" data-page="game" onclick="switchPage('game')"><span class="tab-icon">🎮</span><span>游戏</span></div>
+        <div class="niko-mobile-tab" data-page="compound" onclick="switchPage('compound')"><span class="tab-icon">📈</span><span>复利</span></div>
     </div>
 
 
@@ -7206,6 +7479,16 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item"><label>结束时间</label><input type="time" id="eventEndTime" value="10:00"></div>
             </div>
             <div class="form-row">
+                <div class="form-item">
+                    <label>项目</label>
+                    <div style="display:flex;gap:6px;">
+                        <select id="eventProject" style="flex:1;"></select>
+                        <button class="btn" type="button" onclick="quickAddProjectForEvent()" style="padding:0 10px;font-size:12px;">＋ 新建</button>
+                    </div>
+                </div>
+                <div class="form-item" style="display:flex;align-items:flex-end;font-size:11px;color:#888;">项目色用于日历任务条左侧色条与背景</div>
+            </div>
+            <div class="form-row">
                 <div class="form-item"><label>优先级</label>
                     <select id="eventPriority">
                         <option value="now">Now</option>
@@ -7334,11 +7617,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                 </div>
 
-                <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 -->
+                <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 / 文案库 / 梗文化（同一级别） -->
                 <div class="hot-view-tabs">
                     <span class="hot-view-tab active" id="viewTabHot" onclick="switchHotView('hot')">🔥 行业热点</span>
                     <span class="hot-view-tab" id="viewTabAi" onclick="switchHotView('ai')">🤖 AI快报</span>
                     <span class="hot-view-tab" id="viewTabComp" onclick="switchHotView('comp')">🎯 竞品买量监控</span>
+                    <span class="hot-view-tab" id="viewTabCopy" onclick="switchHotView('copy')">✍️ 文案库</span>
+                    <span class="hot-view-tab" id="viewTabMeme" onclick="switchHotView('meme')">🈯 梗文化</span>
                 </div>
 
                 <!-- AI 每日热点摘要（来自云端 hotspot.json，由每日自动化搜索+分析生成） -->
@@ -7589,6 +7874,24 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="ai-mytools-grid" id="aiMyTools"></div>
                     </div>
                 </div>
+
+                <!-- 文案库（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
+                <div id="hotViewCopy" class="comp-view">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                        <h3 style="font-size:15px;font-weight:600;">✍️ 文案库 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
+                        <button class="btn" onclick="switchPage('copy')" style="padding:7px 14px;" title="进入完整版文案库：搜索/分类/我的收藏/添加">📂 打开完整版</button>
+                    </div>
+                    <div id="hotCopyList"></div>
+                </div>
+
+                <!-- 梗文化（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
+                <div id="hotViewMeme" class="comp-view">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+                        <h3 style="font-size:15px;font-weight:600;">🈯 梗文化 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
+                        <button class="btn" onclick="switchPage('meme')" style="padding:7px 14px;" title="进入完整版梗文化：搜索/地区/我的收藏/添加">📂 打开完整版</button>
+                    </div>
+                    <div id="hotMemeList"></div>
+                </div>
             </div>
 
 
@@ -7784,6 +8087,73 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="nb-tag-filter-bar" id="nbTagFilterBar"></div>
                 <div class="nb-content" id="nbContent"></div>
             </div>
+        </div>
+        <div class="page" id="knowledgePage">
+<div class="kb-wrap">
+            <div class="kb-head">
+                <h1>🧠 知识库 <span class="kb-sub">PARA · 经验复利（分类色条=项目，角标=状态）</span></h1>
+                <div class="kb-actions">
+                    <input id="kbSearch" placeholder="🔍 搜索标题/正文/标签…" oninput="kbSearchText=this.value;renderKbList()" />
+                    <button class="btn" onclick="openKbImportHot()" title="把热点看板里收藏的条目一键存入知识库（03-Resources/时事热点库）">📥 导入热点收藏</button>
+                    <button class="btn" onclick="exportKnowledgeJson()" title="完整 JSON 备份">💾 导出 JSON</button>
+                    <button class="btn" onclick="exportKnowledgeMd()" title="按 PARA 目录导出 Markdown 文件（可迁移到 Obsidian）">📄 导出 Markdown</button>
+                    <button class="btn primary" onclick="openKbEdit(null)">＋ 新增</button>
+                </div>
+            </div>
+            <div class="kb-para-tabs" id="kbParaTabs"></div>
+            <div class="kb-cats" id="kbCats"></div>
+            <div class="kb-stats" id="kbStats"></div>
+            <div class="kb-list" id="kbList"></div>
+        </div>
+
+        <!-- 新增/编辑弹窗 -->
+        <div class="modal-mask" id="kbEditModal">
+            <div class="modal" style="width:560px;max-width:94vw;">
+                <div class="modal-title" id="kbEditTitle">＋ 新增知识条目</div>
+                <div style="overflow-y:auto;max-height:70vh;padding:4px 2px;">
+                    <div class="kb-form-item"><label>标题 *</label><input id="kbFTitle" placeholder="一句话说清这条知识" /></div>
+                    <div class="kb-form-row">
+                        <div class="kb-form-item"><label>PARA 目录</label><select id="kbFPara"></select></div>
+                        <div class="kb-form-item"><label>分类</label><select id="kbFCat">
+                            <option>工作</option><option>副业</option><option>学习</option><option>生活</option>
+                        </select></div>
+                    </div>
+                    <div class="kb-form-item"><label>标签（逗号分隔）</label><input id="kbFTags" placeholder="如：买量, 复盘, SOP" /></div>
+                    <div class="kb-form-item"><label>正文（支持 Markdown：标题/加粗/列表/代码/链接）</label>
+                        <textarea id="kbFBody" rows="7" placeholder="把经验写下来，这是你的复利资产…"></textarea></div>
+                    <div class="kb-form-item"><label>来源链接（可选）</label><input id="kbFLink" placeholder="https://…" /></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeKbEdit()">取消</button>
+                    <button class="btn primary" onclick="saveKbEntry()">✅ 保存</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详情弹窗 -->
+        <div class="modal-mask" id="kbDetailModal">
+            <div class="modal" style="width:600px;max-width:94vw;">
+                <div id="kbDetailContent" style="overflow-y:auto;max-height:72vh;padding:4px 2px;"></div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeKbDetail()">关闭</button>
+                    <button class="btn" onclick="kbPinFromDetail()" id="kbDetailPinBtn">📌</button>
+                    <button class="btn" onclick="kbEditFromDetail()">✏️ 编辑</button>
+                    <button class="btn danger" onclick="kbDeleteFromDetail()">🗑 删除</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 热点收藏导入弹窗 -->
+        <div class="modal-mask" id="kbImportModal">
+            <div class="modal" style="width:560px;max-width:94vw;">
+                <div class="modal-title">📥 从热点收藏导入知识库</div>
+                <div style="overflow-y:auto;max-height:60vh;" id="kbImportList"></div>
+                <div class="modal-footer">
+                    <button class="btn" onclick="closeKbImport()">关闭</button>
+                    <button class="btn primary" onclick="kbImportAll()">✅ 全部导入</button>
+                </div>
+            </div>
+        </div>
         </div>
         <div class="page" id="bookPage">
 <div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
@@ -8510,6 +8880,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <input type="color" id="color-done" value="#10b981">
                     <button class="color-reset-btn" onclick="resetColor('done')">重置</button>
                 </div>
+                <div class="color-picker-row">
+                    <div class="color-preview" id="preview-overdue" style="background:#ef4444;"></div>
+                    <div>
+                        <div class="color-label">已延期 (Overdue)</div>
+                        <div class="color-desc">结束日期已过、仍未完成的任务（自动判定）</div>
+                    </div>
+                    <input type="color" id="color-overdue" value="#ef4444">
+                    <button class="color-reset-btn" onclick="resetColor('overdue')">重置</button>
+                </div>
+            </div>
+
+            <div style="font-size:12.5px;font-weight:600;color:#555;margin:18px 0 6px;display:flex;align-items:center;justify-content:space-between;">
+                <span>项目管理（按项目色区分日历任务条）</span>
+                <button class="btn primary" style="font-size:12px;padding:4px 10px;" onclick="addProjectFromUI()">+ 新建项目</button>
+            </div>
+            <div id="projectPickerList" style="display:flex;flex-direction:column;gap:8px;">
+                <!-- 项目行由 JS 渲染 -->
             </div>
             <div class="modal-footer">
                 <button class="btn danger" onclick="resetAllColors()">全部重置</button>
@@ -8884,9 +9271,89 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         const DEFAULT_STATUS_COLORS = {
             'todo': '#f59e0b',
             'in-progress': '#3b82f6',
-            'done': '#10b981'
+            'done': '#10b981',
+            'overdue': '#ef4444'   // 已延期（自动按结束日期判定，无需手动设）
         };
         let statusColors = safeStorage.get('niko_status_colors', { ...DEFAULT_STATUS_COLORS });
+
+        // ===== 项目管理（v20260824 替换原 6 固定轨道）=====
+        // 用户可自建项目，每个项目一个颜色；任务挂一个项目；状态 4 种（含自动已延期）
+        const NIKO_DEFAULT_PROJECTS = [
+            { id: 'pj_jp', name: '日本项目', color: '#fb923c', createdAt: 0 },
+            { id: 'pj_kr', name: '韩国项目', color: '#e879f9', createdAt: 0 },
+            { id: 'pj_film', name: '影片项目', color: '#f472b6', createdAt: 0 },
+            { id: 'pj_general', name: '通用', color: '#94a3b8', createdAt: 0 }
+        ];
+        let projects = safeStorage.get('niko_projects', null);
+        if (!Array.isArray(projects) || projects.length === 0) {
+            projects = NIKO_DEFAULT_PROJECTS.map(p => ({ ...p, createdAt: Date.now() }));
+            safeStorage.set('niko_projects', projects);
+        }
+        // 旧轨道 → 项目名映射（首次启动迁移用）
+        const TRACK_TO_PROJECT_NAME = {
+            content: '内容事业', deals: '商单交付', film: '影片项目',
+            renovation: '装修', fitness: '身体健康', relationship: '关系'
+        };
+        const TRACK_TO_DEFAULT_COLOR = {
+            content: '#7c3aed', deals: '#ea580c', film: '#db2777',
+            renovation: '#0891b2', fitness: '#65a30d', relationship: '#c026d3'
+        };
+        function getProject(id) { return projects.find(p => p.id === id) || projects[0] || { id: 'pj_general', name: '通用', color: '#94a3b8' }; }
+        function getProjectColor(id) { return getProject(id).color; }
+        function getProjectName(id) { return getProject(id).name; }
+        function addProjectSilent(name, color) {
+            const id = 'pj_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+            projects.push({ id, name: name || '新项目', color: color || '#7c3aed', createdAt: Date.now() });
+            safeStorage.set('niko_projects', projects);
+            return id;
+        }
+        function updateProject(id, name, color) {
+            const p = projects.find(x => x.id === id);
+            if (p) { if (name !== undefined) p.name = name; if (color !== undefined) p.color = color; safeStorage.set('niko_projects', projects); }
+        }
+        function deleteProjectById(id) {
+            if (projects.length <= 1) { showToast('⚠️ 至少保留一个项目'); return false; }
+            projects = projects.filter(p => p.id !== id);
+            safeStorage.set('niko_projects', projects);
+            // 关联到该项目的任务改挂到第一个剩余项目
+            const fallback = projects[0].id;
+            (events || []).forEach(ev => { if (ev.projectId === id) ev.projectId = fallback; });
+            safeStorage.set('work_calendar_events', events);
+            return true;
+        }
+        // 迁移：旧 track 字段 → 新 projectId
+        function migrateEventsToProjects() {
+            if (!Array.isArray(events)) return;
+            let changed = false;
+            events.forEach(ev => {
+                if (ev.projectId && !ev.track) return; // 已是新格式
+                const tk = ev.track || 'content';
+                const projName = TRACK_TO_PROJECT_NAME[tk] || ('迁移-' + tk);
+                let p = projects.find(x => x.name === projName);
+                if (!p) {
+                    const color = TRACK_TO_DEFAULT_COLOR[tk] || '#7c3aed';
+                    const id = addProjectSilent(projName, color);
+                    p = projects.find(x => x.id === id);
+                }
+                ev.projectId = p.id;
+                if (ev.track) { delete ev.track; }
+                changed = true;
+            });
+            if (changed) safeStorage.set('work_calendar_events', events);
+        }
+        // 已延期判定：endDate < 今天 且 状态 !== done
+        function isEventOverdue(ev) {
+            if (!ev || ev.status === 'done' || !ev.endDate) return false;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const end = new Date(ev.endDate + 'T00:00:00');
+            return end < today;
+        }
+        // 已延期但不被算作"今天及以后过期"的状态显示文本（无第四状态值）
+        function getDisplayStatus(ev) {
+            if (ev.status === 'done') return 'done';
+            if (isEventOverdue(ev)) return 'overdue';
+            return ev.status || 'todo';
+        }
         let currentPage = 'today';
         let currentWeekStart = getMonday(new Date());
         let selectedDate = new Date();
@@ -9146,6 +9613,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return e;
         });
 
+        // 项目迁移（v20260824 旧 track 字段 → 新 projectId + projects 列表）
+        if (typeof migrateEventsToProjects === 'function') migrateEventsToProjects();
+
         const trackNames = {
             content: '内容事业',
             deals: '商单交付',
@@ -9183,8 +9653,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchPage(page) {
             currentPage = page;
             document.querySelectorAll('.sidebar-left .nav-item').forEach((item, idx) => {
-                const pages = ['today', 'plan', 'hot', 'meme', 'copy', 'notes', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
-                item.classList.toggle('active', pages[idx] === page);
+                const pages = ['today', 'plan', 'hot', 'notes', 'knowledge', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
+                // 文案库/梗文化已合并进热点板块：切到 copy/meme 时「热点」保持高亮
+                const isHotChild = (page === 'meme' || page === 'copy') && pages[idx] === 'hot';
+                item.classList.toggle('active', pages[idx] === page || isHotChild);
             });
             // 同步底部 Tab 栏激活态（手机端）
             document.querySelectorAll('.niko-mobile-tab').forEach(t => {
@@ -9198,6 +9670,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 renderMemePage();
             } else if (page === 'copy') {
                 renderCopyPage();
+            } else if (page === 'knowledge') {
+                renderKnowledgePage();
             } else if (page === 'notes') {
                 renderNotesPage();
             } else if (page === 'book') {
@@ -10070,10 +10544,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 // ===== 计划看板专属JS =====
 
         // ===== 时间审计周报：统计本周 vs 上周各轨道时长占比 =====
-        const TIME_TRACK_COLORS = {
-            content: '#3b82f6', deals: '#f59e0b', film: '#ef4444', renovation: '#10b981',
-            fitness: '#14b8a6', relationship: '#ec4899'
+        // 轨道色盘（日历/任务卡片/时间审计共用；刻意避开状态三色 #f59e0b橙/#3b82f6蓝/#10b981绿，防止"哪个项目"和"什么状态"混淆）
+        const TRACK_COLORS = {
+            content: '#7c3aed',      // 内容事业 紫
+            deals: '#ea580c',        // 商单交付 深橙
+            film: '#db2777',         // 影片项目 玫红
+            renovation: '#0891b2',   // 装修 湖蓝
+            fitness: '#65a30d',      // 身体健康 橄榄绿
+            relationship: '#c026d3'  // 关系 品红
         };
+        const TIME_TRACK_COLORS = TRACK_COLORS;
         const TIME_TRACK_NAMES = {
             content: '内容事业', deals: '商单交付', film: '影片项目', renovation: '装修',
             fitness: '身体健康', relationship: '关系'
@@ -10110,9 +10590,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const thisStart = fmt(thisMon), thisEnd = fmt(addDays(thisMon, 6));
             const lastStart = fmt(lastMon), lastEnd = fmt(addDays(lastMon, 6));
 
-            const agg = {}; // track -> {min, lastMin}
+            const agg = {}; // projectName -> {min, lastMin}
             events.forEach(ev => {
-                const t = ev.track || 'other';
+                const t = getProject(ev.projectId).name;
                 if (!agg[t]) agg[t] = { min: 0, lastMin: 0 };
                 agg[t].min += timeAuditEventMin(ev, thisStart, thisEnd);
                 agg[t].lastMin += timeAuditEventMin(ev, lastStart, lastEnd);
@@ -10149,8 +10629,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 html += '<div style="text-align:center;color:#aaa;padding:16px;">本周还没有带时间的安排。给执行块/固定行程设置起止时间后，这里会自动统计。</div>';
             } else {
                 html += rows.map(r => {
-                    const name = TIME_TRACK_NAMES[r.t] || r.t;
-                    const color = TIME_TRACK_COLORS[r.t] || '#888';
+                    const proj = projects.find(p => p.name === r.t) || { color: '#888' };
+                    const color = proj.color;
+                    const name = r.t;
                     const diff = r.min - r.lastMin;
                     const diffTxt = diff > 0 ? `<span style="color:#10b981;">↑${fmtMin(diff)}</span>` : diff < 0 ? `<span style="color:#ef4444;">↓${fmtMin(-diff)}</span>` : '<span style="color:#999;">持平</span>';
                     const barW = Math.max(2, Math.round(r.min / maxMin * 100));
@@ -10591,9 +11072,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const hasNext = (dayEventsDisplay[nextDateStr] || []).some(e => e.id === ev.id);
                     const item = document.createElement('div');
                     const isRepeatEvent = ev.repeat || ev.repeatInstance;
-                    item.className = `event-item type-${ev.type} status-${ev.status}${ev.status === 'done' ? ' completed' : ''}${ev.startDate !== ev.endDate ? ' long-task' : ''}${hasPrev ? ' conn-left' : ''}${hasNext ? ' conn-right' : ''}${isRepeatEvent ? ' repeat-event' : ''}`;
+                    const isOverdue = isEventOverdue(ev);
+                    item.className = `event-item type-${ev.type} status-${ev.status}${ev.status === 'done' ? ' completed' : ''}${ev.startDate !== ev.endDate ? ' long-task' : ''}${hasPrev ? ' conn-left' : ''}${hasNext ? ' conn-right' : ''}${isRepeatEvent ? ' repeat-event' : ''}${isOverdue ? ' overdue-event' : ''}`;
                     item.draggable = true;
                     item.dataset.eventId = ev.id;
+                    // 项目色（替代旧 6 固定轨道）
+                    const project = getProject(ev.projectId);
+                    item.style.setProperty('background-color', hexToRgba(project.color, 0.22), 'important');
+                    item.style.setProperty('border-left', '6px solid ' + project.color, 'important');
+                    const displayStatus = isOverdue ? 'overdue' : ev.status;
+                    item.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
@@ -10643,17 +11131,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             dayEvents.forEach(ev => {
                 const isLong = ev.startDate !== ev.endDate;
                 const isDone = ev.status === 'done';
+                const isOverdue = isEventOverdue(ev);
+                const project = getProject(ev.projectId);
                 const item = document.createElement('div');
-                item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '');
+                item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '') + (isOverdue ? ' overdue-event' : '');
+                item.style.setProperty('background-color', hexToRgba(project.color, 0.18), 'important');
+                item.style.setProperty('border-left', '4px solid ' + project.color, 'important');
                 item.innerHTML = `
                     <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
-                        <div class="task-title-text">${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-badge" style="background:${statusColorMap[ev.status]};color:#fff;">${statusNames[ev.status]}</span></div>
+                        <div class="task-title-text">${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-badge" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};color:#fff;">${isOverdue ? statusNames['overdue'] : (statusNames[ev.status] || ev.status)}</span></div>
                         <div class="task-info">
                             <span><span class="task-type-dot" style="background:${getTypeColor(ev.type)};"></span> ${typeNames[ev.type]}</span>
                             ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
                             ${ev.startTime ? `<span>${ev.startTime}${ev.endTime ? ' - '+ev.endTime : ''}</span>` : ''}
-                            <span class="task-track-tag">${trackNames[ev.track] || ev.track}</span>
+                            <span class="task-track-tag" style="background:${project.color};">${project.name}</span>
                             ${isLong ? `<span>${ev.startDate} ~ ${ev.endDate}</span>` : ''}
                         </div>
                         ${ev.desc ? `<div style="font-size:11px;color:#888;margin-top:3px;">${ev.desc}</div>` : ''}
@@ -10707,19 +11199,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function createBoardCard(ev) {
             const isDone = ev.status === 'done';
+            const isOverdue = isEventOverdue(ev);
+            const project = getProject(ev.projectId);
             return `
-                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}" draggable="true" data-event-id="${ev.id}">
+                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}${isOverdue ? ' overdue-event' : ''}" draggable="true" data-event-id="${ev.id}" style="border-left:4px solid ${project.color} !important; box-shadow: inset 4px 0 8px -4px ${hexToRgba(project.color, 0.4)};">
                     <div class="card-actions">
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${statusColorMap[ev.status]};"></span>${ev.title}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${ev.title}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
+                        <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
                         <span class="tag">${typeNames[ev.type] || ev.type}</span>
                         ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
                         ${ev.startTime ? `<span>🕒 ${ev.startTime}</span>` : ''}
                         ${ev.startDate !== ev.endDate ? `<span>📅 ${ev.startDate} ~ ${ev.endDate}</span>` : ''}
+                        ${isOverdue ? '<span style="color:var(--status-overdue,#ef4444);font-weight:600;">⚠ 已延期</span>' : ''}
                     </div>
                     <div class="card-check">
                         <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleComplete('${ev.id}', event)" />
@@ -10814,11 +11310,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
                 // 只显示在时间范围内的任务
                 if (startOffset + duration > 0 && startOffset < days.length) {
+                    const project = getProject(ev.projectId);
+                    const isOverdue = isEventOverdue(ev);
                     taskList += `
-                        <div class="gantt-task-item" onclick="openEventModal('${ev.id}')">
-                            <span class="task-status-dot" style="background:${statusColorMap[ev.status]};"></span>
+                        <div class="gantt-task-item" onclick="openEventModal('${ev.id}')" style="border-left:3px solid ${project.color};${isOverdue ? 'box-shadow: inset 0 0 0 1px #ef4444;' : ''}">
+                            <span class="task-status-dot" style="background:${isOverdue ? '#ef4444' : statusColorMap[ev.status]};"></span>
                             <span class="task-title">${ev.title}</span>
-                            <span class="task-date">${ev.startDate.slice(5)}</span>
+                            <span class="task-date" style="color:${project.color};">${project.name}</span>
                         </div>
                     `;
 
@@ -10885,6 +11383,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('deleteEventBtn').style.display = eventId ? 'inline-block' : 'none';
             document.getElementById('eventId').value = eventId || '';
 
+            // 填充项目下拉（来源：当前所有项目）
+            const projSelect = document.getElementById('eventProject');
+            const currentProjId = eventId ? (events.find(e => e.id === eventId) || {}).projectId : null;
+            const defaultProjId = currentProjId || (projects[0] && projects[0].id) || '';
+            projSelect.innerHTML = projects.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+            // 兼容：若事件有旧 track 但无 projectId，先在 select 中临时显示该 track 名（迁移未跑）
+            if (!currentProjId && eventId) {
+                const ev0 = events.find(e => e.id === eventId);
+                if (ev0 && ev0.track) {
+                    const opt = document.createElement('option');
+                    opt.value = '__legacy__';
+                    opt.textContent = '迁移自：' + (trackNames[ev0.track] || ev0.track);
+                    projSelect.appendChild(opt);
+                }
+            }
+            projSelect.value = defaultProjId || '__legacy__';
+
             // 重置重复选项
             document.getElementById('eventRepeat').value = 'none';
             document.getElementById('repeatUntilRow').style.display = 'none';
@@ -10933,6 +11448,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             setTimeout(() => document.getElementById('eventTitle').focus(), 50);
         }
 
+        // 弹窗内一键新建项目（轻量：弹小窗输入名字 + 默认色；保存后自动选中新项目）
+        function quickAddProjectForEvent() {
+            const name = prompt('给项目起个名字（建议与作品/活动同名，如「日本项目」「韩国项目」）：');
+            if (!name || !name.trim()) return;
+            const palette = ['#fb923c','#e879f9','#f472b6','#22d3ee','#84cc16','#fbbf24','#a78bfa','#34d399','#fb7185','#60a5fa','#facc15','#4ade80'];
+            const used = new Set(projects.map(p => p.color.toLowerCase()));
+            const color = palette.find(c => !used.has(c)) || '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+            const id = addProjectSilent(name.trim(), color);
+            const sel = document.getElementById('eventProject');
+            const opt = document.createElement('option');
+            opt.value = id; opt.textContent = name.trim();
+            sel.appendChild(opt);
+            sel.value = id;
+            showToast('✅ 项目「' + name.trim() + '」已新建');
+        }
+
         function closeEventModal() { document.getElementById('eventModal').classList.remove('show'); }
 
         function saveEvent() {
@@ -10949,6 +11480,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             const id = document.getElementById('eventId').value || Date.now().toString();
             const existing = events.find(e => e.id === id);
+            const projSelect = document.getElementById('eventProject');
+            const projectId = (projSelect && projSelect.value) || (existing && existing.projectId) || (projects[0] && projects[0].id) || 'pj_general';
             const baseEvent = {
                 id,
                 title,
@@ -10960,7 +11493,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 endTime: document.getElementById('eventEndTime').value,
                 priority: document.getElementById('eventPriority').value,
                 status: document.getElementById('eventStatus').value,
-                track: existing ? existing.track : 'content',
+                projectId,
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
                     until: repeatUntil,
@@ -11326,7 +11859,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         .catch(() => { clearTimeout(timer); resolve(null); });
                 } catch (e) { if (timer) clearTimeout(timer); resolve(null); }
             });
-            tryFetch('https://skipperjames.github.io/niko-app/hotspot.json?t=' + Date.now()).then(d => {
+            tryFetch('https://skipperjames.github.io/niko-daily-console/hotspot.json?t=' + Date.now()).then(d => {
                 if (d && applyCloudHot(d)) { finish(true); return; }
                 // 线上失败 → 本地缓存
                 const cached = safeStorage.get('niko_hot_cloud', null);
@@ -11339,7 +11872,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (hotLoading) return;
             hotLoading = true;
 
-            // 显示 loading 状态
+            // 显示 loading 状态（按钮自身也要给出反馈，避免点击后"完全没反应"）
+            const btn = document.getElementById('hotFullRefreshBtn');
+            const btnOrgText = btn ? btn.textContent : null;
+            if (btn) { btn.disabled = true; btn.textContent = '⏳ 刷新中…'; }
             const todayList = document.getElementById('hotList');
             const fullBuy = document.getElementById('hotFullBuy');
             const fullGame = document.getElementById('hotFullGame');
@@ -11351,17 +11887,35 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (fullMedia) fullMedia.innerHTML = loadingHtml;
 
             // 真实刷新：先拉云端 AI 热榜（每日自动化更新），云端失败才回退本地预置数据
-            loadCloudHot(ok => {
-                if (!ok) {
-                    hotData = generateHotData();
-                    hotLastFetchTime = new Date().toISOString();
-                    safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
-                    hotCloudMeta = null;
-                }
+            const finish = (ok) => {
                 hotLoading = false;
+                if (btn) { btn.disabled = false; btn.textContent = btnOrgText || '🔄 刷新热点'; }
+                if (typeof showToast === 'function') {
+                    showToast(ok ? '✅ 热点已刷新为最新云端数据' : '⚠️ 云端拉取失败，已回退预置数据');
+                }
+            };
+            try {
+                loadCloudHot(ok => {
+                    if (!ok) {
+                        hotData = generateHotData();
+                        hotLastFetchTime = new Date().toISOString();
+                        safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
+                        hotCloudMeta = null;
+                    }
+                    renderHot();
+                    if (currentPage === 'hot') renderHotFull();
+                    finish(ok);
+                });
+            } catch (e) {
+                // 防御性兜底：即使 loadCloudHot 同步抛错也能恢复按钮 + 渲染
+                hotData = generateHotData();
+                hotLastFetchTime = new Date().toISOString();
+                safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
+                hotCloudMeta = null;
                 renderHot();
                 if (currentPage === 'hot') renderHotFull();
-            });
+                finish(false);
+            }
         }
 
         function renderHot() {
@@ -11444,21 +11998,37 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 'hotCNWeibo': '微博热搜', 'hotCNDouyin': '抖音热榜', 'hotCNBilibili': 'B站热搜',
                 'hotCNXhs': '小红书热门', 'hotCNKuaishou': '快手热榜', 'hotCNBaidu': '百度热搜'
             };
+            // 平台名称兼容：云端 hotspot.json 与本地预置可能用不同写法（百度热点 / 百度热搜）
+            const cnAlias = {
+                '微博热搜': ['微博热搜'],
+                '抖音热榜': ['抖音热榜'],
+                'B站热搜': ['B站热搜', 'B站热门', '哔哩哔哩热搜'],
+                '小红书热门': ['小红书热门', '小红书热搜'],
+                '快手热榜': ['快手热榜', '快手热门'],
+                '百度热搜': ['百度热搜', '百度热点']
+            };
             const cnAll = hotData['国内'] || [];
             Object.keys(cnMap).forEach(containerId => {
                 const el = document.getElementById(containerId);
                 if (!el) return;
                 const plat = cnMap[containerId];
+                const aliases = cnAlias[plat] || [plat];
                 // 注意：必须用原始索引（openHotDetail 按 hotData[region][index] 定位），
                 // 过滤后重新编号会导致点击"看过/收藏/转灵感"打开错误的条目
                 const items = [];
                 cnAll.forEach((it, i) => {
-                    if (it.source === plat) items.push({ ...it, region: '国内', index: i });
+                    if (aliases.indexOf(it.source) !== -1 || aliases.indexOf(it.platform) !== -1) {
+                        items.push({ ...it, region: '国内', index: i });
+                    }
                 });
+                // 没数据的平台：整张卡片（含 panel-card 容器）直接隐藏，避免出现"暂无数据"空白栏
+                const panel = el.closest('.panel-card');
                 if (items.length) {
                     el.innerHTML = items.map(item => createHotItemHtml(item, true)).join('');
+                    if (panel) panel.style.display = '';
                 } else {
                     el.innerHTML = '<div class="hot-empty" style="padding:10px;">暂无数据</div>';
+                    if (panel) panel.style.display = 'none';
                 }
             });
 
@@ -12235,14 +12805,59 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchHotView(view) {
             const isComp = view === 'comp';
             const isAi = view === 'ai';
-            document.getElementById('viewTabHot').classList.toggle('active', !isComp && !isAi);
+            const isCopy = view === 'copy';
+            const isMeme = view === 'meme';
+            const isHot = !isComp && !isAi && !isCopy && !isMeme;
+            document.getElementById('viewTabHot').classList.toggle('active', isHot);
             document.getElementById('viewTabComp').classList.toggle('active', isComp);
             document.getElementById('viewTabAi').classList.toggle('active', isAi);
-            document.getElementById('hotViewMain').style.display = (!isComp && !isAi) ? 'flex' : 'none';
+            document.getElementById('viewTabCopy').classList.toggle('active', isCopy);
+            document.getElementById('viewTabMeme').classList.toggle('active', isMeme);
+            document.getElementById('hotViewMain').style.display = isHot ? 'flex' : 'none';
             document.getElementById('compViewMain').classList.toggle('active', isComp);
             document.getElementById('aiViewMain').classList.toggle('active', isAi);
+            document.getElementById('hotViewCopy').classList.toggle('active', isCopy);
+            document.getElementById('hotViewMeme').classList.toggle('active', isMeme);
             if (isComp) { renderAdsIntel(); renderCompetitors(); }
             if (isAi) renderAiReport();
+            if (isCopy) renderHotCopyPreview();
+            if (isMeme) renderHotMemePreview();
+        }
+
+        // 热点板块内嵌预览：文案库 Top10（读取 copyRecommend，字段 text/note/category/region/recDate）
+        function renderHotCopyPreview() {
+            const box = document.getElementById('hotCopyList');
+            if (!box) return;
+            const rec = (typeof copyRecommend !== 'undefined' && copyRecommend) ? copyRecommend : [];
+            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">文案库暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
+            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
+            box.innerHTML = rec.slice(0, 10).map(c => `
+                <div class="hot-preview-card">
+                    <div class="hot-preview-main">${escapeHtml(c.text)}</div>
+                    <div class="hot-preview-meta">
+                        ${REG[c.region] ? '<span class="chip">' + REG[c.region] + '</span>' : ''}
+                        ${c.category ? '<span class="chip">' + escapeHtml(c.category) + '</span>' : ''}
+                        ${c.recDate ? '<span class="chip">🤖 ' + escapeHtml(c.recDate) + '</span>' : ''}
+                        ${c.note ? '<span class="hot-preview-note">' + escapeHtml(c.note) + '</span>' : ''}
+                    </div>
+                </div>`).join('');
+        }
+
+        // 热点板块内嵌预览：梗文化 Top10（读取 memeRecommend，字段 term/meaning/region/recDate）
+        function renderHotMemePreview() {
+            const box = document.getElementById('hotMemeList');
+            if (!box) return;
+            const rec = (typeof memeRecommend !== 'undefined' && memeRecommend) ? memeRecommend : [];
+            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">梗文化暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
+            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
+            box.innerHTML = rec.slice(0, 10).map(m => `
+                <div class="hot-preview-card">
+                    <div class="hot-preview-main">${escapeHtml(m.term)}<span class="hot-preview-term">${escapeHtml((m.meaning || '').slice(0, 40))}</span></div>
+                    <div class="hot-preview-meta">
+                        ${REG[m.region] ? '<span class="chip">' + REG[m.region] + '</span>' : ''}
+                        ${m.recDate ? '<span class="chip">🤖 ' + escapeHtml(m.recDate) + '</span>' : ''}
+                    </div>
+                </div>`).join('');
         }
 
         // 竞品筛选状态
@@ -14212,12 +14827,293 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `niko_notes_${new Date().toISOString().slice(0, 10)}.md`;
+            a.download = `niko_notes_${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)}.md`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
             showToast('⬇ 已导出 Markdown');
+        }
+// ===== 知识库（PARA）=====
+        const KB_PARA = [
+            { key: '01-Projects', label: '📁 01-Projects', sub: '当前任务 · 有截止日期', color: '#7c3aed' },
+            { key: '02-Areas', label: '📁 02-Areas', sub: '经验复利 · 持续维护', color: '#0891b2' },
+            { key: '03-Resources', label: '📁 03-Resources', sub: '参考资源 · 素材库', color: '#65a30d' },
+            { key: '04-Archives', label: '📁 04-Archives', sub: '归档 · 已完成/暂停', color: '#6b7280' }
+        ];
+        const KB_CATS = ['全部', '工作', '副业', '学习', '生活'];
+        const KB_STORE = 'niko_knowledge';
+        let knowledge = [];
+        let currentKbPara = 'all', currentKbCat = '全部', kbSearchText = '';
+        let kbDetailId = null;
+
+        function getKbParaColor(key) { const p = KB_PARA.find(x => x.key === key); return p ? p.color : '#6b7280'; }
+        function getKbParaLabel(key) { const p = KB_PARA.find(x => x.key === key); return p ? p.label.replace(/^[^ ]+ /, '') : key; }
+        function kbNewId() { return 'kb_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6); }
+
+        function seedKnowledge() {
+            const now = new Date().toISOString();
+            knowledge = [
+                { id: kbNewId(), title: '失败项目复盘模板（最重要）', body: '每个失败项目都值得一次复盘：\n1. **目标**：当初想达成什么\n2. **结果**：实际发生了什么\n3. **根因**：为什么失败（决策/执行/外部）\n4. **教训**：下次不再犯的一条\n5. **转化**：可以复用的资产\n\n复盘不责备自己，只提取可复用的判断依据。',
+                    para: '02-Areas', category: '副业', tags: ['复盘', '模板'], pinned: true,
+                    source: null, createdAt: now, updatedAt: now },
+                { id: kbNewId(), title: '独立游戏 Demo · roguelike 卡牌', body: '**里程碑**：\n- [ ] 核心循环 Demo（战斗 + 卡牌构筑）\n- [ ] 美术风格定稿\n- [ ] 首个可玩版本\n\n**原则**：先跑通核心循环，再堆内容。',
+                    para: '01-Projects', category: '副业', tags: ['游戏', 'Demo'], pinned: false,
+                    source: null, createdAt: now, updatedAt: now }
+            ];
+            safeStorage.set(KB_STORE, knowledge);
+            safeStorage.set('niko_knowledge_seeded', true);
+        }
+
+        function renderKnowledgePage() {
+            // 铁律：渲染前重读 localStorage（云同步数据可见 + 防覆盖）
+            knowledge = safeStorage.get(KB_STORE, []);
+            if (!knowledge.length && !safeStorage.get('niko_knowledge_seeded', false)) seedKnowledge();
+            renderKbParaTabs();
+            renderKbCats();
+            renderKbList();
+        }
+
+        function renderKbParaTabs() {
+            const box = document.getElementById('kbParaTabs');
+            if (!box) return;
+            box.innerHTML = `<span class="kb-para-tab${currentKbPara === 'all' ? ' active' : ''}" onclick="switchKbPara('all')">🗂 全部</span>` +
+                KB_PARA.map(p => `<span class="kb-para-tab${currentKbPara === p.key ? ' active' : ''}" style="${currentKbPara === p.key ? '' : 'border-left:3px solid ' + p.color + ';'}" onclick="switchKbPara('${p.key}')">${p.label} <span style="font-weight:400;font-size:11px;opacity:.75;">${p.sub}</span></span>`).join('');
+        }
+        function renderKbCats() {
+            const box = document.getElementById('kbCats');
+            if (!box) return;
+            box.innerHTML = KB_CATS.map(c => `<span class="kb-cat${currentKbCat === c ? ' active' : ''}" onclick="switchKbCat('${c}')">${c}</span>`).join('');
+        }
+        function switchKbPara(p) { currentKbPara = p; renderKnowledgePage(); }
+        function switchKbCat(c) { currentKbCat = c; renderKbList(); }
+
+        function getKbFiltered() {
+            const q = (kbSearchText || '').toLowerCase();
+            return knowledge.filter(it => {
+                if (currentKbPara !== 'all' && it.para !== currentKbPara) return false;
+                if (currentKbCat !== '全部' && it.category !== currentKbCat) return false;
+                if (q) {
+                    const hay = (it.title + ' ' + (it.body || '') + ' ' + (it.tags || []).join(' ')).toLowerCase();
+                    if (!hay.includes(q)) return false;
+                }
+                return true;
+            }).sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+        }
+
+        function renderKbList() {
+            const box = document.getElementById('kbList');
+            if (!box) return;
+            const list = getKbFiltered();
+            const stats = document.getElementById('kbStats');
+            if (stats) stats.textContent = `共 ${knowledge.length} 条 · 当前显示 ${list.length} 条` + KB_PARA.map(p => ` · ${p.label.replace(/^[^ ]+ /, '')} ${knowledge.filter(x => x.para === p.key).length}`).join('');
+            if (!list.length) {
+                box.innerHTML = `<div class="kb-empty">${knowledge.length ? '没有匹配的知识条目' : '知识库还是空的，点「＋ 新增」写下第一条经验，或「📥 导入热点收藏」从热点看板搬进来'}</div>`;
+                return;
+            }
+            box.innerHTML = list.map(it => {
+                const paraColor = getKbParaColor(it.para);
+                const tags = (it.tags || []).slice(0, 4).map(t => `<span class="kb-tag">#${escapeHtml(t)}</span>`).join('');
+                return `<div class="kb-card${it.pinned ? ' pinned' : ''}" style="border-left-color:${paraColor};" onclick="openKbDetail('${it.id}')">
+                    <div class="kb-card-title">
+                        ${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}
+                        <span class="kb-badge" style="background:${paraColor};">${getKbParaLabel(it.para)}</span>
+                        <span class="kb-badge" style="background:#9ca3af;">${escapeHtml(it.category)}</span>
+                    </div>
+                    ${it.body ? `<div class="kb-card-body">${escapeHtml(it.body.replace(/[#*`\[]/g, '').slice(0, 120))}</div>` : ''}
+                    <div class="kb-card-meta">
+                        ${tags}
+                        ${it.source && it.source.from ? `<span>📥 来自 ${escapeHtml(it.source.from)}</span>` : ''}
+                        <span>🕒 ${(it.updatedAt || it.createdAt || '').slice(0, 10)}</span>
+                    </div>
+                    <div class="kb-card-actions">
+                        <button class="kb-icon-btn" onclick="event.stopPropagation();toggleKbPin('${it.id}')" title="${it.pinned ? '取消置顶' : '置顶'}">${it.pinned ? '📌' : '📌'}</button>
+                        <button class="kb-icon-btn" onclick="event.stopPropagation();openKbEdit('${it.id}')" title="编辑">✏️</button>
+                        <button class="kb-icon-btn" onclick="event.stopPropagation();deleteKbEntry('${it.id}')" title="删除">🗑</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ---- 新增/编辑 ----
+        function openKbEdit(id) {
+            const isNew = !id;
+            const it = isNew ? null : knowledge.find(x => x.id === id);
+            document.getElementById('kbEditTitle').textContent = isNew ? '＋ 新增知识条目' : '✏️ 编辑知识条目';
+            const paraSel = document.getElementById('kbFPara');
+            paraSel.innerHTML = KB_PARA.map(p => `<option value="${p.key}">${p.label} — ${p.sub}</option>`).join('');
+            document.getElementById('kbFTitle').value = it ? it.title : '';
+            paraSel.value = it ? it.para : '02-Areas';
+            document.getElementById('kbFCat').value = it ? it.category : '副业';
+            document.getElementById('kbFTags').value = it ? (it.tags || []).join(', ') : '';
+            document.getElementById('kbFBody').value = it ? (it.body || '') : '';
+            document.getElementById('kbFLink').value = it && it.source ? (it.source.link || '') : '';
+            kbEditId = id;
+            document.getElementById('kbEditModal').classList.add('show');
+        }
+        function closeKbEdit() { document.getElementById('kbEditModal').classList.remove('show'); kbEditId = null; }
+        function saveKbEntry() {
+            const title = document.getElementById('kbFTitle').value.trim();
+            if (!title) { alert('标题不能为空'); return; }
+            const para = document.getElementById('kbFPara').value;
+            const category = document.getElementById('kbFCat').value;
+            const tags = document.getElementById('kbFTags').value.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+            const body = document.getElementById('kbFBody').value;
+            const link = document.getElementById('kbFLink').value.trim();
+            const now = new Date().toISOString();
+            if (kbEditId) {
+                const it = knowledge.find(x => x.id === kbEditId);
+                if (it) { Object.assign(it, { title, para, category, tags, body, updatedAt: now, source: it.source ? { ...it.source, link: link || it.source.link } : (link ? { from: '手动', link } : null) }); }
+            } else {
+                knowledge.unshift({ id: kbNewId(), title, para, category, tags, body, pinned: false, source: link ? { from: '手动', link } : null, createdAt: now, updatedAt: now });
+            }
+            safeStorage.set(KB_STORE, knowledge);
+            closeKbEdit();
+            renderKbList();
+            showToast('✅ 已保存到知识库');
+        }
+        function toggleKbPin(id) {
+            const it = knowledge.find(x => x.id === id);
+            if (!it) return;
+            it.pinned = !it.pinned; it.updatedAt = new Date().toISOString();
+            safeStorage.set(KB_STORE, knowledge);
+            renderKbList();
+        }
+        function deleteKbEntry(id) {
+            if (!confirm('确定删除这条知识？')) return;
+            knowledge = knowledge.filter(x => x.id !== id);
+            safeStorage.set(KB_STORE, knowledge);
+            renderKbList();
+            showToast('🗑 已删除');
+        }
+
+        // ---- 详情 ----
+        function renderMd(text) {
+            if (!text) return '';
+            let t = escapeHtml(text);
+            t = t.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
+            t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
+            t = t.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+            t = t.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+            t = t.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+            t = t.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+            t = t.replace(/^\s*[-*] (.*)$/gm, '<li>$1</li>');
+            t = t.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+            t = t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+            t = t.replace(/^- \[ \] (.*)$/gm, '<li>☐ $1</li>');
+            t = t.replace(/^- \[x\] (.*)$/gm, '<li>☑ $1</li>');
+            return t.replace(/\n/g, '<br/>');
+        }
+        function openKbDetail(id) {
+            const it = knowledge.find(x => x.id === id);
+            if (!it) return;
+            kbDetailId = id;
+            const paraColor = getKbParaColor(it.para);
+            const tags = (it.tags || []).map(t => `<span class="kb-tag">#${escapeHtml(t)}</span>`).join('');
+            const src = it.source ? (it.source.link ? `<a href="${escapeHtml(it.source.link)}" target="_blank" rel="noopener">🔗 ${escapeHtml(it.source.link)}</a>` : '') : '';
+            document.getElementById('kbDetailContent').innerHTML = `
+                <div class="kb-detail-title">${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}</div>
+                <div class="kb-card-meta" style="margin-bottom:10px;">
+                    <span class="kb-badge" style="background:${paraColor};">${getKbParaLabel(it.para)}</span>
+                    <span class="kb-badge" style="background:#9ca3af;">${escapeHtml(it.category)}</span>
+                    ${tags}
+                    <span>🕒 创建 ${(it.createdAt || '').slice(0, 10)} · 更新 ${(it.updatedAt || '').slice(0, 10)}</span>
+                </div>
+                <div class="kb-detail-body">${renderMd(it.body || '(无正文)')}</div>
+                ${(src || (it.source && it.source.from)) ? `<div class="kb-detail-src">${it.source && it.source.from ? '📥 来自 ' + escapeHtml(it.source.from) : ''} ${src}</div>` : ''}`;
+            document.getElementById('kbDetailModal').classList.add('show');
+        }
+        function closeKbDetail() { document.getElementById('kbDetailModal').classList.remove('show'); kbDetailId = null; }
+        function kbPinFromDetail() { if (kbDetailId) { toggleKbPin(kbDetailId); openKbDetail(kbDetailId); } }
+        function kbEditFromDetail() { closeKbDetail(); openKbEdit(kbDetailId); }
+        function kbDeleteFromDetail() { const id = kbDetailId; closeKbDetail(); deleteKbEntry(id); }
+
+        // ---- 全局入口：其他模块一键转入知识库（阶段二接入各板块按钮） ----
+        function addToKnowledge(opts) {
+            const now = new Date().toISOString();
+            knowledge.unshift({
+                id: kbNewId(),
+                title: opts.title || '未命名条目',
+                body: opts.body || '',
+                para: opts.para || '03-Resources',
+                category: opts.category || '副业',
+                tags: opts.tags || [],
+                pinned: false,
+                source: { from: opts.from || '手动', title: opts.title || '', link: opts.link || '', date: opts.date || now },
+                createdAt: now, updatedAt: now
+            });
+            safeStorage.set(KB_STORE, knowledge);
+            showToast('📥 已存入知识库（03-Resources）');
+            return true;
+        }
+
+        // ---- 从热点收藏导入 ----
+        function openKbImportHot() {
+            const favs = safeStorage.get('niko_hot_favorites', []);
+            const box = document.getElementById('kbImportList');
+            const importedCount = safeStorage.get('niko_kb_imported_refs', []);
+            if (!favs.length) { box.innerHTML = '<div class="kb-empty">热点收藏是空的——去热点看板点 ⭐ 收藏几条，再来这里一键入库</div>'; }
+            else {
+                box.innerHTML = favs.map((f, i) => {
+                    const done = importedCount.includes(f.region + '::' + f.title);
+                    return `<div class="kb-import-item">
+                        <input type="checkbox" id="kbi_${i}" ${done ? 'checked disabled' : 'checked'} />
+                        <div><div class="t">${escapeHtml(f.title)}</div><div class="s">${escapeHtml(f.region || '')} · ${escapeHtml(f.source || '')} · ${escapeHtml((f.desc || '').slice(0, 60))}</div></div>
+                    </div>`;
+                }).join('');
+            }
+            document.getElementById('kbImportModal').classList.add('show');
+        }
+        function closeKbImport() { document.getElementById('kbImportModal').classList.remove('show'); }
+        function kbImportAll() {
+            const favs = safeStorage.get('niko_hot_favorites', []);
+            const imported = safeStorage.get('niko_kb_imported_refs', []);
+            let n = 0;
+            favs.forEach((f, i) => {
+                const box = document.getElementById('kbi_' + i);
+                if (!box || box.disabled) return;
+                const checked = box.checked || box.hasAttribute('checked');
+                if (!checked) return;
+                const ref = f.region + '::' + f.title;
+                if (imported.includes(ref)) return;
+                addToKnowledge({ title: f.title, body: f.desc || (f.title + '（' + (f.source || f.region) + '）'), para: '03-Resources', category: '副业', tags: ['热点', f.region || '国内'], from: '热点收藏', link: '', date: f.savedAt });
+                imported.push(ref); n++;
+            });
+            safeStorage.set('niko_kb_imported_refs', imported);
+            renderKbList();
+            closeKbImport();
+            showToast(n ? `📥 已导入 ${n} 条到 03-Resources` : '没有新条目可导入（都已导过）');
+        }
+
+        // ---- 导出 ----
+        function exportKnowledgeJson() {
+            const blob = new Blob([JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), items: knowledge }, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `niko_knowledge_${new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            showToast('💾 JSON 备份已导出');
+        }
+        function exportKnowledgeMd() {
+            const now = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+            let md = `# NIKO 知识库导出（PARA）\n> 导出时间：${now} · 共 ${knowledge.length} 条\n\n`;
+            KB_PARA.forEach(p => {
+                const items = knowledge.filter(x => x.para === p.key);
+                if (!items.length) return;
+                md += `## ${p.label}\n`;
+                items.forEach(it => {
+                    md += `### ${it.pinned ? '📌 ' : ''}${it.title}${it.category ? '（' + it.category + '）' : ''}\n`;
+                    if (it.tags && it.tags.length) md += `标签：${it.tags.map(t => '#' + t).join(' ')}\n\n`;
+                    md += (it.body || '') + '\n\n';
+                    if (it.source && it.source.link) md += `来源：${it.source.link}\n\n`;
+                });
+            });
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `niko_knowledge_${now}.md`;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            showToast('📄 Markdown 已导出（可迁移 Obsidian）');
         }
 // ===== 读书看板 =====
         const BOOK_SEED_VERSION = 'v2026-08-18';
@@ -17330,6 +18226,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function gtSave(d) { safeStorage.set('niko_game_time', d); }
 
+        // 本地日期字符串（YYYY-MM-DD）。凌晨 0-8 点时 toISOString 是 UTC 昨天，必须用本地日期
+        function gtTodayStr() {
+            const n = new Date();
+            return new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+        }
+
         function fmtMin(min) {
             min = Math.round(min || 0);
             if (min >= 60) {
@@ -17344,7 +18246,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function gtEarn(habitId, min, habitName, dateStr) {
             if (!habitId || !min || min <= 0) return false;
             const d = gtData();
-            const date = dateStr || (new Date().toISOString().slice(0, 10));
+            const date = dateStr || (gtTodayStr());
             const dup = d.history.some(e => e.type === 'earn' && e.habitId === habitId && e.date === date);
             if (dup) return false;
             d.balance = (d.balance || 0) + min;
@@ -17365,7 +18267,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function gtRefund(habitId, dateStr) {
             if (!habitId) return;
             const d = gtData();
-            const date = dateStr || (new Date().toISOString().slice(0, 10));
+            const date = dateStr || (gtTodayStr());
             const idx = d.history.findIndex(e => e.type === 'earn' && e.habitId === habitId && e.date === date);
             if (idx < 0) return;
             const e = d.history[idx];
@@ -17389,11 +18291,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             d.balance -= min;
             d.totalUsed = (d.totalUsed || 0) + min;
-            d.history.unshift({ id: 'gu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), type: 'use', min: min, reason: '手动消耗', date: new Date().toISOString().slice(0, 10), at: new Date().toISOString() });
+            d.history.unshift({ id: 'gu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), type: 'use', min: min, reason: '手动消耗', date: gtTodayStr(), at: new Date().toISOString() });
             if (d.history.length > GT_MAX_HISTORY) d.history.length = GT_MAX_HISTORY;
             gtSave(d);
             // 消耗 = 去玩游戏，自动计入当天游玩日历
-            gtAddPlay(min, null, new Date().toISOString().slice(0, 10));
+            gtAddPlay(min, null, gtTodayStr());
             if (input) input.value = '';
             if (typeof showToast === 'function') showToast(`🎮 消耗 ${fmtMin(min)} 玩游戏，剩余 ${fmtMin(d.balance)}`);
             renderGameTimePage();
@@ -17448,7 +18350,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (statEarned) statEarned.textContent = fmtMin(d.totalEarned || 0);
             const statUsed = document.getElementById('gtStatUsed');
             if (statUsed) statUsed.textContent = fmtMin(d.totalUsed || 0);
-            const today = new Date().toISOString().slice(0, 10);
+            const today = gtTodayStr();
             const todayEarn = (d.history || []).filter(e => e.type === 'earn' && e.date === today).reduce((s, e) => s + e.min, 0);
             const statToday = document.getElementById('gtStatToday');
             if (statToday) statToday.textContent = fmtMin(todayEarn);
@@ -17499,7 +18401,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function gtAddPlay(min, note, dateStr) {
             if (!min || min <= 0) return;
             const logs = gtPlayLogs();
-            const date = dateStr || new Date().toISOString().slice(0, 10);
+            const date = dateStr || gtTodayStr();
             let day = logs.find(l => l.date === date);
             if (day) {
                 day.minutes = (day.minutes || 0) + min;
@@ -17513,7 +18415,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         // 撤销当天最后一次：优先扣减手动备注，没有备注则整体扣减
         function gtUndoPlay() {
-            const today = new Date().toISOString().slice(0, 10);
+            const today = gtTodayStr();
             const logs = gtPlayLogs();
             const day = logs.find(l => l.date === today);
             if (!day || !day.minutes) { if (typeof showToast === 'function') showToast('今天还没有游玩记录'); return; }
@@ -17537,7 +18439,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (min > 1440) { if (typeof showToast === 'function') showToast('单次记录不要超过 24 小时哦'); return; }
             const note = (noteInput && noteInput.value.trim()) || '';
             // 纯记录实际游玩时长（不扣余额）；"消耗"按钮会自动计入当天
-            gtAddPlay(min, note ? { note: note, min: min } : null, new Date().toISOString().slice(0, 10));
+            gtAddPlay(min, note ? { note: note, min: min } : null, gtTodayStr());
             if (minInput) minInput.value = '';
             if (noteInput) noteInput.value = '';
             renderGameTimePage();
@@ -17610,7 +18512,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const now = new Date();
             const base = new Date(now.getFullYear(), now.getMonth() + gtCalOffset, 1);
             const year = base.getFullYear(), month = base.getMonth();
-            const todayStr = now.toISOString().slice(0, 10);
+            const todayStr = gtTodayStr();
             const firstWeekday = base.getDay(); // 0=周日
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const prevDays = new Date(year, month, 0).getDate();
@@ -17697,7 +18599,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (statDaily) statDaily.textContent = fmtMin(avg);
             const undoBtn = document.getElementById('gtUndoPlayBtn');
             if (undoBtn) {
-                const today = new Date().toISOString().slice(0, 10);
+                const today = gtTodayStr();
                 const dayLog = gtPlayDay(today);
                 undoBtn.style.display = (dayLog && dayLog.minutes) ? 'inline-block' : 'none';
             }
@@ -17841,12 +18743,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             const dataPts = CP_DIM_DEFS.map((d, i) => pt(i, R * (scores[d.key] / 100)).join(',')).join(' ');
             html += `<polygon points="${dataPts}" fill="rgba(139,92,246,.22)" stroke="#8b5cf6" stroke-width="1.5"/>`;
-            // 标签：名称+分值合为一行放在 R+28，加白色描边避免相邻维度重叠
+            // 标签：名称+分值合为一行放在 R+38（远离多边形避免遮挡），不加白色描边（之前描边在深色主题下显灰、且字小看不清）
             CP_DIM_DEFS.forEach((d, i) => {
                 const [x, y] = pt(i, R * (scores[d.key] / 100));
                 html += `<circle cx="${x}" cy="${y}" r="3" fill="${d.color}"/>`;
-                const [lx, ly] = pt(i, R + 28);
-                html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="500" fill="${d.color}" paint-order="stroke" stroke="rgba(255,255,255,.9)" stroke-width="3" stroke-linejoin="round">${d.icon}${d.name}<tspan dx="3" font-size="12" font-weight="800">${scores[d.key]}</tspan></text>`;
+                const [lx, ly] = pt(i, R + 38);
+                html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="600" fill="${d.color}">${d.icon}${d.name}<tspan dx="3" font-size="12" font-weight="800">${scores[d.key]}</tspan></text>`;
             });
             html += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="bold" fill="#8b5cf6">复利</text>`;
             svg.innerHTML = html;
@@ -18622,9 +19524,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 .task-card.status-todo { background: linear-gradient(135deg, ${hexToRgba(todoColor,0.08)}, ${hexToRgba(todoColor,0.15)}) !important; border-color: ${hexToRgba(todoColor,0.5)} !important; }
                 .task-card.status-in-progress { background: linear-gradient(135deg, ${hexToRgba(inProgressColor,0.08)}, ${hexToRgba(inProgressColor,0.15)}) !important; border-color: ${hexToRgba(inProgressColor,0.5)} !important; }
                 .task-card.status-done { background: linear-gradient(135deg, ${hexToRgba(doneColor,0.08)}, ${hexToRgba(doneColor,0.15)}) !important; border-color: ${hexToRgba(doneColor,0.5)} !important; }
-                .event-item.status-todo { background: ${todoColor} !important; }
-                .event-item.status-in-progress { background: ${inProgressColor} !important; }
-                .event-item.status-done { background: ${doneColor} !important; opacity: 0.7 !important; }
+                /* 日历事件条：分类色（轨道色）= 背景；状态仅影响 checkbox、左侧细线（不抢背景） */
+                .event-item.status-todo { box-shadow: inset 3px 0 0 ${todoColor}; }
+                .event-item.status-in-progress { box-shadow: inset 3px 0 0 ${inProgressColor}; }
+                .event-item.status-done { opacity: 0.55; }
                 .board-card.status-todo { background: ${hexToRgba(todoColor,0.08)} !important; border-color: ${hexToRgba(todoColor,0.5)} !important; }
                 .board-card.status-in-progress { background: ${hexToRgba(inProgressColor,0.08)} !important; border-color: ${hexToRgba(inProgressColor,0.5)} !important; }
                 .board-card.status-done { background: ${hexToRgba(doneColor,0.08)} !important; border-color: ${hexToRgba(doneColor,0.5)} !important; }
@@ -18650,7 +19553,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderFontScalePicker();
             document.getElementById('colorSettingsModal').classList.add('show');
             // 加载当前颜色
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 const color = statusColors[status] || DEFAULT_STATUS_COLORS[status];
                 document.getElementById('color-' + status).value = color;
                 document.getElementById('preview-' + status).style.background = color;
@@ -18662,7 +19565,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function saveColorSettings() {
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 statusColors[status] = document.getElementById('color-' + status).value;
             });
             safeStorage.set('niko_status_colors', statusColors);
@@ -18681,7 +19584,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!confirm('确定重置所有状态颜色为默认值吗？')) return;
             statusColors = { ...DEFAULT_STATUS_COLORS };
             safeStorage.set('niko_status_colors', statusColors);
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 document.getElementById('color-' + status).value = DEFAULT_STATUS_COLORS[status];
                 document.getElementById('preview-' + status).style.background = DEFAULT_STATUS_COLORS[status];
             });
@@ -18691,7 +19594,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 颜色选择器实时预览
         (function bindColorPickers() {
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 const picker = document.getElementById('color-' + status);
                 if (picker) {
                     picker.addEventListener('input', (e) => {
@@ -18706,6 +19609,71 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         document.getElementById('colorSettingsModal').onclick = (e) => {
             if (e.target.id === 'colorSettingsModal') closeColorSettings();
+        };
+
+        // ===== 项目管理 UI（设置弹窗内）=====
+        function renderProjectPickerList() {
+            const box = document.getElementById('projectPickerList');
+            if (!box) return;
+            const usedIds = new Set();
+            (events || []).forEach(ev => { if (ev.projectId) usedIds.add(ev.projectId); });
+            box.innerHTML = projects.map(p => {
+                const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
+                const taskCount = (events || []).filter(e => e.projectId === p.id).length;
+                return `
+                <div class="color-picker-row" data-project-id="${p.id}">
+                    <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
+                    <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
+                    ${usedTag}
+                    <button class="color-reset-btn" onclick="deleteProjectFromUI('${p.id}')" title="删除项目">🗑</button>
+                </div>`;
+            }).join('');
+        }
+        function addProjectFromUI() {
+            // 自动选一个跟现有项目区分度高的色相
+            const palette = ['#fb923c','#e879f9','#f472b6','#22d3ee','#84cc16','#fbbf24','#a78bfa','#34d399','#fb7185','#60a5fa'];
+            const used = new Set(projects.map(p => p.color.toLowerCase()));
+            const pick = palette.find(c => !used.has(c)) || '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+            const name = '新项目' + (projects.length + 1);
+            const id = addProjectSilent(name, pick);
+            renderProjectPickerList();
+            showToast('✅ 已新建项目「' + name + '」');
+        }
+        function deleteProjectFromUI(id) {
+            const p = projects.find(x => x.id === id);
+            if (!p) return;
+            const count = (events || []).filter(e => e.projectId === id).length;
+            const msg = count > 0 ? `项目「${p.name}」下还有 ${count} 个任务，删除后会自动归到第一个项目。\n确定删除？` : `确定删除项目「${p.name}」？`;
+            if (!confirm(msg)) return;
+            if (deleteProjectById(id)) {
+                renderProjectPickerList();
+                render();
+                showToast('🗑 已删除项目「' + p.name + '」');
+            }
+        }
+        // 打开颜色设置时也刷新项目列表
+        openColorSettings = function() {
+            migrateEventsToProjects();
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
+                const color = statusColors[status] || DEFAULT_STATUS_COLORS[status];
+                document.getElementById('color-' + status).value = color;
+                document.getElementById('preview-' + status).style.background = color;
+            });
+            renderFontScalePicker();
+            renderProjectPickerList();
+            document.getElementById('colorSettingsModal').classList.add('show');
+        };
+        const _origClose = closeColorSettings;
+        closeColorSettings = function() { document.getElementById('colorSettingsModal').classList.remove('show'); };
+        const _origSave = saveColorSettings;
+        saveColorSettings = function() {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
+                statusColors[status] = document.getElementById('color-' + status).value;
+            });
+            safeStorage.set('niko_status_colors', statusColors);
+            applyStatusColors();
+            closeColorSettings();
+            render();
         };
 
         // ========== 数据管理功能 ==========
@@ -18785,7 +19753,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            const dateStr = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10).replace(/-/g, '');
             a.href = url;
             a.download = `niko_backup_${dateStr}.json`;
             document.body.appendChild(a);
@@ -19969,7 +20937,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608202349";
+        window.NIKO_VERSION = "202608241317";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
