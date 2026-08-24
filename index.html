@@ -2387,6 +2387,7 @@
             gap: 6px;
             margin-bottom: 3px;
             min-width: 0;
+            padding-right: 24px;            /* v3:留出右上角状态图标空间 */
         }
         .task-row-main .task-title {
             flex: 1;
@@ -2402,35 +2403,22 @@
             text-decoration: line-through;
             opacity: 0.55;
         }
-        /* 状态图标胶囊：左侧细色条 + emoji + 2 字 */
-        .task-status-pill {
-            flex-shrink: 0;
-            display: inline-flex;
+        /* v3 状态图标：右上角绝对定位 SVG（与日历格统一） */
+        .task-status-mark {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            width: 14px;
+            height: 14px;
+            display: flex;
             align-items: center;
-            gap: 3px;
-            padding: 1px 6px 1px 4px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 700;
-            line-height: 1.55;
-            letter-spacing: 0.2px;
-            color: #fff;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.18);
-            position: relative;
+            justify-content: center;
+            z-index: 2;
         }
-        .task-status-pill::before {
-            content: '';
-            width: 3px;
-            height: 10px;
-            border-radius: 2px;
-            background: rgba(255,255,255,0.85);
-            margin-right: 3px;
-            flex-shrink: 0;
-        }
-        .task-status-pill.todo { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-        .task-status-pill.in-progress { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
-        .task-status-pill.done { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); opacity: 0.9; }
-        .task-status-pill.overdue { background: linear-gradient(135deg, #f87171 0%, #ef4444 100%); }
+        .task-status-mark svg { width: 14px; height: 14px; display: block; }
+        .day-task-item { position: relative; }
+        /* 旧 task-status-pill 不再使用（保留类名避免破坏，设为 hidden） */
+        .task-status-pill { display: none !important; }
         /* meta 行：项目名 pill + 时间/类型/重复 */
         .task-row-meta {
             display: flex;
@@ -2779,15 +2767,16 @@
             padding: 3px 5px;
             border-radius: 3px;
             display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 1px;
+            flex-direction: row;          /* v3:checkbox + 标题同一行 */
+            align-items: center;
+            gap: 4px;
             cursor: grab;
             transition: all 0.15s;
             user-select: none;
             color: #1f2937;
             position: relative;
             overflow: hidden;
+            padding-right: 18px;          /* 留出右上角状态图标空间 */
         }
         .event-item:active {
             cursor: grabbing;
@@ -2801,17 +2790,19 @@
             background: #8b5cf6;
         }
         .event-checkbox {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 3px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.6);
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 9px;
+            font-weight: 700;
             color: transparent;
             transition: all 0.15s;
+            border: 1px solid rgba(0, 0, 0, 0.15);
         }
         .event-item.completed .event-checkbox {
             background: #fff;
@@ -2825,6 +2816,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            flex: 1;
+            min-width: 0;
         }
         .event-desc {
             font-size: 10.5px;
@@ -3673,28 +3666,68 @@
             }
         }
 
-        /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边 + 角标 ⚠ */
+        /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边（v3 角标由 SVG 状态图标替代） */
         .event-item.overdue-event,
         .day-task-item.overdue-event {
             box-shadow: inset 0 0 0 1px var(--status-overdue, #ef4444), 0 0 4px rgba(239,68,68,0.35) !important;
             position: relative;
         }
-        .event-item.overdue-event::after,
-        .day-task-item.overdue-event::after {
-            content: '⚠';
+
+        /* ===== v3 状态图标：绝对定位右上角 SVG（4 态设计感） ===== */
+        .status-mark {
             position: absolute;
-            top: 1px;
-            right: 3px;
-            color: var(--status-overdue, #ef4444);
-            font-size: 10px;
+            top: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
             z-index: 2;
-            text-shadow: 0 0 2px rgba(0,0,0,0.6);
-            pointer-events: none;
         }
-        body.dark-mode .event-item.overdue-event::after,
-        body.dark-mode .day-task-item.overdue-event::after {
-            text-shadow: 0 0 2px rgba(0,0,0,0.9);
+        .status-mark svg { width: 12px; height: 12px; display: block; }
+        .status-mark.todo svg circle { stroke: #f59e0b; fill: none; stroke-width: 2; }
+        .status-mark.in-progress svg circle.bg { fill: rgba(59, 130, 246, 0.25); stroke: #3b82f6; stroke-width: 1.5; }
+        .status-mark.in-progress svg circle.dot { fill: #3b82f6; stroke: none; }
+        .status-mark.done svg rect { fill: #10b981; stroke: none; rx: 2; }
+        .status-mark.done svg path { stroke: #fff; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .status-mark.overdue svg rect { fill: #ef4444; stroke: none; rx: 1.5; }
+        .status-mark.overdue svg line { stroke: #fff; stroke-width: 1.6; stroke-linecap: round; }
+        .status-mark.overdue svg circle { fill: #fff; stroke: none; }
+        /* 大号状态图标（详情卡 14px） */
+        .task-status-mark {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
         }
+        .task-status-mark svg { width: 14px; height: 14px; }
+        .task-status-mark.todo svg circle { stroke: #f59e0b; fill: none; stroke-width: 2; }
+        .task-status-mark.in-progress svg circle.bg { fill: rgba(59, 130, 246, 0.25); stroke: #3b82f6; stroke-width: 1.5; }
+        .task-status-mark.in-progress svg circle.dot { fill: #3b82f6; stroke: none; }
+        .task-status-mark.done svg rect { fill: #10b981; stroke: none; rx: 2; }
+        .task-status-mark.done svg path { stroke: #fff; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        .task-status-mark.overdue svg rect { fill: #ef4444; stroke: none; rx: 1.5; }
+        .task-status-mark.overdue svg line { stroke: #fff; stroke-width: 1.8; stroke-linecap: round; }
+        .task-status-mark.overdue svg circle { fill: #fff; stroke: none; }
+        .day-task-item { position: relative; }
+        /* 深色模式下加亮让图标更清晰 */
+        body.dark-mode .status-mark.todo svg circle,
+        body.dark-mode .task-status-mark.todo svg circle { stroke: #fbbf24; }
+        body.dark-mode .status-mark.in-progress svg circle.bg,
+        body.dark-mode .task-status-mark.in-progress svg circle.bg { stroke: #60a5fa; }
+        body.dark-mode .status-mark.in-progress svg circle.dot,
+        body.dark-mode .task-status-mark.in-progress svg circle.dot { fill: #60a5fa; }
+        body.dark-mode .status-mark.done svg rect,
+        body.dark-mode .task-status-mark.done svg rect { fill: #34d399; }
+        body.dark-mode .status-mark.overdue svg rect,
+        body.dark-mode .task-status-mark.overdue svg rect { fill: #f87171; }
 /* ===== 媒体热点专属CSS ===== */
         .hot-card .hot-header {
             display: flex;
@@ -11339,13 +11372,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
                     const safeDesc = ev.desc ? escapeHtml(ev.desc) : '';
-                    // v2 emoji 状态角标（小格子内更醒目）
-                    const EVENT_STATUS_EMOJI = {
-                        'todo': '○', 'in-progress': '▶', 'done': '✓', 'overdue': '⚠'
+                    // v3 状态图标：右上角 12px SVG（4 态不同形状）
+                    const STATUS_MARK_SVG = {
+                        'todo':        '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.2"/></svg>',
+                        'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><circle class="dot" cx="6" cy="6" r="2.2"/></svg>',
+                        'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
+                        'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
                     };
-                    const statusEmoji = `<span class="plan-status-badge ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${EVENT_STATUS_EMOJI[displayStatus] || ''}</span>`;
-                    const projectColorDot = `<span class="project-dot" style="background:${project.color};width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>`;
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${projectColorDot}${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${statusEmoji}</span>${safeDesc ? `<span class="event-desc">${safeDesc}</span>` : ''}`;
+                    const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}</span>${statusMarkHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); });
                     item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
@@ -11397,21 +11432,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 item.style.setProperty('background-color', hexToRgba(project.color, 0.18), 'important');
                 item.style.setProperty('border-left', '4px solid ' + project.color, 'important');
                 const displayStatus = isOverdue ? 'overdue' : ev.status;
-                // v2 状态胶囊（emoji + 2字）—— 视觉感更强
-                const STATUS_PILL = {
-                    'todo':        { cls: 'todo',        icon: '○', text: '待办' },
-                    'in-progress': { cls: 'in-progress', icon: '▶', text: '进行' },
-                    'done':        { cls: 'done',        icon: '✓', text: '完成' },
-                    'overdue':     { cls: 'overdue',     icon: '⚠', text: '延期' }
+                // v3 状态图标：右上角 14px SVG（与日历格统一）
+                const STATUS_MARK_SVG_LG = {
+                    'todo':        { svg: '<svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5"/></svg>', label: '待办' },
+                    'in-progress': { svg: '<svg viewBox="0 0 14 14"><circle class="bg" cx="7" cy="7" r="5.3"/><circle class="dot" cx="7" cy="7" r="2.5"/></svg>', label: '进行中' },
+                    'done':        { svg: '<svg viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12"/><path d="M3.8 7.2 L6 9.4 L10.2 4.8"/></svg>', label: '已完成' },
+                    'overdue':     { svg: '<svg viewBox="0 0 14 14"><rect x="1.5" y="3" width="11" height="8.5"/><line x1="7" y1="5.8" x2="7" y2="8.4"/><circle cx="7" cy="10.1" r="0.6"/></svg>', label: '已延期' }
                 };
-                const pill = STATUS_PILL[displayStatus] || STATUS_PILL['todo'];
-                const statusPillHtml = `<span class="task-status-pill ${pill.cls}" title="${escapeHtml(pill.text)}">${pill.icon} ${pill.text}</span>`;
+                const markData = STATUS_MARK_SVG_LG[displayStatus] || STATUS_MARK_SVG_LG['todo'];
+                const statusMarkHtml = `<span class="task-status-mark ${displayStatus}" title="${escapeHtml(markData.label)}">${markData.svg}</span>`;
                 item.innerHTML = `
                     <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
                         <div class="task-row-main">
                             <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
-                            ${statusPillHtml}
                         </div>
                         <div class="task-row-meta">
                             <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${escapeHtml(project.name)}</span>
@@ -11425,7 +11459,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="task-item-actions">
                         <button class="icon-btn" onclick="openEventModal('${ev.id}'); event.stopPropagation();">✏️</button>
                         <button class="icon-btn danger" onclick="deleteEventById('${ev.id}'); event.stopPropagation();">🗑️</button>
-                    </div>`;
+                    </div>${statusMarkHtml}`;
                 item.onclick = () => openEventModal(ev.id);
                 list.appendChild(item);
             });
@@ -21214,7 +21248,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241613";
+        window.NIKO_VERSION = "202608241644";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
