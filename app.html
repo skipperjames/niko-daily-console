@@ -16716,16 +16716,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             let filled = 0;
             const note = [];
+            const notMatched = [];
             missing.forEach(x => {
                 const t = x.book.title;
-                // 匹配「《书名》：内容」或「书名：内容」块
-                const re = new RegExp('《?' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '》?[：:]([\\s\\S]*?)(?=\\n?《?[^\\n]*[：:]|$)', 'i');
-                const m = raw.match(re);
-                if (!m) return;
-                let txt = m[1].trim().replace(/^[\s\-—–]+|[\s\-—–]+$/g, '');
-                if (!txt) return;
-                // 去掉可能的结尾标点和多余换行
-                txt = txt.split('\n').filter(s => s.trim()).join(' ');
+                const txt = matchBookBlurb(raw, t);
+                if (!txt) {
+                    if (x.src === 'books') notMatched.push(t);
+                    return;
+                }
                 if (x.src === 'books') {
                     x.book.summary = txt;
                     note.push(`《${t}》`);
@@ -16741,10 +16739,48 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (filled) {
                 renderBookPage();
                 closeBookSummaryBatch();
-                showToast(`✅ 已为 ${filled} 本书填入简介：${note.join('、')}`);
+                showToast(`✅ 已为 ${filled} 本书填入简介：${note.join('、')}${notMatched.length ? '（未匹配 ' + notMatched.length + ' 本）' : ''}`);
             } else {
-                showToast('⚠️ 没有匹配到任何书。请确认格式为《书名》：内容，且书名与你书架一致');
+                const preview = notMatched.slice(0, 5).join('、');
+                const more = notMatched.length > 5 ? ' 等' + notMatched.length + '本' : '';
+                showToast('⚠️ 没有匹配到任何书，请确认 AI 按《书名》（作者）：内容 的格式输出（与复制时一致）。书架里的书：' + preview + more);
             }
+        }
+
+        // 从批量粘贴文本中提取指定书名的简介。
+        // 支持三种格式（按优先级尝试）：
+        //   1. 《书名》（作者）：内容            ← 我们的 prompt 默认带作者括号
+        //   2. 《书名》：内容
+        //   3. 书名:内容 / 书名：内容            ← 容错
+        // 内容截断到下一个「《书名》」或文本末尾（用显式 \n 边界代替贪婪 [^\\n]*，避免吞下后续条目）。
+        function matchBookBlurb(raw, title) {
+            const esc = title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const candidates = [
+                new RegExp('《' + esc + '》\\s*[（(][^）)\\n]*[）)][：:]\\s*([\\s\\S]*?)(?=\\n\\s*《[\\s\\S]*?》|$)'),
+                new RegExp('《' + esc + '》[：:]\\s*([\\s\\S]*?)(?=\\n\\s*《[\\s\\S]*?》|$)'),
+                new RegExp('^' + esc + '[：:]\\s*([\\s\\S]*?)(?=\\n\\s*《[\\s\\S]*?》|$)', 'm')
+            ];
+            for (const re of candidates) {
+                const m = raw.match(re);
+                if (m && m[1]) {
+                    let txt = m[1].trim().replace(/^[\s\-—–]+|[\s\-—–]+$/g, '');
+                    txt = txt.split('\n').filter(s => s.trim()).join(' ').trim();
+                    if (txt) return txt;
+                }
+            }
+            return '';
+        }
+
+        // 规范化书名：去掉《》、全/半角括号、空白、引号、顿号、冒号、连接号、首尾空格，
+        // 用于 NIKO 书架 vs 微信读书的去重匹配（容错：手输的"《小狗钱钱》（博多·舍费尔）" vs 微信的"小狗钱钱"）
+        function normalizeBookTitle(t) {
+            return String(t || '')
+                .replace(/[《》〈〉「」『』“”]/g, '')
+                .replace(/[\(（\)）\[\]【】]/g, '')
+                .replace(/[\s\u3000]/g, '')
+                .replace(/[·•・:：,，、\-—–_"'`]/g, '')
+                .toLowerCase()
+                .trim();
         }
 
         function showRecDetail(id) {
@@ -17123,15 +17159,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             showToast('已清除微信读书数据');
         }
 
-        // 微信读书书架 → NIKO 书架（按书名去重，不改动已有书籍）
+        // 微信读书书架 → NIKO 书架（按书名去重 — 规范化书名比对，自动跳过已有书）
         function wereadSyncShelfToNiko() {
             if (!wereadSnap || !wereadSnap.shelf) { showToast('先导入微信读书数据'); return; }
-            let added = 0, skipped = 0;
+            let added = 0, skipped = 0, updated = 0;
             const items = [];
             (wereadSnap.shelf.books || []).forEach(b => items.push({ title: b.title, author: b.author, category: b.category, finished: b.finished === 1, album: false }));
             (wereadSnap.shelf.albums || []).forEach(a => items.push({ title: a.title, author: a.author, category: '有声书', finished: false, album: true }));
             items.forEach(it => {
-                if (!it.title || books.find(b => b.title === it.title)) { skipped++; return; }
+                if (!it.title) { skipped++; return; }
+                // 规范化书名找已有：去掉《》/() 全半角/空白/常见标点后比对，
+                // 这样 NIKO 存的"《小狗钱钱》（博多·舍费尔）"也能匹配微信读书的"小狗钱钱"。
+                const normIt = normalizeBookTitle(it.title);
+                const exist = books.find(b => normalizeBookTitle(b.title) === normIt)
+                    || books.find(b => normalizeBookTitle(b.title || '').split('（')[0] === normIt);
+                if (exist) {
+                    // 已有：把更详细的字段补上（如已读完、分类），不重复创建
+                    let touched = false;
+                    if (it.finished && exist.status !== 'done') { exist.status = 'done'; touched = true; }
+                    if (it.author && !exist.author) { exist.author = it.author; touched = true; }
+                    if (it.category && (!exist.category || exist.category === '微信读书')) { exist.category = it.category; touched = true; }
+                    if (touched) updated++;
+                    else skipped++;
+                    return;
+                }
                 books.push({
                     id: 'b_wr_' + Date.now() + '_' + added,
                     title: it.title,
@@ -17147,7 +17198,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             bookSaveBooks();
             renderBookPage();
-            showToast(added ? '📚 新增 ' + added + ' 本到 NIKO 书架（跳过已存在 ' + skipped + ' 本）' : '书架已同步过，没有新增');
+            const parts = [];
+            if (added) parts.push('📚 新增 ' + added + ' 本');
+            if (updated) parts.push('🔄 已补充 ' + updated + ' 本');
+            if (skipped) parts.push('跳过 ' + skipped + ' 本已存在');
+            showToast(parts.length ? parts.join(' · ') : '书架已同步过，没有变更');
         }
 
         // 微信读书划线/想法 → NIKO 读书笔记（按引用内容去重）
@@ -21938,7 +21993,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608242220";
+        window.NIKO_VERSION = "202608250003";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
