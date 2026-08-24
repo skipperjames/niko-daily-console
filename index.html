@@ -11222,7 +11222,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
                     const safeDesc = ev.desc ? escapeHtml(ev.desc) : '';
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}</span>${safeDesc ? `<span class="event-desc">${safeDesc}</span>` : ''}`;
+                    const projectTag = `<span class="plan-project-tag" style="background:${project.color};" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</span>`;
+                    const statusBadge = isOverdue
+                        ? '<span class="plan-status-badge overdue" title="已延期">延期</span>'
+                        : (displayStatus === 'in-progress' ? '<span class="plan-status-badge in-progress" title="进行中">进行</span>'
+                        : (displayStatus === 'done' ? '<span class="plan-status-badge done" title="已完成">完成</span>'
+                        : '<span class="plan-status-badge todo" title="待办">待办</span>'));
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${projectTag}${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${statusBadge}</span>${safeDesc ? `<span class="event-desc">${safeDesc}</span>` : ''}`;
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); });
                     item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
@@ -11276,7 +11282,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 item.innerHTML = `
                     <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
-                        <div class="task-title-text">${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-badge" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};color:#fff;">${isOverdue ? statusNames['overdue'] : (statusNames[ev.status] || ev.status)}</span></div>
+                        <div class="task-title-text"><span class="plan-project-tag" style="background:${project.color};" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</span>${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-status-badge ${isOverdue ? 'overdue' : (ev.status === 'in-progress' ? 'in-progress' : (ev.status === 'done' ? 'done' : 'todo'))}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${isOverdue ? '延期' : (ev.status === 'in-progress' ? '进行' : (ev.status === 'done' ? '完成' : '待办'))}</span></div>
                         <div class="task-info">
                             <span><span class="task-type-dot" style="background:${getTypeColor(ev.type)};"></span> ${typeNames[ev.type]}</span>
                             ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
@@ -21078,7 +21084,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241430";
+        window.NIKO_VERSION = "202608241550";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
