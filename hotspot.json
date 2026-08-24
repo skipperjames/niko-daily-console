@@ -1,445 +1,249 @@
 {
-  "version": 2,
-  "fetchedAt": "2026-08-23T23:30:15+08:00",
-  "date": "2026-08-23",
-  "summary": "今日热点：微博热搜「梁王世锦赛夺冠」；百度热搜「总书记为何强调文和旅的融合」；B站热搜「重庆狼队 广州TTG」；抖音热榜「交警巡逻偶遇\"三级头\"」。",
+  "version": 3,
+  "fetchedAt": "2026-08-24T08:38:59+08:00",
+  "date": "2026-08-24",
+  "summary": "今日热点：国内李昀锐生日话题阅读破2000万，甲醛白菜事件持续发酵，嫦娥七号今年预定窗口取消；日本防卫预算8.9万亿日元创战后新高、高市内阁支持率跌至50.2%新低，北海道近海发生6.0级地震；韩国羽毛球世锦赛2金1铜登顶金牌榜，家业继承税惠10年增15倍引避税争议。",
   "regions": {
     "国内": [
       {
-        "title": "梁王世锦赛夺冠",
-        "desc": "",
+        "title": "李昀锐可以去参加披荆斩棘了",
+        "desc": "30岁演员李昀锐生日当天话题登上微博热搜，阅读量突破2000万，粉丝集体喊话其参加综艺",
         "platform": "微博热搜",
-        "hot": "113.1万",
-        "link": "https://s.weibo.com/weibo?q=%E6%A2%81%E7%8E%8B%E4%B8%96%E9%94%A6%E8%B5%9B%E5%A4%BA%E5%86%A0&Refer=top"
+        "hot": "2000万阅读",
+        "link": "https://s.weibo.com/top/summary"
       },
       {
-        "title": "3姐弟太饿报警求助民警上门做饭",
-        "desc": "",
+        "title": "曝一线男明星与女演员的闺蜜发生关系",
+        "desc": "直播匿名爆料冲上热搜，指向三字头部男星但无实锤，引发全网猜测与理性吃瓜讨论",
         "platform": "微博热搜",
-        "hot": "81.2万",
-        "link": "https://s.weibo.com/weibo?q=3%E5%A7%90%E5%BC%9F%E5%A4%AA%E9%A5%BF%E6%8A%A5%E8%AD%A6%E6%B1%82%E5%8A%A9%E6%B0%91%E8%AD%A6%E4%B8%8A%E9%97%A8%E5%81%9A%E9%A5%AD&Refer=top"
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
       },
       {
-        "title": "2万件中央救灾物资支持广西",
-        "desc": "",
+        "title": "郭京飞林一互怼",
+        "desc": "腾讯视频《地球超新鲜2》嘉宾互怼话题登上微博热搜榜Top5，相关视频播放量破3亿",
         "platform": "微博热搜",
-        "hot": "80.9万",
-        "link": "https://s.weibo.com/weibo?q=2%E4%B8%87%E4%BB%B6%E4%B8%AD%E5%A4%AE%E6%95%91%E7%81%BE%E7%89%A9%E8%B5%84%E6%94%AF%E6%8C%81%E5%B9%BF%E8%A5%BF&Refer=top"
+        "hot": "Top5",
+        "link": "https://s.weibo.com/top/summary"
       },
       {
-        "title": "秋天的河南是五彩斑斓的",
-        "desc": "",
+        "title": "殷玉珍和赛考斯重逢相拥落泪",
+        "desc": "美国友人赛考斯重返中国，与扎根毛乌素治沙的殷玉珍时隔20多年相拥，善款已成5万多棵大树",
         "platform": "微博热搜",
-        "hot": "80.9万",
-        "link": "https://s.weibo.com/weibo?q=%E7%A7%8B%E5%A4%A9%E7%9A%84%E6%B2%B3%E5%8D%97%E6%98%AF%E4%BA%94%E5%BD%A9%E6%96%91%E6%96%93%E7%9A%84&Refer=top"
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
       },
       {
-        "title": "张元英走路姿势",
-        "desc": "",
+        "title": "沈月长春电影节黑裙造型",
+        "desc": "长春电影节红毯上沈月黑色花卉刺绣长裙造型被称\"油画公主\"，相关话题登顶热搜",
         "platform": "微博热搜",
-        "hot": "80.9万",
-        "link": "https://s.weibo.com/weibo?q=%E5%BC%A0%E5%85%83%E8%8B%B1%E8%B5%B0%E8%B7%AF%E5%A7%BF%E5%8A%BF&Refer=top"
+        "hot": "热",
+        "link": "https://s.weibo.com/top/summary"
       },
       {
-        "title": "原来内向的人都是这样交朋友的",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "80.9万",
-        "link": "https://s.weibo.com/weibo?q=%E5%8E%9F%E6%9D%A5%E5%86%85%E5%90%91%E7%9A%84%E4%BA%BA%E9%83%BD%E6%98%AF%E8%BF%99%E6%A0%B7%E4%BA%A4%E6%9C%8B%E5%8F%8B%E7%9A%84&Refer=top"
-      },
-      {
-        "title": "张韶涵演唱会突发心脏不适",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "80.2万",
-        "link": "https://s.weibo.com/weibo?q=%E5%BC%A0%E9%9F%B6%E6%B6%B5%E6%BC%94%E5%94%B1%E4%BC%9A%E7%AA%81%E5%8F%91%E5%BF%83%E8%84%8F%E4%B8%8D%E9%80%82&Refer=top"
-      },
-      {
-        "title": "一代人有一代人的隐形家务",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "72.6万",
-        "link": "https://s.weibo.com/weibo?q=%E4%B8%80%E4%BB%A3%E4%BA%BA%E6%9C%89%E4%B8%80%E4%BB%A3%E4%BA%BA%E7%9A%84%E9%9A%90%E5%BD%A2%E5%AE%B6%E5%8A%A1&Refer=top"
-      },
-      {
-        "title": "女主播被以案强迫包养录音5年自保",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "71.1万",
-        "link": "https://s.weibo.com/weibo?q=%E5%A5%B3%E4%B8%BB%E6%92%AD%E8%A2%AB%E4%BB%A5%E6%A1%88%E5%BC%BA%E8%BF%AB%E5%8C%85%E5%85%BB%E5%BD%95%E9%9F%B35%E5%B9%B4%E8%87%AA%E4%BF%9D&Refer=top"
-      },
-      {
-        "title": "小孩哥用麻将搭了个磁悬浮列车",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "69.4万",
-        "link": "https://s.weibo.com/weibo?q=%E5%B0%8F%E5%AD%A9%E5%93%A5%E7%94%A8%E9%BA%BB%E5%B0%86%E6%90%AD%E4%BA%86%E4%B8%AA%E7%A3%81%E6%82%AC%E6%B5%AE%E5%88%97%E8%BD%A6&Refer=top"
-      },
-      {
-        "title": "spirit三冠",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "65.6万",
-        "link": "https://s.weibo.com/weibo?q=spirit%E4%B8%89%E5%86%A0&Refer=top"
-      },
-      {
-        "title": "傅首尔前夫发文怼留几手",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "61.9万",
-        "link": "https://s.weibo.com/weibo?q=%E5%82%85%E9%A6%96%E5%B0%94%E5%89%8D%E5%A4%AB%E5%8F%91%E6%96%87%E6%80%BC%E7%95%99%E5%87%A0%E6%89%8B&Refer=top"
-      },
-      {
-        "title": "从140瘦到了95斤",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "57.3万",
-        "link": "https://s.weibo.com/weibo?q=%E4%BB%8E140%E7%98%A6%E5%88%B0%E4%BA%8695%E6%96%A4&Refer=top"
-      },
-      {
-        "title": "张韶涵演唱会吸氧",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "56.7万",
-        "link": "https://s.weibo.com/weibo?q=%E5%BC%A0%E9%9F%B6%E6%B6%B5%E6%BC%94%E5%94%B1%E4%BC%9A%E5%90%B8%E6%B0%A7&Refer=top"
-      },
-      {
-        "title": "芒果新人撞脸王一博",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "55.1万",
-        "link": "https://s.weibo.com/weibo?q=%E8%8A%92%E6%9E%9C%E6%96%B0%E4%BA%BA%E6%92%9E%E8%84%B8%E7%8E%8B%E4%B8%80%E5%8D%9A&Refer=top"
-      },
-      {
-        "title": "总书记为何强调文和旅的融合",
-        "desc": "",
+        "title": "甲醛白菜事件持续发酵",
+        "desc": "张家口康保县白菜蘸甲醛保鲜被曝光，当地已采取强制措施并全链条溯源，北京新发地启动排查",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%80%BB%E4%B9%A6%E8%AE%B0%E4%B8%BA%E4%BD%95%E5%BC%BA%E8%B0%83%E6%96%87%E5%92%8C%E6%97%85%E7%9A%84%E8%9E%8D%E5%90%88&sa=fyb_news"
+        "link": "https://top.baidu.com/board"
       },
       {
-        "title": "全国推广去世亲人存款查询",
-        "desc": "",
+        "title": "嫦娥七号今年预定窗口取消",
+        "desc": "载人航天办综合研判不满足发射条件，嫦娥七号任务不能在今年预定窗口实施",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%85%A8%E5%9B%BD%E6%8E%A8%E5%B9%BF%E5%8E%BB%E4%B8%96%E4%BA%B2%E4%BA%BA%E5%AD%98%E6%AC%BE%E6%9F%A5%E8%AF%A2&sa=fyb_news"
+        "link": "https://top.baidu.com/board"
       },
       {
-        "title": "花5.9万养发被剃光头拔白发",
-        "desc": "",
+        "title": "3部旧手机换一台iPhone刷屏",
+        "desc": "废旧手机回收行情被炒热，记者调查：并非全品类普涨，AI爆发致存储芯片短缺是核心驱动",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E8%8A%B15.9%E4%B8%87%E5%85%BB%E5%8F%91%E8%A2%AB%E5%89%83%E5%85%89%E5%A4%B4%E6%8B%94%E7%99%BD%E5%8F%91&sa=fyb_news"
+        "link": "https://top.baidu.com/board"
       },
       {
-        "title": "中国汽车出口激增",
-        "desc": "",
+        "title": "一根发圈炒到999元",
+        "desc": "Lululemon\"精灵黄\"发圈官方售罄后被炒至999元，引发年轻人\"符号性消费\"争议",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E4%B8%AD%E5%9B%BD%E6%B1%BD%E8%BD%A6%E5%87%BA%E5%8F%A3%E6%BF%80%E5%A2%9E&sa=fyb_news"
+        "link": "https://top.baidu.com/board"
       },
       {
-        "title": "427万辆召回 没有一款油车",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=427%E4%B8%87%E8%BE%86%E5%8F%AC%E5%9B%9E+%E6%B2%A1%E6%9C%89%E4%B8%80%E6%AC%BE%E6%B2%B9%E8%BD%A6&sa=fyb_news"
-      },
-      {
-        "title": "普京拍桌",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%99%AE%E4%BA%AC%E6%8B%8D%E6%A1%8C&sa=fyb_news"
-      },
-      {
-        "title": "唐师曾去世前白血球几乎为零",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%94%90%E5%B8%88%E6%9B%BE%E5%8E%BB%E4%B8%96%E5%89%8D%E7%99%BD%E8%A1%80%E7%90%83%E5%87%A0%E4%B9%8E%E4%B8%BA%E9%9B%B6&sa=fyb_news"
-      },
-      {
-        "title": "现实版钢铁侠来了",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E7%8E%B0%E5%AE%9E%E7%89%88%E9%92%A2%E9%93%81%E4%BE%A0%E6%9D%A5%E4%BA%86&sa=fyb_news"
-      },
-      {
-        "title": "张韶涵演唱会突发不适插氧气管",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%BC%A0%E9%9F%B6%E6%B6%B5%E6%BC%94%E5%94%B1%E4%BC%9A%E7%AA%81%E5%8F%91%E4%B8%8D%E9%80%82%E6%8F%92%E6%B0%A7%E6%B0%94%E7%AE%A1&sa=fyb_news"
-      },
-      {
-        "title": "尼格买提有多少次被认成撒贝宁",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%B0%BC%E6%A0%BC%E4%B9%B0%E6%8F%90%E6%9C%89%E5%A4%9A%E5%B0%91%E6%AC%A1%E8%A2%AB%E8%AE%A4%E6%88%90%E6%92%92%E8%B4%9D%E5%AE%81&sa=fyb_news"
-      },
-      {
-        "title": "《重器》大结局太虐了",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E3%80%8A%E9%87%8D%E5%99%A8%E3%80%8B%E5%A4%A7%E7%BB%93%E5%B1%80%E5%A4%AA%E8%99%90%E4%BA%86&sa=fyb_news"
-      },
-      {
-        "title": "飞机散云止雨加重内蒙古旱情不实",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E9%A3%9E%E6%9C%BA%E6%95%A3%E4%BA%91%E6%AD%A2%E9%9B%A8%E5%8A%A0%E9%87%8D%E5%86%85%E8%92%99%E5%8F%A4%E6%97%B1%E6%83%85%E4%B8%8D%E5%AE%9E&sa=fyb_news"
-      },
-      {
-        "title": "38岁考大学 39岁的他成绩年级第一",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=38%E5%B2%81%E8%80%83%E5%A4%A7%E5%AD%A6+39%E5%B2%81%E7%9A%84%E4%BB%96%E6%88%90%E7%BB%A9%E5%B9%B4%E7%BA%A7%E7%AC%AC%E4%B8%80&sa=fyb_news"
-      },
-      {
-        "title": "人民日报评“旅客买票占座放零食”",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "新",
-        "link": "https://m.baidu.com/s?word=%E4%BA%BA%E6%B0%91%E6%97%A5%E6%8A%A5%E8%AF%84%E2%80%9C%E6%97%85%E5%AE%A2%E4%B9%B0%E7%A5%A8%E5%8D%A0%E5%BA%A7%E6%94%BE%E9%9B%B6%E9%A3%9F%E2%80%9D&sa=fyb_news"
-      },
-      {
-        "title": "3姐弟太饿报警求助 民警上门做饭",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=3%E5%A7%90%E5%BC%9F%E5%A4%AA%E9%A5%BF%E6%8A%A5%E8%AD%A6%E6%B1%82%E5%8A%A9+%E6%B0%91%E8%AD%A6%E4%B8%8A%E9%97%A8%E5%81%9A%E9%A5%AD&sa=fyb_news"
-      },
-      {
-        "title": "重庆狼队 广州TTG",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "重庆狼队战胜广州TTG KPL",
-        "link": "https://search.bilibili.com/all?keyword=%E9%87%8D%E5%BA%86%E7%8B%BC%E9%98%9F%20%E5%B9%BF%E5%B7%9ETTG"
-      },
-      {
-        "title": "特大暴雨来了",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%89%B9%E5%A4%A7%E6%9A%B4%E9%9B%A8%E6%9D%A5%E4%BA%86"
-      },
-      {
-        "title": "央视揭秘网售外来物种",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%A4%AE%E8%A7%86%E6%8F%AD%E7%A7%98%E7%BD%91%E5%94%AE%E5%A4%96%E6%9D%A5%E7%89%A9%E7%A7%8D"
-      },
-      {
-        "title": "BLG AL",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "BLG vs AL LPL第三赛段",
-        "link": "https://search.bilibili.com/all?keyword=BLG%20AL"
-      },
-      {
-        "title": "美加贸易战是怎么打起来的",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%BE%8E%E5%8A%A0%E8%B4%B8%E6%98%93%E6%88%98%E6%98%AF%E6%80%8E%E4%B9%88%E6%89%93%E8%B5%B7%E6%9D%A5%E7%9A%84"
-      },
-      {
-        "title": "小片片解析记忆管理局",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%B0%8F%E7%89%87%E7%89%87%E8%A7%A3%E6%9E%90%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86%E5%B1%80"
-      },
-      {
-        "title": "FUT Spirit",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "FUT vs Spirit 电竞世俱杯",
-        "link": "https://search.bilibili.com/all?keyword=FUT%20Spirit"
-      },
-      {
-        "title": "冰火歌会",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "2026冰火歌会夏日启航",
-        "link": "https://search.bilibili.com/all?keyword=%E5%86%B0%E7%81%AB%E6%AD%8C%E4%BC%9A"
-      },
-      {
-        "title": "台风紫檀的暴雨会持续多久",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%8F%B0%E9%A3%8E%E7%B4%AB%E6%AA%80%E7%9A%84%E6%9A%B4%E9%9B%A8%E4%BC%9A%E6%8C%81%E7%BB%AD%E5%A4%9A%E4%B9%85"
-      },
-      {
-        "title": "Spirit夺得TI2026冠军",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=Spirit%E5%A4%BA%E5%BE%97TI2026%E5%86%A0%E5%86%9B"
-      },
-      {
-        "title": "交警巡逻偶遇\"三级头\"",
-        "desc": "淮南交警巡逻发现群众戴形似游戏道具的\"三级头\"骑电动车，提醒骑乘务必规范佩戴3C认证安全头盔",
+        "title": "收藏！2026亚运会金牌日历来了",
+        "desc": "爱知·名古屋亚运会9月19日开幕共469枚金牌，倒计时4周，提前收藏金牌赛程",
         "platform": "抖音热榜",
         "hot": "热",
         "link": "https://www.douyin.com/hot"
       },
       {
-        "title": "网红温婉偷税被罚后换号复活",
-        "desc": "因偷税漏税和售\"飞丝羽绒服\"被打假的温婉，大号被封后疑通过矩阵账号继续售高仿服装，平台称直播间有实时审核",
+        "title": "甘肃少年马正作文《我的妈妈》",
+        "desc": "少年烈日下搬瓜装车写下思念出走母亲的作文，视频在多平台热榜获超300万点赞",
         "platform": "抖音热榜",
-        "hot": "热",
+        "hot": "300万赞",
         "link": "https://www.douyin.com/hot"
+      },
+      {
+        "title": "快递小哥的移动工位火了",
+        "desc": "郑州快递员李浩把快递车布置成贴满冰箱贴的\"移动工位\"，网友称其最热爱工作的快递小哥",
+        "platform": "B站热榜",
+        "hot": "热",
+        "link": "https://www.bilibili.com/v/popular/rank/all"
+      },
+      {
+        "title": "脑机接口稳定工作300天可安全取出",
+        "desc": "中科院理化所研发多功能电极界面涂层，解决信号衰减等核心难题，扫清长期临床应用障碍",
+        "platform": "头条热搜",
+        "hot": "热",
+        "link": "https://www.toutiao.com/"
+      },
+      {
+        "title": "北大报到日扛床垫的爸",
+        "desc": "北大新生报到日校园满是给孩子扛床垫的爸爸，网友热议家长应陪到什么程度",
+        "platform": "知乎热榜",
+        "hot": "热",
+        "link": "https://www.zhihu.com/hot"
       }
     ],
     "日本": [
       {
-        "title": "茨城县5.9级地震已致37人受伤",
-        "desc": "23日凌晨茨城南部发生5.9级地震，东京都、神奈川等地至少37人受伤，横滨一名80多岁女性伤势严重，关东部分铁路一度停运",
+        "title": "防卫预算8.9万亿日元创战后新高",
+        "desc": "日本防卫省2027财年预算概算约8.9万亿日元刷新历史峰值，舆论担忧巨额债务拖累经济",
+        "platform": "日本Yahoo",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "高市内阁支持率跌至50.2%新低",
+        "desc": "共同社电话调查显示高市内阁支持率较7月降3.5个百分点，42.6%受访者不满战败日致辞",
+        "platform": "共同社/日媒",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "北海道近海发生6.0级地震",
+        "desc": "23日晚北海道浦河附近海域发生6.0级地震，最大震度4，震源深约40公里，未引发海啸",
+        "platform": "日本气象厅/央视",
+        "hot": "热",
+        "link": "https://www.yahoo.co.jp/"
+      },
+      {
+        "title": "石破茂批评高市不反省战争历史",
+        "desc": "前首相石破茂指高市早苗8·15致辞无战争反省，警告持续回避或将重蹈覆辙",
         "platform": "日本Yahoo/时事",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "日本爆发多场反高市早苗示威",
-        "desc": "从冲绳到熊本多地民众集会，高呼\"撤回发言，立即辞职\"，抗议涉台错误言论与军事扩张，冲绳忧家园再成\"冲突前线\"",
-        "platform": "日本Yahoo/时事",
-        "hot": "热",
-        "link": "https://www.yahoo.co.jp/"
-      },
-      {
-        "title": "高市早苗引用《论语》为丑闻辩解",
-        "desc": "就涉嫌制作诽谤视频及发行\"早苗代币\"指控再次全盘否认，引用\"民无信不立\"辩解，被批讽刺至极",
-        "platform": "日本Yahoo/朝日",
-        "hot": "热",
-        "link": "https://www.yahoo.co.jp/"
-      },
-      {
-        "title": "高市早苗称不忍杀死蟑螂遭群嘲",
-        "desc": "在社媒分享官邸生活称\"下不了手杀蟑螂\"，网友讽刺：连虫子都不忍杀，却解除了杀伤性武器出口禁令",
+        "title": "高市早苗称不忍杀蟑螂遭群嘲",
+        "desc": "高市在社媒称\"下不了手杀蟑螂\"，网友讽刺：连虫子都不忍杀却解除武器出口禁令",
         "platform": "日本Yahoo/凤凰",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "15个地方政府要求修订日美地位协定",
-        "desc": "设有美军基地的都道府县知事会递交文件，要求推进修订1960年以来从未修订的《日美地位协定》，防美军活动引发事故",
-        "platform": "日本Yahoo/参考消息",
+        "title": "中国产味噌汤让日本国产信仰破防",
+        "desc": "日本永谷园味噌汤被曝实际产自中国引发舆论风波，折射日本\"国产信仰\"叙事的脆弱",
+        "platform": "环球时报/日媒",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "日本多地民间团体集会抗议政府",
-        "desc": "东京、茨城、山形、山口等多地集会，呼吁捍卫和平宪法、反对战争，矛头指向高市内阁扩军修宪动向",
-        "platform": "日本Yahoo/央视",
+        "title": "日本跨党派议员团访华",
+        "desc": "8月24日至27日日本跨党派议员团访华，系去年高市涉台答辩致关系恶化后首次",
+        "platform": "日媒",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "石破茂呼吁正视历史勿重蹈覆辙",
-        "desc": "前首相石破茂在反战演讲中批评近三任首相8月15日均未提\"反省\"一词，强调须正视并深入研究战争历史",
-        "platform": "日本Yahoo/时事",
+        "title": "美制裁日籍ICC院长 高市仅表遗憾",
+        "desc": "美国制裁日籍国际刑事法院院长赤根智子，高市回应口风较此前\"自豪\"明显转变",
+        "platform": "日媒",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "日本拟打机床牌换中国稀土",
-        "desc": "日方试图以高端机床等产业筹码换取中国稀土供应，中国7月对日稀土磁体出口仅111吨同比腰斩，重稀土储备或年底耗尽",
-        "platform": "日本Yahoo/经济",
+        "title": "东京民众集会抗议高市扩军",
+        "desc": "民众在东京集会抗议高市政府修宪企图与扩军备武，反对修改\"安保三文件\"\"无核三原则\"",
+        "platform": "央视/日媒",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       },
       {
-        "title": "日本百货店加速消失 行业减收超八成",
-        "desc": "主要58家百货店2025年度销售额同比减2.7%，超八成减收；西武涩谷店9月底关闭，全国\"百货店空白县\"增至4个",
-        "platform": "日本Yahoo/日经",
-        "hot": "热",
-        "link": "https://www.yahoo.co.jp/"
-      },
-      {
-        "title": "花滑奥运冠军三浦璃来与木原龙一宣布订婚",
-        "desc": "2026米兰冬奥双人滑冠军组合通过社媒宣布订婚，两人冰场求婚成功，今年2月逆转夺冠、4月退役，年龄相差9岁",
-        "platform": "日本Yahoo/体坛",
+        "title": "作家称仅靠上调防卫预算难换安全",
+        "desc": "山田顺撰文指防卫费七成以上依赖美国进口，认为巨额债务与日元贬值才是日本真正威胁",
+        "platform": "日本Yahoo",
         "hot": "热",
         "link": "https://www.yahoo.co.jp/"
       }
     ],
     "韩国": [
       {
-        "title": "韩国大法院长绕过总统强推法官人选被批违宪",
-        "desc": "大法院院长赵熙大未与总统李在明会商，直接推荐大邱地院副庭长任大法官，青瓦台定性为宪政史上前所未有的违规操作",
-        "platform": "韩联社/动态",
-        "hot": "热",
-        "link": "https://en.yna.co.kr/"
-      },
-      {
-        "title": "青瓦台因游客过多遭严重损坏",
-        "desc": "青瓦台向公众开放后墙壁瓦片裂缝、木材腐烂、管道爆裂，翻新工程超一年未完工，李在明入住官邸日期未定",
-        "platform": "韩联社/动态",
-        "hot": "热",
-        "link": "https://en.yna.co.kr/"
-      },
-      {
-        "title": "现代3.9万工人全线罢工 阻拦2.5万台机器人上岗",
-        "desc": "时隔十年首次全线全面罢工，蔚山、全州、牙山三大整车厂同步停摆；核心诉求是阻拦现代集团2028年前部署2.5万台Atlas人形机器人，单日损失超2.3万亿韩元",
-        "platform": "韩联社/Naver",
-        "hot": "热",
-        "link": "https://www.naver.com/"
-      },
-      {
-        "title": "中国籍嫌疑人入侵BTS柾国账号获刑20年",
-        "desc": "韩联社报道，入侵BTS田柾国及财阀高管账号的中国籍嫌疑人被判处20年有期徒刑",
+        "title": "羽毛球世锦赛韩国2金1铜登顶金牌榜",
+        "desc": "安洗莹女单、白荷娜/李绍希女双夺金，韩国力压法国居新德里世锦赛金牌榜首位",
         "platform": "韩联社",
         "hot": "热",
         "link": "https://en.yna.co.kr/"
       },
       {
-        "title": "韩国小姐选美冠军出炉 禹瑞允夺冠",
-        "desc": "第70届韩国小姐总决赛在首尔COEX举行，22岁的篮球名宿之女禹瑞允摘得最高荣誉\"真\"，本科就读于美国塔夫茨大学",
-        "platform": "韩联社/动态",
+        "title": "家业继承税惠10年增15倍引避税争议",
+        "desc": "韩国家族企业继承税惠额去年达5410亿韩元同比增136%，被质疑沦为避税通道",
+        "platform": "韩联社/中央日报",
         "hot": "热",
         "link": "https://en.yna.co.kr/"
       },
       {
-        "title": "济州岛失踪案再曝警员谎报调查结果",
-        "desc": "37岁女子张美兰5月失踪警方曾谎称已联系上；同一警员在另一起失踪案以\"已找到\"谎报，男子失踪51天后遗体被发现",
-        "platform": "韩联社/动态",
-        "hot": "热",
-        "link": "https://en.yna.co.kr/"
-      },
-      {
-        "title": "韩国狗肉馆迎最后一批食客",
-        "desc": "禁食狗肉法案2027年2月生效，今夏成狗肉合法交易最后一个伏季，多地老食客排队喝\"最后的告别汤\"，超八成民众支持禁令",
-        "platform": "韩联社/Naver",
+        "title": "女星白珍熙自曝炒股巨亏",
+        "desc": "36岁演员白珍熙在YouTube称因股市急涨急跌亏损严重，拮据到盘算接雨水洗澡喝",
+        "platform": "韩媒/YouTube",
         "hot": "热",
         "link": "https://www.naver.com/"
       },
       {
-        "title": "韩国集装箱船首航北极航线",
-        "desc": "\"PanStar Acro\"号经北方海路驶往欧洲，系韩国首次北极商业航行，预计航程40-45天，可将韩欧航时缩短35%",
-        "platform": "韩联社/观察者",
+        "title": "中国足协：无证据证实韩足协不当招待",
+        "desc": "经专项调查组核查无证据表明韩国足协提供\"不当招待\"，韩文体部已启动审计",
+        "platform": "韩联社/上观",
         "hot": "热",
         "link": "https://en.yna.co.kr/"
       },
       {
-        "title": "白荷娜/李绍希首进世锦赛女双决赛",
-        "desc": "新德里羽毛球世锦赛女双半决赛2-0击败中国组合李怡婧/罗徐敏，决赛将战世界第一刘圣书/谭宁",
-        "platform": "韩联社/体育",
+        "title": "韩国谋求制造业结构创新",
+        "desc": "政府发布《经济结构创新推进方向》，拟四季度起推钢铁、石化、汽车等主力产业AI工艺升级",
+        "platform": "韩联社/人民日报",
         "hot": "热",
         "link": "https://en.yna.co.kr/"
       },
       {
-        "title": "BIBI回应大尺度表演争议",
-        "desc": "女歌手BIBI首度回应\"Waterbomb Seoul 2026\"音乐节争议：\"花了钱进场的人，我一定要让他们开心\"",
-        "platform": "韩联社/动态",
+        "title": "蔚山启动水下数据中心项目",
+        "desc": "蔚山市与海洋科技院合作设计海底数据中心，利用13.3℃海水冷却，目标PUE约1.2",
+        "platform": "韩联社/韩媒",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "Naver恢复星级评分 个体户被困平台",
+        "desc": "Naver地图全面恢复星级评分，荒唐差评再现，个体户抱怨平台生态放大评分压力",
+        "platform": "东亚日报",
+        "hot": "热",
+        "link": "https://www.donga.com/"
+      },
+      {
+        "title": "三星电子股价下挫",
+        "desc": "三星公布偏向分红的股东回报方案令投资者失望，股价最大跌幅达6.4%",
+        "platform": "韩媒/财经",
+        "hot": "热",
+        "link": "https://www.naver.com/"
+      },
+      {
+        "title": "制造业AI转型困难 79.2%企业未引入AI",
+        "desc": "产业技术振兴院报告显示制造业1200余家企业中未引入AI者占79.2%，需政府大力支持",
+        "platform": "韩联社",
+        "hot": "热",
+        "link": "https://en.yna.co.kr/"
+      },
+      {
+        "title": "李在明再批家业继承税惠漏洞",
+        "desc": "李在明质疑为百货、医疗等行业减免数百亿韩元遗产税是否公平，政府拟收紧免税范围",
+        "platform": "韩联社",
         "hot": "热",
         "link": "https://en.yna.co.kr/"
       }
