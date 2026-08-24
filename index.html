@@ -2379,6 +2379,123 @@
         body.dark-mode .day-task-item.status-done {
             opacity: 0.5;
         }
+
+        /* ===== 日详情任务卡 v2：紧凑双行 + 状态图标胶囊（2026-08-24 重设） ===== */
+        .task-row-main {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 3px;
+            min-width: 0;
+        }
+        .task-row-main .task-title {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 500;
+            color: inherit;
+        }
+        .task-row-main .task-title.completed-title {
+            text-decoration: line-through;
+            opacity: 0.55;
+        }
+        /* 状态图标胶囊：左侧细色条 + emoji + 2 字 */
+        .task-status-pill {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 1px 6px 1px 4px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.55;
+            letter-spacing: 0.2px;
+            color: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.18);
+            position: relative;
+        }
+        .task-status-pill::before {
+            content: '';
+            width: 3px;
+            height: 10px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.85);
+            margin-right: 3px;
+            flex-shrink: 0;
+        }
+        .task-status-pill.todo { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+        .task-status-pill.in-progress { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
+        .task-status-pill.done { background: linear-gradient(135deg, #34d399 0%, #10b981 100%); opacity: 0.9; }
+        .task-status-pill.overdue { background: linear-gradient(135deg, #f87171 0%, #ef4444 100%); }
+        /* meta 行：项目名 pill + 时间/类型/重复 */
+        .task-row-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            font-size: 10.5px;
+            color: #6b7280;
+        }
+        .task-project-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1px 6px 1px 4px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.06);
+            color: #374151;
+            font-weight: 500;
+            font-size: 10.5px;
+        }
+        .task-project-pill .project-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+        }
+        .task-meta-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            color: #6b7280;
+            font-size: 10.5px;
+        }
+        /* 任务描述：浅色小字，最多 2 行省略 */
+        .task-desc-line {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 3px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+
+        /* 深色模式：v2 任务卡视觉（胶囊 + meta） */
+        body.dark-mode .task-status-pill {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        }
+        body.dark-mode .task-project-pill {
+            background: rgba(255,255,255,0.08);
+            color: #cbd5e1;
+        }
+        body.dark-mode .task-meta-tag,
+        body.dark-mode .task-desc-line {
+            color: #94a3b8;
+        }
+        body.dark-mode .task-row-main .task-title {
+            color: #e5e7eb;
+        }
+        body.dark-mode .day-task-item.completed .task-row-main .task-title {
+            color: #6b7280;
+        }
         #planPage {
             padding: 16px 24px;
             gap: 12px;
@@ -11222,13 +11339,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
                     const safeDesc = ev.desc ? escapeHtml(ev.desc) : '';
-                    const projectTag = `<span class="plan-project-tag" style="background:${project.color};" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</span>`;
-                    const statusBadge = isOverdue
-                        ? '<span class="plan-status-badge overdue" title="已延期">延期</span>'
-                        : (displayStatus === 'in-progress' ? '<span class="plan-status-badge in-progress" title="进行中">进行</span>'
-                        : (displayStatus === 'done' ? '<span class="plan-status-badge done" title="已完成">完成</span>'
-                        : '<span class="plan-status-badge todo" title="待办">待办</span>'));
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${projectTag}${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${statusBadge}</span>${safeDesc ? `<span class="event-desc">${safeDesc}</span>` : ''}`;
+                    // v2 emoji 状态角标（小格子内更醒目）
+                    const EVENT_STATUS_EMOJI = {
+                        'todo': '○', 'in-progress': '▶', 'done': '✓', 'overdue': '⚠'
+                    };
+                    const statusEmoji = `<span class="plan-status-badge ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${EVENT_STATUS_EMOJI[displayStatus] || ''}</span>`;
+                    const projectColorDot = `<span class="project-dot" style="background:${project.color};width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${projectColorDot}${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${statusEmoji}</span>${safeDesc ? `<span class="event-desc">${safeDesc}</span>` : ''}`;
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); });
                     item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
@@ -11279,18 +11396,31 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '') + (isOverdue ? ' overdue-event' : '');
                 item.style.setProperty('background-color', hexToRgba(project.color, 0.18), 'important');
                 item.style.setProperty('border-left', '4px solid ' + project.color, 'important');
+                const displayStatus = isOverdue ? 'overdue' : ev.status;
+                // v2 状态胶囊（emoji + 2字）—— 视觉感更强
+                const STATUS_PILL = {
+                    'todo':        { cls: 'todo',        icon: '○', text: '待办' },
+                    'in-progress': { cls: 'in-progress', icon: '▶', text: '进行' },
+                    'done':        { cls: 'done',        icon: '✓', text: '完成' },
+                    'overdue':     { cls: 'overdue',     icon: '⚠', text: '延期' }
+                };
+                const pill = STATUS_PILL[displayStatus] || STATUS_PILL['todo'];
+                const statusPillHtml = `<span class="task-status-pill ${pill.cls}" title="${escapeHtml(pill.text)}">${pill.icon} ${pill.text}</span>`;
                 item.innerHTML = `
                     <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
-                        <div class="task-title-text"><span class="plan-project-tag" style="background:${project.color};" title="${escapeHtml(project.name)}">${escapeHtml(project.name)}</span>${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-status-badge ${isOverdue ? 'overdue' : (ev.status === 'in-progress' ? 'in-progress' : (ev.status === 'done' ? 'done' : 'todo'))}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${isOverdue ? '延期' : (ev.status === 'in-progress' ? '进行' : (ev.status === 'done' ? '完成' : '待办'))}</span></div>
-                        <div class="task-info">
-                            <span><span class="task-type-dot" style="background:${getTypeColor(ev.type)};"></span> ${typeNames[ev.type]}</span>
-                            ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
-                            ${ev.startTime ? `<span>${ev.startTime}${ev.endTime ? ' - '+ev.endTime : ''}</span>` : ''}
-                            <span class="task-track-tag" style="background:${project.color};">${project.name}</span>
-                            ${isLong ? `<span>${ev.startDate} ~ ${ev.endDate}</span>` : ''}
+                        <div class="task-row-main">
+                            <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
+                            ${statusPillHtml}
                         </div>
-                        ${ev.desc ? `<div style="font-size:11px;color:#888;margin-top:3px;">${ev.desc}</div>` : ''}
+                        <div class="task-row-meta">
+                            <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${escapeHtml(project.name)}</span>
+                            ${isLong ? '<span class="task-meta-tag">📅 长期</span>' : ''}
+                            ${ev.repeat || ev.repeatInstance ? '<span class="task-meta-tag">🔄 重复</span>' : ''}
+                            ${ev.startTime ? `<span class="task-meta-tag">🕐 ${ev.startTime}${ev.endTime ? '-' + ev.endTime : ''}</span>` : ''}
+                            ${isLong ? `<span class="task-meta-tag">${ev.startDate} ~ ${ev.endDate}</span>` : ''}
+                        </div>
+                        ${ev.desc ? `<div class="task-desc-line">${escapeHtml(ev.desc)}</div>` : ''}
                     </div>
                     <div class="task-item-actions">
                         <button class="icon-btn" onclick="openEventModal('${ev.id}'); event.stopPropagation();">✏️</button>
@@ -21084,7 +21214,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241550";
+        window.NIKO_VERSION = "202608241613";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
