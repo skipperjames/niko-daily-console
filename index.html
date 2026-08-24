@@ -8958,7 +8958,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="cloudsync-actions">
             <button class="cloudsync-btn primary" id="cloudsyncConnectBtn" onclick="NikoSync.connect()">🔗 连接坚果云文件夹</button>
             <button class="cloudsync-btn" id="cloudsyncSyncBtn" onclick="NikoSync.doSync()">⏳ 立即同步</button>
-            <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 紧急从云端拉取</button>
+            <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 从本地快照恢复</button>
+            <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="直接 HTTP 读远端坚果云 / GitHub 文件找 events（本地快照也空时用）">🌐 从远端硬拉（终极恢复）</button>
             <button class="cloudsync-btn danger" id="cloudsyncDisconnectBtn" onclick="NikoSync.disconnect()" style="display:none;">断开</button>
         </div>
 
@@ -9617,33 +9618,63 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         let risks = safeStorage.get('work_calendar_risks', []);
 
         // 启动诊断（控制台输入 nikoDiag() 查看 events 真实长度 + 各通道快照 events 长度）
+        // 关键：快照键是 niko_sync_local_snapshot__fs / __github（按通道隔离），不是 niko_cloud_snapshot_*
+        // 上轮写错键导致 forcePull 误报"云端没数据"，用户白着急一场
         window.nikoDiag = function () {
             const out = { 本地_events_长度: events.length, 本地_projects: projects.length, statusColors };
+            // 1) 真正的快照键（按通道隔离）
+            ['niko_sync_local_snapshot__fs', 'niko_sync_local_snapshot__github'].forEach(k => {
+                try {
+                    const snap = JSON.parse(localStorage.getItem(k) || '{}');
+                    out[k + '_keys'] = Object.keys(snap).length;
+                    if (snap['work_calendar_events']) {
+                        const arr = JSON.parse(snap['work_calendar_events']);
+                        out[k.replace('niko_sync_local_snapshot__','') + '快照_events_长度'] = Array.isArray(arr) ? arr.length : 0;
+                    }
+                } catch (e) { out[k + '_错误'] = e.message; }
+            });
+            // 2) 旧版共用快照（部分老用户）
             try {
-                const fsSnap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_fs') || '{}');
-                out.fs快照_keys = Object.keys(fsSnap).length;
-                if (fsSnap['work_calendar_events']) out.fs快照_events_长度 = JSON.parse(fsSnap['work_calendar_events']).length;
-            } catch (e) { out.fs快照错误 = e.message; }
-            try {
-                const ghSnap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_github') || '{}');
-                out.gh快照_keys = Object.keys(ghSnap).length;
-                if (ghSnap['work_calendar_events']) out.gh快照_events_长度 = JSON.parse(ghSnap['work_calendar_events']).length;
-            } catch (e) { out.gh快照错误 = e.message; }
+                const legacy = JSON.parse(localStorage.getItem('niko_sync_local_snapshot') || '{}');
+                out['旧版共用快照_keys'] = Object.keys(legacy).length;
+                if (legacy['work_calendar_events']) {
+                    const arr = JSON.parse(legacy['work_calendar_events']);
+                    out['旧版共用快照_events_长度'] = Array.isArray(arr) ? arr.length : 0;
+                }
+            } catch (e) {}
+            // 3) 工作日历三键本体（最直接的"还有没有"答案）
+            out['work_calendar_events_本体'] = (() => {
+                try {
+                    const v = JSON.parse(localStorage.getItem('work_calendar_events') || '[]');
+                    return Array.isArray(v) ? v.length : '格式异常';
+                } catch (e) { return 'JSON 损坏'; }
+            })();
+            // 4) 远端物理可达（GitHub 频道走 readRemoteGh 不需要登录 OAuth），告诉用户远端有没有数据
+            out['GitHub频道已连接'] = !!(window.NikoSync && window.NikoSync.state && window.NikoSync.state.ghConnected);
+            out['坚果云频道已连接'] = !!(window.NikoSync && window.NikoSync.state && window.NikoSync.state.fileHandle);
             console.log('%c[NIKO 诊断]', 'color:#f00;font-weight:bold', out);
-            if (events.length === 0) console.warn('⚠️ 本地 events 为空！如快照有数据，请运行 nikoForcePull() 拉取云端');
+            if (events.length === 0) console.warn('⚠️ 本地 events 为空！若任何快照长度>0，请运行 nikoForcePull() 拉取；若都没数据，请运行 nikoRemotePull() 读远端');
             return out;
         };
-        // 紧急：从云端 fs/github 两通道拉取 events，挑最长的覆盖本地
+        // 紧急：从云端 fs/github 两通道拉取 events，挑长度最大的覆盖本地
+        // 关键：快照键是 niko_sync_local_snapshot__<channel>，不是 niko_cloud_snapshot_<channel>
         window.nikoForcePull = async function () {
-            if (!confirm('将拉取云端所有通道的 events，挑长度最大的覆盖本地。确定吗？')) return;
+            if (!confirm('将从所有通道快照里挑 events 长度最大的覆盖本地。确定吗？')) return;
             let best = { len: 0, source: null, value: null };
-            ['fs', 'github'].forEach(ch => {
+            const candidates = [
+                'niko_sync_local_snapshot__fs',
+                'niko_sync_local_snapshot__github',
+                'niko_sync_local_snapshot', // 旧版兼容
+                'niko_cloud_snapshot_fs',
+                'niko_cloud_snapshot_github'
+            ];
+            candidates.forEach(k => {
                 try {
-                    const snap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_' + ch) || '{}');
+                    const snap = JSON.parse(localStorage.getItem(k) || '{}');
                     if (snap['work_calendar_events']) {
                         const arr = JSON.parse(snap['work_calendar_events']);
                         if (Array.isArray(arr) && arr.length > best.len) {
-                            best = { len: arr.length, source: ch, value: snap['work_calendar_events'] };
+                            best = { len: arr.length, source: k, value: snap['work_calendar_events'] };
                         }
                     }
                 } catch (e) {}
@@ -9655,9 +9686,57 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 safeStorage.set('work_calendar_events', events);
                 if (typeof render === 'function') render();
                 if (typeof renderPlanPage === 'function') renderPlanPage();
-                showToast('☁ 紧急恢复成功：' + best.source + ' 通道拉回 ' + best.len + ' 个任务');
+                showToast('☁ 本地快照恢复成功：' + best.source + ' → ' + best.len + ' 个任务');
             } else {
-                showToast('❌ 云端快照里也没有 events 数据，无法恢复');
+                showToast('❌ 本地快照里都没有 events 数据，试试 nikoRemotePull() 直读远端');
+            }
+        };
+        // 终极：从远端（坚果云 + GitHub）直接读 events，覆盖本地（不依赖本地 snapshot）
+        // 适用于：本地 events 空 + 本地快照也是空 + 但远端文件里还有数据
+        window.nikoRemotePull = async function () {
+            if (!window.NikoSync || !window.NikoSync.__internals) {
+                showToast('❌ NikoSync 未加载，云同步模块不可用');
+                return;
+            }
+            if (!confirm('将直接 HTTP 拉远端坚果云/GitHub 文件，挑 events 最长的覆盖本地。确定吗？')) return;
+            const { readRemote, readRemoteGh } = window.NikoSync.__internals;
+            let best = { len: 0, source: null, value: null };
+            // 坚果云
+            try {
+                if (window.NikoSync.state && window.NikoSync.state.fileHandle) {
+                    const file = await window.NikoSync.state.fileHandle.getFile();
+                    const text = await file.text();
+                    if (text) {
+                        const remote = JSON.parse(text);
+                        if (remote.keys && remote.keys['work_calendar_events']) {
+                            const arr = JSON.parse(remote.keys['work_calendar_events'].value || '[]');
+                            if (Array.isArray(arr)) best = { len: arr.length, source: '坚果云', value: remote.keys['work_calendar_events'].value };
+                        }
+                    }
+                }
+            } catch (e) { console.warn('读坚果云失败:', e.message); }
+            // GitHub
+            try {
+                if (window.NikoSync.state && window.NikoSync.state.ghConnected) {
+                    const remote = await readRemoteGh();
+                    if (remote && remote.keys && remote.keys['work_calendar_events']) {
+                        const arr = JSON.parse(remote.keys['work_calendar_events'].value || '[]');
+                        if (Array.isArray(arr) && arr.length > best.len) {
+                            best = { len: arr.length, source: 'GitHub', value: remote.keys['work_calendar_events'].value };
+                        }
+                    }
+                }
+            } catch (e) { console.warn('读 GitHub 失败:', e.message); }
+            if (best.value && best.len > 0) {
+                localStorage.setItem('work_calendar_events', best.value);
+                events = JSON.parse(best.value);
+                if (typeof migrateEventsToProjects === 'function') migrateEventsToProjects();
+                safeStorage.set('work_calendar_events', events);
+                if (typeof render === 'function') render();
+                if (typeof renderPlanPage === 'function') renderPlanPage();
+                showToast('🌐 远端恢复成功：' + best.source + ' → ' + best.len + ' 个任务');
+            } else {
+                showToast('❌ 远端坚果云/GitHub 也没有 events 数据（请用 Niko 控制台日志里的"读 X 失败"判断哪个通道连得上）');
             }
         };
 
@@ -19557,6 +19636,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         });
 
+        // ========== 颜色工具函数（全局，渲染层调用） ==========
+        // 必须顶层声明：计划看板的 renderPlanPage / renderFourWeekGrid / renderDayDetail / createBoardCard
+        // 都要调用，hexToRgba 若放在 applyStatusColors 嵌套里会 ReferenceError 把整个日历渲染炸空
+        function hexToRgba(hex, alpha) {
+            const h = (hex || '').replace('#','');
+            const r = parseInt(h.slice(0,2), 16);
+            const g = parseInt(h.slice(2,4), 16);
+            const b = parseInt(h.slice(4,6), 16);
+            return `rgba(${isNaN(r)?136:r},${isNaN(g)?136:g},${isNaN(b)?136:b},${alpha})`;
+        }
+
         // ========== 颜色设置 & 数据管理 ==========
         // ========== 颜色设置功能 ==========
         function applyStatusColors() {
@@ -19570,12 +19660,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             statusColorMap['done'] = doneColor;
 
             // 动态生成 CSS 覆盖硬编码颜色（使用 !important 确保优先级最高）
-            function hexToRgba(hex, alpha) {
-                const r = parseInt(hex.slice(1,3), 16);
-                const g = parseInt(hex.slice(3,5), 16);
-                const b = parseInt(hex.slice(5,7), 16);
-                return `rgba(${r},${g},${b},${alpha})`;
-            }
 
             let dynamicCSS = `
                 .task-card.status-todo { background: linear-gradient(135deg, ${hexToRgba(todoColor,0.08)}, ${hexToRgba(todoColor,0.15)}) !important; border-color: ${hexToRgba(todoColor,0.5)} !important; }
@@ -20994,7 +21078,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241419";
+        window.NIKO_VERSION = "202608241430";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
