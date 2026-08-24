@@ -3555,6 +3555,29 @@
                 width: 100%; gap: 6px; flex-wrap: wrap; justify-content: flex-start;
             }
         }
+
+        /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边 + 角标 ⚠ */
+        .event-item.overdue-event,
+        .day-task-item.overdue-event {
+            box-shadow: inset 0 0 0 1px var(--status-overdue, #ef4444), 0 0 4px rgba(239,68,68,0.35) !important;
+            position: relative;
+        }
+        .event-item.overdue-event::after,
+        .day-task-item.overdue-event::after {
+            content: '⚠';
+            position: absolute;
+            top: 1px;
+            right: 3px;
+            color: var(--status-overdue, #ef4444);
+            font-size: 10px;
+            z-index: 2;
+            text-shadow: 0 0 2px rgba(0,0,0,0.6);
+            pointer-events: none;
+        }
+        body.dark-mode .event-item.overdue-event::after,
+        body.dark-mode .day-task-item.overdue-event::after {
+            text-shadow: 0 0 2px rgba(0,0,0,0.9);
+        }
 /* ===== 媒体热点专属CSS ===== */
         .hot-card .hot-header {
             display: flex;
@@ -7456,6 +7479,16 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item"><label>结束时间</label><input type="time" id="eventEndTime" value="10:00"></div>
             </div>
             <div class="form-row">
+                <div class="form-item">
+                    <label>项目</label>
+                    <div style="display:flex;gap:6px;">
+                        <select id="eventProject" style="flex:1;"></select>
+                        <button class="btn" type="button" onclick="quickAddProjectForEvent()" style="padding:0 10px;font-size:12px;">＋ 新建</button>
+                    </div>
+                </div>
+                <div class="form-item" style="display:flex;align-items:flex-end;font-size:11px;color:#888;">项目色用于日历任务条左侧色条与背景</div>
+            </div>
+            <div class="form-row">
                 <div class="form-item"><label>优先级</label>
                     <select id="eventPriority">
                         <option value="now">Now</option>
@@ -8847,6 +8880,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <input type="color" id="color-done" value="#10b981">
                     <button class="color-reset-btn" onclick="resetColor('done')">重置</button>
                 </div>
+                <div class="color-picker-row">
+                    <div class="color-preview" id="preview-overdue" style="background:#ef4444;"></div>
+                    <div>
+                        <div class="color-label">已延期 (Overdue)</div>
+                        <div class="color-desc">结束日期已过、仍未完成的任务（自动判定）</div>
+                    </div>
+                    <input type="color" id="color-overdue" value="#ef4444">
+                    <button class="color-reset-btn" onclick="resetColor('overdue')">重置</button>
+                </div>
+            </div>
+
+            <div style="font-size:12.5px;font-weight:600;color:#555;margin:18px 0 6px;display:flex;align-items:center;justify-content:space-between;">
+                <span>项目管理（按项目色区分日历任务条）</span>
+                <button class="btn primary" style="font-size:12px;padding:4px 10px;" onclick="addProjectFromUI()">+ 新建项目</button>
+            </div>
+            <div id="projectPickerList" style="display:flex;flex-direction:column;gap:8px;">
+                <!-- 项目行由 JS 渲染 -->
             </div>
             <div class="modal-footer">
                 <button class="btn danger" onclick="resetAllColors()">全部重置</button>
@@ -9221,9 +9271,89 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         const DEFAULT_STATUS_COLORS = {
             'todo': '#f59e0b',
             'in-progress': '#3b82f6',
-            'done': '#10b981'
+            'done': '#10b981',
+            'overdue': '#ef4444'   // 已延期（自动按结束日期判定，无需手动设）
         };
         let statusColors = safeStorage.get('niko_status_colors', { ...DEFAULT_STATUS_COLORS });
+
+        // ===== 项目管理（v20260824 替换原 6 固定轨道）=====
+        // 用户可自建项目，每个项目一个颜色；任务挂一个项目；状态 4 种（含自动已延期）
+        const NIKO_DEFAULT_PROJECTS = [
+            { id: 'pj_jp', name: '日本项目', color: '#fb923c', createdAt: 0 },
+            { id: 'pj_kr', name: '韩国项目', color: '#e879f9', createdAt: 0 },
+            { id: 'pj_film', name: '影片项目', color: '#f472b6', createdAt: 0 },
+            { id: 'pj_general', name: '通用', color: '#94a3b8', createdAt: 0 }
+        ];
+        let projects = safeStorage.get('niko_projects', null);
+        if (!Array.isArray(projects) || projects.length === 0) {
+            projects = NIKO_DEFAULT_PROJECTS.map(p => ({ ...p, createdAt: Date.now() }));
+            safeStorage.set('niko_projects', projects);
+        }
+        // 旧轨道 → 项目名映射（首次启动迁移用）
+        const TRACK_TO_PROJECT_NAME = {
+            content: '内容事业', deals: '商单交付', film: '影片项目',
+            renovation: '装修', fitness: '身体健康', relationship: '关系'
+        };
+        const TRACK_TO_DEFAULT_COLOR = {
+            content: '#7c3aed', deals: '#ea580c', film: '#db2777',
+            renovation: '#0891b2', fitness: '#65a30d', relationship: '#c026d3'
+        };
+        function getProject(id) { return projects.find(p => p.id === id) || projects[0] || { id: 'pj_general', name: '通用', color: '#94a3b8' }; }
+        function getProjectColor(id) { return getProject(id).color; }
+        function getProjectName(id) { return getProject(id).name; }
+        function addProjectSilent(name, color) {
+            const id = 'pj_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+            projects.push({ id, name: name || '新项目', color: color || '#7c3aed', createdAt: Date.now() });
+            safeStorage.set('niko_projects', projects);
+            return id;
+        }
+        function updateProject(id, name, color) {
+            const p = projects.find(x => x.id === id);
+            if (p) { if (name !== undefined) p.name = name; if (color !== undefined) p.color = color; safeStorage.set('niko_projects', projects); }
+        }
+        function deleteProjectById(id) {
+            if (projects.length <= 1) { showToast('⚠️ 至少保留一个项目'); return false; }
+            projects = projects.filter(p => p.id !== id);
+            safeStorage.set('niko_projects', projects);
+            // 关联到该项目的任务改挂到第一个剩余项目
+            const fallback = projects[0].id;
+            (events || []).forEach(ev => { if (ev.projectId === id) ev.projectId = fallback; });
+            safeStorage.set('work_calendar_events', events);
+            return true;
+        }
+        // 迁移：旧 track 字段 → 新 projectId
+        function migrateEventsToProjects() {
+            if (!Array.isArray(events)) return;
+            let changed = false;
+            events.forEach(ev => {
+                if (ev.projectId && !ev.track) return; // 已是新格式
+                const tk = ev.track || 'content';
+                const projName = TRACK_TO_PROJECT_NAME[tk] || ('迁移-' + tk);
+                let p = projects.find(x => x.name === projName);
+                if (!p) {
+                    const color = TRACK_TO_DEFAULT_COLOR[tk] || '#7c3aed';
+                    const id = addProjectSilent(projName, color);
+                    p = projects.find(x => x.id === id);
+                }
+                ev.projectId = p.id;
+                if (ev.track) { delete ev.track; }
+                changed = true;
+            });
+            if (changed) safeStorage.set('work_calendar_events', events);
+        }
+        // 已延期判定：endDate < 今天 且 状态 !== done
+        function isEventOverdue(ev) {
+            if (!ev || ev.status === 'done' || !ev.endDate) return false;
+            const today = new Date(); today.setHours(0,0,0,0);
+            const end = new Date(ev.endDate + 'T00:00:00');
+            return end < today;
+        }
+        // 已延期但不被算作"今天及以后过期"的状态显示文本（无第四状态值）
+        function getDisplayStatus(ev) {
+            if (ev.status === 'done') return 'done';
+            if (isEventOverdue(ev)) return 'overdue';
+            return ev.status || 'todo';
+        }
         let currentPage = 'today';
         let currentWeekStart = getMonday(new Date());
         let selectedDate = new Date();
@@ -9482,6 +9612,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             return e;
         });
+
+        // 项目迁移（v20260824 旧 track 字段 → 新 projectId + projects 列表）
+        if (typeof migrateEventsToProjects === 'function') migrateEventsToProjects();
 
         const trackNames = {
             content: '内容事业',
@@ -10457,9 +10590,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const thisStart = fmt(thisMon), thisEnd = fmt(addDays(thisMon, 6));
             const lastStart = fmt(lastMon), lastEnd = fmt(addDays(lastMon, 6));
 
-            const agg = {}; // track -> {min, lastMin}
+            const agg = {}; // projectName -> {min, lastMin}
             events.forEach(ev => {
-                const t = ev.track || 'other';
+                const t = getProject(ev.projectId).name;
                 if (!agg[t]) agg[t] = { min: 0, lastMin: 0 };
                 agg[t].min += timeAuditEventMin(ev, thisStart, thisEnd);
                 agg[t].lastMin += timeAuditEventMin(ev, lastStart, lastEnd);
@@ -10496,8 +10629,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 html += '<div style="text-align:center;color:#aaa;padding:16px;">本周还没有带时间的安排。给执行块/固定行程设置起止时间后，这里会自动统计。</div>';
             } else {
                 html += rows.map(r => {
-                    const name = TIME_TRACK_NAMES[r.t] || r.t;
-                    const color = TIME_TRACK_COLORS[r.t] || '#888';
+                    const proj = projects.find(p => p.name === r.t) || { color: '#888' };
+                    const color = proj.color;
+                    const name = r.t;
                     const diff = r.min - r.lastMin;
                     const diffTxt = diff > 0 ? `<span style="color:#10b981;">↑${fmtMin(diff)}</span>` : diff < 0 ? `<span style="color:#ef4444;">↓${fmtMin(-diff)}</span>` : '<span style="color:#999;">持平</span>';
                     const barW = Math.max(2, Math.round(r.min / maxMin * 100));
@@ -10938,10 +11072,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const hasNext = (dayEventsDisplay[nextDateStr] || []).some(e => e.id === ev.id);
                     const item = document.createElement('div');
                     const isRepeatEvent = ev.repeat || ev.repeatInstance;
-                    item.className = `event-item type-${ev.type} status-${ev.status} track-${ev.track || 'content'}${ev.status === 'done' ? ' completed' : ''}${ev.startDate !== ev.endDate ? ' long-task' : ''}${hasPrev ? ' conn-left' : ''}${hasNext ? ' conn-right' : ''}${isRepeatEvent ? ' repeat-event' : ''}`;
+                    const isOverdue = isEventOverdue(ev);
+                    item.className = `event-item type-${ev.type} status-${ev.status}${ev.status === 'done' ? ' completed' : ''}${ev.startDate !== ev.endDate ? ' long-task' : ''}${hasPrev ? ' conn-left' : ''}${hasNext ? ' conn-right' : ''}${isRepeatEvent ? ' repeat-event' : ''}${isOverdue ? ' overdue-event' : ''}`;
                     item.draggable = true;
                     item.dataset.eventId = ev.id;
-                    item.title = (trackNames[ev.track] || ev.track || '未分类') + ' · ' + (statusNames[ev.status] || ev.status);
+                    // 项目色（替代旧 6 固定轨道）
+                    const project = getProject(ev.projectId);
+                    item.style.setProperty('background-color', hexToRgba(project.color, 0.22), 'important');
+                    item.style.setProperty('border-left', '6px solid ' + project.color, 'important');
+                    const displayStatus = isOverdue ? 'overdue' : ev.status;
+                    item.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
@@ -10991,17 +11131,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             dayEvents.forEach(ev => {
                 const isLong = ev.startDate !== ev.endDate;
                 const isDone = ev.status === 'done';
+                const isOverdue = isEventOverdue(ev);
+                const project = getProject(ev.projectId);
                 const item = document.createElement('div');
-                item.className = 'day-task-item status-' + ev.status + ' track-' + (ev.track || 'content') + (isDone ? ' completed' : '');
+                item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '') + (isOverdue ? ' overdue-event' : '');
+                item.style.setProperty('background-color', hexToRgba(project.color, 0.18), 'important');
+                item.style.setProperty('border-left', '4px solid ' + project.color, 'important');
                 item.innerHTML = `
                     <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
-                        <div class="task-title-text">${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-badge" style="background:${statusColorMap[ev.status]};color:#fff;">${statusNames[ev.status]}</span></div>
+                        <div class="task-title-text">${ev.title} ${isLong ? '<span class="plan-badge">📅 长期</span>' : ''} <span class="plan-badge" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};color:#fff;">${isOverdue ? statusNames['overdue'] : (statusNames[ev.status] || ev.status)}</span></div>
                         <div class="task-info">
                             <span><span class="task-type-dot" style="background:${getTypeColor(ev.type)};"></span> ${typeNames[ev.type]}</span>
                             ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
                             ${ev.startTime ? `<span>${ev.startTime}${ev.endTime ? ' - '+ev.endTime : ''}</span>` : ''}
-                            <span class="task-track-tag">${trackNames[ev.track] || ev.track}</span>
+                            <span class="task-track-tag" style="background:${project.color};">${project.name}</span>
                             ${isLong ? `<span>${ev.startDate} ~ ${ev.endDate}</span>` : ''}
                         </div>
                         ${ev.desc ? `<div style="font-size:11px;color:#888;margin-top:3px;">${ev.desc}</div>` : ''}
@@ -11055,19 +11199,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function createBoardCard(ev) {
             const isDone = ev.status === 'done';
+            const isOverdue = isEventOverdue(ev);
+            const project = getProject(ev.projectId);
             return `
-                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}" draggable="true" data-event-id="${ev.id}">
+                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}${isOverdue ? ' overdue-event' : ''}" draggable="true" data-event-id="${ev.id}" style="border-left:4px solid ${project.color} !important; box-shadow: inset 4px 0 8px -4px ${hexToRgba(project.color, 0.4)};">
                     <div class="card-actions">
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${statusColorMap[ev.status]};"></span>${ev.title}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${ev.title}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
+                        <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
                         <span class="tag">${typeNames[ev.type] || ev.type}</span>
                         ${ev.repeat || ev.repeatInstance ? '<span>🔄 重复</span>' : ''}
                         ${ev.startTime ? `<span>🕒 ${ev.startTime}</span>` : ''}
                         ${ev.startDate !== ev.endDate ? `<span>📅 ${ev.startDate} ~ ${ev.endDate}</span>` : ''}
+                        ${isOverdue ? '<span style="color:var(--status-overdue,#ef4444);font-weight:600;">⚠ 已延期</span>' : ''}
                     </div>
                     <div class="card-check">
                         <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleComplete('${ev.id}', event)" />
@@ -11162,11 +11310,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
                 // 只显示在时间范围内的任务
                 if (startOffset + duration > 0 && startOffset < days.length) {
+                    const project = getProject(ev.projectId);
+                    const isOverdue = isEventOverdue(ev);
                     taskList += `
-                        <div class="gantt-task-item" onclick="openEventModal('${ev.id}')">
-                            <span class="task-status-dot" style="background:${statusColorMap[ev.status]};"></span>
+                        <div class="gantt-task-item" onclick="openEventModal('${ev.id}')" style="border-left:3px solid ${project.color};${isOverdue ? 'box-shadow: inset 0 0 0 1px #ef4444;' : ''}">
+                            <span class="task-status-dot" style="background:${isOverdue ? '#ef4444' : statusColorMap[ev.status]};"></span>
                             <span class="task-title">${ev.title}</span>
-                            <span class="task-date">${ev.startDate.slice(5)}</span>
+                            <span class="task-date" style="color:${project.color};">${project.name}</span>
                         </div>
                     `;
 
@@ -11233,6 +11383,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('deleteEventBtn').style.display = eventId ? 'inline-block' : 'none';
             document.getElementById('eventId').value = eventId || '';
 
+            // 填充项目下拉（来源：当前所有项目）
+            const projSelect = document.getElementById('eventProject');
+            const currentProjId = eventId ? (events.find(e => e.id === eventId) || {}).projectId : null;
+            const defaultProjId = currentProjId || (projects[0] && projects[0].id) || '';
+            projSelect.innerHTML = projects.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+            // 兼容：若事件有旧 track 但无 projectId，先在 select 中临时显示该 track 名（迁移未跑）
+            if (!currentProjId && eventId) {
+                const ev0 = events.find(e => e.id === eventId);
+                if (ev0 && ev0.track) {
+                    const opt = document.createElement('option');
+                    opt.value = '__legacy__';
+                    opt.textContent = '迁移自：' + (trackNames[ev0.track] || ev0.track);
+                    projSelect.appendChild(opt);
+                }
+            }
+            projSelect.value = defaultProjId || '__legacy__';
+
             // 重置重复选项
             document.getElementById('eventRepeat').value = 'none';
             document.getElementById('repeatUntilRow').style.display = 'none';
@@ -11281,6 +11448,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             setTimeout(() => document.getElementById('eventTitle').focus(), 50);
         }
 
+        // 弹窗内一键新建项目（轻量：弹小窗输入名字 + 默认色；保存后自动选中新项目）
+        function quickAddProjectForEvent() {
+            const name = prompt('给项目起个名字（建议与作品/活动同名，如「日本项目」「韩国项目」）：');
+            if (!name || !name.trim()) return;
+            const palette = ['#fb923c','#e879f9','#f472b6','#22d3ee','#84cc16','#fbbf24','#a78bfa','#34d399','#fb7185','#60a5fa','#facc15','#4ade80'];
+            const used = new Set(projects.map(p => p.color.toLowerCase()));
+            const color = palette.find(c => !used.has(c)) || '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+            const id = addProjectSilent(name.trim(), color);
+            const sel = document.getElementById('eventProject');
+            const opt = document.createElement('option');
+            opt.value = id; opt.textContent = name.trim();
+            sel.appendChild(opt);
+            sel.value = id;
+            showToast('✅ 项目「' + name.trim() + '」已新建');
+        }
+
         function closeEventModal() { document.getElementById('eventModal').classList.remove('show'); }
 
         function saveEvent() {
@@ -11297,6 +11480,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             const id = document.getElementById('eventId').value || Date.now().toString();
             const existing = events.find(e => e.id === id);
+            const projSelect = document.getElementById('eventProject');
+            const projectId = (projSelect && projSelect.value) || (existing && existing.projectId) || (projects[0] && projects[0].id) || 'pj_general';
             const baseEvent = {
                 id,
                 title,
@@ -11308,7 +11493,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 endTime: document.getElementById('eventEndTime').value,
                 priority: document.getElementById('eventPriority').value,
                 status: document.getElementById('eventStatus').value,
-                track: existing ? existing.track : 'content',
+                projectId,
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
                     until: repeatUntil,
@@ -19368,7 +19553,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderFontScalePicker();
             document.getElementById('colorSettingsModal').classList.add('show');
             // 加载当前颜色
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 const color = statusColors[status] || DEFAULT_STATUS_COLORS[status];
                 document.getElementById('color-' + status).value = color;
                 document.getElementById('preview-' + status).style.background = color;
@@ -19380,7 +19565,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function saveColorSettings() {
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 statusColors[status] = document.getElementById('color-' + status).value;
             });
             safeStorage.set('niko_status_colors', statusColors);
@@ -19399,7 +19584,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!confirm('确定重置所有状态颜色为默认值吗？')) return;
             statusColors = { ...DEFAULT_STATUS_COLORS };
             safeStorage.set('niko_status_colors', statusColors);
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 document.getElementById('color-' + status).value = DEFAULT_STATUS_COLORS[status];
                 document.getElementById('preview-' + status).style.background = DEFAULT_STATUS_COLORS[status];
             });
@@ -19409,7 +19594,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 颜色选择器实时预览
         (function bindColorPickers() {
-            ['todo', 'in-progress', 'done'].forEach(status => {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
                 const picker = document.getElementById('color-' + status);
                 if (picker) {
                     picker.addEventListener('input', (e) => {
@@ -19424,6 +19609,71 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         document.getElementById('colorSettingsModal').onclick = (e) => {
             if (e.target.id === 'colorSettingsModal') closeColorSettings();
+        };
+
+        // ===== 项目管理 UI（设置弹窗内）=====
+        function renderProjectPickerList() {
+            const box = document.getElementById('projectPickerList');
+            if (!box) return;
+            const usedIds = new Set();
+            (events || []).forEach(ev => { if (ev.projectId) usedIds.add(ev.projectId); });
+            box.innerHTML = projects.map(p => {
+                const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
+                const taskCount = (events || []).filter(e => e.projectId === p.id).length;
+                return `
+                <div class="color-picker-row" data-project-id="${p.id}">
+                    <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
+                    <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
+                    ${usedTag}
+                    <button class="color-reset-btn" onclick="deleteProjectFromUI('${p.id}')" title="删除项目">🗑</button>
+                </div>`;
+            }).join('');
+        }
+        function addProjectFromUI() {
+            // 自动选一个跟现有项目区分度高的色相
+            const palette = ['#fb923c','#e879f9','#f472b6','#22d3ee','#84cc16','#fbbf24','#a78bfa','#34d399','#fb7185','#60a5fa'];
+            const used = new Set(projects.map(p => p.color.toLowerCase()));
+            const pick = palette.find(c => !used.has(c)) || '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+            const name = '新项目' + (projects.length + 1);
+            const id = addProjectSilent(name, pick);
+            renderProjectPickerList();
+            showToast('✅ 已新建项目「' + name + '」');
+        }
+        function deleteProjectFromUI(id) {
+            const p = projects.find(x => x.id === id);
+            if (!p) return;
+            const count = (events || []).filter(e => e.projectId === id).length;
+            const msg = count > 0 ? `项目「${p.name}」下还有 ${count} 个任务，删除后会自动归到第一个项目。\n确定删除？` : `确定删除项目「${p.name}」？`;
+            if (!confirm(msg)) return;
+            if (deleteProjectById(id)) {
+                renderProjectPickerList();
+                render();
+                showToast('🗑 已删除项目「' + p.name + '」');
+            }
+        }
+        // 打开颜色设置时也刷新项目列表
+        openColorSettings = function() {
+            migrateEventsToProjects();
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
+                const color = statusColors[status] || DEFAULT_STATUS_COLORS[status];
+                document.getElementById('color-' + status).value = color;
+                document.getElementById('preview-' + status).style.background = color;
+            });
+            renderFontScalePicker();
+            renderProjectPickerList();
+            document.getElementById('colorSettingsModal').classList.add('show');
+        };
+        const _origClose = closeColorSettings;
+        closeColorSettings = function() { document.getElementById('colorSettingsModal').classList.remove('show'); };
+        const _origSave = saveColorSettings;
+        saveColorSettings = function() {
+            ['todo', 'in-progress', 'done', 'overdue'].forEach(status => {
+                statusColors[status] = document.getElementById('color-' + status).value;
+            });
+            safeStorage.set('niko_status_colors', statusColors);
+            applyStatusColors();
+            closeColorSettings();
+            render();
         };
 
         // ========== 数据管理功能 ==========
@@ -20687,7 +20937,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241301";
+        window.NIKO_VERSION = "202608241317";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
