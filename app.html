@@ -5692,6 +5692,19 @@
         }
         .kb-form-row { display:flex; gap:10px; }
         .kb-form-row .kb-form-item { flex:1; }
+        /* 模板入口样式：按 PARA 分组、紧凑按钮 */
+        .kb-tpl-bar { display:flex; flex-direction:column; gap:6px; padding:8px 10px; background:#f9fafb; border:1px dashed #d1d5db; border-radius:8px; max-height:200px; overflow-y:auto; }
+        body.dark-mode .kb-tpl-bar { background:#1a1a26; border-color:#3b3b50; }
+        .kb-tpl-group { display:flex; align-items:flex-start; gap:6px; flex-wrap:wrap; }
+        .kb-tpl-group-label { font-size:11px; font-weight:600; color:#6b7280; padding:3px 6px; border-radius:6px; background:#fff; border:1px solid #e5e7eb; white-space:nowrap; min-width:112px; align-self:center; }
+        body.dark-mode .kb-tpl-group-label { background:#232335; border-color:#3b3b50; color:#9ca3af; }
+        .kb-tpl-chip { font-size:11.5px; padding:3px 9px; border-radius:14px; border:1px solid #e5e7eb; background:#fff; color:#374151; cursor:pointer; user-select:none; transition:all .12s; white-space:nowrap; }
+        body.dark-mode .kb-tpl-chip { background:#232335; border-color:#3b3b50; color:#d1d5db; }
+        .kb-tpl-chip:hover { border-color:#7c3aed; color:#7c3aed; transform:translateY(-1px); box-shadow:0 2px 6px rgba(124,58,237,.18); }
+        .kb-tpl-chip[data-para="01-Projects"] { border-left:3px solid #7c3aed; }
+        .kb-tpl-chip[data-para="02-Areas"] { border-left:3px solid #0891b2; }
+        .kb-tpl-chip[data-para="03-Resources"] { border-left:3px solid #65a30d; }
+        .kb-tpl-chip[data-para="04-Archives"] { border-left:3px solid #6b7280; }
         .kb-import-item { display:flex; align-items:flex-start; gap:8px; padding:9px 6px; border-bottom:1px dashed #eef0f3; }
         body.dark-mode .kb-import-item { border-color:#2e2e42; }
         .kb-import-item .t { font-size:13px; color:#1f2937; line-height:1.5; flex:1; }
@@ -8307,6 +8320,11 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         </select></div>
                     </div>
                     <div class="kb-form-item"><label>标签（逗号分隔）</label><input id="kbFTags" placeholder="如：买量, 复盘, SOP" /></div>
+                    <!-- 模板快捷入口（按 PARA 4 维分组，点模板即填表，可二次编辑） -->
+                    <div class="kb-form-item">
+                        <label>📋 用模板（可选）— 19 个覆盖 PARA 全景</label>
+                        <div id="kbTplBar" class="kb-tpl-bar"></div>
+                    </div>
                     <div class="kb-form-item"><label>正文（支持 Markdown：标题/加粗/列表/代码/链接）</label>
                         <textarea id="kbFBody" rows="7" placeholder="把经验写下来，这是你的复利资产…"></textarea></div>
                     <div class="kb-form-item"><label>来源链接（可选）</label><input id="kbFLink" placeholder="https://…" /></div>
@@ -15287,6 +15305,71 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         ];
         const KB_CATS = ['全部', '工作', '副业', '学习', '生活'];
         const KB_STORE = 'niko_knowledge';
+        // 知识库模板库（按 PARA 4 维 × 使用场景全覆盖；点编辑弹窗「📋 用模板」一键填表）
+        // 字段：id / name(按钮文字) / para(默认目录) / category(默认分类) / tags(默认标签) / title(默认标题示例) / body(Markdown 模板)
+        const KB_TEMPLATES = [
+            // 01-Projects · 当前任务 · 有截止日期
+            { id: 'tpl_project_kickoff', para: '01-Projects', category: '工作', tags: ['项目', '立项'],
+              name: '🚀 项目立项', title: '「项目名」立项卡',
+              body: '## 目标\n一句话说清这次要达成什么（用动词 + 可衡量结果）\n\n## 范围\n- 包含：\n- 不包含：\n\n## 关键里程碑\n- [ ] M1：\n- [ ] M2：\n- [ ] M3：\n\n## 风险 / 阻塞\n- 风险 1：缓解措施\n- 依赖：\n\n## 退出标准\n什么情况下宣布项目完成？\n' },
+            { id: 'tpl_project_milestone', para: '01-Projects', category: '工作', tags: ['项目', '里程碑'],
+              name: '📊 里程碑跟踪', title: '「项目名」里程碑状态',
+              body: '## 当前阶段\n## 完成率\n已完成 / 总任务 = %\n\n## 本周已完成\n- \n\n## 阻塞项\n- \n\n## 下周关键\n- \n' },
+            { id: 'tpl_project_adr', para: '01-Projects', category: '工作', tags: ['决策', 'ADR'],
+              name: '🧭 决策记录 (ADR)', title: 'ADR「「N」：决策主题',
+              body: '## 背景\n为什么要现在做这个决策？\n\n## 候选方案\n### A 方案\n- 优点：\n- 缺点：\n### B 方案\n- 优点：\n- 缺点：\n\n## 决定\n选 X 方案，因为…\n\n## 后果与回滚\n预期影响 / 如何回滚\n' },
+            { id: 'tpl_project_bug', para: '01-Projects', category: '工作', tags: ['Bug', '排查'],
+              name: '🐛 Bug 排查记录', title: 'Bug：简短描述',
+              body: '## 现象\n看到了什么 / 用户反馈\n\n## 复现步骤\n1. \n2. \n3. \n\n## 根因\n真正的原因（不是表面现象）\n\n## 修复方案\n做了哪些修改 / PR 链接\n\n## 预防\n怎么避免下次再犯（测试 / 流程 / 文档）\n' },
+            { id: 'tpl_project_weekly', para: '01-Projects', category: '工作', tags: ['周报'],
+              name: '📅 项目周报', title: '「项目名」周报 YYYY-MM-DD',
+              body: '## 本周成果\n- \n\n## 下周计划\n- \n\n## 风险 / 阻塞\n- \n\n## 需要支持\n- \n' },
+            // 02-Areas · 经验复利 · 持续维护
+            { id: 'tpl_area_retro_fail', para: '02-Areas', category: '学习', tags: ['复盘', '失败'],
+              name: '💥 失败复盘', title: '复盘：项目/事件名',
+              body: '## 目标\n当初想达成什么？\n\n## 结果\n实际发生了什么？\n\n## 根因\n为什么失败？（决策 / 执行 / 外部）\n- 决策层：\n- 执行层：\n- 外部因素：\n\n## 教训\n下次不再犯的一条（只要一条，写多了记不住）\n\n## 转化\n可以复用的资产（写成 SOP / 加入工具清单 / 给团队分享）\n' },
+            { id: 'tpl_area_retro_win', para: '02-Areas', category: '学习', tags: ['复盘', '成功'],
+              name: '🏆 成功模式', title: '成功模式：项目/事件名',
+              body: '## 触发条件\n是什么场景下做了这件事？\n\n## 做了什么\n关键动作 / 决策（不要写流水账）\n\n## 为什么有效\n背后的原理 / 运气 vs 能力（诚实区分）\n\n## 复制条件\n下次什么情况下还能用？需要什么前提？\n' },
+            { id: 'tpl_area_principle', para: '02-Areas', category: '学习', tags: ['原则', '判断'],
+              name: '⚖️ 个人原则', title: '原则：场景描述',
+              body: '## 触发场景\n在什么情况下触发这个原则？\n\n## 原则\n一句话能说清的判断准则\n\n## 反例\n什么情况下这条原则不适用？（避免过度泛化）\n\n## 来源\n这个原则是怎么沉淀下来的？哪次经历 / 哪本书 / 哪个人的话？\n' },
+            { id: 'tpl_area_sop', para: '02-Areas', category: '工作', tags: ['SOP', '流程'],
+              name: '🛠 SOP 流程', title: 'SOP：流程名',
+              body: '## 适用场景\n什么时候用这个 SOP？\n\n## 前置条件\n需要准备什么？\n\n## 步骤\n1. \n2. \n3. \n4. \n\n## 检查点\n完成什么节点可以停下来 / 出问题怎么识别？\n\n## 异常处理\n最常见的 3 个坑 + 应对\n' },
+            { id: 'tpl_area_learning', para: '02-Areas', category: '学习', tags: ['学习', '沉淀'],
+              name: '📚 知识沉淀', title: '主题：核心概念',
+              body: '## 主题\n要学的是什么？\n\n## 核心概念\n3 个最关键的概念（用自己的话）\n- \n\n## 已学\n- \n\n## 未学\n- \n\n## 应用\n准备用到哪些场景？怎么用？\n' },
+            // 03-Resources · 参考资源 · 素材库
+            { id: 'tpl_res_book', para: '03-Resources', category: '学习', tags: ['书摘'],
+              name: '📖 书摘笔记', title: '《书名》/章节名',
+              body: '## 章节\n## 原文\n> \n\n## 我的理解\n用自己的话翻译一遍\n\n## 行动\n这个观点我会怎么用到生活/工作里？\n' },
+            { id: 'tpl_res_quote', para: '03-Resources', category: '学习', tags: ['金句'],
+              name: '💬 金句卡片', title: '金句：来源',
+              body: '## 来源\n书名 / 文章 / 演讲\n\n## 原文\n> \n\n## 为什么打动我\n共鸣在哪？\n\n## 用在哪\n写文案 / 当座右铭 / 给团队分享\n' },
+            { id: 'tpl_res_tool', para: '03-Resources', category: '工作', tags: ['工具'],
+              name: '🔧 工具清单', title: '工具：场景',
+              body: '## 工具\n## 用途\n解决什么具体问题？\n\n## 价格 / 配额\n免费额度 / 付费档\n\n## 替代品\nA / B / C\n\n## 坑\n最常见的踩坑点 + 如何避免\n' },
+            { id: 'tpl_res_article', para: '03-Resources', category: '学习', tags: ['文章'],
+              name: '📄 文章收藏', title: '文章：标题',
+              body: '## 来源\n作者 / 公众号 / 链接\n\n## 核心观点\n3 个关键结论\n- \n\n## 我的批注\n哪些点不同意 / 哪些点想延伸\n\n## 适用场景\n什么情况下回看？\n' },
+            { id: 'tpl_res_inspiration', para: '03-Resources', category: '副业', tags: ['灵感'],
+              name: '✨ 灵感碎片', title: '灵感：触发场景',
+              body: '## 触发物\n什么让我想到这个点？\n\n## 想法\n具体是什么点子？\n\n## 延展\n可以变成什么产品 / 文案 / 行动？\n\n## 待验证\n怎么低成本验证这个点子？\n' },
+            { id: 'tpl_res_datapoint', para: '03-Resources', category: '学习', tags: ['数据'],
+              name: '📊 数据点', title: '数据：来源',
+              body: '## 来源\n报告 / 文章 / 调研\n\n## 数值\n## 可信度\n高 / 中 / 低 + 为什么\n\n## 对比\n行业平均 / 同比 / 环比\n\n## 引用场景\n写文案 / 决策依据 / 团队分享时怎么引用\n' },
+            // 04-Archives · 归档 · 已完成/暂停
+            { id: 'tpl_arc_project_close', para: '04-Archives', category: '工作', tags: ['项目', '收尾'],
+              name: '📦 项目收尾', title: '归档：「项目名」',
+              body: '## 目标达成度\n最初目标 / 实际完成 / 完成率 %\n\n## 关键成果\n- \n\n## 未达成 / 妥协\n- \n\n## 复盘链接\n见「失败复盘」/「成功模式」条目\n\n## 留下的资产\n文档 / 代码 / 关系网\n' },
+            { id: 'tpl_arc_quarter', para: '04-Archives', category: '学习', tags: ['季度', '复盘'],
+              name: '🗓 季度复盘', title: 'YYYY QX 季度复盘',
+              body: '## 高光\n- \n\n## 低谷\n- \n\n## 学到\n- \n\n## 下季度 3 件事\n- \n- \n- \n' },
+            { id: 'tpl_arc_year', para: '04-Archives', category: '学习', tags: ['年度', '总结'],
+              name: '📅 年度总结', title: 'YYYY 年度总结',
+              body: '## 年度主题\n一句话说清这一年的主线\n\n## 关键事件\n- \n\n## 数据指标\n- 健康：\n- 认知：\n- 财务：\n- 关系：\n- 内容：\n\n## 明年方向\n3 件事\n' }
+        ];
         // 来源筛选映射：source.from → 显示名 + 回跳板块
         const KB_FROMS = [
             { key: 'all', label: '全部来源' },
@@ -15408,6 +15491,39 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }).join('');
         }
 
+        // ---- 模板：渲染 + 应用 ----
+        function renderKbTplBar() {
+            const box = document.getElementById('kbTplBar');
+            if (!box) return;
+            // 按 PARA 分组（按 KB_PARA 顺序：01-Projects / 02-Areas / 03-Resources / 04-Archives）
+            const groups = KB_PARA.map(p => ({ para: p, tpls: KB_TEMPLATES.filter(t => t.para === p.key) })).filter(g => g.tpls.length);
+            box.innerHTML = groups.map(g => {
+                const chips = g.tpls.map(t => `<span class="kb-tpl-chip" data-para="${t.para}" data-tpl="${t.id}" onclick="applyKbTemplate('${t.id}')" title="${t.title}">${t.name}</span>`).join('');
+                return `<div class="kb-tpl-group"><span class="kb-tpl-group-label" style="border-left:3px solid ${g.para.color};">${g.para.label}</span>${chips}</div>`;
+            }).join('');
+        }
+        function applyKbTemplate(tplId) {
+            const t = KB_TEMPLATES.find(x => x.id === tplId);
+            if (!t) return;
+            // 模板即意图：所有字段都套用，用户可在表单上二次编辑
+            document.getElementById('kbFTitle').value = t.title;
+            const paraEl = document.getElementById('kbFPara');
+            const catEl = document.getElementById('kbFCat');
+            if (paraEl) paraEl.value = t.para;
+            if (catEl) catEl.value = t.category;
+            document.getElementById('kbFTags').value = t.tags.join(', ');
+            document.getElementById('kbFBody').value = t.body;
+            // 视觉反馈：标题/正文/标签字段闪一下黄底
+            ['kbFTitle', 'kbFBody', 'kbFTags', 'kbFPara', 'kbFCat'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.style.transition = 'background .25s';
+                el.style.background = '#fef9c3';
+                setTimeout(() => { el.style.background = ''; }, 600);
+            });
+            if (typeof showToast === 'function') showToast('📋 已套用模板「' + t.name + '」，可直接二次编辑');
+        }
+
         // ---- 新增/编辑 ----
         function openKbEdit(id) {
             const isNew = !id;
@@ -15415,6 +15531,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('kbEditTitle').textContent = isNew ? '＋ 新增知识条目' : '✏️ 编辑知识条目';
             const paraSel = document.getElementById('kbFPara');
             paraSel.innerHTML = KB_PARA.map(p => `<option value="${p.key}">${p.label} — ${p.sub}</option>`).join('');
+            renderKbTplBar();
+            // 编辑旧条目时不显示模板条（避免误覆盖原值），新增时显示
+            const tplBarWrap = document.getElementById('kbTplBar');
+            if (tplBarWrap && tplBarWrap.parentElement) tplBarWrap.parentElement.style.display = isNew ? '' : 'none';
             document.getElementById('kbFTitle').value = it ? it.title : '';
             paraSel.value = it ? it.para : '02-Areas';
             document.getElementById('kbFCat').value = it ? it.category : '副业';
@@ -21489,7 +21609,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608242156";
+        window.NIKO_VERSION = "202608242206";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
