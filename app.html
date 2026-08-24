@@ -4388,9 +4388,10 @@
         .ai-sec-head { display:flex; align-items:baseline; gap:10px; font-size:14px; font-weight:600; }
         .ai-sec-note { font-size:11px; font-weight:400; color:#999; }
         .ai-card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
-        .ai-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+        .ai-card { background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:14px 16px; display:flex; flex-direction:column; gap:8px; cursor:pointer; transition:transform .15s, box-shadow .15s, border-color .15s; }
         body.dark-mode .ai-card { background:#1c1c1c; border-color:#333; }
-        .ai-card:hover { box-shadow:0 3px 12px rgba(0,0,0,.08); }
+        .ai-card:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(59,130,246,.18); border-color:#93c5fd; }
+        body.dark-mode .ai-card:hover { transform:translateY(-1px); box-shadow:0 6px 18px rgba(96,165,250,.28); border-color:#3b82f6; }
         .ai-card-top { display:flex; align-items:flex-start; gap:8px; }
         .ai-card-name { font-size:15px; font-weight:600; line-height:1.3; }
         .ai-card-vendor { font-size:12px; color:#667eea; background:#eef2ff; padding:1px 8px; border-radius:10px; white-space:nowrap; }
@@ -8110,7 +8111,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
     </div>
 
-    <!-- AI 快报 · 模型基本信息速览弹窗（点卡片"📋 详情"触发） -->
+    <!-- AI 快报 · 模型基本信息速览弹窗（点卡片整体或「📋 详情」按钮触发） -->
     <div class="modal-mask" id="aiDetailModal" onclick="if(event.target===this)closeAiDetail()">
         <div class="modal ai-detail-modal">
             <div class="ai-detail-header">
@@ -13621,8 +13622,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 (it.tag ? '<span class="ai-chip hot">' + it.tag + '</span>' : '') +
                 (dateOrMetric ? '<span class="ai-chip">' + dateOrMetric + '</span>' : '') +
                 (it.delta ? '<span class="ai-chip">' + it.delta + '</span>' : '');
-            const src = it.source ? '<a class="ai-src" href="' + (it.url || '#') + '" target="_blank" rel="noopener">📎 ' + it.source + '</a>' : '';
-            return '<div class="ai-card">' +
+            const src = it.source ? '<a class="ai-src" href="' + (it.url || '#') + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">📎 ' + it.source + '</a>' : '';
+            // 卡片整体可点（打开基本信息详情），子元素通过 stopPropagation 阻止冒泡
+            return '<div class="ai-card" onclick="openAiDetail(\'' + it.id + '\')" title="点卡片查看「基本信息速览」（开发公司/参数/上下文/多模态等）">' +
                 '<div class="ai-card-top"><div style="flex:1;min-width:0;"><div class="ai-card-name">' + it.name + '</div></div><span class="ai-card-vendor">' + it.vendor + '</span></div>' +
                 '<div class="ai-card-tags">' +
                     '<span class="ai-tags-group">' + chips + '</span>' +
@@ -13630,17 +13632,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 '<div class="ai-card-desc">' + it.desc + '</div>' +
                 '<div class="ai-card-foot">' + src +
                     '<div class="ai-actions">' +
-                    '<button class="ai-act" onclick="openAiDetail(\'' + it.id + '\')" title="查看基本信息速览（开发公司/参数量/上下文/多模态等）">📋 详情</button>' +
-                    '<button class="ai-act inspire" onclick="aiToInspiration(\'' + it.id + '\')" title="转为灵感便签">💡 转灵感</button>' +
-                    '<button class="ai-act mine" onclick="addAiMyTool(\'' + it.id + '\')" title="加入我的AI工具清单">📌 加入清单</button>' +
+                    '<button class="ai-act" onclick="event.stopPropagation();openAiDetail(\'' + it.id + '\')" title="查看基本信息速览（开发公司/参数量/上下文/多模态等）">📋 详情</button>' +
+                    '<button class="ai-act inspire" onclick="event.stopPropagation();aiToInspiration(\'' + it.id + '\')" title="转为灵感便签">💡 转灵感</button>' +
+                    '<button class="ai-act mine" onclick="event.stopPropagation();addAiMyTool(\'' + it.id + '\')" title="加入我的AI工具清单">📌 加入清单</button>' +
                     '</div></div></div>';
         }
 
-        // AI 快报 · 模型基本信息速览弹窗：打开/关闭 + 渲染
+        // AI 快报 · 模型基本信息速览弹窗：支持模型/工具/排名三源（统一从 aiFindItem 找）
         function openAiDetail(id) {
-            const models = safeStorage.get('niko_ai_models', []);
-            const m = models.find(x => x.id === id);
-            if (!m) { showToast('⚠️ 找不到该模型数据（已被清理？）'); return; }
+            const m = aiFindItem(id);
+            if (!m) { showToast('⚠️ 找不到该条目（已被清理？）'); return; }
             document.getElementById('aiDetailTitle').textContent = m.name + ' · 基本信息';
             const body = document.getElementById('aiDetailBody');
             const rows = [
@@ -13652,13 +13653,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 ['上下文窗口', m.context || '—'],
                 ['多模态', m.multimodal || '—'],
                 ['开源协议', m.license || '—'],
+                ['指标', m.metric ? (m.metric + (m.metricUnit ? ' ' + m.metricUnit : '')) : '—'],
                 ['分类标签', (m.cat ? m.cat + ' · ' : '') + ((m.tags && m.tags.length) ? m.tags.join(' / ') : '—')],
                 ['数据来源', m.source || (m.url ? '官方页面' : '—')]
             ];
             body.innerHTML =
                 (m.desc ? '<div class="ai-detail-desc">' + m.desc + '</div>' : '') +
                 '<dl class="ai-detail-grid">' +
-                rows.map(r => '<dt>' + r[0] + '</dt><dd>' + (typeof r[1] === 'string' ? r[1] : r[1]) + '</dd>').join('') +
+                rows.map(r => '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>').join('') +
                 '</dl>' +
                 '<div class="ai-detail-actions"><a class="ai-src" href="' + (m.url || '#') + '" target="_blank" rel="noopener">📎 ' + (m.source || '官方') + '</a></div>';
             document.getElementById('aiDetailModal').classList.add('show');
@@ -13734,15 +13736,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             list.innerHTML = items.map((it, i) => {
                 const id = 'rk_' + aiRankDomain + '_' + (i + 1);
                 const medal = i === 0 ? '🏆' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
-                return '<div class="ai-rank-card">' +
+                // 排名卡也支持整体点击（详情弹窗走 aiFindItem 通用查找）
+                return '<div class="ai-rank-card" onclick="openAiDetail(\'' + id + '\')" title="点卡片查看条目详情">' +
                     '<div class="ai-rank-top"><span class="ai-rank-no' + (i < 3 ? ' podium' : '') + '">' + (medal || (i + 1)) + '</span>' +
                     '<span class="ai-rank-name">' + it.name + '</span>' +
                     (it.metric ? '<span class="ai-rank-metric">' + it.metric + '</span>' : '') + '</div>' +
                     '<div class="ai-rank-desc2">' + it.desc + '</div>' +
-                    '<div class="ai-card-foot"><a class="ai-src" href="#" target="_blank" rel="noopener">📎 ' + (it.source || '') + '</a>' +
+                    '<div class="ai-card-foot"><a class="ai-src" href="#" target="_blank" rel="noopener" onclick="event.stopPropagation()">📎 ' + (it.source || '') + '</a>' +
                     '<div class="ai-actions">' +
-                    '<button class="ai-act inspire" onclick="aiToInspiration(\'' + id + '\')" title="转为灵感便签">💡 转灵感</button>' +
-                    '<button class="ai-act mine" onclick="addAiMyTool(\'' + id + '\')" title="加入我的AI工具清单">📌 加入清单</button>' +
+                    '<button class="ai-act" onclick="event.stopPropagation();openAiDetail(\'' + id + '\')" title="查看详情">📋 详情</button>' +
+                    '<button class="ai-act inspire" onclick="event.stopPropagation();aiToInspiration(\'' + id + '\')" title="转为灵感便签">💡 转灵感</button>' +
+                    '<button class="ai-act mine" onclick="event.stopPropagation();addAiMyTool(\'' + id + '\')" title="加入我的AI工具清单">📌 加入清单</button>' +
                     '</div></div></div>';
             }).join('');
         }
@@ -21485,7 +21489,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608242132";
+        window.NIKO_VERSION = "202608242144";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
