@@ -11851,6 +11851,26 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 saveNotes();
                 showToast('✅ 灵感已转为正式任务');
             }
+
+            // 阶段二：任务变 done 时，同步存入知识库 02-Areas（项目轨迹/复盘入口）
+            if (baseEvent.status === 'done') {
+                const projName = (() => {
+                    const p = (typeof projects !== 'undefined') && projects.find(x => x.id === baseEvent.projectId);
+                    return p ? p.name : '';
+                })();
+                upsertKnowledge('任务 ' + baseEvent.title, '计划看板', {
+                    body: (projName ? '【项目】' + projName + '\n' : '') +
+                          (baseEvent.desc ? baseEvent.desc + '\n' : '') +
+                          '时间：' + baseEvent.startDate + (baseEvent.endDate && baseEvent.endDate !== baseEvent.startDate ? ' ~ ' + baseEvent.endDate : '') +
+                          (baseEvent.startTime ? ' ' + baseEvent.startTime : '') +
+                          (baseEvent.priority && baseEvent.priority !== 'normal' ? '\n优先级：' + baseEvent.priority : ''),
+                    para: '02-Areas',
+                    category: '工作',
+                    tags: ['计划', projName || '未分类'].filter(Boolean),
+                    date: baseEvent.endDate || baseEvent.startDate,
+                    dedup: true
+                });
+            }
         }
 
         function generateRepeatInstances(baseEvent) {
@@ -21400,7 +21420,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608242059";
+        window.NIKO_VERSION = "202608242108";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
