@@ -11208,6 +11208,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (n) Object.assign(n, { title, date, region, category, remindDays, note });
             } else {
                 marketNodes.unshift({ id: 'node_' + Date.now(), title, date, region, category, remindDays, note, done: false });
+                // 阶段二：新增节点同步存入知识库（01-Projects）
+                addToKnowledge({
+                    title: title,
+                    body: '日期：' + date + (region ? '\n地区：' + region : '') + (category ? '\n分类：' + category : '') + (note ? '\n\n' + note : ''),
+                    para: '01-Projects',
+                    category: '副业',
+                    tags: ['计划', '节点', category].filter(Boolean),
+                    from: '计划看板',
+                    dedup: true
+                });
             }
             marketNodes.sort((a, b) => a.date.localeCompare(b.date));
             saveMarketNodes();
@@ -14408,6 +14418,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!text) { showToast('⚠️ 先填文案内容'); return; }
             copyLibrary.unshift({ id: 'copy_' + Date.now(), src: 'custom', text, note, category, region });
             safeStorage.set('niko_copy_library', copyLibrary);
+            // 阶段二：新增文案同步存入知识库（03-Resources）
+            addToKnowledge({
+                title: text.replace(/\s+/g, ' ').slice(0, 30),
+                body: text + (note ? '\n\n备注：' + note : ''),
+                para: '03-Resources',
+                category: '副业',
+                tags: ['文案', region || ''].filter(Boolean),
+                from: '文案库',
+                dedup: true
+            });
             document.getElementById('copyText').value = '';
             document.getElementById('copyNote').value = '';
             copyView = 'mine';
@@ -15076,6 +15096,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast('✅ 便签已更新');
             } else {
                 notes.unshift({ id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false });
+                // 阶段二：新增便签同步存入知识库（03-Resources）
+                addToKnowledge({
+                    title: content.replace(/\s+/g, ' ').slice(0, 30),
+                    body: content,
+                    para: '03-Resources',
+                    category: '生活',
+                    tags: ['便签', nbEditingTag || ''].filter(Boolean),
+                    from: '便签',
+                    dedup: true
+                });
                 showToast('📌 便签已创建');
             }
             closeNoteModal();
@@ -15336,12 +15366,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ---- 全局入口：其他模块一键转入知识库（阶段二接入各板块按钮） ----
         function addToKnowledge(opts) {
+            // 铁律：先重读 localStorage，避免内存空数组覆盖已有数据（云同步/历史数据可见）
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            // 去重：dedup=true 且已存在「相同来源 + 相同标题」条目则不重复入库
+            if (opts.dedup && knowledge.some(it => it.title === (opts.title || '') && it.source && it.source.from === (opts.from || ''))) {
+                showToast('📥 该内容已在知识库，跳过');
+                return false;
+            }
             const now = new Date().toISOString();
+            const para = opts.para || '03-Resources';
             knowledge.unshift({
                 id: kbNewId(),
                 title: opts.title || '未命名条目',
                 body: opts.body || '',
-                para: opts.para || '03-Resources',
+                para: para,
                 category: opts.category || '副业',
                 tags: opts.tags || [],
                 pinned: false,
@@ -15349,8 +15387,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 createdAt: now, updatedAt: now
             });
             safeStorage.set(KB_STORE, knowledge);
-            showToast('📥 已存入知识库（03-Resources）');
+            showToast('📥 已存入知识库（' + getKbParaLabel(para) + '）');
             return true;
+        }
+        // 阶段二辅助：按「来源+标题」更新或新增知识库条目（日记等需要反复同步的场景）
+        function upsertKnowledge(title, from, opts) {
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            const it = knowledge.find(x => x.source && x.source.from === from && x.title === title);
+            if (it) {
+                if (opts.body !== undefined) it.body = opts.body;
+                if (opts.tags) it.tags = opts.tags;
+                if (opts.category) it.category = opts.category;
+                it.updatedAt = new Date().toISOString();
+                safeStorage.set(KB_STORE, knowledge);
+                return false; // 更新
+            }
+            addToKnowledge({ title, from, ...opts });
+            return true; // 新增
         }
 
         // ---- 从热点收藏导入 ----
@@ -15797,6 +15850,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     reason: document.getElementById('bookFReason').value.trim(),
                     summary: document.getElementById('bookFSummary').value.trim(),
                     src: 'custom', recId: null, addedDate: bookTodayStr()
+                });
+                // 阶段二：新增书籍同步存入知识库（03-Resources）
+                const newBookAuthor = document.getElementById('bookFAuthor').value.trim();
+                const newBookSummary = document.getElementById('bookFSummary').value.trim();
+                const newBookRating = Number(document.getElementById('bookFRating').value) || 0;
+                addToKnowledge({
+                    title: '《' + title + '》' + (newBookAuthor ? '（' + newBookAuthor + '）' : ''),
+                    body: '分类：' + document.getElementById('bookFCategory').value + ' · 状态：' + status + (newBookRating ? ' · 评分：' + newBookRating + '/10' : '') + (newBookSummary ? '\n\n' + newBookSummary : ''),
+                    para: '03-Resources',
+                    category: '学习',
+                    tags: ['读书', '书单'],
+                    from: '读书看板',
+                    dedup: true
                 });
             }
             bookSaveBooks();
@@ -16341,6 +16407,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 settled = bookNoteToInspirationCore(note);
             }
             bookSaveNotes();
+            // 阶段二：读书笔记同步存入知识库（03-Resources）
+            const noteBookForKb = bookFindItem(bookId);
+            addToKnowledge({
+                title: '《' + (noteBookForKb ? noteBookForKb.title : '未知名') + '》摘抄' + (page ? ' · P' + page : '') + ' · ' + quote.slice(0, 12),
+                body: (thought ? thought + '\n\n' : '') + '「' + quote + '」',
+                para: '03-Resources',
+                category: '学习',
+                tags: ['读书', '摘抄'],
+                from: '读书笔记',
+                dedup: true
+            });
             document.getElementById('bookNoteQuote').value = '';
             document.getElementById('bookNotePage').value = '';
             document.getElementById('bookNoteThought').value = '';
@@ -16798,6 +16875,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             }
             diarySaveEntries();
+            // 阶段二：日记同步存入知识库（同日期已有条目则更新正文，保持同步）
+            upsertKnowledge('日记 ' + ds, '日记', {
+                body: content + (diaryMood && diaryMood !== 'ok' ? '\n\n（心情：' + diaryMoodName(diaryMood) + '）' : ''),
+                para: '02-Areas',
+                category: '生活',
+                tags: ['日记'],
+                date: ds
+            });
             diaryAutoCheckHabit(ds);
             renderDiaryPage();
             showToast('💾 已保存 ' + ds);
@@ -21248,7 +21333,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241644";
+        window.NIKO_VERSION = "202608242038";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
