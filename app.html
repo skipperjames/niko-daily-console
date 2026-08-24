@@ -8958,6 +8958,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="cloudsync-actions">
             <button class="cloudsync-btn primary" id="cloudsyncConnectBtn" onclick="NikoSync.connect()">🔗 连接坚果云文件夹</button>
             <button class="cloudsync-btn" id="cloudsyncSyncBtn" onclick="NikoSync.doSync()">⏳ 立即同步</button>
+            <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 紧急从云端拉取</button>
             <button class="cloudsync-btn danger" id="cloudsyncDisconnectBtn" onclick="NikoSync.disconnect()" style="display:none;">断开</button>
         </div>
 
@@ -9323,9 +9324,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         }
         // 迁移：旧 track 字段 → 新 projectId
         function migrateEventsToProjects() {
-            if (!Array.isArray(events)) return;
+            if (!Array.isArray(events) || events.length === 0) {
+                console.warn('[NIKO] migrateEventsToProjects: events 为空，跳过迁移（避免清空已有数据）');
+                return;
+            }
             let changed = false;
+            let migrated = 0;
             events.forEach(ev => {
+                if (!ev) return; // 防空对象
                 if (ev.projectId && !ev.track) return; // 已是新格式
                 const tk = ev.track || 'content';
                 const projName = TRACK_TO_PROJECT_NAME[tk] || ('迁移-' + tk);
@@ -9335,11 +9341,16 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     const id = addProjectSilent(projName, color);
                     p = projects.find(x => x.id === id);
                 }
+                if (!p || !p.id) return; // 保护
                 ev.projectId = p.id;
-                if (ev.track) { delete ev.track; }
+                // 暂不删 track，保留旧字段以便回滚/兼容老版数据
                 changed = true;
+                migrated++;
             });
-            if (changed) safeStorage.set('work_calendar_events', events);
+            if (changed) {
+                safeStorage.set('work_calendar_events', events);
+                console.log(`[NIKO] 迁移完成: ${migrated} 个任务已挂上 projectId`);
+            }
         }
         // 已延期判定：endDate < 今天 且 状态 !== done
         function isEventOverdue(ev) {
@@ -9605,8 +9616,54 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         let events = safeStorage.get('work_calendar_events', []);
         let risks = safeStorage.get('work_calendar_risks', []);
 
+        // 启动诊断（控制台输入 nikoDiag() 查看 events 真实长度 + 各通道快照 events 长度）
+        window.nikoDiag = function () {
+            const out = { 本地_events_长度: events.length, 本地_projects: projects.length, statusColors };
+            try {
+                const fsSnap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_fs') || '{}');
+                out.fs快照_keys = Object.keys(fsSnap).length;
+                if (fsSnap['work_calendar_events']) out.fs快照_events_长度 = JSON.parse(fsSnap['work_calendar_events']).length;
+            } catch (e) { out.fs快照错误 = e.message; }
+            try {
+                const ghSnap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_github') || '{}');
+                out.gh快照_keys = Object.keys(ghSnap).length;
+                if (ghSnap['work_calendar_events']) out.gh快照_events_长度 = JSON.parse(ghSnap['work_calendar_events']).length;
+            } catch (e) { out.gh快照错误 = e.message; }
+            console.log('%c[NIKO 诊断]', 'color:#f00;font-weight:bold', out);
+            if (events.length === 0) console.warn('⚠️ 本地 events 为空！如快照有数据，请运行 nikoForcePull() 拉取云端');
+            return out;
+        };
+        // 紧急：从云端 fs/github 两通道拉取 events，挑最长的覆盖本地
+        window.nikoForcePull = async function () {
+            if (!confirm('将拉取云端所有通道的 events，挑长度最大的覆盖本地。确定吗？')) return;
+            let best = { len: 0, source: null, value: null };
+            ['fs', 'github'].forEach(ch => {
+                try {
+                    const snap = JSON.parse(localStorage.getItem('niko_cloud_snapshot_' + ch) || '{}');
+                    if (snap['work_calendar_events']) {
+                        const arr = JSON.parse(snap['work_calendar_events']);
+                        if (Array.isArray(arr) && arr.length > best.len) {
+                            best = { len: arr.length, source: ch, value: snap['work_calendar_events'] };
+                        }
+                    }
+                } catch (e) {}
+            });
+            if (best.value) {
+                localStorage.setItem('work_calendar_events', best.value);
+                events = JSON.parse(best.value);
+                if (typeof migrateEventsToProjects === 'function') migrateEventsToProjects();
+                safeStorage.set('work_calendar_events', events);
+                if (typeof render === 'function') render();
+                if (typeof renderPlanPage === 'function') renderPlanPage();
+                showToast('☁ 紧急恢复成功：' + best.source + ' 通道拉回 ' + best.len + ' 个任务');
+            } else {
+                showToast('❌ 云端快照里也没有 events 数据，无法恢复');
+            }
+        };
+
         // 确保 status 字段存在
         events = events.map(e => {
+            if (!e || typeof e !== 'object') return e;
             if (e.status === undefined) {
                 e.status = e.completed === true ? 'done' : 'todo';
             }
@@ -20937,7 +20994,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241317";
+        window.NIKO_VERSION = "202608241419";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
