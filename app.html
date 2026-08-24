@@ -4575,6 +4575,23 @@
         @media (max-width: 768px) {
             .hot-cn-plat { padding:8px 10px; }
         }
+
+        /* AI 快报 · 模型基本信息速览弹窗 */
+        .ai-detail-modal { width:720px; max-width:calc(100vw - 32px); }
+        .ai-detail-header { display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid #e5e7eb; }
+        body.dark-mode .ai-detail-header { border-color:#333; }
+        .ai-detail-header h3 { margin:0; font-size:16px; flex:1; color:#1f2937; }
+        body.dark-mode .ai-detail-header h3 { color:#e5e7eb; }
+        .ai-detail-body { padding:14px 20px 4px; }
+        .ai-detail-desc { background:#f8fafc; padding:12px 14px; border-radius:8px; font-size:13px; line-height:1.6; color:#374151; margin-bottom:14px; }
+        body.dark-mode .ai-detail-desc { background:#1a1a1a; color:#cbd5e1; }
+        .ai-detail-grid { display:grid; grid-template-columns:96px 1fr; gap:9px 14px; font-size:13px; margin:0; padding:0; }
+        .ai-detail-grid dt { color:#6b7280; font-weight:500; margin:0; }
+        body.dark-mode .ai-detail-grid dt { color:#9ca3af; }
+        .ai-detail-grid dd { margin:0; color:#1f2937; line-height:1.5; }
+        body.dark-mode .ai-detail-grid dd { color:#e5e7eb; }
+        .ai-detail-actions { display:flex; gap:8px; justify-content:flex-end; padding:12px 20px; border-top:1px solid #e5e7eb; }
+        body.dark-mode .ai-detail-actions { border-color:#333; }
 /* ===== 梗文化速查专属CSS ===== */
         .meme-region-tabs {
             display: flex;
@@ -5618,6 +5635,14 @@
         body.dark-mode .kb-cat { background:#232335; border-color:#2e2e42; color:#bbb; }
         .kb-cat.active { background:#eef2ff; border-color:#c7d2fe; color:#667eea; font-weight:600; }
         body.dark-mode .kb-cat.active { background:#312e81; border-color:#4338ca; color:#a5b4fc; }
+        .kb-froms { display:flex; gap:6px; flex-wrap:wrap; flex-shrink:0; }
+        .kb-from {
+            font-size:12px; padding:4px 12px; border-radius:14px; cursor:pointer;
+            background:#fff; border:1px solid #e2e5ea; color:#666;
+        }
+        body.dark-mode .kb-from { background:#232335; border-color:#2e2e42; color:#bbb; }
+        .kb-from.active { background:#ecfdf5; border-color:#a7f3d0; color:#059669; font-weight:600; }
+        body.dark-mode .kb-from.active { background:#064e3b; border-color:#059669; color:#6ee7b7; }
         .kb-stats { font-size:12px; color:#999; flex-shrink:0; }
         .kb-list { display:flex; flex-direction:column; gap:10px; overflow-y:auto; min-height:0; }
         .kb-card {
@@ -8084,6 +8109,17 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             </div>
         </div>
     </div>
+
+    <!-- AI 快报 · 模型基本信息速览弹窗（点卡片"📋 详情"触发） -->
+    <div class="modal-mask" id="aiDetailModal" onclick="if(event.target===this)closeAiDetail()">
+        <div class="modal ai-detail-modal">
+            <div class="ai-detail-header">
+                <h3 id="aiDetailTitle">模型详情</h3>
+                <button class="btn" onclick="closeAiDetail()">关闭</button>
+            </div>
+            <div class="ai-detail-body" id="aiDetailBody"></div>
+        </div>
+    </div>
         </div>
         <div class="page" id="memePage">
 <div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
@@ -8252,6 +8288,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             </div>
             <div class="kb-para-tabs" id="kbParaTabs"></div>
             <div class="kb-cats" id="kbCats"></div>
+            <div class="kb-froms" id="kbFroms"></div>
             <div class="kb-stats" id="kbStats"></div>
             <div class="kb-list" id="kbList"></div>
         </div>
@@ -11208,6 +11245,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (n) Object.assign(n, { title, date, region, category, remindDays, note });
             } else {
                 marketNodes.unshift({ id: 'node_' + Date.now(), title, date, region, category, remindDays, note, done: false });
+                // 阶段二：新增节点同步存入知识库（01-Projects）
+                addToKnowledge({
+                    title: title,
+                    body: '日期：' + date + (region ? '\n地区：' + region : '') + (category ? '\n分类：' + category : '') + (note ? '\n\n' + note : ''),
+                    para: '01-Projects',
+                    category: '副业',
+                    tags: ['计划', '节点', category].filter(Boolean),
+                    from: '计划看板',
+                    dedup: true
+                });
             }
             marketNodes.sort((a, b) => a.date.localeCompare(b.date));
             saveMarketNodes();
@@ -11831,6 +11878,26 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 convertingNoteId = null;
                 saveNotes();
                 showToast('✅ 灵感已转为正式任务');
+            }
+
+            // 阶段二：任务变 done 时，同步存入知识库 02-Areas（项目轨迹/复盘入口）
+            if (baseEvent.status === 'done') {
+                const projName = (() => {
+                    const p = (typeof projects !== 'undefined') && projects.find(x => x.id === baseEvent.projectId);
+                    return p ? p.name : '';
+                })();
+                upsertKnowledge('任务 ' + baseEvent.title, '计划看板', {
+                    body: (projName ? '【项目】' + projName + '\n' : '') +
+                          (baseEvent.desc ? baseEvent.desc + '\n' : '') +
+                          '时间：' + baseEvent.startDate + (baseEvent.endDate && baseEvent.endDate !== baseEvent.startDate ? ' ~ ' + baseEvent.endDate : '') +
+                          (baseEvent.startTime ? ' ' + baseEvent.startTime : '') +
+                          (baseEvent.priority && baseEvent.priority !== 'normal' ? '\n优先级：' + baseEvent.priority : ''),
+                    para: '02-Areas',
+                    category: '工作',
+                    tags: ['计划', projName || '未分类'].filter(Boolean),
+                    date: baseEvent.endDate || baseEvent.startDate,
+                    dedup: true
+                });
             }
         }
 
@@ -13343,7 +13410,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { id:'m13', name:'字节 Seed3D', vendor:'字节跳动', date:'2025-10', cat:'3D', tag:'开源 3D 生成', desc:'开源 3D 生成模型，社区生态活跃，可与混元/Tripo 对比用。', tags:['3D'], source:'Crafiq 3D Arena', url:'https://seed.bytedance.com' },
             { id:'m14', name:'Fish Audio S2.1 Pro', vendor:'Fish Audio', date:'2026-07', cat:'语音', tag:'企业级配音标配', desc:'首包延迟仅 90ms，批量配音稳定，8 个月 ARR 2100 万美元，全球第二大 AI 语音平台。', tags:['配音'], source:'官方发布 2026-08', url:'https://www.fish.audio' },
             { id:'m15', name:'Google Stitch', vendor:'Google', date:'2026-03', cat:'UI', tag:'文生 UI 模型', desc:'一句话描述直接生成完整 UI 界面代码，配合 Gemini 多模态理解，是文生界面赛道的底层模型，前端/买量落地页提效明显。', tags:['UI设计'], source:'Google 发布', url:'https://stitch.withgoogle.com' },
-            { id:'m16', name:'Figma Make', vendor:'Figma', date:'2026-05', cat:'UI', tag:'设计稿直接生成', desc:'Figma 原生 AI，设计稿秒级改版/生成组件变体，设计师工作流无缝衔接，UI 团队提效首选。', tags:['UI设计','生图'], source:'官方 2026-05', url:'https://www.figma.com' }
+            { id:'m16', name:'Figma Make', vendor:'Figma', date:'2026-05', cat:'UI', tag:'设计稿直接生成', desc:'Figma 原生 AI，设计稿秒级改版/生成组件变体，设计师工作流无缝衔接，UI 团队提效首选。', tags:['UI设计','生图'], source:'官方 2026-05', url:'https://www.figma.com' },
+            { id:'m17', name:'GLM-5V Turbo', vendor:'智谱AI', date:'2026-04', cat:'多模态', tag:'图文视频多模态基座', desc:'多模态 Coding 基座，MoE + 自研 CogViT 视觉编码器，原生支持图片/视频/设计稿理解，长上下文窗口。', tags:['脚本','生图','视频'], source:'用户截图 2026-08-24', url:'https://www.zhipuai.cn', params:'74B（激活40B）', arch:'MoE + CogViT 视觉编码器', context:'200K tokens', multimodal:'原生多模态（图/视频/设计稿）', license:'闭源（仅云端 API）' },
+            { id:'m18', name:'Kimi K2.7 Code', vendor:'月之暗面', date:'2026-06', cat:'编程', tag:'编程专用长上下文', desc:'月之暗面编程专用模型，1.1T 总参数 / 激活 32B，MoonViT 视觉编码器，原生支持图/视频输入，已被多个 IDE 集成。', tags:['脚本'], source:'用户截图 2026-08-24', url:'https://www.moonshot.cn', params:'1.1T（激活32B）', arch:'MoE + MoonViT 视觉编码器', context:'256K tokens', multimodal:'原生多模态（图/视频）', license:'Modified MIT' },
+            { id:'m19', name:'MiniMax M3', vendor:'稀宇科技', date:'2026-06', cat:'旗舰', tag:'长上下文 + 全模态旗舰', desc:'全能旗舰（Coding + 多模态 + 长上下文），自研 MSA 稀疏注意力保障 1M tokens 长窗口下质量不衰减，Apache-2.0 最友好开源协议。', tags:['脚本','文案','视频'], source:'用户截图 2026-08-24', url:'https://api.MiniMax.chat', params:'428B（激活23B）', arch:'MoE + 自研 MSA 稀疏注意力', context:'1M tokens（保障至少 512K）', multimodal:'原生多模态（图/视频）', license:'Apache-2.0' },
+            { id:'m20', name:'豆包 1.5 Pro', vendor:'字节跳动', date:'2026-07', cat:'旗舰', tag:'抖音生态绑定', desc:'字节豆包主力旗舰，抖音/剪映工作流深度绑定，App 助手"豆包"同名上线。基础参数与官方长上下文待补充。', tags:['文案','视频','配音'], source:'行业资讯 2026-08', url:'https://www.volcengine.com/product/doubao', params:'—', arch:'—', context:'—', multimodal:'原生多模态（图/视频/语音）', license:'闭源（云端 API）' }
         ];
 
         // 工具热度（月活/用户数，口径见 metricUnit；bar 为条形图相对宽度）
@@ -13559,9 +13630,42 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 '<div class="ai-card-desc">' + it.desc + '</div>' +
                 '<div class="ai-card-foot">' + src +
                     '<div class="ai-actions">' +
+                    '<button class="ai-act" onclick="openAiDetail(\'' + it.id + '\')" title="查看基本信息速览（开发公司/参数量/上下文/多模态等）">📋 详情</button>' +
                     '<button class="ai-act inspire" onclick="aiToInspiration(\'' + it.id + '\')" title="转为灵感便签">💡 转灵感</button>' +
                     '<button class="ai-act mine" onclick="addAiMyTool(\'' + it.id + '\')" title="加入我的AI工具清单">📌 加入清单</button>' +
                     '</div></div></div>';
+        }
+
+        // AI 快报 · 模型基本信息速览弹窗：打开/关闭 + 渲染
+        function openAiDetail(id) {
+            const models = safeStorage.get('niko_ai_models', []);
+            const m = models.find(x => x.id === id);
+            if (!m) { showToast('⚠️ 找不到该模型数据（已被清理？）'); return; }
+            document.getElementById('aiDetailTitle').textContent = m.name + ' · 基本信息';
+            const body = document.getElementById('aiDetailBody');
+            const rows = [
+                ['开发公司', m.vendor || '—'],
+                ['发布时间', m.date || '—'],
+                ['核心定位', m.tag || m.cat || '—'],
+                ['总参数量', m.params || '—'],
+                ['架构', m.arch || '—'],
+                ['上下文窗口', m.context || '—'],
+                ['多模态', m.multimodal || '—'],
+                ['开源协议', m.license || '—'],
+                ['分类标签', (m.cat ? m.cat + ' · ' : '') + ((m.tags && m.tags.length) ? m.tags.join(' / ') : '—')],
+                ['数据来源', m.source || (m.url ? '官方页面' : '—')]
+            ];
+            body.innerHTML =
+                (m.desc ? '<div class="ai-detail-desc">' + m.desc + '</div>' : '') +
+                '<dl class="ai-detail-grid">' +
+                rows.map(r => '<dt>' + r[0] + '</dt><dd>' + (typeof r[1] === 'string' ? r[1] : r[1]) + '</dd>').join('') +
+                '</dl>' +
+                '<div class="ai-detail-actions"><a class="ai-src" href="' + (m.url || '#') + '" target="_blank" rel="noopener">📎 ' + (m.source || '官方') + '</a></div>';
+            document.getElementById('aiDetailModal').classList.add('show');
+        }
+        function closeAiDetail() {
+            const modal = document.getElementById('aiDetailModal');
+            if (modal) modal.classList.remove('show');
         }
 
         // 通用：条目是否命中当前分类筛选（同时查 tags / cat / tag 描述）
@@ -14077,6 +14181,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!meaning) { showToast('⚠️ 填一下含义'); return; }
             memes.unshift({ id: 'meme_' + Date.now(), src: 'custom', region: currentMemeRegion, term, meaning, usage, suitable });
             safeStorage.set('niko_memes', memes);
+            // 阶段二：新增梗同步存入知识库（03-Resources 爆款素材）
+            addToKnowledge({
+                title: '梗：' + term,
+                body: '含义：' + meaning + (usage ? '\n用法：' + usage : '') + (suitable ? '\n适用：' + suitable : ''),
+                para: '03-Resources',
+                category: '副业',
+                tags: ['梗文化', currentMemeRegion || ''].filter(Boolean),
+                from: '梗文化',
+                dedup: true
+            });
             document.getElementById('memeTerm').value = '';
             document.getElementById('memeMeaning').value = '';
             document.getElementById('memeUsage').value = '';
@@ -14408,6 +14522,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!text) { showToast('⚠️ 先填文案内容'); return; }
             copyLibrary.unshift({ id: 'copy_' + Date.now(), src: 'custom', text, note, category, region });
             safeStorage.set('niko_copy_library', copyLibrary);
+            // 阶段二：新增文案同步存入知识库（03-Resources）
+            addToKnowledge({
+                title: text.replace(/\s+/g, ' ').slice(0, 30),
+                body: text + (note ? '\n\n备注：' + note : ''),
+                para: '03-Resources',
+                category: '副业',
+                tags: ['文案', region || ''].filter(Boolean),
+                from: '文案库',
+                dedup: true
+            });
             document.getElementById('copyText').value = '';
             document.getElementById('copyNote').value = '';
             copyView = 'mine';
@@ -15076,6 +15200,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast('✅ 便签已更新');
             } else {
                 notes.unshift({ id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false });
+                // 阶段二：新增便签同步存入知识库（03-Resources）
+                addToKnowledge({
+                    title: content.replace(/\s+/g, ' ').slice(0, 30),
+                    body: content,
+                    para: '03-Resources',
+                    category: '生活',
+                    tags: ['便签', nbEditingTag || ''].filter(Boolean),
+                    from: '便签',
+                    dedup: true
+                });
                 showToast('📌 便签已创建');
             }
             closeNoteModal();
@@ -15149,8 +15283,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         ];
         const KB_CATS = ['全部', '工作', '副业', '学习', '生活'];
         const KB_STORE = 'niko_knowledge';
+        // 来源筛选映射：source.from → 显示名 + 回跳板块
+        const KB_FROMS = [
+            { key: 'all', label: '全部来源' },
+            { key: '手动', label: '✍️ 手动', page: null },
+            { key: '读书看板', label: '📚 读书', page: 'book' },
+            { key: '读书笔记', label: '📝 读书笔记', page: 'book' },
+            { key: '日记', label: '📔 日记', page: 'diary' },
+            { key: '便签', label: '🗂 便签', page: 'notes' },
+            { key: '文案库', label: '✍️ 文案库', page: 'copy' },
+            { key: '计划看板', label: '📋 计划', page: 'plan' },
+            { key: '热点收藏', label: '🔥 热点', page: 'hot' },
+            { key: '梗文化', label: '🈯 梗文化', page: 'meme' },
+            { key: '育儿手册', label: '👶 育儿', page: 'parenting' }
+        ];
         let knowledge = [];
-        let currentKbPara = 'all', currentKbCat = '全部', kbSearchText = '';
+        let currentKbPara = 'all', currentKbCat = '全部', currentKbFrom = 'all', kbSearchText = '';
         let kbDetailId = null;
 
         function getKbParaColor(key) { const p = KB_PARA.find(x => x.key === key); return p ? p.color : '#6b7280'; }
@@ -15177,6 +15325,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!knowledge.length && !safeStorage.get('niko_knowledge_seeded', false)) seedKnowledge();
             renderKbParaTabs();
             renderKbCats();
+            renderKbFroms();
             renderKbList();
         }
 
@@ -15191,14 +15340,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!box) return;
             box.innerHTML = KB_CATS.map(c => `<span class="kb-cat${currentKbCat === c ? ' active' : ''}" onclick="switchKbCat('${c}')">${c}</span>`).join('');
         }
+        function renderKbFroms() {
+            const box = document.getElementById('kbFroms');
+            if (!box) return;
+            // 只显示实际有数据的来源（all + 出现过的 from）
+            const seen = new Set(knowledge.map(it => (it.source && it.source.from) || '手动'));
+            const tabs = KB_FROMS.filter(f => f.key === 'all' || seen.has(f.key));
+            box.innerHTML = tabs.map(f => `<span class="kb-from${currentKbFrom === f.key ? ' active' : ''}" onclick="switchKbFrom('${f.key}')">${f.label}</span>`).join('');
+        }
         function switchKbPara(p) { currentKbPara = p; renderKnowledgePage(); }
         function switchKbCat(c) { currentKbCat = c; renderKbList(); }
+        function switchKbFrom(f) { currentKbFrom = f; renderKbList(); }
 
         function getKbFiltered() {
             const q = (kbSearchText || '').toLowerCase();
             return knowledge.filter(it => {
                 if (currentKbPara !== 'all' && it.para !== currentKbPara) return false;
                 if (currentKbCat !== '全部' && it.category !== currentKbCat) return false;
+                if (currentKbFrom !== 'all') {
+                    const src = it.source && it.source.from;
+                    if (currentKbFrom === '手动') { if (src) return false; }
+                    else if (src !== currentKbFrom) return false;
+                }
                 if (q) {
                     const hay = (it.title + ' ' + (it.body || '') + ' ' + (it.tags || []).join(' ')).toLowerCase();
                     if (!hay.includes(q)) return false;
@@ -15317,6 +15480,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const paraColor = getKbParaColor(it.para);
             const tags = (it.tags || []).map(t => `<span class="kb-tag">#${escapeHtml(t)}</span>`).join('');
             const src = it.source ? (it.source.link ? `<a href="${escapeHtml(it.source.link)}" target="_blank" rel="noopener">🔗 ${escapeHtml(it.source.link)}</a>` : '') : '';
+            const fromName = it.source && it.source.from ? it.source.from : '';
+            const fromMeta = KB_FROMS.find(f => f.key === fromName);
+            const jumpBtn = (fromMeta && fromMeta.page) ? `<button class="kb-icon-btn" onclick="kbJumpFrom()" title="跳转到来源板块" style="font-size:12px;">↗ ${escapeHtml(fromMeta.label)}</button>` : '';
             document.getElementById('kbDetailContent').innerHTML = `
                 <div class="kb-detail-title">${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}</div>
                 <div class="kb-card-meta" style="margin-bottom:10px;">
@@ -15326,22 +15492,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <span>🕒 创建 ${(it.createdAt || '').slice(0, 10)} · 更新 ${(it.updatedAt || '').slice(0, 10)}</span>
                 </div>
                 <div class="kb-detail-body">${renderMd(it.body || '(无正文)')}</div>
-                ${(src || (it.source && it.source.from)) ? `<div class="kb-detail-src">${it.source && it.source.from ? '📥 来自 ' + escapeHtml(it.source.from) : ''} ${src}</div>` : ''}`;
+                ${(src || fromName) ? `<div class="kb-detail-src">${fromName ? '📥 来自 ' + escapeHtml(fromName) : ''} ${src} ${jumpBtn}</div>` : ''}`;
             document.getElementById('kbDetailModal').classList.add('show');
         }
         function closeKbDetail() { document.getElementById('kbDetailModal').classList.remove('show'); kbDetailId = null; }
+        function kbJumpFrom() {
+            const it = knowledge.find(x => x.id === kbDetailId);
+            if (!it) return;
+            const meta = KB_FROMS.find(f => f.key === (it.source && it.source.from));
+            if (meta && meta.page && typeof switchPage === 'function') { closeKbDetail(); switchPage(meta.page); }
+        }
         function kbPinFromDetail() { if (kbDetailId) { toggleKbPin(kbDetailId); openKbDetail(kbDetailId); } }
         function kbEditFromDetail() { closeKbDetail(); openKbEdit(kbDetailId); }
         function kbDeleteFromDetail() { const id = kbDetailId; closeKbDetail(); deleteKbEntry(id); }
 
         // ---- 全局入口：其他模块一键转入知识库（阶段二接入各板块按钮） ----
         function addToKnowledge(opts) {
+            // 铁律：先重读 localStorage，避免内存空数组覆盖已有数据（云同步/历史数据可见）
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            // 去重：dedup=true 且已存在「相同来源 + 相同标题」条目则不重复入库
+            if (opts.dedup && knowledge.some(it => it.title === (opts.title || '') && it.source && it.source.from === (opts.from || ''))) {
+                showToast('📥 该内容已在知识库，跳过');
+                return false;
+            }
             const now = new Date().toISOString();
+            const para = opts.para || '03-Resources';
             knowledge.unshift({
                 id: kbNewId(),
                 title: opts.title || '未命名条目',
                 body: opts.body || '',
-                para: opts.para || '03-Resources',
+                para: para,
                 category: opts.category || '副业',
                 tags: opts.tags || [],
                 pinned: false,
@@ -15349,8 +15529,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 createdAt: now, updatedAt: now
             });
             safeStorage.set(KB_STORE, knowledge);
-            showToast('📥 已存入知识库（03-Resources）');
+            showToast('📥 已存入知识库（' + getKbParaLabel(para) + '）');
             return true;
+        }
+        // 阶段二辅助：按「来源+标题」更新或新增知识库条目（日记等需要反复同步的场景）
+        function upsertKnowledge(title, from, opts) {
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            const it = knowledge.find(x => x.source && x.source.from === from && x.title === title);
+            if (it) {
+                if (opts.body !== undefined) it.body = opts.body;
+                if (opts.tags) it.tags = opts.tags;
+                if (opts.category) it.category = opts.category;
+                it.updatedAt = new Date().toISOString();
+                safeStorage.set(KB_STORE, knowledge);
+                return false; // 更新
+            }
+            addToKnowledge({ title, from, ...opts });
+            return true; // 新增
         }
 
         // ---- 从热点收藏导入 ----
@@ -15797,6 +15992,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     reason: document.getElementById('bookFReason').value.trim(),
                     summary: document.getElementById('bookFSummary').value.trim(),
                     src: 'custom', recId: null, addedDate: bookTodayStr()
+                });
+                // 阶段二：新增书籍同步存入知识库（03-Resources）
+                const newBookAuthor = document.getElementById('bookFAuthor').value.trim();
+                const newBookSummary = document.getElementById('bookFSummary').value.trim();
+                const newBookRating = Number(document.getElementById('bookFRating').value) || 0;
+                addToKnowledge({
+                    title: '《' + title + '》' + (newBookAuthor ? '（' + newBookAuthor + '）' : ''),
+                    body: '分类：' + document.getElementById('bookFCategory').value + ' · 状态：' + status + (newBookRating ? ' · 评分：' + newBookRating + '/10' : '') + (newBookSummary ? '\n\n' + newBookSummary : ''),
+                    para: '03-Resources',
+                    category: '学习',
+                    tags: ['读书', '书单'],
+                    from: '读书看板',
+                    dedup: true
                 });
             }
             bookSaveBooks();
@@ -16341,6 +16549,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 settled = bookNoteToInspirationCore(note);
             }
             bookSaveNotes();
+            // 阶段二：读书笔记同步存入知识库（03-Resources）
+            const noteBookForKb = bookFindItem(bookId);
+            addToKnowledge({
+                title: '《' + (noteBookForKb ? noteBookForKb.title : '未知名') + '》摘抄' + (page ? ' · P' + page : '') + ' · ' + quote.slice(0, 12),
+                body: (thought ? thought + '\n\n' : '') + '「' + quote + '」',
+                para: '03-Resources',
+                category: '学习',
+                tags: ['读书', '摘抄'],
+                from: '读书笔记',
+                dedup: true
+            });
             document.getElementById('bookNoteQuote').value = '';
             document.getElementById('bookNotePage').value = '';
             document.getElementById('bookNoteThought').value = '';
@@ -16798,6 +17017,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             }
             diarySaveEntries();
+            // 阶段二：日记同步存入知识库（同日期已有条目则更新正文，保持同步）
+            upsertKnowledge('日记 ' + ds, '日记', {
+                body: content + (diaryMood && diaryMood !== 'ok' ? '\n\n（心情：' + diaryMoodName(diaryMood) + '）' : ''),
+                para: '02-Areas',
+                category: '生活',
+                tags: ['日记'],
+                date: ds
+            });
             diaryAutoCheckHabit(ds);
             renderDiaryPage();
             showToast('💾 已保存 ' + ds);
@@ -19705,6 +19932,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!text) { showToast('请输入理念内容'); return; }
             parentingPrinciples.unshift({ id: 'pp_' + Date.now(), text, addedAt: new Date().toISOString() });
             parentingSave();
+            // 阶段二：育儿理念同步存入知识库（02-Areas 经验复利）
+            addToKnowledge({
+                title: '育儿理念 · ' + text.replace(/\s+/g, ' ').slice(0, 20),
+                body: text,
+                para: '02-Areas',
+                category: '生活',
+                tags: ['育儿', '理念'],
+                from: '育儿手册',
+                dedup: true
+            });
             input.value = '';
             renderParentingPage();
             showToast('💡 理念已保存');
@@ -21248,7 +21485,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608241644";
+        window.NIKO_VERSION = "202608242132";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
