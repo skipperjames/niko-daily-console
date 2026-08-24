@@ -5692,6 +5692,26 @@
         }
         .kb-form-row { display:flex; gap:10px; }
         .kb-form-row .kb-form-item { flex:1; }
+        /* 双向链接样式：紫虚下划线（命中）/ 红 broken（未命中） */
+        .kb-wikilink { color:#7c3aed; border-bottom:1px dashed #7c3aed; padding:0 2px; cursor:pointer; transition:background .15s; }
+        .kb-wikilink:hover { background:rgba(124,58,237,.12); border-bottom-style:solid; }
+        body.dark-mode .kb-wikilink { color:#a78bfa; border-color:#a78bfa; }
+        body.dark-mode .kb-wikilink:hover { background:rgba(167,139,250,.16); }
+        .kb-wikilink-broken { color:#ef4444; background:rgba(239,68,68,.08); padding:1px 5px; border-radius:4px; cursor:pointer; border-bottom:1px dashed #ef4444; }
+        .kb-wikilink-broken:hover { background:rgba(239,68,68,.18); }
+        body.dark-mode .kb-wikilink-broken { color:#f87171; background:rgba(248,113,113,.12); border-color:#f87171; }
+        body.dark-mode .kb-wikilink-broken:hover { background:rgba(248,113,113,.22); }
+        /* 反向引用面板 */
+        .kb-backlinks { margin-top:14px; padding-top:12px; border-top:1px dashed #e5e7eb; }
+        body.dark-mode .kb-backlinks { border-color:#333; }
+        .kb-backlinks-title { font-size:12px; font-weight:600; color:#6b7280; margin-bottom:8px; letter-spacing:.3px; }
+        body.dark-mode .kb-backlinks-title { color:#9ca3af; }
+        .kb-backlink-item { display:flex; align-items:center; gap:8px; padding:7px 9px; margin-bottom:5px; border-radius:7px; cursor:pointer; transition:background .15s; border:1px solid transparent; }
+        .kb-backlink-item:hover { background:#f5f3ff; border-color:#ddd6fe; }
+        body.dark-mode .kb-backlink-item:hover { background:#1c1a2e; border-color:#3b3b50; }
+        .kb-backlink-name { font-size:13px; color:#1f2937; flex:1; font-weight:500; }
+        body.dark-mode .kb-backlink-name { color:#e5e7eb; }
+        .kb-backlink-tags { font-size:10.5px; color:#9ca3af; }
         /* 模板入口样式：按 PARA 分组、紧凑按钮 */
         .kb-tpl-bar { display:flex; flex-direction:column; gap:6px; padding:8px 10px; background:#f9fafb; border:1px dashed #d1d5db; border-radius:8px; max-height:200px; overflow-y:auto; }
         body.dark-mode .kb-tpl-bar { background:#1a1a26; border-color:#3b3b50; }
@@ -15581,9 +15601,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ---- 详情 ----
+        function escapeRegex(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
         function renderMd(text) {
             if (!text) return '';
             let t = escapeHtml(text);
+            // 双向链接 [[条目标题]] —— 找到匹配的渲染为可点链接，未找到渲染为红色 broken（点新建）
+            t = t.replace(/\[\[([^\]\n]+)\]\]/g, function(_, title) {
+                const target = (knowledge || []).find(x => x.title === title);
+                if (target) return `<a class="kb-wikilink" data-id="${target.id}" onclick="kbWikilinkClick(event,'${target.id}')" title="跳转到「${escapeHtml(title)}」">${escapeHtml(title)}</a>`;
+                return `<span class="kb-wikilink-broken" onclick="kbWikilinkCreate(event,'${escapeHtml(title).replace(/'/g, '\\\'')}')" title="未链接到任何条目，点此新建">[[${escapeHtml(title)}]]</span>`;
+            });
             t = t.replace(/```([\s\S]*?)```/g, '<pre>$1</pre>');
             t = t.replace(/`([^`]+)`/g, '<code>$1</code>');
             t = t.replace(/^### (.*)$/gm, '<h3>$1</h3>');
@@ -15597,6 +15624,29 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             t = t.replace(/^- \[x\] (.*)$/gm, '<li>☑ $1</li>');
             return t.replace(/\n/g, '<br/>');
         }
+        // 双向链接点击：跳转到目标条目详情（不冒泡到外层）
+        function kbWikilinkClick(e, id) {
+            if (e) e.stopPropagation();
+            if (id) openKbDetail(id);
+        }
+        // 双向链接 broken：关闭详情，打开新增弹窗，预填标题
+        function kbWikilinkCreate(e, title) {
+            if (e) e.stopPropagation();
+            closeKbDetail();
+            openKbEdit();
+            setTimeout(() => {
+                const tEl = document.getElementById('kbFTitle');
+                if (tEl) tEl.value = title;
+                if (typeof showToast === 'function') showToast('📝 新建条目「' + title + '」');
+            }, 80);
+        }
+        // 反向引用：找出正文中引用了当前条目 [[当前标题]] 的其他条目
+        function findKbBacklinks(id) {
+            const cur = knowledge.find(x => x.id === id);
+            if (!cur || !cur.title) return [];
+            const re = new RegExp('\\[\\[' + escapeRegex(cur.title) + '\\]\\]');
+            return (knowledge || []).filter(x => x.id !== id && x.body && re.test(x.body));
+        }
         function openKbDetail(id) {
             const it = knowledge.find(x => x.id === id);
             if (!it) return;
@@ -15607,6 +15657,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const fromName = it.source && it.source.from ? it.source.from : '';
             const fromMeta = KB_FROMS.find(f => f.key === fromName);
             const jumpBtn = (fromMeta && fromMeta.page) ? `<button class="kb-icon-btn" onclick="kbJumpFrom()" title="跳转到来源板块" style="font-size:12px;">↗ ${escapeHtml(fromMeta.label)}</button>` : '';
+            // 反向引用面板
+            const backlinks = findKbBacklinks(id);
+            const backlinksHtml = backlinks.length ? `<div class="kb-backlinks">
+                <div class="kb-backlinks-title">🔗 被引用 · ${backlinks.length} 条目</div>
+                ${backlinks.map(b => `<div class="kb-backlink-item" onclick="openKbDetail('${b.id}')">
+                    <span class="kb-badge" style="background:${getKbParaColor(b.para)};">${getKbParaLabel(b.para)}</span>
+                    <span class="kb-backlink-name">${escapeHtml(b.title)}</span>
+                    <span class="kb-backlink-tags">${(b.tags || []).slice(0, 3).map(t => '#' + escapeHtml(t)).join(' ')}</span>
+                </div>`).join('')}
+            </div>` : '';
             document.getElementById('kbDetailContent').innerHTML = `
                 <div class="kb-detail-title">${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}</div>
                 <div class="kb-card-meta" style="margin-bottom:10px;">
@@ -15616,7 +15676,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <span>🕒 创建 ${(it.createdAt || '').slice(0, 10)} · 更新 ${(it.updatedAt || '').slice(0, 10)}</span>
                 </div>
                 <div class="kb-detail-body">${renderMd(it.body || '(无正文)')}</div>
-                ${(src || fromName) ? `<div class="kb-detail-src">${fromName ? '📥 来自 ' + escapeHtml(fromName) : ''} ${src} ${jumpBtn}</div>` : ''}`;
+                ${(src || fromName) ? `<div class="kb-detail-src">${fromName ? '📥 来自 ' + escapeHtml(fromName) : ''} ${src} ${jumpBtn}</div>` : ''}
+                ${backlinksHtml}`;
             document.getElementById('kbDetailModal').classList.add('show');
         }
         function closeKbDetail() { document.getElementById('kbDetailModal').classList.remove('show'); kbDetailId = null; }
@@ -21609,7 +21670,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608242206";
+        window.NIKO_VERSION = "202608242210";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
