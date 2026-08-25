@@ -2782,6 +2782,9 @@
             cursor: grabbing;
             opacity: 0.8;
         }
+        .event-item.dragging { opacity: 0.35; }
+        .event-item.drag-over-top { box-shadow: inset 0 2px 0 0 #f59e0b !important; }
+        .event-item.drag-over-bottom { box-shadow: inset 0 -2px 0 0 #f59e0b !important; }
         .event-item.completed {
             opacity: 0.5;
             text-decoration: line-through;
@@ -9145,7 +9148,44 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
         <div class="niko-sync-popover-actions">
             <button class="btn" onclick="hideSyncPopover();toggleNavMore()">📋 更多</button>
+            <button class="btn" onclick="hideSyncPopover();openPushSettings()" style="background:#f59e0b;color:#fff;">📢 推送设置</button>
             <button class="btn primary" onclick="hideSyncPopover();openDataManager()">⚙ 数据管理</button>
+        </div>
+    </div>
+
+    <!-- 推送设置弹窗：企业微信群机器人 / Server 酱（SCKEY） / WxPusher（appToken） -->
+    <div class="modal-mask" id="pushSettingsModal" onclick="if(event.target===this)closePushSettings()">
+        <div class="modal" style="width:560px;max-width:94vw;">
+            <h3>📢 微信推送设置 <span style="font-size:11px;color:#888;font-weight:400;">本地走 HTTPS POST，NIKO 不消耗任何积分</span></h3>
+            <p style="font-size:12px;color:#666;line-height:1.65;margin:8px 0 14px;">
+                把完成的关键事件推到你的微信。<b>企业微信群机器人</b>最简单：建一个 1 人群 → 群机器人 → 复制 webhook URL 填下面，<span style="color:#10b981;font-weight:600;">30 秒搞定、永远免费</span>。
+            </p>
+            <div class="form-item"><label>渠道类型</label>
+                <select id="pushChType" onchange="renderPushTypeHint()">
+                    <option value="wechatBot">🤖 企业微信群机器人（推荐）</option>
+                    <option value="serverChan">📮 Server 酱（SCKEY）</option>
+                    <option value="wxPusher">📨 WxPusher（appToken）</option>
+                </select>
+            </div>
+            <div class="form-item"><label>Webhook URL / Token</label>
+                <input id="pushChToken" type="password" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx" />
+                <div id="pushChHint" style="font-size:11px;color:#888;margin-top:4px;line-height:1.55;"></div>
+            </div>
+            <div class="form-item"><label>推送时机（多选）</label>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;">
+                    <label><input type="checkbox" id="pushEvtDeploy" checked /> 推送上线完成</label>
+                    <label><input type="checkbox" id="pushEvtTest" checked /> 测试通过</label>
+                    <label><input type="checkbox" id="pushEvtHabit" /> 今日习惯全完成</label>
+                    <label><input type="checkbox" id="pushEvtManual" checked /> 手动发送</label>
+                </div>
+            </div>
+            <div class="form-item" style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button class="btn primary" onclick="savePushSettings()">💾 保存</button>
+                <button class="btn" onclick="testPushNotification()">📤 发送测试</button>
+                <button class="btn" onclick="pushNotifyNow('👋 测试推送 · NIKO 已连通你的微信')">📨 立即推一条</button>
+                <button class="btn" onclick="closePushSettings()">关闭</button>
+            </div>
+            <div id="pushLastStatus" style="font-size:11.5px;color:#666;margin-top:8px;line-height:1.55;"></div>
         </div>
     </div>
 
@@ -11501,6 +11541,46 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             updateGlobalStats();
         }
 
+        // 任务条纵向拖拽：每个日期存一份 ID 序列（niko_plan_day_order）
+        let planDayOrder = safeStorage.get('niko_plan_day_order', {});
+        function getDayOrder(dateStr) {
+            return (planDayOrder && planDayOrder[dateStr]) || null;
+        }
+        function setDayOrder(dateStr, ids) {
+            if (!planDayOrder) planDayOrder = {};
+            planDayOrder[dateStr] = ids;
+            safeStorage.set('niko_plan_day_order', planDayOrder);
+        }
+        // 把 dayEvents 按 dayOrder 优先排；缺失项按 startTime 兜底
+        function sortDayEventsByUserOrder(dayEvents, dateStr) {
+            const order = getDayOrder(dateStr);
+            if (order && order.length) {
+                dayEvents.sort((a, b) => {
+                    const ai = order.indexOf(a.id), bi = order.indexOf(b.id);
+                    if (ai >= 0 && bi >= 0) return ai - bi;
+                    if (ai >= 0) return -1;
+                    if (bi >= 0) return 1;
+                    return (a.startTime || '99:99').localeCompare(b.startTime || '99:99');
+                });
+            } else {
+                dayEvents.sort((a, b) => (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
+            }
+        }
+        // 把 srcId 拖到 targetId 上半部/下半部：before / after；存 dayOrder，重渲染
+        function reorderEventInCell(srcId, targetId, after, dateStr) {
+            if (srcId === targetId) return;
+            const src = events.find(e => e.id === srcId);
+            if (!src) return;
+            let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+            sortDayEventsByUserOrder(dayEvents, dateStr);
+            dayEvents = dayEvents.filter(e => e.id !== srcId);
+            const ti = dayEvents.findIndex(e => e.id === targetId);
+            if (ti < 0) return;
+            dayEvents.splice(after ? ti + 1 : ti, 0, src);
+            setDayOrder(dateStr, dayEvents.map(e => e.id));
+            render();
+        }
+
         function updateDateRangeText() {
             const endDate = addDays(currentWeekStart, 27);
             document.getElementById('dateRangeText').textContent = `${currentWeekStart.getMonth()+1}月${currentWeekStart.getDate()}日 — ${endDate.getMonth()+1}月${endDate.getDate()}日`;
@@ -11542,7 +11622,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const dateStr = formatDate(date);
                 let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
                 if (keyword) dayEvents = dayEvents.filter(e => e.title.toLowerCase().includes(keyword) || (e.desc && e.desc.toLowerCase().includes(keyword)));
-                dayEvents.sort((a,b) => (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
+                sortDayEventsByUserOrder(dayEvents, dateStr);
                 dayEventsDisplay[dateStr] = dayEvents.slice(0, MAX_EVENTS_PER_DAY);
             }
             for (let i = 0; i < daysToShow; i++) {
@@ -11608,8 +11688,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     };
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
                     item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}</span>${statusMarkHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
-                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); });
-                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); });
+                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); });
+                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom')); });
+                    // 任务条纵向拖拽：上/下半区决定插入位置
+                    item.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation(); // 不冒泡到 cell 的 drop（防止落到 cell 空白处直接改日期）
+                        const rect = item.getBoundingClientRect();
+                        const isAfter = (e.clientY - rect.top) >= rect.height / 2;
+                        item.classList.toggle('drag-over-top', !isAfter);
+                        item.classList.toggle('drag-over-bottom', isAfter);
+                        e.dataTransfer.dropEffect = 'move';
+                    });
+                    item.addEventListener('dragleave', () => item.classList.remove('drag-over-top', 'drag-over-bottom'));
+                    item.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (!draggedEventId) return;
+                        const rect = item.getBoundingClientRect();
+                        const isAfter = (e.clientY - rect.top) >= rect.height / 2;
+                        reorderEventInCell(draggedEventId, ev.id, isAfter, dateStr);
+                        document.querySelectorAll('.event-item').forEach(x => x.classList.remove('drag-over-top', 'drag-over-bottom'));
+                    });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
                     eventsContainer.appendChild(item);
                 });
@@ -11640,7 +11740,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const dateStr = formatDate(selectedDate);
             document.getElementById('detailDateTitle').textContent = `${selectedDate.getFullYear()}年${selectedDate.getMonth()+1}月${selectedDate.getDate()}日 ${weekdays[selectedDate.getDay()]}${isSameDay(selectedDate, new Date()) ? ' · 今天' : ''}`;
             let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
-            dayEvents.sort((a,b) => (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
+            sortDayEventsByUserOrder(dayEvents, dateStr);
             const doneCount = dayEvents.filter(e => e.status === 'done').length;
             document.getElementById('detailStats').innerHTML = `<span>共 <strong>${dayEvents.length}</strong> 项</span><span>已完成 <strong>${doneCount}</strong> 项</span>`;
             const list = document.getElementById('dayTaskList');
@@ -22345,7 +22445,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608250857";
+        window.NIKO_VERSION = "202608251108";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -22554,6 +22654,139 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchDisguise);
         else watchDisguise();
+    })();
+    </script>
+
+    <!-- ===== 微信推送（企业微信 / Server 酱 / WxPusher）=====
+         设计：纯前端 fetch POST，零依赖；配置存 niko_push_config；多渠道适配；
+         三个内置触发点：pushEvtDeploy（推送完成）/pushEvtTest（测试通过）/pushEvtHabit（习惯全完成） -->
+    <script>
+    (function() {
+        const PUSH_CFG_KEY = 'niko_push_config';
+        const PUSH_HIST_KEY = 'niko_push_history';
+        // 默认配置：渠道 + 启用事件 + 历史最大 50
+        const defaultCfg = () => ({ type: 'wechatBot', token: '', events: { deploy: true, test: true, habit: false, manual: true } });
+
+        function loadPushCfg() {
+            const c = safeStorage.get(PUSH_CFG_KEY, null);
+            return c ? Object.assign(defaultCfg(), c) : defaultCfg();
+        }
+        function savePushCfg(c) { safeStorage.set(PUSH_CFG_KEY, c); }
+        function pushLog(msg, ok) {
+            const h = safeStorage.get(PUSH_HIST_KEY, []);
+            h.unshift({ ts: new Date().toISOString(), msg: String(msg).slice(0, 200), ok: ok !== false });
+            safeStorage.set(PUSH_HIST_KEY, h.slice(0, 50));
+        }
+        // 把文本按渠道组装 payload 并 POST，返回 Promise<{ok, err}>
+        async function sendWechatBot(text, cfg) {
+            cfg = cfg || loadPushCfg();
+            if (!cfg.token) return { ok: false, err: '未配置 token' };
+            const safeText = String(text || '').slice(0, 2000);
+            try {
+                if (cfg.type === 'wechatBot') {
+                    // 企业微信群机器人：markdown 类型
+                    const r = await fetch(cfg.token, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ msgtype: 'markdown', markdown: { content: safeText } })
+                    });
+                    const j = await r.json().catch(() => ({}));
+                    return (j.errcode === 0 || j.Code === 0) ? { ok: true } : { ok: false, err: j.errmsg || j.Error || ('HTTP ' + r.status) };
+                } else if (cfg.type === 'serverChan') {
+                    // Server 酱：https://sctapi.ftqq.com/{SCKEY}.send?title=...&desp=...
+                    const url = 'https://sctapi.ftqq.com/' + encodeURIComponent(cfg.token) + '.send?title=' + encodeURIComponent(safeText.slice(0, 60)) + '&desp=' + encodeURIComponent(safeText);
+                    const r = await fetch(url, { method: 'GET' });
+                    const j = await r.json().catch(() => ({}));
+                    return (j.code === 0) ? { ok: true } : { ok: false, err: j.message || ('HTTP ' + r.status) };
+                } else if (cfg.type === 'wxPusher') {
+                    // WxPusher：POST /api/send/message（简化版，需关注应用）
+                    const r = await fetch('https://wxpusher.zjiecode.com/api/send/message/' + encodeURIComponent(cfg.token), {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ content: safeText, summary: safeText.slice(0, 30) })
+                    });
+                    const j = await r.json().catch(() => ({}));
+                    return (j.code === 1000) ? { ok: true } : { ok: false, err: j.msg || ('HTTP ' + r.status) };
+                }
+                return { ok: false, err: '未知渠道：' + cfg.type };
+            } catch (e) { return { ok: false, err: String(e.message || e).slice(0, 120) }; }
+        }
+        // 公开 API：全局调用 pushNotifyNow('msg') 即推
+        window.pushNotifyNow = async function(text) {
+            const cfg = loadPushCfg();
+            if (!cfg.events.manual) { console.log('[push] manual 推送被关闭'); return { ok: false, err: 'manual 关闭' }; }
+            const r = await sendWechatBot(text, cfg);
+            pushLog(text, r.ok);
+            if (typeof showToast === 'function') showToast(r.ok ? '📢 已推送到微信' : '❌ 推送失败：' + (r.err || '未知'));
+            return r;
+        };
+        // 触发点：推送完成（agent 调用或 push_api 完成后用 localStorage 标记）
+        window.pushEventDeploy = async function(note) {
+            const cfg = loadPushCfg(); if (!cfg.events.deploy) return;
+            await sendWechatBot('🚀 **NIKO 部署完成**\n\n' + (note || '') + '\n\n⏰ ' + new Date().toLocaleString('zh-CN'), cfg);
+        };
+        window.pushEventTest = async function(note, ok) {
+            const cfg = loadPushCfg(); if (!cfg.events.test) return;
+            const emoji = ok !== false ? '✅' : '❌';
+            await sendWechatBot(emoji + ' **测试结果**\n\n' + (note || ''), cfg);
+        };
+        window.pushEventHabit = async function(note) {
+            const cfg = loadPushCfg(); if (!cfg.events.habit) return;
+            await sendWechatBot('🎉 **今日习惯全完成**\n\n' + (note || '100%！'), cfg);
+        };
+        // 测试钩子：暴露内部函数
+        window.loadPushCfg = loadPushCfg;
+        window.savePushCfg = savePushCfg;
+        // ---- 设置 UI ----
+        window.openPushSettings = function() {
+            const cfg = loadPushCfg();
+            const tEl = document.getElementById('pushChType');
+            if (tEl) { // 用 setAttribute('selected') 标记（兼容 linkedom 的 .selected 失效）
+                Array.from(tEl.options).forEach(o => o.removeAttribute('selected'));
+                const opt = Array.from(tEl.options).find(o => o.value === cfg.type);
+                if (opt) opt.setAttribute('selected', 'selected');
+            }
+            const tkEl = document.getElementById('pushChToken'); if (tkEl) tkEl.value = cfg.token;
+            ['deploy', 'test', 'habit', 'manual'].forEach(k => {
+                const e = document.getElementById('pushEvt' + k[0].toUpperCase() + k.slice(1));
+                if (e) e.checked = !!cfg.events[k];
+            });
+            renderPushTypeHint();
+            document.getElementById('pushSettingsModal').classList.add('show');
+        };
+        window.closePushSettings = function() { document.getElementById('pushSettingsModal').classList.remove('show'); };
+        window.renderPushTypeHint = function() {
+            const t = (document.getElementById('pushChType') || {}).value;
+            const hint = document.getElementById('pushChHint');
+            const tk = document.getElementById('pushChToken');
+            if (!hint || !tk) return;
+            const map = {
+                wechatBot: { ph: 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxx', tip: '<b>步骤：</b>建一个 1 人群（自己+自己）→ 群右上 ⋯ → 群机器人 → 添加 → 复制 webhook URL。群消息会推送到你的微信。' },
+                serverChan: { ph: 'SCT27xxxxx', tip: '<b>步骤：</b>扫码关注"Server酱"公众号 → 复制推送 URL 末尾的 SCKEY → 粘贴到这。消息推送到你微信的"服务通知"。' },
+                wxPusher: { ph: 'AT_xxx (appToken)', tip: '<b>步骤：</b>扫码关注 WxPusher 公众号 → 后台创建应用 → 拿 appToken。消息推送到你微信。' }
+            };
+            const m = map[t] || map.wechatBot;
+            tk.placeholder = m.ph;
+            hint.innerHTML = m.tip;
+        };
+        window.savePushSettings = function() {
+            const cfg = loadPushCfg();
+            // 用 hasAttribute('selected') 读取（兼容 linkedom 的 .selected 失效）
+            const tEl = document.getElementById('pushChType');
+            cfg.type = (tEl && Array.from(tEl.options).find(o => o.hasAttribute('selected')) || (tEl && tEl.options[0]) || {}).value || 'wechatBot';
+            cfg.token = document.getElementById('pushChToken').value.trim();
+            ['deploy', 'test', 'habit', 'manual'].forEach(k => {
+                const e = document.getElementById('pushEvt' + k[0].toUpperCase() + k.slice(1));
+                cfg.events[k] = e && e.checked;
+            });
+            savePushCfg(cfg);
+            document.getElementById('pushLastStatus').innerHTML = '<span style="color:#10b981;">✅ 已保存于 ' + new Date().toLocaleTimeString() + '</span>';
+            if (typeof showToast === 'function') showToast('💾 推送设置已保存');
+        };
+        window.testPushNotification = async function() {
+            savePushSettings();
+            const r = await pushNotifyNow('🧪 NIKO 推送测试 · ' + new Date().toLocaleString('zh-CN'));
+            const el = document.getElementById('pushLastStatus');
+            if (el) el.innerHTML = r.ok ? '<span style="color:#10b981;">✅ 测试消息已发送，请查收微信</span>' : '<span style="color:#ef4444;">❌ ' + (r.err || '推送失败') + '</span>';
+        };
     })();
     </script>
     <!-- 截图识别 OCR 引擎（Tesseract.js，按需加载，首次识别下载语言包后浏览器缓存） -->
