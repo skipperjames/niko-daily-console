@@ -5730,6 +5730,67 @@
         .kb-import-item .t { font-size:13px; color:#1f2937; line-height:1.5; flex:1; }
         body.dark-mode .kb-import-item .t { color:#d1d5db; }
         .kb-import-item .s { font-size:11px; color:#999; }
+        /* AI 洞察 */
+        .kb-insight-section { margin-bottom:16px; padding:12px 14px; border:1px solid #e5e7eb; border-radius:10px; background:#fafafa; }
+        body.dark-mode .kb-insight-section { background:#1c1c26; border-color:#2e2e42; }
+        .kb-insight-section-title { font-size:13px; font-weight:700; color:#1f2937; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+        body.dark-mode .kb-insight-section-title { color:#e5e7eb; }
+        .kb-insight-stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:10px; margin-bottom:8px; }
+        .kb-insight-stat { background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:10px 12px; }
+        body.dark-mode .kb-insight-stat { background:#232335; border-color:#3b3b50; }
+        .kb-insight-stat-label { font-size:11px; color:#6b7280; }
+        .kb-insight-stat-value { font-size:20px; font-weight:700; margin-top:2px; color:#7c3aed; }
+        body.dark-mode .kb-insight-stat-value { color:#a78bfa; }
+        .kb-insight-stat-sub { font-size:11px; color:#9ca3af; margin-top:1px; }
+        .kb-insight-bar-row { display:flex; align-items:center; gap:8px; margin:4px 0; font-size:12.5px; }
+        .kb-insight-bar-label { width:110px; color:#374151; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        body.dark-mode .kb-insight-bar-label { color:#d1d5db; }
+        .kb-insight-bar-track { flex:1; background:#e5e7eb; border-radius:6px; height:14px; overflow:hidden; position:relative; }
+        body.dark-mode .kb-insight-bar-track { background:#2e2e42; }
+        .kb-insight-bar-fill { height:100%; border-radius:6px; transition:width .25s; }
+        .kb-insight-bar-val { width:38px; text-align:right; font-weight:600; color:#1f2937; }
+        body.dark-mode .kb-insight-bar-val { color:#e5e7eb; }
+        .kb-insight-tag-cloud { display:flex; flex-wrap:wrap; gap:6px; padding-top:4px; }
+        .kb-insight-tag { padding:2px 8px; border-radius:12px; background:#eff6ff; color:#1d4ed8; font-size:11.5px; }
+        body.dark-mode .kb-insight-tag { background:#1e3a5f; color:#93c5fd; }
+        .kb-insight-tag-zombie { background:#f3f4f6; color:#9ca3af; }
+        body.dark-mode .kb-insight-tag-zombie { background:#2a2a3c; color:#6b7280; }
+        .kb-insight-month-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(60px, 1fr)); gap:6px; }
+        .kb-insight-month-cell { background:#fff; border:1px solid #e5e7eb; border-radius:7px; padding:8px 10px; text-align:center; }
+        body.dark-mode .kb-insight-month-cell { background:#232335; border-color:#3b3b50; }
+        .kb-insight-month-cell-label { font-size:11px; color:#6b7280; }
+        .kb-insight-month-cell-val { font-size:18px; font-weight:700; color:#0891b2; margin-top:2px; }
+        body.dark-mode .kb-insight-month-cell-val { color:#22d3ee; }
+        .kb-insight-month-cell-peak { background:#0891b2; color:#fff; }
+        body.dark-mode .kb-insight-month-cell-peak { background:#0891b2; color:#fff; }
+        .kb-insight-month-cell-peak .kb-insight-month-cell-val { color:#fff; }
+        .kb-insight-month-cell-peak .kb-insight-month-cell-label { color:rgba(255,255,255,.8); }
+        /* 时光机 */
+        .kb-history-item { padding:9px 10px; margin-bottom:6px; border:1px solid #e5e7eb; border-radius:8px; cursor:pointer; transition:all .15s; }
+        body.dark-mode .kb-history-item { border-color:#3b3b50; }
+        .kb-history-item:hover { border-color:#7c3aed; background:#f5f3ff; }
+        body.dark-mode .kb-history-item:hover { background:#2a2440; }
+        .kb-history-item.current { border-color:#0891b2; background:#ecfeff; border-style:solid; }
+        body.dark-mode .kb-history-item.current { background:#08323a; border-color:#22d3ee; }
+        .kb-history-item.selected { border-color:#7c3aed; background:#f5f3ff; border-width:2px; }
+        body.dark-mode .kb-history-item.selected { background:#2a2440; }
+        .kb-history-item-ts { font-size:11.5px; color:#6b7280; }
+        .kb-history-item-title { font-size:13px; font-weight:600; color:#1f2937; margin:2px 0 4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        body.dark-mode .kb-history-item-title { color:#e5e7eb; }
+        .kb-history-item-meta { font-size:11px; color:#9ca3af; display:flex; gap:8px; }
+        .kb-history-diff { font-family:Consolas, Monaco, 'Courier New', monospace; font-size:12.5px; line-height:1.6; border:1px solid #e5e7eb; border-radius:8px; overflow:hidden; }
+        body.dark-mode .kb-history-diff { border-color:#3b3b50; }
+        .kb-diff-line { padding:2px 10px; white-space:pre-wrap; word-break:break-word; }
+        .kb-diff-line.add { background:#d1fae5; color:#065f46; border-left:3px solid #10b981; }
+        body.dark-mode .kb-diff-line.add { background:#064e3b; color:#6ee7b7; border-color:#10b981; }
+        .kb-diff-line.del { background:#fee2e2; color:#991b1b; border-left:3px solid #ef4444; }
+        body.dark-mode .kb-diff-line.del { background:#4c1d1d; color:#fca5a5; border-color:#ef4444; }
+        .kb-diff-line.same { color:#374151; }
+        body.dark-mode .kb-diff-line.same { color:#9ca3af; }
+        .kb-diff-line.meta { background:#fef3c7; color:#92400e; font-weight:600; border-left:3px solid #f59e0b; }
+        body.dark-mode .kb-diff-line.meta { background:#451a03; color:#fbbf24; border-color:#f59e0b; }
+        .kb-history-rollback { margin-top:12px; padding:10px 12px; border:1px solid #7c3aed; border-radius:8px; background:#f5f3ff; }
+        body.dark-mode .kb-history-rollback { background:#2a2440; }
         /* 知识图谱 */
         .kb-graph-node { transition:stroke-width .15s, filter .15s; }
         .kb-graph-node:hover { stroke-width: 4; filter: drop-shadow(0 0 8px rgba(0,0,0,.35)); }
@@ -8347,6 +8408,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <input id="kbSearch" placeholder="🔍 搜索标题/正文/标签…" oninput="kbSearchText=this.value;renderKbList()" />
                     <button class="btn" onclick="openKbGraph()" title="可视化整个知识库：节点=条目、边=双向引用，PARA 染色">🕸️ 图谱</button>
                     <button class="btn" onclick="openKbReview()" title="间隔复习：FSRS 算法推今日该复习的条目，忘了/模糊/流畅 3 档评分">🎴 复习 <span id="kbReviewBadge" class="kb-review-badge" style="display:none;">0</span></button>
+                    <button class="btn" onclick="openKbInsight()" title="AI 总结：月度新增统计 / PARA 趋势 / 标签云 / 来源占比">📊 AI 洞察</button>
                     <button class="btn" onclick="openKbImportHot()" title="把热点看板里收藏的条目一键存入知识库（03-Resources/时事热点库）">📥 导入热点收藏</button>
                     <button class="btn" onclick="exportKnowledgeJson()" title="完整 JSON 备份">💾 导出 JSON</button>
                     <button class="btn" onclick="exportKnowledgeMd()" title="按 PARA 目录导出 Markdown 文件（可迁移到 Obsidian）">📄 导出 Markdown</button>
@@ -8423,6 +8485,29 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div style="overflow:auto;max-height:80vh;padding:4px;">
                     <svg id="kbGraphSvg" viewBox="0 0 760 580" style="display:block;width:100%;background:#fafafa;border-radius:8px;" preserveAspectRatio="xMidYMid meet"></svg>
                     <div class="kb-graph-legend">节点大小=被引用数 · 边=[[]] 双向链接 · 颜色=PARA 目录 · 点节点跳详情</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI 洞察弹窗 -->
+        <div class="modal-mask" id="kbInsightModal" onclick="if(event.target===this)closeKbInsight()">
+            <div class="modal" style="width:720px;max-width:94vw;">
+                <div class="modal-title">📊 AI 洞察 · <span style="font-size:12px;font-weight:400;color:#6b7280;" id="kbInsightSubtitle">本地统计 · 零依赖 · 不联网</span>
+                    <button class="btn" style="float:right;" onclick="closeKbInsight()">关闭</button>
+                </div>
+                <div id="kbInsightBody" style="overflow-y:auto;max-height:74vh;padding:6px 8px;"></div>
+            </div>
+        </div>
+
+        <!-- 时光机弹窗：左侧历史列表 + 右侧 diff 视图 -->
+        <div class="modal-mask" id="kbHistoryModal" onclick="if(event.target===this)closeKbHistory()">
+            <div class="modal" style="width:880px;max-width:94vw;">
+                <div class="modal-title">🕘 时光机 · <span id="kbHistoryTitle" style="font-weight:500;"></span>
+                    <button class="btn" style="float:right;" onclick="closeKbHistory()">关闭</button>
+                </div>
+                <div style="display:flex;gap:0;height:72vh;">
+                    <div id="kbHistoryList" style="width:260px;border-right:1px solid #e5e7eb;overflow-y:auto;padding:8px 4px;"></div>
+                    <div id="kbHistoryDiff" style="flex:1;overflow-y:auto;padding:10px 14px;"></div>
                 </div>
             </div>
         </div>
@@ -15633,14 +15718,31 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const now = new Date().toISOString();
             if (kbEditId) {
                 const it = knowledge.find(x => x.id === kbEditId);
-                if (it) { Object.assign(it, { title, para, category, tags, body, updatedAt: now, source: it.source ? { ...it.source, link: link || it.source.link } : (link ? { from: '手动', link } : null) }); }
+                if (it) {
+                    // 时光机：保存前把当前版本快照到 history（最大 20 个）
+                    if (!Array.isArray(it.history)) it.history = [];
+                    it.history.push(kbSnapshot(it));
+                    if (it.history.length > 20) it.history = it.history.slice(-20);
+                    Object.assign(it, { title, para, category, tags, body, updatedAt: now, source: it.source ? { ...it.source, link: link || it.source.link } : (link ? { from: '手动', link } : null) });
+                }
             } else {
-                knowledge.unshift({ id: kbNewId(), title, para, category, tags, body, pinned: false, source: link ? { from: '手动', link } : null, createdAt: now, updatedAt: now });
+                knowledge.unshift({ id: kbNewId(), title, para, category, tags, body, pinned: false, source: link ? { from: '手动', link } : null, history: [], createdAt: now, updatedAt: now });
             }
             safeStorage.set(KB_STORE, knowledge);
             closeKbEdit();
             renderKbList();
             showToast('✅ 已保存到知识库');
+        }
+        // 时光机：把一个知识条目的"当前态"打包成历史快照（仅保留关键字段，避免 localStorage 爆）
+        function kbSnapshot(it) {
+            return {
+                ts: new Date().toISOString(),
+                title: it.title || '',
+                body: it.body || '',
+                para: it.para || '',
+                category: it.category || '',
+                tags: Array.isArray(it.tags) ? it.tags.slice() : []
+            };
         }
         function toggleKbPin(id) {
             const it = knowledge.find(x => x.id === id);
@@ -15733,6 +15835,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <span>🕒 创建 ${(it.createdAt || '').slice(0, 10)} · 更新 ${(it.updatedAt || '').slice(0, 10)}</span>
                 </div>
                 <div class="kb-detail-body">${renderMd(it.body || '(无正文)')}</div>
+                <div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap;">
+                    ${(Array.isArray(it.history) && it.history.length) ? `<button class="kb-icon-btn" onclick="openKbHistory('${it.id}')" style="font-size:12px;color:#7c3aed;border-color:#ddd6fe;" title="查看历史版本与 diff">🕘 历史 · ${it.history.length} 版</button>` : `<button class="kb-icon-btn" onclick="openKbHistory('${it.id}')" style="font-size:12px;" title="编辑后会留下历史快照">🕘 时光机</button>`}
+                </div>
                 ${(src || fromName) ? `<div class="kb-detail-src">${fromName ? '📥 来自 ' + escapeHtml(fromName) : ''} ${src} ${jumpBtn}</div>` : ''}
                 ${backlinksHtml}`;
             document.getElementById('kbDetailModal').classList.add('show');
@@ -15979,6 +16084,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 tags: opts.tags || [],
                 pinned: false,
                 source: { from: opts.from || '手动', title: opts.title || '', link: opts.link || '', date: opts.date || now },
+                history: [],  // 时光机：编辑历史快照（首次创建为空，编辑时由 saveKbEntry / upsertKnowledge 写入）
                 createdAt: now, updatedAt: now
             });
             safeStorage.set(KB_STORE, knowledge);
@@ -15990,6 +16096,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             knowledge = safeStorage.get(KB_STORE, knowledge);
             const it = knowledge.find(x => x.source && x.source.from === from && x.title === title);
             if (it) {
+                // 时光机：任何字段变化都先快照到 history（限制 20 个版本）
+                if (!Array.isArray(it.history)) it.history = [];
+                it.history.push(kbSnapshot(it));
+                if (it.history.length > 20) it.history = it.history.slice(-20);
                 if (opts.body !== undefined) it.body = opts.body;
                 if (opts.tags) it.tags = opts.tags;
                 if (opts.category) it.category = opts.category;
@@ -16068,6 +16178,248 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             a.download = `niko_knowledge_${now}.md`;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             showToast('📄 Markdown 已导出（可迁移 Obsidian）');
+        }
+
+        // ===== AI 洞察：本地统计月度新增 / PARA 趋势 / 标签云 / 来源占比 =====
+        function openKbInsight() {
+            knowledge = safeStorage.get(KB_STORE, []);
+            document.getElementById('kbInsightBody').innerHTML = renderKbInsight();
+            document.getElementById('kbInsightModal').classList.add('show');
+        }
+        function closeKbInsight() { document.getElementById('kbInsightModal').classList.remove('show'); }
+        function kbMonthOf(iso) { return (iso || '').slice(0, 7); } // "YYYY-MM"
+        function kbParaColor(key) { return getKbParaColor(key); } // 已有别名
+        function renderKbInsight() {
+            const all = knowledge;
+            if (!all.length) return '<div class="kb-empty">知识库是空的，先去「＋ 新增」写下第一条心得吧</div>';
+            const now = new Date();
+            const thisMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+            const monthKeys = [];
+            for (let i = 5; i >= 0; i--) {
+                const d = new Date(now.getFullYear(), now.getMonth() - i, 15);
+                monthKeys.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+            }
+
+            // ① 本月新增 / 总览统计
+            const thisMonthItems = all.filter(x => kbMonthOf(x.createdAt) === thisMonth);
+            const totalBytes = all.reduce((s, x) => s + (x.body || '').length, 0);
+            const withHist = all.filter(x => Array.isArray(x.history) && x.history.length).length;
+
+            // ② 近 6 月按月条数（按 createdAt）
+            const monthCount = {}; monthKeys.forEach(k => monthCount[k] = 0);
+            all.forEach(x => { const k = kbMonthOf(x.createdAt); if (k in monthCount) monthCount[k]++; });
+            const maxMonth = Math.max(1, ...Object.values(monthCount));
+            const peakMonth = Object.keys(monthCount).reduce((a, b) => monthCount[a] >= monthCount[b] ? a : b);
+
+            // ③ PARA 分布（看哪些领域空白）
+            const paraCount = {};
+            KB_PARA.forEach(p => paraCount[p.key] = 0);
+            all.forEach(x => { if (x.para in paraCount) paraCount[x.para]++; });
+            const maxPara = Math.max(1, ...Object.values(paraCount));
+
+            // ④ 标签云：高频前 15 + 僵尸（用 ≤2 次）灰显
+            const tagMap = {};
+            all.forEach(x => (x.tags || []).forEach(t => { tagMap[t] = (tagMap[t] || 0) + 1; }));
+            const tagList = Object.entries(tagMap).sort((a, b) => b[1] - a[1]);
+            const totalTags = tagList.reduce((s, [, n]) => s + n, 0);
+
+            // ⑤ 来源占比
+            const fromMap = {};
+            all.forEach(x => { const f = (x.source && x.source.from) || '手动'; fromMap[f] = (fromMap[f] || 0) + 1; });
+            const fromList = Object.entries(fromMap).sort((a, b) => b[1] - a[1]);
+            const maxFrom = fromList[0] ? fromList[0][1] : 1;
+
+            // 渲染
+            let html = '';
+            // 总览 + 月度条
+            html += `<div class="kb-insight-section">
+                <div class="kb-insight-section-title">📈 总览</div>
+                <div class="kb-insight-stats">
+                    <div class="kb-insight-stat"><div class="kb-insight-stat-label">条目总数</div><div class="kb-insight-stat-value">${all.length}</div></div>
+                    <div class="kb-insight-stat"><div class="kb-insight-stat-label">本月新增</div><div class="kb-insight-stat-value" style="color:#10b981;">${thisMonthItems.length}</div><div class="kb-insight-stat-sub">${thisMonthItems.length >= 5 ? '高产' : thisMonthItems.length >= 1 ? '在写' : '本月静默'}</div></div>
+                    <div class="kb-insight-stat"><div class="kb-insight-stat-label">总字数</div><div class="kb-insight-stat-value" style="color:#0891b2;">${(totalBytes / 1000).toFixed(1)}k</div></div>
+                    <div class="kb-insight-stat"><div class="kb-insight-stat-label">有历史版</div><div class="kb-insight-stat-value" style="color:#f59e0b;">${withHist}</div><div class="kb-insight-stat-sub">时光机可用</div></div>
+                    <div class="kb-insight-stat"><div class="kb-insight-stat-label">标签总数</div><div class="kb-insight-stat-value" style="color:#ec4899;">${tagList.length}</div><div class="kb-insight-stat-sub">累计 ${totalTags} 次</div></div>
+                </div>
+            </div>`;
+
+            // 近 6 月新增条数
+            html += `<div class="kb-insight-section">
+                <div class="kb-insight-section-title">📅 近 6 月新增趋势（按创建时间）</div>
+                <div class="kb-insight-month-grid">` + monthKeys.map(k => {
+                    const n = monthCount[k];
+                    const isPeak = k === peakMonth && n > 0;
+                    return `<div class="kb-insight-month-cell${isPeak ? ' kb-insight-month-cell-peak' : ''}">
+                        <div class="kb-insight-month-cell-label">${k.slice(2)}</div>
+                        <div class="kb-insight-month-cell-val">${n}</div>
+                        ${isPeak ? '<div class="kb-insight-stat-sub" style="color:rgba(255,255,255,.85);font-weight:600;">峰值 ✨</div>' : ''}
+                    </div>`;
+                }).join('') + `</div>
+                ${thisMonthItems.length > 0 ? `<div style="margin-top:8px;font-size:12px;color:#6b7280;">本月主要标签：${Array.from(new Set(thisMonthItems.flatMap(x => x.tags || []))).slice(0, 8).map(t => '#' + t).join(' · ') || '无标签'}</div>` : ''}
+            </div>`;
+
+            // PARA 分布（柱状）
+            html += `<div class="kb-insight-section">
+                <div class="kb-insight-section-title">🗂 PARA 目录分布（看哪些领域空白）</div>` + KB_PARA.map(p => {
+                const n = paraCount[p.key] || 0;
+                const pct = Math.round(n / maxPara * 100);
+                return `<div class="kb-insight-bar-row">
+                    <div class="kb-insight-bar-label" style="color:${p.color};font-weight:600;">${p.icon} ${p.label.replace(/^[^ ]+ /, '')}</div>
+                    <div class="kb-insight-bar-track"><div class="kb-insight-bar-fill" style="width:${pct}%;background:${p.color};"></div></div>
+                    <div class="kb-insight-bar-val">${n}</div>
+                </div>`;
+            }).join('') + `</div>`;
+
+            // 来源占比（柱状）
+            html += `<div class="kb-insight-section">
+                <div class="kb-insight-section-title">📥 来源占比（哪些板块贡献最多）</div>` + (fromList.length === 0 ? '<div style="color:#9ca3af;font-size:12px;">无来源数据</div>' : fromList.slice(0, 8).map(([f, n]) => {
+                const pct = Math.round(n / maxFrom * 100);
+                return `<div class="kb-insight-bar-row">
+                    <div class="kb-insight-bar-label">${escapeHtml(f)}</div>
+                    <div class="kb-insight-bar-track"><div class="kb-insight-bar-fill" style="width:${pct}%;background:#7c3aed;"></div></div>
+                    <div class="kb-insight-bar-val">${n}</div>
+                </div>`;
+            }).join('')) + `</div>`;
+
+            // 标签云（高频 + 僵尸）
+            html += `<div class="kb-insight-section">
+                <div class="kb-insight-section-title">🏷 标签云 <span style="font-weight:400;font-size:11px;color:#6b7280;">字号=频率 · 灰色=僵尸标签（≤2次，建议清理）</span></div>
+                <div class="kb-insight-tag-cloud">` + (tagList.length === 0 ? '<div style="color:#9ca3af;font-size:12px;">还没有标签</div>' : tagList.slice(0, 30).map(([t, n]) => {
+                const zombie = n <= 2;
+                return `<span class="kb-insight-tag${zombie ? ' kb-insight-tag-zombie' : ''}" style="font-size:${Math.min(18, 11 + n * 0.6)}px;" title="#${escapeHtml(t)} · ${n} 次">#${escapeHtml(t)} ${n}</span>`;
+            }).join('')) + `</div>
+            </div>`;
+            return html;
+        }
+
+        // ===== 时光机：历史时间轴 + diff + 一键回滚 =====
+        let kbHistoryCurrent = null; // 当前查看时光机的条目
+        function openKbHistory(id) {
+            const it = knowledge.find(x => x.id === id);
+            if (!it) return;
+            kbHistoryCurrent = it;
+            document.getElementById('kbHistoryTitle').textContent = '《' + (it.title || '未命名') + '》';
+            renderKbHistoryList();
+            document.getElementById('kbHistoryDiff').innerHTML = '<div style="color:#9ca3af;font-size:13px;padding:20px;text-align:center;">左侧选一个历史版本，与当前对比 diff</div>';
+            document.getElementById('kbHistoryModal').classList.add('show');
+        }
+        function closeKbHistory() { document.getElementById('kbHistoryModal').classList.remove('show'); kbHistoryCurrent = null; }
+        function renderKbHistoryList(selectIdx) {
+            if (!kbHistoryCurrent) return;
+            const hist = Array.isArray(kbHistoryCurrent.history) ? kbHistoryCurrent.history : [];
+            const cur = kbSnapshot(kbHistoryCurrent);
+            const list = [
+                { kind: 'current', ts: cur.ts || kbHistoryCurrent.updatedAt, data: cur },
+                ...hist.map((h, i) => ({ kind: 'history', idx: i, ts: h.ts, data: h }))
+            ];
+            const html = list.map(it => {
+                const d = it.data;
+                const safeTitle = escapeHtml(d.title || '(无标题)');
+                const safePara = escapeHtml(getKbParaLabel(d.para || ''));
+                const safeCat = escapeHtml(d.category || '');
+                const tagStr = (d.tags || []).map(t => '#' + t).join(' ');
+                const len = (d.body || '').length;
+                const dataAttr = it.kind === 'history' ? `data-idx="${it.idx}"` : `data-current="1"`;
+                return `<div class="kb-history-item${it.kind === 'current' ? ' current' : ''}" ${dataAttr}>
+                    <div class="kb-history-item-ts">${it.kind === 'current' ? '🟢 当前' : '🕘 v' + (hist.length - it.idx)} · ${(it.ts || '').slice(0, 16).replace('T', ' ')}</div>
+                    <div class="kb-history-item-title">${safeTitle}</div>
+                    <div class="kb-history-item-meta"><span>${safePara}</span><span>${safeCat}</span><span>${len}字</span></div>
+                    <div style="font-size:10.5px;color:#9ca3af;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${tagStr}</div>
+                </div>`;
+            }).join('');
+            const listEl = document.getElementById('kbHistoryList');
+            listEl.innerHTML = html;
+            // 绑定点击
+            listEl.querySelectorAll('.kb-history-item').forEach(el => {
+                el.onclick = () => {
+                    listEl.querySelectorAll('.kb-history-item').forEach(x => x.classList.remove('selected'));
+                    el.classList.add('selected');
+                    if (el.dataset.current) { renderKbHistoryDiff(null); } else { renderKbHistoryDiff(Number(el.dataset.idx)); }
+                };
+            });
+        }
+        // 显示历史版本 idx（0=最早历史…n-1=最新历史）与当前版本的 diff
+        function renderKbHistoryDiff(idx) {
+            if (!kbHistoryCurrent) return;
+            const hist = Array.isArray(kbHistoryCurrent.history) ? kbHistoryCurrent.history : [];
+            const cur = kbSnapshot(kbHistoryCurrent);
+            const target = idx == null ? cur : hist[idx];
+            const targetLabel = idx == null ? '当前' : 'v' + (hist.length - idx);
+            const diff = diffKbSnapshots(target, cur);
+            const opCounts = diff.reduce((s, l) => { s[l.op] = (s[l.op] || 0) + 1; return s; }, {});
+            const opHtml = ['add', 'del', 'same', 'meta'].map(k => `<span style="margin-right:12px;"><b style="color:${k === 'add' ? '#10b981' : k === 'del' ? '#ef4444' : k === 'meta' ? '#f59e0b' : '#6b7280'};">${opCounts[k] || 0}</b> ${k === 'add' ? '新增' : k === 'del' ? '删除' : k === 'meta' ? '字段' : '未变'}</span>`).join('');
+            document.getElementById('kbHistoryDiff').innerHTML = `
+                <div style="font-size:13px;color:#374151;margin-bottom:8px;">🕘 ${targetLabel} → 🟢 当前 · 行级 diff</div>
+                <div style="font-size:12px;color:#6b7280;margin-bottom:10px;">${opHtml}</div>
+                <div class="kb-history-diff">${diff.map(l => `<div class="kb-diff-line ${l.op}">${l.op === 'meta' ? '● ' + l.text : (l.op === 'add' ? '+ ' : l.op === 'del' ? '- ' : '  ') + escapeHtml(l.text)}</div>`).join('')}</div>
+                ${idx != null ? `<div class="kb-history-rollback">
+                    <div style="font-size:13px;color:#7c3a0e;margin-bottom:6px;">要回滚到这一版吗？</div>
+                    <div style="display:flex;gap:8px;">
+                        <button class="btn primary" onclick="kbRollbackTo(${idx})">↩️ 一键回滚到 v${hist.length - idx}</button>
+                        <button class="btn" onclick="renderKbHistoryDiff(null)">看当前</button>
+                    </div>
+                </div>` : ''}
+            `;
+        }
+        // 一键回滚：把当前版本快照到 history，再把目标版本写入当前（保留原 history 顺序）
+        function kbRollbackTo(idx) {
+            if (!kbHistoryCurrent) return;
+            const it = kbHistoryCurrent;
+            const hist = Array.isArray(it.history) ? it.history : [];
+            if (idx < 0 || idx >= hist.length) return;
+            const target = hist[idx];
+            if (!confirm('确定回滚到 v' + (hist.length - idx) + '（' + (target.ts || '').slice(0, 16).replace('T', ' ') + '）？当前版本会自动备份到历史')) return;
+            it.history.push(kbSnapshot(it)); // 当前→history
+            if (it.history.length > 20) it.history = it.history.slice(-20);
+            it.title = target.title; it.body = target.body; it.para = target.para; it.category = target.category;
+            it.tags = (target.tags || []).slice();
+            it.updatedAt = new Date().toISOString();
+            safeStorage.set(KB_STORE, knowledge);
+            renderKbHistoryList(); renderKbHistoryDiff(null); renderKbList();
+            showToast('↩️ 已回滚到 v' + (hist.length - idx));
+        }
+        // 行级 LCS diff，返回 [{op:'add'|'del'|'same'|'meta', text}]
+        function diffKbSnapshots(oldS, newS) {
+            const lines = [];
+            // 元字段比较：title / para / category / tags
+            if (oldS.title !== newS.title) { lines.push({ op: 'meta', text: `标题：${oldS.title} → ${newS.title}` }); }
+            if (oldS.para !== newS.para) { lines.push({ op: 'meta', text: `PARA：${oldS.para} → ${newS.para}` }); }
+            if (oldS.category !== newS.category) { lines.push({ op: 'meta', text: `分类：${oldS.category} → ${newS.category}` }); }
+            const oldT = (oldS.tags || []).join(', '), newT = (newS.tags || []).join(', ');
+            if (oldT !== newT) { lines.push({ op: 'meta', text: `标签：${oldT} → ${newT}` }); }
+            // 正文行级 diff
+            const a = (oldS.body || '').split('\n'), b = (newS.body || '').split('\n');
+            const lcs = kbLcs(a, b);
+            let i = 0, j = 0, k = 0;
+            while (i < a.length && j < b.length) {
+                if (a[i] === b[j]) { lines.push({ op: 'same', text: a[i] }); i++; j++; k++; continue; }
+                // 在 lcs 范围内移动
+                if (k < lcs.length && lcs[k] === a[i]) {
+                    lines.push({ op: 'add', text: b[j] }); j++;
+                } else if (k < lcs.length && lcs[k] === b[j]) {
+                    lines.push({ op: 'del', text: a[i] }); i++;
+                } else {
+                    lines.push({ op: 'del', text: a[i] }); lines.push({ op: 'add', text: b[j] }); i++; j++;
+                }
+            }
+            while (i < a.length) { lines.push({ op: 'del', text: a[i++] }); }
+            while (j < b.length) { lines.push({ op: 'add', text: b[j++] }); }
+            return lines;
+        }
+        // 经典 LCS（O(n*m)，对几百行 OK；超长再换 Myers diff）
+        function kbLcs(a, b) {
+            const n = a.length, m = b.length;
+            const dp = Array.from({ length: n + 1 }, () => new Uint32Array(m + 1));
+            for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) {
+                dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+            }
+            const res = []; let i = 0, j = 0;
+            while (i < n && j < m) {
+                if (a[i] === b[j]) { res.push(a[i]); i++; j++; }
+                else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+                else j++;
+            }
+            return res;
         }
 // ===== 读书看板 =====
         const BOOK_SEED_VERSION = 'v2026-08-18';
@@ -21993,7 +22345,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608250003";
+        window.NIKO_VERSION = "202608250857";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
