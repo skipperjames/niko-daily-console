@@ -22458,7 +22458,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608251314";
+        window.NIKO_VERSION = "202608251316";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -22690,30 +22690,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h.unshift({ ts: new Date().toISOString(), msg: String(msg).slice(0, 200), ok: ok !== false });
             safeStorage.set(PUSH_HIST_KEY, h.slice(0, 50));
         }
-        // 把文本按渠道组装 payload 并 POST，返回 Promise<{ok, err}>
+        // 把文本按渠道组装 payload 并 POST，返回 Promise<{ok, err}>。
+        // 重要：企业微信 webhook 没返回 CORS 头，浏览器默认拦截 → 用 mode:'no-cors' 走 simple request
+        //     （Content-Type 必须是 text/plain/form-data/urlencoded 之一，且 method=POST/GET）。
+        //     副作用：no-cors 模式读不到响应，所以 ok 永远=true（除非 catch 到网络层异常）。
+        //     这是 NIKO 部署在 https://skipperjames.github.io 的唯一可行方案。
         async function sendWechatBot(text, cfg) {
             cfg = cfg || loadPushCfg();
             if (!cfg.token) return { ok: false, err: '未配置 token' };
             const safeText = String(text || '').slice(0, 2000);
             try {
                 if (cfg.type === 'wechatBot') {
-                    // 企业微信群机器人：markdown 类型
+                    // 企业微信群机器人：markdown 类型（包成 text/plain 字符串避开 CORS 预检）
                     const r = await fetch(cfg.token, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        method: 'POST',
+                        mode: 'no-cors',  // 关键：绕过 CORS
+                        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
                         body: JSON.stringify({ msgtype: 'markdown', markdown: { content: safeText } })
                     });
-                    const j = await r.json().catch(() => ({}));
-                    return (j.errcode === 0 || j.Code === 0) ? { ok: true } : { ok: false, err: j.errmsg || j.Error || ('HTTP ' + r.status) };
+                    // no-cors 模式下 r.type === 'opaque'，body/status 都不可读 — 但请求已发出去
+                    return { ok: true, note: 'no-cors 模式（无法读取响应，请查微信确认）' };
                 } else if (cfg.type === 'serverChan') {
                     // Server 酱：https://sctapi.ftqq.com/{SCKEY}.send?title=...&desp=...
                     const url = 'https://sctapi.ftqq.com/' + encodeURIComponent(cfg.token) + '.send?title=' + encodeURIComponent(safeText.slice(0, 60)) + '&desp=' + encodeURIComponent(safeText);
-                    const r = await fetch(url, { method: 'GET' });
+                    const r = await fetch(url, { method: 'GET', mode: 'cors' });
                     const j = await r.json().catch(() => ({}));
                     return (j.code === 0) ? { ok: true } : { ok: false, err: j.message || ('HTTP ' + r.status) };
                 } else if (cfg.type === 'wxPusher') {
                     // WxPusher：POST /api/send/message（简化版，需关注应用）
                     const r = await fetch('https://wxpusher.zjiecode.com/api/send/message/' + encodeURIComponent(cfg.token), {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ content: safeText, summary: safeText.slice(0, 30) })
                     });
                     const j = await r.json().catch(() => ({}));
@@ -22806,7 +22812,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             savePushSettings();
             const r = await pushNotifyNow('🧪 NIKO 推送测试 · ' + new Date().toLocaleString('zh-CN'));
             const el = document.getElementById('pushLastStatus');
-            if (el) el.innerHTML = r.ok ? '<span style="color:#10b981;">✅ 测试消息已发送，请查收微信</span>' : '<span style="color:#ef4444;">❌ ' + (r.err || '推送失败') + '</span>';
+            if (el) el.innerHTML = r.ok ? '<span style="color:#10b981;">✅ 请求已发出（no-cors 模式：无法读响应，请查微信群确认是否收到）</span>' : '<span style="color:#ef4444;">❌ ' + (r.err || '推送失败') + '</span>';
         };
     })();
     </script>
