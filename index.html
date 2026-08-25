@@ -9169,7 +9169,10 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 </select>
             </div>
             <div class="form-item"><label>Webhook URL / Token</label>
-                <input id="pushChToken" type="password" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx" />
+                <div style="display:flex;gap:6px;align-items:center;">
+                    <input id="pushChToken" type="password" placeholder="https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=xxxx" style="flex:1;" />
+                    <button type="button" class="btn" id="pushChTokenToggle" onclick="togglePushTokenVis()" style="padding:6px 10px;flex-shrink:0;" title="显示/隐藏已填内容（避免粘错）">👁</button>
+                </div>
                 <div id="pushChHint" style="font-size:11px;color:#888;margin-top:4px;line-height:1.55;"></div>
             </div>
             <div class="form-item"><label>推送时机（多选）</label>
@@ -22455,7 +22458,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608251310";
+        window.NIKO_VERSION = "202608251314";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -22745,6 +22748,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 测试钩子：暴露内部函数
         window.loadPushCfg = loadPushCfg;
         window.savePushCfg = savePushCfg;
+        // 切换 token 字段明文/密码（避免粘错）
+        window.togglePushTokenVis = function() {
+            const el = document.getElementById('pushChToken');
+            const btn = document.getElementById('pushChTokenToggle');
+            if (!el) return;
+            if (el.type === 'password') { el.type = 'text'; if (btn) btn.textContent = '🙈'; }
+            else { el.type = 'password'; if (btn) btn.textContent = '👁'; }
+        };
         // ---- 设置 UI ----
         window.openPushSettings = function() {
             const cfg = loadPushCfg();
