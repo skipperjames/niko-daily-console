@@ -11718,9 +11718,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         e.preventDefault();
                         e.stopPropagation();
                         if (!draggedEventId) return;
+                        const draggedEv = events.find(e => e.id === draggedEventId);
+                        if (!draggedEv) return;
                         const rect = item.getBoundingClientRect();
                         const isAfter = (e.clientY - rect.top) >= rect.height / 2;
-                        reorderEventInCell(draggedEventId, ev.id, isAfter, dateStr);
+                        // 来源任务已落在目标日期范围内 → 同日内排序；否则跨日期移动
+                        if (isDateInRange(dateStr, draggedEv.startDate, draggedEv.endDate)) {
+                            reorderEventInCell(draggedEventId, ev.id, isAfter, dateStr);
+                        } else {
+                            moveEventToDateAndOrder(draggedEventId, dateStr, ev.id, isAfter);
+                        }
                         document.querySelectorAll('.event-item').forEach(x => x.classList.remove('drag-over-top', 'drag-over-bottom'));
                     });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
@@ -11746,6 +11753,27 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 saveData();
                 render();
             }
+        }
+
+        // 跨日期拖拽：先把任务移到目标日期，再按落点插入到目标条目上/下方
+        function moveEventToDateAndOrder(eventId, targetDate, targetId, isAfter) {
+            const ev = events.find(e => e.id === eventId);
+            if (!ev) return;
+            const duration = new Date(ev.endDate) - new Date(ev.startDate);
+            const newStart = new Date(targetDate);
+            ev.startDate = formatDate(newStart);
+            ev.endDate = formatDate(new Date(newStart.getTime() + duration));
+            // 按目标日现有顺序插入到 targetId 上/下方
+            let dayEvents = events.filter(e => isDateInRange(targetDate, e.startDate, e.endDate));
+            sortDayEventsByUserOrder(dayEvents, targetDate);
+            dayEvents = dayEvents.filter(e => e.id !== eventId);
+            const ti = dayEvents.findIndex(e => e.id === targetId);
+            if (ti >= 0) {
+                dayEvents.splice(isAfter ? ti + 1 : ti, 0, ev);
+                setDayOrder(targetDate, dayEvents.map(e => e.id));
+            }
+            saveData();
+            render();
         }
 
         function renderDayDetail() {
@@ -22458,7 +22486,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608251316";
+        window.NIKO_VERSION = "202608270849";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
