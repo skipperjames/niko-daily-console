@@ -3771,6 +3771,128 @@
             color: #fff;
             border-color: #1a1a1a;
         }
+
+        /* ===== 热点关键词过滤与刷新控制 ===== */
+        .hot-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 12px 14px;
+            background: #faf9f7;
+            border: 1px solid #e8e6e1;
+            border-radius: 10px;
+            flex-shrink: 0;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        body.dark-mode .hot-controls { background: #1c1c1c; border-color: #333; }
+        .hot-keyword-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .hot-filter-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        body.dark-mode .hot-filter-label { color: #aaa; }
+        .hot-keyword-chip {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            border: 1px solid #d0d0d0;
+            background: #fff;
+            color: #555;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        body.dark-mode .hot-keyword-chip { background: #2a2a38; border-color: #444; color: #ccc; }
+        .hot-keyword-chip:hover { border-color: #667eea; color: #667eea; }
+        body.dark-mode .hot-keyword-chip:hover { border-color: #818cf8; color: #818cf8; }
+        .hot-keyword-chip.active {
+            background: #667eea;
+            color: #fff;
+            border-color: #667eea;
+        }
+        body.dark-mode .hot-keyword-chip.active { background: #818cf8; border-color: #818cf8; color: #fff; }
+        .hot-keyword-chip .chip-remove {
+            font-size: 13px;
+            line-height: 1;
+            opacity: 0.7;
+        }
+        .hot-keyword-chip .chip-remove:hover { opacity: 1; }
+        .hot-keyword-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .hot-keyword-input {
+            width: 120px;
+            padding: 4px 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 14px;
+            font-size: 11px;
+            outline: none;
+            background: #fff;
+            color: #333;
+            transition: all 0.2s;
+        }
+        body.dark-mode .hot-keyword-input { background: #252535; border-color: #444; color: #ccc; }
+        .hot-keyword-input:focus { border-color: #667eea; }
+        .hot-keyword-add {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            border: 1px solid #667eea;
+            background: #fff;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        body.dark-mode .hot-keyword-add { background: #2a2a38; }
+        .hot-keyword-add:hover { background: #667eea; color: #fff; }
+        .hot-refresh-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .hot-auto-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            user-select: none;
+        }
+        body.dark-mode .hot-auto-switch { color: #ccc; }
+        .hot-auto-switch input {
+            width: 16px;
+            height: 16px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+        .hot-filter-count {
+            font-size: 11px;
+            color: #888;
+            margin-left: auto;
+        }
+        body.dark-mode .hot-filter-count { color: #999; }
+        @media (max-width: 768px) {
+            .hot-controls { padding: 10px; }
+            .hot-keyword-input { width: 100px; }
+            .hot-refresh-row { gap: 8px; }
+            .hot-auto-switch { font-size: 11px; }
+        }
         .hot-list {
             display: flex;
             flex-direction: column;
@@ -7929,6 +8051,26 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <span class="hot-view-tab" id="viewTabComp" onclick="switchHotView('comp')">🎯 竞品买量监控</span>
                     <span class="hot-view-tab" id="viewTabCopy" onclick="switchHotView('copy')">✍️ 文案库</span>
                     <span class="hot-view-tab" id="viewTabMeme" onclick="switchHotView('meme')">🈯 梗文化</span>
+                </div>
+
+                <!-- 热点关键词过滤 + 刷新控制 -->
+                <div class="hot-controls" id="hotFilterControls">
+                    <div class="hot-keyword-row">
+                        <span class="hot-filter-label">🎯 只看：</span>
+                        <span id="hotKeywordChips"></span>
+                        <div class="hot-keyword-input-wrap">
+                            <input type="text" class="hot-keyword-input" id="hotKeywordInput" placeholder="+ 添加词" onkeydown="if(event.key==='Enter') addHotKeyword(this.value)" />
+                            <button class="hot-keyword-add" onclick="addHotKeyword(document.getElementById('hotKeywordInput').value)">添加</button>
+                        </div>
+                        <span class="hot-filter-count" id="hotFilterCount"></span>
+                    </div>
+                    <div class="hot-refresh-row">
+                        <label class="hot-auto-switch" title="开启后每次打开热点页会自动拉取云端最新数据">
+                            <input type="checkbox" id="hotAutoRefreshSwitch" onchange="toggleHotAutoRefresh(this.checked)" />
+                            <span>每天自动刷新热点</span>
+                        </label>
+                        <button class="btn primary" onclick="refreshHotNow()" title="立即从云端拉取最新热点数据">⚡ 立即刷新</button>
+                    </div>
                 </div>
 
                 <!-- AI 每日热点摘要（来自云端 hotspot.json，由每日自动化搜索+分析生成） -->
@@ -12317,6 +12459,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         let hotData = { '日本': [], '韩国': [], '国内': [] };
         let hotLoading = false;
         let hotLastFetchTime = safeStorage.get('niko_hot_last_fetch', null);
+        // 热点关键词过滤（默认话题）
+        const DEFAULT_HOT_KEYWORDS = ['游戏行业', '独立游戏', '梗文化', '搞怪', '文化', '娱乐'];
+        let hotKeywords = safeStorage.get('niko_hot_keywords', DEFAULT_HOT_KEYWORDS);
+        if (!Array.isArray(hotKeywords) || hotKeywords.length === 0) hotKeywords = DEFAULT_HOT_KEYWORDS.slice();
+        let activeHotKeywords = safeStorage.get('niko_hot_keywords_active', DEFAULT_HOT_KEYWORDS.slice());
+        if (!Array.isArray(activeHotKeywords)) activeHotKeywords = [];
+        let hotAutoRefresh = safeStorage.get('niko_hot_auto_refresh', true) === true;
 
         // 热点内容模板库（基于日期伪随机生成，确保每天内容一致且看起来真实）
         const hotTemplates = {
@@ -12539,6 +12688,88 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="hs-meta">📡 数据由每日自动化从各平台实时热榜整理 + AI 分析生成 · 更新于 ${when} · 点「🔄 刷新热点」可重新拉取</div>`;
         }
 
+        // ===== 热点关键词过滤 =====
+        function saveHotKeywords() {
+            safeStorage.set('niko_hot_keywords', hotKeywords);
+            safeStorage.set('niko_hot_keywords_active', activeHotKeywords);
+        }
+        function addHotKeyword(kw) {
+            kw = String(kw || '').trim();
+            if (!kw) return;
+            if (hotKeywords.indexOf(kw) === -1) {
+                hotKeywords.push(kw);
+                activeHotKeywords.push(kw);
+            } else if (activeHotKeywords.indexOf(kw) === -1) {
+                activeHotKeywords.push(kw);
+            }
+            const input = document.getElementById('hotKeywordInput');
+            if (input) input.value = '';
+            saveHotKeywords();
+            renderHotKeywordFilter();
+            renderHot();
+            if (currentPage === 'hot') renderHotFull();
+        }
+        function removeHotKeyword(kw) {
+            hotKeywords = hotKeywords.filter(k => k !== kw);
+            activeHotKeywords = activeHotKeywords.filter(k => k !== kw);
+            saveHotKeywords();
+            renderHotKeywordFilter();
+            renderHot();
+            if (currentPage === 'hot') renderHotFull();
+        }
+        function toggleHotKeyword(kw) {
+            const idx = activeHotKeywords.indexOf(kw);
+            if (idx >= 0) activeHotKeywords.splice(idx, 1);
+            else activeHotKeywords.push(kw);
+            saveHotKeywords();
+            renderHotKeywordFilter();
+            renderHot();
+            if (currentPage === 'hot') renderHotFull();
+        }
+        function clearHotKeywords() {
+            activeHotKeywords = [];
+            saveHotKeywords();
+            renderHotKeywordFilter();
+            renderHot();
+            if (currentPage === 'hot') renderHotFull();
+        }
+        function matchesHotKeywords(item) {
+            if (!activeHotKeywords.length) return true;
+            const text = [
+                item.title || '', item.desc || '', item.detail || '',
+                item.source || '', item.platform || '',
+                (item.tags || []).join(' '), item.tag || ''
+            ].join(' ').toLowerCase();
+            return activeHotKeywords.some(kw => text.includes(kw.toLowerCase()));
+        }
+        function renderHotKeywordFilter() {
+            const chips = document.getElementById('hotKeywordChips');
+            const count = document.getElementById('hotFilterCount');
+            const sw = document.getElementById('hotAutoRefreshSwitch');
+            if (sw) sw.checked = hotAutoRefresh;
+            if (!chips) return;
+            if (hotKeywords.length === 0) {
+                chips.innerHTML = '<span style="font-size:11px;color:#999;">暂无过滤词</span>';
+            } else {
+                chips.innerHTML = hotKeywords.map(kw => {
+                    const active = activeHotKeywords.indexOf(kw) >= 0;
+                    return `<span class="hot-keyword-chip ${active ? 'active' : ''}" onclick="toggleHotKeyword('${kw.replace(/'/g, "\\'")}')" title="${active ? '点击取消' : '点击筛选'}">${escapeHtml(kw)}<span class="chip-remove" onclick="event.stopPropagation();removeHotKeyword('${kw.replace(/'/g, "\\'")}')" title="删除">×</span></span>`;
+                }).join('');
+            }
+            if (count) {
+                const active = activeHotKeywords.length;
+                count.textContent = active ? `已选 ${active} 个话题` : '显示全部';
+            }
+        }
+        function toggleHotAutoRefresh(checked) {
+            hotAutoRefresh = !!checked;
+            safeStorage.set('niko_hot_auto_refresh', hotAutoRefresh);
+        }
+        // 立即刷新：强制重新拉取云端最新数据
+        function refreshHotNow() {
+            refreshHot();
+        }
+
         // 拉取云端热榜：优先线上 hotspot.json，失败回退本地缓存
         function loadCloudHot(cb) {
             const finish = ok => { renderHotCloudSummary(); if (typeof cb === 'function') cb(ok); };
@@ -12655,6 +12886,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 items = hotData[cat].map((item, idx) => ({ ...item, category: cat, index: idx }));
             }
 
+            // 关键词过滤
+            items = items.filter(matchesHotKeywords);
+
             // 按 isHot 排序，热门在前
             items.sort((a, b) => (b.isHot ? 1 : 0) - (a.isHot ? 1 : 0));
             // 今日页面只显示前 5 条
@@ -12684,8 +12918,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 refreshHot();
                 return;
             }
-            if (fullKR) fullKR.innerHTML = hotData['韩国'].map((item, idx) => createHotItemHtml({...item, region: '韩国', index: idx}, true)).join('') || '<div class="hot-empty">暂无数据</div>';
-            if (fullJP) fullJP.innerHTML = hotData['日本'].map((item, idx) => createHotItemHtml({...item, region: '日本', index: idx}, true)).join('') || '<div class="hot-empty">暂无数据</div>';
+            if (fullKR) fullKR.innerHTML = hotData['韩国'].map((item, idx) => ({...item, region: '韩国', index: idx})).filter(matchesHotKeywords).map(item => createHotItemHtml(item, true)).join('') || '<div class="hot-empty">暂无数据</div>';
+            if (fullJP) fullJP.innerHTML = hotData['日本'].map((item, idx) => ({...item, region: '日本', index: idx})).filter(matchesHotKeywords).map(item => createHotItemHtml(item, true)).join('') || '<div class="hot-empty">暂无数据</div>';
 
             // ===== 国内各平台独立专区 =====
             const cnMap = {
@@ -12715,10 +12949,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         items.push({ ...it, region: '国内', index: i });
                     }
                 });
+                // 应用关键词过滤（保留原始 index 供 openHotDetail 定位）
+                const filteredItems = items.filter(matchesHotKeywords);
                 // 没数据的平台：整张卡片（含 panel-card 容器）直接隐藏，避免出现"暂无数据"空白栏
                 const panel = el.closest('.panel-card');
-                if (items.length) {
-                    el.innerHTML = items.map(item => createHotItemHtml(item, true)).join('');
+                if (filteredItems.length) {
+                    el.innerHTML = filteredItems.map(item => createHotItemHtml(item, true)).join('');
                     if (panel) panel.style.display = '';
                 } else {
                     el.innerHTML = '<div class="hot-empty" style="padding:10px;">暂无数据</div>';
@@ -12749,7 +12985,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 // 按热度排序：isHot 优先，然后随机热度值（基于日期种子保持一致）
                 const today = new Date();
                 const baseSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-                const sorted = items.slice().sort((a, b) => {
+                const sorted = items.slice().filter(matchesHotKeywords).sort((a, b) => {
                     if (a.isHot && !b.isHot) return -1;
                     if (!a.isHot && b.isHot) return 1;
                     // 相同热度时，用标题哈希值排序（保持稳定）
@@ -22486,7 +22722,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608270849";
+        window.NIKO_VERSION = "202608270945";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
