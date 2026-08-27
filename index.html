@@ -2057,6 +2057,33 @@
         .habit-edit { color: #3b82f6; }
         .habit-edit:hover { background: #dbeafe; }
         body.dark-mode .habit-edit:hover { background: #1e3a5f; }
+        .habit-makeup { color: #10b981; margin-left: 4px; }
+        .habit-makeup:hover { background: #d1fae5; }
+        body.dark-mode .habit-makeup:hover { background: #064e3b; }
+        .habit-makeup-form {
+            margin-top: 8px;
+            padding: 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        body.dark-mode .habit-makeup-form { background: #064e3b33; border-color: #059669; }
+        .habit-makeup-form label { font-size: 12px; color: #555; }
+        body.dark-mode .habit-makeup-form label { color: #ccc; }
+        .habit-makeup-form input[type="date"] {
+            padding: 4px 8px;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #fff;
+            color: #333;
+        }
+        body.dark-mode .habit-makeup-form input[type="date"] { background: #1f1f2e; border-color: #444; color: #eee; }
+        .habit-makeup-form .btn { padding: 4px 10px; font-size: 12px; }
         .habit-card .habit-progress {
             margin-top: 6px;
             font-size: 11px;
@@ -11067,6 +11094,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (hm && hm.classList.contains('show')) renderHabitStats();
         }
 
+        let habitMakeUpId = null;
+        function habitMakeUp(id) {
+            habitMakeUpId = id;
+            renderHabitStats();
+        }
+        function habitCancelMakeUp() {
+            habitMakeUpId = null;
+            renderHabitStats();
+        }
+        function habitConfirmMakeUp(id) {
+            const dateInput = document.getElementById('habitMakeUpDate_' + id);
+            const date = dateInput ? dateInput.value : '';
+            const today = formatDate(new Date());
+            if (!date) { if (typeof showToast === 'function') showToast('请选择补卡日期'); return; }
+            if (date > today) { if (typeof showToast === 'function') showToast('不能补未来的卡'); return; }
+            const logs = habitLogs();
+            if (logs.some(l => l.habitId === id && l.date === date)) { if (typeof showToast === 'function') showToast('该日期已经打卡'); return; }
+            logs.push({ id: 'hl_' + Date.now(), habitId: id, date: date, doneAt: new Date().toISOString() });
+            habitSaveLogs(logs);
+            const h = habitList().find(x => x.id === id);
+            const rewardMin = h ? (Number(h.rewardMin) || 0) : 0;
+            if (rewardMin > 0 && typeof window.gameTimeEarn === 'function') {
+                try { window.gameTimeEarn(id, rewardMin, h.name, date); } catch (e) {}
+            }
+            if (id === HABIT_BOOK_ID) bookHabitLinkApply(date);
+            habitMakeUpId = null;
+            renderHabitStats();
+            renderTodayHabits();
+            renderHabitHeat();
+            if (typeof showToast === 'function') showToast(`✅ 已补卡 ${date}`);
+        }
+
         // 今日习惯区块（卡片网格）
         function renderTodayHabits() {
             const box = document.getElementById('todayHabitsList');
@@ -11234,24 +11293,34 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!habits.length) {
                 listBox.innerHTML = '<div class="habit-empty" style="padding:16px;text-align:center;">还没有习惯，先用上面的表单添加一个吧</div>';
             } else {
+                const yesterday = formatDate(addDays(new Date(), -1));
                 listBox.innerHTML = habits.map(h => {
                     const wc = habitWeekCount(h.id);
                     const goal = h.goal || 7;
                     const pct = Math.min(100, Math.round(wc / goal * 100));
                     const streak = habitStreak(h.id);
+                    const isMakeUp = habitMakeUpId === h.id;
+                    const makeUpForm = isMakeUp ? `<div class="habit-makeup-form">
+                        <label>补卡日期：</label>
+                        <input type="date" id="habitMakeUpDate_${h.id}" value="${yesterday}" max="${formatDate(new Date())}" />
+                        <button class="btn primary" onclick="habitConfirmMakeUp('${h.id}')">确认补卡</button>
+                        <button class="btn" onclick="habitCancelMakeUp()">取消</button>
+                    </div>` : '';
                     return `<div class="habit-card">
                         <div class="habit-card-head">
                             <span class="habit-icon">${h.icon || '🎯'}</span>
                             <span class="habit-name">${escapeHtml(h.name)}</span>
                             <span class="habit-streak">🔥 ${streak} 天</span>
+                            <button class="habit-makeup" onclick="event.stopPropagation();habitMakeUp('${h.id}')" title="补卡">📝</button>
                             <button class="habit-edit" onclick="event.stopPropagation();editHabit('${h.id}')" title="编辑">✏️</button>
-                            <button class="habit-del" onclick="deleteHabit('${h.id}')">🗑</button>
+                            <button class="habit-del" onclick="deleteHabit('${h.id}')" title="删除">🗑</button>
                         </div>
                         <div class="habit-progress">
                             <span>本周 ${wc}/${goal}</span>
                             <div class="habit-bar"><i style="width:${pct}%"></i></div>
                             <span>${pct}%</span>
                         </div>
+                        ${makeUpForm}
                     </div>`;
                 }).join('');
             }
@@ -22764,7 +22833,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608271034";
+        window.NIKO_VERSION = "202608271625";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
