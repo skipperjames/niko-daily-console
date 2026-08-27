@@ -8069,7 +8069,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                             <input type="checkbox" id="hotAutoRefreshSwitch" onchange="toggleHotAutoRefresh(this.checked)" />
                             <span>每天自动刷新热点</span>
                         </label>
-                        <button class="btn primary" onclick="refreshHotNow()" title="立即从云端拉取最新热点数据">⚡ 立即刷新</button>
+                        <button class="btn primary" onclick="refreshHotNow()" title="从云端拉取最新热点。如需后台重新爬取实时热榜，请在本机运行「刷新热点.bat」">⚡ 立即刷新</button>
                     </div>
                 </div>
 
@@ -22722,7 +22722,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608270945";
+        window.NIKO_VERSION = "202608270956";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
