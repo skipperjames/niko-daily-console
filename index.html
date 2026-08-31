@@ -2892,6 +2892,13 @@
         .event-item.long-task.is-ghost {
             opacity: 0 !important;
         }
+        /* 甘特车道垫片：本行其他长任务在该格的空车道占位，保持整行长条 Y 对齐 */
+        .event-item.lane-pad {
+            visibility: hidden !important;
+            background: none !important;
+            border: none !important;
+            pointer-events: none;
+        }
         .calendar-gantt-layer {
             position: absolute;
             inset: 0;
@@ -8240,6 +8247,11 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </select>
                 </div>
             </div>
+            <div class="form-item"><label>副本定位</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;user-select:none;">
+                    <input type="checkbox" id="eventCustomBoss" style="width:auto;"> 👑 手动指定为本周 Boss（难度高但工期短的硬仗）
+                </label>
+            </div>
             <div class="modal-footer">
                 <button class="btn danger" id="deleteEventBtn" onclick="deleteEvent()" style="display:none;">删除</button>
                 <button class="btn" onclick="closeEventModal()">取消</button>
@@ -12096,8 +12108,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (d !== 0) return d;
                 return a.startDate < b.startDate ? -1 : 1;
             };
-            const boss = weekTasks.filter(e => e.status !== 'done').slice().sort(byDur)[0]
-                || (isClear ? weekTasks.slice().sort(byDur)[0] : null);
+            // Boss 优先级：手动指定的 customBoss（难但工期短的硬仗）> 工期最长的未完成 > 全清后展示刚击倒的
+            const aliveBoss = weekTasks.filter(e => e.status !== 'done').slice().sort(byDur)[0];
+            const customBoss = weekTasks.find(e => e.customBoss && e.status !== 'done');
+            const boss = customBoss || aliveBoss
+                || (isClear ? (weekTasks.find(e => e.customBoss) || weekTasks.slice().sort(byDur)[0]) : null);
             const minions = weekTasks.filter(e => !boss || e.id !== boss.id);
             const fmtShort = (s) => s.slice(5).replace('-', '/');
             let html = `<div class="raid-head"><span class="raid-title">⚔️ 本周副本</span><span class="raid-week">${fmtShort(formatDate(monday))} – ${fmtShort(formatDate(sunday))}</span>`;
@@ -12235,6 +12250,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 sortDayEventsByUserOrder(dayEvents, dateStr);
                 dayEventsDisplay[dateStr] = dayEvents.slice(0, MAX_EVENTS_PER_DAY);
             }
+            // 甘特车道（按周行统一分配）：先收集每个周行内出现过的所有跨天任务，
+            // 按 startDate 稳定排序定车道号；同一条长条在整行所有格子的 Y 完全一致，
+            // 不会因其他长任务中途开始/结束而错位扫过普通任务
+            const rowLaneLongs = {};
+            for (let r = 0; r < Math.ceil(daysToShow / 7); r++) {
+                const rowLongs = [];
+                const seen = new Set();
+                for (let j = r * 7; j < Math.min(daysToShow, (r + 1) * 7); j++) {
+                    const ds = formatDate(addDays(currentWeekStart, j));
+                    for (const e of (dayEventsDisplay[ds] || [])) {
+                        if (e.startDate !== e.endDate && !seen.has(e.id)) { seen.add(e.id); rowLongs.push(e); }
+                    }
+                }
+                rowLongs.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
+                rowLaneLongs[r] = rowLongs;
+            }
             for (let i = 0; i < daysToShow; i++) {
                 const date = addDays(currentWeekStart, i);
                 const dateStr = formatDate(date);
@@ -12271,18 +12302,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
-                // 甘特车道：跨天任务的透明占位固定排在格子最上方（按开始日期稳定排序），
-                // 保证覆盖层长条横穿各格时只压在占位上，不遮挡普通任务
-                const laneLongs = dayEvents.filter(e => e.startDate !== e.endDate)
-                    .sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
-                const laneIndex = new Map(laneLongs.map((e, i) => [e.id, i]));
-                const laneSorted = dayEvents.slice().sort((a, b) => {
-                    const la = a.startDate !== a.endDate, lb = b.startDate !== b.endDate;
-                    if (la && lb) return laneIndex.get(a.id) - laneIndex.get(b.id);
-                    if (la !== lb) return la ? -1 : 1;
-                    return 0;   // 同类保持原有用户排序
+                // 甘特车道：本行所有跨天任务按行级车道号排到格子顶部；
+                // 该天不存在的长任务放透明垫片，保证每条长条整行 Y 对齐
+                const rowLongs = rowLaneLongs[Math.floor(i / 7)] || [];
+                const renderList = [];
+                rowLongs.forEach(le => {
+                    renderList.push(dayEvents.find(e => e.id === le.id) || { __lanePad: true });
                 });
-                laneSorted.forEach(ev => {
+                dayEvents.forEach(ev => { if (ev.startDate === ev.endDate) renderList.push(ev); });
+                renderList.forEach(ev => {
+                    if (ev.__lanePad) {
+                        const pad = document.createElement('div');
+                        pad.className = 'event-item lane-pad';
+                        pad.innerHTML = '<span class="event-text">&nbsp;</span>';
+                        eventsContainer.appendChild(pad);
+                        return;
+                    }
                     const prevDateStr = formatDate(addDays(date, -1));
                     const nextDateStr = formatDate(addDays(date, 1));
                     const hasPrev = (dayEventsDisplay[prevDateStr] || []).some(e => e.id === ev.id);
@@ -12948,6 +12983,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     document.getElementById('eventEndTime').value = ev.endTime || '10:00';
                     document.getElementById('eventPriority').value = ev.priority || 'next';
                     document.getElementById('eventStatus').value = ev.status || 'todo';
+                    document.getElementById('eventCustomBoss').checked = ev.customBoss === true;
                     // 回显重复选项
                     if (ev.repeat) {
                         document.getElementById('eventRepeat').value = ev.repeat.mode;
@@ -12976,6 +13012,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('eventEndTime').value = '10:00';
             document.getElementById('eventPriority').value = 'next';
             document.getElementById('eventStatus').value = 'todo';
+            document.getElementById('eventCustomBoss').checked = false;
             setTimeout(() => document.getElementById('eventTitle').focus(), 50);
         }
 
@@ -13024,6 +13061,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 endTime: document.getElementById('eventEndTime').value,
                 priority: document.getElementById('eventPriority').value,
                 status: document.getElementById('eventStatus').value,
+                customBoss: document.getElementById('eventCustomBoss').checked,
                 projectId,
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
@@ -23454,7 +23492,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312313";
+        window.NIKO_VERSION = "202608312327";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
