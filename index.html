@@ -2923,6 +2923,96 @@
         .backlog-parking.drag-over { border-color: #667eea; background: rgba(102, 126, 234, 0.07); }
         body.dark-mode .backlog-parking { border-color: #3d3d50; }
         body.dark-mode .backlog-parking.drag-over { border-color: #667eea; background: rgba(102, 126, 234, 0.12); }
+        /* ===== 本周副本 · RPG 进度墙（中和版） ===== */
+        .raid-wall {
+            border: 1px solid #e8e6e1;
+            background: #faf9f7;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        body.dark-mode .raid-wall { background: #20202e; border-color: #333345; }
+        .raid-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+        .raid-title { font-size: 13px; font-weight: 700; color: #1f2937; }
+        body.dark-mode .raid-title { color: #e5e7eb; }
+        .raid-week { font-size: 11px; color: #8a93a6; }
+        .raid-right { margin-left: auto; font-size: 11px; color: #8a93a6; }
+        .raid-right .raid-hp-num { font-weight: 700; color: #b45309; }
+        body.dark-mode .raid-right .raid-hp-num { color: #fbbf24; }
+        .raid-right.raid-clear { color: #d97706; font-weight: 700; }
+        body.dark-mode .raid-right.raid-clear { color: #fcd34d; }
+        .raid-hpbar {
+            position: relative;
+            height: 14px;
+            border-radius: 7px;
+            background: rgba(128, 138, 158, 0.15);
+            overflow: hidden;
+        }
+        body.dark-mode .raid-hpbar { background: rgba(128, 138, 158, 0.12); }
+        .raid-hp-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            border-radius: 7px;
+            background: linear-gradient(90deg, #059669, #34d399);
+            transition: width 0.5s ease, background 0.5s ease;
+        }
+        .raid-hp-fill.hp-mid { background: linear-gradient(90deg, #b45309, #f59e0b); }
+        .raid-hp-fill.hp-low { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+        /* 像素分段：低对比暗线，有游戏感不刺眼 */
+        .raid-hp-seg {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(90deg, transparent 0, transparent calc(10% - 2px), rgba(0, 0, 0, 0.22) calc(10% - 2px), rgba(0, 0, 0, 0.22) 10%);
+            pointer-events: none;
+        }
+        .raid-damage {
+            position: absolute;
+            right: 8px;
+            top: -4px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #ef4444;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+            animation: raidDmg 0.9s ease-out forwards;
+            pointer-events: none;
+        }
+        body.dark-mode .raid-damage { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+        @keyframes raidDmg {
+            0% { opacity: 0; transform: translateY(6px) scale(0.85); }
+            25% { opacity: 1; transform: translateY(-2px) scale(1.08); }
+            100% { opacity: 0; transform: translateY(-16px) scale(1); }
+        }
+        .raid-boss {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #1f2937;
+        }
+        body.dark-mode .raid-boss { color: #e5e7eb; }
+        .raid-boss .raid-boss-name { font-weight: 700; max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .raid-boss .raid-boss-tag { font-size: 10px; color: #8a93a6; }
+        .raid-boss.raid-boss-dead { opacity: 0.55; }
+        .raid-boss.raid-boss-dead .raid-boss-name { text-decoration: line-through; }
+        .raid-minions { display: flex; flex-wrap: wrap; gap: 5px; }
+        .raid-minion {
+            font-size: 11px;
+            line-height: 1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            border-left: 3px solid #6b7280;
+            background: rgba(107, 114, 128, 0.14);
+            color: #374151;
+            max-width: 180px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        body.dark-mode .raid-minion { color: #d1d5db; }
+        .raid-minion.done { opacity: 0.42; text-decoration: line-through; }
+        .raid-empty { font-size: 12px; color: #8a93a6; }
         .bp-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
         .bp-title { font-size: 12px; font-weight: 600; color: #6b7280; }
         body.dark-mode .bp-title { color: #9ca3af; }
@@ -8062,6 +8152,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                             </div>
                             <div class="bp-chips" id="bpChips"></div>
                         </div>
+                        <!-- 本周副本 · RPG 进度墙（中和版）：血条+Boss+小怪，庆祝只在完成瞬间一闪 -->
+                        <div class="raid-wall" id="raidWall"></div>
                     </div>
                 </div>
                 <div id="dayDetailPanel" class="day-detail-panel">
@@ -11972,6 +12064,62 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderFourWeekGrid();
             renderDayDetail();
             updateGlobalStats();
+            renderRaidWall();
+        }
+
+        // ========== 本周副本 · RPG 进度墙（中和版） ==========
+        // 血条 = 本周剩余任务；Boss = 工期最长的未完成任务；小怪 = 其余任务。
+        // 热血但克制：只有完成任务的瞬间飘一次伤害数字，平时完全静态。
+        function renderRaidWall() {
+            const box = document.getElementById('raidWall');
+            if (!box) return;
+            const now = new Date();
+            const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+            const sunday = addDays(monday, 6);
+            const weekKey = 'W' + formatDate(monday);
+            const weekTasks = events.filter(e => !(e.endDate < formatDate(monday) || e.startDate > formatDate(sunday)));
+            const total = weekTasks.length;
+            const done = weekTasks.filter(e => e.status === 'done').length;
+            const remain = total - done;
+            // 伤害结算：对比上次快照，完成数增加 → 血条上飘一次伤害数字
+            const raidState = safeStorage.get('niko_raid_state', {});
+            const lastDone = raidState[weekKey];
+            const dmg = (typeof lastDone === 'number' && done > lastDone) ? Math.min(done - lastDone, 5) : 0;
+            raidState[weekKey] = done;
+            safeStorage.set('niko_raid_state', raidState);
+            const isClear = total > 0 && remain === 0;
+            const hpPct = total ? Math.round(remain / total * 100) : 0;
+            const hpCls = hpPct <= 25 ? ' hp-low' : (hpPct <= 55 ? ' hp-mid' : '');
+            // Boss：未完成里挑工期最长的（并列取开始早的）；全清则展示刚击倒的
+            const byDur = (a, b) => {
+                const d = (new Date(b.endDate) - new Date(b.startDate)) - (new Date(a.endDate) - new Date(a.startDate));
+                if (d !== 0) return d;
+                return a.startDate < b.startDate ? -1 : 1;
+            };
+            const boss = weekTasks.filter(e => e.status !== 'done').slice().sort(byDur)[0]
+                || (isClear ? weekTasks.slice().sort(byDur)[0] : null);
+            const minions = weekTasks.filter(e => !boss || e.id !== boss.id);
+            const fmtShort = (s) => s.slice(5).replace('-', '/');
+            let html = `<div class="raid-head"><span class="raid-title">⚔️ 本周副本</span><span class="raid-week">${fmtShort(formatDate(monday))} – ${fmtShort(formatDate(sunday))}</span>`;
+            if (isClear) html += `<span class="raid-right raid-clear">🏆 副本通关 · 排期全清</span>`;
+            else if (total) html += `<span class="raid-right">HP <span class="raid-hp-num">${remain}</span>/${total} · 已讨伐 ${done}</span>`;
+            html += `</div>`;
+            if (!total) {
+                box.innerHTML = html + `<div class="raid-empty">本周还没有排期——用上面的闪捕条抓一个任务进来，副本开张。</div>`;
+                return;
+            }
+            html += `<div class="raid-hpbar"><div class="raid-hp-fill${hpCls}" style="width:${hpPct}%"></div><div class="raid-hp-seg"></div>${dmg ? `<span class="raid-damage">-${dmg}</span>` : ''}</div>`;
+            if (boss) {
+                const bp = getProject(boss.projectId);
+                html += `<div class="raid-boss${boss.status === 'done' ? ' raid-boss-dead' : ''}"><span>${boss.status === 'done' ? '☠️' : '👑'}</span><span class="raid-boss-name" title="${escapeHtml(boss.title)}">${escapeHtml(boss.title)}</span><span class="raid-boss-tag">${boss.status === 'done' ? 'Boss 已击倒' : 'Boss · ' + escapeHtml(bp.name || '')}</span></div>`;
+            }
+            if (minions.length) {
+                html += `<div class="raid-minions">` + minions.map(e => {
+                    const p = getProject(e.projectId);
+                    return `<span class="raid-minion${e.status === 'done' ? ' done' : ''}" style="border-left-color:${p.color};background:${hexToRgba(p.color, 0.14)}" title="${escapeHtml(e.title)}">${escapeHtml(e.title)}</span>`;
+                }).join('') + `</div>`;
+            }
+            box.innerHTML = html;
         }
 
         // 任务条纵向拖拽：每个日期存一份 ID 序列（niko_plan_day_order）
@@ -12123,7 +12271,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
-                dayEvents.forEach(ev => {
+                // 甘特车道：跨天任务的透明占位固定排在格子最上方（按开始日期稳定排序），
+                // 保证覆盖层长条横穿各格时只压在占位上，不遮挡普通任务
+                const laneLongs = dayEvents.filter(e => e.startDate !== e.endDate)
+                    .sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
+                const laneIndex = new Map(laneLongs.map((e, i) => [e.id, i]));
+                const laneSorted = dayEvents.slice().sort((a, b) => {
+                    const la = a.startDate !== a.endDate, lb = b.startDate !== b.endDate;
+                    if (la && lb) return laneIndex.get(a.id) - laneIndex.get(b.id);
+                    if (la !== lb) return la ? -1 : 1;
+                    return 0;   // 同类保持原有用户排序
+                });
+                laneSorted.forEach(ev => {
                     const prevDateStr = formatDate(addDays(date, -1));
                     const nextDateStr = formatDate(addDays(date, 1));
                     const hasPrev = (dayEventsDisplay[prevDateStr] || []).some(e => e.id === ev.id);
@@ -23295,7 +23454,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312301";
+        window.NIKO_VERSION = "202608312313";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
