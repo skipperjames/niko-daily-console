@@ -1932,11 +1932,29 @@
             border: 1px solid #f0eeea;
             border-radius: 10px;
             position: relative;
-            cursor: default;
+            cursor: pointer;
             transition: all 0.15s;
         }
         body.dark-mode .habit-card { background: #252535; border-color: #333345; }
         .habit-card:active { transform: scale(0.98); }
+        /* Q1 已完成态：变暗 + 虚线框 + 删除线，收在未完成后面 */
+        .habit-card.done-card { opacity: 0.5; border-style: dashed; }
+        .habit-card.done-card .habit-name { text-decoration: line-through; color: #999; }
+        body.dark-mode .habit-card.done-card .habit-name { color: #777; }
+        /* Q2 连击徽章 */
+        .habit-streak-chip {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 999px;
+            flex-shrink: 0;
+            font-weight: 600;
+            background: rgba(234, 157, 6, 0.14);
+            color: #b45309;
+            white-space: nowrap;
+        }
+        body.dark-mode .habit-streak-chip { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
+        /* Q4 全勤徽章 */
+        .today-habits-badge.all-done { background: #10b981; color: #fff; }
         .habit-card-top { display: flex; align-items: center; gap: 6px; width: 100%; }
         .habit-card .habit-icon { font-size: 17px; flex-shrink: 0; }
         .habit-card .habit-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -2568,6 +2586,11 @@
             text-align: center;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
+        /* P3 统计卡语义色：完成绿 / 待完成琥珀 */
+        .stat-card.sc-done .stat-num { color: #059669; }
+        .stat-card.sc-pending .stat-num { color: #b45309; }
+        body.dark-mode .stat-card.sc-done .stat-num { color: #34d399; }
+        body.dark-mode .stat-card.sc-pending .stat-num { color: #fbbf24; }
         .stat-num {
             font-size: 18px;
             font-weight: 600;
@@ -2752,6 +2775,58 @@
             display: inline-block;
             font-size: 12px;
         }
+        /* P1 今日列高亮：整列微亮 + 描边 */
+        .day-cell.today {
+            background: rgba(102, 126, 234, 0.07);
+            border-color: rgba(102, 126, 234, 0.55);
+            box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.30);
+        }
+        body.dark-mode .day-cell.today {
+            background: rgba(129, 140, 248, 0.10);
+            border-color: rgba(129, 140, 248, 0.55);
+            box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.35);
+        }
+        /* P5 周末列微底色（写在 today 之后，today 同时存在时优先生效） */
+        .day-cell.weekend { background: #faf9f7; }
+        body.dark-mode .day-cell.weekend { background: rgba(255, 255, 255, 0.028); }
+        /* P4 hover 快速新建按钮 */
+        .cell-quick-add {
+            position: absolute;
+            right: 4px;
+            bottom: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            font-size: 13px;
+            line-height: 17px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.15s;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .day-cell:hover .cell-quick-add { opacity: 1; pointer-events: auto; }
+        .cell-quick-add:hover { background: #667eea; color: #fff; }
+        /* P2 周行完成度摘要条（甘特覆盖层内，pointer-events 继承 none） */
+        .week-summary-ribbon {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 15px;
+            font-size: 10px;
+            color: #7c8698;
+            background: rgba(128, 138, 158, 0.14);
+            border-radius: 8px;
+            z-index: 6;
+            white-space: nowrap;
+        }
+        body.dark-mode .week-summary-ribbon { color: #8a93a6; background: rgba(128, 138, 158, 0.16); }
+        .week-summary-ribbon .ws-track { width: 70px; height: 4px; border-radius: 2px; background: rgba(128, 128, 128, 0.25); overflow: hidden; }
+        .week-summary-ribbon .ws-track i { display: block; height: 100%; background: #10b981; border-radius: 2px; }
         .day-date {
             font-size: 12px;
             font-weight: 600;
@@ -7899,9 +7974,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <button class="btn-small primary" style="background:#8b5cf6;border-color:#8b5cf6;" onclick="openMarketNodeModal()">🎯 买量节点</button>
                     <button class="btn-small primary" style="background:#f59e0b;border-color:#f59e0b;" onclick="openTimeAudit()" title="自动统计各轨道时长占比 vs 上周，回答时间花哪了">⏱ 时间审计</button>
                     <div class="top-stats">
-                        <div class="stat-card"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总任务</div></div>
-                        <div class="stat-card"><div class="stat-num" id="statDone">0</div><div class="stat-label">已完成</div></div>
-                        <div class="stat-card"><div class="stat-num" id="statPending">0</div><div class="stat-label">待完成</div></div>
+                        <div class="stat-card sc-total"><div class="stat-num" id="statTotal">0</div><div class="stat-label">全部任务</div></div>
+                        <div class="stat-card sc-done"><div class="stat-num" id="statDone">0</div><div class="stat-label">已完成</div></div>
+                        <div class="stat-card sc-pending"><div class="stat-num" id="statPending">0</div><div class="stat-label">待完成</div></div>
                     </div>
                 </div>
             </div>
@@ -11172,16 +11247,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const today = formatDate(new Date());
             const done = habitDoneSet(today);
             let doneCount = 0;
-            const rows = habits.map(h => {
+            // Q1 两态分离：未完成排前面（保持原顺序），已完成变暗收后面
+            const sorted = [...habits].sort((a, b) => (done[a.id] ? 1 : 0) - (done[b.id] ? 1 : 0));
+            const rows = sorted.map(h => {
                 const d = !!done[h.id];
                 if (d) doneCount++;
                 const wc = habitWeekCount(h.id);
                 const goal = h.goal || 7;
                 const pct = Math.min(100, Math.round(wc / goal * 100));
-                return `<div class="habit-card" onclick="habitToggle('${h.id}')">
+                const streak = habitStreak(h.id);
+                return `<div class="habit-card${d ? ' done-card' : ''}" onclick="habitToggle('${h.id}')" title="${d ? '点击取消打卡' : '点击打卡'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}</span>
+                        ${streak > 0 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                         ${(Number(h.rewardMin) || 0) > 0 ? `<span class="habit-reward">+${Number(h.rewardMin)}分</span>` : ''}
                     </div>
                     <div class="habit-card-foot">
@@ -11191,7 +11270,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 </div>`;
             }).join('');
             box.innerHTML = rows;
-            if (badge) badge.textContent = `${doneCount}/${habits.length}`;
+            if (badge) {
+                const allDone = habits.length > 0 && doneCount === habits.length;
+                badge.textContent = allDone ? `🎉 ${doneCount}/${habits.length}` : `${doneCount}/${habits.length}`;
+                badge.classList.toggle('all-done', allDone);
+            }
         }
 
         let habitEditId = null;
@@ -11918,9 +12001,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.dataset.date = dateStr;
                 if (isSameDay(date, selectedDate)) cell.classList.add('selected');
                 if (isSameDay(date, today)) cell.classList.add('today');
+                const wd = date.getDay();
+                if (wd === 0 || wd === 6) cell.classList.add('weekend');
                 const dateHeader = document.createElement('div');
                 dateHeader.className = 'day-date';
-                const wdName = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()];
+                const wdName = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][wd];
+                const wdLabel = isSameDay(date, today) ? '今天' : wdName;
                 // 中国传统节日 & 纪念日 & 买量节点标签：内联在日期数字旁边（不单独占行）
                 const festChips = cnFestivalShow ? getFestivalsForDate(dateStr) : [];
                 const memChips = memorialShow ? getMemorialsForDate(dateStr) : [];
@@ -11938,7 +12024,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const MAX_TAGS = 3;
                     inlineTags = `<span class="day-fest-inline">${allTags.slice(0, MAX_TAGS).join('')}${allTags.length > MAX_TAGS ? `<span class="cal-extra-chip-inline" title="打开纪念日管理 / 查看节日">+${allTags.length - MAX_TAGS}</span>` : ''}</span>`;
                 }
-                dateHeader.innerHTML = `<span style="display:inline-flex;align-items:center;gap:3px;"><span class="day-weekday">${wdName}</span>${date.getDate()}${inlineTags}</span>${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}`;
+                dateHeader.innerHTML = `<span style="display:inline-flex;align-items:center;gap:3px;"><span class="day-weekday">${wdLabel}</span>${date.getDate()}${inlineTags}</span>${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}`;
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
@@ -12010,6 +12096,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId) moveEventToDate(draggedEventId, dateStr); });
                 cell.addEventListener('click', () => { selectedDate = new Date(date); render(); });
                 cell.addEventListener('dblclick', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
+                // P4 hover 快速新建（手机端无 hover 不显示，走原有新建入口）
+                const quickAdd = document.createElement('span');
+                quickAdd.className = 'cell-quick-add';
+                quickAdd.textContent = '+';
+                quickAdd.title = '新建任务';
+                quickAdd.addEventListener('click', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
+                cell.appendChild(quickAdd);
                 grid.appendChild(cell);
             }
             renderGanttBarsOverlay(grid, dayEventsDisplay, daysToShow);
@@ -12085,6 +12178,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}`;
                     overlay.appendChild(bar);
                 }
+            }
+            // P2 周行完成度摘要：每个周行底部中央叠一条 mini 摘要（完成/总数 + 进度条）
+            for (let r = 0; r < Math.ceil(daysToShow / 7); r++) {
+                const firstStr = formatDate(addDays(currentWeekStart, r * 7));
+                const lastIdx = Math.min(daysToShow, (r + 1) * 7) - 1;
+                const lastStr = formatDate(addDays(currentWeekStart, lastIdx));
+                const weekEvents = events.filter(e => !(e.endDate < firstStr || e.startDate > lastStr));
+                const total = weekEvents.length;
+                if (!total) continue;
+                const doneN = weekEvents.filter(e => e.status === 'done').length;
+                const fc = grid.querySelector('.day-cell[data-date="' + firstStr + '"]');
+                const lc = grid.querySelector('.day-cell[data-date="' + lastStr + '"]');
+                if (!fc || !lc) continue;
+                const fa = fc.getBoundingClientRect();
+                const la = lc.getBoundingClientRect();
+                const pct = Math.round(doneN / total * 100);
+                const rib = document.createElement('div');
+                rib.className = 'week-summary-ribbon';
+                rib.style.left = (fa.left - gridRect.left) + 'px';
+                rib.style.top = (la.bottom - gridRect.top - 10) + 'px';
+                rib.style.width = (la.right - fa.left) + 'px';
+                rib.title = '第 ' + (r + 1) + ' 周：' + doneN + '/' + total + ' 完成';
+                rib.innerHTML = '<span>第' + (r + 1) + '周 ' + doneN + '/' + total + '</span><span class="ws-track"><i style="width:' + pct + '%"></i></span>';
+                overlay.appendChild(rib);
             }
             grid.appendChild(overlay);
         }
@@ -22957,7 +23074,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312228";
+        window.NIKO_VERSION = "202608312242";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
