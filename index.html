@@ -2986,6 +2986,16 @@
             pointer-events: none;
         }
         body.dark-mode .raid-damage { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6); }
+        .raid-damage.crit { color: #f59e0b; font-size: 15px; }
+        .raid-damage.combo-hot { font-size: 17px; }
+        .raid-damage.crit.combo-hot { font-size: 19px; }
+        /* ④ 掉落图鉴 */
+        .raid-drops { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+        .raid-drops-label { font-size: 11px; color: #8a93a6; margin-right: 2px; }
+        body.dark-mode .raid-drops-label { color: #6b7488; }
+        .raid-drop { font-size: 11px; padding: 1px 8px; border: 1px solid; border-radius: 9px; line-height: 1.5; font-weight: 600; opacity: 0.9; }
+        /* ③ 逾期史莱姆 */
+        .slime-mark { font-size: 10px; margin-left: 2px; display: inline-block; filter: saturate(0.85); }
         @keyframes raidDmg {
             0% { opacity: 0; transform: translateY(6px) scale(0.85); }
             25% { opacity: 1; transform: translateY(-2px) scale(1.08); }
@@ -12093,11 +12103,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const total = weekTasks.length;
             const done = weekTasks.filter(e => e.status === 'done').length;
             const remain = total - done;
-            // 伤害结算：对比上次快照，完成数增加 → 血条上飘一次伤害数字
+            // 伤害结算：对比上次快照，新完成任务按优先级结算 ATK（① 伤害值系统：now=暴击×2，其余=1）
             const raidState = safeStorage.get('niko_raid_state', {});
-            const lastDone = raidState[weekKey];
-            const dmg = (typeof lastDone === 'number' && done > lastDone) ? Math.min(done - lastDone, 5) : 0;
-            raidState[weekKey] = done;
+            let rs = raidState[weekKey];
+            if (!rs || typeof rs !== 'object') rs = { done: 0, doneIds: [], combo: 0, comboDate: '' };
+            if (!Array.isArray(rs.doneIds)) rs.doneIds = [];
+            const doneSet = new Set(rs.doneIds);
+            const newlyDone = weekTasks.filter(e => e.status === 'done' && !doneSet.has(e.id));
+            const atkOf = (e) => (e.priority === 'now' ? 2 : 1);
+            let dmg = 0, crit = false;
+            const todayStr = formatDate(now);
+            const yestStr = formatDate(addDays(now, -1));
+            if (newlyDone.length) {
+                dmg = newlyDone.reduce((s, e) => s + atkOf(e), 0);
+                crit = newlyDone.some(e => atkOf(e) > 1);
+                // ② 连讨 combo：连续每天至少讨伐 1 只 → ×N，断一天归零
+                if (rs.comboDate !== todayStr) {
+                    rs.combo = (rs.comboDate === yestStr) ? (rs.combo || 0) + 1 : 1;
+                    rs.comboDate = todayStr;
+                }
+                // ④ 掉落图鉴：每个新完成任务按项目掉 1 材料
+                const drops = safeStorage.get('niko_drops', {});
+                newlyDone.forEach(e => { const pid = e.projectId || '_none'; drops[pid] = (drops[pid] || 0) + 1; });
+                safeStorage.set('niko_drops', drops);
+            } else if (rs.comboDate && rs.comboDate !== todayStr && rs.comboDate !== yestStr) {
+                rs.combo = 0; rs.comboDate = '';   // 断签归零
+            }
+            newlyDone.forEach(e => doneSet.add(e.id));
+            rs.doneIds = Array.from(doneSet);
+            rs.done = done;
+            raidState[weekKey] = rs;
             safeStorage.set('niko_raid_state', raidState);
             const isClear = total > 0 && remain === 0;
             const hpPct = total ? Math.round(remain / total * 100) : 0;
@@ -12116,14 +12151,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const minions = weekTasks.filter(e => !boss || e.id !== boss.id);
             const fmtShort = (s) => s.slice(5).replace('-', '/');
             let html = `<div class="raid-head"><span class="raid-title">⚔️ 本周副本</span><span class="raid-week">${fmtShort(formatDate(monday))} – ${fmtShort(formatDate(sunday))}</span>`;
+            const comboN = rs.combo || 0;
             if (isClear) html += `<span class="raid-right raid-clear">🏆 副本通关 · 排期全清</span>`;
-            else if (total) html += `<span class="raid-right">HP <span class="raid-hp-num">${remain}</span>/${total} · 已讨伐 ${done}</span>`;
+            else if (total) html += `<span class="raid-right">HP <span class="raid-hp-num">${remain}</span>/${total} · 已讨伐 ${done}${comboN >= 2 ? ` · 🔥 连讨 ×${comboN}` : ''}</span>`;
             html += `</div>`;
             if (!total) {
                 box.innerHTML = html + `<div class="raid-empty">本周还没有排期——用上面的闪捕条抓一个任务进来，副本开张。</div>`;
                 return;
             }
-            html += `<div class="raid-hpbar"><div class="raid-hp-fill${hpCls}" style="width:${hpPct}%"></div><div class="raid-hp-seg"></div>${dmg ? `<span class="raid-damage">-${dmg}</span>` : ''}</div>`;
+            html += `<div class="raid-hpbar"><div class="raid-hp-fill${hpCls}" style="width:${hpPct}%"></div><div class="raid-hp-seg"></div>${dmg ? `<span class="raid-damage${crit ? ' crit' : ''}${comboN >= 3 ? ' combo-hot' : ''}">-${dmg}${crit ? ' 暴击!' : ''}</span>` : ''}</div>`;
             if (boss) {
                 const bp = getProject(boss.projectId);
                 html += `<div class="raid-boss${boss.status === 'done' ? ' raid-boss-dead' : ''}"><span>${boss.status === 'done' ? '☠️' : '👑'}</span><span class="raid-boss-name" title="${escapeHtml(boss.title)}">${escapeHtml(boss.title)}</span><span class="raid-boss-tag">${boss.status === 'done' ? 'Boss 已击倒' : 'Boss · ' + escapeHtml(bp.name || '')}</span></div>`;
@@ -12132,6 +12168,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 html += `<div class="raid-minions">` + minions.map(e => {
                     const p = getProject(e.projectId);
                     return `<span class="raid-minion${e.status === 'done' ? ' done' : ''}" style="border-left-color:${p.color};background:${hexToRgba(p.color, 0.14)}" title="${escapeHtml(e.title)}">${escapeHtml(e.title)}</span>`;
+                }).join('') + `</div>`;
+            }
+            // ④ 掉落图鉴：按项目色累计材料（niko_drops）
+            const dropsNow = safeStorage.get('niko_drops', {});
+            const dropEntries = Object.entries(dropsNow).filter(([pid]) => pid !== '_none' && getProject(pid)).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            if (dropEntries.length) {
+                html += `<div class="raid-drops"><span class="raid-drops-label">🎒 掉落图鉴</span>` + dropEntries.map(([pid, n]) => {
+                    const p = getProject(pid);
+                    return `<span class="raid-drop" style="border-color:${p.color};color:${p.color}" title="${escapeHtml(p.name)} 材料 ×${n}">◆${n}</span>`;
                 }).join('') + `</div>`;
             }
             box.innerHTML = html;
@@ -12338,6 +12383,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
                     const safeDesc = ev.desc ? escapeHtml(ev.desc) : '';
+                    // ③ 逾期史莱姆：逾期未完成粘一只小史莱姆在标题后（完成后消失）
+                    const slimeHtml = (isOverdue && ev.status !== 'done') ? `<span class="slime-mark" title="逾期史莱姆 · 完成后啵地蒸发">🟢</span>` : '';
                     // v3 状态图标：右上角 12px SVG（4 态不同形状）
                     const STATUS_MARK_SVG = {
                         'todo':        '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.2"/></svg>',
@@ -12346,7 +12393,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
                     };
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}</span>${statusMarkHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); });
                     item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom')); });
                     // 任务条纵向拖拽：上/下半区决定插入位置
@@ -23492,7 +23539,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312327";
+        window.NIKO_VERSION = "202608312339";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
