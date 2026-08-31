@@ -2591,6 +2591,17 @@
         .stat-card.sc-pending .stat-num { color: #b45309; }
         body.dark-mode .stat-card.sc-done .stat-num { color: #34d399; }
         body.dark-mode .stat-card.sc-pending .stat-num { color: #fbbf24; }
+        /* P2v2 本周完成度大胶囊卡（顶栏） */
+        .stat-card.sc-week { min-width: 130px; text-align: left; display: flex; flex-direction: column; gap: 5px; justify-content: center; }
+        .stat-card.sc-week .week-stat-row { display: flex; align-items: baseline; gap: 8px; }
+        .stat-card.sc-week .stat-label { font-size: 12px; color: #888; font-weight: 600; }
+        .stat-card.sc-week .stat-num { font-size: 18px; color: #667eea; }
+        .stat-card.sc-week .week-stat-track { height: 6px; border-radius: 3px; background: rgba(128, 128, 128, 0.22); overflow: hidden; }
+        .stat-card.sc-week .week-stat-track i { display: block; height: 100%; background: linear-gradient(90deg, #10b981, #34d399); border-radius: 3px; transition: width 0.4s ease; }
+        .stat-card.sc-week.week-full .stat-num { color: #059669; }
+        .stat-card.sc-week.week-full .week-stat-track i { background: #10b981; }
+        body.dark-mode .stat-card.sc-week .stat-num { color: #8b9cf5; }
+        body.dark-mode .stat-card.sc-week.week-full .stat-num { color: #34d399; }
         .stat-num {
             font-size: 18px;
             font-weight: 600;
@@ -2809,24 +2820,6 @@
         }
         .day-cell:hover .cell-quick-add { opacity: 1; pointer-events: auto; }
         .cell-quick-add:hover { background: #667eea; color: #fff; }
-        /* P2 周行完成度摘要条（甘特覆盖层内，pointer-events 继承 none） */
-        .week-summary-ribbon {
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            height: 15px;
-            font-size: 10px;
-            color: #7c8698;
-            background: rgba(128, 138, 158, 0.14);
-            border-radius: 8px;
-            z-index: 6;
-            white-space: nowrap;
-        }
-        body.dark-mode .week-summary-ribbon { color: #8a93a6; background: rgba(128, 138, 158, 0.16); }
-        .week-summary-ribbon .ws-track { width: 70px; height: 4px; border-radius: 2px; background: rgba(128, 128, 128, 0.25); overflow: hidden; }
-        .week-summary-ribbon .ws-track i { display: block; height: 100%; background: #10b981; border-radius: 2px; }
         .day-date {
             font-size: 12px;
             font-weight: 600;
@@ -3772,10 +3765,10 @@
             #planPage .node-toggle > span:last-child { font-size: 11px !important; }
             /* 买量节点按钮缩小 */
             #planPage .top-bar .btn-small { padding: 4px 8px !important; font-size: 11px !important; }
-            /* 统计卡：横排、变小 */
+            /* 统计卡：横排、变小（4 张卡 2×2） */
             #planPage .top-stats {
                 display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
+                grid-template-columns: repeat(2, 1fr) !important;
                 gap: 4px !important;
                 width: 100% !important;
             }
@@ -7977,6 +7970,10 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="stat-card sc-total"><div class="stat-num" id="statTotal">0</div><div class="stat-label">全部任务</div></div>
                         <div class="stat-card sc-done"><div class="stat-num" id="statDone">0</div><div class="stat-label">已完成</div></div>
                         <div class="stat-card sc-pending"><div class="stat-num" id="statPending">0</div><div class="stat-label">待完成</div></div>
+                        <div class="stat-card sc-week" id="weekStatCard" title="本周（含今天的周行）任务完成度">
+                            <div class="week-stat-row"><span class="stat-label">本周</span><span class="stat-num" id="statWeek">0/0</span></div>
+                            <div class="week-stat-track"><i id="statWeekBar" style="width:0%"></i></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -11965,6 +11962,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('statTotal').textContent = total;
             document.getElementById('statDone').textContent = done;
             document.getElementById('statPending').textContent = total - done;
+            // 本周完成度（含今天的周行，与甘特周行同口径：与该周有交集的任务去重计数）
+            const todayStr = formatDate(new Date());
+            let weekIdx = -1;
+            for (let r = 0; r < Math.ceil(28 / 7); r++) {
+                const firstStr = formatDate(addDays(currentWeekStart, r * 7));
+                const lastStr = formatDate(addDays(currentWeekStart, r * 7 + 6));
+                if (todayStr >= firstStr && todayStr <= lastStr) { weekIdx = r; break; }
+            }
+            const weekTotalEl = document.getElementById('statWeek');
+            if (weekTotalEl) {
+                if (weekIdx === -1) {
+                    // 当前视图不含今天：显示为 —，不算数
+                    weekTotalEl.textContent = '—';
+                    weekTotalEl.closest('.stat-card').classList.remove('week-full');
+                    document.getElementById('statWeekBar').style.width = '0%';
+                } else {
+                    const wFirst = formatDate(addDays(currentWeekStart, weekIdx * 7));
+                    const wLast = formatDate(addDays(currentWeekStart, weekIdx * 7 + 6));
+                    const weekEvents = events.filter(e => !(e.endDate < wFirst || e.startDate > wLast));
+                    const wTotal = weekEvents.length;
+                    const wDone = weekEvents.filter(e => e.status === 'done').length;
+                    weekTotalEl.textContent = wDone + '/' + wTotal;
+                    const pct = wTotal ? Math.round(wDone / wTotal * 100) : 0;
+                    document.getElementById('statWeekBar').style.width = pct + '%';
+                    weekTotalEl.closest('.stat-card').classList.toggle('week-full', wTotal > 0 && wDone === wTotal);
+                }
+            }
         }
 
         function navigateWeeks(delta) { currentWeekStart = addDays(currentWeekStart, delta * 7); render(); }
@@ -12178,30 +12202,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}`;
                     overlay.appendChild(bar);
                 }
-            }
-            // P2 周行完成度摘要：每个周行底部中央叠一条 mini 摘要（完成/总数 + 进度条）
-            for (let r = 0; r < Math.ceil(daysToShow / 7); r++) {
-                const firstStr = formatDate(addDays(currentWeekStart, r * 7));
-                const lastIdx = Math.min(daysToShow, (r + 1) * 7) - 1;
-                const lastStr = formatDate(addDays(currentWeekStart, lastIdx));
-                const weekEvents = events.filter(e => !(e.endDate < firstStr || e.startDate > lastStr));
-                const total = weekEvents.length;
-                if (!total) continue;
-                const doneN = weekEvents.filter(e => e.status === 'done').length;
-                const fc = grid.querySelector('.day-cell[data-date="' + firstStr + '"]');
-                const lc = grid.querySelector('.day-cell[data-date="' + lastStr + '"]');
-                if (!fc || !lc) continue;
-                const fa = fc.getBoundingClientRect();
-                const la = lc.getBoundingClientRect();
-                const pct = Math.round(doneN / total * 100);
-                const rib = document.createElement('div');
-                rib.className = 'week-summary-ribbon';
-                rib.style.left = (fa.left - gridRect.left) + 'px';
-                rib.style.top = (la.bottom - gridRect.top - 10) + 'px';
-                rib.style.width = (la.right - fa.left) + 'px';
-                rib.title = '第 ' + (r + 1) + ' 周：' + doneN + '/' + total + ' 完成';
-                rib.innerHTML = '<span>第' + (r + 1) + '周 ' + doneN + '/' + total + '</span><span class="ws-track"><i style="width:' + pct + '%"></i></span>';
-                overlay.appendChild(rib);
             }
             grid.appendChild(overlay);
         }
@@ -23074,7 +23074,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312242";
+        window.NIKO_VERSION = "202608312250";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
