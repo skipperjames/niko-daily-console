@@ -2898,6 +2898,58 @@
             pointer-events: none;
             z-index: 5;
         }
+        /* ===== 闪捕条 + 停车场 ===== */
+        .quick-capture-wrap { padding: 10px 2px 4px; display: flex; flex-direction: column; gap: 8px; }
+        .quick-capture-bar {
+            display: flex; align-items: center; gap: 8px;
+            background: #fff; border: 1px solid #e8e6e1; border-radius: 10px;
+            padding: 9px 12px; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .quick-capture-bar:focus-within { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12); }
+        body.dark-mode .quick-capture-bar { background: #252535; border-color: #333345; }
+        .qc-icon { font-size: 15px; flex-shrink: 0; }
+        .quick-capture-bar input {
+            flex: 1; border: none; outline: none; background: transparent;
+            font-size: 13px; color: #1f2937; min-width: 0;
+        }
+        body.dark-mode .quick-capture-bar input { color: #e5e7eb; }
+        body.dark-mode .quick-capture-bar input::placeholder { color: #6b7280; }
+        .qc-hint { font-size: 11px; color: #667eea; white-space: nowrap; flex-shrink: 0; }
+        body.dark-mode .qc-hint { color: #8b9cf5; }
+        .backlog-parking {
+            border: 1.5px dashed #d6d3ce; border-radius: 10px; padding: 8px 10px;
+            transition: border-color 0.2s, background 0.2s; min-height: 52px;
+        }
+        .backlog-parking.drag-over { border-color: #667eea; background: rgba(102, 126, 234, 0.07); }
+        body.dark-mode .backlog-parking { border-color: #3d3d50; }
+        body.dark-mode .backlog-parking.drag-over { border-color: #667eea; background: rgba(102, 126, 234, 0.12); }
+        .bp-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+        .bp-title { font-size: 12px; font-weight: 600; color: #6b7280; }
+        body.dark-mode .bp-title { color: #9ca3af; }
+        .bp-count { background: rgba(102, 126, 234, 0.15); color: #667eea; border-radius: 8px; padding: 0 6px; font-size: 11px; }
+        body.dark-mode .bp-count { color: #8b9cf5; }
+        .bp-tip { font-size: 10.5px; color: #a8a29e; }
+        body.dark-mode .bp-tip { color: #6b7280; }
+        .bp-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .bp-empty { font-size: 11px; color: #b8b2aa; padding: 4px 2px; }
+        body.dark-mode .bp-empty { color: #55556a; }
+        .bp-chip {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #faf9f7; border: 1px solid #e8e6e1; border-radius: 14px;
+            padding: 3px 10px; font-size: 12px; color: #374151;
+            cursor: grab; user-select: none; transition: all 0.15s; max-width: 240px;
+        }
+        .bp-chip:hover { border-color: #667eea; transform: translateY(-1px); }
+        .bp-chip.dragging { opacity: 0.4; }
+        body.dark-mode .bp-chip { background: #2b2b3d; border-color: #3d3d50; color: #d1d5db; }
+        .bp-chip .bp-chip-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bp-chip .bp-del {
+            color: #b8b2aa; font-size: 12px; line-height: 1; cursor: pointer;
+            border-radius: 50%; width: 14px; height: 14px; display: inline-flex;
+            align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .bp-chip .bp-del:hover { color: #ef4444; background: rgba(239, 68, 68, 0.12); }
+        body.dark-mode .bp-chip .bp-del { color: #6b7280; }
         .gantt-bar {
             position: absolute;
             display: flex;
@@ -7996,6 +8048,21 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="week-header-cell">周四</div><div class="week-header-cell">周五</div><div class="week-header-cell">周六</div><div class="week-header-cell">周日</div>
                     </div>
                     <div class="four-week-grid" id="fourWeekGrid"></div>
+                    <!-- 闪捕条 + 停车场：随手输入回车即捕获，带日期自动排期，无日期入停车场待拖 -->
+                    <div class="quick-capture-wrap">
+                        <div class="quick-capture-bar">
+                            <span class="qc-icon">⚡</span>
+                            <input type="text" id="qcInput" placeholder="闪捕：随手输入回车即捕获，如「周五 交商单初稿」「明天 修 Bug」" autocomplete="off">
+                            <span class="qc-hint" id="qcHint"></span>
+                        </div>
+                        <div class="backlog-parking" id="backlogParking">
+                            <div class="bp-head">
+                                <span class="bp-title">🅿️ 停车场 <span class="bp-count" id="bpCount">0</span></span>
+                                <span class="bp-tip">无日期的捕获落在这里 · 拖进日历格子即排期 · 日历任务拖回这里即入库</span>
+                            </div>
+                            <div class="bp-chips" id="bpChips"></div>
+                        </div>
+                    </div>
                 </div>
                 <div id="dayDetailPanel" class="day-detail-panel">
                     <div class="panel-header">
@@ -11899,6 +11966,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 渲染前重读 localStorage：避免云同步拉取后仍用旧内存，保存时覆盖云端数据
             events = safeStorage.get('work_calendar_events', events);
             planDayOrder = safeStorage.get('niko_plan_day_order', planDayOrder);
+            backlog = safeStorage.get('niko_backlog', backlog);
+            renderBacklogParking();
             updateDateRangeText();
             renderFourWeekGrid();
             renderDayDetail();
@@ -11907,6 +11976,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 任务条纵向拖拽：每个日期存一份 ID 序列（niko_plan_day_order）
         let planDayOrder = safeStorage.get('niko_plan_day_order', {});
+        // 闪捕停车场：无日期捕获暂存（niko_backlog），拖进日历即转正式任务
+        let backlog = safeStorage.get('niko_backlog', []);
         function getDayOrder(dateStr) {
             return (planDayOrder && planDayOrder[dateStr]) || null;
         }
@@ -12117,7 +12188,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.appendChild(eventsContainer);
                 cell.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drag-over'); });
                 cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
-                cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId) moveEventToDate(draggedEventId, dateStr); });
+                cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId && draggedEventId.startsWith('backlog:')) scheduleBacklogItem(draggedEventId.slice(8), dateStr); else if (draggedEventId) moveEventToDate(draggedEventId, dateStr); });
                 cell.addEventListener('click', () => { selectedDate = new Date(date); render(); });
                 cell.addEventListener('dblclick', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
                 // P4 hover 快速新建（手机端无 hover 不显示，走原有新建入口）
@@ -12215,6 +12286,156 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (grid && grid.children.length) renderFourWeekGrid();
             }, 200);
         });
+
+        // ========== 闪捕条 + 停车场 ==========
+        // 自然语言日期解析：明天/后天/周X/下周X/X月X日/X月X号/M/D → 具体日期；返回 {title, dateStr, hint}
+        function parseQuickCapture(raw) {
+            let text = raw.trim();
+            if (!text) return { title: '', dateStr: null, hint: '' };
+            const today = new Date();
+            let date = null, matched = '';
+            const fmt = (d) => formatDate(d);
+            const WD = { '一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'日':0,'天':0 };
+            let m;
+            if ((m = text.match(/^(?:大后天)(.*)$/))) { date = addDays(today, 3); matched = '大后天'; text = m[1]; }
+            else if ((m = text.match(/^后天(.*)$/))) { date = addDays(today, 2); matched = '后天'; text = m[1]; }
+            else if ((m = text.match(/^明天(.*)$/))) { date = addDays(today, 1); matched = '明天'; text = m[1]; }
+            else if ((m = text.match(/^今[天日](.*)$/))) { date = today; matched = '今天'; text = m[1]; }
+            if (!date && (m = text.match(/^下周([一二三四五六日天])(.*)$/))) {
+                const target = WD[m[1]]; const cur = addDays(today, 7 - ((today.getDay() + 6) % 7)); // 下周一
+                date = addDays(cur, (target - 1 + 7) % 7); matched = '下周' + m[1]; text = m[2];
+            }
+            if (!date && (m = text.match(/^(?:周|礼拜|星期)([一二三四五六日天])(.*)$/))) {
+                const target = WD[m[1]];
+                let delta = (target - today.getDay() + 7) % 7; if (delta === 0) delta = 0; // 当天即今天
+                date = addDays(today, delta); matched = '周' + m[1]; text = m[2];
+            }
+            if (!date && (m = text.match(/^(\d{1,2})月(\d{1,2})[日号](.*)$/))) {
+                let d = new Date(today.getFullYear(), parseInt(m[1]) - 1, parseInt(m[2]));
+                if (d < new Date(fmt(today))) d.setFullYear(d.getFullYear() + 1);
+                date = d; matched = m[1] + '月' + m[2] + '日'; text = m[3];
+            }
+            if (!date && (m = text.match(/^(\d{1,2})\/(\d{1,2})(.*)$/))) {
+                let d = new Date(today.getFullYear(), parseInt(m[1]) - 1, parseInt(m[2]));
+                if (d < new Date(fmt(today))) d.setFullYear(d.getFullYear() + 1);
+                date = d; matched = m[1] + '/' + m[2]; text = m[3];
+            }
+            text = text.replace(/^[，,。、\s]+/, '').trim();
+            if (!text) return { title: '', dateStr: null, hint: '' };
+            if (date) {
+                const wdName = ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
+                return { title: text, dateStr: fmt(date), hint: '→ ' + matched + ' (' + (date.getMonth() + 1) + '/' + date.getDate() + ' 周' + wdName + ') 回车排期' };
+            }
+            return { title: text, dateStr: null, hint: '→ 未识别日期，回车入停车场（也可写「周五」「9/5」等）' };
+        }
+
+        function quickCaptureSubmit() {
+            const input = document.getElementById('qcInput');
+            const parsed = parseQuickCapture(input.value);
+            if (!parsed.title) { showToast('⚡ 输入点内容再回车'); return; }
+            if (parsed.dateStr) {
+                const projId = (typeof projects !== 'undefined' && projects[0] && projects[0].id) || 'pj_general';
+                events.push({
+                    id: Date.now().toString(),
+                    title: parsed.title, desc: '',
+                    startDate: parsed.dateStr, endDate: parsed.dateStr,
+                    type: 'execute', startTime: '', endTime: '',
+                    priority: 'next', status: 'todo', projectId: projId, repeat: null
+                });
+                saveData(); render();
+                showToast('⚡ 已排到 ' + parsed.dateStr + '：' + parsed.title);
+            } else {
+                backlog.push({ id: 'bl' + Date.now().toString(), title: parsed.title, createdAt: new Date().toISOString() });
+                safeStorage.set('niko_backlog', backlog);
+                renderBacklogParking();
+                showToast('🅿️ 已入停车场：' + parsed.title);
+            }
+            input.value = '';
+            document.getElementById('qcHint').textContent = '';
+        }
+
+        function renderBacklogParking() {
+            const chips = document.getElementById('bpChips');
+            const count = document.getElementById('bpCount');
+            if (!chips) return;
+            count.textContent = backlog.length;
+            if (!backlog.length) { chips.innerHTML = '<span class="bp-empty">空——闪捕的不带日期想法都会先停在这里</span>'; return; }
+            chips.innerHTML = backlog.map(b =>
+                `<span class="bp-chip" draggable="true" data-backlog-id="${b.id}" title="拖到日历格子即排期">
+                    <span class="bp-chip-text">${escapeHtml(b.title)}</span>
+                    <span class="bp-del" onclick="deleteBacklogItem('${b.id}')" title="丢弃">✕</span>
+                </span>`).join('');
+            chips.querySelectorAll('.bp-chip').forEach(chip => {
+                chip.addEventListener('dragstart', (e) => {
+                    draggedEventId = 'backlog:' + chip.dataset.backlogId;
+                    e.dataTransfer.effectAllowed = 'move';
+                    chip.classList.add('dragging');
+                });
+                chip.addEventListener('dragend', () => {
+                    draggedEventId = null;
+                    chip.classList.remove('dragging');
+                    document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over'));
+                });
+            });
+        }
+
+        function deleteBacklogItem(id) {
+            backlog = backlog.filter(b => b.id !== id);
+            safeStorage.set('niko_backlog', backlog);
+            renderBacklogParking();
+        }
+
+        // 停车场任务落位：转为正式任务
+        function scheduleBacklogItem(backlogId, dateStr) {
+            const item = backlog.find(b => b.id === backlogId);
+            if (!item) return;
+            const projId = (typeof projects !== 'undefined' && projects[0] && projects[0].id) || 'pj_general';
+            events.push({
+                id: Date.now().toString(),
+                title: item.title, desc: '',
+                startDate: dateStr, endDate: dateStr,
+                type: 'execute', startTime: '', endTime: '',
+                priority: 'next', status: 'todo', projectId: projId, repeat: null
+            });
+            backlog = backlog.filter(b => b.id !== backlogId);
+            safeStorage.set('niko_backlog', backlog);
+            saveData(); render();
+            showToast('🅿️→📅 已排到 ' + dateStr + '：' + item.title);
+        }
+
+        // 日历任务拖回停车场：从日历移除并入库存
+        function parkEvent(eventId) {
+            const ev = events.find(e => e.id === eventId);
+            if (!ev) return;
+            backlog.push({ id: 'bl' + Date.now().toString(), title: ev.title, createdAt: new Date().toISOString() });
+            events = events.filter(e => e.id !== eventId);
+            safeStorage.set('niko_backlog', backlog);
+            saveData(); render();
+            showToast('🅿️ 已收入停车场：' + ev.title);
+        }
+
+        // 闪捕输入：实时解析提示 + 回车提交
+        document.addEventListener('input', (e) => {
+            if (e.target && e.target.id === 'qcInput') {
+                document.getElementById('qcHint').textContent = parseQuickCapture(e.target.value).hint;
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.target && e.target.id === 'qcInput' && e.key === 'Enter') { e.preventDefault(); quickCaptureSubmit(); }
+        });
+        // 停车场作为拖放目标：日历任务拖回入库
+        (function initParkingDrop() {
+            const parking = document.getElementById('backlogParking');
+            if (!parking) return;
+            parking.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; parking.classList.add('drag-over'); });
+            parking.addEventListener('dragleave', (e) => { if (!parking.contains(e.relatedTarget)) parking.classList.remove('drag-over'); });
+            parking.addEventListener('drop', (e) => {
+                e.preventDefault();
+                parking.classList.remove('drag-over');
+                if (draggedEventId && !draggedEventId.startsWith('backlog:')) parkEvent(draggedEventId);
+                draggedEventId = null;
+            });
+        })();
 
         function moveEventToDate(eventId, targetDate) {
             const ev = events.find(e => e.id === eventId);
@@ -23074,7 +23295,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312250";
+        window.NIKO_VERSION = "202608312301";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
