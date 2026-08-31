@@ -2802,7 +2802,7 @@
             user-select: none;
             color: #1f2937;
             position: relative;
-            overflow: hidden;
+            overflow: visible;            /* 跨天连接桥需要伸出格子 */
             padding-right: 18px;          /* 留出右上角状态图标空间 */
         }
         .event-item:active {
@@ -2817,7 +2817,40 @@
             text-decoration: line-through;
         }
         .event-item.long-task {
-            background: #8b5cf6;
+            /* 仅作为标记类，不覆盖项目色背景 */
+        }
+        /* 跨天任务甘特连接：左右延伸覆盖格子间隙，形成连续长条 */
+        .event-item.conn-left,
+        .event-item.conn-right {
+            position: relative;
+            z-index: 1;
+        }
+        .event-item.conn-left::before,
+        .event-item.conn-right::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: inherit;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .event-item.conn-left::before {
+            left: -30px;
+            border-radius: 3px 0 0 3px;
+        }
+        .event-item.conn-right::after {
+            right: -30px;
+            border-radius: 0 3px 3px 0;
+        }
+        .event-item.conn-left {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .event-item.conn-right {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
         }
         .event-checkbox {
             width: 12px;
@@ -11784,6 +11817,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function renderPlanPage() {
+            // 渲染前重读 localStorage：避免云同步拉取后仍用旧内存，保存时覆盖云端数据
+            events = safeStorage.get('work_calendar_events', events);
+            planDayOrder = safeStorage.get('niko_plan_day_order', planDayOrder);
             updateDateRangeText();
             renderFourWeekGrid();
             renderDayDetail();
@@ -11922,6 +11958,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const project = getProject(ev.projectId);
                     item.style.setProperty('background-color', hexToRgba(project.color, 0.22), 'important');
                     item.style.setProperty('border-left', '6px solid ' + project.color, 'important');
+                    // 跨天长条：中间天去掉左边框，让相邻条连成一整条；第一天保留左边框作为起点
+                    if (hasPrev) {
+                        item.style.setProperty('border-left', 'none', 'important');
+                        item.style.setProperty('padding-left', '11px', 'important');
+                    }
                     const displayStatus = isOverdue ? 'overdue' : ev.status;
                     item.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
@@ -12073,6 +12114,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 看板视图
         function renderBoard() {
+            events = safeStorage.get('work_calendar_events', events);
+            planDayOrder = safeStorage.get('niko_plan_day_order', planDayOrder);
             const container = document.getElementById('boardContainer');
             container.innerHTML = '';
             const groups = { 'todo': [], 'in-progress': [], 'done': [] };
@@ -12145,6 +12188,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ========== 甘特图渲染 ==========
         function renderGantt() {
+            events = safeStorage.get('work_calendar_events', events);
+            planDayOrder = safeStorage.get('niko_plan_day_order', planDayOrder);
             const header = document.getElementById('ganttHeader');
             const body = document.getElementById('ganttBody');
             if (!header || !body) return;
@@ -22833,7 +22878,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608271625";
+        window.NIKO_VERSION = "202608312203";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
