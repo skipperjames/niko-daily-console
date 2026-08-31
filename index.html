@@ -12031,20 +12031,24 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
                 'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
             };
-            const seen = new Set();
             for (let i = 0; i < daysToShow; i++) {
                 const startStr = formatDate(addDays(currentWeekStart, i));
                 const dayEvents = dayEventsDisplay[startStr] || [];
+                const rowStart = Math.floor(i / 7) * 7;
                 for (const ev of dayEvents) {
-                    if (ev.startDate === ev.endDate || seen.has(ev.id)) continue;
-                    seen.add(ev.id);
-                    // 收集同一周行内的连续展示天（跨行/断开则拆分）
-                    const rowEnd = Math.min(daysToShow, (Math.floor(i / 7) + 1) * 7);
+                    if (ev.startDate === ev.endDate) continue;
+                    // 行内分工：本行前一天也显示该事件 → 本日是延续，由行内第一天负责画条（跨行任务每行各画一条）
+                    if (i > rowStart) {
+                        const prevStr = formatDate(addDays(currentWeekStart, i - 1));
+                        if ((dayEventsDisplay[prevStr] || []).some(e => e.id === ev.id)) continue;
+                    }
+                    // 收集本行内从 i 开始的连续展示天（跨行/断开则拆分）
+                    const rowEnd = Math.min(daysToShow, rowStart + 7);
                     const run = [];
                     for (let j = i; j < rowEnd; j++) {
                         const dStr = formatDate(addDays(currentWeekStart, j));
                         if ((dayEventsDisplay[dStr] || []).some(e => e.id === ev.id)) run.push(dStr);
-                        else if (run.length) break;
+                        else break;
                     }
                     if (!run.length) continue;
                     const firstCell = grid.querySelector('.day-cell[data-date="' + run[0] + '"]');
@@ -22953,7 +22957,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312223";
+        window.NIKO_VERSION = "202608312228";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
