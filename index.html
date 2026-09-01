@@ -1596,6 +1596,25 @@
         }
         body.dark-mode .cmd-brief-top { color: #8f94b3; }
         .cmd-brief-dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; flex-shrink: 0; }
+        /* Niko伙伴：由连续打卡天数喂养的小生物（纯CSS，无惩罚焦虑） */
+        .buddy-wrap { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid #e8e6e1; border-radius:14px; padding:10px 16px; margin-bottom:2px; cursor:pointer; position:relative; user-select:none; transition: background .3s ease, border-color .3s ease; }
+        .buddy-wrap:hover { border-color:#c7d2fe; }
+        .buddy-body { position:relative; width:38px; height:34px; flex-shrink:0; }
+        .buddy-core { position:absolute; inset:0; background:#a5b4fc; border-radius:52% 48% 55% 45% / 62% 62% 38% 38%; box-shadow: inset -3px -4px 0 rgba(0,0,0,.08); transition: transform .35s ease, background .35s ease, box-shadow .35s ease; }
+        .buddy-wrap:hover .buddy-core { transform: scale(1.08); }
+        .buddy-eyes { position:absolute; top:11px; left:0; right:0; display:flex; justify-content:center; gap:9px; z-index:2; }
+        .buddy-eyes i { width:5px; height:7px; background:#1f2937; border-radius:3px; display:block; transition: all .2s; }
+        .buddy-wrap.sleep .buddy-eyes i { height:2px; margin-top:5px; }
+        .buddy-stage-0 .buddy-core { transform: scale(.78); background:#c7d2fe; }
+        .buddy-stage-4 .buddy-core { background:#818cf8; box-shadow: 0 0 14px rgba(129,140,248,.55), inset -3px -4px 0 rgba(0,0,0,.08); }
+        .buddy-name { font-size:13.5px; font-weight:600; color:#1f2937; transition: color .3s ease; }
+        .buddy-sub { font-size:11.5px; color:#888; margin-top:1px; transition: color .3s ease; }
+        .buddy-say { position:absolute; right:12px; bottom:calc(100% - 4px); background:#1f2937; color:#fff; font-size:12px; line-height:1.5; padding:7px 11px; border-radius:10px 10px 2px 10px; max-width:75%; opacity:0; pointer-events:none; transition:opacity .25s; z-index:5; }
+        .buddy-wrap.say .buddy-say { opacity:1; }
+        body.dark-mode .buddy-wrap { background:#26262e; border-color:#3a3a44; }
+        body.dark-mode .buddy-wrap:hover { border-color:#4b5069; }
+        body.dark-mode .buddy-name { color:#e5e7eb; }
+        body.dark-mode .buddy-sub { color:#9ca3af; }
         .cmd-brief-main {
             font-size: 19px; font-weight: 600; line-height: 1.5;
             color: #1f2937;
@@ -8138,6 +8157,11 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="page active" id="todayPage">
 <div class="cmd-brief" id="cmdBrief"></div>
             <div class="clear-settle" id="clearSettle" style="display:none;"></div>
+            <div class="buddy-wrap" id="buddyWrap" onclick="buddyTalk()">
+                <div class="buddy-say" id="buddySay"></div>
+                <div class="buddy-body buddy-stage-0" id="buddyBody"><div class="buddy-core"></div><div class="buddy-eyes"><i></i><i></i></div></div>
+                <div class="buddy-meta"><div class="buddy-name" id="buddyName">Niko</div><div class="buddy-sub" id="buddySub"></div></div>
+            </div>
             <div class="today-habits" id="todayHabits">
                 <div class="today-habits-head">
                     <span class="today-habits-title">🎯 今日习惯</span>
@@ -11115,6 +11139,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderMarketNodeAlerts();
             renderCommandBrief();
             renderClearSettle();
+            renderBuddy();
             renderFlightPlan();
             renderHot();
             renderWeeklyEntry();
@@ -11610,6 +11635,58 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } catch (e) {}
         }
 
+        // ===== Niko伙伴：连续打卡喂养（数据全部真实） =====
+        function buddyStreak() {
+            const days = new Set(habitLogs().map(l => l.date));
+            const today = formatDate(new Date());
+            let cursor = new Date(), streak = 0;
+            if (!days.has(today)) cursor.setDate(cursor.getDate() - 1);
+            while (days.has(formatDate(cursor))) { streak++; cursor.setDate(cursor.getDate() - 1); }
+            return streak;
+        }
+        function buddyStageOf(streak) { return streak >= 30 ? 4 : streak >= 14 ? 3 : streak >= 7 ? 2 : streak >= 3 ? 1 : 0; }
+        function renderBuddy() {
+            const wrap = document.getElementById('buddyWrap');
+            if (!wrap) return;
+            const streak = buddyStreak();
+            const stage = buddyStageOf(streak);
+            const today = formatDate(new Date());
+            const doneCount = Object.keys(habitDoneSet(today)).length;
+            const total = habitList().length;
+            wrap.classList.toggle('sleep', doneCount === 0 && streak === 0);
+            document.getElementById('buddyBody').className = 'buddy-body buddy-stage-' + stage;
+            const stageNames = ['幼体', '成长', '少年', '成熟', '完全体'];
+            document.getElementById('buddyName').textContent = 'Niko · ' + stageNames[stage];
+            let sub;
+            if (doneCount > 0) sub = `连续坚持 ${streak} 天 · 今日已打卡 ${doneCount} 次`;
+            else if (streak > 0) sub = `在等今天第一次打卡…（已坚持 ${streak} 天）`;
+            else sub = '睡着了 💤（打卡唤醒它）';
+            document.getElementById('buddySub').textContent = sub;
+        }
+        function buddyTalk() {
+            const say = document.getElementById('buddySay');
+            const wrap = document.getElementById('buddyWrap');
+            if (!say || !wrap) return;
+            const streak = buddyStreak();
+            const today = formatDate(new Date());
+            const doneCount = Object.keys(habitDoneSet(today)).length;
+            const total = habitList().length;
+            const h = new Date().getHours();
+            const lines = [];
+            if (doneCount === 0 && streak === 0) lines.push('好几天没见到你了，我先睡着 💤 点张卡唤醒我');
+            if (doneCount === 0 && streak > 0) lines.push(`已经陪你坚持 ${streak} 天了，今天别让我饿肚子呀！`);
+            if (doneCount > 0) {
+                if (total > 0 && doneCount >= total) lines.push('今天全清！我好饱，超开心 🎉');
+                else lines.push(`唔，今天已经 ${doneCount} 次打卡，还差 ${total - doneCount} 次我就饱了`);
+                if (streak >= 7) lines.push(`连续 ${streak} 天了，我感觉自己快要进化了`);
+            }
+            if (h >= 22) lines.push('夜深了，收完尾巴早点休息哦 🌙');
+            say.textContent = lines[0] || '点打卡我就会长大，先从第一张开始吧';
+            wrap.classList.add('say');
+            clearTimeout(buddyTalk._t);
+            buddyTalk._t = setTimeout(() => wrap.classList.remove('say'), 3500);
+        }
+
         // ===== 习惯打卡 =====
         const HABIT_ICONS = ['💪','🏃','🧘','📖','✍️','🎬','🎨','🗣️','💧','😴','💰','🌱'];
         let habitIconPick = '💪';
@@ -11720,6 +11797,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderTodayHabits();
             renderCommandBrief();
             renderClearSettle();
+            renderBuddy();
             const hm = document.getElementById('habitsModal');
             if (hm && hm.classList.contains('show')) renderHabitStats();
         }
@@ -20776,12 +20854,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         if (pushed + pulled === 0) addLog(`[${channelName(channel || 'fs')}] 同步完成：数据已是最新`, 'ok');
         else addLog(`[${channelName(channel || 'fs')}] 同步完成：推送 ${pushed} 项，拉取 ${pulled} 项`, 'ok');
 
-        // 数据已落云端，弹个小 toast 让用户放心关页面
+        // 静默同步：纯推送不弹 toast（侧边栏状态灯足够）；只有从云端拉到数据才提示一次
         try {
-            if (typeof showToast === 'function') {
-                if (pushed + pulled > 0) showToast('✓ 已同步云端（' + fmtTime(new Date().toISOString()) + '）');
-                else showToast('☁ 数据已是最新');
-            }
+            if (typeof showToast === 'function' && pulled > 0) showToast('✓ 已从云端更新 ' + pulled + ' 项');
         } catch (e) {}
 
         // 拉取的数据写入 localStorage 后，通知面板刷新
@@ -21082,7 +21157,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
     /* ---------- 自动推送（debounced） ---------- */
     let autoPushTimer = null;
     let syncDirty = false; // 同步进行中发生的写入：本轮结束后补推一次，绝不丢弃
-    const AUTO_PUSH_DELAY = 3000; // 3 秒合并连续修改
+    const AUTO_PUSH_DELAY = 10000; // 10 秒合并连续修改（打卡等高频操作只推一次，2026-09-01 静默同步）
 
     function scheduleAutoPush(key) {
         // 只对业务数据 key 触发（排除同步元数据、状态 key）
@@ -24216,7 +24291,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609012303";
+        window.NIKO_VERSION = "202609012330";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
