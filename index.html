@@ -9941,6 +9941,17 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <span style="color:#999;font-size:11px;">本机修改仍会 3 秒内即时推送</span>
         </div>
 
+        <div class="cloudsync-manual-row" style="gap:6px;">
+            <span>⚔️ 冲突策略：</span>
+            <select id="cloudsyncConflictPolicy" onchange="NikoSync.setConflictPolicy(this.value)"
+                style="font-size:12.5px;padding:6px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#333;outline:none;cursor:pointer;">
+                <option value="remote">自动用云端（推荐多设备党）</option>
+                <option value="local">自动用本地</option>
+                <option value="ask">每次弹窗问我</option>
+            </select>
+            <span style="color:#999;font-size:11px;" id="cloudsyncConflictHint">本地与云端同时改动时，不再弹窗，直接以云端为准</span>
+        </div>
+
         <div class="cloudsync-hint" id="cloudsyncHint">
             ① 打开坚果云客户端（或网页版），新建文件夹 <b>WorkBuddy</b><br>
             ② 点击「连接坚果云文件夹」，选择该文件夹的<b>本地同步目录</b>（如 D:\坚果云\WorkBuddy）<br>
@@ -19499,7 +19510,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         ghConnected: false,
         ghConnecting: false,
         ghBackOffUntil: 0,
-        syncIntervalSec: DEFAULT_SYNC_INTERVAL_SEC
+        syncIntervalSec: DEFAULT_SYNC_INTERVAL_SEC,
+        conflictPolicy: 'remote'   // 冲突默认策略：remote=云端优先（默认） / local=本地优先 / ask=每次询问
     };
 
     const log = []; // 日志（最新的在末尾）
@@ -19556,6 +19568,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
     }
 
     function renderUI() {
+        renderConflictUI();
         const connectBtn = $id('cloudsyncConnectBtn');
         const syncBtn = $id('cloudsyncSyncBtn');
         const discBtn = $id('cloudsyncDisconnectBtn');
@@ -19627,6 +19640,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         state.ghToken = s.ghToken || '';
         const iv = parseInt(s.syncIntervalSec, 10);
         state.syncIntervalSec = SYNC_INTERVAL_OPTIONS.includes(iv) ? iv : DEFAULT_SYNC_INTERVAL_SEC;
+        const cp = s.conflictPolicy;
+        state.conflictPolicy = (cp === 'local' || cp === 'ask') ? cp : 'remote';
     }
     function saveSettings() {
         set('niko_sync_settings', {
@@ -19636,7 +19651,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             ghOwner: state.ghOwner || '',
             ghRepo: state.ghRepo || '',
             ghToken: state.ghToken || '',
-            syncIntervalSec: state.syncIntervalSec
+            syncIntervalSec: state.syncIntervalSec,
+            conflictPolicy: state.conflictPolicy
         });
     }
 
@@ -19663,6 +19679,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         sel.innerHTML = SYNC_INTERVAL_OPTIONS.map(s =>
             `<option value="${s}" ${s === state.syncIntervalSec ? 'selected' : ''}>每 ${intervalLabel(s)}</option>`
         ).join('');
+    }
+
+    /* ---------- 冲突默认策略 ---------- */
+    const CONFLICT_POLICY_HINT = {
+        remote: '本地与云端同时改动时，不再弹窗，直接以云端为准',
+        local: '本地与云端同时改动时，不再弹窗，直接以本地为准',
+        ask: '本地与云端同时改动时，弹窗让你逐项选择'
+    };
+    function setConflictPolicy(v) {
+        if (!CONFLICT_POLICY_HINT[v]) return;
+        state.conflictPolicy = v;
+        saveSettings();
+        renderConflictUI();
+        addLog(`冲突策略已切换为：${v === 'remote' ? '自动用云端' : v === 'local' ? '自动用本地' : '每次询问'}`, 'ok');
+    }
+    function renderConflictUI() {
+        const sel = $id('cloudsyncConflictPolicy');
+        if (sel) {
+            const opts = [
+                ['remote', '自动用云端（推荐多设备党）'],
+                ['local', '自动用本地'],
+                ['ask', '每次弹窗问我']
+            ];
+            const cur = state.conflictPolicy || 'remote';
+            sel.innerHTML = opts.map(([v, t]) =>
+                `<option value="${v}" ${v === cur ? 'selected' : ''}>${t}</option>`
+            ).join('');
+        }
+        const hint = $id('cloudsyncConflictHint');
+        if (hint) hint.textContent = CONFLICT_POLICY_HINT[state.conflictPolicy || 'remote'];
     }
 
     /* ---------- IndexedDB 句柄持久化 ---------- */
@@ -20140,6 +20186,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         } finally {
             state.syncing = false;
             if (syncBtn) syncBtn.disabled = false;
+            // 同步期间有新写入：立即补推一轮，确保习惯打卡/日历状态不漏同步
+            if (syncDirty) {
+                syncDirty = false;
+                setTimeout(() => { if (!state.syncing) doSync(); }, 1000);
+            }
         }
     }
 
@@ -20199,6 +20250,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 冲突处理
         if (merged.conflict.length > 0) {
+            const policy = state.conflictPolicy || 'remote';
+            if (policy !== 'ask') {
+                // 默认策略：不弹窗，直接按策略解决（习惯打卡/日历等高频写入不再打断）
+                state.conflictList = merged.conflict;
+                state.conflictChoices = {};
+                merged.conflict.forEach(k => { state.conflictChoices[k] = policy; });
+                state.pendingRemote = remote;
+                state.pendingLocal = local;
+                state.pendingPush = merged.push;
+                state.pendingPull = merged.pull;
+                state.pendingChannel = channel;
+                addLog(`[${channelName(channel)}] ${merged.conflict.length} 项冲突，按默认策略自动用${policy === 'remote' ? '云端' : '本地'}`, 'ok');
+                await applyConflict();
+                return;
+            }
             state.conflictList = merged.conflict;
             state.conflictChoices = {};
             state.pendingRemote = remote;
@@ -20567,6 +20633,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
     /* ---------- 自动推送（debounced） ---------- */
     let autoPushTimer = null;
+    let syncDirty = false; // 同步进行中发生的写入：本轮结束后补推一次，绝不丢弃
     const AUTO_PUSH_DELAY = 3000; // 3 秒合并连续修改
 
     function scheduleAutoPush(key) {
@@ -20574,7 +20641,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         if (key && !DATA_PREFIXES.some(p => key.startsWith(p))) return;
         if (META_KEYS.includes(key) || EXCLUDE_KEYS.includes(key)) return;
         if (activeChannels().length === 0) return; // 无连接时不触发
-        if (state.syncing) return; // 正在同步中，跳过
+        if (state.syncing) { syncDirty = true; return; } // 正在同步中：先记脏标记，本轮结束立即补推
 
         if (autoPushTimer) clearTimeout(autoPushTimer);
         autoPushTimer = setTimeout(() => {
@@ -20662,8 +20729,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         await tryRestore();
         // 尝试自动重连云端数据库（配置过 AppID 时）
         await ghAutoConnect();
-        // 前台恢复监听
-        document.addEventListener('visibilitychange', onVisibility);
+        // 页面即将隐藏/关闭：取消 3 秒 debounce，立即推送，防止打卡后马上关页面丢数据
+        function flushOnHide() {
+            if (state.syncing) { syncDirty = true; return; }
+            if (activeChannels().length === 0) return;
+            if (autoPushTimer) { clearTimeout(autoPushTimer); autoPushTimer = null; }
+            addLog('页面即将隐藏，立即推送...', 'info');
+            doSync();
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) flushOnHide();
+            else onVisibility();
+        });
+        window.addEventListener('pagehide', flushOnHide);
     }
 
     // 暴露 API
@@ -20680,6 +20758,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         resetUI: () => { loadSettings(); state.conflictList = null; renderUI(); renderGhUI(); updateSidebarIndicator(); },
         toggleManual,
         setSyncInterval,
+        setConflictPolicy,
         getSyncIntervalMs,
         exportManual,
         importManualFile,
@@ -23689,7 +23768,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609011306";
+        window.NIKO_VERSION = "202609012042";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
