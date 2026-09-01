@@ -6330,6 +6330,16 @@
         .kb-review-empty { padding:30px; text-align:center; color:#9ca3af; font-size:14px; }
         .kb-review-empty a { color:#7c3aed; cursor:pointer; text-decoration:underline; }
 
+        /* 新手引导卡 */
+        .kb-guide { background:#f6f3ff; border:1px solid #ddd3f8; border-radius:12px; padding:12px 16px; margin-bottom:12px; font-size:12.5px; color:#5b4a8a; line-height:1.8; }
+        body.dark-mode .kb-guide { background:#262233; border-color:#4a3f6b; color:#c4b5fd; }
+        .kb-guide-title { font-weight:600; font-size:13px; margin-bottom:4px; color:#6d5bb3; }
+        body.dark-mode .kb-guide-title { color:#c4b5fd; }
+        .kb-guide-body b { color:#7c3aed; }
+        body.dark-mode .kb-guide-body b { color:#a78bfa; }
+        .kb-guide .btn { margin-top:8px; font-size:12px; padding:6px 14px; }
+        body.dark-mode .kb-guide .btn { background:#332d47; border-color:#4a3f6b; color:#c4b5fd; }
+
         @media (max-width:768px) {
             .kb-actions input { width:100%; }
             .kb-head { align-items:flex-start; }
@@ -6879,6 +6889,42 @@
         }
         body.dark-mode .diary-item-empty { border-color: #333; color: #777; }
 
+        /* 今日战报卡 */
+        .diary-battle {
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+            background: #fdf6e9; border: 1px solid #f0e0c0; border-radius: 10px;
+            padding: 7px 12px; font-size: 12.5px; color: #8a6d3b;
+        }
+        body.dark-mode .diary-battle { background: #2a2519; border-color: #4a3f2f; color: #d9b96a; }
+        .diary-battle b { color: #b45309; }
+        body.dark-mode .diary-battle b { color: #fbbf24; }
+        /* 每日一问 */
+        .diary-q {
+            background: #f4f1fa; border: 1px dashed #cabdf0; border-radius: 10px;
+            padding: 9px 12px; font-size: 13px; color: #5b4a8a; line-height: 1.6;
+        }
+        body.dark-mode .diary-q { background: #262233; border-color: #4a3f6b; color: #c4b5fd; }
+        .diary-q-actions { margin-top: 6px; display: flex; gap: 8px; }
+        .diary-q-btn {
+            font-size: 11.5px; padding: 3px 10px; border-radius: 12px; cursor: pointer;
+            background: #fff; border: 1px solid #cabdf0; color: #6d5bb3; transition: all .2s;
+        }
+        body.dark-mode .diary-q-btn { background: #332d47; border-color: #4a3f6b; color: #c4b5fd; }
+        .diary-q-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+        /* 本周心情回顾 */
+        .diary-week {
+            background: #fff; border: 1px solid #eee; border-radius: 14px;
+            padding: 12px 16px; display: flex; flex-direction: column; gap: 6px;
+        }
+        body.dark-mode .diary-week { background: #1f2937; border-color: #333; }
+        .diary-week-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+        .diary-week-title { font-size: 13.5px; font-weight: 600; }
+        .diary-week-meta { font-size: 12px; color: #999; }
+        .diary-week-text { font-size: 13px; color: #666; line-height: 1.7; }
+        body.dark-mode .diary-week-text { color: #bbb; }
+        .diary-week-moods { font-size: 13px; }
+        .diary-week-empty { font-size: 12.5px; color: #999; }
+
         /* ===== 日记手机端紧凑化 ===== */
         @media (max-width: 768px) {
             /* 整页 padding 缩紧 */
@@ -6923,6 +6969,12 @@
             #diaryPage .diary-list-item { padding: 6px 8px !important; }
             #diaryPage .diary-item-head { margin-bottom: 3px !important; }
             #diaryPage .diary-item-content { font-size: 12px !important; line-height: 1.5; -webkit-line-clamp: 3 !important; }
+            /* 新增卡片手机端紧凑化 */
+            #diaryPage .diary-week { padding: 8px 10px !important; gap: 4px !important; }
+            #diaryPage .diary-week-text { font-size: 12px !important; line-height: 1.6; }
+            #diaryPage .diary-week-meta { font-size: 11px !important; }
+            #diaryPage .diary-battle { font-size: 11px !important; padding: 5px 8px !important; }
+            #diaryPage .diary-q { font-size: 12px !important; padding: 7px 9px !important; }
         }
 /* ===== 坚果云同步卡片（注入数据管理弹窗） ===== */
 .cloudsync-card {
@@ -8965,6 +9017,16 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
         <div class="page" id="knowledgePage">
 <div class="kb-wrap">
+            <div id="kbGuideCard" class="kb-guide" style="display:none;">
+                <div class="kb-guide-title">🧭 知识库是什么？30 秒上手</div>
+                <div class="kb-guide-body">
+                    ① 它是你的<b>第二大脑</b>：只存「值得留下去的经验和素材」，日常任务留在计划看板，不往这里混。<br>
+                    ② 内容<b>不用手动搬</b>：读书看板、便签、文案库、梗文化、热点收藏里都有「📥 存入知识库」按钮，看到好的点一下就进来。<br>
+                    ③ 条目按 <b>PARA</b> 自动分区：01-Projects 项目 / 02-Areas 领域 / 03-Resources 素材 / 04-Archive 归档，分类色条就是分区。<br>
+                    ④ 存进来之后：🔍 搜索、🕸️ 图谱看关联、🎴 复习帮你记住、📊 AI 洞察告诉你哪个区在吃灰。
+                </div>
+                <button class="btn" onclick="kbDismissGuide()">知道了，不再显示</button>
+            </div>
             <div class="kb-head">
                 <h1>🧠 知识库 <span class="kb-sub">PARA · 经验复利（分类色条=项目，角标=状态）</span></h1>
                 <div class="kb-actions">
@@ -9332,6 +9394,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 </div>
 
                 <div class="diary-stats" id="diaryStatCards"></div>
+
+                <div class="diary-week" id="diaryWeekCard"></div>
 
                 <div class="diary-layout">
                     <div class="diary-calendar-card">
@@ -12121,16 +12185,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (n) Object.assign(n, { title, date, region, category, remindDays, note });
             } else {
                 marketNodes.unshift({ id: 'node_' + Date.now(), title, date, region, category, remindDays, note, done: false });
-                // 阶段二：新增节点同步存入知识库（01-Projects）
-                addToKnowledge({
-                    title: title,
-                    body: '日期：' + date + (region ? '\n地区：' + region : '') + (category ? '\n分类：' + category : '') + (note ? '\n\n' + note : ''),
-                    para: '01-Projects',
-                    category: '副业',
-                    tags: ['计划', '节点', category].filter(Boolean),
-                    from: '计划看板',
-                    dedup: true
-                });
+                // 注：不再自动写入知识库（用户反馈任务混进知识库很困惑）；需要沉淀时去知识库手动「＋ 新增」
             }
             marketNodes.sort((a, b) => a.date.localeCompare(b.date));
             saveMarketNodes();
@@ -16977,11 +17032,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function renderKbList() {
             const box = document.getElementById('kbList');
             if (!box) return;
+            kbRenderGuide();
             const list = getKbFiltered();
             const stats = document.getElementById('kbStats');
             if (stats) stats.textContent = `共 ${knowledge.length} 条 · 当前显示 ${list.length} 条` + KB_PARA.map(p => ` · ${p.label.replace(/^[^ ]+ /, '')} ${knowledge.filter(x => x.para === p.key).length}`).join('');
             if (!list.length) {
-                box.innerHTML = `<div class="kb-empty">${knowledge.length ? '没有匹配的知识条目' : '知识库还是空的，点「＋ 新增」写下第一条经验，或「📥 导入热点收藏」从热点看板搬进来'}</div>`;
+                box.innerHTML = `<div class="kb-empty">${knowledge.length ? '没有匹配的知识条目' : '知识库还是空的——各板块看到好内容点「📥 存入知识库」，或这里点「＋ 新增」写第一条'}</div>`;
                 return;
             }
             box.innerHTML = list.map(it => {
@@ -17006,6 +17062,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                 </div>`;
             }).join('');
+        }
+        // 新手引导：未关闭时显示（30 秒讲清知识库定位与用法）
+        function kbRenderGuide() {
+            const g = document.getElementById('kbGuideCard');
+            if (!g) return;
+            g.style.display = safeStorage.get('niko_kb_guide_dismissed', false) ? 'none' : '';
+        }
+        function kbDismissGuide() {
+            safeStorage.set('niko_kb_guide_dismissed', true);
+            kbRenderGuide();
         }
 
         // ---- 模板：渲染 + 应用 ----
@@ -19088,6 +19154,162 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return streak;
         }
 
+        // ===== 每日一问（按日期轮换，可换一题）=====
+        const DIARY_QUESTIONS = [
+            '今天学到了什么新东西，哪怕很小？',
+            '今天有什么新的感悟或想法？',
+            '有什么想吐槽的？说出来会舒服一点。',
+            '今天哪个瞬间让你觉得「还不错」？',
+            '今天有好好吃饭吗？吃了什么好吃的？',
+            '今天身体感觉怎么样？',
+            '有没有一件小事，今天做得比昨天好？',
+            '今天和谁说过话？聊天感觉如何？',
+            '此刻最想去的地方是哪里？',
+            '今天有没有对你温柔的人或事？',
+            '最近让你期待的事情是什么？',
+            '今天有什么想夸夸自己的？',
+            '如果给今天打分，你会打几分？为什么？',
+            '今天有没有什么担心的事？写下来可能会轻一点。',
+            '最近循环播放的歌是什么？',
+            '今天看到的、听到的最有趣的一件事？',
+            '有什么话想说但今天没说出口？',
+            '今天睡得还好吗？',
+            '最近有什么小确幸？',
+            '今天的工作/学习里，最有成就感的部分？',
+            '有没有什么想放下一会儿的事？',
+            '今天天色最好的时候，是早上还是傍晚？',
+            '最近一次笑出声是什么时候？',
+            '如果明天的你给今天的你留一句话，会说什么？',
+            '今天有什么「算了，无所谓」的事？真的无所谓吗？',
+            '最近在想的一个人，TA 最近好吗？',
+            '今天有没有帮别人，或被人帮了一小把？',
+            '这周想给自己安排一件什么小奖励？',
+            '今天有什么想记下来、怕忘掉的细节？',
+            '最近的精力都花在哪了？值得吗？',
+            '有什么想对一年后的自己说的？',
+            '今天有没有哪个决定，做得挺果断？',
+            '最近身体在提醒你什么吗？',
+            '今天最想删除的一个瞬间？最想保留的一个瞬间？',
+            '有什么事情，其实你想开始很久了？',
+            '今天有没有觉得时间过得特别快的时刻？',
+            '最近让你觉得安心的一样东西/一个习惯？',
+            '今天有「啊，原来如此」的时刻吗？',
+            '如果把今天浓缩成一个词，会是什么词？',
+            '有什么情绪今天一直跟着你？',
+            '今天有没有偷偷立下什么小目标？',
+            '最近一次觉得「我做得挺好」是什么时候？',
+            '有什么想收到但没好意思要的安慰？现在写给自己吧。',
+            '今天傍晚（或此刻）窗外的天是什么颜色？'
+        ];
+        let diaryQSwap = safeStorage.get('niko_diary_q', {}) || {};
+        function diaryCurQuestion() {
+            const ds = diarySelectedDate || diaryTodayStr();
+            if (!diaryQSwap || diaryQSwap.date !== ds) diaryQSwap = { date: ds, off: 0 };
+            let base = 0;
+            for (const c of ds) base = (base * 31 + c.charCodeAt(0)) >>> 0;
+            return DIARY_QUESTIONS[(base + (diaryQSwap.off || 0)) % DIARY_QUESTIONS.length];
+        }
+        function diarySwapQuestion() {
+            const ds = diarySelectedDate || diaryTodayStr();
+            if (!diaryQSwap || diaryQSwap.date !== ds) diaryQSwap = { date: ds, off: 0 };
+            diaryQSwap.off = (diaryQSwap.off || 0) + 1;
+            safeStorage.set('niko_diary_q', diaryQSwap);
+            renderDiaryEditor();
+        }
+        function diaryUseQuestion() {
+            const input = document.getElementById('diaryEditorInput');
+            if (!input) return;
+            const q = diaryCurQuestion();
+            input.value = input.value.trim()
+                ? input.value.replace(/\s+$/, '') + '\n❓ ' + q + '\n'
+                : '❓ ' + q + '\n';
+            input.focus();
+            try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
+        }
+
+        // ===== 今日战报（自动数据切片）=====
+        function diaryBattleStats(dateStr) {
+            let tasksDone = 0, tasksTotal = 0, habitDone = 0, habitTotal = 0, gameMin = 0;
+            try {
+                const evs = safeStorage.get('work_calendar_events', []) || [];
+                const dayEvs = evs.filter(e => dateStr >= (e.startDate || '') && dateStr <= (e.endDate || e.startDate || ''));
+                tasksTotal = dayEvs.length;
+                tasksDone = dayEvs.filter(e => e.status === 'done').length;
+            } catch (err) {}
+            try {
+                const hs = safeStorage.get('niko_habits', []) || [];
+                const logs = safeStorage.get('niko_habit_logs', []) || [];
+                habitTotal = hs.length;
+                const dayLogs = logs.filter(l => l.date === dateStr);
+                habitDone = dayLogs.length;
+                dayLogs.forEach(l => {
+                    const h = hs.find(x => x.id === l.habitId);
+                    gameMin += Number((h && h.rewardMin) || 0);
+                });
+            } catch (err) {}
+            return { tasksDone, tasksTotal, habitDone, habitTotal, gameMin };
+        }
+        function diaryBattleHtml(ds) {
+            const s = diaryBattleStats(ds);
+            if (!s.tasksTotal && !s.habitTotal) return '';   // 没有任何任务和习惯时不显示
+            const parts = [];
+            if (s.tasksTotal) parts.push('⚔️ 讨伐任务 <b>' + s.tasksDone + '/' + s.tasksTotal + '</b>');
+            if (s.habitTotal) parts.push('✅ 习惯打卡 <b>' + s.habitDone + '/' + s.habitTotal + '</b>');
+            if (s.gameMin > 0) parts.push('🎮 游戏时间 <b>+' + s.gameMin + ' 分钟</b>');
+            return '<div class="diary-battle">今天的数据切片：' + parts.join(' · ') + '（保存日记时自动归档）</div>';
+        }
+
+        // ===== 本周心情回顾（有温度的周报，全部基于真实日记数据）=====
+        function diaryWeekRange() {
+            const now = new Date();
+            const day = now.getDay();
+            const diff = now.getDate() - day + (day === 0 ? -6 : 1);  // 本周一
+            const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
+            return { start: diaryFmt(mon), end: diaryTodayStr() };
+        }
+        function renderDiaryWeekReview() {
+            const el = document.getElementById('diaryWeekCard');
+            if (!el) return;
+            const range = diaryWeekRange();
+            const list = diaryEntries.filter(e => e.date >= range.start && e.date <= range.end).sort((a, b) => a.date.localeCompare(b.date));
+            const head = '<div class="diary-week-head"><span class="diary-week-title">🌤 本周心情回顾</span>' +
+                '<button class="diary-q-btn" onclick="diaryWeekAICopy()">🤖 让 AI 关心我这周</button></div>';
+            if (!list.length) {
+                el.innerHTML = head + '<div class="diary-week-empty">这周还没留下日记。不管好坏，写一句话给自己——我都在这里看着你的时间线。</div>';
+                return;
+            }
+            const moodCount = {};
+            list.forEach(e => { const k = e.mood || 'ok'; moodCount[k] = (moodCount[k] || 0) + 1; });
+            const moodStr = DIARY_MOODS.filter(m => moodCount[m.key]).map(m => m.icon + ' ' + m.name + ' ×' + moodCount[m.key]).join('　');
+            const lowCount = (moodCount.sad || 0) + (moodCount.tired || 0) + (moodCount.meh || 0);
+            const goodCount = (moodCount.great || 0) + (moodCount.ok || 0);
+            let warm;
+            if (lowCount >= goodCount && lowCount > 0) {
+                warm = '这周好像有点沉——' + lowCount + ' 天被疲惫或低落跟着。别急着责怪自己，能记下来本身就是照顾自己了。挑一件最小的事（出门走走、早点睡、吃顿好的），这周末前给自己补一口氧气。';
+            } else if (goodCount && !lowCount) {
+                warm = '这周状态挺稳的，' + list.length + ' 天都有认真生活。把这种节奏记住——它就是你一点点搭起来的东西，不是运气。';
+            } else {
+                warm = '这周有起有落，' + goodCount + ' 天平稳、' + lowCount + ' 天偏低。日子本来就有潮汐，你在低处也照样写日记，这就是了不起的地方。';
+            }
+            el.innerHTML = head +
+                '<div class="diary-week-meta">' + range.start + ' ~ ' + range.end + ' · 写了 ' + list.length + ' 篇 · ' + moodStr + '</div>' +
+                '<div class="diary-week-text">' + diaryEsc(warm) + '</div>';
+        }
+        function diaryWeekAICopy() {
+            const range = diaryWeekRange();
+            const list = diaryEntries.filter(e => e.date >= range.start && e.date <= range.end).sort((a, b) => a.date.localeCompare(b.date));
+            if (!list.length) { showToast('🌤 这周还没有日记，先写几句话再让 AI 回顾吧'); return; }
+            const lines = list.map(e => '[' + e.date + ' · ' + diaryMoodName(e.mood) + '] ' + String(e.content || '').replace(/\s*\n+\s*/g, ' ').slice(0, 200)).join('\n');
+            const text = '【我这一周的日记】' + range.start + ' ~ ' + range.end + '（共 ' + list.length + ' 篇）\n\n' + lines + '\n\n' +
+                '【请这样回应我】\n' +
+                '请以一位熟悉我、真诚不评判的朋友身份，回顾我这一周：\n' +
+                '1. 先共情我这周整体的状态（结合心情记录，不只是复述内容）；\n' +
+                '2. 指出这一周里我情绪或想法上的一个变化/趋势；\n' +
+                '3. 如果这周偏低落，给我温柔的关心和一件周末能做的小事；如果这周不错，帮我看到是哪些东西在起作用；\n' +
+                '4. 语气自然温暖，不鸡汤，不写小作文。';
+            diaryCopyText(text, '✅ 已复制！去 WorkBuddy 粘贴，让 AI 关心你这周');
+        }
+
         // ===== 主渲染 =====
         function renderDiaryPage() {
             // 渲染前重读（云同步修复）：云同步拉取后 localStorage 已是最新，若不重读内存变量，
@@ -19097,6 +19319,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const sel = diaryEntry(diarySelectedDate);
             diaryMood = (sel && sel.mood) || 'ok';
             renderDiaryStats();
+            renderDiaryWeekReview();
             renderDiaryCalendar();
             renderDiaryEditor();
             renderDiaryList();
@@ -19196,7 +19419,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="diary-mood-row" id="diaryMoodRow">
                     ${DIARY_MOODS.map(m => `<span class="diary-mood${mood === m.key ? ' active' : ''}" data-mood="${m.key}" onclick="diarySetMood('${m.key}')">${m.icon} ${m.name}</span>`).join('')}
                 </div>
-                <textarea class="diary-editor-input" id="diaryEditorInput" data-date="${ds}" placeholder="写点什么…">${draft !== null ? diaryEsc(draft) : (e ? diaryEsc(e.content) : '')}</textarea>
+                ${ds === today ? diaryBattleHtml(ds) : ''}
+                <div class="diary-q">
+                    <div>💬 今天想问你：${diaryEsc(diaryCurQuestion())}</div>
+                    <div class="diary-q-actions">
+                        <button class="diary-q-btn" onclick="diarySwapQuestion()">🔄 换一题</button>
+                        <button class="diary-q-btn" onclick="diaryUseQuestion()">✍️ 帮我开头</button>
+                    </div>
+                </div>
+                <textarea class="diary-editor-input" id="diaryEditorInput" data-date="${ds}" placeholder="一句话也行，今天过得怎么样…">${draft !== null ? diaryEsc(draft) : (e ? diaryEsc(e.content) : '')}</textarea>
                 <div class="diary-editor-foot">
                     <button class="diary-btn danger" id="diaryDeleteBtn" style="${e ? '' : 'display:none;'}" onclick="diaryDeleteCurrent()">🗑 删除这一天</button>
                     <span class="diary-editor-actions">
@@ -23768,7 +23999,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609012042";
+        window.NIKO_VERSION = "202609012204";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
