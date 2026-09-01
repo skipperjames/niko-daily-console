@@ -8175,7 +8175,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="date-range" id="dateRangeText"></div>
                 <button class="nav-btn" onclick="navigateWeeks(1)">›</button>
                 <button class="today-btn" onclick="goToday()">Today</button>
-                <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示 2 周或 4 周" style="min-width:44px;">2周</button>
+                <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示周数（2/3/4 周循环）" style="min-width:44px;">2周</button>
                 <div class="display-setting">
                     <label>单日显示</label>
                     <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
@@ -11665,10 +11665,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         renderTodayHabits();
 // ===== 计划看板专属JS =====
 
-        // 日历显示周数：2 周为主（省空间），可切 4 周；持久化到 localStorage
-        let CAL_WEEKS = safeStorage.get('niko_cal_weeks', 2) === 4 ? 4 : 2;
+        // 日历显示周数：2/3/4 周循环切换（默认 2 周省空间）；持久化到 localStorage
+        const _savedWeeks = safeStorage.get('niko_cal_weeks', 2);
+        let CAL_WEEKS = [2, 3, 4].includes(_savedWeeks) ? _savedWeeks : 2;
         function toggleWeekCount() {
-            CAL_WEEKS = CAL_WEEKS === 2 ? 4 : 2;
+            CAL_WEEKS = CAL_WEEKS >= 4 ? 2 : CAL_WEEKS + 1;
             safeStorage.set('niko_cal_weeks', CAL_WEEKS);
             const btn = document.getElementById('weekRangeBtn');
             if (btn) btn.textContent = CAL_WEEKS + '周';
@@ -23622,7 +23623,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609011058";
+        window.NIKO_VERSION = "202609011223";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
