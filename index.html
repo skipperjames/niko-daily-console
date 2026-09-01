@@ -1580,67 +1580,63 @@
             padding: 20px 32px;
             gap: 16px;
         }
-        .today-time-blocks {
-            background: #fff;
-            border-radius: 10px;
-            border: 1px solid #e8e6e1;
-            padding: 14px 20px;
+        /* ===== 指挥官开场白（英雄简报卡）===== */
+        .cmd-brief {
+            background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.05));
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 16px;
+            padding: 16px 20px 14px;
             flex-shrink: 0;
-            transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .today-time-blocks h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        body.dark-mode .cmd-brief { background: linear-gradient(135deg, rgba(99,102,241,0.16), rgba(139,92,246,0.07)); border-color: rgba(139,92,246,0.32); }
+        .cmd-brief-top {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 11.5px; color: #8a8fa8; margin-bottom: 8px;
+            letter-spacing: 0.04em;
         }
-        .time-blocks-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: #e8e6e1;
-            border-radius: 6px;
-            overflow: hidden;
-            transition: background 0.3s ease;
+        body.dark-mode .cmd-brief-top { color: #8f94b3; }
+        .cmd-brief-dot { width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; flex-shrink: 0; }
+        .cmd-brief-main {
+            font-size: 19px; font-weight: 600; line-height: 1.5;
+            color: #1f2937;
         }
-        .time-block {
-            background: #fff;
-            padding: 10px 14px;
-            cursor: pointer;
-            transition: background 0.2s;
+        .cmd-brief-main b { color: #6366f1; }
+        body.dark-mode .cmd-brief-main { color: #eceef8; }
+        body.dark-mode .cmd-brief-main b { color: #a5b4fc; }
+        .cmd-brief-sub {
+            margin-top: 6px; font-size: 12.5px; color: #8a8fa8;
+            display: flex; flex-wrap: wrap; gap: 4px 14px;
         }
-        .time-block:hover {
-            background: #faf9f7;
+        body.dark-mode .cmd-brief-sub { color: #9fa3bd; }
+        .cmd-brief-sub .warn { color: #ef4444; font-weight: 600; }
+        body.dark-mode .cmd-brief-sub .warn { color: #f87171; }
+        /* ===== 通关结算画面 ===== */
+        .clear-settle {
+            background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(52,211,153,0.04));
+            border: 1px solid rgba(16,185,129,0.30);
+            border-radius: 16px;
+            padding: 16px 20px 14px;
+            text-align: center;
+            flex-shrink: 0;
         }
-        .time-block .time {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 2px;
-            transition: color 0.3s ease;
+        body.dark-mode .clear-settle { background: linear-gradient(135deg, rgba(16,185,129,0.13), rgba(52,211,153,0.05)); border-color: rgba(16,185,129,0.35); }
+        .cs-tag { font-size: 10.5px; font-weight: 600; letter-spacing: 3px; color: #059669; }
+        body.dark-mode .cs-tag { color: #6ee7b7; }
+        .cs-title { font-size: 20px; font-weight: 600; color: #1f2937; margin: 4px 0 12px; }
+        body.dark-mode .cs-title { color: #eceef8; }
+        .cs-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+        .cs-stat {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(16,185,129,0.22);
+            border-radius: 10px; padding: 7px 16px; min-width: 74px;
         }
-        .time-block .title {
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .time-block .status {
-            font-size: 11px;
-            color: #aaa;
-            margin-top: 2px;
-            transition: color 0.3s ease;
-        }
-        .time-block.past {
-            background: #faf9f7;
-        }
-        .time-block.past .title {
-            color: #999;
-            text-decoration: line-through;
-        }
-        .time-block.completed .title {
-            color: #10b981;
-            text-decoration: line-through;
-        }
+        body.dark-mode .cs-stat { background: rgba(30,30,48,0.7); border-color: rgba(16,185,129,0.28); }
+        .cs-stat .cs-num { font-size: 17px; font-weight: 600; color: #059669; line-height: 1.2; }
+        body.dark-mode .cs-stat .cs-num { color: #6ee7b7; }
+        .cs-stat .cs-label { font-size: 10.5px; color: #8a8fa8; }
+        body.dark-mode .cs-stat .cs-label { color: #9fa3bd; }
+        .cs-comment { font-size: 12.5px; color: #6b7280; line-height: 1.6; }
+        body.dark-mode .cs-comment { color: #9fa3bd; }
 
         .today-main {
             flex: 1;
@@ -1721,19 +1717,6 @@
         .fp-section-content.two-col {
             grid-template-columns: 1fr 1fr;
         }
-        /* 作战简报卡：问候 + 焦点任务 */
-        .fp-brief {
-            background: linear-gradient(135deg, rgba(99,102,241,0.10), rgba(139,92,246,0.06));
-            border: 1px solid rgba(99,102,241,0.22);
-            border-radius: 14px;
-            padding: 12px 16px;
-            margin-bottom: 2px;
-        }
-        body.dark-mode .fp-brief { background: linear-gradient(135deg, rgba(99,102,241,0.14), rgba(139,92,246,0.07)); border-color: rgba(139,92,246,0.30); }
-        .fp-brief-greet { font-size: 13.5px; color: #555; line-height: 1.6; }
-        .fp-brief-greet b { color: #6366f1; font-size: 15px; }
-        body.dark-mode .fp-brief-greet { color: #b9bdd6; }
-        body.dark-mode .fp-brief-greet b { color: #a5b4fc; }
         .fp-focus {
             display: flex; align-items: center; gap: 8px;
             margin-top: 9px; padding: 9px 12px;
@@ -2359,9 +2342,11 @@
             .habit-card .habit-reward { font-size: 9px; }
             .habit-streak-chip { font-size: 9.5px; }
             .habit-done-badge { position: static; width: 16px; height: 16px; font-size: 9px; box-shadow: none; flex-shrink: 0; }
-            /* 手机端作战简报：紧凑 + 双列任务卡改单列 */
-            .fp-brief { padding: 10px 12px; border-radius: 12px; }
-            .fp-brief-greet { font-size: 12.5px; }
+            /* 手机端开场白/结算：紧凑 + 双列任务卡改单列 */
+            .cmd-brief { padding: 12px 14px; border-radius: 14px; }
+            .cmd-brief-main { font-size: 16px; }
+            .clear-settle { padding: 12px 14px; }
+            .cs-title { font-size: 17px; }
             .fp-focus { padding: 8px 10px; }
             .fp-focus-title { font-size: 12px; }
             .fp-section { gap: 8px; }
@@ -7765,8 +7750,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     }
     .btn { min-height: 38px; }
 
-    /* 今日看板：四列→两列 */
-    .time-blocks-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    /* 今日看板：双列任务卡改单列 */
     .fp-section-content.two-col { grid-template-columns: 1fr; }
 
     /* 每周复盘：统计卡两列、周导航换行 */
@@ -7827,7 +7811,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     #planPage, #hotPage, #memePage, #copyPage, #notesPage, #bookPage, #diaryPage, #parentingPage { padding: 14px 12px; }
     #todayPage .today-main { flex-direction: column; overflow: visible; }
     #todayPage .today-main .flight-plan,
-    #todayPage .today-main .today-time-blocks,
     #todayPage .today-main .today-panel,
     #todayPage .today-main > div { flex: none; width: 100%; }
     #hotViewMain, #aiViewMain, #planContentArea { gap: 10px; }
@@ -8153,7 +8136,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
     <div class="main-container">
         <div class="page active" id="todayPage">
-<div class="today-habits" id="todayHabits">
+<div class="cmd-brief" id="cmdBrief"></div>
+            <div class="clear-settle" id="clearSettle" style="display:none;"></div>
+            <div class="today-habits" id="todayHabits">
                 <div class="today-habits-head">
                     <span class="today-habits-title">🎯 今日习惯</span>
                     <span class="today-habits-badge" id="todayHabitBadge">0/0</span>
@@ -8168,10 +8153,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div class="market-node-alerts" id="marketNodeAlerts" style="display:none;">
                 <h3>🎯 买量节点临近</h3>
                 <div id="marketNodeAlertList"></div>
-            </div>
-            <div class="today-time-blocks">
-                <h3>⏰ 今日时间块</h3>
-                <div class="time-blocks-grid" id="todayTimeBlocks"></div>
             </div>
             <div class="today-main">
                 <div class="flight-plan">
@@ -10647,7 +10628,6 @@ html[data-theme] .hot-desc,
 html[data-theme] .day-task-item .task-info,
 html[data-theme] .gt-empty { color: var(--muted); }
 html[data-theme] .events-container { background: transparent; }
-html[data-theme] .time-blocks-grid,
 html[data-theme] .board-column { background: transparent; }
 /* 次级卡片（hot-cn-plat、表单区等）用更深的主题色 */
 html[data-theme] .hot-cn-plat { background: var(--card-bg-2, var(--card-bg)); }
@@ -11133,7 +11113,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 // ===== 今日看板专属JS =====
         function renderTodayPage() {
             renderMarketNodeAlerts();
-            renderTodayTimeBlocks();
+            renderCommandBrief();
+            renderClearSettle();
             renderFlightPlan();
             renderHot();
             renderWeeklyEntry();
@@ -11166,36 +11147,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             list.innerHTML = items.join('');
         }
 
-        function renderTodayTimeBlocks() {
-            const container = document.getElementById('todayTimeBlocks');
-            const todayStr = formatDate(new Date());
-            const todayEvents = events.filter(e => isDateInRange(todayStr, e.startDate, e.endDate) && e.startTime).sort((a,b) => a.startTime.localeCompare(b.startTime));
-            const now = new Date();
-            container.innerHTML = '';
-            todayEvents.slice(0,4).forEach(ev => {
-                const block = document.createElement('div');
-                block.className = 'time-block status-' + ev.status;
-                if (ev.status === 'done') block.classList.add('completed');
-                else if (new Date(`${todayStr}T${ev.endTime}`) < now) block.classList.add('past');
-                block.innerHTML = `<div class="time">${ev.startTime}</div><div class="title">${ev.title} ${ev.startDate !== ev.endDate ? '📅' : ''}</div><div class="status">${ev.status === 'done' ? '✅ 已完成' : trackNames[ev.track]}</div>`;
-                block.onclick = () => openEventModal(ev.id);
-                container.appendChild(block);
-            });
-            if (todayEvents.length === 0) container.innerHTML = '<div style="grid-column:1/-1;padding:12px;text-align:center;color:#aaa;">今天还没有时间块安排</div>';
-        }
-
-        // 今日作战简报文案（按时间段问候，数据全部真实）
-        function todayGreeting() {
-            const h = new Date().getHours();
-            if (h < 6) return '夜深了，早点休息 🌙';
-            if (h < 12) return '早上好，新副本已刷新 ☀️';
-            if (h < 14) return '中午好，半天战况不错？🍜';
-            if (h < 18) return '下午好，继续讨伐 ⚔️';
-            return '晚上好，收尾冲刺 🌆';
-        }
-
-        function renderFlightPlan() {
-            const container = document.getElementById('flightPlanContent');
+        // 今日看板共享数据源（开场白/结算/推进序列共用，一次计算）
+        function todayBoardData() {
             const todayStr = formatDate(new Date());
             const tomorrowStr = formatDate(addDays(new Date(),1));
             // 已延期：结束日期已过且未完成
@@ -11208,16 +11161,121 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 .sort((a,b) => (priOrder[a.priority] ?? 3) - (priOrder[b.priority] ?? 3) || (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
             const todayDone = todayAll.filter(e => e.status === 'done');
             const tomorrowCount = events.filter(e => isDateInRange(tomorrowStr, e.startDate, e.endDate) && e.status !== 'done').length;
-            const focus = overdueTasks[0] || todayTasks[0];
-            const greetLine = `${todayGreeting()}　今天 <b>${todayTasks.length}</b> 项待讨伐${todayDone.length ? ` · 已完成 ${todayDone.length}` : ''}${overdueTasks.length ? ` · <span style="color:#ef4444;font-weight:600;">⚠️ ${overdueTasks.length} 项延期</span>` : ''}`;
-            const focusLine = focus
-                ? `<div class="fp-focus" onclick="openEventModal('${focus.id}')"><span class="fp-focus-tag">🎯 焦点</span><span class="fp-focus-title">${escapeHtml(focus.title)}</span>${focus.startTime ? `<span class="fp-focus-time">${focus.startTime}</span>` : ''}</div>`
+            const habits = habitList();
+            const doneSet = habitDoneSet(todayStr);
+            const habitDone = habits.filter(h => doneSet[h.id]).length;
+            return {
+                todayStr, overdueTasks, todayAll, todayTasks, todayDone, tomorrowCount,
+                focus: overdueTasks[0] || todayTasks[0],
+                habits, habitDone, habitRemain: habits.length - habitDone,
+                habitAllDone: habits.length > 0 && habitDone === habits.length
+            };
+        }
+
+        // 指挥官开场白主句（按时段 + 真实数据选措辞）
+        function cmdBriefMainLine(d) {
+            const h = new Date().getHours();
+            const t = d.focus ? escapeHtml(d.focus.title) : '';
+            const allClear = d.todayAll.length > 0 && d.todayTasks.length === 0;
+            if (allClear && d.habitAllDone) return '今日全清。刀已入鞘，好好休息 🏆';
+            if (allClear) return `任务已全清，还差 <b>${d.habitRemain}</b> 次打卡就能收工 🎯`;
+            if (h < 6) return t ? `夜深了。${t} 不急，明天再战 🌙` : '夜深了，早点休息 🌙';
+            if (h < 12) return d.overdueTasks.length
+                ? `延期怪 <b>${t}</b> 已经咬了你几天，今天先砍它。`
+                : `新副本已刷新：今天 <b>${d.todayTasks.length}</b> 项待讨伐，从 ${t} 开始。`;
+            if (h < 14) return `半天已过，还剩 <b>${d.todayTasks.length}</b> 项。下午主攻 ${t}。`;
+            if (h < 18) return `还剩 <b>${d.todayTasks.length}</b> 项。现在最值得出手的是 ${t}。`;
+            return d.todayTasks.length <= 2
+                ? `收尾冲刺：就剩 <b>${d.todayTasks.length}</b> 项了，砍完 ${t} 收工。`
+                : `今晚还有 <b>${d.todayTasks.length}</b> 项，先清 ${t}。`;
+        }
+
+        function renderCommandBrief() {
+            const box = document.getElementById('cmdBrief');
+            if (!box) return;
+            const d = todayBoardData();
+            const now = new Date();
+            const h = now.getHours();
+            const tag = h < 6 ? '深夜简报' : h < 12 ? '晨间简报' : h < 14 ? '午间简报' : h < 18 ? '午后简报' : '晚间简报';
+            const dateStr = `${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`;
+            const focusLine = d.focus
+                ? `<div class="fp-focus" onclick="openEventModal('${d.focus.id}')"><span class="fp-focus-tag">🎯 焦点</span><span class="fp-focus-title">${escapeHtml(d.focus.title)}</span>${d.focus.startTime ? `<span class="fp-focus-time">${d.focus.startTime}</span>` : ''}</div>`
                 : `<div class="fp-focus fp-focus-clear">🏆 今日任务全清！去日历安排新副本，或专注习惯打卡</div>`;
-            container.innerHTML = `
-                <div class="fp-brief">
-                    <div class="fp-brief-greet">${greetLine}</div>
-                    ${focusLine}
-                </div>`;
+            box.innerHTML = `
+                <div class="cmd-brief-top"><span class="cmd-brief-dot"></span>${tag} · ${dateStr}</div>
+                <div class="cmd-brief-main">${cmdBriefMainLine(d)}</div>
+                <div class="cmd-brief-sub">
+                    <span>待讨伐 <b>${d.todayTasks.length}</b></span>
+                    ${d.todayDone.length ? `<span>已完成 ${d.todayDone.length}</span>` : ''}
+                    ${d.habits.length ? `<span>习惯 ${d.habitDone}/${d.habits.length}</span>` : ''}
+                    ${d.overdueTasks.length ? `<span class="warn">⚠️ 延期 ${d.overdueTasks.length}</span>` : ''}
+                    ${d.tomorrowCount ? `<span>明天 ${d.tomorrowCount} 项</span>` : ''}
+                </div>
+                ${focusLine}`;
+        }
+
+        // 连续全清天数（含今天；今天未全清则从昨天倒推），纯由日历事件推导
+        function clearStreak() {
+            const isClear = (dateStr) => {
+                const list = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+                return list.length > 0 && list.every(e => e.status === 'done');
+            };
+            let cursor = new Date();
+            if (!isClear(formatDate(cursor))) cursor.setDate(cursor.getDate() - 1);
+            let n = 0;
+            while (n < 365 && isClear(formatDate(cursor))) { n++; cursor.setDate(cursor.getDate() - 1); }
+            return n;
+        }
+
+        // 通关结算画面：今天任务全部讨伐完成时出现
+        function renderClearSettle() {
+            const box = document.getElementById('clearSettle');
+            if (!box) return;
+            const d = todayBoardData();
+            const allClear = d.todayAll.length > 0 && d.todayTasks.length === 0;
+            if (!allClear) { box.style.display = 'none'; box.innerHTML = ''; return; }
+            // 今日最佳一刻：习惯打卡日志里最后一次 doneAt
+            let lastMoment = '';
+            try {
+                const todayLogs = habitLogs().filter(l => l.date === d.todayStr && l.doneAt);
+                if (todayLogs.length) {
+                    const dt = new Date(todayLogs.map(l => l.doneAt).sort().pop());
+                    if (!isNaN(dt)) lastMoment = `${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+                }
+            } catch (e) {}
+            const streak = clearStreak();
+            let weekLine = '';
+            try {
+                const tw = collectWeekly(0).doneCount, lw = collectWeekly(1).doneCount;
+                if (tw) weekLine = lw
+                    ? (tw >= lw ? `本周已讨伐 ${tw} 单，不输上周的 ${lw} 单。` : `本周已讨伐 ${tw} 单，追赶上周的 ${lw} 单。`)
+                    : `本周已讨伐 ${tw} 单，开了个好头。`;
+            } catch (e) {}
+            const comment = [
+                lastMoment ? `今日最佳一刻：${lastMoment} 的最后一击。` : '今日最佳一刻：整装待发。',
+                weekLine,
+                streak > 1 ? `全清连击 ×${streak}，手感正热。` : ''
+            ].filter(Boolean).join(' ');
+            box.innerHTML = `
+                <div class="cs-tag">TODAY CLEAR</div>
+                <div class="cs-title">今日全清通关</div>
+                <div class="cs-stats">
+                    <div class="cs-stat"><div class="cs-num">${d.todayAll.length}</div><div class="cs-label">讨伐</div></div>
+                    ${d.habits.length ? `<div class="cs-stat"><div class="cs-num">${d.habitDone}/${d.habits.length}</div><div class="cs-label">习惯</div></div>` : ''}
+                    <div class="cs-stat"><div class="cs-num">×${streak}</div><div class="cs-label">全清连击</div></div>
+                </div>
+                <div class="cs-comment">${comment}</div>`;
+            box.style.display = 'block';
+        }
+
+        function renderFlightPlan() {
+            const container = document.getElementById('flightPlanContent');
+            const d = todayBoardData();
+            const overdueTasks = d.overdueTasks;
+            const todayTasks = d.todayTasks;
+            const todayDone = d.todayDone;
+            const tomorrowCount = d.tomorrowCount;
+            container.innerHTML = '';
             const renderSection = (label, tasks, twoCol, badgeCls) => {
                 if (!tasks.length) return;
                 const section = document.createElement('div');
@@ -11660,6 +11718,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
             }
             renderTodayHabits();
+            renderCommandBrief();
+            renderClearSettle();
             const hm = document.getElementById('habitsModal');
             if (hm && hm.classList.contains('show')) renderHabitStats();
         }
@@ -24156,7 +24216,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609012240";
+        window.NIKO_VERSION = "202609012303";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
