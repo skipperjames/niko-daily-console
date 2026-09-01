@@ -2726,8 +2726,16 @@
         }
         .calendar-wrapper {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .calendar-scroll-pane {
+            flex: 1;
             overflow-y: auto;
             padding-right: 2px;
+            min-height: 0;
         }
         .week-header {
             display: grid;
@@ -2872,7 +2880,7 @@
             color: #1f2937;
             position: relative;
             overflow: visible;            /* 跨天连接桥需要伸出格子 */
-            padding-right: 18px;          /* 留出右上角状态图标空间 */
+            padding-right: 32px;          /* 留出右上角状态图标+操作按钮空间 */
         }
         .event-item:active {
             cursor: grabbing;
@@ -3949,10 +3957,14 @@
             #planPage .display-setting input { width: 36px !important; padding: 2px 4px !important; }
             /* 搜索框：收窄 */
             #planPage .search-box { width: 110px !important; padding: 4px 10px !important; font-size: 12px !important; }
+            /* 任务条操作按钮：手机无 hover，默认半显 */
+            #planPage .event-action { opacity: 0.85 !important; right: 18px !important; }
             /* 顶部右侧按钮组：水平滚动 */
             #planPage .top-bar > div:nth-child(2) {
                 width: 100%; gap: 6px; flex-wrap: wrap; justify-content: flex-start;
             }
+            /* 日历滚动区最小高度，避免 1080p/手机端被底部副本完全挤掉 */
+            #planPage .calendar-scroll-pane { min-height: 180px !important; }
         }
 
         /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边（v3 角标由 SVG 状态图标替代） */
@@ -3976,6 +3988,26 @@
             z-index: 2;
         }
         .status-mark svg { width: 12px; height: 12px; display: block; }
+        .status-mark { cursor: pointer; }
+        .event-action {
+            position: absolute;
+            top: 1px;
+            right: 16px;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.15s, background 0.15s;
+            font-size: 10px;
+            color: rgba(0,0,0,0.45);
+            z-index: 3;
+        }
+        .event-item:hover .event-action { opacity: 1; }
+        .event-action:hover { background: rgba(0,0,0,0.12); color: #1f2937; }
         .status-mark.todo svg circle { stroke: #f59e0b; fill: none; stroke-width: 2; }
         .status-mark.in-progress svg circle.bg { fill: rgba(59, 130, 246, 0.25); stroke: #3b82f6; stroke-width: 1.5; }
         .status-mark.in-progress svg circle.dot { fill: #3b82f6; stroke: none; }
@@ -4007,6 +4039,8 @@
         .task-status-mark.overdue svg circle { fill: #fff; stroke: none; }
         .day-task-item { position: relative; }
         /* 深色模式下加亮让图标更清晰 */
+        body.dark-mode .event-action { color: rgba(255,255,255,0.5); }
+        body.dark-mode .event-action:hover { background: rgba(255,255,255,0.15); color: #e5e7eb; }
         body.dark-mode .status-mark.todo svg circle,
         body.dark-mode .task-status-mark.todo svg circle { stroke: #fbbf24; }
         body.dark-mode .status-mark.in-progress svg circle.bg,
@@ -8149,12 +8183,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <input type="text" class="search-box" id="searchInput" placeholder="搜索任务..." oninput="render()">
             </div>
             <div id="planContentArea" class="calendar-main" style="flex:1;overflow:hidden;display:flex;gap:12px;">
-                <div id="calendarWrapper" class="calendar-wrapper" style="flex:1;overflow-y:auto;">
-                    <div class="week-header">
-                        <div class="week-header-cell">周一</div><div class="week-header-cell">周二</div><div class="week-header-cell">周三</div>
-                        <div class="week-header-cell">周四</div><div class="week-header-cell">周五</div><div class="week-header-cell">周六</div><div class="week-header-cell">周日</div>
+                <div id="calendarWrapper" class="calendar-wrapper">
+                    <div class="calendar-scroll-pane">
+                        <div class="week-header">
+                            <div class="week-header-cell">周一</div><div class="week-header-cell">周二</div><div class="week-header-cell">周三</div>
+                            <div class="week-header-cell">周四</div><div class="week-header-cell">周五</div><div class="week-header-cell">周六</div><div class="week-header-cell">周日</div>
+                        </div>
+                        <div class="four-week-grid" id="fourWeekGrid"></div>
                     </div>
-                    <div class="four-week-grid" id="fourWeekGrid"></div>
                     <!-- 闪捕条 + 停车场：随手输入回车即捕获，带日期自动排期，无日期入停车场待拖 -->
                     <div class="quick-capture-wrap">
                         <div class="quick-capture-bar">
@@ -12392,8 +12428,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
                         'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
                     };
-                    const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期' : (statusNames[ev.status] || ev.status)}">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
+                    const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
+                    const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${copyActionHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); });
                     item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom')); });
                     // 任务条纵向拖拽：上/下半区决定插入位置
@@ -12508,8 +12545,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     bar.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
                     const safeTitle = escapeHtml(ev.title || '');
                     const repeatIcon = (ev.repeat || ev.repeatInstance) ? '🔄 ' : '';
-                    const statusMarkHtml = `<span class="status-mark ${displayStatus}">${GANTT_MARK_SVG[displayStatus] || ''}</span>`;
-                    // 勾选小方块 + 标题 + 右上角状态图标；点击 ✓ 触发完成；其余区域点击穿透到 ghost 占位打开编辑
+                    const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${GANTT_MARK_SVG[displayStatus] || ''}</span>`;
+                    // 勾选小方块 + 标题 + 右上角状态图标；点击 ✓ 触发完成；状态图标点击循环切换；其余区域点击穿透到 ghost 占位打开编辑
                     const checkHtml = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span>`;
                     bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}`;
                     overlay.appendChild(bar);
@@ -12980,6 +13017,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 saveData();
                 render();
             }
+        }
+
+        // 任务条状态快捷切换：点击状态图标循环 todo → in-progress → done → todo
+        function cycleEventStatus(id, e) {
+            if (e) e.stopPropagation();
+            const ev = events.find(e => e.id === id);
+            if (!ev) return;
+            const cycle = { 'todo': 'in-progress', 'in-progress': 'done', 'done': 'todo' };
+            ev.status = cycle[ev.status] || 'todo';
+            saveData();
+            render();
+            showToast('状态 → ' + (statusNames[ev.status] || ev.status));
+        }
+
+        // 复制任务：生成副本（标题加「副本」、状态重置 todo），并保留在原日期
+        function duplicateEvent(id, e) {
+            if (e) e.stopPropagation();
+            const ev = events.find(e => e.id === id);
+            if (!ev) return;
+            const copy = { ...ev };
+            copy.id = Date.now().toString();
+            copy.title = (copy.title || '') + '（副本）';
+            copy.status = 'todo';
+            copy.repeat = null;
+            copy.repeatGroup = null;
+            copy.repeatInstance = false;
+            copy.parentId = null;
+            copy.customBoss = false;
+            events.push(copy);
+            saveData();
+            render();
+            showToast('✅ 已复制任务');
         }
 
         function deleteEventById(id) {
@@ -23539,7 +23608,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202608312339";
+        window.NIKO_VERSION = "202609010932";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
