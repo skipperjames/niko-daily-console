@@ -1993,13 +1993,19 @@
         .today-habits-badge.all-done { background: #10b981; color: #fff; }
         .habit-card-top { display: flex; align-items: center; gap: 6px; width: 100%; }
         .habit-card .habit-icon { font-size: 17px; flex-shrink: 0; }
-        .habit-card .habit-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        /* 习惯名支持两行换行（长描述不再被截成 3 个字） */
+        .habit-card .habit-name {
+            font-size: 13px; font-weight: 600; flex: 1; min-width: 0;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+            overflow: hidden; word-break: break-all; line-height: 1.35;
+        }
         .habit-card .habit-reward {
             font-size: 10px; padding: 1px 7px; border-radius: 999px; flex-shrink: 0;
             background: #ede9fe; color: #6d28d9; font-weight: 600;
         }
         body.dark-mode .habit-card .habit-reward { background: #3b3560; color: #c4b5fd; }
-        .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+        .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
+        .habit-card-foot .habit-chips { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
         .habit-card .habit-week { font-size: 10.5px; color: #888; white-space: nowrap; }
         body.dark-mode .habit-card .habit-week { color: #999; }
         .habit-card .habit-check {
@@ -2303,7 +2309,7 @@
             }
             .habit-card-top { width: auto; flex: 1 1 auto; min-width: 0; gap: 4px; }
             .habit-card .habit-icon { font-size: 13px; }
-            .habit-card .habit-name { font-size: 11.5px; max-width: 42vw; }
+            .habit-card .habit-name { font-size: 11.5px; max-width: 56vw; -webkit-line-clamp: 2; }
             .habit-card .habit-reward { font-size: 9px; padding: 0 6px; }
             .habit-card-foot { width: auto; flex-shrink: 0; gap: 4px; }
             .habit-card .habit-week { font-size: 9px; }
@@ -9018,18 +9024,29 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="page" id="knowledgePage">
 <div class="kb-wrap">
             <div id="kbGuideCard" class="kb-guide" style="display:none;">
-                <div class="kb-guide-title">🧭 知识库是什么？30 秒上手</div>
+                <div class="kb-guide-title">🧭 知识库使用指南 <span style="font-size:11px;color:#9ca3af;font-weight:400;">（收起后随时点顶栏「🧭 指南」再看）</span></div>
                 <div class="kb-guide-body">
-                    ① 它是你的<b>第二大脑</b>：只存「值得留下去的经验和素材」，日常任务留在计划看板，不往这里混。<br>
-                    ② 内容<b>不用手动搬</b>：读书看板、便签、文案库、梗文化、热点收藏里都有「📥 存入知识库」按钮，看到好的点一下就进来。<br>
-                    ③ 条目按 <b>PARA</b> 自动分区：01-Projects 项目 / 02-Areas 领域 / 03-Resources 素材 / 04-Archive 归档，分类色条就是分区。<br>
-                    ④ 存进来之后：🔍 搜索、🕸️ 图谱看关联、🎴 复习帮你记住、📊 AI 洞察告诉你哪个区在吃灰。
+                    <b style="color:#7c3aed;">它是什么：</b>你的第二大脑。只存「值得留下去的经验和素材」，日常任务留在计划看板，不往这里混。<br>
+                    <b style="color:#7c3aed;">内容怎么进来：</b>不用手动搬——读书看板、便签、文案库、梗文化、热点收藏里都有「📥 存入知识库」按钮，看到好的点一下就进来；也可以这里「＋ 新增」手写。<br>
+                    <b style="color:#7c3aed;">PARA 分区：</b>01-Projects 项目 / 02-Areas 领域 / 03-Resources 素材 / 04-Archive 归档，列表左侧分类色条就是分区，不用纠结放哪，先丢进来再说。<br>
+                    <div style="margin-top:6px;padding-top:6px;border-top:1px dashed #ddd4;">
+                        <b style="color:#0ea5e9;">🚀 冷启动建议（降低上手门槛的关键）：</b><br>
+                        ① <b>别管分类，先攒数量</b>——凡是「以后可能有用」的就存，每周日花 5 分钟批量归档就行；<br>
+                        ② <b>一句话就够</b>——标题写清楚，正文贴原文链接或两句感想，不要强迫自己写笔记；<br>
+                        ③ <b>标签少而精</b>——一个条目 1~2 个标签足够，标签是给搜索用的不是给展示用的。<br>
+                        <b style="color:#0ea5e9;">🔧 进阶玩法（条目多了再解锁）：</b><br>
+                        ④ 🔍 <b>搜索优先</b>——下次想 Google 之前先搜自己的库，经验复利从这里开始；<br>
+                        ⑤ 🕸️ <b>图谱</b>——看条目之间的双向引用关联，发现意想不到的连接；<br>
+                        ⑥ 🎴 <b>复习</b>——FSRS 算法推今天该复习的条目，防吃灰核心武器；<br>
+                        ⑦ 📊 <b>AI 洞察</b>——月度新增统计 / PARA 趋势 / 标签云，一眼看出哪个区在吃灰、哪个区在生长。
+                    </div>
                 </div>
-                <button class="btn" onclick="kbDismissGuide()">知道了，不再显示</button>
+                <button class="btn" onclick="kbDismissGuide()">先这么用着（收起）</button>
             </div>
             <div class="kb-head">
                 <h1>🧠 知识库 <span class="kb-sub">PARA · 经验复利（分类色条=项目，角标=状态）</span></h1>
                 <div class="kb-actions">
+                    <button class="btn" onclick="kbShowGuide()" title="再看一遍知识库使用指南">🧭 指南</button>
                     <input id="kbSearch" placeholder="🔍 搜索标题/正文/标签…" oninput="kbSearchText=this.value;renderKbList()" />
                     <button class="btn" onclick="openKbGraph()" title="可视化整个知识库：节点=条目、边=双向引用，PARA 染色">🕸️ 图谱</button>
                     <button class="btn" onclick="openKbReview()" title="间隔复习：FSRS 算法推今日该复习的条目，忘了/模糊/流畅 3 档评分">🎴 复习 <span id="kbReviewBadge" class="kb-review-badge" style="display:none;">0</span></button>
@@ -11592,12 +11609,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 return `<div class="habit-card${d ? ' done-card' : ''}" onclick="habitToggle('${h.id}')" title="${d ? '点击取消打卡' : '点击打卡'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
-                        <span class="habit-name">${escapeHtml(h.name)}</span>
-                        ${streak > 0 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
-                        ${(Number(h.rewardMin) || 0) > 0 ? `<span class="habit-reward">+${Number(h.rewardMin)}分</span>` : ''}
+                        <span class="habit-name" title="${escapeHtml(h.name)}">${escapeHtml(h.name)}</span>
                     </div>
                     <div class="habit-card-foot">
                         <span class="habit-week">本周 ${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
+                        <span class="habit-chips">
+                            ${streak > 0 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
+                            ${(Number(h.rewardMin) || 0) > 0 ? `<span class="habit-reward">+${Number(h.rewardMin)}分</span>` : ''}
+                        </span>
                         <span class="habit-check ${d ? 'done' : ''}" onclick="event.stopPropagation();habitToggle('${h.id}')" title="${d ? '取消打卡' : '打卡'}">${d ? '✓' : ''}</span>
                     </div>
                 </div>`;
@@ -17063,7 +17082,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 </div>`;
             }).join('');
         }
-        // 新手引导：未关闭时显示（30 秒讲清知识库定位与用法）
+        // 新手引导：默认显示，收起后可随时点顶栏「🧭 指南」重开
         function kbRenderGuide() {
             const g = document.getElementById('kbGuideCard');
             if (!g) return;
@@ -17072,6 +17091,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function kbDismissGuide() {
             safeStorage.set('niko_kb_guide_dismissed', true);
             kbRenderGuide();
+        }
+        function kbShowGuide() {
+            safeStorage.set('niko_kb_guide_dismissed', false);
+            kbRenderGuide();
+            const g = document.getElementById('kbGuideCard');
+            if (g && g.scrollIntoView) g.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // ---- 模板：渲染 + 应用 ----
@@ -23999,7 +24024,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609012204";
+        window.NIKO_VERSION = "202609012216";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
