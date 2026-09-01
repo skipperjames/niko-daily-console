@@ -1704,7 +1704,7 @@
             gap: 14px;
         }
         .fp-section-label {
-            width: 56px;
+            width: 74px;
             flex-shrink: 0;
             font-size: 12px;
             color: #888;
@@ -1721,6 +1721,49 @@
         .fp-section-content.two-col {
             grid-template-columns: 1fr 1fr;
         }
+        /* 作战简报卡：问候 + 焦点任务 */
+        .fp-brief {
+            background: linear-gradient(135deg, rgba(99,102,241,0.10), rgba(139,92,246,0.06));
+            border: 1px solid rgba(99,102,241,0.22);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 2px;
+        }
+        body.dark-mode .fp-brief { background: linear-gradient(135deg, rgba(99,102,241,0.14), rgba(139,92,246,0.07)); border-color: rgba(139,92,246,0.30); }
+        .fp-brief-greet { font-size: 13.5px; color: #555; line-height: 1.6; }
+        .fp-brief-greet b { color: #6366f1; font-size: 15px; }
+        body.dark-mode .fp-brief-greet { color: #b9bdd6; }
+        body.dark-mode .fp-brief-greet b { color: #a5b4fc; }
+        .fp-focus {
+            display: flex; align-items: center; gap: 8px;
+            margin-top: 9px; padding: 9px 12px;
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(99,102,241,0.25);
+            border-radius: 10px; cursor: pointer;
+            transition: all 0.15s;
+        }
+        .fp-focus:hover { border-color: #6366f1; transform: translateX(2px); }
+        body.dark-mode .fp-focus { background: rgba(30,30,48,0.75); }
+        .fp-focus-tag {
+            font-size: 10px; font-weight: 700; flex-shrink: 0;
+            padding: 2px 8px; border-radius: 999px;
+            background: #6366f1; color: #fff; letter-spacing: 0.04em;
+        }
+        .fp-focus-title {
+            font-size: 13px; font-weight: 600; color: #333;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;
+        }
+        body.dark-mode .fp-focus-title { color: #e5e7f5; }
+        .fp-focus-time { font-size: 11px; color: #8a8fa8; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+        .fp-focus.fp-focus-clear { cursor: default; color: #059669; font-size: 12.5px; font-weight: 600; }
+        .fp-focus.fp-focus-clear:hover { transform: none; border-color: rgba(99,102,241,0.25); }
+        body.dark-mode .fp-focus.fp-focus-clear { color: #6ee7b7; }
+        .fp-section-label.overdue { color: #ef4444; font-weight: 600; }
+        .fp-tomorrow-hint {
+            font-size: 11.5px; color: #9a9aa8; padding: 2px 2px 0;
+            text-align: right;
+        }
+        .fp-tomorrow-hint b { color: #6366f1; }
 
         .task-card {
             background: #fff;
@@ -1957,70 +2000,69 @@
         }
         body.dark-mode .habit-dg { border-color: #333345; background: rgba(128, 138, 158, 0.08); }
         body.dark-mode .habit-dg-hp { color: #99a; }
-        /* 习惯卡片：图标 + 名称 + 打卡，横向铺满不留长条 */
+        /* 习惯卡片 v2：瓷砖图标 + 两行标题 + 周进度细条 + 弱化奖励文本，去徽章杂讯 */
         .habit-card {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 6px;
-            padding: 10px 12px;
-            background: #faf9f7;
-            border: 1px solid #f0eeea;
-            border-radius: 10px;
+            gap: 8px;
+            padding: 11px 12px 10px;
+            background: linear-gradient(180deg, #fff, #faf9f7);
+            border: 1px solid #eeece8;
+            border-radius: 14px;
             position: relative;
             cursor: pointer;
-            transition: all 0.15s;
+            transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
         }
-        body.dark-mode .habit-card { background: #252535; border-color: #333345; }
+        .habit-card:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,0.06); border-color: #d9d6f6; }
+        body.dark-mode .habit-card { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
+        body.dark-mode .habit-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.4); border-color: #4a4668; }
         .habit-card:active { transform: scale(0.98); }
-        /* Q1 已完成态：变暗 + 虚线框 + 删除线，收在未完成后面 */
-        .habit-card.done-card { opacity: 0.5; border-style: dashed; }
-        .habit-card.done-card .habit-name { text-decoration: line-through; color: #999; }
-        body.dark-mode .habit-card.done-card .habit-name { color: #777; }
-        /* Q2 连击徽章 */
-        .habit-streak-chip {
-            font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 999px;
-            flex-shrink: 0;
-            font-weight: 600;
-            background: rgba(234, 157, 6, 0.14);
-            color: #b45309;
-            white-space: nowrap;
+        /* 完成态：绿调描边 + 角标勾，不再整卡变虚 */
+        .habit-card.done-card { border-color: rgba(16,185,129,0.35); }
+        body.dark-mode .habit-card.done-card { border-color: rgba(16,185,129,0.28); background: linear-gradient(180deg, #212e2b, #202628); }
+        .habit-card.done-card .habit-name { text-decoration: line-through; color: #9aa5a0; }
+        body.dark-mode .habit-card.done-card .habit-name { color: #6b7d75; }
+        .habit-done-badge {
+            position: absolute; top: 9px; right: 9px;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: #10b981; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 700;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
         }
-        body.dark-mode .habit-streak-chip { background: rgba(251, 191, 36, 0.12); color: #fbbf24; }
         /* Q4 全勤徽章 */
         .today-habits-badge.all-done { background: #10b981; color: #fff; }
-        .habit-card-top { display: flex; align-items: center; gap: 6px; width: 100%; }
-        .habit-card .habit-icon { font-size: 17px; flex-shrink: 0; }
+        .habit-card-top { display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 22px; }
+        .habit-card .habit-icon {
+            width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            background: rgba(124,58,237,0.08);
+        }
+        body.dark-mode .habit-card .habit-icon { background: rgba(139,92,246,0.14); }
         /* 习惯名支持两行换行（长描述不再被截成 3 个字） */
         .habit-card .habit-name {
             font-size: 13px; font-weight: 600; flex: 1; min-width: 0;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
             overflow: hidden; word-break: break-all; line-height: 1.35;
         }
-        .habit-card .habit-reward {
-            font-size: 10px; padding: 1px 7px; border-radius: 999px; flex-shrink: 0;
-            background: #ede9fe; color: #6d28d9; font-weight: 600;
+        /* 周进度细条：视觉化替代纯文字 */
+        .habit-progress { display: flex; align-items: center; gap: 7px; width: 100%; }
+        .habit-progress-bar { flex: 1; height: 5px; border-radius: 999px; background: rgba(124,58,237,0.10); overflow: hidden; }
+        body.dark-mode .habit-progress-bar { background: rgba(139,92,246,0.14); }
+        .habit-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #6366f1, #8b5cf6); transition: width 0.4s ease; }
+        .habit-card.done-card .habit-progress-fill { background: linear-gradient(90deg, #10b981, #34d399); }
+        .habit-progress-num { font-size: 10.5px; color: #8a8a96; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        body.dark-mode .habit-progress-num { color: #8f8fa3; }
+        .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; min-height: 16px; }
+        .habit-card .habit-reward { font-size: 10.5px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; }
+        body.dark-mode .habit-card .habit-reward { color: #a89bd6; }
+        /* 连击：只保留小火苗数字，弱化为文字 */
+        .habit-streak-chip {
+            font-size: 10.5px; font-weight: 700; flex-shrink: 0;
+            color: #d97706; white-space: nowrap;
         }
-        body.dark-mode .habit-card .habit-reward { background: #3b3560; color: #c4b5fd; }
-        .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; }
-        .habit-card-foot .habit-chips { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-        .habit-card .habit-week { font-size: 10.5px; color: #888; white-space: nowrap; }
-        body.dark-mode .habit-card .habit-week { color: #999; }
-        .habit-card .habit-check {
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            border: 2px solid #d1d5db;
-            background: #fff;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 13px;
-            color: transparent;
-            flex-shrink: 0;
-            transition: all 0.15s;
-        }
-        .habit-card .habit-check.done { background: #10b981; border-color: #10b981; color: #fff; }
+        body.dark-mode .habit-streak-chip { color: #fbbf24; }
         .habit-empty { font-size: 11px; color: #aaa; padding: 4px 0; }
         body.dark-mode .habit-empty { color: #777; }
 
@@ -2097,8 +2139,8 @@
         .habit-goal::-webkit-outer-spin-button, .habit-goal::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         body.dark-mode .habit-goal { background: #1f1f2e; border-color: #444; color: #eee; }
         .habit-stats { display: flex; flex-direction: column; gap: 10px; }
-        .habit-card { border: 1px solid #e8e6e1; border-radius: 10px; padding: 10px 12px; }
-        body.dark-mode .habit-card { border-color: #333345; }
+        .habit-stats .habit-card { border: 1px solid #e8e6e1; border-radius: 10px; padding: 10px 12px; }
+        body.dark-mode .habit-stats .habit-card { border-color: #333345; }
         .habit-card-head { display: flex; align-items: center; gap: 8px; }
         .habit-card-head .habit-icon { font-size: 18px; }
         .habit-card-head .habit-name { font-size: 14px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -2144,7 +2186,7 @@
         }
         body.dark-mode .habit-makeup-form input[type="date"] { background: #1f1f2e; border-color: #444; color: #eee; }
         .habit-makeup-form .btn { padding: 4px 10px; font-size: 12px; }
-        .habit-card .habit-progress {
+        .habit-stats .habit-card .habit-progress {
             margin-top: 6px;
             font-size: 11px;
             color: #888;
@@ -2152,7 +2194,7 @@
             align-items: center;
             gap: 8px;
         }
-        body.dark-mode .habit-card .habit-progress { color: #999; }
+        body.dark-mode .habit-stats .habit-card .habit-progress { color: #999; }
         .habit-bar { flex: 1; height: 6px; border-radius: 3px; background: #eee; overflow: hidden; }
         body.dark-mode .habit-bar { background: #333345; }
         .habit-bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.3s; }
@@ -2300,20 +2342,32 @@
             .habit-card {
                 flex-direction: row;
                 align-items: center;
-                gap: 5px;
-                padding: 6px 10px;
+                gap: 6px;
+                padding: 5px 10px;
                 border-radius: 999px;
                 width: auto;
                 min-width: 0;
                 flex: 1 1 auto;
             }
-            .habit-card-top { width: auto; flex: 1 1 auto; min-width: 0; gap: 4px; }
-            .habit-card .habit-icon { font-size: 13px; }
-            .habit-card .habit-name { font-size: 11.5px; max-width: 56vw; -webkit-line-clamp: 2; }
-            .habit-card .habit-reward { font-size: 9px; padding: 0 6px; }
-            .habit-card-foot { width: auto; flex-shrink: 0; gap: 4px; }
-            .habit-card .habit-week { font-size: 9px; }
-            .habit-card .habit-check { width: 22px; height: 22px; font-size: 11px; }
+            .habit-card-top { width: auto; flex: 1 1 auto; min-width: 0; gap: 4px; padding-right: 0; }
+            .habit-card .habit-icon { width: 20px; height: 20px; font-size: 12px; border-radius: 6px; }
+            .habit-card .habit-name { font-size: 11.5px; max-width: 52vw; -webkit-line-clamp: 1; }
+            .habit-progress { width: auto; flex-shrink: 0; }
+            .habit-progress-bar { display: none; }
+            .habit-progress-num { font-size: 9.5px; }
+            .habit-card-foot { width: auto; flex-shrink: 0; gap: 5px; min-height: 0; }
+            .habit-card .habit-reward { font-size: 9px; }
+            .habit-streak-chip { font-size: 9.5px; }
+            .habit-done-badge { position: static; width: 16px; height: 16px; font-size: 9px; box-shadow: none; flex-shrink: 0; }
+            /* 手机端作战简报：紧凑 + 双列任务卡改单列 */
+            .fp-brief { padding: 10px 12px; border-radius: 12px; }
+            .fp-brief-greet { font-size: 12.5px; }
+            .fp-focus { padding: 8px 10px; }
+            .fp-focus-title { font-size: 12px; }
+            .fp-section { gap: 8px; }
+            .fp-section-label { width: 58px; font-size: 10.5px; }
+            .fp-section-content.two-col { grid-template-columns: 1fr; }
+            .fp-tomorrow-hint { text-align: left; padding-left: 66px; }
         }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
@@ -8099,17 +8153,17 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
     <div class="main-container">
         <div class="page active" id="todayPage">
-<div class="weekly-entry" onclick="openWeeklyReview()" title="自动汇总本周灵感/收藏/读书/任务">
-                <span class="weekly-entry-title">📊 本周复盘</span>
-                <span class="weekly-entry-sub"><span class="weekly-entry-badge" id="weeklyEntryBadge">算一下这周产出了什么 →</span></span>
-            </div>
-            <div class="today-habits" id="todayHabits">
+<div class="today-habits" id="todayHabits">
                 <div class="today-habits-head">
                     <span class="today-habits-title">🎯 今日习惯</span>
                     <span class="today-habits-badge" id="todayHabitBadge">0/0</span>
                     <span class="today-habits-more" onclick="openHabits()">管理 →</span>
                 </div>
                 <div class="today-habits-list" id="todayHabitsList"></div>
+            </div>
+            <div class="weekly-entry" onclick="openWeeklyReview()" title="自动汇总本周灵感/收藏/读书/任务">
+                <span class="weekly-entry-title">📊 本周复盘</span>
+                <span class="weekly-entry-sub"><span class="weekly-entry-badge" id="weeklyEntryBadge">算一下这周产出了什么 →</span></span>
             </div>
             <div class="market-node-alerts" id="marketNodeAlerts" style="display:none;">
                 <h3>🎯 买量节点临近</h3>
@@ -8412,7 +8466,26 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     <div class="modal-mask" id="marketNodeModal">
         <div class="modal" style="width:520px;">
             <h3>🎯 买量节点管理</h3>
-            <p style="font-size:12px;color:#888;margin-bottom:12px;">AI已搜索预置2026下半年重要节点（竞品上线/节日/展会），自动显示在日历上，并在临近时在今日看板提醒 — 可直接编辑、删除，或点底部「重新载入AI预置」更新</p>
+            <p style="font-size:12px;color:#888;margin-bottom:12px;">AI已搜索预置2026下半年重要节点（竞品上线/节日/展会/韩日节假日），自动显示在日历上，并在临近时在今日看板提醒 — 可直接编辑、删除，或点底部「重新载入AI预置」更新</p>
+            <details class="node-culture" style="margin:-4px 0 12px;">
+                <summary style="cursor:pointer;font-size:12.5px;font-weight:600;color:#8b5cf6;">📚 韩日文化科普（做买量视频前看一眼）</summary>
+                <div style="font-size:12px;line-height:1.75;margin-top:8px;color:#666;">
+                    <b style="color:#e11d48;">🇰🇷 韩国：</b><br>
+                    · <b>辈分与敬语文化</b>：前辈/后辈等级分明，素材里长辈/前辈角色出镜更有信任感，全龄段下架 aggressive 玩梗<br>
+                    · <b>咖啡与外卖狂魔</b>：치맥（炸鸡+啤酒）是国民梗，外卖文化深入生活，日常场景素材可用<br>
+                    · <b>PC방 网吧文化</b>：游戏素材加网吧开黑场景，年轻男性用户代入感强<br>
+                    · <b>인생네컷 大头贴文化</b>：四格拍立得是年轻人社交刚需，晒图类素材可参考<br>
+                    · <b>忌讳</b>：数字「4」（音同死），红笔写名字忌讳（死亡联想）；避免用红色写用户名/编号<br>
+                    · <b>世界化 ~세계화</b>：K-POP/韩剧式反转叙事节奏，3 秒一个钩子，符合韩国用户观看习惯<br>
+                    <b style="color:#0ea5e9;">🇯🇵 日本：</b><br>
+                    · <b>期间限定最强</b>：「期間限定」「初回限定」话术对日本用户魔力极大，缺了就焦虑，素材记得带<br>
+                    · <b>漫才节奏</b>：ボケ装傻+ツッコミ吐槽的双人对话结构，是日本短视频素材的黄金节奏模板<br>
+                    · <b>手帐/收集文化</b>：集章、图鉴收集、每日签到打卡类玩法素材表现力好<br>
+                    · <b>正月文化</b>：初诣参拜、福袋、压岁钱（お年玉）、년 年贺状——日本「春节」全在这几天<br>
+                    · <b>忌讳</b>：数字「4」（死）和「9」（苦），紫色历史上偏丧；确认/契约文化重，素材里「無料体験」（免费试用）信任度高<br>
+                    · <b>お盆与彼岸</b>：盂兰盆（8月中旬）与春分/秋分是返乡高峰，节日素材提前 1-2 周投
+                </div>
+            </details>
             <div id="nodeDataStale" style="font-size:11px;margin:-6px 0 12px;"></div>
             <input type="hidden" id="nodeId">
             <div class="form-item"><label>节点标题</label><input type="text" id="nodeTitle" placeholder="例如：美国黑五（感恩节大促）"></div>
@@ -8424,6 +8497,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <option value="US">🇺🇸 美国</option>
                         <option value="CA">🇨🇦 加拿大</option>
                         <option value="JP">🇯🇵 日本</option>
+                        <option value="KR">🇰🇷 韩国</option>
                         <option value="CN">🇨🇳 国内</option>
                     </select>
                 </div>
@@ -11110,31 +11184,70 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (todayEvents.length === 0) container.innerHTML = '<div style="grid-column:1/-1;padding:12px;text-align:center;color:#aaa;">今天还没有时间块安排</div>';
         }
 
+        // 今日作战简报文案（按时间段问候，数据全部真实）
+        function todayGreeting() {
+            const h = new Date().getHours();
+            if (h < 6) return '夜深了，早点休息 🌙';
+            if (h < 12) return '早上好，新副本已刷新 ☀️';
+            if (h < 14) return '中午好，半天战况不错？🍜';
+            if (h < 18) return '下午好，继续讨伐 ⚔️';
+            return '晚上好，收尾冲刺 🌆';
+        }
+
         function renderFlightPlan() {
             const container = document.getElementById('flightPlanContent');
             const todayStr = formatDate(new Date());
             const tomorrowStr = formatDate(addDays(new Date(),1));
-            const nowTasks = events.filter(e => isDateInRange(todayStr, e.startDate, e.endDate) && e.priority === 'now' && e.status !== 'done');
-            const nextTasks = events.filter(e => (isDateInRange(todayStr, e.startDate, e.endDate) || isDateInRange(tomorrowStr, e.startDate, e.endDate)) && e.priority === 'next' && e.status !== 'done');
-            const laterTasks = events.filter(e => e.priority === 'later' && e.status !== 'done');
-            container.innerHTML = '';
-            const renderSection = (label, tasks, twoCol) => {
+            // 已延期：结束日期已过且未完成
+            const overdueTasks = events.filter(e => e.endDate && e.endDate < todayStr && e.status !== 'done')
+                .sort((a,b) => b.endDate.localeCompare(a.endDate)).slice(0, 5);
+            // 今天的真实任务：不再依赖手动 priority，自动全量拉取
+            const todayAll = events.filter(e => isDateInRange(todayStr, e.startDate, e.endDate));
+            const priOrder = { now: 0, next: 1, later: 2 };
+            const todayTasks = todayAll.filter(e => e.status !== 'done')
+                .sort((a,b) => (priOrder[a.priority] ?? 3) - (priOrder[b.priority] ?? 3) || (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
+            const todayDone = todayAll.filter(e => e.status === 'done');
+            const tomorrowCount = events.filter(e => isDateInRange(tomorrowStr, e.startDate, e.endDate) && e.status !== 'done').length;
+            const focus = overdueTasks[0] || todayTasks[0];
+            const greetLine = `${todayGreeting()}　今天 <b>${todayTasks.length}</b> 项待讨伐${todayDone.length ? ` · 已完成 ${todayDone.length}` : ''}${overdueTasks.length ? ` · <span style="color:#ef4444;font-weight:600;">⚠️ ${overdueTasks.length} 项延期</span>` : ''}`;
+            const focusLine = focus
+                ? `<div class="fp-focus" onclick="openEventModal('${focus.id}')"><span class="fp-focus-tag">🎯 焦点</span><span class="fp-focus-title">${escapeHtml(focus.title)}</span>${focus.startTime ? `<span class="fp-focus-time">${focus.startTime}</span>` : ''}</div>`
+                : `<div class="fp-focus fp-focus-clear">🏆 今日任务全清！去日历安排新副本，或专注习惯打卡</div>`;
+            container.innerHTML = `
+                <div class="fp-brief">
+                    <div class="fp-brief-greet">${greetLine}</div>
+                    ${focusLine}
+                </div>`;
+            const renderSection = (label, tasks, twoCol, badgeCls) => {
+                if (!tasks.length) return;
                 const section = document.createElement('div');
                 section.className = 'fp-section';
-                section.innerHTML = `<div class="fp-section-label">${label}</div>`;
+                section.innerHTML = `<div class="fp-section-label${badgeCls ? ' ' + badgeCls : ''}">${label}${tasks.length ? ` <span style="opacity:.6;">${tasks.length}</span>` : ''}</div>`;
                 const content = document.createElement('div');
                 content.className = 'fp-section-content' + (twoCol ? ' two-col' : '');
-                if (tasks.length === 0) {
-                    content.innerHTML = `<div style="padding:10px 0;color:#aaa;text-align:center;${twoCol ? 'grid-column:1/-1;' : ''}">暂无</div>`;
-                } else {
-                    tasks.forEach(ev => content.appendChild(createTaskCard(ev, label === '现在')));
-                }
+                tasks.forEach(ev => content.appendChild(createTaskCard(ev, label.includes('现在'))));
                 section.appendChild(content);
                 container.appendChild(section);
             };
-            renderSection('现在', nowTasks);
-            renderSection('接下来', nextTasks, true);
-            renderSection('稍后', laterTasks, true);
+            renderSection('⚠️ 已延期', overdueTasks, true, 'overdue');
+            renderSection('⚡ 现在就打', todayTasks.filter(e => e.priority === 'now'));
+            renderSection('📌 今天待办', todayTasks.filter(e => e.priority !== 'now'), true);
+            if (todayDone.length) {
+                const section = document.createElement('div');
+                section.className = 'fp-section';
+                section.innerHTML = `<div class="fp-section-label" style="opacity:.65;">✅ 已讨伐 ${todayDone.length}</div>`;
+                const content = document.createElement('div');
+                content.className = 'fp-section-content two-col';
+                todayDone.forEach(ev => content.appendChild(createTaskCard(ev, false)));
+                section.appendChild(content);
+                container.appendChild(section);
+            }
+            if (tomorrowCount) {
+                const hint = document.createElement('div');
+                hint.className = 'fp-tomorrow-hint';
+                hint.innerHTML = `🔭 明天还有 <b>${tomorrowCount}</b> 项 · 点击右上角「计划」查看`;
+                container.appendChild(hint);
+            }
         }
 
         function createTaskCard(ev, isNow) {
@@ -11606,19 +11719,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const goal = h.goal || 7;
                 const pct = Math.min(100, Math.round(wc / goal * 100));
                 const streak = habitStreak(h.id);
-                return `<div class="habit-card${d ? ' done-card' : ''}" onclick="habitToggle('${h.id}')" title="${d ? '点击取消打卡' : '点击打卡'}">
+                return `<div class="habit-card${d ? ' done-card' : ''}" onclick="habitToggle('${h.id}')" title="${d ? '点击取消打卡' : '点击打卡：' + escapeHtml(h.name)}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
-                        <span class="habit-name" title="${escapeHtml(h.name)}">${escapeHtml(h.name)}</span>
+                        <span class="habit-name">${escapeHtml(h.name)}</span>
+                    </div>
+                    <div class="habit-progress">
+                        <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
+                        <span class="habit-progress-num">${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
                     </div>
                     <div class="habit-card-foot">
-                        <span class="habit-week">本周 ${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
-                        <span class="habit-chips">
-                            ${streak > 0 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
-                            ${(Number(h.rewardMin) || 0) > 0 ? `<span class="habit-reward">+${Number(h.rewardMin)}分</span>` : ''}
-                        </span>
-                        <span class="habit-check ${d ? 'done' : ''}" onclick="event.stopPropagation();habitToggle('${h.id}')" title="${d ? '取消打卡' : '打卡'}">${d ? '✓' : ''}</span>
+                        <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
+                        ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                     </div>
+                    ${d ? '<span class="habit-done-badge">✓</span>' : ''}
                 </div>`;
             }).join('');
             // 每日地下城血条：今日全部习惯 = 满血 Boss，打卡一个削一段血，全清 = 通关
@@ -11958,12 +12072,26 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { id: 'preset_cybermonday', title: '网络星期一', date: '2026-11-30', region: 'US', category: 'festival', remindDays: 3, note: '黑五后电商日，延续促销素材', done: false },
             { id: 'preset_1212', title: '双12大促', date: '2026-12-12', region: 'CN', category: 'festival', remindDays: 3, note: '年末最后一波大促', done: false },
             { id: 'preset_christmas', title: '圣诞平安夜', date: '2026-12-24', region: 'US', category: 'festival', remindDays: 7, note: '美加圣诞+新年季(12/24-1/1)，节日素材提前1周', done: false },
+            { id: 'preset_kr_chuseok', title: '🇰🇷 秋夕（추석）', date: '2026-09-25', region: 'KR', category: 'festival', remindDays: 7, note: '韩国最大传统节日，连休约9/24-26（以官方为准）。返乡+祭祖+松饼，家庭/感恩/韩服向素材；游戏端秋夕签到奖励活动提前1周预热', done: false },
+            { id: 'preset_kr_gaecheonjeol', title: '🇰🇷 开天节（개천절）', date: '2026-10-03', region: 'KR', category: 'festival', remindDays: 3, note: '公休日，太极旗满街，轻节点可蹭国旗/民族元素', done: false },
+            { id: 'preset_kr_hangeul', title: '🇰🇷 韩文日（한글날）', date: '2026-10-09', region: 'KR', category: 'festival', remindDays: 3, note: '公休。文字/字体/梗图类素材可蹭，轻节点', done: false },
+            { id: 'preset_jp_halloween', title: '🇯🇵 万圣节（ハロウィン）', date: '2026-10-31', region: 'JP', category: 'festival', remindDays: 7, note: '日本万圣节规模极大（涩谷/游园变装季），变装/限定/南瓜向素材提前1周投放', done: false },
+            { id: 'preset_jp_bunka', title: '🇯🇵 文化之日（文化の日）', date: '2026-11-03', region: 'JP', category: 'festival', remindDays: 3, note: '公休，凑成连休，3连休首日投放窗口', done: false },
+            { id: 'preset_jp_753', title: '🇯🇵 七五三（しごさん）', date: '2026-11-15', region: 'JP', category: 'festival', remindDays: 7, note: '神社参拜+千岁糖，家庭/亲子向素材窗口', done: false },
+            { id: 'preset_kr_pepero', title: '🇰🇷 Pepero Day（빼빼로데이）', date: '2026-11-11', region: 'KR', category: 'festival', remindDays: 3, note: '韩国版双11！巧克力棒 sticks 刷屏，电商/福利向素材，便利店渠道大促', done: false },
+            { id: 'preset_jp_kinro', title: '🇯🇵 勤劳感谢之日（勤労感謝の日）', date: '2026-11-23', region: 'JP', category: 'festival', remindDays: 3, note: '公休，11/21-23 三连休投放窗口', done: false },
+            { id: 'preset_jp_christmas', title: '🇯🇵 圣诞节（クリスマス）', date: '2026-12-24', region: 'JP', category: 'festival', remindDays: 7, note: '日本圣诞=情侣节日+圣诞蛋糕+肯德基，与欧美家庭向不同，情侣/约会向素材', done: false },
+            { id: 'preset_kr_xmas', title: '🇰🇷 圣诞节', date: '2026-12-25', region: 'KR', category: 'festival', remindDays: 7, note: '韩国公休，情侣约会大节日（情侣装的国度），约会/礼物向素材', done: false },
+            { id: 'preset_jp_omisoka', title: '🇯🇵 大晦日·跨年（大晦日）', date: '2026-12-31', region: 'JP', category: 'festival', remindDays: 7, note: '跨年荞麦面+红白歌会，年越し素材；紧接正月三が日全年前大节点', done: false },
+            { id: 'preset_jp_shogatsu', title: '🇯🇵 正月·初诣（お正月）', date: '2027-01-01', region: 'JP', category: 'festival', remindDays: 7, note: '日本全年最大节点之一：初参拜+福袋+压岁钱（お年玉）。新年首个 xx 号/限定/福袋向素材提前1-2周备', done: false },
+            { id: 'preset_jp_seijin', title: '🇯🇵 成人之日（成人の日）', date: '2027-01-11', region: 'JP', category: 'festival', remindDays: 7, note: '成人式振袖盛装，年轻成年用户向素材窗口', done: false },
+            { id: 'preset_kr_seollal', title: '🇰🇷 韩国春节（설날）', date: '2027-02-06', region: 'KR', category: 'festival', remindDays: 7, note: '与国内春节同日，连休约2/6-8。压岁钱세뱃돈+韩服拜年+年糕汤，新春素材与国内共用可微调本地化', done: false },
             { id: 'preset_springfest2027', title: '2027春节', date: '2027-02-06', region: 'CN', category: 'festival', remindDays: 7, note: '2027春节(以官方公布为准)，提前1个月备新春素材', done: false }
         ];
 
         let marketNodes = safeStorage.get('niko_market_nodes', []);
         const NODE_CAT_NAMES = { festival: '🎉 节日/大促', competitor: '🎮 竞品上线', promo: '📣 投放窗口', other: '📝 其他' };
-        const NODE_REGION_NAMES = { US: '🇺🇸 美国', CA: '🇨🇦 加拿大', JP: '🇯🇵 日本', CN: '🇨🇳 国内' };
+        const NODE_REGION_NAMES = { US: '🇺🇸 美国', CA: '🇨🇦 加拿大', JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
 
         function saveMarketNodes() { safeStorage.set('niko_market_nodes', marketNodes); }
 
@@ -12115,10 +12243,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // 注入 AI 预置节点（幂等：自动只注入一次，删掉后不会复活；可点「重新载入AI预置」手动去重合并）
+        // PRESET_VERSION 递增 = 预置内容更新过，自动补注入一次（去重合并不覆盖用户数据）
+        const NODE_PRESET_VERSION = 2; // v2: 新增韩日节假日节点（2026-09-01）
         function seedMarketNodes(force) {
             if (typeof safeStorage === 'undefined') return 0;
+            const seededVer = Number(safeStorage.get('niko_market_nodes_seeded_ver', 0));
             const seeded = safeStorage.get('niko_market_nodes_seeded', false);
-            if (seeded && !force) return 0;
+            if (seeded && !force && seededVer >= NODE_PRESET_VERSION) return 0;
             const existing = safeStorage.get('niko_market_nodes', []);
             const seen = new Set(existing.map(n => (n.title || '') + '|' + (n.date || '')));
             const toAdd = NIKO_PRESET_MARKET_NODES.filter(n => !seen.has(n.title + '|' + n.date));
@@ -12127,6 +12258,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 saveMarketNodes();
             }
             safeStorage.set('niko_market_nodes_seeded', true);
+            safeStorage.set('niko_market_nodes_seeded_ver', NODE_PRESET_VERSION);
             // 记录 AI 预置数据更新时间（供面板显示时效，提醒用户喊我重新搜索）
             safeStorage.set('niko_market_nodes_updated_at', new Date().toISOString());
             return toAdd.length;
@@ -24024,7 +24156,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609012216";
+        window.NIKO_VERSION = "202609012240";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
