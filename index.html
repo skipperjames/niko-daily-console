@@ -8175,6 +8175,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="date-range" id="dateRangeText"></div>
                 <button class="nav-btn" onclick="navigateWeeks(1)">›</button>
                 <button class="today-btn" onclick="goToday()">Today</button>
+                <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示 2 周或 4 周" style="min-width:44px;">2周</button>
                 <div class="display-setting">
                     <label>单日显示</label>
                     <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
@@ -11664,6 +11665,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         renderTodayHabits();
 // ===== 计划看板专属JS =====
 
+        // 日历显示周数：2 周为主（省空间），可切 4 周；持久化到 localStorage
+        let CAL_WEEKS = safeStorage.get('niko_cal_weeks', 2) === 4 ? 4 : 2;
+        function toggleWeekCount() {
+            CAL_WEEKS = CAL_WEEKS === 2 ? 4 : 2;
+            safeStorage.set('niko_cal_weeks', CAL_WEEKS);
+            const btn = document.getElementById('weekRangeBtn');
+            if (btn) btn.textContent = CAL_WEEKS + '周';
+            render();
+        }
+
         // ===== 时间审计周报：统计本周 vs 上周各轨道时长占比 =====
         // 轨道色盘（日历/任务卡片/时间审计共用；刻意避开状态三色 #f59e0b橙/#3b82f6蓝/#10b981绿，防止"哪个项目"和"什么状态"混淆）
         const TRACK_COLORS = {
@@ -12261,7 +12272,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function updateDateRangeText() {
-            const endDate = addDays(currentWeekStart, 27);
+            const endDate = addDays(currentWeekStart, CAL_WEEKS * 7 - 1);
             document.getElementById('dateRangeText').textContent = `${currentWeekStart.getMonth()+1}月${currentWeekStart.getDate()}日 — ${endDate.getMonth()+1}月${endDate.getDate()}日`;
         }
 
@@ -12280,7 +12291,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 本周完成度（含今天的周行，与甘特周行同口径：与该周有交集的任务去重计数）
             const todayStr = formatDate(new Date());
             let weekIdx = -1;
-            for (let r = 0; r < Math.ceil(28 / 7); r++) {
+            for (let r = 0; r < CAL_WEEKS; r++) {
                 const firstStr = formatDate(addDays(currentWeekStart, r * 7));
                 const lastStr = formatDate(addDays(currentWeekStart, r * 7 + 6));
                 if (todayStr >= firstStr && todayStr <= lastStr) { weekIdx = r; break; }
@@ -12316,12 +12327,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function renderFourWeekGrid() {
             const grid = document.getElementById('fourWeekGrid');
+            // 周数切换按钮文案与当前状态同步（含刷新后从 localStorage 恢复的情况）
+            const wrBtn = document.getElementById('weekRangeBtn');
+            if (wrBtn) wrBtn.textContent = CAL_WEEKS + '周';
             grid.innerHTML = '';
             const today = new Date();
             const keyword = document.getElementById('searchInput').value.toLowerCase();
-            // 手机窄屏只渲染当周 7 天（避免 28 天列表过长），桌面仍 28 天
+            // 手机窄屏只渲染当周 7 天（避免 28 天列表过长）；桌面按 CAL_WEEKS 渲染（2 周 / 4 周可切换）
             const isNarrow = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
-            const daysToShow = isNarrow ? 7 : 28;
+            const daysToShow = isNarrow ? 7 : CAL_WEEKS * 7;
             const dayEventsDisplay = {};
             for (let i = 0; i < daysToShow; i++) {
                 const date = addDays(currentWeekStart, i);
@@ -23608,7 +23622,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609010932";
+        window.NIKO_VERSION = "202609011058";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
