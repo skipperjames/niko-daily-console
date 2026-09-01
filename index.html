@@ -1921,6 +1921,42 @@
         body.dark-mode .today-habits-badge { background: #064e3b; color: #6ee7b7; }
         .today-habits-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
         .today-habits-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+        /* 每日地下城：习惯打卡 Boss 血条（视觉与计划页「本周副本」同源：绿→黄→红随剩余血量变化） */
+        .habit-dg {
+            grid-column: 1 / -1;
+            padding: 8px 10px;
+            border: 1px solid #e8e6e1;
+            border-radius: 8px;
+            background: rgba(128, 138, 158, 0.06);
+        }
+        .habit-dg-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 6px; }
+        .habit-dg-title { font-weight: 700; }
+        .habit-dg-hp { color: #888; }
+        .habit-dg-clear { color: #d97706; font-weight: 700; }
+        .habit-dg-bar {
+            position: relative;
+            height: 12px;
+            border-radius: 6px;
+            background: rgba(128, 138, 158, 0.15);
+            overflow: hidden;
+        }
+        .habit-dg-fill {
+            position: absolute;
+            inset: 0 auto 0 0;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #059669, #34d399);
+            transition: width 0.5s ease, background 0.5s ease;
+        }
+        .habit-dg-fill.mid { background: linear-gradient(90deg, #b45309, #f59e0b); }
+        .habit-dg-fill.low { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+        .habit-dg-seg {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(90deg, transparent 0, transparent calc(12.5% - 2px), rgba(0, 0, 0, 0.22) calc(12.5% - 2px), rgba(0, 0, 0, 0.22) 12.5%);
+            pointer-events: none;
+        }
+        body.dark-mode .habit-dg { border-color: #333345; background: rgba(128, 138, 158, 0.08); }
+        body.dark-mode .habit-dg-hp { color: #99a; }
         /* 习惯卡片：图标 + 名称 + 打卡，横向铺满不留长条 */
         .habit-card {
             display: flex;
@@ -2858,6 +2894,13 @@
             padding: 0 5px;
             border-radius: 10px;
             transition: background 0.3s ease, color 0.3s ease;
+        }
+        /* 小怪清剿印记：当日任务全清时盖在日期行尾部，微光效呼应副本主题 */
+        .day-clear-badge {
+            font-size: 11px;
+            line-height: 1;
+            margin-left: 2px;
+            filter: drop-shadow(0 0 3px rgba(217, 119, 6, 0.55));
         }
         .events-container {
             flex: 1;
@@ -11484,7 +11527,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                 </div>`;
             }).join('');
-            box.innerHTML = rows;
+            // 每日地下城血条：今日全部习惯 = 满血 Boss，打卡一个削一段血，全清 = 通关
+            const totalH = habits.length;
+            const remainH = totalH - doneCount;
+            const hpPct = totalH ? Math.round(remainH / totalH * 100) : 0;
+            const hpCls = hpPct <= 25 ? ' low' : (hpPct <= 55 ? ' mid' : '');
+            const dgHtml = `<div class="habit-dg">
+                <div class="habit-dg-head">
+                    <span class="habit-dg-title">🏰 每日地下城</span>
+                    <span class="habit-dg-hp">HP ${remainH}/${totalH}${doneCount === totalH ? ' · <span class="habit-dg-clear">🏆 地下城通关!</span>' : ''}</span>
+                </div>
+                <div class="habit-dg-bar"><div class="habit-dg-fill${hpCls}" style="width:${hpPct}%"></div><div class="habit-dg-seg"></div></div>
+            </div>`;
+            box.innerHTML = dgHtml + rows;
             if (badge) {
                 const allDone = habits.length > 0 && doneCount === habits.length;
                 badge.textContent = allDone ? `🎉 ${doneCount}/${habits.length}` : `${doneCount}/${habits.length}`;
@@ -12200,8 +12255,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const fmtShort = (s) => s.slice(5).replace('-', '/');
             let html = `<div class="raid-head"><span class="raid-title">⚔️ 本周副本</span><span class="raid-week">${fmtShort(formatDate(monday))} – ${fmtShort(formatDate(sunday))}</span>`;
             const comboN = rs.combo || 0;
+            // 全清连击：连续「当日任务全清」的天数（今天还没清完不算断，从昨天起算）
+            const dayFullClear = (ds) => {
+                const evs = events.filter(e => isDateInRange(ds, e.startDate, e.endDate));
+                return evs.length > 0 && evs.every(e => e.status === 'done');
+            };
+            let clearStreak = 0;
+            let curDay = dayFullClear(todayStr) ? new Date(now) : addDays(now, -1);
+            while (dayFullClear(formatDate(curDay))) { clearStreak++; curDay = addDays(curDay, -1); }
             if (isClear) html += `<span class="raid-right raid-clear">🏆 副本通关 · 排期全清</span>`;
-            else if (total) html += `<span class="raid-right">HP <span class="raid-hp-num">${remain}</span>/${total} · 已讨伐 ${done}${comboN >= 2 ? ` · 🔥 连讨 ×${comboN}` : ''}</span>`;
+            else if (total) html += `<span class="raid-right">HP <span class="raid-hp-num">${remain}</span>/${total} · 已讨伐 ${done}${comboN >= 2 ? ` · 🔥 连讨 ×${comboN}` : ''}${clearStreak >= 2 ? ` · 🗡️ 全清连击 ×${clearStreak}` : ''}</span>`;
             html += `</div>`;
             if (!total) {
                 box.innerHTML = html + `<div class="raid-empty">本周还没有排期——用上面的闪捕条抓一个任务进来，副本开张。</div>`;
@@ -12338,10 +12401,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const isNarrow = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
             const daysToShow = isNarrow ? 7 : CAL_WEEKS * 7;
             const dayEventsDisplay = {};
+            const dayClearMap = {};   // 当日任务全清（小怪清剿）标记，不受搜索过滤影响
             for (let i = 0; i < daysToShow; i++) {
                 const date = addDays(currentWeekStart, i);
                 const dateStr = formatDate(date);
-                let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+                const allDayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+                dayClearMap[dateStr] = allDayEvents.length > 0 && allDayEvents.every(e => e.status === 'done');
+                let dayEvents = allDayEvents;
                 if (keyword) dayEvents = dayEvents.filter(e => e.title.toLowerCase().includes(keyword) || (e.desc && e.desc.toLowerCase().includes(keyword)));
                 sortDayEventsByUserOrder(dayEvents, dateStr);
                 dayEventsDisplay[dateStr] = dayEvents.slice(0, MAX_EVENTS_PER_DAY);
@@ -12394,7 +12460,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const MAX_TAGS = 3;
                     inlineTags = `<span class="day-fest-inline">${allTags.slice(0, MAX_TAGS).join('')}${allTags.length > MAX_TAGS ? `<span class="cal-extra-chip-inline" title="打开纪念日管理 / 查看节日">+${allTags.length - MAX_TAGS}</span>` : ''}</span>`;
                 }
-                dateHeader.innerHTML = `<span style="display:inline-flex;align-items:center;gap:3px;"><span class="day-weekday">${wdLabel}</span>${date.getDate()}${inlineTags}</span>${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}`;
+                dateHeader.innerHTML = `<span style="display:inline-flex;align-items:center;gap:3px;"><span class="day-weekday">${wdLabel}</span>${date.getDate()}${inlineTags}</span>${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}${dayClearMap[dateStr] ? `<span class="day-clear-badge" title="当日任务全清 · 小怪清剿完成">🗡️</span>` : ''}`;
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
@@ -23623,7 +23689,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609011223";
+        window.NIKO_VERSION = "202609011306";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
