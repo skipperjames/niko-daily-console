@@ -2285,6 +2285,7 @@
         .habit-progress-num { font-size: 10.5px; color: #8a8a96; white-space: nowrap; font-variant-numeric: tabular-nums; }
         body.dark-mode .habit-progress-num { color: #8f8fa3; }
         .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; min-height: 16px; }
+        .habit-card-foot .hcl { margin-left: auto; }
         .habit-card .habit-reward { font-size: 10.5px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; }
         body.dark-mode .habit-card .habit-reward { color: #a89bd6; }
         /* 连击：只保留小火苗数字，弱化为文字 */
@@ -2324,12 +2325,11 @@
         }
         body.dark-mode .habit-card.rest-card .habit-rest-tag { background:#2a2a38; color:#9ca3af; }
         .habit-card.rest-card .habit-name::before { content:'🌙 '; opacity:.6; }
-        /* ===== v2.11 习惯水晶链：近7天打卡结晶 ===== */
-        /* v2.11.1 修复：链不得挤压习惯名——卡窄时自动让位（名字是主角，链是配角） */
-        .habit-card { container-type: inline-size; }
+        /* ===== v2.11.2 习惯水晶链：近7天打卡结晶 ===== */
+        /* v2.11.2 修复：链移到卡底行右侧——名字行零竞争，桌面/手机常显（此前窄卡整条隐身=功能消失）；
+           同时移除 container-type: inline-size（容器查询已删，遗留该属性会使 flex 基准尺寸=0，手机端卡片被挤成 28px） */
         .hcl { display: inline-flex; align-items: flex-end; gap: 2.5px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; min-width: 0; }
         .hcl-node { width: 6px; height: 6px; border-radius: 2px; background: rgba(0,0,0,0.06); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10); position: relative; }
-        @container (max-width: 205px) { .hcl { display: none; } }
         .hcl-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 4px rgba(16,185,129,0.55), inset 0 0 2px rgba(255,255,255,0.7); }
         .hcl-node.today-node { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(16,185,129,0.45); border-radius: 50%; }
         .hcl-node.today-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 6px rgba(16,185,129,0.75), inset 0 0 2px rgba(255,255,255,0.8); }
@@ -2635,7 +2635,8 @@
                 padding: 5px 10px;
                 border-radius: 999px;
                 width: auto;
-                min-width: 0;
+                min-width: max-content; /* v2.11.2 修复：禁止被同行的地下城块挤压成 28px，超宽自动换行 */
+                max-width: 100%;
                 flex: 1 1 auto;
             }
             .habit-card-top { width: auto; flex: 1 1 auto; min-width: 0; gap: 4px; padding-right: 0; }
@@ -2933,6 +2934,18 @@
             flex-shrink: 0;
             flex-wrap: wrap;
             gap: 8px;
+        }
+        /* v2.11.2 修复：右侧工具群换行时右对齐——此前各行左堆叠，右上角留出 600px+ 空洞 */
+        #planPage .top-bar > div:nth-child(2) { flex: 1 1 460px; min-width: 0; justify-content: flex-end; }
+        /* 桌面紧凑层（1080p/125% 缩放 = 1536px 视口的首选体验）：少换行，给日历+副本墙省回高度 */
+        @media (max-width: 1680px) {
+            #planPage .top-bar { gap: 6px; }
+            #planPage .top-bar > div:nth-child(2) { gap: 7px !important; }
+            #planPage .top-title h1 { font-size: 17px; margin-bottom: 1px; }
+            #planPage .top-title p { display: none; }
+            #planPage .top-bar .btn-small { padding: 4px 9px; font-size: 11px; }
+            #planPage .view-toggle button { padding: 4px 9px; font-size: 11px; }
+            #planPage .top-stats { gap: 6px; }
         }
         .top-title h1 {
             font-size: 20px;
@@ -12849,7 +12862,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
-                        ${habitCrystalChain(h)}
                     </div>
                     <div class="habit-progress">
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
@@ -12859,6 +12871,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                         ${!isActive ? `<span style="font-size:10px;color:#9ca3af;">🌙 今天休息</span>` : ''}
+                        ${habitCrystalChain(h)}
                     </div>
                     ${d ? '<span class="habit-done-badge">✓</span>' : ''}
                 </div>`;
@@ -25818,7 +25831,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021719";
+        window.NIKO_VERSION = "202609021815";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
