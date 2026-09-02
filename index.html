@@ -3065,17 +3065,21 @@
             border-color: #3b82f6;
             background: #eff6ff;
         }
-        .day-cell.today .day-date {
+        /* v4:今日高亮圆圈只套在日期数字上——旧版套整个 day-date(inline-block 22px) 会把
+           计数/节日标签全部挤到换行，出现「任务数独占一行」的破版 */
+        .day-cell.today .day-num {
             background: #1a1a1a;
             color: #fff;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            line-height: 22px;
-            text-align: center;
-            display: inline-block;
-            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
         }
+        body.dark-mode .day-cell.today .day-num { background: #818cf8; color: #0f0f1a; }
         /* P1 今日列高亮：整列微亮 + 描边 */
         .day-cell.today {
             background: rgba(102, 126, 234, 0.07);
@@ -3090,26 +3094,29 @@
         /* P5 周末列微底色（写在 today 之后，today 同时存在时优先生效） */
         .day-cell.weekend { background: #faf9f7; }
         body.dark-mode .day-cell.weekend { background: rgba(255, 255, 255, 0.028); }
-        /* P4 hover 快速新建按钮 */
+        /* P4 hover 快速新建：v4 移入日期行右侧，不再绝对定位压住任务条状态圈 */
         .cell-quick-add {
-            position: absolute;
-            right: 4px;
-            bottom: 4px;
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 5px;
             background: rgba(102, 126, 234, 0.15);
             color: #667eea;
-            font-size: 13px;
-            line-height: 17px;
+            font-size: 12px;
+            line-height: 15px;
             text-align: center;
             opacity: 0;
             transition: opacity 0.15s;
             pointer-events: none;
+            flex-shrink: 0;
+            cursor: pointer;
             z-index: 3;
         }
         .day-cell:hover .cell-quick-add { opacity: 1; pointer-events: auto; }
         .cell-quick-add:hover { background: #667eea; color: #fff; }
+        /* v4 日期行左右分组：左侧(星期+日期+心情+节日)可收缩截断，右侧(计数+清剿印+快速新建)不换行 */
+        .day-head-left { display: inline-flex; align-items: center; gap: 3px; min-width: 0; overflow: hidden; flex: 1; }
+        .day-head-right { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; margin-left: 4px; }
+        .day-num { flex-shrink: 0; }
         .day-date {
             font-size: 12px;
             font-weight: 600;
@@ -3394,24 +3401,68 @@
             margin: 0;
         }
         .event-checkbox {
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-            background: rgba(255, 255, 255, 0.6);
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            border: 5px solid transparent;               /* v4:透明边扩触控热区至 24×24，视觉仍 14×14 不挤布局 */
+            background-color: rgba(255, 255, 255, 0.6);
+            background-clip: padding-box;
+            box-sizing: content-box;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 700;
             color: transparent;
             transition: all 0.15s;
-            border: 1px solid rgba(0, 0, 0, 0.15);
+            cursor: pointer;
         }
+        .event-checkbox:hover { box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4); }
+        .event-checkbox:active { transform: scale(0.82); }
         .event-item.completed .event-checkbox {
-            background: #fff;
+            background-color: rgba(16, 185, 129, 0.16);
             color: #10b981;
             font-size: 10px;
+            border-color: rgba(16, 185, 129, 0.45);
+        }
+        body.dark-mode .event-checkbox { background-color: rgba(255, 255, 255, 0.24); }
+        body.dark-mode .event-checkbox:hover { box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.45); }
+        body.dark-mode .event-item.completed .event-checkbox {
+            background-color: rgba(16, 185, 129, 0.22);
+            color: #34d399;
+        }
+        /* v4 完成仪式三连：勾选 pop → 删除线扫过 → 翡翠微光掠过整条 */
+        @keyframes evCheckPop { 0% { transform: scale(0.5) rotate(-30deg); } 55% { transform: scale(1.28) rotate(8deg); } 100% { transform: scale(1) rotate(0); } }
+        @keyframes evStrike { to { transform: scaleX(1); } }
+        @keyframes evSheen { to { background-position: -60% 0; } }
+        .event-item.just-done .event-checkbox { animation: evCheckPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .event-item.just-done::after {
+            content: '';
+            position: absolute;
+            left: 26px;
+            right: 22px;
+            top: 50%;
+            height: 1.5px;
+            background: #10b981;
+            opacity: 0.75;
+            transform: scaleX(0);
+            transform-origin: left center;
+            animation: evStrike 0.5s 0.08s ease-out forwards;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .event-item.just-done::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            z-index: 1;
+            background: linear-gradient(105deg, transparent 30%, rgba(16, 185, 129, 0.30) 50%, transparent 70%);
+            background-size: 250% 100%;
+            background-position: 130% 0;
+            animation: evSheen 0.8s ease-out forwards;
         }
         .event-text {
             overflow: hidden;
@@ -4298,10 +4349,12 @@
         /* ===== v3 状态图标：绝对定位右上角 SVG（4 态设计感） ===== */
         .status-mark {
             position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 12px;
-            height: 12px;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            padding: 2px;                /* v4:热区扩到 20×20，视觉图标仍 12px */
+            box-sizing: content-box;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -13525,7 +13578,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const MAX_TAGS = 3;
                     inlineTags = `<span class="day-fest-inline">${allTags.slice(0, MAX_TAGS).join('')}${allTags.length > MAX_TAGS ? `<span class="cal-extra-chip-inline" title="打开纪念日管理 / 查看节日">+${allTags.length - MAX_TAGS}</span>` : ''}</span>`;
                 }
-                dateHeader.innerHTML = `<span style="display:inline-flex;align-items:center;gap:3px;"><span class="day-weekday">${wdLabel}</span>${date.getDate()}${moodByDate[dateStr] ? `<span class="cal-mood-wx" title="心情气候：${moodNameMap[moodByDate[dateStr]] || moodByDate[dateStr]}">${moodWxMap[moodByDate[dateStr]] || ''}</span>` : ''}${inlineTags}</span>${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}${dayClearMap[dateStr] ? `<span class="day-clear-badge" title="当日任务全清 · 小怪清剿完成">🗡️</span>` : ''}`;
+                dateHeader.innerHTML = `<span class="day-head-left"><span class="day-weekday">${wdLabel}</span><span class="day-num">${date.getDate()}</span>${moodByDate[dateStr] ? `<span class="cal-mood-wx" title="心情气候：${moodNameMap[moodByDate[dateStr]] || moodByDate[dateStr]}">${moodWxMap[moodByDate[dateStr]] || ''}</span>` : ''}${inlineTags}</span><span class="day-head-right">${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}${dayClearMap[dateStr] ? `<span class="day-clear-badge" title="当日任务全清 · 小怪清剿完成">🗡️</span>` : ''}</span>`;
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
@@ -13615,13 +13668,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId && draggedEventId.startsWith('backlog:')) scheduleBacklogItem(draggedEventId.slice(8), dateStr); else if (draggedEventId) moveEventToDate(draggedEventId, dateStr); });
                 cell.addEventListener('click', () => { selectedDate = new Date(date); render(); });
                 cell.addEventListener('dblclick', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
-                // P4 hover 快速新建（手机端无 hover 不显示，走原有新建入口）
+                // P4 hover 快速新建（手机端无 hover 不显示，走原有新建入口）；v4 挂到日期行右侧
                 const quickAdd = document.createElement('span');
                 quickAdd.className = 'cell-quick-add';
                 quickAdd.textContent = '+';
                 quickAdd.title = '新建任务';
                 quickAdd.addEventListener('click', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
-                cell.appendChild(quickAdd);
+                const dayHeadRight = dateHeader.querySelector('.day-head-right');
+                if (dayHeadRight) dayHeadRight.appendChild(quickAdd);
                 grid.appendChild(cell);
             }
             renderGanttBarsOverlay(grid, dayEventsDisplay, daysToShow);
@@ -14174,6 +14228,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } catch (err) {}
         }
 
+        // v4 完成仪式：render 重建 DOM 后给刚完成的任务条挂 just-done（pop+划线+微光），950ms 后摘除
+        function markJustDone(id) {
+            try {
+                const el = document.querySelector('.event-item[data-event-id="' + id + '"]');
+                if (!el) return;
+                el.classList.add('just-done');
+                setTimeout(() => el.classList.remove('just-done'), 950);
+            } catch (err) {}
+        }
+
         function toggleComplete(id, e) {
             if (e) e.stopPropagation();
             const ev = events.find(e => e.id === id);
@@ -14184,11 +14248,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (ev.status === 'done') {
                     if (typeof nikoComboBump === 'function') nikoComboBump();
                     if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(e && e.target);
-                    else if (typeof nikoSpark === 'function') nikoSpark(e && e.target, '✦', '#fbbf24');
+                    else if (typeof nikoSpark === 'function') nikoSpark(e && e.target, '✓', '#10b981');
+                    // v4 全清播报：这一刀补完当日所有任务 → 小怪清剿战报
+                    try {
+                        const dayEvs = events.filter(x => typeof isDateInRange !== 'function' || isDateInRange(ev.startDate, x.startDate, x.endDate));
+                        if (dayEvs.length > 1 && dayEvs.every(x => x.status === 'done')) showToast('🗡️ 本日任务全清 · 小怪清剿完成！');
+                    } catch (err) {}
                 } else {
                     if (typeof nikoComboDrop === 'function') nikoComboDrop();
                 }
                 render();
+                if (ev.status === 'done') markJustDone(ev.id);
             }
         }
 
@@ -14204,11 +14274,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (ev.status === 'done') {
                 if (typeof nikoComboBump === 'function') nikoComboBump();
                 if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(e && e.target);
-                else if (typeof nikoSpark === 'function') nikoSpark(e && e.target, '✦', '#fbbf24');
+                else if (typeof nikoSpark === 'function') nikoSpark(e && e.target, '✓', '#10b981');
             } else {
                 if (typeof nikoComboDrop === 'function') nikoComboDrop();
             }
             render();
+            if (ev.status === 'done') markJustDone(ev.id);
             showToast('状态 → ' + (statusNames[ev.status] || ev.status));
         }
 
@@ -25238,7 +25309,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021228";
+        window.NIKO_VERSION = "202609021317";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
