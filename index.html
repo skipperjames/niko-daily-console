@@ -331,6 +331,38 @@
         .niko-float-dot.syncing .niko-float-dot-inner { animation: nikoPulse 1s infinite; }
         .niko-float-dot:active { transform: scale(0.92); }
         @keyframes nikoPulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+        /* ===== v2.11 云同步守护兽：状态点拟人化 =====
+           synced=睁眼打盹苏醒眨眼+摇尾 / syncing=闭眼睡+冒💤 / offline=竖毛红光抖动 / manual=眯眼 */
+        .niko-float-dot::after {
+            content: ''; position: absolute; left: 7px; top: 8px;
+            width: 2.5px; height: 4px; border-radius: 2px; background: rgba(255,255,255,.92);
+            box-shadow: 6px 0 0 rgba(255,255,255,.92); pointer-events: none;
+            transition: height .25s, transform .25s, opacity .25s;
+        }
+        .niko-float-dot .niko-float-dot-inner { transition: opacity .25s; }
+        .niko-float-dot.synced::after { animation: nikoBlink 4.2s infinite; }
+        .niko-float-dot.synced::before {
+            content: ''; position: absolute; right: -3px; bottom: 1px;
+            width: 5px; height: 5px; border-radius: 60% 40% 60% 40%;
+            background: inherit; transform-origin: left bottom;
+            animation: nikoWag 2.6s ease-in-out infinite; pointer-events: none;
+        }
+        .niko-float-dot.syncing::after { height: 1.2px; transform: translateY(1.5px); }
+        .niko-float-dot.syncing::before {
+            content: '💤'; position: absolute; right: -7px; top: -8px;
+            font-size: 9px; animation: nikoZzz 1.6s ease-in-out infinite; pointer-events: none;
+        }
+        .niko-float-dot.offline::after { height: 5px; box-shadow: 6px 0 0 #fff; }
+        .niko-float-dot.offline { animation: nikoBristle 1.2s infinite; box-shadow: 0 0 8px rgba(239,68,68,.55); }
+        .niko-float-dot.offline:not([style*="background"]) { background: #ef4444; }
+        .niko-float-dot.manual::after { height: 1.6px; transform: translateY(1px); }
+        @keyframes nikoBlink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.12); } }
+        @keyframes nikoWag { 0%, 100% { transform: rotate(0deg); } 30% { transform: rotate(22deg); } 60% { transform: rotate(-8deg); } }
+        @keyframes nikoZzz { 0% { opacity: 0; transform: translate(0, 2px) scale(.7); } 40% { opacity: 1; } 100% { opacity: 0; transform: translate(4px, -7px) scale(1.1); } }
+        @keyframes nikoBristle { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-1px); } 75% { transform: translateX(1px); } }
+        @media (prefers-reduced-motion: reduce) {
+            .niko-float-dot.synced::before, .niko-float-dot.syncing::before, .niko-float-dot.offline { animation: none; }
+        }
         .niko-float-more {
             width: 36px; height: 36px; border-radius: 50%;
             background: rgba(255,255,255,.95);
@@ -2290,6 +2322,32 @@
         }
         body.dark-mode .habit-card.rest-card .habit-rest-tag { background:#2a2a38; color:#9ca3af; }
         .habit-card.rest-card .habit-name::before { content:'🌙 '; opacity:.6; }
+        /* ===== v2.11 习惯水晶链：近7天打卡结晶 ===== */
+        .hcl { display: inline-flex; align-items: flex-end; gap: 3px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; }
+        .hcl-node { width: 7px; height: 7px; border-radius: 2px; background: rgba(0,0,0,0.06); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10); position: relative; }
+        .hcl-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 4px rgba(16,185,129,0.55), inset 0 0 2px rgba(255,255,255,0.7); }
+        .hcl-node.today-node { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(16,185,129,0.45); border-radius: 50%; }
+        .hcl-node.today-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 6px rgba(16,185,129,0.75), inset 0 0 2px rgba(255,255,255,0.8); }
+        .hcl-node.rest-node { opacity: .32; border-radius: 50%; }
+        .hcl-node.withered { background: rgba(120,113,108,0.28); box-shadow: inset 0 0 0 1px rgba(87,83,78,0.25); }
+        .hcl-node.withered::after { content:''; position:absolute; right:-1px; top:-1px; width:3px; height:3px; border-radius:50%; background:rgba(87,83,78,0.4); }
+        .hcl-node.crystal-new { animation: hclCrystallize .8s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes hclCrystallize { 0% { transform: scale(.2) rotate(45deg); filter: brightness(2); } 55% { transform: scale(1.7) rotate(0deg); filter: brightness(1.6); } 100% { transform: scale(1); filter: brightness(1); } }
+        body.dark-mode .hcl-node { background: rgba(255,255,255,0.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
+        body.dark-mode .hcl-node.withered { background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10); }
+        /* ===== v2.11 地下城 Boss 进化 ===== */
+        .dg-boss { display: inline-flex; align-items: center; gap: 4px; margin-right: 6px; padding: 1px 7px 1px 4px; border-radius: 10px; background: rgba(0,0,0,0.05); font-size: 11px; font-weight: 600; color: #6b7280; }
+        .dg-boss .dg-boss-face { font-size: 14px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2)); }
+        .dg-boss.tier-2 { background: rgba(245,158,11,0.14); color: #b45309; }
+        .dg-boss.tier-3 { background: rgba(107,114,128,0.16); color: #374151; }
+        .dg-boss.tier-4 { background: rgba(139,92,246,0.14); color: #6d28d9; }
+        .dg-boss.tier-5 { background: linear-gradient(90deg, rgba(16,185,129,0.18), rgba(59,130,246,0.18)); color: #065f46; }
+        .dg-boss .dg-boss-streak { font-size: 10px; opacity: .75; font-weight: 500; }
+        body.dark-mode .dg-boss { background: rgba(255,255,255,0.08); color: #cbd5e1; }
+        body.dark-mode .dg-boss.tier-2 { background: rgba(245,158,11,0.2); color: #fbbf24; }
+        body.dark-mode .dg-boss.tier-3 { background: rgba(148,163,184,0.18); color: #e2e8f0; }
+        body.dark-mode .dg-boss.tier-4 { background: rgba(139,92,246,0.22); color: #c4b5fd; }
+        body.dark-mode .dg-boss.tier-5 { background: linear-gradient(90deg, rgba(16,185,129,0.28), rgba(59,130,246,0.28)); color: #6ee7b7; }
         .habit-card.rest-done-card { opacity:.7; }
 
         /* 习惯管理弹窗 */
@@ -6546,6 +6604,18 @@
         .nb-card-content { font-size: 13px; line-height: 1.5; color: #3f3a32; word-break: break-word; white-space: pre-wrap; max-height: 180px; overflow-y: auto; }
         .nb-card-footer { display: flex; align-items: center; gap: 4px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
         .nb-card-time { font-size: 10px; color: rgba(0,0,0,.42); flex: 1; white-space: nowrap; overflow: hidden; }
+        /* ===== v2.11 便签老化：按创建天数自然卷角落尘，点击拂尘恢复 ===== */
+        .nb-card { --age: 0; }
+        .nb-card.aged .nb-card-content { filter: sepia(.12) contrast(.94) brightness(.985); }
+        .nb-card.aged-old .nb-card-content { filter: sepia(.22) contrast(.88) brightness(.96); }
+        .nb-card .nb-curl { position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 16px 16px 0; border-color: transparent rgba(0,0,0,0) transparent transparent; pointer-events: none; opacity: 0; transition: opacity .3s; background: transparent; border-image: none; }
+        .nb-card.aged .nb-curl { opacity: 1; border-width: 0 13px 13px 0; border-color: transparent #fff transparent transparent; box-shadow: -2px 2px 4px rgba(0,0,0,0.10); border-radius: 0 0 0 4px; filter: drop-shadow(-1px 1px 1px rgba(0,0,0,0.12)); }
+        .nb-card.aged-old .nb-curl { border-width: 0 17px 17px 0; box-shadow: -3px 3px 5px rgba(0,0,0,0.14); }
+        body.dark-mode .nb-card.aged .nb-curl { border-color: transparent #3a3f46 transparent transparent; box-shadow: -2px 2px 4px rgba(0,0,0,0.35); }
+        .nb-dust { font-size: 10px; line-height: 1; cursor: pointer; opacity: .55; transition: transform .2s, opacity .2s; flex-shrink: 0; }
+        .nb-dust:hover { opacity: 1; transform: scale(1.25) rotate(-12deg); }
+        @keyframes nbDustPuff { 0% { transform: scale(1); filter: brightness(1); } 40% { transform: scale(1.06) rotate(2deg); filter: brightness(1.3); } 100% { transform: scale(1); filter: brightness(1); } }
+        .nb-card.dusting { animation: nbDustPuff .5s ease; }
         .nb-card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; flex-shrink: 0; }
         .nb-card:hover .nb-card-actions { opacity: 1; }
         .nb-icon-btn { border: none; background: rgba(255,255,255,.6); border-radius: 4px; font-size: 11px; width: 22px; height: 22px; cursor: pointer; color: #555; display: flex; align-items: center; justify-content: center; transition: all .12s; flex-shrink: 0; }
@@ -12586,6 +12656,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 logs.push({ id: 'hl_' + Date.now(), habitId: id, date: today, doneAt: new Date().toISOString() });
                 habitSaveLogs(logs);
                 justDone = true;
+                window._hclNewId = id; // v2.11 水晶链今日节点结晶动画
                 if (typeof window.nikoComboBump === 'function') window.nikoComboBump();   // 连击 +1（写入当日地下城战报）
                 if (id === HABIT_BOOK_ID) bookHabitLinkApply(today);
                 const rewardMin = Number(h.rewardMin) || 0;
@@ -12660,6 +12731,72 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (typeof showToast === 'function') showToast(`✅ 已补卡 ${date}`);
         }
 
+        // ===== v2.11 习惯水晶链 / Boss 进化 =====
+        // 某习惯在某天是否为应打卡日（habitShouldToday 的历史日期版）
+        function habitActiveOnDate(h, dateStr) {
+            if (!h) return true;
+            const freq = h.frequency || 'daily';
+            if (freq === 'daily' || freq === 'weekly') return true;
+            if (freq === 'weekdays') {
+                const days = Array.isArray(h.weekDays) ? h.weekDays : [];
+                return days.includes(new Date(dateStr + 'T00:00:00').getDay());
+            }
+            return true;
+        }
+        // 水晶链：近 7 天节点（lit 结晶 / withered 风化 / today-node 今日未定 / rest-node 休息日）
+        function habitCrystalChain(h) {
+            const logs = new Set(habitLogs().filter(l => l.habitId === h.id).map(l => l.date));
+            const today = formatDate(new Date());
+            let nodes = '';
+            for (let i = 6; i >= 0; i--) {
+                const dt = new Date(); dt.setDate(dt.getDate() - i);
+                const ds = formatDate(dt);
+                const active = habitActiveOnDate(h, ds);
+                let cls = 'hcl-node';
+                if (logs.has(ds)) cls += ' lit';
+                else if (ds === today) cls += ' today-node';
+                else if (!active) cls += ' rest-node';
+                else cls += ' withered';
+                if (ds === today && logs.has(ds)) cls += ' today-node';
+                if (ds === today && logs.has(ds) && window._hclNewId === h.id) { cls += ' crystal-new'; window._hclNewId = null; }
+                const tip = `${ds}${active ? '' : ' · 休息日'}${logs.has(ds) ? ' · 已打卡 ✓' : ''}`;
+                nodes += `<span class="${cls}" title="${tip}"></span>`;
+            }
+            return `<span class="hcl" title="近 7 天打卡结晶">${nodes}</span>`;
+        }
+        // Boss 进化：连续全勤天数（休息日跳过不计不断；今天未打满不中断不计）
+        const DG_BOSS_TIERS = [
+            { face: '🟢', name: '史莱姆' },
+            { face: '👹', name: '哥布林' },
+            { face: '💀', name: '骷髅兵' },
+            { face: '⚔️', name: '暗黑骑士' },
+            { face: '🐉', name: '远古巨龙' }
+        ];
+        function dungeonPerfectStreak() {
+            const habits = habitList().filter(h => habitActiveOnDate(h, formatDate(new Date())) || (h.frequency || 'daily') !== 'daily');
+            if (!habits.length) return 0;
+            const doneSet = new Set(habitLogs().map(l => l.habitId + '@' + l.date));
+            let streak = 0;
+            for (let i = 0; i < 120; i++) {
+                const dt = new Date(); dt.setDate(dt.getDate() - i);
+                const ds = formatDate(dt);
+                const actives = habitList().filter(h => habitActiveOnDate(h, ds));
+                if (!actives.length) continue; // 休息日：跳过，不中断
+                const allDone = actives.every(h => doneSet.has(h.id + '@' + ds));
+                if (allDone) streak++;
+                else if (i === 0) continue; // 今天还没打完：不算断也不算进
+                else break;
+            }
+            return streak;
+        }
+        function dungeonBossHtml() {
+            const streak = dungeonPerfectStreak();
+            const tier = Math.min(DG_BOSS_TIERS.length - 1, Math.floor(streak / 7));
+            const b = DG_BOSS_TIERS[tier];
+            const streakTip = streak > 0 ? `<span class="dg-boss-streak">全勤${streak}天</span>` : '';
+            return `<span class="dg-boss tier-${tier + 1}" title="连续全勤升级 Boss：每 7 天进化一档，断打卡退化。当前 ${b.name}（全勤 ${streak} 天）"><span class="dg-boss-face">${b.face}</span>${b.name}${streakTip}</span>`;
+        }
+
         // 今日习惯区块（卡片网格）
         function renderTodayHabits() {
             const box = document.getElementById('todayHabitsList');
@@ -12702,6 +12839,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
+                        ${habitCrystalChain(h)}
                     </div>
                     <div class="habit-progress">
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
@@ -12728,7 +12866,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } catch (e) {}
             const dgHtml = `<div class="habit-dg">
                 <div class="habit-dg-head">
-                    <span class="habit-dg-title">🏰 今日地下城</span>
+                    <span class="habit-dg-title">${dungeonBossHtml()}🏰 今日地下城</span>
                     <span class="habit-dg-hp">HP ${remainH}/${totalH}${comboCnt >= 2 ? ` · <span title="今日连续完成任务/习惯 ${comboCnt} 次" style="color:#f59e0b;font-weight:700;">🔥 连击×${comboCnt}</span>` : ''}${totalH > 0 && doneToday === totalH ? ' · <span class="habit-dg-clear">🏆 地下城通关!</span>' : ''}</span>
                 </div>
                 <div class="habit-dg-bar"><div class="habit-dg-fill${hpCls}" style="width:${hpPct}%"></div><div class="habit-dg-seg"></div></div>
@@ -17676,6 +17814,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         }
 
+        // v2.11 便签拂尘：老化便签点一下恢复活力（刷新时间戳）
+        function nbDust(id, e) {
+            if (e) e.stopPropagation();
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            n.createdAt = new Date().toISOString();
+            if (n.updatedAt === undefined) n.updatedAt = n.createdAt;
+            saveNotes();
+            if (typeof nikoSpark === 'function' && e && e.target) nikoSpark(e.target, '✨', '#a78bfa');
+            if (typeof showToast === 'function') showToast('🧹 拂尘完毕，便签恢复活力');
+        }
+
         // 统一保存：同时刷新侧栏与便签看板
         function saveNotes() {
             safeStorage.set('niko_inspiration_notes', notes);
@@ -18168,13 +18318,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const sel = nbSelected.has(n.id);
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}" style="background:${tag.bg};--rot:${noteRotation(n.id)}deg" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            // v2.11 老化：创建超 14 天卷角落尘，超 30 天加深；拂尘即恢复
+            const ageD = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
+            const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}" style="background:${tag.bg};--rot:${noteRotation(n.id)}deg" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
+                ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
                 <div class="nb-card-content">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
+                    ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
                     <div class="nb-card-actions">
                         <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
                         <button class="nb-icon-btn" title="编辑" onclick="openNoteModal('${n.id}',null,event)">✏️</button>
@@ -25653,7 +25808,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021433";
+        window.NIKO_VERSION = "202609021530";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
