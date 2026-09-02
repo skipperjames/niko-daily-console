@@ -1386,6 +1386,15 @@
             padding: 0 4px; font-weight: 500;
         }
         body.dark-mode .dock-btn { background: #1f2937; border-color: #374151; }
+        /* ===== 全局微反馈引擎（nikoSpark）：粒子 + 光环，纯视觉层不挡触控 ===== */
+        .niko-spark-ring { position:fixed; width:10px; height:10px; margin:-5px 0 0 -5px; border:2px solid; border-radius:50%; opacity:.85; animation:nikoSparkRing .7s ease-out forwards; }
+        .niko-spark-glyph { position:fixed; font-size:15px; transform:translate(-50%,-50%); text-shadow:0 0 10px currentColor; opacity:0; animation:nikoSparkFly .95s cubic-bezier(.2,.7,.3,1) var(--sd,0s) forwards; }
+        @keyframes nikoSparkRing { 0% { transform:scale(.4); opacity:.9; } 100% { transform:scale(4.6); opacity:0; } }
+        @keyframes nikoSparkFly {
+            0% { opacity:0; transform:translate(-50%,-50%) scale(.5); }
+            18% { opacity:1; transform:translate(calc(-50% + var(--sdx,0px)*.3), calc(-50% + var(--sdy,-14px)*.3)) scale(1.15); }
+            100% { opacity:0; transform:translate(calc(-50% + var(--sdx,0px)), calc(-50% + var(--sdy,-14px))) scale(.75); }
+        }
         /* FAB 折叠：小屏默认收起为一个「+」主按钮，展开后浮出 4 个 */
         .dock-toggle { display: none; }
         @media (max-width:768px) {
@@ -6254,6 +6263,7 @@
 
         /* 便签卡片 */
         .nb-card { border-radius: 8px; padding: 10px 12px 8px; box-shadow: 0 1px 3px rgba(0,0,0,.09); cursor: grab; position: relative; transition: transform .15s, box-shadow .15s; border-top: 1px solid rgba(255,255,255,.5); }
+        @keyframes nbPinWobble { 0% { transform: rotate(var(--rot,0deg)) scale(1); } 30% { transform: rotate(calc(var(--rot,0deg) + 2.4deg)) scale(1.03); } 60% { transform: rotate(calc(var(--rot,0deg) - 1.6deg)) scale(1.01); } 100% { transform: rotate(var(--rot,0deg)) scale(1); } }
         .nb-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.13); }
         .nb-card:active { cursor: grabbing; }
         .nb-card.pinned { box-shadow: 0 0 0 2px rgba(245,158,11,.5), 0 2px 6px rgba(0,0,0,.1); }
@@ -11269,6 +11279,31 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function isDateInRange(dateStr, startDate, endDate) { return dateStr >= startDate && dateStr <= endDate; }
 
         // 页面切换
+        // ===== 全局微反馈引擎（仪式感批量落地 2026-09-02）：nikoSpark(el, glyph, color) =====
+        // 在元素中心升起一枚字符粒子 + 扩散光环，纯视觉层 pointer-events:none，1.3s 自动清理，手机端同样生效
+        function nikoSpark(target, glyph, color) {
+            try {
+                if (!target) return;
+                const el = target.nodeType === 1 ? target : (typeof target === 'string' ? document.querySelector(target) : null);
+                if (!el) return;
+                const r = el.getBoundingClientRect();
+                if (!r || (!r.width && !r.height)) return;
+                const cx = r.left + r.width / 2, cy = r.top + Math.min(r.height / 2, 30);
+                const c = color || '#fbbf24';
+                const host = document.createElement('div');
+                host.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9500;';
+                host.innerHTML = '<div class="niko-spark-ring" style="left:' + cx + 'px;top:' + cy + 'px;border-color:' + c + ';"></div>' +
+                    [0, 1, 2].map(i => {
+                        const ang = (-90 + (i - 1) * 46) * Math.PI / 180;
+                        const dx = (Math.cos(ang) * 26).toFixed(1), dy = (Math.sin(ang) * 22 - 8).toFixed(1);
+                        const d = (0.1 + i * 0.09).toFixed(2);
+                        return '<span class="niko-spark-glyph" style="left:' + cx + 'px;top:' + cy + 'px;color:' + c + ';--sdx:' + dx + 'px;--sdy:' + dy + 'px;--sd:' + d + 's;">' + glyph + '</span>';
+                    }).join('');
+                document.body.appendChild(host);
+                setTimeout(() => host.remove(), 1350);
+            } catch (err) {}
+        }
+
         function switchPage(page) {
             currentPage = page;
             document.querySelectorAll('.sidebar-left .nav-item').forEach((item, idx) => {
@@ -12215,7 +12250,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
             }
             renderTodayHabits();
-            if (justDone) habitSpark(id);
+            if (justDone) {
+                habitSpark(id);
+                // 🏆 地下城通关爆发：今日应打全部完成的一瞬间，血条上方洒落一圈 ✦（每次通关只放一次）
+                const due = habitList().filter(habitShouldToday);
+                const allDone = due.length > 0 && due.every(x => habitLogs().some(l => l.habitId === x.id && l.date === today));
+                if (allDone && !window._dgBurstShown) {
+                    window._dgBurstShown = true;
+                    if (typeof nikoSpark === 'function') {
+                        const dg = document.querySelector('.habit-dg');
+                        if (dg) {
+                            nikoSpark(dg, '🏆', '#fbbf24');
+                            setTimeout(() => nikoSpark(dg, '✦', '#f59e0b'), 220);
+                            setTimeout(() => nikoSpark(dg, '✦', '#fbbf24'), 440);
+                        }
+                    }
+                }
+            } else {
+                window._dgBurstShown = false; // 取消打卡 → 重置，允许再次通关爆发
+            }
             renderCommandBrief();
             renderClearSettle();
             renderBuddy();
@@ -13973,6 +14026,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (ev) {
                 ev.status = ev.status === 'done' ? 'todo' : 'done';
                 saveData();
+                if (ev.status === 'done' && typeof nikoSpark === 'function') nikoSpark(e && e.target, '✦', '#fbbf24');
                 render();
             }
         }
@@ -13985,6 +14039,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const cycle = { 'todo': 'in-progress', 'in-progress': 'done', 'done': 'todo' };
             ev.status = cycle[ev.status] || 'todo';
             saveData();
+            if (ev.status === 'done' && typeof nikoSpark === 'function') nikoSpark(e && e.target, '✦', '#fbbf24');
             render();
             showToast('状态 → ' + (statusNames[ev.status] || ev.status));
         }
@@ -17642,7 +17697,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // 单条操作
-        function nbPin(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.pinned = !n.pinned; saveNotes(); showToast(n.pinned ? '📌 已置顶' : '已取消置顶'); } }
+        function nbPin(id, e) {
+            e && e.stopPropagation();
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            n.pinned = !n.pinned;
+            saveNotes();
+            // 置顶瞬间：卡片图钉落点闪光 + 轻微晃一下（仪式感微反馈）
+            if (typeof nikoSpark === 'function') {
+                const card = e && e.target ? e.target.closest('.nb-card, .nb-tl-item') : null;
+                if (n.pinned && card) {
+                    nikoSpark(card, '📌', '#f59e0b');
+                    card.style.animation = 'none'; void card.offsetWidth;
+                    card.style.animation = 'nbPinWobble .5s ease';
+                }
+            }
+            showToast(n.pinned ? '📌 已置顶' : '已取消置顶');
+        }
         function nbDelete(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.deleted = true; n.deletedAt = new Date().toISOString(); nbSelected.delete(id); saveNotes(); showToast('🗑 已移入回收站'); } }
         function nbArchive(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.archived = true; nbSelected.delete(id); saveNotes(); showToast('📦 已归档'); } }
         function nbUnarchive(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.archived = false; saveNotes(); showToast('📤 已放回看板'); } }
@@ -20404,6 +20475,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             diaryAutoCheckHabit(ds);
             renderDiaryPage();
+            // 保存瞬间：墨羽落点闪光（仪式感微反馈）
+            if (typeof nikoSpark === 'function') nikoSpark(document.querySelector('.diary-btn.primary'), '🪶', '#8b7cf6');
             showToast('💾 已保存 ' + ds);
         }
 
@@ -22272,6 +22345,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 消耗 = 去玩游戏，自动计入当天游玩日历
             gtAddPlay(min, null, gtTodayStr());
             if (input) input.value = '';
+            // 消耗瞬间：金币洒落（仪式感微反馈）
+            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('gtSpendBtn'), '🪙', '#fbbf24');
             if (typeof showToast === 'function') showToast(`🎮 消耗 ${fmtMin(min)} 玩游戏，剩余 ${fmtMin(d.balance)}`);
             renderGameTimePage();
         }
@@ -22417,6 +22492,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             gtAddPlay(min, note ? { note: note, min: min } : null, gtTodayStr());
             if (minInput) minInput.value = '';
             if (noteInput) noteInput.value = '';
+            // 记录瞬间：手柄闪光（仪式感微反馈）
+            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('gtPlayBtn'), '🎮', '#34d399');
             renderGameTimePage();
             if (typeof showToast === 'function') showToast(`🎮 已记录游玩 ${fmtMin(min)}${note ? '（' + note + '）' : ''}`);
         }
@@ -24964,7 +25041,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021007";
+        window.NIKO_VERSION = "202609021040";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
