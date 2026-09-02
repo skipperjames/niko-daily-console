@@ -1535,6 +1535,54 @@
         .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 1px; color: #111827; }
         body.dark-mode .pomo-time { color: #f9fafb; }
         .pomo-state { font-size: 12px; color: #f97316; margin-top: 2px; }
+        /* v2.10 专注呼吸光环：进行中钟面缓缓呼吸，像一颗陪伴你跳动的心脏 */
+        .pomo-ring.running { animation: pomoBreath 3.4s ease-in-out infinite; }
+        @keyframes pomoBreath {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.28); }
+            50% { box-shadow: 0 0 0 9px rgba(249, 115, 22, 0.06), 0 0 18px 3px rgba(249, 115, 22, 0.3); }
+        }
+        body.dark-mode .pomo-ring.running { animation-name: pomoBreathDark; }
+        @keyframes pomoBreathDark {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.35); }
+            50% { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0.08), 0 0 22px 4px rgba(249, 115, 22, 0.4); }
+        }
+        /* v2.10 番茄收获播报：完成瞬间居中非阻塞卡片，2.6s 自动消散 */
+        .pomo-harvest {
+            position: fixed;
+            top: 16%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-radius: 16px;
+            background: rgba(26, 26, 26, 0.93);
+            color: #fff;
+            box-shadow: 0 10px 36px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+            animation: pomoHarvestIn 2.6s ease forwards;
+            white-space: nowrap;
+        }
+        .pomo-harvest .ph-icon { font-size: 30px; animation: phPop 0.5s cubic-bezier(0.34, 1.6, 0.64, 1); }
+        .pomo-harvest .ph-title { font-size: 15px; font-weight: 700; }
+        .pomo-harvest .ph-sub { font-size: 11.5px; opacity: 0.75; margin-top: 2px; }
+        .pomo-harvest .ph-min { font-size: 20px; font-weight: 700; color: #fdba74; }
+        @keyframes pomoHarvestIn {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-16px) scale(0.88); }
+            9% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            84% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-12px) scale(0.95); }
+        }
+        @keyframes phPop { 0% { transform: scale(0.3) rotate(-18deg); } 100% { transform: scale(1) rotate(0); } }
+        /* v2.10 项目 Boss 血条（颜色设置·项目管理列表内） */
+        .proj-hp { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding-left: 50px; }
+        .proj-hp-track { flex: 1; height: 5px; border-radius: 3px; background: rgba(127, 127, 127, 0.18); overflow: hidden; }
+        .proj-hp-track i { display: block; height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .proj-hp.low i { background: #ef4444 !important; }
+        .proj-hp-num { font-size: 10.5px; color: #8a8a9a; white-space: nowrap; font-weight: 600; }
+        .proj-hp-clear { font-size: 11px; font-weight: 700; color: #10b981; white-space: nowrap; }
         .pomo-controls { display: flex; gap: 10px; justify-content: center; padding: 10px 0; }
         .pomo-opts {
             display: flex; align-items: center; gap: 8px; justify-content: center;
@@ -3113,6 +3161,119 @@
         }
         .day-cell:hover .cell-quick-add { opacity: 1; pointer-events: auto; }
         .cell-quick-add:hover { background: #667eea; color: #fff; }
+
+        /* ===== v2.10 拖拽让位：水波让位 + 吸附光缝 ===== */
+        .event-item { will-change: transform; }
+        .events-container.is-dragging .event-item { transition: transform 0.18s cubic-bezier(0.34, 1.4, 0.64, 1); }
+        .events-container.is-dragging .event-item.nudge { transform: translateY(4px); }
+        .events-container.is-dragging .event-item.dragging { opacity: 0.4; transform: none; }
+        .event-item.drag-over-top::after,
+        .event-item.drag-over-bottom::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            right: 3px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b 22%, #fbbf24 50%, #f59e0b 78%, transparent);
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.75);
+            animation: nikoSeamPulse 0.9s ease-in-out infinite;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .event-item.drag-over-top::after { top: -3px; }
+        .event-item.drag-over-bottom::after { bottom: -3px; }
+        @keyframes nikoSeamPulse {
+            0%, 100% { opacity: 0.55; transform: scaleX(0.92); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+
+        /* ===== v2.10 长按状态轮盘（四向菱形） ===== */
+        .status-mark { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+        .status-wheel {
+            position: fixed;
+            z-index: 9999;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+        .status-wheel .sw-item {
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            line-height: 1;
+            cursor: pointer;
+            pointer-events: auto;
+            border: 1.5px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+            transform: translate(-50%, -50%) scale(0.3);
+            opacity: 0;
+            animation: swPop 0.22s cubic-bezier(0.34, 1.5, 0.64, 1) forwards;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .status-wheel .sw-item small { font-size: 8px; font-weight: 600; margin-top: 1px; opacity: 0.85; }
+        .status-wheel .sw-item.sw-done { animation-delay: 0.03s; }
+        .status-wheel .sw-item.sw-todo { animation-delay: 0.06s; }
+        .status-wheel .sw-item.sw-overdue { animation-delay: 0.09s; }
+        .status-wheel .sw-hint {
+            position: absolute;
+            transform: translate(-50%, 26px);
+            white-space: nowrap;
+            font-size: 10px;
+            color: #fff;
+            background: rgba(26, 26, 26, 0.88);
+            padding: 2px 8px;
+            border-radius: 8px;
+            pointer-events: none;
+            animation: swPop 0.2s 0.1s cubic-bezier(0.34, 1.5, 0.64, 1) forwards;
+            opacity: 0;
+        }
+        @keyframes swPop { to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .status-wheel .sw-hint { animation-name: swHintPop; }
+        @keyframes swHintPop { to { transform: translate(-50%, 26px); opacity: 1; } }
+
+        /* ===== v2.10 项目讨伐完成仪式（居中短暂横幅，非阻塞自动消散） ===== */
+        .project-clear-fx {
+            position: fixed;
+            top: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 22px;
+            border-radius: 14px;
+            background: rgba(26, 26, 26, 0.92);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+            animation: projClearIn 2.8s ease forwards;
+            white-space: nowrap;
+        }
+        .project-clear-fx .pcf-icon { font-size: 24px; animation: pcfBob 0.9s ease-in-out infinite alternate; }
+        @keyframes projClearIn {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-14px) scale(0.9); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+            82% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.96); }
+        }
+        @keyframes pcfBob { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+
+        /* ===== v2.10 专注林地（计划看板 mini 版，复用 .pomo-tree 树苗样式） ===== */
+        .plan-focus-strip { display: inline-flex; align-items: flex-end; gap: 4px; margin-left: 10px; padding-bottom: 1px; vertical-align: middle; }
+        .plan-focus-strip .pfs-cap { font-size: 10px; color: #8a93a6; margin-left: 3px; white-space: nowrap; align-self: center; }
+        body.dark-mode .plan-focus-strip .pfs-cap { color: #6b7488; }
+        @media (max-width: 768px) { .plan-focus-strip .pfs-cap span.pfs-full { display: none; } .plan-focus-strip { gap: 3px; margin-left: 6px; } }
         /* v4 日期行左右分组：左侧(星期+日期+心情+节日)可收缩截断，右侧(计数+清剿印+快速新建)不换行 */
         .day-head-left { display: inline-flex; align-items: center; gap: 3px; min-width: 0; overflow: hidden; flex: 1; }
         .day-head-right { display: inline-flex; align-items: center; gap: 3px; flex-shrink: 0; margin-left: 4px; }
@@ -3183,8 +3344,8 @@
             opacity: 0.8;
         }
         .event-item.dragging { opacity: 0.35; }
-        .event-item.drag-over-top { box-shadow: inset 0 2px 0 0 #f59e0b !important; }
-        .event-item.drag-over-bottom { box-shadow: inset 0 -2px 0 0 #f59e0b !important; }
+        /* v2.10：吸附光缝改由 ::after 绘制（发光呼吸），这里仅保留命中标记 */
+        .event-item.drag-over-top, .event-item.drag-over-bottom { z-index: 3; }
         .event-item.completed {
             opacity: 0.5;
             text-decoration: line-through;
@@ -4130,6 +4291,18 @@
         }
         body.dark-mode .gantt-bar {
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        /* v2.10 跨天任务进度底条：白色微光随推进天数变亮变宽 */
+        .gantt-progress {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2.5px;
+            border-radius: 0 2px 2px 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.35), rgba(255,255,255,0.85));
+            box-shadow: 0 0 5px rgba(255,255,255,0.45);
+            pointer-events: none;
+            transition: width 0.5s ease;
         }
 
         /* ===== 买量节点 ===== */
@@ -8739,6 +8912,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <span class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span>截止日</span>
                         <span class="legend-item"><span class="legend-dot" style="background:#10b981;"></span>项目节点</span>
                         <span class="legend-item"><span class="legend-dot" style="background:#8b5cf6;"></span>长期任务</span>
+                        <span class="plan-focus-strip" id="planFocusStrip" title="番茄林地：每完成一个番茄钟种一棵树，树高 = 专注时长"></span>
                     </div>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
@@ -11673,6 +11847,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function render() {
+            if (typeof renderPlanFocusStrip === 'function') { try { renderPlanFocusStrip(); } catch (e) {} } // v2.10 计划看板专注林地（图例行内）
             if (currentPage === 'today') renderTodayPage();
             else if (currentPage === 'plan') {
                 if (currentView === 'calendar') renderPlanPage();
@@ -13406,6 +13581,55 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             box.innerHTML = html;
         }
 
+        // ===== v2.10 专注林地（计划看板 mini 版）：近 7 天番茄树 + 本周专注合计，渲染由总框架 render() 调度 =====
+        function pfFmtMin(m) {
+            m = Number(m) || 0;
+            if (m >= 60) { const h = Math.floor(m / 60); return h + 'h' + (m % 60 ? (m % 60) + 'm' : ''); }
+            return m + 'm';
+        }
+        function renderPlanFocusStrip() {
+            const box = document.getElementById('planFocusStrip');
+            if (!box) return;
+            const logs = safeStorage.get('niko_pomodoro_logs', []);
+            const byDate = {};
+            logs.forEach(l => { if (l && l.date) { (byDate[l.date] = byDate[l.date] || []).push(Number(l.minutes) || 25); } });
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const n = new Date();
+                n.setDate(n.getDate() - i);
+                days.push(new Date(n.getTime() - n.getTimezoneOffset() * 60000).toISOString().slice(0, 10));
+            }
+            const leafH = (min) => Math.min(16, 5 + Math.round((min || 25) / 25) * 3);
+            const todayDs = days[6];
+            const html = days.map(ds => {
+                const list = byDate[ds] || [];
+                const trees = list.slice(-5).map(m => `<span class="pomo-tree"><span class="pt-leaf${ds === todayDs ? ' lit' : ''}" style="height:${leafH(m)}px;"></span><span class="pt-trunk"></span></span>`).join('');
+                const dayMin = list.reduce((s, m) => s + m, 0);
+                const tip = `${ds} · 专注 ${pfFmtMin(dayMin)} · ${list.length} 个番茄`;
+                return `<span class="gt-forest-day" title="${tip}">${trees || '<span class="gt-forest-idle"></span>'}</span>`;
+            }).join('');
+            const weekMin = days.reduce((s, ds) => s + (byDate[ds] || []).reduce((a, m) => a + m, 0), 0);
+            box.innerHTML = html + `<span class="pfs-cap">🌱<span class="pfs-full"> 本周专注 </span>${pfFmtMin(weekMin)}</span>`;
+        }
+
+        // ===== v2.10 项目讨伐完成仪式：项目最后一个任务完成的瞬间全服播报 =====
+        function projectClearCeremony(project) {
+            const fx = document.createElement('div');
+            fx.className = 'project-clear-fx';
+            fx.innerHTML = `<span class="pcf-icon">🏆</span><span>项目「${escapeHtml(project.name || '')}」讨伐完成！</span><span style="font-size:11px;opacity:.75;">材料已入掉落图鉴</span>`;
+            fx.style.borderLeft = '4px solid ' + (project.color || '#10b981');
+            document.body.appendChild(fx);
+            setTimeout(() => fx.remove(), 2900);
+            showToast('🏆 项目「' + (project.name || '') + '」讨伐完成！');
+        }
+        function checkProjectClear(ev) {
+            if (!ev || !ev.projectId) return;
+            const project = getProject(ev.projectId);
+            if (!project || project.id === 'pj_general') return;
+            const remain = events.filter(e => e.projectId === ev.projectId && e.status !== 'done').length;
+            if (remain === 0) projectClearCeremony(project);
+        }
+
         // 任务条纵向拖拽：每个日期存一份 ID 序列（niko_plan_day_order）
         let planDayOrder = safeStorage.get('niko_plan_day_order', {});
         // 闪捕停车场：无日期捕获暂存（niko_backlog），拖进日历即转正式任务
@@ -13630,9 +13854,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
                     const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
                     item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${copyActionHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
-                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); });
-                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom')); });
-                    // 任务条纵向拖拽：上/下半区决定插入位置
+                    // v2.10 状态圈长按轮盘
+                    if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
+                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
+                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom', 'nudge')); document.querySelectorAll('.events-container.is-dragging').forEach(x => x.classList.remove('is-dragging')); });
+                    // 任务条纵向拖拽：上/下半区决定插入位置；其余任务水波让位
                     item.addEventListener('dragover', (e) => {
                         e.preventDefault();
                         e.stopPropagation(); // 不冒泡到 cell 的 drop（防止落到 cell 空白处直接改日期）
@@ -13640,6 +13866,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         const isAfter = (e.clientY - rect.top) >= rect.height / 2;
                         item.classList.toggle('drag-over-top', !isAfter);
                         item.classList.toggle('drag-over-bottom', isAfter);
+                        // v2.10 让位：插入点之后的任务条顺势下移 4px，像水面让路
+                        const ec = item.closest('.events-container');
+                        if (ec) {
+                            const siblings = [...ec.querySelectorAll('.event-item')];
+                            const idx = siblings.indexOf(item);
+                            siblings.forEach((s, i) => {
+                                if (s === item) return;
+                                s.classList.toggle('nudge', isAfter ? i > idx : i >= idx);
+                            });
+                        }
                         e.dataTransfer.dropEffect = 'move';
                     });
                     item.addEventListener('dragleave', () => item.classList.remove('drag-over-top', 'drag-over-bottom'));
@@ -13748,7 +13984,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${GANTT_MARK_SVG[displayStatus] || ''}</span>`;
                     // 勾选小方块 + 标题 + 右上角状态图标；点击 ✓ 触发完成；状态图标点击循环切换；其余区域点击穿透到 ghost 占位打开编辑
                     const checkHtml = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span>`;
-                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}`;
+                    // v2.10 跨天进度底条：亮度随已进行天数推进，像技能冷却条一样讲述"走到哪了"
+                    let progressHtml = '';
+                    if (!isDone && ev.startDate !== ev.endDate) {
+                        const st = new Date(ev.startDate + 'T00:00:00'), en = new Date(ev.endDate + 'T00:00:00'), now = new Date();
+                        const total = Math.max(1, Math.round((en - st) / 86400000));
+                        const done = Math.min(total, Math.max(0, Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - st) / 86400000)));
+                        const pct = Math.round(done / total * 100);
+                        if (pct > 0) progressHtml = `<i class="gantt-progress" style="width:${pct}%"></i>`;
+                    }
+                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
                     overlay.appendChild(bar);
                 }
             }
@@ -14254,6 +14499,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         const dayEvs = events.filter(x => typeof isDateInRange !== 'function' || isDateInRange(ev.startDate, x.startDate, x.endDate));
                         if (dayEvs.length > 1 && dayEvs.every(x => x.status === 'done')) showToast('🗡️ 本日任务全清 · 小怪清剿完成！');
                     } catch (err) {}
+                    checkProjectClear(ev);
                 } else {
                     if (typeof nikoComboDrop === 'function') nikoComboDrop();
                 }
@@ -14265,6 +14511,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 任务条状态快捷切换：点击状态图标循环 todo → in-progress → done → todo
         function cycleEventStatus(id, e) {
             if (e) e.stopPropagation();
+            if (typeof _swSuppressClick !== 'undefined' && _swSuppressClick) { _swSuppressClick = false; return; } // 长按轮盘刚收起，吞掉这次 click
             const ev = events.find(e => e.id === id);
             if (!ev) return;
             const wasOverdue = ev.status !== 'done' && typeof isEventOverdue === 'function' && isEventOverdue(ev);
@@ -14275,12 +14522,87 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (typeof nikoComboBump === 'function') nikoComboBump();
                 if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(e && e.target);
                 else if (typeof nikoSpark === 'function') nikoSpark(e && e.target, '✓', '#10b981');
+                checkProjectClear(ev);
             } else {
                 if (typeof nikoComboDrop === 'function') nikoComboDrop();
             }
             render();
             if (ev.status === 'done') markJustDone(ev.id);
             showToast('状态 → ' + (statusNames[ev.status] || ev.status));
+        }
+
+        // ===== v2.10 长按状态轮盘：长按状态圈 450ms 弹出四向菱形，指向即切换，点空白/再点收起 =====
+        let _swSuppressClick = false;
+        let _swEl = null;
+        const SW_ITEMS = [
+            { status: 'in-progress', icon: '🔵', label: '进行', color: '#3b82f6', dx: 0, dy: -40 },
+            { status: 'done',        icon: '✅', label: '完成', color: '#10b981', dx: 40, dy: 0 },
+            { status: 'todo',        icon: '⚪', label: '待办', color: '#94a3b8', dx: 0, dy: 40 },
+            { status: 'overdue',     icon: '⏳', label: '延期', color: '#ef4444', dx: -40, dy: 0 }
+        ];
+        function attachStatusWheel(markEl, eventId) {
+            if (!markEl) return;
+            let pressTimer = null;
+            const clearTimer = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+            markEl.addEventListener('contextmenu', (e) => e.preventDefault()); // 长按是轮盘手势，屏蔽系统菜单
+            markEl.addEventListener('pointerdown', (e) => {
+                if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+                clearTimer();
+                pressTimer = setTimeout(() => { pressTimer = null; openStatusWheel(eventId, markEl); }, 450);
+            });
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => markEl.addEventListener(t, clearTimer));
+        }
+        function openStatusWheel(eventId, anchorEl) {
+            closeStatusWheel();
+            _swSuppressClick = true; // 松手时触发的 click 不再走循环切换
+            const rect = anchorEl.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+            const wheel = document.createElement('div');
+            wheel.className = 'status-wheel';
+            wheel.style.left = cx + 'px';
+            wheel.style.top = cy + 'px';
+            wheel.innerHTML = SW_ITEMS.map(it =>
+                `<span class="sw-item sw-${it.status}" style="left:${it.dx}px;top:${it.dy}px;background:${it.color};color:#fff;" data-status="${it.status}" title="${statusNames[it.status] || it.status}">${it.icon}<small>${it.label}</small></span>`
+            ).join('') + `<span class="sw-hint">选状态</span>`;
+            wheel.style.pointerEvents = 'none';
+            document.body.appendChild(wheel);
+            wheel.style.pointerEvents = '';
+            wheel.querySelectorAll('.sw-item').forEach(btn => {
+                btn.addEventListener('pointerdown', (e) => e.stopPropagation());
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    setStatusDirect(eventId, btn.getAttribute('data-status'), anchorEl);
+                    closeStatusWheel();
+                });
+            });
+            _swEl = wheel;
+            // 点其它任何地方 / 滚动 / 3 秒超时自动收起
+            setTimeout(() => {
+                document.addEventListener('pointerdown', closeStatusWheel, { once: true, capture: true });
+            }, 0);
+            window.addEventListener('scroll', closeStatusWheel, { once: true, capture: true });
+            wheel._timeout = setTimeout(closeStatusWheel, 3000);
+        }
+        function closeStatusWheel() {
+            if (_swEl) { try { _swEl.remove(); } catch (e) {} _swEl = null; }
+        }
+        function setStatusDirect(id, status, targetEl) {
+            const ev = events.find(e => e.id === id);
+            if (!ev || !status) return;
+            const wasOverdue = ev.status !== 'done' && typeof isEventOverdue === 'function' && isEventOverdue(ev);
+            const wasDone = ev.status === 'done';
+            ev.status = status;
+            saveData();
+            if (status === 'done') {
+                if (typeof nikoComboBump === 'function') nikoComboBump();
+                if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(targetEl);
+                else if (typeof nikoSpark === 'function') nikoSpark(targetEl, '✓', '#10b981');
+                checkProjectClear(ev);
+            } else if (wasDone) {
+                if (typeof nikoComboDrop === 'function') nikoComboDrop();
+            }
+            render();
+            showToast('状态 → ' + (statusNames[status] || status));
         }
 
         // 复制任务：生成副本（标题加「副本」、状态重置 todo），并保留在原日期
@@ -23977,12 +24299,24 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             box.innerHTML = projects.map(p => {
                 const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
                 const taskCount = (events || []).filter(e => e.projectId === p.id).length;
+                // v2.10 项目 Boss 血条：HP = 未完成任务 / 全部任务，清零即讨伐完成
+                const pTotal = (events || []).filter(e => e.projectId === p.id).length;
+                const pRemain = (events || []).filter(e => e.projectId === p.id && e.status !== 'done').length;
+                const hpPct = pTotal ? Math.round(pRemain / pTotal * 100) : 0;
+                const hpHtml = pTotal ? `
+                    <div class="proj-hp${hpPct <= 25 && pRemain > 0 ? ' low' : ''}">
+                        <div class="proj-hp-track"><i style="width:${hpPct}%;background:${p.color};"></i></div>
+                        ${pRemain === 0 ? `<span class="proj-hp-clear">🏆 讨伐完成</span>` : `<span class="proj-hp-num">HP ${pRemain}/${pTotal}</span>`}
+                    </div>` : '';
                 return `
-                <div class="color-picker-row" data-project-id="${p.id}">
-                    <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
-                    <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
-                    ${usedTag}
-                    <button class="color-reset-btn" onclick="deleteProjectFromUI('${p.id}')" title="删除项目">🗑</button>
+                <div class="color-picker-row" data-project-id="${p.id}" style="flex-direction:column;align-items:stretch;gap:4px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
+                        <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
+                        ${usedTag}
+                        <button class="color-reset-btn" onclick="deleteProjectFromUI('${p.id}')" title="删除项目">🗑</button>
+                    </div>
+                    ${hpHtml}
                 </div>`;
             }).join('');
         }
@@ -24833,7 +25167,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const btnEl = document.getElementById('pomoToggleBtn');
             if (timeEl) timeEl.textContent = pomoTimeText(pomoRemain);
             const pct = pomoTotalSeconds ? ((pomoTotalSeconds - pomoRemain) / pomoTotalSeconds) * 100 : 0;
-            if (ringEl) ringEl.style.background = `conic-gradient(#f97316 ${pct}%, #e5e7eb ${pct}% 100%)`;
+            if (ringEl) { ringEl.style.background = `conic-gradient(#f97316 ${pct}%, #e5e7eb ${pct}% 100%)`; ringEl.classList.toggle('running', !!pomoRunning); }
             if (stateEl) stateEl.textContent = pomoRunning ? (pomoTag ? pomoTag + ' · 专注中' : '专注中') : '准备开始';
             if (btnEl) btnEl.textContent = pomoRunning ? '⏸ 暂停' : '▶ 开始';
         }
@@ -24941,8 +25275,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoLog();
             renderPomoBadge();
             renderPomoFace();
-            // 🌱 番茄林地：每完成一个番茄钟种下一棵树（游戏时间页游玩日历卡头部可看林地全景）
+            // 🌱 番茄林地：每完成一个番茄钟种下一棵树（游戏时间页 + 计划看板图例行同步可看）
             if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('pomoTimeDisplay'), '🌱', '#34d399');
+            try { if (typeof window.renderPlanFocusStrip === 'function') window.renderPlanFocusStrip(); } catch (e) {}
+            // 🍅 v2.10 收获仪式：居中非阻塞播报这张番茄的"战利品"
+            try {
+                const todayLogs = safeStorage.get('niko_pomodoro_logs', []).filter(l => l.date === formatDate(new Date()));
+                const hv = document.createElement('div');
+                hv.className = 'pomo-harvest';
+                hv.innerHTML = `<span class="ph-icon">🍅</span><span><div class="ph-title">番茄收进仓！</div><div class="ph-sub">今天的第 ${todayLogs.length} 颗 · 「${escapeHtml(pomoTag)}」</div></span><span class="ph-min">+${pomoMinutes}′</span>`;
+                document.body.appendChild(hv);
+                setTimeout(() => { try { hv.remove(); } catch (e) {} }, 2700);
+            } catch (e) {}
             // 浏览器系统通知（页面在后台/最小化也能收到）+ 标题闪烁兜底
             try {
                 if ('Notification' in window && Notification.permission === 'granted') {
@@ -25309,7 +25653,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021317";
+        window.NIKO_VERSION = "202609021433";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
