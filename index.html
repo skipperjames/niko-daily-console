@@ -1367,6 +1367,7 @@
         .floating-dock {
             position: fixed; right: 20px; bottom: 24px; z-index: 2600;
             display: flex; flex-direction: column; gap: 10px;
+            align-items: flex-end;
         }
         .dock-btn {
             width: 46px; height: 46px; border-radius: 50%;
@@ -1385,6 +1386,39 @@
             padding: 0 4px; font-weight: 500;
         }
         body.dark-mode .dock-btn { background: #1f2937; border-color: #374151; }
+        /* FAB 折叠：小屏默认收起为一个「+」主按钮，展开后浮出 4 个 */
+        .dock-toggle { display: none; }
+        @media (max-width:768px) {
+            /* 主折叠按钮 */
+            .dock-toggle {
+                display: flex; width: 50px; height: 50px; border-radius: 50%;
+                background: linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff;
+                align-items:center; justify-content:center; font-size:24px; font-weight:300;
+                box-shadow: 0 6px 18px rgba(124,58,237,.4); border:none; cursor:pointer;
+                position: relative; transition: transform .2s ease;
+            }
+            .dock-toggle:active { transform: scale(.92); }
+            .dock-toggle .dock-toggle-icon { transition: transform .25s ease; }
+            .floating-dock.open .dock-toggle-icon { transform: rotate(135deg); }
+            /* 子按钮默认隐藏 */
+            .floating-dock > .dock-btn:not(.dock-toggle) {
+                opacity: 0; transform: scale(.6) translateY(10px);
+                pointer-events: none; transition: opacity .18s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+            }
+            .floating-dock.open > .dock-btn:not(.dock-toggle) {
+                opacity: 1; transform: scale(1) translateY(0); pointer-events: auto;
+            }
+            .floating-dock.open > .dock-btn:nth-of-type(2) { transition-delay: .04s; }
+            .floating-dock.open > .dock-btn:nth-of-type(3) { transition-delay: .08s; }
+            .floating-dock.open > .dock-btn:nth-of-type(4) { transition-delay: .12s; }
+            .floating-dock.open > .dock-btn:nth-of-type(5) { transition-delay: .16s; }
+            /* 遮罩防止误触底层 */
+            .floating-dock.open::before {
+                content:''; position: fixed; left:0; right:0; top:0; bottom:0;
+                background: rgba(0,0,0,.18); z-index: -1; animation: dockFadeIn .2s ease;
+            }
+            @keyframes dockFadeIn { from {opacity:0;} to {opacity:1;} }
+        }
 
         /* ===== 截图识别便签（OCR） ===== */
         .ocr-drop {
@@ -2115,6 +2149,36 @@
         body.dark-mode .habit-streak-chip { color: #fbbf24; }
         .habit-empty { font-size: 11px; color: #aaa; padding: 4px 0; }
         body.dark-mode .habit-empty { color: #777; }
+        /* ===== 习惯频率选择器（2026-09-02 智能打卡） ===== */
+        .habit-freq { display:flex; align-items:center; gap:6px; flex-wrap:wrap; width:100%; padding:4px 0; }
+        .habit-freq-label { font-size:11.5px; color:#888; padding:0 4px; }
+        .habit-freq-btn {
+            padding:5px 12px; border-radius:14px; cursor:pointer; font-size:12px;
+            background:#fff; color:#555; border:1px solid #e0ded9; transition:all .15s;
+            font-family:inherit;
+        }
+        body.dark-mode .habit-freq-btn { background:#1f1f2e; border-color:#444; color:#bbb; }
+        .habit-freq-btn:hover { border-color:#7c3aed; color:#7c3aed; }
+        .habit-freq-btn.active { background:linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff; border-color:transparent; font-weight:600; }
+        .habit-weekdays { display:flex; align-items:center; gap:4px; flex-wrap:wrap; width:100%; padding:0 0 4px; }
+        .habit-day-btn {
+            width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:12px; font-weight:600;
+            background:#fff; color:#555; border:1px solid #e0ded9; transition:all .15s; font-family:inherit;
+        }
+        body.dark-mode .habit-day-btn { background:#1f1f2e; border-color:#444; color:#bbb; }
+        .habit-day-btn:hover { border-color:#7c3aed; color:#7c3aed; }
+        .habit-day-btn.active { background:linear-gradient(135deg,#7c3aed,#4f46e5); color:#fff; border-color:transparent; box-shadow:0 2px 6px rgba(124,58,237,.4); }
+        /* 「今天休息」灰态习惯卡（不在打卡频率内的） */
+        .habit-card.rest-card { opacity:.45; cursor:not-allowed; background:#f5f5f5 !important; border-style:dashed !important; }
+        body.dark-mode .habit-card.rest-card { background:#1a1a22 !important; }
+        .habit-card.rest-card:hover { transform:none !important; box-shadow:none !important; }
+        .habit-card.rest-card .habit-rest-tag {
+            display:inline-block; font-size:10px; padding:1px 6px; border-radius:8px;
+            background:#e5e7eb; color:#6b7280; margin-left:4px; font-weight:500;
+        }
+        body.dark-mode .habit-card.rest-card .habit-rest-tag { background:#2a2a38; color:#9ca3af; }
+        .habit-card.rest-card .habit-name::before { content:'🌙 '; opacity:.6; }
+        .habit-card.rest-done-card { opacity:.7; }
 
         /* 习惯管理弹窗 */
         #habitsModal .modal { width: 640px; max-width: 94vw; }
@@ -6524,10 +6588,38 @@
         body.dark-mode .kb-guide .btn { background:#332d47; border-color:#4a3f6b; color:#c4b5fd; }
 
         @media (max-width:768px) {
-            .kb-actions input { width:100%; }
+            .kb-actions { width:100%; gap:6px; }
+            .kb-actions input { width:100%; font-size:16px; padding:10px 12px; }
+            .kb-actions .btn { padding:10px 11px; font-size:12.5px; min-height:38px; }
             .kb-head { align-items:flex-start; }
-            .kb-actions .btn { padding:9px 12px; font-size:13px; }
+            .kb-head h1 { font-size:18px !important; }
+            .kb-head .kb-sub { display:block; max-width:240px; font-size:11.5px; line-height:1.5; margin-top:2px; }
             .kb-para-tab { padding:8px 13px; font-size:12.5px; }
+            .kb-cat, .kb-from { font-size:11.5px; padding:4px 10px; }
+            .kb-stats { font-size:11px; }
+            .kb-insight-stat-value { font-size:17px !important; }
+            .kb-insight-bar-label { width:84px; font-size:11.5px; }
+            .kb-insight-month-grid { grid-template-columns:repeat(3,1fr); }
+            .kb-card { padding:12px 12px; }
+            .kb-card-title { font-size:13.5px; }
+            .kb-card-body { font-size:12px; }
+            .kb-review-card { padding:14px; }
+            .kb-review-title { font-size:15px; }
+            .kb-review-grade { grid-template-columns:1fr 1fr 1fr; gap:6px; }
+            .kb-review-grade button { padding:10px 6px; font-size:12px; }
+            .kb-guide { padding:10px 12px; font-size:11.5px; }
+            .kb-tpl-group-label { min-width:84px; font-size:10.5px; }
+            .kb-tpl-chip { font-size:11px; padding:2px 7px; }
+        }
+        /* 极窄屏（≤375px）进一步压缩 */
+        @media (max-width:380px) {
+            .kb-actions .btn { padding:8px 8px; font-size:11.5px; }
+            .kb-insight-month-grid { grid-template-columns:repeat(2,1fr); }
+            .kb-insight-stats { grid-template-columns:repeat(2,1fr); }
+        }
+        @media (max-width:600px) {
+            #kbEditModal .modal { width: 100vw !important; max-width: 100vw !important; border-radius: 14px 14px 0 0; max-height: 90vh; }
+            #kbImportModal .modal, #kbGraphModal .modal, #kbInsightModal .modal, #kbReviewModal .modal { width: 100vw !important; max-width: 100vw !important; }
         }
 /* ===== 读书看板专属CSS ===== */
         .book-view-tabs {
@@ -7601,6 +7693,71 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         body.dark-mode .gt-empty { color: #777; }
         .gt-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start; }
         @media (max-width: 860px) { .gt-layout { grid-template-columns: 1fr; } }
+
+        /* ===== 手机端适配（2026-09-02 与知识库/计划/日记同步强化） ===== */
+        @media (max-width:768px) {
+            /* 主容器 padding 收紧 + 底部安全区 */
+            #gamePage > div { padding: 14px 14px calc(20px + env(safe-area-inset-bottom, 0)) !important; gap: 12px !important; }
+            /* 标题缩小 */
+            #gamePage h1 { font-size: 18px !important; }
+            #gamePage p { font-size: 12.5px !important; }
+
+            /* 余额卡：左右垂直堆叠，避免输入框被挤掉 */
+            .gt-balance-card { flex-direction: column; align-items: stretch; padding: 16px; gap: 12px; border-radius: 14px; }
+            .gt-balance-left { gap: 6px; }
+            .gt-balance-num { font-size: 34px; }
+            .gt-balance-right { width: 100%; }
+            .gt-spend-box { width: 100%; justify-content: space-between; padding: 10px; }
+            .gt-spend-box input { width: 100% !important; min-height: 40px; font-size: 16px !important; }
+            .gt-spend-box button { flex: 1; min-height: 40px; font-size: 13px; padding: 10px 16px; }
+
+            /* 4 列统计 → 2 列 */
+            .gt-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .gt-stat { padding: 10px 12px; border-radius: 12px; }
+            .gt-stat-value { font-size: 17px; }
+            .gt-stat-value#gtStatLast { font-size: 13px !important; }
+
+            /* 游玩日历紧凑 */
+            .gt-card { padding: 12px 12px; border-radius: 12px; }
+            .gt-card-title { font-size: 13px; }
+            .gt-play-input { gap: 6px; }
+            .gt-play-input input { min-height: 40px; font-size: 16px !important; }
+            .gt-play-input button { min-height: 40px; padding: 8px 12px; font-size: 12.5px; }
+            .gt-play-stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            .gt-play-stat { padding: 7px 10px; }
+            .gt-play-stat-val { font-size: 14px; }
+
+            /* 日历格子更紧凑 */
+            .gt-calendar { gap: 3px; padding: 8px 6px; border-radius: 10px; }
+            .gt-cal-day { min-height: 38px; padding: 2px 1px; border-radius: 6px; }
+            .gt-cal-day-num { font-size: 10.5px; }
+            .gt-cal-day-min { font-size: 9px; padding: 1px 3px; }
+            .gt-cal-day-note { display: none; }
+            .gt-cal-nav-btn { padding: 6px 10px; font-size: 11.5px; min-height: 32px; }
+
+            /* 奖励规则行更紧凑 */
+            .gt-rule-row { padding: 8px 0; gap: 8px; }
+            .gt-rule-name { font-size: 12.5px; min-width: 0; flex: 1; }
+            .gt-rule-input { font-size: 11px; }
+            .gt-rule-input input { width: 56px; padding: 4px 6px; font-size: 13px !important; }
+
+            /* 流水项 */
+            .gt-h-item { padding: 7px 9px; font-size: 12px; gap: 8px; }
+            .gt-h-type { width: 28px; font-size: 12px; }
+            .gt-week-bar-label { width: 38px; }
+            .gt-week-bar-val { width: 64px; font-size: 10px; }
+        }
+        /* 极窄屏 ≤375px 进一步压缩 */
+        @media (max-width:380px) {
+            .gt-balance-num { font-size: 30px; }
+            .gt-stats { grid-template-columns: repeat(2, 1fr); }
+            .gt-stat-value { font-size: 16px; }
+            .gt-cal-day { min-height: 34px; }
+        }
+        @media (max-width:600px) {
+            #gtDayDetail { padding: 10px 12px; }
+            .gt-dd-sum { grid-template-columns: repeat(2, 1fr); }
+        }
 /* ===== 复利面板专属CSS ===== */
         .cp-wrap { display:flex; flex-direction:column; gap:14px; }
         .cp-hero {
@@ -8268,7 +8425,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="niko-mobile-tab" data-page="plan" onclick="switchPage('plan')"><span class="tab-icon">📋</span><span>计划</span></div>
         <div class="niko-mobile-tab" data-page="diary" onclick="switchPage('diary')"><span class="tab-icon">📔</span><span>日记</span></div>
         <div class="niko-mobile-tab" data-page="game" onclick="switchPage('game')"><span class="tab-icon">🎮</span><span>游戏</span></div>
-        <div class="niko-mobile-tab" data-page="compound" onclick="switchPage('compound')"><span class="tab-icon">📈</span><span>复利</span></div>
+        <div class="niko-mobile-tab" data-page="knowledge" onclick="switchPage('knowledge')"><span class="tab-icon">🧠</span><span>知识</span></div>
     </div>
 
 
@@ -8361,7 +8518,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <div class="habit-form">
                         <input type="text" id="habitNameInput" placeholder="习惯名称，如：早上8点前起床" onkeydown="if(event.key==='Enter')addHabit()">
                         <span class="habit-icon-pick" id="habitIconPick"></span>
-                        <span class="habit-goal-wrap">
+                        <div class="habit-freq" id="habitFreqBar">
+                            <span class="habit-freq-label">频率</span>
+                            <button type="button" class="habit-freq-btn active" data-freq="daily" onclick="setHabitFreq('daily')">每天</button>
+                            <button type="button" class="habit-freq-btn" data-freq="weekly" onclick="setHabitFreq('weekly')">每周N次</button>
+                            <button type="button" class="habit-freq-btn" data-freq="weekdays" onclick="setHabitFreq('weekdays')">固定几天</button>
+                        </div>
+                        <div class="habit-weekdays" id="habitWeekdaysBar" style="display:none;">
+                            <span class="habit-freq-label">哪几天</span>
+                            <button type="button" class="habit-day-btn" data-day="1" onclick="toggleHabitDay(1)">一</button>
+                            <button type="button" class="habit-day-btn" data-day="2" onclick="toggleHabitDay(2)">二</button>
+                            <button type="button" class="habit-day-btn" data-day="3" onclick="toggleHabitDay(3)">三</button>
+                            <button type="button" class="habit-day-btn" data-day="4" onclick="toggleHabitDay(4)">四</button>
+                            <button type="button" class="habit-day-btn" data-day="5" onclick="toggleHabitDay(5)">五</button>
+                            <button type="button" class="habit-day-btn" data-day="6" onclick="toggleHabitDay(6)">六</button>
+                            <button type="button" class="habit-day-btn" data-day="0" onclick="toggleHabitDay(0)">日</button>
+                        </div>
+                        <span class="habit-goal-wrap" id="habitGoalWrap">
                             <span class="habit-goal-label">每周</span>
                             <input type="number" class="habit-goal" id="habitGoalInput" min="1" max="28" step="1" value="7" title="每周目标次数，可自定义（1-28）">
                             <span class="habit-goal-unit">次</span>
@@ -10348,19 +10521,22 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     </div>
 
     <!-- 右下角悬浮工具坞 -->
-    <div class="floating-dock">
-        <div class="dock-btn" onclick="openPomodoro()" title="番茄钟专注">
+    <div class="floating-dock" id="floatingDock">
+        <div class="dock-btn dock-toggle" onclick="toggleDock(event)" title="工具坞（番茄/收件箱/标签/截图）">
+            <span class="dock-toggle-icon">✦</span>
+        </div>
+        <div class="dock-btn" onclick="openPomodoro();closeDock();" title="番茄钟专注">
             <span>🍅</span>
             <span class="dock-badge" id="pomoTodayBadge" style="display:none;">0</span>
         </div>
-        <div class="dock-btn" onclick="openInbox()" title="快速捕获">
+        <div class="dock-btn" onclick="openInbox();closeDock();" title="快速捕获">
             <span>📥</span>
             <span class="dock-badge" id="inboxBadge" style="display:none;">0</span>
         </div>
-        <div class="dock-btn" onclick="openTagOverview()" title="标签总览">
+        <div class="dock-btn" onclick="openTagOverview();closeDock();" title="标签总览">
             <span>🏷</span>
         </div>
-        <div class="dock-btn" onclick="openOcr()" title="截图识别便签">
+        <div class="dock-btn" onclick="openOcr();closeDock();" title="截图识别便签">
             <span>📷</span>
         </div>
     </div>
@@ -11102,10 +11278,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const p = document.getElementById('navMorePanel');
             if (p) p.classList.remove('show');
         }
+        // 悬浮工具坞：手机端折叠态切换
+        function toggleDock(e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            const d = document.getElementById('floatingDock');
+            if (!d) return;
+            d.classList.toggle('open');
+        }
+        function closeDock() {
+            const d = document.getElementById('floatingDock');
+            if (d && d.classList.contains('open')) d.classList.remove('open');
+        }
         document.addEventListener('click', (e) => {
             const p = document.getElementById('navMorePanel');
             if (p && p.classList.contains('show') && !e.target.closest('.nav-more-btn') && !e.target.closest('.nav-more-panel')) {
                 p.classList.remove('show');
+            }
+            const d = document.getElementById('floatingDock');
+            if (d && d.classList.contains('open') && !e.target.closest('.floating-dock')) {
+                d.classList.remove('open');
             }
         });
 
@@ -11934,26 +12125,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 今日打卡/取消（打卡成功且习惯设置了奖励 → 自动赚取游戏时间）
         function habitToggle(id) {
+            const h = habitList().find(x => x.id === id);
+            if (!h) return;
             const today = formatDate(new Date());
             const logs = habitLogs();
             const idx = logs.findIndex(l => l.habitId === id && l.date === today);
+            // 取消打卡任何时候都允许（避免误操作后无法撤回）
             if (idx >= 0) {
                 logs.splice(idx, 1);
                 habitSaveLogs(logs);
-                // 取消打卡 → 回滚当天该习惯赚到的游戏时间
                 if (typeof window.gameTimeRefund === 'function') {
                     try { window.gameTimeRefund(id, today); } catch (e) {}
                 }
-                // 取消「读书」习惯 → 同步移除读书板块当日 0 分钟占位
                 if (id === HABIT_BOOK_ID) bookHabitLinkRollback(today);
                 if (typeof showToast === 'function') showToast('已取消今日打卡');
             } else {
+                // 新增打卡前检查频率（2026-09-02 智能打卡）
+                if (!habitShouldToday(h)) {
+                    if (typeof showToast === 'function') showToast(`🌙 ${h.name} 今天不是打卡日（${habitFreqLabel(h)}），休息就好`);
+                    return;
+                }
                 logs.push({ id: 'hl_' + Date.now(), habitId: id, date: today, doneAt: new Date().toISOString() });
                 habitSaveLogs(logs);
-                // 打卡「读书」习惯 → 读书板块当日占位（0 分钟，标记今日已读书）
                 if (id === HABIT_BOOK_ID) bookHabitLinkApply(today);
-                const h = habitList().find(x => x.id === id);
-                const rewardMin = h ? (Number(h.rewardMin) || 0) : 0;
+                const rewardMin = Number(h.rewardMin) || 0;
                 if (rewardMin > 0 && typeof window.gameTimeEarn === 'function') {
                     try {
                         const ok = window.gameTimeEarn(id, rewardMin, h.name, today);
@@ -12019,20 +12214,35 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             const today = formatDate(new Date());
             const done = habitDoneSet(today);
-            let doneCount = 0;
-            // Q1 两态分离：未完成排前面（保持原顺序），已完成变暗收后面
-            const sorted = [...habits].sort((a, b) => (done[a.id] ? 1 : 0) - (done[b.id] ? 1 : 0));
+            // 分两组：今日应打（active）/ 今日休息（rest）
+            const activeHabits = habits.filter(h => habitShouldToday(h));
+            const restHabits = habits.filter(h => !habitShouldToday(h));
+            let doneCount = 0, doneToday = 0;
+            for (const h of habits) if (done[h.id]) doneCount++;
+            for (const h of activeHabits) if (done[h.id]) doneToday++;
+            // active 内未完成排前；rest 在最后
+            const sorted = [
+                ...activeHabits.sort((a, b) => (done[a.id] ? 1 : 0) - (done[b.id] ? 1 : 0)),
+                ...restHabits.sort((a, b) => (done[a.id] ? 1 : 0) - (done[b.id] ? 1 : 0))
+            ];
             const rows = sorted.map(h => {
                 const d = !!done[h.id];
-                if (d) doneCount++;
+                const isActive = habitShouldToday(h);
                 const wc = habitWeekCount(h.id);
                 const goal = h.goal || 7;
                 const pct = Math.min(100, Math.round(wc / goal * 100));
                 const streak = habitStreak(h.id);
-                return `<div class="habit-card${d ? ' done-card' : ''}" onclick="habitToggle('${h.id}')" title="${d ? '点击取消打卡' : '点击打卡：' + escapeHtml(h.name)}">
+                const freqLabel = habitFreqLabel(h);
+                const restCls = isActive ? '' : ' rest-card';
+                const restDoneCls = (isActive || d) ? '' : ' rest-done-card';
+                const clickAttr = isActive ? ` onclick="habitToggle('${h.id}')"` : '';
+                const cardTitle = isActive
+                    ? (d ? '点击取消打卡' : '点击打卡：' + escapeHtml(h.name))
+                    : `今天不是打卡日（${freqLabel}），休息即可`;
+                return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}"${clickAttr} title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
-                        <span class="habit-name">${escapeHtml(h.name)}</span>
+                        <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
                     </div>
                     <div class="habit-progress">
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
@@ -12041,35 +12251,100 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-foot">
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
+                        ${!isActive ? `<span style="font-size:10px;color:#9ca3af;">🌙 今天休息</span>` : ''}
                     </div>
                     ${d ? '<span class="habit-done-badge">✓</span>' : ''}
                 </div>`;
             }).join('');
-            // 每日地下城血条：今日全部习惯 = 满血 Boss，打卡一个削一段血，全清 = 通关
-            const totalH = habits.length;
-            const remainH = totalH - doneCount;
+            // 每日地下城血条：今日应打的习惯 = Boss，rest 习惯不计入
+            const totalH = activeHabits.length;
+            const remainH = totalH - doneToday;
             const hpPct = totalH ? Math.round(remainH / totalH * 100) : 0;
             const hpCls = hpPct <= 25 ? ' low' : (hpPct <= 55 ? ' mid' : '');
             const dgHtml = `<div class="habit-dg">
                 <div class="habit-dg-head">
-                    <span class="habit-dg-title">🏰 每日地下城</span>
-                    <span class="habit-dg-hp">HP ${remainH}/${totalH}${doneCount === totalH ? ' · <span class="habit-dg-clear">🏆 地下城通关!</span>' : ''}</span>
+                    <span class="habit-dg-title">🏰 今日地下城</span>
+                    <span class="habit-dg-hp">HP ${remainH}/${totalH}${totalH > 0 && doneToday === totalH ? ' · <span class="habit-dg-clear">🏆 地下城通关!</span>' : ''}</span>
                 </div>
                 <div class="habit-dg-bar"><div class="habit-dg-fill${hpCls}" style="width:${hpPct}%"></div><div class="habit-dg-seg"></div></div>
             </div>`;
-            box.innerHTML = dgHtml + rows;
+            const restHint = restHabits.length ? `<div style="font-size:11px;color:#9ca3af;margin:6px 0 -2px 2px;">🌙 ${restHabits.length} 个习惯今天休息（${restHabits.map(h=>h.name).slice(0,3).join('、')}${restHabits.length>3?'…':''}）</div>` : '';
+            box.innerHTML = dgHtml + restHint + rows;
             if (badge) {
-                const allDone = habits.length > 0 && doneCount === habits.length;
-                badge.textContent = allDone ? `🎉 ${doneCount}/${habits.length}` : `${doneCount}/${habits.length}`;
-                badge.classList.toggle('all-done', allDone);
+                const allActiveDone = totalH > 0 && doneToday === totalH;
+                const baseTxt = allActiveDone ? `🎉 ${doneToday}/${totalH}` : `${doneToday}/${totalH}`;
+                badge.textContent = restHabits.length ? `${baseTxt} +${restHabits.length}🌙` : baseTxt;
+                badge.classList.toggle('all-done', allActiveDone);
             }
         }
 
         let habitEditId = null;
+        // 习惯频率状态（2026-09-02 智能打卡）：daily=每天 / weekly=每周N次 / weekdays=每周固定几天
+        let habitFrequency = 'daily';
+        let habitWeekdays = []; // [0..6]，0=周日
+
+        function setHabitFreq(freq) {
+            habitFrequency = freq;
+            const bar = document.getElementById('habitFreqBar');
+            if (bar) bar.querySelectorAll('.habit-freq-btn').forEach(b => b.classList.toggle('active', b.dataset.freq === freq));
+            const wdBar = document.getElementById('habitWeekdaysBar');
+            const goalWrap = document.getElementById('habitGoalWrap');
+            if (wdBar) wdBar.style.display = freq === 'weekdays' ? 'flex' : 'none';
+            if (goalWrap) {
+                // 每天：隐藏周目标（goal 留空=无效）；每周N次：显示；固定几天：goal=weekdays.length
+                goalWrap.style.display = freq === 'daily' ? 'none' : 'flex';
+                if (freq === 'weekdays') {
+                    const goalInput = document.getElementById('habitGoalInput');
+                    if (goalInput) goalInput.value = String(habitWeekdays.length || 0);
+                }
+            }
+        }
+        function toggleHabitDay(dayIdx) {
+            const i = habitWeekdays.indexOf(dayIdx);
+            if (i >= 0) habitWeekdays.splice(i, 1); else habitWeekdays.push(dayIdx);
+            habitWeekdays.sort();
+            const bar = document.getElementById('habitWeekdaysBar');
+            if (bar) bar.querySelectorAll('.habit-day-btn').forEach(b => b.classList.toggle('active', habitWeekdays.includes(Number(b.dataset.day))));
+            // 同步 goal 输入
+            const freq = habitFrequency;
+            if (freq === 'weekdays') {
+                const goalInput = document.getElementById('habitGoalInput');
+                if (goalInput) goalInput.value = String(habitWeekdays.length);
+            }
+        }
+
+        // 判断某习惯今天是否应打卡（频率核心函数）
+        function habitShouldToday(h) {
+            if (!h) return true;
+            const freq = h.frequency || 'daily';
+            if (freq === 'daily') return true;
+            if (freq === 'weekdays') {
+                const days = Array.isArray(h.weekDays) ? h.weekDays : [];
+                const dow = new Date().getDay(); // 0=周日
+                return days.includes(dow);
+            }
+            // weekly：每天都能打，但目标按周计
+            return true;
+        }
+        // 取某习惯的频率简述（用于卡片脚标）
+        function habitFreqLabel(h) {
+            const freq = h.frequency || 'daily';
+            if (freq === 'daily') return '每天';
+            if (freq === 'weekly') return `每周 ${h.goal || 7} 次`;
+            if (freq === 'weekdays') {
+                const days = Array.isArray(h.weekDays) ? h.weekDays : [];
+                if (!days.length) return '固定日（待选）';
+                const names = ['日','一','二','三','四','五','六'];
+                return '每' + days.slice().sort().map(d => names[d]).join('·');
+            }
+            return '';
+        }
 
         function resetHabitForm() {
             habitEditId = null;
             habitIconPick = '💪';
+            habitFrequency = 'daily';
+            habitWeekdays = [];
             const nameInput = document.getElementById('habitNameInput');
             if (nameInput) nameInput.value = '';
             const goalInput = document.getElementById('habitGoalInput');
@@ -12080,6 +12355,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (btn) { btn.textContent = '＋ 添加'; btn.classList.add('primary'); }
             const cancel = document.getElementById('habitEditCancel');
             if (cancel) cancel.style.display = 'none';
+            setHabitFreq('daily');
+            const wdBar = document.getElementById('habitWeekdaysBar');
+            if (wdBar) wdBar.querySelectorAll('.habit-day-btn').forEach(b => b.classList.remove('active'));
             renderHabitIconPick();
         }
 
@@ -12102,6 +12380,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (goalInput) goalInput.value = String(h.goal || 7);
             const rewardInput = document.getElementById('habitRewardInput');
             if (rewardInput) rewardInput.value = String(Number(h.rewardMin) || 0);
+            // 加载频率（向后兼容：缺省视为 daily）
+            const freq = h.frequency || 'daily';
+            habitWeekdays = Array.isArray(h.weekDays) ? h.weekDays.slice() : [];
+            setHabitFreq(freq);
+            const wdBar = document.getElementById('habitWeekdaysBar');
+            if (wdBar) wdBar.querySelectorAll('.habit-day-btn').forEach(b => b.classList.toggle('active', habitWeekdays.includes(Number(b.dataset.day))));
             renderHabitIconPick();
             const btn = document.getElementById('habitAddBtn');
             if (btn) { btn.textContent = '💾 保存修改'; btn.classList.add('primary'); }
@@ -12125,11 +12409,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!name) { if (typeof showToast === 'function') showToast('请输入习惯名称'); return; }
             const goalInput = document.getElementById('habitGoalInput');
             const goalRaw = Number(goalInput && goalInput.value);
-            const goal = (!goalRaw || goalRaw < 1) ? 7 : Math.min(28, Math.round(goalRaw));
+            let goal = (!goalRaw || goalRaw < 1) ? 7 : Math.min(28, Math.round(goalRaw));
             const rewardInput = document.getElementById('habitRewardInput');
             let rewardMin = Math.round(Number(rewardInput && rewardInput.value) || 0);
             if (rewardMin < 0) rewardMin = 0;
             if (rewardMin > 480) rewardMin = 480;
+
+            // 频率处理
+            const freq = habitFrequency || 'daily';
+            let weekDays = [];
+            if (freq === 'weekdays') {
+                if (!habitWeekdays.length) { if (typeof showToast === 'function') showToast('固定几天模式请至少选一天'); return; }
+                weekDays = habitWeekdays.slice().sort();
+                goal = weekDays.length; // 固定几天：周目标=天数
+            } else if (freq === 'daily') {
+                goal = 7; // 每天：周目标=7
+            }
+            // weekly：用户输入什么就是什么
 
             const habits = habitList();
             if (habitEditId) {
@@ -12138,14 +12434,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (idx < 0) { if (typeof showToast === 'function') showToast('未找到要编辑的习惯'); return; }
                 const dup = habits.find(h => h.name === name && h.id !== habitEditId);
                 if (dup) { if (typeof showToast === 'function') showToast('这个习惯已经存在'); return; }
-                habits[idx] = { ...habits[idx], name, icon: habitIconPick, goal, rewardMin };
+                habits[idx] = { ...habits[idx], name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined };
                 habitSaveList(habits);
                 if (typeof showToast === 'function') showToast('✏️ 习惯已更新');
                 resetHabitForm();
             } else {
                 // 新增模式
                 if (habits.some(h => h.name === name)) { if (typeof showToast === 'function') showToast('这个习惯已经存在'); return; }
-                habits.push({ id: 'hb_' + Date.now(), name, icon: habitIconPick, goal, rewardMin, createdAt: new Date().toISOString() });
+                habits.push({ id: 'hb_' + Date.now(), name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined, createdAt: new Date().toISOString() });
                 habitSaveList(habits);
                 if (typeof showToast === 'function') showToast(rewardMin > 0 ? `🎯 习惯已添加，打卡奖励 ${rewardMin} 分钟游戏时间` : '🎯 习惯已添加');
                 if (nameInput) nameInput.value = '';
@@ -24545,7 +24841,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609020010";
+        window.NIKO_VERSION = "202609020758";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
