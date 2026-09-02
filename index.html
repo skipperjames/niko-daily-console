@@ -2260,7 +2260,9 @@
         }
         /* Q4 全勤徽章 */
         .today-habits-badge.all-done { background: #10b981; color: #fff; }
-        .habit-card-top { display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 22px; }
+        .habit-card-top { display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 6px; }
+        /* v2.11.1：完成徽章占位只在完成时预留，平时把空间还给习惯名 */
+        .habit-card.done-card .habit-card-top { padding-right: 22px; }
         .habit-card .habit-icon {
             width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
@@ -2323,8 +2325,11 @@
         body.dark-mode .habit-card.rest-card .habit-rest-tag { background:#2a2a38; color:#9ca3af; }
         .habit-card.rest-card .habit-name::before { content:'🌙 '; opacity:.6; }
         /* ===== v2.11 习惯水晶链：近7天打卡结晶 ===== */
-        .hcl { display: inline-flex; align-items: flex-end; gap: 3px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; }
-        .hcl-node { width: 7px; height: 7px; border-radius: 2px; background: rgba(0,0,0,0.06); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10); position: relative; }
+        /* v2.11.1 修复：链不得挤压习惯名——卡窄时自动让位（名字是主角，链是配角） */
+        .habit-card { container-type: inline-size; }
+        .hcl { display: inline-flex; align-items: flex-end; gap: 2.5px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; min-width: 0; }
+        .hcl-node { width: 6px; height: 6px; border-radius: 2px; background: rgba(0,0,0,0.06); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10); position: relative; }
+        @container (max-width: 205px) { .hcl { display: none; } }
         .hcl-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 4px rgba(16,185,129,0.55), inset 0 0 2px rgba(255,255,255,0.7); }
         .hcl-node.today-node { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(16,185,129,0.45); border-radius: 50%; }
         .hcl-node.today-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 6px rgba(16,185,129,0.75), inset 0 0 2px rgba(255,255,255,0.8); }
@@ -3127,7 +3132,7 @@
         }
         .week-header {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 6px;
             margin-bottom: 4px;
             padding: 0 2px;
@@ -3141,11 +3146,16 @@
         }
         .four-week-grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 6px;
             grid-auto-rows: 1fr;
             position: relative;   /* 甘特覆盖层定位锚点 */
         }
+        /* v2.11.1 修复日历歪斜：长任务标题的 min-content 曾把 1fr 列撑到 499px。
+           minmax(0,1fr) 锁定七等分；day-cell/events-container 允许收缩，长标题走省略号 */
+        .day-cell { min-width: 0; }
+        .day-cell .events-container { min-width: 0; width: 100%; }
+        .day-cell .event-item { max-width: 100%; }
         .day-cell {
             background: #fff;
             border: 1px solid #e8e6e1;
@@ -25808,7 +25818,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021530";
+        window.NIKO_VERSION = "202609021719";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
