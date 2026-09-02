@@ -1461,6 +1461,38 @@
         .ocr-tag-chip.active { font-weight: 500; color: #fff; border-color: transparent; }
         .ocr-tag-chip .ocr-tag-rec { font-size: 10px; opacity: .85; margin-left: 2px; }
 
+        /* ===== 仪式系统（揭幕/夜雾/季节封面/徽章/周日回信/焦点模式） ===== */
+        .ritual-curtain { position:fixed; inset:0; z-index:12000; pointer-events:none; background:linear-gradient(180deg, rgba(251,191,36,.16), rgba(251,191,36,0) 42%); opacity:0; }
+        .ritual-curtain.play { animation:curtainOpen 2.4s ease forwards; }
+        @keyframes curtainOpen { 0%{opacity:1; clip-path:inset(0 0 100% 0);} 55%{opacity:1; clip-path:inset(0 0 0 0);} 100%{opacity:0; clip-path:inset(0 0 0 0);} }
+        .ritual-curtain::after { content:'早。新的一天已经开门营业'; position:absolute; left:50%; top:38%; transform:translateX(-50%); font-size:13px; letter-spacing:3px; color:rgba(251,191,36,.85); text-shadow:0 0 18px rgba(251,191,36,.4); animation:curtainWord 2.4s ease forwards; }
+        @keyframes curtainWord { 0%,55%{opacity:0; transform:translate(-50%,8px);} 75%{opacity:1; transform:translate(-50%,0);} 100%{opacity:0;} }
+        body.night-mist #pageContainer::before, body.night-mist .main-content::before { content:''; position:fixed; inset:0; z-index:5; pointer-events:none; background:radial-gradient(1.5px 1.5px at 12% 18%, rgba(255,255,255,.5), transparent 60%), radial-gradient(1px 1px at 78% 12%, rgba(255,255,255,.4), transparent 60%), radial-gradient(1.2px 1.2px at 55% 32%, rgba(196,181,253,.45), transparent 60%), radial-gradient(1px 1px at 88% 55%, rgba(255,255,255,.3), transparent 60%); animation:mistTwinkle 5s ease-in-out infinite alternate; }
+        @keyframes mistTwinkle { from{opacity:.5;} to{opacity:1;} }
+        body.season-spring .main-content { background-image:linear-gradient(160deg, rgba(52,211,153,.05), transparent 45%); }
+        body.season-summer .main-content { background-image:linear-gradient(160deg, rgba(251,191,36,.05), transparent 45%); }
+        body.season-autumn .main-content { background-image:linear-gradient(160deg, rgba(249,115,22,.06), transparent 45%); }
+        body.season-winter .main-content { background-image:linear-gradient(160deg, rgba(147,197,253,.05), transparent 45%); }
+        body.pomo-focusing .main-content, body.pomo-focusing .content-area { filter:saturate(.35) brightness(.92); transition:filter .6s ease; }
+        body.pomo-focusing .floating-dock, body.pomo-focusing .niko-mobile-tabbar { opacity:.35; transition:opacity .6s ease; }
+        .badge-pop { position:fixed; left:50%; bottom:14%; transform:translateX(-50%); z-index:12500; background:linear-gradient(135deg,#1f2937,#111827); border:1px solid rgba(251,191,36,.55); border-radius:16px; padding:14px 22px; text-align:center; box-shadow:0 12px 40px rgba(251,191,36,.18); animation:badgeIn .8s cubic-bezier(.34,1.56,.64,1) forwards; }
+        @keyframes badgeIn { from{opacity:0; transform:translate(-50%,24px) scale(.8);} to{opacity:1; transform:translate(-50%,0) scale(1);} }
+        .badge-pop .bp-icon { font-size:30px; display:block; margin-bottom:4px; }
+        .badge-pop .bp-name { font-size:13px; color:#fbbf24; letter-spacing:1px; }
+        .badge-pop .bp-sub { font-size:11px; color:#9ca3af; margin-top:2px; }
+        #badgeCorner { position:fixed; top:10px; right:12px; z-index:900; font-size:11px; color:#fbbf24; background:rgba(31,41,55,.85); border:1px solid rgba(251,191,36,.35); border-radius:10px; padding:2px 8px; cursor:pointer; display:none; backdrop-filter:blur(4px); }
+        .sunday-letter-mask { position:fixed; inset:0; z-index:12200; background:rgba(8,8,14,.72); display:flex; align-items:center; justify-content:center; animation:closeIn .4s ease; }
+        .sunday-letter { width:min(400px,86vw); background:linear-gradient(175deg,#f5efe2,#ece2cd); color:#3f3a30; border-radius:6px; padding:26px 26px 20px; box-shadow:0 24px 60px rgba(0,0,0,.5); position:relative; font-family:KaiTi,'楷体',serif; animation:letterUp .7s ease forwards; }
+        @keyframes letterUp { from{opacity:0; transform:translateY(26px);} to{opacity:1; transform:translateY(0);} }
+        .sunday-letter::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:66px; height:18px; background:rgba(139,92,246,.28); border-radius:0 0 6px 6px; }
+        .sunday-letter h4 { margin:6px 0 12px; font-size:15px; letter-spacing:2px; text-align:center; }
+        .sunday-letter .sl-body { font-size:13.5px; line-height:2; white-space:pre-line; }
+        .sunday-letter .sl-sign { text-align:right; font-size:12.5px; margin-top:12px; color:#6b5f4a; }
+        .sunday-letter .sl-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:14px; }
+        .sunday-letter .sl-actions button { border:1px solid #b9a888; background:transparent; color:#6b5f4a; border-radius:8px; padding:6px 14px; font-size:12px; cursor:pointer; }
+        .sunday-letter .sl-actions button.primary { background:#8b5cf6; border-color:#8b5cf6; color:#fff; }
+        @media (max-width:768px) { .sunday-letter { padding:20px 18px 16px; } .badge-pop { padding:12px 18px; } #badgeCorner { top:auto; bottom:76px; } }
+
         /* ===== 番茄钟 ===== */
         .pomo-face { display: flex; flex-direction: column; align-items: center; padding: 18px 0 8px; }
         .pomo-ring {
@@ -2101,6 +2133,12 @@
         body.dark-mode .habit-card { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
         body.dark-mode .habit-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,0.4); border-color: #4a4668; }
         .habit-card:active { transform: scale(0.98); }
+        /* 🔥 点火仪式：打卡瞬间火星从卡顶升起 */
+        .habit-card { position: relative; }
+        .habit-card.spark::before { content:'✦'; position:absolute; top:-12px; left:50%; font-size:14px; color:#fbbf24; text-shadow:0 0 10px rgba(251,146,60,.9), 0 0 22px rgba(251,191,36,.5); pointer-events:none; animation:habitSpark 1.4s ease-out forwards; }
+        .habit-card.spark { animation:sparkPulse 1.4s ease; }
+        @keyframes habitSpark { 0%{ opacity:0; transform:translate(-50%,6px) scale(.6);} 22%{ opacity:1; transform:translate(-50%,-4px) scale(1.15);} 100%{ opacity:0; transform:translate(-50%,-30px) scale(.7);} }
+        @keyframes sparkPulse { 0%{ box-shadow:0 0 0 0 rgba(251,191,36,.45);} 40%{ box-shadow:0 0 0 7px rgba(251,191,36,0);} 100%{ box-shadow:0 0 0 0 rgba(251,191,36,0);} }
         /* 完成态：绿调描边 + 角标勾，不再整卡变虚 */
         .habit-card.done-card { border-color: rgba(16,185,129,0.35); }
         body.dark-mode .habit-card.done-card { border-color: rgba(16,185,129,0.28); background: linear-gradient(180deg, #212e2b, #202628); }
@@ -6425,6 +6463,10 @@
         .kb-detail-title { font-size:18px; font-weight:700; color:#1f2937; margin-bottom:10px; }
         body.dark-mode .kb-detail-title { color:#f3f4f6; }
         .kb-detail-body { font-size:13.5px; line-height:1.9; color:#333; word-break:break-word; }
+        /* ✒️ 摘抄浮墨气泡 */
+        .kb-ink-bubble { position:fixed; z-index:12600; transform:translateY(0); background:linear-gradient(135deg,#1f2937,#111827); color:#e5e7eb; font-size:12px; padding:6px 12px; border-radius:10px; border:1px solid rgba(139,92,246,.5); box-shadow:0 6px 20px rgba(0,0,0,.35); cursor:pointer; animation:kbInkIn .22s ease; user-select:none; }
+        @keyframes kbInkIn { from{opacity:0; transform:translateY(6px) scale(.9);} to{opacity:1; transform:translateY(0) scale(1);} }
+        body.dark-mode .kb-ink-bubble { background:linear-gradient(135deg,#312e81,#1e1b4b); }
         body.dark-mode .kb-detail-body { color:#d1d5db; }
         .kb-detail-body h1,.kb-detail-body h2,.kb-detail-body h3 { margin:10px 0 6px; }
         .kb-detail-body ul,.kb-detail-body ol { padding-left:20px; }
@@ -7759,6 +7801,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             .gt-dd-sum { grid-template-columns: repeat(2, 1fr); }
         }
 /* ===== 复利面板专属CSS ===== */
+        @keyframes cpOvernightRise { 0%{opacity:0; transform:translateY(8px);} 18%{opacity:1; transform:translateY(0);} 82%{opacity:1;} 100%{opacity:0; transform:translateY(-10px);} }
         .cp-wrap { display:flex; flex-direction:column; gap:14px; }
         .cp-hero {
             background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
@@ -12123,10 +12166,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return streak;
         }
 
+        // 🔥 习惯点火：打卡瞬间卡顶燃起火星，烧进地下城记忆（仪式感 #2）
+        function habitSpark(id) {
+            const card = document.querySelector(`.habit-card[data-hid="${id}"]`);
+            if (!card) return;
+            card.classList.add('spark');
+            setTimeout(() => card.classList.remove('spark'), 1500);
+        }
+
         // 今日打卡/取消（打卡成功且习惯设置了奖励 → 自动赚取游戏时间）
         function habitToggle(id) {
             const h = habitList().find(x => x.id === id);
             if (!h) return;
+            let justDone = false;
             const today = formatDate(new Date());
             const logs = habitLogs();
             const idx = logs.findIndex(l => l.habitId === id && l.date === today);
@@ -12147,6 +12199,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
                 logs.push({ id: 'hl_' + Date.now(), habitId: id, date: today, doneAt: new Date().toISOString() });
                 habitSaveLogs(logs);
+                justDone = true;
                 if (id === HABIT_BOOK_ID) bookHabitLinkApply(today);
                 const rewardMin = Number(h.rewardMin) || 0;
                 if (rewardMin > 0 && typeof window.gameTimeEarn === 'function') {
@@ -12162,6 +12215,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
             }
             renderTodayHabits();
+            if (justDone) habitSpark(id);
             renderCommandBrief();
             renderClearSettle();
             renderBuddy();
@@ -12239,7 +12293,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const cardTitle = isActive
                     ? (d ? '点击取消打卡' : '点击打卡：' + escapeHtml(h.name))
                     : `今天不是打卡日（${freqLabel}），休息即可`;
-                return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}"${clickAttr} title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
+                return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}"${clickAttr} data-hid="${h.id}" title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
@@ -18687,6 +18741,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             return res;
         }
+        // ===== ✒️ 摘抄浮墨（仪式 #10）：在知识详情里划过的字，晕开成墨，一键入便签 =====
+        let kbInkBubble = null;
+        function kbInkHide() { if (kbInkBubble) { kbInkBubble.remove(); kbInkBubble = null; } }
+        document.addEventListener('mouseup', (e) => {
+            setTimeout(() => {
+                const box = document.getElementById('kbDetailContent');
+                const mask = document.getElementById('kbDetailModal');
+                if (!box || !mask || !mask.classList.contains('show')) { kbInkHide(); return; }
+                const sel = window.getSelection();
+                const txt = sel ? String(sel).trim() : '';
+                if (!txt || txt.length < 2 || !box.contains(sel.anchorNode)) { kbInkHide(); return; }
+                kbInkHide();
+                const r = sel.getRangeAt(0).getBoundingClientRect();
+                kbInkBubble = document.createElement('div');
+                kbInkBubble.className = 'kb-ink-bubble';
+                kbInkBubble.textContent = '✒️ 摘入便签';
+                kbInkBubble.style.left = Math.max(8, Math.min(window.innerWidth - 120, r.left + r.width / 2 - 52)) + 'px';
+                kbInkBubble.style.top = Math.max(8, r.top - 38) + 'px';
+                document.body.appendChild(kbInkBubble);
+                kbInkBubble.onclick = (ev) => {
+                    ev.stopPropagation();
+                    const notes = safeStorage.get('niko_inspiration_notes', []);
+                    notes.unshift({ id: 'note_' + Date.now(), content: '✒️ ' + txt, tag: '摘抄', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false });
+                    safeStorage.set('niko_inspiration_notes', notes);
+                    try { document.dispatchEvent(new CustomEvent('niko:datachanged', { detail: { key: 'niko_inspiration_notes' } })); } catch (err) {}
+                    kbInkHide();
+                    if (sel.removeAllRanges) sel.removeAllRanges();
+                    if (typeof showToast === 'function') showToast('✒️ 墨迹已落进便签墙');
+                };
+            }, 10);
+        });
+        document.addEventListener('mousedown', (e) => { if (kbInkBubble && !kbInkBubble.contains(e.target)) kbInkHide(); });
 // ===== 读书看板 =====
         const BOOK_SEED_VERSION = 'v2026-08-18';
         const BOOK_CATEGORIES = ['营销根基', '创意方法', '思维升级', '习惯养成', '行业前沿'];
@@ -23090,6 +23176,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             cpRenderAch();
             cpRenderAI();
             cpPredict(dims);
+            cpOvernight();
+        }
+        // 💰 复利过夜（仪式 #3）：跨夜首次打开，金色铭牌升起「昨夜 +¥X」——睡一觉，资产自己生长
+        function cpOvernight() {
+            try {
+                const inv = safeStorage.get('niko_investments', []);
+                const sum = inv.reduce((s, i) => s + (Number(i.principal) || 0) + (Number(i.profit) || Number(i.return) || 0), 0);
+                const today = new Date().toISOString().slice(0, 10);
+                const snap = safeStorage.get('niko_cp_overnight', null);
+                safeStorage.set('niko_cp_overnight', { date: today, total: sum });
+                if (!snap || snap.date === today || sum <= snap.total) return;
+                const diff = Math.round(sum - snap.total);
+                const anchor = document.getElementById('cpTotalScore');
+                let card = null;
+                if (anchor) { card = anchor.closest('.cp-hero') || anchor.closest('.cp-card') || anchor.closest('section') || anchor.parentElement; }
+                if (!card) return;
+                const badge = document.createElement('div');
+                badge.style.cssText = 'position:absolute;right:14px;top:12px;z-index:30;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:4px 12px;letter-spacing:1px;box-shadow:0 0 18px rgba(251,191,36,.15);animation:cpOvernightRise 3.6s ease forwards;pointer-events:none;';
+                badge.textContent = '昨夜 +¥' + diff.toLocaleString();
+                const cs = getComputedStyle(card);
+                if (cs && cs.position === 'static') card.style.position = 'relative';
+                card.appendChild(badge);
+                setTimeout(() => badge.remove(), 3800);
+            } catch (e) {}
         }
         if (typeof window.__NIKO_GAME_TEST__ !== 'undefined') renderCompoundPage();
 // ===== 育儿手册 =====
@@ -24438,12 +24548,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             safeStorage.set(POMO_ACTIVE_KEY, { endAt: pomoEndAt, minutes: pomoMinutes, tag: pomoTag });
             pomoRunning = true;
+            document.body.classList.add('pomo-focusing');
+            if ('Notification' in window && Notification.permission === 'default') { try { Notification.requestPermission(); } catch (e) {} }
             clearInterval(pomoTimerId);
             pomoTimerId = setInterval(pomoTick, 1000);
             renderPomoFace();
         }
         function pomoPause() {
             pomoRunning = false;
+            document.body.classList.remove('pomo-focusing');
             clearInterval(pomoTimerId);
             pomoEndAt = null;
             safeStorage.set(POMO_ACTIVE_KEY, null);
@@ -24451,6 +24564,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function pomoReset() {
             pomoRunning = false;
+            document.body.classList.remove('pomo-focusing');
             clearInterval(pomoTimerId);
             pomoEndAt = null;
             safeStorage.set(POMO_ACTIVE_KEY, null);
@@ -24466,6 +24580,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function pomoFinish() {
             pomoRunning = false;
+            document.body.classList.remove('pomo-focusing');
             clearInterval(pomoTimerId);
             const logs = safeStorage.get('niko_pomodoro_logs', []);
             logs.unshift({
@@ -24483,6 +24598,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoLog();
             renderPomoBadge();
             renderPomoFace();
+            // 浏览器系统通知（页面在后台/最小化也能收到）+ 标题闪烁兜底
+            try {
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('🍅 番茄完成', { body: `${pomoMinutes} 分钟「${pomoTag}」专注结束，休息一下吧`, tag: 'niko-pomo' });
+                }
+            } catch (e) {}
+            let flashN = 0;
+            const flashT = setInterval(() => { document.title = (flashN++ % 2 ? '🍅 番茄完成！' : 'NIKO'); if (flashN > 9) { clearInterval(flashT); document.title = 'NIKO'; } }, 900);
             showToast('🍅 完成一个番茄，休息一下吧');
         }
         function restorePomoRunning() {
@@ -24841,7 +24964,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609020758";
+        window.NIKO_VERSION = "202609021007";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -24941,6 +25064,94 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }, false);
 
         function init() { injectCloseBtns(document); }
+        // ===== 仪式系统 =====
+        function ritualTodayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+        function ritualDoorOpening() {
+            const last = safeStorage.get('niko_last_open_day', '');
+            const today = ritualTodayStr();
+            if (last === today) return;
+            safeStorage.set('niko_last_open_day', today);
+            const c = document.createElement('div');
+            c.className = 'ritual-curtain play';
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 2600);
+        }
+        function ritualNightMist() {
+            const off = safeStorage.get('niko_night_mist_off', false);
+            const h = new Date().getHours();
+            document.body.classList.toggle('night-mist', !off && (h >= 23 || h < 5));
+        }
+        function ritualSeasonCover() {
+            const m = new Date().getMonth();
+            const cls = ['winter','spring','summer','autumn'][Math.floor(((m % 12) + 1) / 3 % 4)] || 'autumn';
+            document.body.classList.add('season-' + cls);
+            const seen = safeStorage.get('niko_season_seen', '');
+            const key = new Date().getFullYear() + '-' + (m + 1);
+            if (seen !== key) {
+                safeStorage.set('niko_season_seen', key);
+                const names = { spring: '春 · 新芽', summer: '夏 · 长昼', autumn: '秋 · 收敛', winter: '冬 · 蓄藏' };
+                if (typeof showToast === 'function') showToast('🍂 ' + (names[cls] || '') + '封面已就位');
+            }
+        }
+        function ritualBadges() {
+            const defs = [
+                { id: 'habit_week_full', icon: '🔥', name: '满勤周', sub: '一周习惯全打卡', check: () => false },
+                { id: 'cp_10k', icon: '💰', name: '复利破万', sub: '总资产突破 ¥10,000', check: () => { const inv = safeStorage.get('niko_investments', []); return inv.reduce((s, i) => s + (Number(i.principal) || 0) + (Number(i.profit) || Number(i.return) || 0), 0) >= 10000; } },
+                { id: 'kb_100', icon: '📚', name: '知识百藏', sub: '知识库收录 100 条', check: () => safeStorage.get('niko_knowledge', []).length >= 100 },
+                { id: 'game_10h', icon: '🎮', name: '十小时玩家', sub: '游戏时长累计 10 小时', check: () => safeStorage.get('niko_game_minutes', 0) >= 600 || safeStorage.get('niko_game_earned_total', 0) >= 600 }
+            ];
+            const got = safeStorage.get('niko_badges', []);
+            defs.forEach(d => {
+                if (got.includes(d.id) || !d.check()) return;
+                got.push(d.id);
+                safeStorage.set('niko_badges', got);
+                const pop = document.createElement('div');
+                pop.className = 'badge-pop';
+                pop.innerHTML = `<span class="bp-icon">${d.icon}</span><div class="bp-name">成就解锁 · ${d.name}</div><div class="bp-sub">${d.sub}</div>`;
+                document.body.appendChild(pop);
+                setTimeout(() => pop.remove(), 4200);
+            });
+            ritualBadgeCorner(got.length);
+        }
+        function ritualBadgeCorner(n) {
+            let el = document.getElementById('badgeCorner');
+            if (!el) { el = document.createElement('div'); el.id = 'badgeCorner'; el.onclick = () => { if (typeof showToast === 'function') showToast('🏆 成就 ' + safeStorage.get('niko_badges', []).length + ' 枚 · 更多徽章敬请解锁'); }; document.body.appendChild(el); }
+            el.style.display = n > 0 ? 'block' : 'none';
+            el.textContent = '🏆 ' + n;
+        }
+        function ritualSundayLetter() {
+            const now = new Date();
+            if (now.getDay() !== 0 || now.getHours() < 21) return;
+            const weekKey = ritualTodayStr();
+            if (safeStorage.get('niko_sunday_letter', '') === weekKey) return;
+            safeStorage.set('niko_sunday_letter', weekKey);
+            const weekStart = new Date(now); weekStart.setDate(now.getDate() - 6);
+            const inWeek = iso => iso >= weekStart.toISOString().slice(0, 10);
+            const habits = safeStorage.get('niko_habits', []);
+            const hlogs = safeStorage.get('niko_habit_logs', []).filter(l => inWeek(l.date));
+            const notes = safeStorage.get('niko_inspiration_notes', []).filter(n => n.createdAt && inWeek(n.createdAt.slice(0, 10)) && !n.deleted);
+            const kb = safeStorage.get('niko_knowledge', []).filter(k => k.createdAt && inWeek(k.createdAt.slice(0, 10)));
+            const pomo = safeStorage.get('niko_pomodoro_logs', []).filter(l => inWeek(l.date));
+            const pomoMin = pomo.reduce((s, l) => s + (Number(l.minutes) || 0), 0);
+            const body = `这一周你点亮了 ${hlogs.length} 次习惯${habits.length ? '（共 ' + habits.length + ' 个在册）' : ''}，\n贴下 ${notes.length} 张便签，收进 ${kb.length} 条知识，\n专注 ${pomo.length} 枚番茄共 ${pomoMin} 分钟。\n${hlogs.length + notes.length + kb.length === 0 ? '安静的一周也是一周，下一封信想热闹一点。' : '它们都不会消失，都在等你回头翻看。'}`;
+            const mask = document.createElement('div');
+            mask.className = 'sunday-letter-mask';
+            mask.innerHTML = `<div class="sunday-letter"><h4>📮 本周回信</h4><div class="sl-body">${body}</div><div class="sl-sign">—— 周日的你</div><div class="sl-actions"><button onclick="this.closest('.sunday-letter-mask').remove()">读过了</button><button class="primary" onclick="ritualArchiveLetter(this)">📮 存入知识库</button></div></div>`;
+            document.body.appendChild(mask);
+        }
+        function ritualArchiveLetter(btn) {
+            const body = btn.closest('.sunday-letter').querySelector('.sl-body').textContent;
+            try { if (typeof addToKnowledge === 'function') { addToKnowledge('本周回信 ' + ritualTodayStr(), body); } else { throw 0; } } catch (e) {
+                const kb = safeStorage.get('niko_knowledge', []);
+                kb.unshift({ id: 'kb_' + Date.now(), title: '本周回信 ' + ritualTodayStr(), body, para: '02-Areas', category: '复盘', tags: ['周报'], source: { from: '周日回信' }, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+                safeStorage.set('niko_knowledge', kb);
+            }
+            btn.closest('.sunday-letter-mask').remove();
+            if (typeof showToast === 'function') showToast('📮 回信已存入知识库');
+        }
+        function ritualInit() { try { ritualDoorOpening(); ritualNightMist(); ritualSeasonCover(); setTimeout(() => { ritualBadges(); ritualSundayLetter(); }, 1200); } catch (e) {} }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ritualInit); else ritualInit();
+
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
         else init();
 
