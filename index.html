@@ -1567,6 +1567,22 @@
         .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 1px; color: #111827; }
         body.dark-mode .pomo-time { color: #f9fafb; }
         .pomo-state { font-size: 12px; color: #f97316; margin-top: 2px; }
+        /* v2.12 循环进度点 + 自动衔接开关 */
+        .pomo-cycle { display: flex; align-items: center; gap: 5px; margin-top: 10px; }
+        .pomo-cyc-dot { width: 7px; height: 7px; border-radius: 50%; background: #e5e7eb; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08); transition: all .3s; }
+        .pomo-cyc-dot.on { background: #f97316; box-shadow: 0 0 6px rgba(249,115,22,0.45); }
+        .pomo-cyc-label { font-size: 10.5px; color: #9ca3af; margin-left: 5px; }
+        .pomo-chain { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #6b7280; cursor: pointer; margin-left: auto; user-select: none; }
+        .pomo-chain input { accent-color: #f97316; width: 14px; height: 14px; cursor: pointer; }
+        body.dark-mode .pomo-cyc-dot { background: #374151; }
+        body.dark-mode .pomo-chain { color: #9ca3af; }
+        /* 休息阶段：翡翠绿呼吸 */
+        .pomo-ring.breaking.running { animation-name: pomoBreathBreak; }
+        body.dark-mode .pomo-ring.breaking.running { animation-name: pomoBreathBreak; }
+        @keyframes pomoBreathBreak {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.28); }
+            50% { box-shadow: 0 0 0 9px rgba(52, 211, 153, 0.06), 0 0 18px 3px rgba(52, 211, 153, 0.3); }
+        }
         /* v2.10 专注呼吸光环：进行中钟面缓缓呼吸，像一颗陪伴你跳动的心脏 */
         .pomo-ring.running { animation: pomoBreath 3.4s ease-in-out infinite; }
         @keyframes pomoBreath {
@@ -10987,9 +11003,11 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="pomo-state" id="pomoStateLabel">准备开始</div>
                     </div>
                 </div>
+                <div class="pomo-cycle" id="pomoCycle"></div>
             </div>
             <div class="pomo-controls">
                 <button class="btn primary" id="pomoToggleBtn" onclick="pomoToggle()">▶ 开始</button>
+                <button class="btn" id="pomoSkipBtn" onclick="pomoSkip()" style="display:none;">⏭ 跳过休息</button>
                 <button class="btn" onclick="pomoReset()">↺ 重置</button>
             </div>
             <div class="pomo-opts">
@@ -11004,6 +11022,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <option value="创意">💡 创意</option>
                     <option value="学习">🎓 学习</option>
                 </select>
+                <label class="pomo-chain" title="番茄结束自动进入休息，休息结束自动开始下一个番茄——全程零点击"><input type="checkbox" id="pomoChainChk" onchange="setPomoChain(this.checked)"> 自动衔接</label>
             </div>
             <div class="pomo-today" id="pomoToday">今日 🍅 0 个 · 0 分钟</div>
             <div class="pomo-log" id="pomoLog"><div class="pomo-log-empty">还没有完成的番茄</div></div>
@@ -25312,7 +25331,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             showToast('📌 已存为便签（切到便签看板查看）');
         }
 
-        // ===== 番茄钟专注 =====
+        // ===== 番茄钟专注（v2.12 自动衔接：专注→休息→下一个番茄，全程零点击）=====
         let pomoMinutes = 25;
         let pomoTotalSeconds = 25 * 60;
         let pomoRemain = pomoTotalSeconds;
@@ -25320,7 +25339,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         let pomoTimerId = null;
         let pomoEndAt = null;
         let pomoTag = '工作';
+        let pomoPhase = 'work';          // 'work' 专注 | 'break' 休息
+        let pomoBreakMin = 5;            // 当前这段休息的时长（每第 4 个番茄后长休）
         const POMO_ACTIVE_KEY = 'niko_pomodoro_active';
+        const POMO_CHAIN_KEY = 'niko_pomodoro_chain';   // 自动衔接开关（默认开）
+        const POMO_WORK_COLOR = '#f97316';
+        const POMO_BREAK_COLOR = '#34d399';
+        function pomoChainOn() { const v = safeStorage.get(POMO_CHAIN_KEY, null); return v === null ? true : !!v; }
+        function setPomoChain(v) { safeStorage.set(POMO_CHAIN_KEY, !!v); renderPomoFace(); }
+        function pomoTodayDone() { const today = formatDate(new Date()); return safeStorage.get('niko_pomodoro_logs', []).filter(l => l.date === today).length; }
+        // 第 4、8、12…个番茄后长休 15 分钟，其余短休 5 分钟
+        function pomoBreakFor(doneCount) { return (doneCount > 0 && doneCount % 4 === 0) ? 15 : 5; }
+        function pomoDurationFor(phase) { return phase === 'break' ? pomoBreakMin * 60 : pomoMinutes * 60; }
 
         function pomoTimeText(sec) {
             const m = Math.floor(sec / 60);
@@ -25343,11 +25373,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const ringEl = document.getElementById('pomoRing');
             const stateEl = document.getElementById('pomoStateLabel');
             const btnEl = document.getElementById('pomoToggleBtn');
+            const cycEl = document.getElementById('pomoCycle');
+            const skipEl = document.getElementById('pomoSkipBtn');
+            const chainEl = document.getElementById('pomoChainChk');
+            const color = pomoPhase === 'break' ? POMO_BREAK_COLOR : POMO_WORK_COLOR;
             if (timeEl) timeEl.textContent = pomoTimeText(pomoRemain);
             const pct = pomoTotalSeconds ? ((pomoTotalSeconds - pomoRemain) / pomoTotalSeconds) * 100 : 0;
-            if (ringEl) { ringEl.style.background = `conic-gradient(#f97316 ${pct}%, #e5e7eb ${pct}% 100%)`; ringEl.classList.toggle('running', !!pomoRunning); }
-            if (stateEl) stateEl.textContent = pomoRunning ? (pomoTag ? pomoTag + ' · 专注中' : '专注中') : '准备开始';
-            if (btnEl) btnEl.textContent = pomoRunning ? '⏸ 暂停' : '▶ 开始';
+            if (ringEl) {
+                ringEl.style.background = `conic-gradient(${color} ${pct}%, #e5e7eb ${pct}% 100%)`;
+                ringEl.classList.toggle('running', !!pomoRunning);
+                ringEl.classList.toggle('breaking', pomoPhase === 'break');
+            }
+            if (stateEl) {
+                stateEl.style.color = color;
+                stateEl.textContent = pomoRunning
+                    ? (pomoPhase === 'break' ? `休息中 · ${pomoBreakMin} 分钟` : (pomoTag ? pomoTag + ' · 专注中' : '专注中'))
+                    : (pomoPhase === 'break' ? '休息就绪' : '准备开始');
+            }
+            if (btnEl) {
+                btnEl.textContent = pomoRunning ? '⏸ 暂停' : (pomoPhase === 'break' ? '▶ 继续休息' : '▶ 开始');
+                btnEl.style.background = (!pomoRunning && pomoPhase === 'break') ? POMO_BREAK_COLOR : '';
+                btnEl.style.borderColor = (!pomoRunning && pomoPhase === 'break') ? POMO_BREAK_COLOR : '';
+            }
+            if (skipEl) skipEl.style.display = pomoPhase === 'break' ? '' : 'none';
+            if (chainEl) chainEl.checked = pomoChainOn();
+            if (cycEl) {
+                const done = pomoTodayDone();
+                const pos = done % 4;
+                const filled = (done > 0 && pos === 0) ? 4 : pos;
+                const round = Math.floor(done / 4) + 1;
+                cycEl.innerHTML = [0, 1, 2, 3].map(i => `<span class="pomo-cyc-dot${i < filled ? ' on' : ''}"></span>`).join('')
+                    + `<span class="pomo-cyc-label">第 ${round} 轮 · ${pomoChainOn() ? '自动衔接' : '手动模式'}</span>`;
+            }
         }
         function renderPomoOpts() {
             document.querySelectorAll('.pomo-min-btn').forEach(b => {
@@ -25384,8 +25441,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         document.getElementById('pomodoroModal').addEventListener('click', (e) => { if (e.target.id === 'pomodoroModal') closePomodoro(); });
         function setPomoMinutes(m) {
             pomoMinutes = m;
-            pomoTotalSeconds = m * 60;
-            if (!pomoRunning) pomoRemain = pomoTotalSeconds;
+            if (pomoPhase === 'work') {
+                pomoTotalSeconds = m * 60;
+                if (!pomoRunning) { pomoRemain = pomoTotalSeconds; pomoEndAt = null; }
+            }
             renderPomoOpts();
             renderPomoFace();
         }
@@ -25393,15 +25452,32 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function pomoToggle() {
             if (pomoRunning) { pomoPause(); } else { pomoStart(); }
         }
+        // 阶段待命：切到某阶段但先不跑（手动模式等待点击，或链式切换前校准钟面）
+        function pomoArmPhase(phase) {
+            pomoPhase = phase;
+            if (phase === 'break') pomoBreakMin = pomoBreakFor(pomoTodayDone());
+            pomoTotalSeconds = pomoDurationFor(phase);
+            pomoRemain = pomoTotalSeconds;
+            pomoEndAt = null;
+            pomoRunning = false;
+            document.body.classList.remove('pomo-focusing');
+            clearInterval(pomoTimerId);
+            safeStorage.set(POMO_ACTIVE_KEY, null);
+            renderPomoFace();
+        }
         function pomoStart() {
             if (pomoEndAt) {
                 const diff = Math.round((pomoEndAt - Date.now()) / 1000);
                 if (diff <= 0) { pomoFinish(); return; }
                 pomoRemain = diff;
             } else {
+                // 暂停后继续：保留剩余时间；全新开始：按当前阶段时长校准
+                const dur = pomoDurationFor(pomoPhase);
+                if (pomoRemain <= 0 || pomoRemain > dur) pomoRemain = dur;
+                pomoTotalSeconds = dur;
                 pomoEndAt = Date.now() + pomoRemain * 1000;
             }
-            safeStorage.set(POMO_ACTIVE_KEY, { endAt: pomoEndAt, minutes: pomoMinutes, tag: pomoTag });
+            safeStorage.set(POMO_ACTIVE_KEY, { endAt: pomoEndAt, minutes: pomoPhase === 'break' ? pomoBreakMin : pomoMinutes, tag: pomoTag, phase: pomoPhase, breakMin: pomoBreakMin });
             pomoRunning = true;
             document.body.classList.add('pomo-focusing');
             if ('Notification' in window && Notification.permission === 'default') { try { Notification.requestPermission(); } catch (e) {} }
@@ -25418,13 +25494,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoFace();
         }
         function pomoReset() {
-            pomoRunning = false;
-            document.body.classList.remove('pomo-focusing');
-            clearInterval(pomoTimerId);
-            pomoEndAt = null;
-            safeStorage.set(POMO_ACTIVE_KEY, null);
-            pomoRemain = pomoTotalSeconds;
-            renderPomoFace();
+            pomoArmPhase(pomoPhase);
         }
         function pomoTick() {
             if (!pomoEndAt) return;
@@ -25434,61 +25504,86 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (diff <= 0) pomoFinish();
         }
         function pomoFinish() {
+            const finishedPhase = pomoPhase;
             pomoRunning = false;
             document.body.classList.remove('pomo-focusing');
             clearInterval(pomoTimerId);
-            const logs = safeStorage.get('niko_pomodoro_logs', []);
-            logs.unshift({
-                id: 'pomo_' + Date.now(),
-                date: formatDate(new Date()),
-                minutes: pomoMinutes,
-                tag: pomoTag,
-                doneAt: new Date().toISOString()
-            });
-            safeStorage.set('niko_pomodoro_logs', logs);
             pomoEndAt = null;
             safeStorage.set(POMO_ACTIVE_KEY, null);
-            pomoRemain = pomoTotalSeconds;
-            renderPomoToday();
-            renderPomoLog();
-            renderPomoBadge();
-            renderPomoFace();
-            // 🌱 番茄林地：每完成一个番茄钟种下一棵树（游戏时间页 + 计划看板图例行同步可看）
-            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('pomoTimeDisplay'), '🌱', '#34d399');
-            try { if (typeof window.renderPlanFocusStrip === 'function') window.renderPlanFocusStrip(); } catch (e) {}
-            // 🍅 v2.10 收获仪式：居中非阻塞播报这张番茄的"战利品"
-            try {
-                const todayLogs = safeStorage.get('niko_pomodoro_logs', []).filter(l => l.date === formatDate(new Date()));
-                const hv = document.createElement('div');
-                hv.className = 'pomo-harvest';
-                hv.innerHTML = `<span class="ph-icon">🍅</span><span><div class="ph-title">番茄收进仓！</div><div class="ph-sub">今天的第 ${todayLogs.length} 颗 · 「${escapeHtml(pomoTag)}」</div></span><span class="ph-min">+${pomoMinutes}′</span>`;
-                document.body.appendChild(hv);
-                setTimeout(() => { try { hv.remove(); } catch (e) {} }, 2700);
-            } catch (e) {}
-            // 浏览器系统通知（页面在后台/最小化也能收到）+ 标题闪烁兜底
-            try {
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification('🍅 番茄完成', { body: `${pomoMinutes} 分钟「${pomoTag}」专注结束，休息一下吧`, tag: 'niko-pomo' });
-                }
-            } catch (e) {}
-            let flashN = 0;
-            const flashT = setInterval(() => { document.title = (flashN++ % 2 ? '🍅 番茄完成！' : 'NIKO'); if (flashN > 9) { clearInterval(flashT); document.title = 'NIKO'; } }, 900);
-            showToast('🍅 完成一个番茄，休息一下吧');
+            if (finishedPhase === 'work') {
+                const logs = safeStorage.get('niko_pomodoro_logs', []);
+                logs.unshift({
+                    id: 'pomo_' + Date.now(),
+                    date: formatDate(new Date()),
+                    minutes: pomoMinutes,
+                    tag: pomoTag,
+                    doneAt: new Date().toISOString()
+                });
+                safeStorage.set('niko_pomodoro_logs', logs);
+                renderPomoToday();
+                renderPomoLog();
+                renderPomoBadge();
+                // 🌱 番茄林地：每完成一个番茄钟种下一棵树（游戏时间页 + 计划看板图例行同步可看）
+                if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('pomoTimeDisplay'), '🌱', '#34d399');
+                try { if (typeof window.renderPlanFocusStrip === 'function') window.renderPlanFocusStrip(); } catch (e) {}
+                // 🍅 v2.10 收获仪式：居中非阻塞播报这张番茄的"战利品"
+                try {
+                    const todayLogs = safeStorage.get('niko_pomodoro_logs', []).filter(l => l.date === formatDate(new Date()));
+                    const hv = document.createElement('div');
+                    hv.className = 'pomo-harvest';
+                    hv.innerHTML = `<span class="ph-icon">🍅</span><span><div class="ph-title">番茄收进仓！</div><div class="ph-sub">今天的第 ${todayLogs.length} 颗 · 「${escapeHtml(pomoTag)}」</div></span><span class="ph-min">+${pomoMinutes}′</span>`;
+                    document.body.appendChild(hv);
+                    setTimeout(() => { try { hv.remove(); } catch (e) {} }, 2700);
+                } catch (e) {}
+                // 浏览器系统通知 + 标题闪烁兜底
+                const breakMin = pomoBreakFor(pomoTodayDone());
+                try {
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification('🍅 番茄完成', { body: `${pomoMinutes} 分钟「${pomoTag}」结束，${breakMin} 分钟休息开始`, tag: 'niko-pomo' });
+                    }
+                } catch (e) {}
+                let flashN = 0;
+                const flashT = setInterval(() => { document.title = (flashN++ % 2 ? '🍅 番茄完成！' : 'NIKO'); if (flashN > 9) { clearInterval(flashT); document.title = 'NIKO'; } }, 900);
+                showToast(`🍅 完成一个番茄，休息 ${breakMin} 分钟`);
+            } else {
+                // 休息结束：轻提示即可，不再标题闪烁打扰
+                try {
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification('☕ 休息结束', { body: '下一个番茄已就位，继续冲', tag: 'niko-pomo-break' });
+                    }
+                } catch (e) {}
+                showToast('☕ 休息完毕，下一个番茄开始');
+            }
+            // 阶段切换：自动衔接开启则零点击续跑，否则停在待命状态等手动开始
+            pomoArmPhase(finishedPhase === 'work' ? 'break' : 'work');
+            if (pomoChainOn()) pomoStart();
+        }
+        // 跳过休息：立即回到工作待命（自动衔接开则直接开跑）
+        function pomoSkip() {
+            if (pomoPhase !== 'break') return;
+            pomoArmPhase('work');
+            if (pomoChainOn()) { pomoStart(); showToast('⏭ 跳过休息，下一个番茄开始'); }
+            else showToast('⏭ 已跳过休息，随时开始下一个番茄');
         }
         function restorePomoRunning() {
             const active = safeStorage.get(POMO_ACTIVE_KEY, null);
             if (!active || !active.endAt) return;
             const diff = Math.round((active.endAt - Date.now()) / 1000);
+            pomoPhase = active.phase || 'work';
+            if (pomoPhase === 'work') pomoMinutes = active.minutes || 25;
+            pomoBreakMin = active.breakMin || pomoBreakFor(pomoTodayDone());
             if (diff > 0) {
                 pomoEndAt = active.endAt;
-                pomoMinutes = active.minutes || 25;
-                pomoTotalSeconds = pomoMinutes * 60;
+                pomoTotalSeconds = pomoDurationFor(pomoPhase);
                 pomoRemain = diff;
                 pomoRunning = true;
                 clearInterval(pomoTimerId);
                 pomoTimerId = setInterval(pomoTick, 1000);
             } else {
+                // 页面关闭期间错过的阶段：不补跑，直接进入下一阶段待命
                 safeStorage.set(POMO_ACTIVE_KEY, null);
+                pomoArmPhase(pomoPhase === 'work' ? 'break' : 'work');
+                return;
             }
             renderPomoFace();
         }
@@ -25831,7 +25926,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609021815";
+        window.NIKO_VERSION = "202609032104";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
