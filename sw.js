@@ -3,7 +3,7 @@
 //   1. 优先从网络获取最新版（绕过浏览器缓存）
 //   2. 网络失败时降级到本地缓存
 //   3. 每次 fetch 带 cache: 'no-cache'，告诉 CDN/代理不要返回旧缓存
-const CACHE_NAME = 'niko-sw-202609040508';
+const CACHE_NAME = 'niko-sw-202609040521';
 
 self.addEventListener('install', function(e) {
     self.skipWaiting();
