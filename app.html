@@ -9895,6 +9895,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button id="viewBoardBtn" onclick="setView('board')">📋 看板</button>
                         <button id="viewGanttBtn" onclick="setView('gantt')">📊 甘特图</button>
                     </div>
+                    <div class="view-toggle" id="scopeModeGroup" title="工作 / 生活模式：上班专注工作项目，下班只看生活任务（看书、接孩子…）。自动 = 到点自动切换">
+                        <button data-mode="auto" onclick="setScopeMode('auto')">⏰ 自动</button>
+                        <button data-mode="work" onclick="setScopeMode('work')" title="只看工作项目">💼</button>
+                        <button data-mode="life" onclick="setScopeMode('life')" title="只看生活任务">🏡</button>
+                        <button data-mode="all" onclick="setScopeMode('all')" title="全部显示">🌐</button>
+                    </div>
+                    <input type="time" id="scopeOffTime" value="19:00" onchange="setScopeOffTime(this.value)" title="自动模式：到这个时间点自动切到生活模式" style="display:none;width:78px;padding:4px 6px;border-radius:6px;border:1px solid var(--card-border,#333);background:transparent;color:inherit;font-size:12px;">
                     <label class="node-toggle" title="一键显示/隐藏日历上的买量节点标签，不干扰任务行程">
                         <input type="checkbox" id="marketNodeToggle" onchange="toggleMarketNodeShow()" checked>
                         <span class="node-toggle-track"></span>
@@ -10035,7 +10042,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="btn" type="button" onclick="quickAddProjectForEvent()" style="padding:0 10px;font-size:12px;">＋ 新建</button>
                     </div>
                 </div>
-                <div class="form-item" style="display:flex;align-items:flex-end;font-size:11px;color:#888;">项目色用于日历任务条左侧色条与背景</div>
+                <div class="form-item"><label>归属（工作/生活模式筛选用）</label>
+                    <select id="eventScope">
+                        <option value="">跟随项目</option>
+                        <option value="work">💼 工作</option>
+                        <option value="life">🏡 生活</option>
+                    </select>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-item"><label>优先级</label>
@@ -12037,15 +12050,27 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         function getProject(id) { return projects.find(p => p.id === id) || projects[0] || { id: 'pj_general', name: '通用', color: '#94a3b8' }; }
         function getProjectColor(id) { return getProject(id).color; }
         function getProjectName(id) { return getProject(id).name; }
+        // ===== 工作/生活归属（2026-09-04）：项目可标记 scope；未标记按名称推断 =====
+        const NIKO_LIFE_PROJECT_WORDS = ['装修', '健康', '关系', '生活', '家庭', '孩子', '读书', '钢琴'];
+        function inferProjectScopeByName(name) {
+            name = name || '';
+            return NIKO_LIFE_PROJECT_WORDS.some(w => name.includes(w)) ? 'life' : 'work';
+        }
+        function getProjectScope(p) { return (p && p.scope) || inferProjectScopeByName(p && p.name); }
+        function setProjectScope(id, scope) {
+            updateProject(id, undefined, undefined, scope);
+            renderProjectPickerList();
+            if (typeof render === 'function') { try { render(); } catch (err) {} }
+        }
         function addProjectSilent(name, color) {
             const id = 'pj_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
             projects.push({ id, name: name || '新项目', color: color || '#7c3aed', createdAt: Date.now() });
             safeStorage.set('niko_projects', projects);
             return id;
         }
-        function updateProject(id, name, color) {
+        function updateProject(id, name, color, scope) {
             const p = projects.find(x => x.id === id);
-            if (p) { if (name !== undefined) p.name = name; if (color !== undefined) p.color = color; safeStorage.set('niko_projects', projects); }
+            if (p) { if (name !== undefined) p.name = name; if (color !== undefined) p.color = color; if (scope !== undefined) p.scope = scope; safeStorage.set('niko_projects', projects); }
         }
         function deleteProjectById(id) {
             if (projects.length <= 1) { showToast('⚠️ 至少保留一个项目'); return false; }
@@ -14029,6 +14054,53 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             render();
         }
 
+        // ===== 工作 / 生活模式（2026-09-04）：上班看工作项目，下班看生活任务 =====
+        // 三层归属：任务级 ev.scope > 项目级 project.scope > 按项目名推断（装修/健康/关系/生活/家庭/孩子/读书/钢琴 → 生活，其余 → 工作）
+        function setScopeMode(m) {
+            safeStorage.set('niko_scope_mode', m);
+            updateScopeUI();
+            render();
+        }
+        function setScopeOffTime(v) {
+            safeStorage.set('niko_scope_offtime', v || '19:00');
+            updateScopeUI();
+            render();
+        }
+        function getScopeMode() { return safeStorage.get('niko_scope_mode', 'auto'); }
+        function getScopeOffTime() { return safeStorage.get('niko_scope_offtime', '19:00'); }
+        // 当前生效模式：手动直接返回；自动按下班时间切换（≥ 下班时间 → 生活）
+        function currentScopeMode() {
+            const m = getScopeMode();
+            if (m === 'work' || m === 'life' || m === 'all') return m;
+            const h = Number((getScopeOffTime() || '19:00').split(':')[0]) || 19;
+            return new Date().getHours() >= h ? 'life' : 'work';
+        }
+        function eventScope(ev) {
+            if (ev && (ev.scope === 'work' || ev.scope === 'life')) return ev.scope;
+            let p = null;
+            try { p = (typeof projects !== 'undefined') && projects.find(x => x.id === (ev && ev.projectId)); } catch (err) {}
+            if (p) return (typeof getProjectScope === 'function') ? getProjectScope(p) : (p.scope || 'work');
+            return 'work';
+        }
+        function scopeVisible(ev) {
+            const m = currentScopeMode();
+            return m === 'all' || eventScope(ev) === m;
+        }
+        function updateScopeUI() {
+            const group = document.getElementById('scopeModeGroup');
+            if (!group) return;
+            const m = getScopeMode();
+            group.querySelectorAll('button').forEach(b => {
+                b.classList.toggle('active', b.dataset.mode === m);
+                if (b.dataset.mode === 'auto') b.textContent = m === 'auto' ? ('⏰ 自动·' + (currentScopeMode() === 'work' ? '班' : '家')) : '⏰ 自动';
+            });
+            const t = document.getElementById('scopeOffTime');
+            if (t) {
+                t.style.display = m === 'auto' ? '' : 'none';
+                if (document.activeElement !== t && t.value !== getScopeOffTime()) t.value = getScopeOffTime();
+            }
+        }
+
         // ===== 时间审计周报：统计本周 vs 上周各轨道时长占比 =====
         // 轨道色盘（日历/任务卡片/时间审计共用；刻意避开状态三色 #f59e0b橙/#3b82f6蓝/#10b981绿，防止"哪个项目"和"什么状态"混淆）
         const TRACK_COLORS = {
@@ -14701,7 +14773,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             let total = 0, done = 0;
             for (let i = 0; i < 7; i++) {
                 const dateStr = formatDate(addDays(currentWeekStart, i));
-                const dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+                const dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate) && scopeVisible(e));
                 total += dayEvents.length;
                 done += dayEvents.filter(e => e.status === 'done').length;
             }
@@ -14726,7 +14798,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 } else {
                     const wFirst = formatDate(addDays(currentWeekStart, weekIdx * 7));
                     const wLast = formatDate(addDays(currentWeekStart, weekIdx * 7 + 6));
-                    const weekEvents = events.filter(e => !(e.endDate < wFirst || e.startDate > wLast));
+                    const weekEvents = events.filter(e => !(e.endDate < wFirst || e.startDate > wLast) && scopeVisible(e));
                     const wTotal = weekEvents.length;
                     const wDone = weekEvents.filter(e => e.status === 'done').length;
                     weekTotalEl.textContent = wDone + '/' + wTotal;
@@ -14768,7 +14840,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const dateStr = formatDate(date);
                 const allDayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
                 dayClearMap[dateStr] = allDayEvents.length > 0 && allDayEvents.every(e => e.status === 'done');
-                let dayEvents = allDayEvents;
+                let dayEvents = allDayEvents.filter(scopeVisible);
                 if (keyword) dayEvents = dayEvents.filter(e => e.title.toLowerCase().includes(keyword) || (e.desc && e.desc.toLowerCase().includes(keyword)));
                 sortDayEventsByUserOrder(dayEvents, dateStr);
                 dayEventsDisplay[dateStr] = dayEvents.slice(0, MAX_EVENTS_PER_DAY);
@@ -15216,7 +15288,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
             const dateStr = formatDate(selectedDate);
             document.getElementById('detailDateTitle').textContent = `${selectedDate.getFullYear()}年${selectedDate.getMonth()+1}月${selectedDate.getDate()}日 ${weekdays[selectedDate.getDay()]}${isSameDay(selectedDate, new Date()) ? ' · 今天' : ''}`;
-            let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate));
+            let dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate) && scopeVisible(e));
             sortDayEventsByUserOrder(dayEvents, dateStr);
             const doneCount = dayEvents.filter(e => e.status === 'done').length;
             document.getElementById('detailStats').innerHTML = `<span>共 <strong>${dayEvents.length}</strong> 项</span><span>已完成 <strong>${doneCount}</strong> 项</span>`;
@@ -15278,7 +15350,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const container = document.getElementById('boardContainer');
             container.innerHTML = '';
             const groups = { 'todo': [], 'in-progress': [], 'done': [] };
-            events.forEach(ev => {
+            events.filter(scopeVisible).forEach(ev => {
                 const status = ev.status || 'todo';
                 if (groups[status]) groups[status].push(ev);
             });
@@ -15371,7 +15443,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             `;
 
             // 获取所有任务（排除重复实例，只显示原始任务和独立任务）
-            let ganttEvents = events.filter(e => !e.repeatInstance).slice();
+            let ganttEvents = events.filter(e => !e.repeatInstance && scopeVisible(e)).slice();
             // 按开始日期排序
             ganttEvents.sort((a, b) => a.startDate.localeCompare(b.startDate));
 
@@ -15771,6 +15843,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 priority: document.getElementById('eventPriority').value,
                 status: document.getElementById('eventStatus').value,
                 customBoss: document.getElementById('eventCustomBoss').checked,
+                scope: document.getElementById('eventScope').value || '',
                 projectId,
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
@@ -25146,6 +25219,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             (events || []).forEach(ev => { if (ev.projectId) usedIds.add(ev.projectId); });
             box.innerHTML = projects.map(p => {
                 const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
+                const pScope = getProjectScope(p);
+                const scopeSeg = `<span style="display:inline-flex;border:1px solid var(--card-border,#333);border-radius:6px;overflow:hidden;flex-shrink:0;" title="项目归属：工作/生活模式筛选时决定显示谁（未手动标记时按项目名推断）">
+                        <button onclick="setProjectScope('${p.id}','work')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'work' ? 'rgba(59,130,246,0.28)' : 'transparent'};color:inherit;">💼</button>
+                        <button onclick="setProjectScope('${p.id}','life')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'life' ? 'rgba(16,185,129,0.28)' : 'transparent'};color:inherit;">🏡</button>
+                    </span>`;
                 const taskCount = (events || []).filter(e => e.projectId === p.id).length;
                 // v2.10 项目 Boss 血条：HP = 未完成任务 / 全部任务，清零即讨伐完成
                 const pTotal = (events || []).filter(e => e.projectId === p.id).length;
@@ -25161,6 +25239,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div style="display:flex;align-items:center;gap:8px;">
                         <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
                         <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
+                        ${scopeSeg}
                         ${usedTag}
                         <button class="color-reset-btn" onclick="deleteProjectFromUI('${p.id}')" title="删除项目">🗑</button>
                     </div>
@@ -26562,7 +26641,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609041318";
+        window.NIKO_VERSION = "202609042122";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
