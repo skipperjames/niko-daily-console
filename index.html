@@ -6208,1051 +6208,119 @@
         .copy-add-btn:hover { background: #0284c7; }
         .copy-empty { padding: 30px 0; text-align: center; color: #aaa; font-size: 13px; }
         .copy-count { font-size: 11px; color: #999; margin-left: auto; }
-/* ===== 全局重置 & 基础 ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-        body {
-            background: #f5f2ed;
-            color: #333;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        /* ===== 左侧导航 ===== */
-        .sidebar-left {
-            width: 180px;
-            background: #1a1a1a;
-            color: #fff;
+/* ===== 便签专属CSS ===== */
+        /* ============================================================
+                   灵感便签侧边栏（新增）
+                   ============================================================ */
+        .notes-sidebar {
+            width: 288px;
+            flex-shrink: 0;
+            background: #faf8f4;
+            border-left: 1px solid #e8e6e1;
             display: flex;
             flex-direction: column;
-            padding: 16px 0;
-            flex-shrink: 0;
-            overflow-y: auto;
-            transition: background 0.3s ease;
+            transition: width 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            padding-top: 60px; /* 顶部预留给系统胶囊按钮 */
         }
-        .logo {
-            padding: 0 20px 24px;
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
+        .notes-sidebar.collapsed {
+            width: 44px;
+        }
+
+        /* 收起状态的触发条 */
+        .notes-trigger {
+            display: none;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 8px 0 20px;
+            cursor: pointer;
+            height: 100%;
+            color: #999;
+            transition: background 0.2s, color 0.2s;
         }
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .notes-sidebar.collapsed .notes-trigger { display: flex; }
+        .notes-trigger:hover { background: #f0ede8; color: #555; }
+        .notes-trigger .trigger-icon { font-size: 18px; }
+        .notes-trigger .trigger-text {
+            writing-mode: vertical-rl;
+            font-size: 12px;
+            letter-spacing: 5px;
+            font-weight: 500;
+        }
+        .notes-trigger .trigger-count {
+            background: #f59e0b;
+            color: #fff;
+            font-size: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            padding: 0 4px;
+            font-weight: 600;
         }
-        .nav-section {
-            margin-bottom: 24px;
+
+        /* 展开面板 */
+        .notes-panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 288px;
         }
-        .nav-title {
-            font-size: 11px;
+        .notes-sidebar.collapsed .notes-panel { display: none; }
+
+        .notes-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4px 16px 2px;
+        }
+        .notes-title { font-size: 15px; font-weight: 600; transition: color 0.3s ease; }
+        .notes-collapse-btn {
+            width: 26px; height: 26px;
+            border: 1px solid #e0ded9;
+            background: #fff;
+            border-radius: 6px;
+            cursor: pointer;
             color: #888;
-            padding: 0 20px 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 12px;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+        .notes-collapse-btn:hover { background: #f5f4f1; color: #333; }
+        .notes-subtitle {
+            font-size: 11px;
+            color: #999;
+            padding: 0 16px 10px;
             transition: color 0.3s ease;
         }
-        .nav-item {
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ccc;
-            transition: all 0.2s;
-            border-left: 3px solid transparent;
-            padding-left: 17px;
-        }
-        .nav-item:hover {
-            background: #2a2a2a;
-            color: #fff;
-        }
-        .nav-item.active {
-            background: #2a2a2a;
-            color: #fff;
-            border-left-color: #667eea;
-        }
-        .nav-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .nav-badge {
-            margin-left: auto;
-            background: #ef4444;
-            color: #fff;
-            font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 10px;
-        }
-        .dark-mode-toggle {
-            margin: 12px 16px 8px;
-            padding: 8px 12px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 8px;
-            color: #ccc;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            text-align: left;
-            width: calc(100% - 32px);
-        }
-        .dark-mode-toggle:hover {
-            background: #333;
-            color: #fff;
-            border-color: #667eea;
-        }
-        .dark-mode-toggle .toggle-icon {
-            font-size: 16px;
-            flex-shrink: 0;
-            transition: transform 0.3s ease;
-        }
 
-        /* ===== 主容器 ===== */
-        .main-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-width: 0;
-            transition: background 0.3s ease;
-        }
-
-        /* ===== 页面切换 ===== */
-        .page {
-            display: none;
-            flex: 1;
-            overflow: hidden;
-            flex-direction: column;
-        }
-        .page.active {
-            display: flex;
-        }
-        .panel-card {
+        /* 输入区 */
+        .note-input-area {
+            margin: 0 12px 10px;
             background: #fff;
-            border-radius: 10px;
             border: 1px solid #e8e6e1;
-            padding: 14px 16px;
+            border-radius: 10px;
+            padding: 10px 10px 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
             flex-shrink: 0;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .panel-card h3 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .panel-card .subtitle {
-            font-size: 11px;
-            color: #888;
-            margin-bottom: 10px;
-            transition: color 0.3s ease;
-        }
-
-        .risk-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #f0eeea;
-            transition: border-color 0.3s ease;
-        }
-        .risk-item:last-child {
-            border-bottom: none;
-        }
-        .risk-item .category {
-            font-size: 12px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-        .risk-item .content {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.4;
-            transition: color 0.3s ease;
-        }
-        .risk-item .handled {
-            display: inline-block;
-            margin-top: 4px;
-            padding: 1px 8px;
-            background: #f0eeea;
-            border-radius: 4px;
-            font-size: 10px;
-            color: #888;
-            transition: background 0.3s ease;
-        }
-        /* 弹窗 */
-        .modal-mask {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal-mask.show {
-            display: flex;
-        }
-        .modal {
-            background: #fff;
-            border-radius: 10px;
-            width: 520px;
-            padding: 22px 24px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-            max-height: 90vh;
-            overflow-y: auto;
-            transition: background 0.3s ease;
-        }
-        .modal h3 {
-            margin-bottom: 14px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        .form-item {
-            margin-bottom: 12px;
-        }
-        .form-item label {
-            display: block;
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 4px;
-            transition: color 0.3s ease;
-        }
-        .form-item input,
-        .form-item select,
-        .form-item textarea {
+        .note-input-area textarea {
             width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #e0ded9;
-            border-radius: 6px;
-            font-size: 13px;
-            outline: none;
-            background: #faf9f7;
-            transition: all 0.3s ease;
-        }
-        .form-item input:focus,
-        .form-item select:focus {
-            border-color: #667eea;
-            background: #fff;
-        }
-        .form-row {
-            display: flex;
-            gap: 10px;
-        }
-        .form-row .form-item {
-            flex: 1;
-        }
-        .repeat-badge {
-            display: inline-block;
-            font-size: 9px;
-            padding: 0 5px;
-            background: #ede9fe;
-            color: #6d28d9;
-            border-radius: 3px;
-            margin-left: 4px;
-            vertical-align: middle;
-        }
-        .repeat-icon {
-            font-size: 10px;
-            margin-right: 2px;
-        }
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-            margin-top: 16px;
-            align-items: center;
-        }
-        .btn {
-            padding: 6px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            border: 1px solid #e0ded9;
-            background: #fff;
-            color: #555;
-            transition: all 0.15s;
-        }
-        .btn:hover {
-            background: #f5f4f1;
-        }
-        .btn.primary {
-            background: #1a1a1a;
-            color: #fff;
-            border-color: #1a1a1a;
-        }
-        .btn.primary:hover {
-            background: #333;
-        }
-        .btn.danger {
-            color: #ef4444;
-            border-color: #fecaca;
-            margin-right: auto;
-        }
-        .btn.danger:hover {
-            background: #fef2f2;
-        }
-
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d0cdc8;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #b8b5b0;
-        }
-
-        /* ===== 状态颜色系统（整体变色） ===== */
-        :root {
-            --status-todo: #f59e0b;
-            --status-in-progress: #3b82f6;
-            --status-done: #10b981;
-        }
-
-        /* 任务卡片 - 今日视图 */
-        .task-card.status-todo {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fbbf24;
-        }
-        .task-card.status-in-progress {
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border: 1px solid #60a5fa;
-        }
-        .task-card.status-done {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            border: 1px solid #34d399;
-            opacity: 0.85;
-        }
-        .task-card.status-todo .task-title,
-        .task-card.status-in-progress .task-title,
-        .task-card.status-done .task-title {
-            color: #1f2937;
-        }
-        .task-card.status-todo .task-desc,
-        .task-card.status-in-progress .task-desc,
-        .task-card.status-done .task-desc {
-            color: #4b5563;
-        }
-        .task-card.status-todo .task-meta,
-        .task-card.status-in-progress .task-meta,
-        .task-card.status-done .task-meta {
-            color: #6b7280;
-        }
-
-        /* 时间块 */
-        .time-block.status-todo {
-            background: #fffbeb;
-            border-left: 3px solid #f59e0b;
-        }
-        .time-block.status-in-progress {
-            background: #eff6ff;
-            border-left: 3px solid #3b82f6;
-        }
-        .time-block.status-done {
-            background: #ecfdf5;
-            border-left: 3px solid #10b981;
-            opacity: 0.85;
-        }
-
-        /* 日历事件条 */
-        .event-item.status-todo {
-            background: #f59e0b !important;
-            color: #fff !important;
-        }
-        .event-item.status-in-progress {
-            background: #3b82f6 !important;
-            color: #fff !important;
-        }
-        .event-item.status-done {
-            background: #10b981 !important;
-            color: #fff !important;
-            opacity: 0.7 !important;
-        }
-        .event-item.status-todo .event-checkbox,
-        .event-item.status-in-progress .event-checkbox,
-        .event-item.status-done .event-checkbox {
-            background: rgba(255,255,255,0.25);
-        }
-        .event-item.status-done .event-checkbox {
-            background: #fff;
-            color: #10b981;
-        }
-
-        /* 详情面板任务项 */
-        .day-task-item.status-todo {
-            background: #fffbeb;
-            border: 1px solid #fbbf24;
-            border-radius: 6px;
-            margin: 2px 8px;
-        }
-        .day-task-item.status-in-progress {
-            background: #eff6ff;
-            border: 1px solid #60a5fa;
-            border-radius: 6px;
-            margin: 2px 8px;
-        }
-        .day-task-item.status-done {
-            background: #ecfdf5;
-            border: 1px solid #34d399;
-            border-radius: 6px;
-            margin: 2px 8px;
-            opacity: 0.85;
-        }
-        .day-task-item.status-todo .task-title-text,
-        .day-task-item.status-in-progress .task-title-text {
-            color: #1f2937;
-        }
-        .day-task-item.status-done .task-title-text {
-            color: #6b7280;
-        }
-
-        /* 看板卡片 */
-        .board-card.status-todo {
-            background: #fffbeb;
-            border: 1px solid #fbbf24;
-        }
-        .board-card.status-in-progress {
-            background: #eff6ff;
-            border: 1px solid #60a5fa;
-        }
-        .board-card.status-done {
-            background: #ecfdf5;
-            border: 1px solid #34d399;
-            opacity: 0.85;
-        }
-        .board-card.status-todo .card-title,
-        .board-card.status-in-progress .card-title,
-        .board-card.status-done .card-title {
-            color: #1f2937;
-        }
-        .board-card.status-todo .card-desc,
-        .board-card.status-in-progress .card-desc,
-        .board-card.status-done .card-desc {
-            color: #4b5563;
-        }
-        .board-card.status-todo .card-meta,
-        .board-card.status-in-progress .card-meta,
-        .board-card.status-done .card-meta {
-            color: #6b7280;
-        }
-
-        /* 深色模式适配 */
-        body.dark-mode .task-card.status-todo {
-            background: linear-gradient(135deg, #3a2a1a 0%, #4a3a20 100%);
-            border-color: #d97706;
-        }
-        body.dark-mode .task-card.status-in-progress {
-            background: linear-gradient(135deg, #1a2a4a 0%, #1a3a5a 100%);
-            border-color: #3b82f6;
-        }
-        body.dark-mode .task-card.status-done {
-            background: linear-gradient(135deg, #1a3a2a 0%, #1a4a3a 100%);
-            border-color: #10b981;
-        }
-        body.dark-mode .task-card.status-todo .task-title,
-        body.dark-mode .task-card.status-in-progress .task-title,
-        body.dark-mode .task-card.status-done .task-title {
-            color: #e5e7eb;
-        }
-        body.dark-mode .task-card.status-todo .task-desc,
-        body.dark-mode .task-card.status-in-progress .task-desc,
-        body.dark-mode .task-card.status-done .task-desc {
-            color: #9ca3af;
-        }
-        body.dark-mode .task-card.status-todo .task-meta,
-        body.dark-mode .task-card.status-in-progress .task-meta,
-        body.dark-mode .task-card.status-done .task-meta {
-            color: #9ca3af;
-        }
-
-        body.dark-mode .time-block.status-todo {
-            background: #3a2a1a;
-            border-left-color: #d97706;
-        }
-        body.dark-mode .time-block.status-in-progress {
-            background: #1a2a4a;
-            border-left-color: #3b82f6;
-        }
-        body.dark-mode .time-block.status-done {
-            background: #1a3a2a;
-            border-left-color: #10b981;
-        }
-
-        body.dark-mode .event-item.status-todo {
-            background: #d97706;
-        }
-        body.dark-mode .event-item.status-in-progress {
-            background: #3b82f6;
-        }
-        body.dark-mode .event-item.status-done {
-            background: #059669;
-        }
-
-        body.dark-mode .day-task-item.status-todo {
-            background: #3a2a1a;
-            border-color: #d97706;
-        }
-        body.dark-mode .day-task-item.status-in-progress {
-            background: #1a2a4a;
-            border-color: #3b82f6;
-        }
-        body.dark-mode .day-task-item.status-done {
-            background: #1a3a2a;
-            border-color: #059669;
-        }
-        body.dark-mode .day-task-item.status-todo .task-title-text,
-        body.dark-mode .day-task-item.status-in-progress .task-title-text {
-            color: #e5e7eb;
-        }
-
-        body.dark-mode .board-card.status-todo {
-            background: #3a2a1a;
-            border-color: #d97706;
-        }
-        body.dark-mode .board-card.status-in-progress {
-            background: #1a2a4a;
-            border-color: #3b82f6;
-        }
-        body.dark-mode .board-card.status-done {
-            background: #1a3a2a;
-            border-color: #059669;
-        }
-        body.dark-mode .board-card.status-todo .card-title,
-        body.dark-mode .board-card.status-in-progress .card-title,
-        body.dark-mode .board-card.status-done .card-title {
-            color: #e5e7eb;
-        }
-        body.dark-mode .board-card.status-todo .card-desc,
-        body.dark-mode .board-card.status-in-progress .card-desc,
-        body.dark-mode .board-card.status-done .card-desc {
-            color: #9ca3af;
-        }
-
-        /* 颜色设置弹窗 */
-        .color-picker-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0eeea;
-        }
-        .color-picker-row:last-child { border-bottom: none; }
-        .color-picker-row .color-preview {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            border: 2px solid #e0ded9;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: transform 0.15s;
-        }
-        .color-picker-row .color-preview:hover { transform: scale(1.1); }
-        .color-picker-row .color-label {
-            flex: 1;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        .color-picker-row .color-desc {
-            font-size: 11px;
-            color: #888;
-        }
-        .color-picker-row input[type="color"] {
-            width: 50px;
-            height: 32px;
-            border: 1px solid #e0ded9;
-            border-radius: 6px;
-            cursor: pointer;
-            background: none;
-            padding: 2px;
-        }
-        .color-reset-btn {
-            font-size: 11px;
-            color: #667eea;
-            cursor: pointer;
-            background: none;
             border: none;
-            padding: 2px 8px;
-        }
-        .color-reset-btn:hover { text-decoration: underline; }
-
-        body.dark-mode .color-picker-row { border-bottom-color: #2a2a3a; }
-        body.dark-mode .color-picker-row input[type="color"] { border-color: #444; }
-
-        /* ===== 数据管理样式 ===== */
-        .data-action-card {
-            background: #faf9f7;
-            border: 1px solid #e8e6e1;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-            transition: all 0.2s;
-        }
-        .data-action-card:hover {
-            border-color: #ccc;
-            background: #f5f3ef;
-        }
-        .data-action-card h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .data-action-card p {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .data-meta-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
-        .data-meta-tag {
-            font-size: 11px;
-            padding: 2px 8px;
-            background: #fff;
-            border: 1px solid #e0ded9;
-            border-radius: 4px;
-            color: #666;
-        }
-        .data-meta-tag .count {
-            font-weight: 600;
+            outline: none;
+            resize: none;
+            font-size: 13px;
+            background: transparent;
             color: #333;
+            font-family: inherit;
+            line-height: 1.5;
+            transition: color 0.3s ease;
         }
-        .file-drop-zone {
-            border: 2px dashed #d0cdc8;
-            border-radius: 8px;
-            padding: 24px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #faf9f7;
-        }
-        .file-drop-zone:hover, .file-drop-zone.drag-over {
-            border-color: #667eea;
-            background: #f0f0ff;
-        }
-        .file-drop-zone .drop-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-        .file-drop-zone .drop-text {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 4px;
-        }
-        .file-drop-zone .drop-hint {
-            font-size: 11px;
-            color: #aaa;
-        }
-        .import-preview {
-            background: #f8f6f2;
-            border-radius: 6px;
-            padding: 12px;
-            margin-top: 10px;
-            font-size: 12px;
-        }
-        .import-preview h5 {
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .import-preview-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            border-bottom: 1px solid #f0eeea;
-        }
-        .import-preview-row:last-child { border-bottom: none; }
-        .import-warning {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 12px;
-            color: #92400e;
-            margin-top: 10px;
-        }
-        .import-success {
-            background: #d1fae5;
-            border: 1px solid #10b981;
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 12px;
-            color: #065f46;
-            margin-top: 10px;
-        }
-
-        body.dark-mode .data-action-card {
-            background: #252535;
-            border-color: #333345;
-        }
-        body.dark-mode .data-action-card:hover {
-            background: #2a2a3a;
-            border-color: #444;
-        }
-        body.dark-mode .data-meta-tag {
-            background: #2a2a3a;
-            border-color: #444;
-            color: #aaa;
-        }
-        body.dark-mode .data-meta-tag .count { color: #ddd; }
-        body.dark-mode .file-drop-zone {
-            background: #252535;
-            border-color: #444;
-        }
-        body.dark-mode .file-drop-zone:hover, body.dark-mode .file-drop-zone.drag-over {
-            background: #2a2a40;
-            border-color: #667eea;
-        }
-        body.dark-mode .file-drop-zone .drop-text { color: #ccc; }
-        body.dark-mode .file-drop-zone .drop-hint { color: #888; }
-        body.dark-mode .import-preview {
-            background: #1a1a28;
-        }
-        body.dark-mode .import-preview-row {
-            border-bottom-color: #2a2a3a;
-        }
-        body.dark-mode .import-warning {
-            background: #3a2a1a;
-            border-color: #b45309;
-            color: #fbbf24;
-        }
-        body.dark-mode .import-success {
-            background: #1a3a2a;
-            border-color: #10b981;
-            color: #6ee7b7;
-        }
-        /* 深色模式 */
-
-        body.dark-mode {
-            background: #121218;
-            color: #d0d0d8;
-        }
-        body.dark-mode .sidebar-left {
-            background: #0d0d16;
-        }
-        body.dark-mode .nav-title {
-            color: #6b6b80;
-        }
-        body.dark-mode .nav-item {
-            color: #999;
-        }
-        body.dark-mode .nav-item:hover {
-            background: #1a1a2a;
-            color: #ddd;
-        }
-        body.dark-mode .nav-item.active {
-            background: #1a1a2a;
-            color: #fff;
-            border-left-color: #667eea;
-        }
-        body.dark-mode .dark-mode-toggle {
-            background: #1a1a2a;
-            border-color: #444;
-            color: #bbb;
-        }
-        body.dark-mode .dark-mode-toggle:hover {
-            background: #222235;
-            color: #fff;
-            border-color: #667eea;
-        }
-        body.dark-mode .main-container {
-            background: #121218;
-        }
-        body.dark-mode .today-time-blocks,
-        body.dark-mode .flight-plan,
-        body.dark-mode .panel-card,
-        body.dark-mode .stat-card,
-        body.dark-mode .day-cell,
-        body.dark-mode .day-detail-panel,
-        body.dark-mode .board-card {
-            background: #1e1e2c;
-            border-color: #333345;
-        }
-        body.dark-mode .time-blocks-grid {
-            background: #333345;
-        }
-        body.dark-mode .time-block {
-            background: #1e1e2c;
-        }
-        body.dark-mode .time-block:hover {
-            background: #252535;
-        }
-        body.dark-mode .time-block .time {
-            color: #8888a0;
-        }
-        body.dark-mode .time-block .status {
-            color: #777;
-        }
-        body.dark-mode .time-block.past {
-            background: #1a1a28;
-        }
-        body.dark-mode .time-block.past .title {
-            color: #777;
-        }
-        body.dark-mode .task-card {
-            background: #252535;
-            border-color: #333345;
-        }
-        body.dark-mode .task-card:hover {
-            border-color: #555;
-        }
-        body.dark-mode .task-meta {
-            color: #8888a0;
-        }
-        body.dark-mode .task-meta .track-tag {
-            background: #2a2a40;
-            color: #667eea;
-        }
-        body.dark-mode .task-title {
-            color: #e0e0e8;
-        }
-        body.dark-mode .task-desc {
-            color: #999;
-        }
-        body.dark-mode .action-btn {
-            background: #252535;
-            border-color: #444;
-            color: #ccc;
-        }
-        body.dark-mode .action-btn:hover {
-            background: #333345;
-        }
-        body.dark-mode .action-btn.primary {
-            background: #667eea;
-            border-color: #667eea;
-        }
-        body.dark-mode .risk-item {
-            border-bottom-color: #2a2a3a;
-        }
-        body.dark-mode .risk-item .content {
-            color: #aaa;
-        }
-        body.dark-mode .risk-item .handled {
-            background: #2a2a3a;
-            color: #888;
-        }
-        body.dark-mode .hot-header .hot-date {
-            background: #2a2a3a;
-            color: #8888a0;
-        }
-        body.dark-mode .hot-tab {
-            background: #252535;
-            border-color: #444;
-            color: #999;
-        }
-        body.dark-mode .hot-tab.active {
-            background: #667eea;
-            color: #fff;
-            border-color: #667eea;
-        }
-        body.dark-mode .hot-item {
-            background: #252535;
-            border-left-color: #667eea;
-        }
-        body.dark-mode .hot-item .hot-desc {
-            color: #aaa;
-        }
-        body.dark-mode .hot-item .hot-title .tag {
-            background: #3a3a4a;
-            color: #aaa;
-        }
-        body.dark-mode .hot-item .hot-insight {
-            background: #2a2a40;
-            color: #8b9ef5;
-        }
-        body.dark-mode .hot-item .hot-source {
-            color: #777;
-        }
-        body.dark-mode .deal-card {
-            background: #1a2a3a;
-        }
-        body.dark-mode .deal-card .label {
-            color: #8888a0;
-        }
-        body.dark-mode .view-toggle {
-            background: #2a2a3a;
-        }
-        body.dark-mode .view-toggle button {
-            color: #999;
-        }
-        body.dark-mode .view-toggle button.active {
-            background: #3a3a4a;
-            color: #e0e0e8;
-        }
-        body.dark-mode .nav-btn,
-        body.dark-mode .today-btn {
-            background: #252535;
-            border-color: #444;
-            color: #aaa;
-        }
-        body.dark-mode .display-setting {
-            color: #8888a0;
-        }
-        body.dark-mode .display-setting input,
-        body.dark-mode .search-box {
-            background: #252535;
-            border-color: #444;
-            color: #ccc;
-        }
-        body.dark-mode .week-header-cell {
-            color: #8888a0;
-        }
-        body.dark-mode .day-date {
-            color: #ccc;
-        }
-        body.dark-mode .day-count {
-            background: #2a2a3a;
-            color: #888;
-        }
-        body.dark-mode .panel-stats {
-            color: #8888a0;
-        }
-        body.dark-mode .panel-stats span strong {
-            color: #ddd;
-        }
-        body.dark-mode .btn-small {
-            background: #252535;
-            border-color: #444;
-            color: #aaa;
-        }
-        body.dark-mode .btn-small.primary {
-            background: #667eea;
-            color: #fff;
-            border-color: #667eea;
-        }
-        body.dark-mode .day-task-item {
-            border-bottom-color: #2a2a3a;
-        }
-        body.dark-mode .day-task-item:hover {
-            background: #252535;
-        }
-        body.dark-mode .task-title-text {
-            color: #ddd;
-        }
-        body.dark-mode .task-info {
-            color: #8888a0;
-        }
-        body.dark-mode .task-track-tag {
-            background: #2a2a3a;
-            color: #aaa;
-        }
-        body.dark-mode .task-check {
-            border-color: #555;
-        }
-        body.dark-mode .board-column {
-            background: #1a1a28;
-            border-color: #333345;
-        }
-        body.dark-mode .board-column-header .count {
-            background: #2a2540;
-            color: #a78bfa;
-        }
-        body.dark-mode .board-card {
-            background: #252535;
-            border-color: #333345;
-        }
-        body.dark-mode .board-card .card-desc {
-            color: #999;
-        }
-        body.dark-mode .board-card .card-meta {
-            color: #888;
-        }
-        body.dark-mode .board-card .card-meta .tag {
-            background: #2a2a40;
-            color: #667eea;
-        }
-        body.dark-mode .board-card .card-actions button {
-            background: #333345;
-            color: #aaa;
-        }
-        body.dark-mode .modal {
-            background: #1e1e2c;
-            color: #d0d0d8;
-        }
-        body.dark-mode .form-item label {
-            color: #8888a0;
-        }
-        body.dark-mode .form-item input,
-        body.dark-mode .form-item select,
-        body.dark-mode .form-item textarea {
-            background: #252535;
-            border-color: #444;
-            color: #d0d0d8;
-        }
-        body.dark-mode .btn {
-            background: #252535;
-            border-color: #444;
-            color: #ccc;
-        }
-        body.dark-mode .btn.primary {
-            background: #667eea;
-            color: #fff;
-            border-color: #667eea;
-        }
-        body.dark-mode .btn.danger {
-            color: #ef4444;
-            border-color: #5a2020;
-        }
-        body.dark-mode ::-webkit-scrollbar-thumb {
-            background: #444;
-        }
-
-        /* Toast 轻提示 */
-        .niko-toast {
-            position: fixed;
-            bottom: 44px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: #1a1a1a;
-            color: #fff;
-            font-size: 13px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 3000;
-            pointer-events: none;
-        }
-        .niko-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        .page { display: flex !important; }
-
-
-
-
-
         .note-tag-picker {
             display: flex;
             gap: 4px;
@@ -7276,7 +6344,22 @@
             color: #fff;
             font-weight: 600;
         }
+        .note-add-btn {
+            width: 100%;
+            padding: 6px 0;
+            background: #1a1a1a;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .note-add-btn:hover { background: #333; }
 
+        /* ===== 时间胶囊「寄给未来」===== */
+        .note-input-actions { display: flex; gap: 8px; align-items: stretch; }
+        .note-input-actions .note-add-btn { flex: 1; width: auto; }
         .capsule-chip {
             display: inline-flex; align-items: center; gap: 4px;
             font-size: 11.5px; padding: 5px 12px; border-radius: 8px;
@@ -7339,7 +6422,40 @@
         body:not(.dark-mode) .capsule-letter-sign { color: #8a8071; }
         body:not(.dark-mode) .capsule-letter-meta { color: #a8a291; }
 
+        /* 标签筛选栏 */
+        .notes-filter {
+            display: flex;
+            gap: 4px;
+            padding: 0 12px 8px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+        .note-filter-chip {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            color: #888;
+            background: transparent;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .note-filter-chip:hover { background: #f0ede8; }
+        .note-filter-chip.active {
+            background: #1a1a1a;
+            color: #fff;
+        }
 
+        /* 便签列表 */
+        .notes-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 14px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
         .note-card {
             --rot: 0deg;
             position: relative;
@@ -7459,8 +6575,23 @@
         }
 
 
+        /* 便签栏深色模式 */
+        body.dark-mode .notes-sidebar { background: #17171f; border-left-color: #333345; }
+        body.dark-mode .notes-trigger { color: #777; }
+        body.dark-mode .notes-trigger:hover { background: #22222e; color: #aaa; }
+        body.dark-mode .notes-title { color: #e0e0e8; }
+        body.dark-mode .notes-subtitle { color: #666; }
+        body.dark-mode .notes-collapse-btn { background: #252535; border-color: #444; color: #888; }
+        body.dark-mode .notes-collapse-btn:hover { background: #333345; color: #ccc; }
+        body.dark-mode .note-input-area { background: #1e1e2c; border-color: #333345; }
+        body.dark-mode .note-input-area textarea { color: #d0d0d8; }
         body.dark-mode .note-tag-option { background: #252535; border-color: #444; color: #999; }
         body.dark-mode .note-tag-option.selected { color: #fff; }
+        body.dark-mode .note-add-btn { background: #667eea; }
+        body.dark-mode .note-add-btn:hover { background: #7c8ef0; }
+        body.dark-mode .note-filter-chip { color: #777; }
+        body.dark-mode .note-filter-chip:hover { background: #252535; }
+        body.dark-mode .note-filter-chip.active { background: #667eea; color: #fff; }
         body.dark-mode .note-card { box-shadow: 2px 3px 12px rgba(0,0,0,0.40); }
         body.dark-mode .note-card::before { background: rgba(255,255,255,0.30); }
         body.dark-mode .notes-empty { color: #666; }
@@ -7637,6 +6768,31 @@
 
         /* 移动端适配：便签栏变悬浮抽屉 */
         @media (max-width: 900px) {
+            .notes-sidebar {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 950;
+                width: min(320px, 86vw);
+                box-shadow: -4px 0 24px rgba(0,0,0,0.18);
+            }
+            .notes-sidebar.collapsed {
+                width: 44px;
+                top: auto;
+                bottom: 96px;
+                height: auto;
+                padding-top: 0;
+                border-radius: 22px 0 0 22px;
+                box-shadow: -2px 2px 12px rgba(0,0,0,0.18);
+                border: 1px solid #e8e6e1;
+                border-right: none;
+            }
+            .notes-sidebar.collapsed .notes-trigger {
+                padding: 14px 0;
+                height: auto;
+            }
+            .notes-sidebar.collapsed .trigger-text { display: none; }
             .nb-wall { columns: 2 160px; }
         }
 /* ===== 知识库（PARA）专属CSS ===== */
@@ -8337,17 +7493,6 @@
         }
         body.dark-mode .diary-cal-today-btn { background: #3a3327; border-color: #4a3f2f; color: #fbbf24; }
         .diary-cal-today-btn:hover { background: #fde68a; }
-        /* v2.12.1 日历折叠：手机端默认收起，点标题栏右侧箭头展开（省掉大块月历占位） */
-        .diary-cal-fold {
-            font-size: 11px; padding: 3px 8px; border-radius: 10px; cursor: pointer;
-            background: transparent; border: 1px solid #e5e2da; color: #888; transition: all .2s; margin-left: auto;
-        }
-        body.dark-mode .diary-cal-fold { border-color: #3a3a3a; color: #999; }
-        .diary-cal-fold:hover { border-color: #d97706; color: #b45309; }
-        .diary-calendar-card.folded .diary-cal-grid { display: none; }
-        .diary-calendar-card.folded .diary-cal-head { margin-bottom: 0; }
-        .diary-cal-fold .fold-arrow { display: inline-block; transition: transform .2s; }
-        .diary-calendar-card.folded .fold-arrow { transform: rotate(-90deg); }
         .diary-cal-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -8516,10 +7661,6 @@
             #diaryPage .diary-cal-nav { padding: 2px 6px !important; font-size: 11px !important; min-width: 24px; }
             #diaryPage .diary-cal-today-btn { padding: 2px 8px !important; font-size: 10.5px !important; }
             #diaryPage .diary-cal-grid { gap: 2px !important; }
-            /* v2.12.1 手机端：写日记框提到首屏最前（不用下翻），统计/周卡顺势下移，日历默认收起 */
-            #diaryPage .diary-layout { order: -1 !important; display: flex !important; flex-direction: column !important; gap: 8px !important; }
-            #diaryPage .diary-editor-card { order: -1 !important; }
-            #diaryPage .diary-cal-fold { padding: 2px 7px !important; font-size: 10.5px !important; }
             #diaryPage .diary-cal-dow { font-size: 10px !important; padding: 1px 0 !important; }
             #diaryPage .diary-cal-cell {
                 padding: 4px 1px !important; min-height: 30px !important; font-size: 11px !important;
@@ -8991,13 +8132,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
         /* ===== 番茄林地（2026-09-02）：每完成一个番茄钟种一棵像素小树，高度=专注时长，长在游玩日历卡头部 ===== */
         .gt-forest { display:flex; align-items:flex-end; gap:5px; padding:0 2px; }
-        /* v2.12.1 番茄林地独立成条：从标题行挪出来，单独一行更好看（中性色，深浅主题通用） */
-        .gt-forest-strip {
-            display: flex; align-items: flex-end; gap: 8px; margin: 2px 0 10px;
-            padding: 6px 10px; border-radius: 10px;
-            background: rgba(128,128,128,.07); border: 1px solid rgba(128,128,128,.16);
-            overflow-x: auto;
-        }
         .gt-forest-day { display:flex; align-items:flex-end; gap:2px; padding-bottom:1px; min-width:11px; }
         .pomo-tree { display:inline-flex; flex-direction:column; align-items:center; }
         .pomo-tree .pt-leaf { width:9px; border-radius:2px; background:linear-gradient(180deg,#34d399,#16a34a); box-shadow:inset 0 -1px 0 rgba(0,0,0,.14); }
@@ -11100,7 +10234,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                             <span class="diary-cal-title" id="diaryCalTitle"></span>
                             <button class="diary-cal-nav" onclick="switchDiaryMonth(1)" title="下个月">›</button>
                             <button class="diary-cal-today-btn" onclick="diaryGoToday()">今天</button>
-                            <button class="diary-cal-fold" id="diaryCalFoldBtn" onclick="diaryToggleCal()" title="收起 / 展开日历">月历 <span class="fold-arrow">▾</span></button>
                         </div>
                         <div class="diary-cal-grid" id="diaryCalGrid"></div>
                     </div>
@@ -11209,33 +10342,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <p style="color:#888;font-size:13px;margin-top:2px;">用良好习惯换取游戏时间——打卡习惯自动入账，这里随时查看余额与流水</p>
                 </div>
 
-                <!-- ===== 游玩记录：日历表跟踪 + 每周时长总结 ===== -->
-                <div class="gt-card" style="margin-top:2px;">
-                    <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        🎮 游玩日历
-                        <span>记录每天实际游玩时长，自动汇总每周进度</span>
-                        <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
-                    </div>
-                    <div class="gt-forest-strip" title="番茄林地：每完成一个番茄钟种一棵树，树的高度 = 该次专注时长">
-                        <span class="gt-forest-cap" style="margin-left:0;">🌲 番茄林地</span>
-                        <span class="gt-forest" id="gtForest"></span>
-                    </div>
-                    <div class="gt-play-input">
-                        <input type="number" id="gtPlayMin" placeholder="分钟" min="1" step="1">
-                        <input type="text" id="gtPlayNote" placeholder="备注（游戏名，可选）" style="flex:1;min-width:120px;">
-                        <button id="gtPlayBtn" onclick="gtLogPlay()">+ 记录游玩</button>
-                        <button class="gt-play-minus" onclick="gtUndoPlay()" title="撤销今天最后一次记录" style="display:none;" id="gtUndoPlayBtn">↩ 撤销</button>
-                    </div>
-                    <div class="gt-play-stats">
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">📅 今日</span><span class="gt-play-stat-val" id="gtPlayToday">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">🗓 本周</span><span class="gt-play-stat-val" id="gtPlayWeek">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">📆 本月</span><span class="gt-play-stat-val" id="gtPlayMonth">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">⚡ 日均(本周)</span><span class="gt-play-stat-val" id="gtPlayDaily">0 分钟</span></div>
-                    </div>
-                    <div class="gt-calendar" id="gtPlayCalendar"></div>
-                    <div class="gt-day-detail" id="gtDayDetail"></div>
-                    <div class="gt-week-summary" id="gtWeekSummary"></div>
-                </div>
                 <div class="gt-balance-card">
                     <div class="gt-balance-left">
                         <div class="gt-balance-label">⏱ 当前可玩游戏时长</div>
@@ -11268,6 +10374,30 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                 </div>
 
+                <!-- ===== 游玩记录：日历表跟踪 + 每周时长总结 ===== -->
+                <div class="gt-card" style="margin-top:2px;">
+                    <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                        🎮 游玩日历
+                        <span>记录每天实际游玩时长，自动汇总每周进度</span>
+                        <span class="gt-forest" id="gtForest" title="番茄林地：每完成一个番茄钟种一棵树，树的高度 = 该次专注时长"></span>
+                        <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
+                    </div>
+                    <div class="gt-play-input">
+                        <input type="number" id="gtPlayMin" placeholder="分钟" min="1" step="1">
+                        <input type="text" id="gtPlayNote" placeholder="备注（游戏名，可选）" style="flex:1;min-width:120px;">
+                        <button id="gtPlayBtn" onclick="gtLogPlay()">+ 记录游玩</button>
+                        <button class="gt-play-minus" onclick="gtUndoPlay()" title="撤销今天最后一次记录" style="display:none;" id="gtUndoPlayBtn">↩ 撤销</button>
+                    </div>
+                    <div class="gt-play-stats">
+                        <div class="gt-play-stat"><span class="gt-play-stat-label">📅 今日</span><span class="gt-play-stat-val" id="gtPlayToday">0 分钟</span></div>
+                        <div class="gt-play-stat"><span class="gt-play-stat-label">🗓 本周</span><span class="gt-play-stat-val" id="gtPlayWeek">0 分钟</span></div>
+                        <div class="gt-play-stat"><span class="gt-play-stat-label">📆 本月</span><span class="gt-play-stat-val" id="gtPlayMonth">0 分钟</span></div>
+                        <div class="gt-play-stat"><span class="gt-play-stat-label">⚡ 日均(本周)</span><span class="gt-play-stat-val" id="gtPlayDaily">0 分钟</span></div>
+                    </div>
+                    <div class="gt-calendar" id="gtPlayCalendar"></div>
+                    <div class="gt-day-detail" id="gtDayDetail"></div>
+                    <div class="gt-week-summary" id="gtWeekSummary"></div>
+                </div>
             </div>
         </div>
         <div class="page" id="compoundPage">
@@ -11518,7 +10648,37 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     </div>
 
     <!-- 便签侧边栏 & 弹窗注入区 -->
-<div class="nb-batch-bar" id="nbBatchBar">
+<!-- ===== 灵感便签侧边栏 ===== -->
+    <div class="notes-sidebar" id="notesSidebar">
+        <!-- 收起状态：竖向触发条 -->
+        <div class="notes-trigger" id="notesTrigger" onclick="toggleNotesSidebar()" title="展开灵感便签">
+            <span class="trigger-icon">💡</span>
+            <span class="trigger-text">灵感便签</span>
+            <span class="trigger-count" id="triggerCount" style="display:none;">0</span>
+        </div>
+        <!-- 展开状态：完整面板 -->
+        <div class="notes-panel">
+            <div class="notes-header">
+                <div class="notes-title">💡 灵感速记</div>
+                <button class="notes-collapse-btn" onclick="toggleNotesSidebar()" title="收起">»</button>
+            </div>
+            <div class="notes-subtitle">随手记一笔，稍后一键转为正式任务 · <a style="color:#667eea;cursor:pointer;" onclick="switchPage('notes')">打开看板 →</a></div>
+            <div class="note-input-area">
+                <textarea id="noteInput" placeholder="记个灵感… Ctrl+Enter 快速贴上" rows="2"></textarea>
+                <div class="note-tag-picker" id="noteTagPicker"></div>
+                <div class="note-input-actions">
+                    <span class="capsule-chip" id="capsuleChip" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己">⏳ 寄给未来</span>
+                    <button class="note-add-btn" onclick="addNote()">📌 贴上便签</button>
+                </div>
+            </div>
+            <input type="text" id="notesSearchInput" class="nb-search" style="width:100%;margin:2px 0 6px;box-sizing:border-box;" placeholder="🔍 搜索便签…" oninput="sidebarSearch=this.value;renderNotes();renderNotesFilter();updateTriggerCount()">
+            <div class="notes-filter" id="notesFilter"></div>
+            <div class="notes-list" id="notesList"></div>
+        </div>
+    </div>
+
+    <!-- 批量操作条（便签看板） -->
+    <div class="nb-batch-bar" id="nbBatchBar">
         <span>已选 <strong id="nbSelCount">0</strong> 项</span>
         <select class="nb-batch-select" id="nbBatchTagSelect" onchange="if(this.value){nbBatchDo('tag:'+this.value);this.value='';}">
             <option value="">🏷 换标签…</option>
@@ -15625,14 +14785,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             showToast('状态 → ' + (statusNames[status] || status));
         }
 
-        // 复制任务：生成副本（标题保持原样不加后缀、状态重置 todo），并保留在原日期
-        // v2.12.1 用户要求：复制后标题不再带「（副本）」，避免每次手动删后缀
+        // 复制任务：生成副本（标题加「副本」、状态重置 todo），并保留在原日期
         function duplicateEvent(id, e) {
             if (e) e.stopPropagation();
             const ev = events.find(e => e.id === id);
             if (!ev) return;
             const copy = { ...ev };
             copy.id = Date.now().toString();
+            copy.title = (copy.title || '') + '（副本）';
             copy.status = 'todo';
             copy.repeat = null;
             copy.repeatGroup = null;
@@ -18656,9 +17816,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         let notes = safeStorage.get('niko_inspiration_notes', []);
         let currentNoteFilter = 'all';
+        let sidebarSearch = '';
         let selectedNoteTag = 'creative';
         let editingNoteId = null;
         let convertingNoteId = null; // 正在转任务的便签 id
+        let notesSidebarCollapsed = safeStorage.get('niko_notes_sidebar_collapsed', null);
+        // 小屏默认收起
+        if (notesSidebarCollapsed === null) {
+            notesSidebarCollapsed = window.innerWidth <= 900;
+        }
 
         // ===== 便签数据迁移：补充看板新增字段（置顶/归档/软删除/更新时间） =====
         notes = notes.map(n => ({
@@ -18705,7 +17871,41 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 统一保存：同时刷新侧栏与便签看板
         function saveNotes() {
             safeStorage.set('niko_inspiration_notes', notes);
+            renderNotes();
+            renderNotesFilter();
+            updateTriggerCount();
             if (currentPage === 'notes') renderNotesPage();
+        }
+
+        function toggleNotesSidebar() {
+            notesSidebarCollapsed = !notesSidebarCollapsed;
+            safeStorage.set('niko_notes_sidebar_collapsed', notesSidebarCollapsed);
+            applyNotesSidebarState();
+        }
+
+        function applyNotesSidebarState() {
+            document.getElementById('notesSidebar').classList.toggle('collapsed', !!notesSidebarCollapsed);
+        }
+
+        function updateTriggerCount() {
+            syncNotes();
+            const el = document.getElementById('triggerCount');
+            const visibleCount = notes.filter(n => !n.deleted && !n.archived).length;
+            el.textContent = visibleCount;
+            el.style.display = visibleCount > 0 ? 'flex' : 'none';
+        }
+
+        function renderNoteTagPicker() {
+            const picker = document.getElementById('noteTagPicker');
+            picker.innerHTML = Object.entries(noteTagDict()).map(([key, tag]) => {
+                const sel = selectedNoteTag === key;
+                return `<span class="note-tag-option ${sel ? 'selected' : ''}" style="${sel ? `background:${tag.chipBg};` : ''}" onclick="selectNoteTag('${key}')">${tag.icon} ${tag.name}</span>`;
+            }).join('');
+        }
+
+        function selectNoteTag(key) {
+            selectedNoteTag = key;
+            renderNoteTagPicker();
         }
 
         // ===== 时间胶囊「寄给未来」=====
@@ -18776,6 +17976,54 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             showToast('📥 已归档进知识库');
         }
 
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            const content = input.value.trim();
+            if (!content) {
+                showToast('✏️ 先写点内容再贴便签');
+                input.focus();
+                return;
+            }
+            const note = {
+                id: 'note_' + Date.now(),
+                content: content,
+                tag: selectedNoteTag,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                pinned: false,
+                archived: false,
+                deleted: false
+            };
+            capsuleAttach(note);
+            const hadCapsule = !!capsulePick;
+            capsulePick = ''; updateCapsuleChips();
+            notes.unshift(note);
+            input.value = '';
+            saveNotes();
+            showToast(hadCapsule ? '📮 已密封，未来见' : '📌 便签已贴上');
+        }
+
+        function setNoteFilter(key) {
+            currentNoteFilter = key;
+            renderNotesFilter();
+            renderNotes();
+        }
+
+        function renderNotesFilter() {
+            syncNotes();
+            const container = document.getElementById('notesFilter');
+            const visible = notes.filter(n => !n.deleted && !n.archived);
+            const counts = { all: visible.length };
+            Object.keys(noteTagDict()).forEach(k => counts[k] = visible.filter(n => n.tag === k).length);
+            let html = `<span class="note-filter-chip ${currentNoteFilter === 'all' ? 'active' : ''}" onclick="setNoteFilter('all')">全部 ${counts.all}</span>`;
+            Object.entries(noteTagDict()).forEach(([key, tag]) => {
+                if (counts[key] > 0 || currentNoteFilter === key) {
+                    html += `<span class="note-filter-chip ${currentNoteFilter === key ? 'active' : ''}" onclick="setNoteFilter('${key}')">${tag.icon} ${counts[key]}</span>`;
+                }
+            });
+            container.innerHTML = html;
+        }
+
         // 稳定的伪随机倾斜角（同一张便签角度固定）
         function noteRotation(id) {
             let hash = 0;
@@ -18796,6 +18044,124 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return `${d.getMonth()+1}月${d.getDate()}日`;
         }
 
+        function renderNotes() {
+            syncNotes();
+            const container = document.getElementById('notesList');
+            const visible = notes.filter(n => !n.deleted && !n.archived);
+            let filtered = currentNoteFilter === 'all' ? visible : visible.filter(n => n.tag === currentNoteFilter);
+            if (sidebarSearch) {
+                const kw = sidebarSearch.toLowerCase();
+                filtered = filtered.filter(n => {
+                    const tag = noteTagDict()[n.tag];
+                    return (n.content || '').toLowerCase().includes(kw) ||
+                           (tag && tag.name.toLowerCase().includes(kw)) ||
+                           (n.source || '').toLowerCase().includes(kw);
+                });
+            }
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="notes-empty">📭<br>${sidebarSearch ? `没有找到「${escapeHtml(sidebarSearch)}」<br>换个关键词试试` : (currentNoteFilter === 'all' ? '还没有便签<br>有灵感随时记一笔' : '该分类下暂无便签')}</div>`;
+                return;
+            }
+            container.innerHTML = '';
+            filtered.forEach(note => {
+                const tag = noteTagDict()[note.tag] || noteTagDict().other;
+                const card = document.createElement('div');
+                card.className = 'note-card';
+                card.style.background = tag.bg;
+                card.style.setProperty('--rot', noteRotation(note.id) + 'deg');
+
+                if (editingNoteId === note.id) {
+                    card.innerHTML = `
+                        <textarea class="note-edit-textarea" id="noteEdit_${note.id}" rows="3">${escapeHtml(note.content)}</textarea>
+                        <div class="note-edit-btns">
+                            <button class="save" onclick="saveNoteEdit('${note.id}')">保存</button>
+                            <button onclick="cancelNoteEdit()">取消</button>
+                        </div>`;
+                    container.appendChild(card);
+                    setTimeout(() => {
+                        const ta = document.getElementById('noteEdit_' + note.id);
+                        if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); }
+                    }, 30);
+                    return;
+                }
+
+                card.innerHTML = `
+                    <div class="note-content" ondblclick="editNote('${note.id}')" title="双击编辑">${note.pinned ? '📌 ' : ''}${escapeHtml(note.content)}</div>
+                    <div class="note-footer">
+                        <span class="note-tag-dot">${tag.icon} ${tag.name}</span>
+                        <span class="note-time">${formatNoteTime(note.createdAt)}</span>
+                        <div class="note-actions">
+                            <button class="note-action-btn" onclick="copyNote('${note.id}')" title="复制全文">📋</button>
+                            <button class="note-action-btn convert" onclick="convertNoteToTask('${note.id}')" title="转为正式任务">📌 转任务</button>
+                            <button class="note-action-btn" onclick="editNote('${note.id}')" title="编辑">✏️</button>
+                            <button class="note-action-btn delete" onclick="deleteNote('${note.id}')" title="删除（进回收站）">🗑</button>
+                        </div>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        // 一键复制便签全文（带标签尾注）
+        function copyNote(id) {
+            const note = notes.find(n => n.id === id);
+            if (!note) return;
+            const tag = noteTagDict()[note.tag];
+            const text = note.content + (tag ? `\n—— [${tag.icon}${tag.name}]` : '');
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => showToast('📋 已复制到剪贴板')).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); showToast('📋 已复制到剪贴板'); }
+            catch (e) { showToast('⚠️ 复制失败，请手动复制'); }
+            document.body.removeChild(ta);
+        }
+
+        function editNote(id) {
+            editingNoteId = id;
+            renderNotes();
+        }
+
+        function saveNoteEdit(id) {
+            const ta = document.getElementById('noteEdit_' + id);
+            const note = notes.find(n => n.id === id);
+            if (note && ta) {
+                const content = ta.value.trim();
+                if (!content) { showToast('⚠️ 便签内容不能为空'); return; }
+                note.content = content;
+                note.updatedAt = new Date().toISOString();
+                saveNotes();
+                showToast('✅ 便签已更新');
+            }
+            editingNoteId = null;
+            renderNotes();
+        }
+
+        function cancelNoteEdit() {
+            editingNoteId = null;
+            renderNotes();
+        }
+
+        // 软删除：移入回收站（便签看板中可恢复）
+        function deleteNote(id) {
+            const note = notes.find(n => n.id === id);
+            if (note) {
+                note.deleted = true;
+                note.deletedAt = new Date().toISOString();
+            }
+            saveNotes();
+            showToast('🗑 已移入回收站（便签看板可恢复）');
+        }
+
+        // 一键转正式任务：打开任务弹窗并预填内容，保存成功后移除便签
         function convertNoteToTask(id) {
             const note = notes.find(n => n.id === id);
             if (!note) return;
@@ -18906,7 +18272,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 vl.classList.toggle('active', nbView === 'list');
             }
             syncNotes();
+            renderNotes();          // 同步右侧灵感侧栏列表
+            renderNotesFilter();    // 同步侧栏分类计数
             renderNbTagFilter();    // 同步工具栏分类筛选
+            updateTriggerCount();   // 同步侧边栏徽标数
             renderNbStats();
             document.getElementById('nbSelCount').textContent = nbSelected.size;
             const c = document.getElementById('nbContent');
@@ -21732,28 +21101,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ===== 月历 =====
-        // v2.12.1 日历折叠：手机端默认收起（省掉大块月历占位），用户展开后记住偏好
-        function diaryCalFolded() {
-            const saved = safeStorage.get('niko_diary_cal_folded', null);
-            if (saved === null) return window.innerWidth <= 768;
-            return !!saved;
-        }
-        function diaryToggleCal() {
-            const card = document.querySelector('#diaryPage .diary-calendar-card');
-            if (!card) return;
-            const folded = !card.classList.contains('folded');
-            card.classList.toggle('folded', folded);
-            safeStorage.set('niko_diary_cal_folded', folded);
-            const btn = document.getElementById('diaryCalFoldBtn');
-            if (btn) btn.title = folded ? '展开月历' : '收起月历';
-        }
-        function applyDiaryCalFold() {
-            const card = document.querySelector('#diaryPage .diary-calendar-card');
-            if (!card) return;
-            card.classList.toggle('folded', diaryCalFolded());
-        }
         function renderDiaryCalendar() {
-            applyDiaryCalFold();
             const titleEl = document.getElementById('diaryCalTitle');
             if (titleEl) titleEl.textContent = diaryMonthY + ' 年 ' + (diaryMonthM + 1) + ' 月';
             const grid = document.getElementById('diaryCalGrid');
@@ -25597,7 +24945,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 命令面板动作（Cmd+K 可执行的动作） =====
         const GS_ACTIONS = [
-            { icon: '✏️', title: '新建便签', sub: '立即添加一条灵感便签', run: () => { switchPage('notes'); setTimeout(() => { if (typeof openNoteModal === 'function') openNoteModal(); }, 150); } },
+            { icon: '✏️', title: '新建便签', sub: '立即添加一条灵感便签', run: () => { switchPage('notes'); setTimeout(() => { const el = document.getElementById('noteInput'); if (el) { el.focus(); el.scrollIntoView({ block: 'center' }); } }, 150); } },
             { icon: '🍅', title: '开始番茄钟', sub: '25 分钟专注计时', run: () => { pomoReset(); openPomodoro(); } },
             { icon: '📥', title: '快速捕获', sub: '碎片想法进收件箱', run: () => openInbox() },
             { icon: '📊', title: '生成每周复盘', sub: '汇总本周所有产出', run: () => { if (typeof openWeeklyReview === 'function') openWeeklyReview(); } },
@@ -26302,7 +25650,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             safeStorage.set('niko_inspiration_notes', notes);
             renderInboxList();
             renderInboxBadge();
-            if (typeof renderNotesPage === 'function') { try { renderNotesPage(); } catch (e) {} }
+            if (typeof renderNotes === 'function') { try { renderNotes(); } catch (e) {} }
             showToast('📌 已归位为便签');
         }
         function inboxClearDone() {
@@ -26516,6 +25864,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             nameEl.value = ''; iconEl.value = '';
             tagActiveId = id;
             renderTagCloud(); renderTagResult();
+            if (typeof renderNoteTagPicker === 'function') { try { renderNoteTagPicker(); } catch (e) {} }
+            if (typeof renderNotesFilter === 'function') { try { renderNotesFilter(); } catch (e) {} }
+            if (typeof renderNotes === 'function') { try { renderNotes(); } catch (e) {} }
             showToast('✅ 标签「' + name + '」已添加，可在便签里选用');
         }
         function openTagOverview() {
@@ -26538,6 +25889,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 初始化颜色
         applyStatusColors();
 
+        // 初始化灵感便签
+        applyNotesSidebarState();
+        renderNoteTagPicker();
+        renderNotesFilter();
+        renderNotes();
+        updateTriggerCount();
+        document.getElementById('noteInput').addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                addNote();
+            }
+        });
 
         // 初始化便签看板弹窗事件
         document.getElementById('noteModal').onclick = (e) => { if (e.target.id === 'noteModal') closeNoteModal(); };
@@ -26563,7 +25926,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609041235";
+        window.NIKO_VERSION = "202609032104";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
