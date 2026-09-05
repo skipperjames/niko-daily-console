@@ -1870,85 +1870,70 @@
         .cs-comment { font-size: 12.5px; color: #6b7280; line-height: 1.6; }
         body.dark-mode .cs-comment { color: #9fa3bd; }
 
-        .today-main {
-            flex: 1;
-            display: flex;
-            gap: 16px;
-            overflow: hidden;
-            min-height: 0;
-        }
-
-        .flight-plan {
-            flex: 1;
+        /* ===== 六树庭院：六柱每日一浇（2026-09-05 替换推进序列/行业热点，设计语言对齐习惯卡） ===== */
+        .garden-strip {
+            margin-top: 10px;
             background: #fff;
-            border-radius: 10px;
             border: 1px solid #e8e6e1;
-            padding: 18px 22px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-width: 0;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            border-radius: 10px;
+            padding: 10px 14px;
         }
-        .fp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 16px;
-            flex-shrink: 0;
+        body.dark-mode .garden-strip { background: #1f1f2e; border-color: #333345; }
+        .garden-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+        .garden-title { font-size: 13px; font-weight: 600; }
+        .garden-badge {
+            font-size: 10px; padding: 1px 8px; border-radius: 10px;
+            background: #d1fae5; color: #047857; white-space: nowrap;
         }
-        .fp-title .label {
-            font-size: 11px;
-            color: #3b82f6;
-            font-weight: 500;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
+        body.dark-mode .garden-badge { background: #064e3b; color: #6ee7b7; }
+        .garden-badge.all-done { background: #10b981; color: #fff; }
+        body.dark-mode .garden-badge.all-done { background: #10b981; color: #fff; }
+        .garden-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; }
+        .garden-avg { margin-left: auto; font-size: 11px; color: #888; white-space: nowrap; }
+        .garden-avg b {
+            font-size: 15px; font-weight: 800; margin-left: 2px;
+            background: linear-gradient(135deg, #667eea, #a78bfa);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .fp-title h2 {
-            font-size: 20px;
-            font-weight: 600;
-            transition: color 0.3s ease;
+        .garden-trees { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+        .garden-tree-card {
+            display: flex; flex-direction: column; gap: 6px;
+            padding: 10px 10px 7px;
+            background: linear-gradient(180deg, #fff, #faf9f7);
+            border: 1px solid #eeece8; border-radius: 14px;
+            cursor: pointer; position: relative; user-select: none;
+            transition: transform .15s, box-shadow .15s, border-color .15s;
         }
-        .fp-nav {
-            font-size: 12px;
-            color: #888;
-            display: flex;
-            gap: 6px;
-            transition: color 0.3s ease;
+        .garden-tree-card:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,.06); border-color: #d9d6f6; }
+        body.dark-mode .garden-tree-card { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
+        body.dark-mode .garden-tree-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,.4); border-color: #4a4668; }
+        .garden-tree-card:active { transform: scale(.98); }
+        .garden-tree-card.done-card { border-color: rgba(16,185,129,.35); }
+        body.dark-mode .garden-tree-card.done-card { border-color: rgba(16,185,129,.28); background: linear-gradient(180deg, #212e2b, #202628); }
+        .garden-tree-card.withered-card { border-style: dashed; }
+        .garden-svg { display: block; width: 100%; height: 62px; pointer-events: none; }
+        .garden-name-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+        .garden-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gc, #888); box-shadow: 0 0 6px var(--gc, #888); flex-shrink: 0; }
+        .garden-name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .garden-score { margin-left: auto; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+        .garden-bar { height: 4px; border-radius: 3px; background: rgba(128,138,158,.15); overflow: hidden; }
+        .garden-bar i { display: block; height: 100%; border-radius: 3px; background: var(--gc, #888); transition: width .45s ease; }
+        .garden-act {
+            font-size: 10px; color: #8b7bb8; font-weight: 600; letter-spacing: .02em;
+            text-align: center; padding: 4px 0 2px; border-top: 1px dashed rgba(128,138,158,.25);
         }
-        .fp-nav .active {
-            color: #3b82f6;
-            font-weight: 600;
+        body.dark-mode .garden-act { color: #a89bd6; }
+        .garden-tree-card.done-card .garden-act { color: #10b981; }
+        body.dark-mode .garden-tree-card.done-card .garden-act { color: #34d399; }
+        /* 浇水瞬间：一滴水从树冠落下（DOM 层微反馈） */
+        .garden-water-anim {
+            position: absolute; top: 8px; left: 50%; margin-left: -3px;
+            width: 6px; height: 10px; border-radius: 50% 50% 60% 60%;
+            background: linear-gradient(#aee9ff, #4cc4f5);
+            pointer-events: none; z-index: 3;
+            animation: gardenDrop .8s cubic-bezier(.4,0,.9,.6) forwards;
         }
-        .fp-content {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-        .fp-section {
-            display: flex;
-            gap: 14px;
-        }
-        .fp-section-label {
-            width: 74px;
-            flex-shrink: 0;
-            font-size: 12px;
-            color: #888;
-            padding-top: 10px;
-            text-align: right;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .fp-section-content {
-            flex: 1;
-            display: grid;
-            gap: 10px;
-        }
-        .fp-section-content.two-col {
-            grid-template-columns: 1fr 1fr;
-        }
+        @keyframes gardenDrop { to { transform: translateY(50px); opacity: 0; } }
         .fp-focus {
             display: flex; align-items: center; gap: 8px;
             margin-top: 9px; padding: 9px 12px;
@@ -1973,12 +1958,6 @@
         .fp-focus.fp-focus-clear { cursor: default; color: #059669; font-size: 12.5px; font-weight: 600; }
         .fp-focus.fp-focus-clear:hover { transform: none; border-color: rgba(99,102,241,0.25); }
         body.dark-mode .fp-focus.fp-focus-clear { color: #6ee7b7; }
-        .fp-section-label.overdue { color: #ef4444; font-weight: 600; }
-        .fp-tomorrow-hint {
-            font-size: 11.5px; color: #9a9aa8; padding: 2px 2px 0;
-            text-align: right;
-        }
-        .fp-tomorrow-hint b { color: #6366f1; }
 
         .task-card {
             background: #fff;
@@ -2678,10 +2657,11 @@
             .cs-title { font-size: 17px; }
             .fp-focus { padding: 8px 10px; }
             .fp-focus-title { font-size: 12px; }
-            .fp-section { gap: 8px; }
-            .fp-section-label { width: 58px; font-size: 10.5px; }
-            .fp-section-content.two-col { grid-template-columns: 1fr; }
-            .fp-tomorrow-hint { text-align: left; padding-left: 66px; }
+            /* 手机端六树庭院：6 列 → 3×2，整卡可点 ≥44px */
+            .garden-trees { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .garden-tree-card { min-height: 96px; }
+            .garden-svg { height: 54px; }
+            .garden-sub { display: none; }
         }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
@@ -9760,43 +9740,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <h3>🎯 买量节点临近</h3>
                 <div id="marketNodeAlertList"></div>
             </div>
-            <div class="today-main">
-                <div class="flight-plan">
-                    <div class="fp-header">
-                        <div class="fp-title">
-                            <div class="label">FLIGHT PLAN</div>
-                            <h2>今日推进序列</h2>
-                        </div>
-                        <div class="fp-nav">
-                            <span class="active">NOW</span> → <span>NEXT</span> → <span>LATER</span>
-                        </div>
-                    </div>
-                    <div class="fp-content" id="flightPlanContent"></div>
+            <div class="garden-strip" id="gardenStrip">
+                <div class="garden-head">
+                    <span class="garden-title">🌱 六树庭院</span>
+                    <span class="garden-badge" id="gardenWateredBadge">今日 0/6</span>
+                    <span class="garden-sub">六柱人生 · 每日一浇 · 花开于九十</span>
+                    <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
                 </div>
-                <div class="right-panel">
-                    <div class="panel-card hot-card">
-                        <div class="hot-header">
-                            <h3>🔥 行业热点 <span style="font-size:10px;color:#10b981;font-weight:400;" id="hotStatusBadge">实时获取</span></h3>
-                            <span class="hot-date" id="hotDateLabel">今日</span>
-                        </div>
-                        <div class="hot-tabs" id="hotTabs">
-                            <span class="hot-tab active" data-cat="all">全部</span>
-                            <span class="hot-tab" data-cat="美国">🇺🇸 美国</span>
-                            <span class="hot-tab" data-cat="加拿大">🇨🇦 加拿大</span>
-                            <span class="hot-tab" data-cat="日本">🇯🇵 日本</span>
-                            <span class="hot-tab" data-cat="国内">🇨🇳 国内</span>
-                        </div>
-                        <div class="hot-list" id="hotList">
-                            <div class="hot-loading"><div class="spinner"></div><div>正在获取最新资讯...</div></div>
-                        </div>
-                        <div class="hot-footer">
-                            <span class="hot-updated" id="hotLastUpdated">加载中</span>
-                            <span style="float:right;">
-                                <a onclick="refreshHot()" id="hotRefreshLink">🔄 刷新</a> · <a onclick="switchPage('hot')">查看全部 →</a>
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                <div class="garden-trees" id="gardenTrees"></div>
             </div>
 
             <!-- ===== 每周复盘弹窗 ===== -->
@@ -12839,8 +12790,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderCommandBrief();
             renderClearSettle();
             renderBuddy();
-            renderFlightPlan();
-            renderHot();
+            renderGarden();
             renderWeeklyEntry();
             renderCapsuleChip();
         }
@@ -13035,45 +12985,153 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             box.style.display = 'block';
         }
 
-        function renderFlightPlan() {
-            const container = document.getElementById('flightPlanContent');
-            const d = todayBoardData();
-            const overdueTasks = d.overdueTasks;
-            const todayTasks = d.todayTasks;
-            const todayDone = d.todayDone;
-            const tomorrowCount = d.tomorrowCount;
-            container.innerHTML = '';
-            const renderSection = (label, tasks, twoCol, badgeCls) => {
-                if (!tasks.length) return;
-                const section = document.createElement('div');
-                section.className = 'fp-section';
-                section.innerHTML = `<div class="fp-section-label${badgeCls ? ' ' + badgeCls : ''}">${label}${tasks.length ? ` <span style="opacity:.6;">${tasks.length}</span>` : ''}</div>`;
-                const content = document.createElement('div');
-                content.className = 'fp-section-content' + (twoCol ? ' two-col' : '');
-                tasks.forEach(ev => content.appendChild(createTaskCard(ev, label.includes('现在'))));
-                section.appendChild(content);
-                container.appendChild(section);
-            };
-            renderSection('⚠️ 已延期', overdueTasks, true, 'overdue');
-            renderSection('⚡ 现在就打', todayTasks.filter(e => e.priority === 'now'));
-            renderSection('📌 今天待办', todayTasks.filter(e => e.priority !== 'now'), true);
-            if (todayDone.length) {
-                const section = document.createElement('div');
-                section.className = 'fp-section';
-                section.innerHTML = `<div class="fp-section-label" style="opacity:.65;">✅ 已讨伐 ${todayDone.length}</div>`;
-                const content = document.createElement('div');
-                content.className = 'fp-section-content two-col';
-                todayDone.forEach(ev => content.appendChild(createTaskCard(ev, false)));
-                section.appendChild(content);
-                container.appendChild(section);
+        // ===== 六树庭院：六柱每日一浇（2026-09-05 植入今日看板，替换推进序列/行业热点） =====
+        // 数据：niko_garden（niko_ 前缀自动进云同步）；规则：浇水 +1/日，荒废每日 -1，花开于九十
+        const GARDEN_PILLARS = [
+            { key:'energy', name:'精力', c:'#fb923c', dark:'#8a3212', mid:'#ea6a13', lite:'#fdba74', species:'maple'  },
+            { key:'money',  name:'收入', c:'#facc15', dark:'#8f6608', mid:'#d9a80f', lite:'#fde047', species:'ginkgo' },
+            { key:'relate', name:'关系', c:'#f472b6', dark:'#8f1d46', mid:'#ec4899', lite:'#fbcfe8', species:'cherry' },
+            { key:'mood',   name:'情绪', c:'#a78bfa', dark:'#44337a', mid:'#8b5cf6', lite:'#c4b5fd', species:'wist'   },
+            { key:'health', name:'健康', c:'#4ade80', dark:'#14532d', mid:'#1f9d55', lite:'#86efac', species:'pine'   },
+            { key:'spirit', name:'精神', c:'#38bdf8', dark:'#0c4a6e', mid:'#0284c7', lite:'#7dd3fc', species:'spirit' }
+        ];
+        function gardenState() {
+            let st = safeStorage.get('niko_garden', null);
+            if (!st || !st.score) {
+                st = { created: todayYmd(), day: todayYmd(), score: {}, watered: {} };
+                GARDEN_PILLARS.forEach(p => { st.score[p.key] = 12; st.watered[p.key] = ''; });
+                safeStorage.set('niko_garden', st);
             }
-            if (tomorrowCount) {
-                const hint = document.createElement('div');
-                hint.className = 'fp-tomorrow-hint';
-                hint.innerHTML = `🔭 明天还有 <b>${tomorrowCount}</b> 项 · 点击右上角「计划」查看`;
-                container.appendChild(hint);
-            }
+            return st;
         }
+        function gardenDaysBetween(a, b) {
+            const da = new Date(a + 'T00:00:00'), db = new Date(b + 'T00:00:00');
+            return Math.round((db - da) / 86400000);
+        }
+        // 每日衰减：距上次浇水每多一天 -1（昨天浇过今天不扣）。跨天首次渲染时结算一次（面板渲染前重读 localStorage 铁律）
+        function gardenNormalize(st) {
+            const today = todayYmd();
+            if (st.day !== today) {
+                GARDEN_PILLARS.forEach(p => {
+                    const last = st.watered[p.key] || st.created || today;
+                    const decay = Math.max(0, gardenDaysBetween(last, today) - 1);
+                    if (decay > 0) st.score[p.key] = Math.max(0, (st.score[p.key] || 0) - decay);
+                });
+                st.day = today;
+                safeStorage.set('niko_garden', st);
+            }
+            return st;
+        }
+        // 迷你树 SVG（62px 高）：幼芽/凋零/成树/开花 四态，六树种冠形差异
+        function gardenTreeSVG(p, sc, done) {
+            const withered = sc < 30;
+            const grow = Math.min(1, Math.max(0, (sc - 8) / 92));
+            const H = 10 + grow * 34, CW = 6 + grow * 15;
+            const pal = withered ? { dark:'#3c4038', mid:'#4a5044', lite:'#5c6455' } : { dark:p.dark, mid:p.mid, lite:p.lite };
+            const B = 45, GY = 70;
+            let s = `<svg class="garden-svg" viewBox="0 0 90 76" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="${B}" cy="${GY+1}" rx="${(15+CW*.35).toFixed(1)}" ry="4" fill="${withered ? '#2a2721' : '#1c3524'}" opacity="${withered ? '.5' : '.35'}"/>`;
+            if (done) s += `<ellipse cx="${B}" cy="${GY+1}" rx="${(17+CW*.4).toFixed(1)}" ry="4.5" fill="none" stroke="${p.c}" stroke-width="1.1" opacity=".5" stroke-dasharray="4 3"/>`;
+            if (sc <= 12) { // 幼芽
+                const g = withered ? '#5c6455' : '#6fbf73';
+                s += `<path d="M ${B} ${GY} L ${B} ${GY-11}" stroke="${g}" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M ${B} ${GY-9} C ${B-5} ${GY-12} ${B-6} ${GY-17} ${B-1} ${GY-18} C ${B+1} ${GY-14} ${B+1} ${GY-11} ${B} ${GY-9} Z" fill="${g}"/>
+                    <path d="M ${B} ${GY-9} C ${B+5} ${GY-12} ${B+6} ${GY-17} ${B+1} ${GY-18} C ${B-1} ${GY-14} ${B-1} ${GY-11} ${B} ${GY-9} Z" fill="${p.lite}" opacity="${withered ? '.5' : '.85'}"/>`;
+            } else {
+                const tw = 2 + grow * 3;
+                s += `<path d="M ${(B-tw).toFixed(1)} ${GY} Q ${(B-tw*.4).toFixed(1)} ${(GY-H*.5).toFixed(1)} ${B} ${(GY-H).toFixed(1)} L ${(B+tw).toFixed(1)} ${(GY-H).toFixed(1)} Q ${(B+tw*.4).toFixed(1)} ${(GY-H*.5).toFixed(1)} ${(B+tw).toFixed(1)} ${GY} Z" fill="#3a2d22"/>`;
+                const canY = GY - H - CW * .35;
+                if (p.species === 'pine') {
+                    [[canY+CW*.7, CW*1.15, pal.dark],[canY, CW*.85, pal.mid],[canY-CW*.65, CW*.58, pal.lite]].forEach(t => {
+                        const y=t[0], w=t[1];
+                        s += `<path d="M ${(B-w).toFixed(1)} ${y.toFixed(1)} Q ${B} ${(y-w*.75).toFixed(1)} ${(B+w).toFixed(1)} ${y.toFixed(1)} Q ${B} ${(y+w*.3).toFixed(1)} ${(B-w).toFixed(1)} ${y.toFixed(1)} Z" fill="${t[2]}"/>`;
+                    });
+                } else {
+                    s += `<circle cx="${B}" cy="${(canY+1.5).toFixed(1)}" r="${(CW*.95).toFixed(1)}" fill="${pal.dark}"/>`;
+                    [[-.5,0,.62],[.45,.18,.55],[0,-.32,.58],[-.2,.3,.45]].forEach(o => {
+                        s += `<circle cx="${(B+o[0]*CW).toFixed(1)}" cy="${(canY+o[1]*CW).toFixed(1)}" r="${(o[2]*CW).toFixed(1)}" fill="${pal.mid}"/>`;
+                    });
+                    s += `<circle cx="${(B-CW*.25).toFixed(1)}" cy="${(canY-CW*.3).toFixed(1)}" r="${(CW*.3).toFixed(1)}" fill="${pal.lite}" opacity=".55"/>`;
+                    if (p.species === 'maple' || p.species === 'ginkgo') {
+                        const dc = withered ? '#6b6b58' : (p.species === 'maple' ? '#ff7e45' : '#fef3a0');
+                        for (let k = 0; k < 4; k++) {
+                            const a = k * 1.7 + 0.6, d = CW * .5;
+                            const x = (B + Math.cos(a) * d).toFixed(1), y = (canY + Math.sin(a) * d * .7).toFixed(1);
+                            s += `<path d="M ${x} ${y} l 1.6 2.1 l -1.6 2.1 l -1.6 -2.1 Z" fill="${dc}" opacity=".85"/>`;
+                        }
+                    }
+                    if (p.species === 'cherry' && !withered && sc >= 60) {
+                        s += `<circle cx="${(B-4).toFixed(1)}" cy="${(canY+CW*.8).toFixed(1)}" r="1.6" fill="#fbcfe8"><animate attributeName="opacity" values="0;.9;0" dur="3s" repeatCount="indefinite"/></circle>`;
+                    }
+                    if (p.species === 'spirit') {
+                        s += `<circle cx="${(B+CW*.5).toFixed(1)}" cy="${(canY-CW*.2).toFixed(1)}" r="1.8" fill="${pal.lite}"><animate attributeName="opacity" values=".3;1;.3" dur="2.6s" repeatCount="indefinite"/></circle>`;
+                    }
+                }
+                if (!withered && sc >= 90) s += `<circle cx="${B}" cy="${(GY-H-CW*.3).toFixed(1)}" r="${(CW*1.5).toFixed(1)}" fill="${p.lite}" opacity=".14"/>`;
+            }
+            s += `</svg>`;
+            return s;
+        }
+        // 渲染入口：每次重读 localStorage（云同步链路 niko:datachanged → renderTodayPage）
+        function renderGarden() {
+            const wrap = document.getElementById('gardenTrees');
+            if (!wrap) return;
+            const st = gardenNormalize(gardenState());
+            const today = todayYmd();
+            wrap.innerHTML = GARDEN_PILLARS.map(p => {
+                const sc = st.score[p.key] || 0;
+                const done = st.watered[p.key] === today;
+                const withered = sc < 30;
+                return `<div class="garden-tree-card ${done ? 'done-card' : ''} ${withered ? 'withered-card' : ''}" data-key="${p.key}" style="--gc:${p.c}" title="${p.name} · 每日一浇 +1">
+                    ${gardenTreeSVG(p, sc, done)}
+                    <span class="garden-name-row"><span class="garden-dot"></span><span class="garden-name">${p.name}</span><span class="garden-score">${sc}</span></span>
+                    <span class="garden-bar"><i style="width:${sc}%"></i></span>
+                    <span class="garden-act">${done ? '✓ 今日已浇' : '💧 浇水 +1'}</span>
+                </div>`;
+            }).join('');
+            const n = GARDEN_PILLARS.filter(p => st.watered[p.key] === today).length;
+            const badge = document.getElementById('gardenWateredBadge');
+            if (badge) {
+                badge.textContent = `今日 ${n}/6`;
+                badge.classList.toggle('all-done', n === 6);
+            }
+            const avg = document.getElementById('gardenAvg');
+            if (avg) avg.textContent = Math.round(GARDEN_PILLARS.reduce((a, p) => a + (st.score[p.key] || 0), 0) / GARDEN_PILLARS.length);
+        }
+        function gardenWater(key, cardEl) {
+            const st = gardenNormalize(gardenState());
+            const today = todayYmd();
+            if (st.watered[key] === today) return;
+            const p = GARDEN_PILLARS.find(x => x.key === key);
+            if (!p) return;
+            const old = st.score[key] || 0;
+            st.score[key] = Math.min(100, old + 1);
+            st.watered[key] = today;
+            safeStorage.set('niko_garden', st);
+            if (cardEl) {
+                const drop = document.createElement('i');
+                drop.className = 'garden-water-anim';
+                cardEl.appendChild(drop);
+                setTimeout(() => drop.remove(), 900);
+                if (typeof nikoSpark === 'function') nikoSpark(cardEl, '💧', p.c);
+            }
+            const cross90 = old < 90 && st.score[key] >= 90;
+            setTimeout(() => {
+                renderGarden();
+                if (typeof showToast === 'function') {
+                    if ((st.score[key] || 0) === 100) showToast(`✨ 「${p.name}」满庭芬芳！`);
+                    else if (cross90) showToast(`🌸 「${p.name}」开花了 · 花开于九十`);
+                }
+            }, 420);
+        }
+        (function bindGarden() {
+            const wrap = document.getElementById('gardenTrees');
+            if (!wrap) return;
+            wrap.addEventListener('click', e => {
+                const card = e.target.closest('.garden-tree-card');
+                if (card) gardenWater(card.dataset.key, card);
+            });
+        })();
 
         function createTaskCard(ev, isNow) {
             const card = document.createElement('div');
@@ -26641,7 +26699,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609042122";
+        window.NIKO_VERSION = "202609051118";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
