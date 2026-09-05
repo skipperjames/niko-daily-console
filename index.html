@@ -1846,7 +1846,7 @@
         .clear-settle {
             background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(52,211,153,0.04));
             border: 1px solid rgba(16,185,129,0.30);
-            border-radius: 16px;
+            border-radius: 14px;
             padding: 16px 20px 14px;
             text-align: center;
             flex-shrink: 0;
@@ -1870,25 +1870,7 @@
         .cs-comment { font-size: 12.5px; color: #6b7280; line-height: 1.6; }
         body.dark-mode .cs-comment { color: #9fa3bd; }
 
-        /* ===== 六树庭院：六柱每日一浇（2026-09-05 替换推进序列/行业热点，设计语言对齐习惯卡） ===== */
-        .garden-strip {
-            margin-top: 10px;
-            background: #fff;
-            border: 1px solid #e8e6e1;
-            border-radius: 10px;
-            padding: 10px 14px;
-        }
-        body.dark-mode .garden-strip { background: #1f1f2e; border-color: #333345; }
-        .garden-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-        .garden-title { font-size: 13px; font-weight: 600; }
-        .garden-badge {
-            font-size: 10px; padding: 1px 8px; border-radius: 10px;
-            background: #d1fae5; color: #047857; white-space: nowrap;
-        }
-        body.dark-mode .garden-badge { background: #064e3b; color: #6ee7b7; }
-        .garden-badge.all-done { background: #10b981; color: #fff; }
-        body.dark-mode .garden-badge.all-done { background: #10b981; color: #fff; }
-        .garden-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; }
+        /* ===== 六树庭院：六柱每日一浇（2026-09-05 起为 today-board 的第二分区，壳样式见 .today-board） ===== */
         .garden-avg { margin-left: auto; font-size: 11px; color: #888; white-space: nowrap; }
         .garden-avg b {
             font-size: 15px; font-weight: 800; margin-left: 2px;
@@ -2065,50 +2047,6 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
         }
 
-        /* ===== 买量节点提醒 ===== */
-        .market-node-alerts {
-            background: #f5f3ff;
-            border: 1px solid #ddd6fe;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
-        }
-        body.dark-mode .market-node-alerts { background: #1e1b4b; border-color: #3730a3; }
-        .market-node-alerts h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #6d28d9;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        body.dark-mode .market-node-alerts h3 { color: #c4b5fd; }
-        .market-node-alert-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            padding: 5px 0;
-            border-bottom: 1px dashed #ddd6fe;
-            color: #4c1d95;
-            flex-wrap: wrap;
-        }
-        body.dark-mode .market-node-alert-item { border-bottom-color: #3730a3; color: #ddd6fe; }
-        .market-node-alert-item:last-child { border-bottom: none; }
-        .mna-badge {
-            font-size: 10px;
-            padding: 1px 8px;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
-        .mna-badge.due { background: #fee2e2; color: #b91c1c; }
-        .mna-badge.today { background: #fef3c7; color: #b45309; }
-        .mna-badge.soon { background: #d1fae5; color: #047857; }
-        body.dark-mode .mna-badge.due { background: #7f1d1d; color: #fca5a5; }
-        body.dark-mode .mna-badge.today { background: #78350f; color: #fcd34d; }
-        body.dark-mode .mna-badge.soon { background: #064e3b; color: #6ee7b7; }
-
         /* ===== 每周复盘 ===== */
         .weekly-entry {
             display: flex;
@@ -2137,17 +2075,22 @@
         }
 
         /* ===== 今日习惯 ===== */
-        .today-habits {
+        /* ===== 今日主板卡：习惯 + 六树庭院 同壳一体（2026-09-05 整体化改造） ===== */
+        .today-board {
             margin-top: 10px;
             background: #fff;
             border: 1px solid #e8e6e1;
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 14px;
+            overflow: hidden;
         }
-        body.dark-mode .today-habits { background: #1f1f2e; border-color: #333345; }
-        .today-habits-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-        .today-habits-title { font-size: 13px; font-weight: 600; }
-        .today-habits-badge {
+        body.dark-mode .today-board { background: #1f1f2e; border-color: #333345; }
+        .today-sec { padding: 10px 14px; }
+        .today-sec + .today-sec { border-top: 1px solid #eeece8; }
+        body.dark-mode .today-sec + .today-sec { border-top-color: #2c2c3d; }
+        /* 统一区头语法：图标标题 · 绿徽章 · 左簇说明 · 右侧动作，两区完全同构 */
+        .today-sec-head { display: flex; align-items: center; gap: 8px; min-height: 24px; margin-bottom: 8px; flex-wrap: wrap; }
+        .today-sec-title { font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .sec-badge {
             font-size: 10px;
             padding: 1px 8px;
             border-radius: 10px;
@@ -2155,8 +2098,12 @@
             color: #047857;
             white-space: nowrap;
         }
-        body.dark-mode .today-habits-badge { background: #064e3b; color: #6ee7b7; }
-        .today-habits-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
+        body.dark-mode .sec-badge { background: #064e3b; color: #6ee7b7; }
+        .sec-badge.all-done { background: #10b981; color: #fff; }
+        body.dark-mode .sec-badge.all-done { background: #10b981; color: #fff; }
+        .today-sec-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; white-space: nowrap; }
+        body.dark-mode .today-sec-sub { color: #8f8fa3; }
+        .today-sec-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
         /* 本周复盘：压缩成习惯头部行内的胶囊 chip（铁律10：禁止独占整行） */
         .weekly-chip {
             margin-left: auto; display: inline-flex; align-items: center;
@@ -2253,8 +2200,7 @@
             font-size: 11px; font-weight: 700;
             box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
         }
-        /* Q4 全勤徽章 */
-        .today-habits-badge.all-done { background: #10b981; color: #fff; }
+        /* Q4 全勤徽章（sec-badge.all-done 见统一区头） */
         .habit-card-top { display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 6px; }
         /* v2.11.1：完成徽章占位只在完成时预留，平时把空间还给习惯名 */
         .habit-card.done-card .habit-card-top { padding-right: 22px; }
@@ -2647,8 +2593,9 @@
             /* 手机端开场白/结算：紧凑 + 双列任务卡改单列 */
             .cmd-brief { padding: 12px 14px; border-radius: 14px; }
             .cmd-brief-main { font-size: 16px; }
-            /* 手机端：复盘chip + 胶囊chip 紧凑不换行溢出；习惯头部允许换行 */
-            .today-habits-head { flex-wrap: wrap; }
+            /* 手机端：主板卡分区头紧凑；复盘chip + 胶囊chip 不换行溢出 */
+            .today-sec { padding: 10px 12px; }
+            .today-sec-head { flex-wrap: wrap; }
             .weekly-chip { font-size: 11px; padding: 3px 10px; }
             .capsule-brief-chip { font-size: 11px; padding: 3px 10px; }
             .closing-receipt { width: 200px; }
@@ -2661,7 +2608,7 @@
             .garden-trees { grid-template-columns: repeat(3, 1fr); gap: 6px; }
             .garden-tree-card { min-height: 96px; }
             .garden-svg { height: 54px; }
-            .garden-sub { display: none; }
+            .today-sec-sub { display: none; }
         }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
@@ -9727,27 +9674,25 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="page active" id="todayPage">
 <div class="cmd-brief" id="cmdBrief"></div>
             <div class="clear-settle" id="clearSettle" style="display:none;"></div>
-            <div class="today-habits" id="todayHabits">
-                <div class="today-habits-head">
-                    <span class="today-habits-title">🎯 今日习惯</span>
-                    <span class="today-habits-badge" id="todayHabitBadge">0/0</span>
-                    <span class="weekly-chip" id="weeklyEntryChip" onclick="openWeeklyReview()" title="自动汇总本周灵感/收藏/读书/任务">📊 本周复盘<span id="weeklyEntryBadge">· 算一下这周</span></span>
-                    <span class="today-habits-more" onclick="openHabits()">管理 →</span>
-                </div>
-                <div class="today-habits-list" id="todayHabitsList"></div>
-            </div>
-            <div class="market-node-alerts" id="marketNodeAlerts" style="display:none;">
-                <h3>🎯 买量节点临近</h3>
-                <div id="marketNodeAlertList"></div>
-            </div>
-            <div class="garden-strip" id="gardenStrip">
-                <div class="garden-head">
-                    <span class="garden-title">🌱 六树庭院</span>
-                    <span class="garden-badge" id="gardenWateredBadge">今日 0/6</span>
-                    <span class="garden-sub">六柱人生 · 每日一浇 · 花开于九十</span>
-                    <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
-                </div>
-                <div class="garden-trees" id="gardenTrees"></div>
+            <div class="today-board">
+                <section class="today-sec" id="todayHabits">
+                    <div class="today-sec-head">
+                        <span class="today-sec-title">🎯 今日习惯</span>
+                        <span class="sec-badge" id="todayHabitBadge">0/0</span>
+                        <span class="weekly-chip" id="weeklyEntryChip" onclick="openWeeklyReview()" title="自动汇总本周灵感/收藏/读书/任务">📊 本周复盘<span id="weeklyEntryBadge">· 算一下这周</span></span>
+                        <span class="today-sec-more" onclick="openHabits()">管理 →</span>
+                    </div>
+                    <div class="today-habits-list" id="todayHabitsList"></div>
+                </section>
+                <section class="today-sec" id="gardenStrip">
+                    <div class="today-sec-head">
+                        <span class="today-sec-title">🌱 六树庭院</span>
+                        <span class="sec-badge" id="gardenWateredBadge">今日 0/6</span>
+                        <span class="today-sec-sub">六柱人生 · 每日一浇 · 花开于九十</span>
+                        <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
+                    </div>
+                    <div class="garden-trees" id="gardenTrees"></div>
+                </section>
             </div>
 
             <!-- ===== 每周复盘弹窗 ===== -->
@@ -12786,7 +12731,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
 // ===== 今日看板专属JS =====
         function renderTodayPage() {
-            renderMarketNodeAlerts();
             renderCommandBrief();
             renderClearSettle();
             renderBuddy();
@@ -12832,33 +12776,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const target = due.find(n => !n.capsule.opened) || due[0];
             if (typeof window.openCapsuleLetter === 'function') window.openCapsuleLetter(target.id);
             else showToast('💌 到期的胶囊请到便签看板拆封');
-        }
-
-        // 买量节点临近提醒（读计划看板的节点数据）
-        function renderMarketNodeAlerts() {
-            const container = document.getElementById('marketNodeAlerts');
-            const list = document.getElementById('marketNodeAlertList');
-            if (!container || !list) return;
-            const nodes = safeStorage.get('niko_market_nodes', []);
-            const todayStr = formatDate(new Date());
-            const upcoming = nodes.filter(n => !n.done && n.date >= todayStr && n.date <= formatDate(addDays(new Date(), 7)));
-            const overdue = nodes.filter(n => !n.done && n.date < todayStr);
-            if (upcoming.length === 0 && overdue.length === 0) { container.style.display = 'none'; return; }
-            container.style.display = 'block';
-            const regionNames = { US: '🇺🇸', CA: '🇨🇦', JP: '🇯🇵', CN: '🇨🇳' };
-            const catNames = { festival: '🎉 节日/大促', competitor: '🎮 竞品上线', promo: '📣 投放窗口', other: '📝' };
-            const items = [
-                ...overdue.map(n => {
-                    const diff = Math.round((new Date(todayStr) - new Date(n.date)) / 86400000);
-                    return `<div class="market-node-alert-item"><span class="mna-badge due">已到期 ${diff} 天</span><strong>${escapeHtml(n.title)}</strong><span>${regionNames[n.region] || ''} ${catNames[n.category] || ''}</span>${n.note ? `<span style="opacity:.7;">${escapeHtml(n.note)}</span>` : ''}</div>`;
-                }),
-                ...upcoming.map(n => {
-                    const diff = Math.round((new Date(n.date) - new Date(todayStr)) / 86400000);
-                    const badge = diff === 0 ? '<span class="mna-badge today">今天</span>' : `<span class="mna-badge soon">${diff} 天后</span>`;
-                    return `<div class="market-node-alert-item">${badge}<strong>${escapeHtml(n.title)}</strong><span>${regionNames[n.region] || ''} ${catNames[n.category] || ''}</span><span style="opacity:.7;">📅 ${n.date}</span>${n.note ? `<span style="opacity:.7;">${escapeHtml(n.note)}</span>` : ''}</div>`;
-                })
-            ];
-            list.innerHTML = items.join('');
         }
 
         // 今日看板共享数据源（开场白/结算/推进序列共用，一次计算）
@@ -26699,7 +26616,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609051118";
+        window.NIKO_VERSION = "202609051317";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
