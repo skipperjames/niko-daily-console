@@ -7558,15 +7558,22 @@
         .nb-col-add:hover { border-color: #667eea; color: #667eea; background: #f0f0ff; }
 
         /* 便签卡片 */
-        .nb-card { border-radius: 8px; padding: 10px 12px 8px; box-shadow: 0 1px 3px rgba(0,0,0,.09); cursor: grab; position: relative; transition: transform .15s, box-shadow .15s; border-top: 1px solid rgba(255,255,255,.5); }
-        @keyframes nbPinWobble { 0% { transform: rotate(var(--rot,0deg)) scale(1); } 30% { transform: rotate(calc(var(--rot,0deg) + 2.4deg)) scale(1.03); } 60% { transform: rotate(calc(var(--rot,0deg) - 1.6deg)) scale(1.01); } 100% { transform: rotate(var(--rot,0deg)) scale(1); } }
+        /* ===== v3 便签卡：今日看板同款安静卡面，标签色只留左签 + 小 chip ===== */
+        .nb-card { --ntag: #10b981; border-radius: 10px; padding: 11px 13px 8px; cursor: grab; position: relative; transition: transform .15s, box-shadow .15s; background: #fff; border: 1px solid #e8e6e1; border-left: 3px solid var(--ntag); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+        body.dark-mode .nb-card { background: #1f1f2e; border-color: #333345; box-shadow: none; }
+        @keyframes nbPinWobble { 0% { transform: scale(1); } 30% { transform: rotate(2.4deg) scale(1.03); } 60% { transform: rotate(-1.6deg) scale(1.01); } 100% { transform: scale(1); } }
         .nb-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.13); }
+        body.dark-mode .nb-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.4); }
         .nb-card:active { cursor: grabbing; }
-        .nb-card.pinned { box-shadow: 0 0 0 2px rgba(245,158,11,.5), 0 2px 6px rgba(0,0,0,.1); }
-        .nb-card.selected { box-shadow: 0 0 0 2px #667eea, 0 2px 6px rgba(0,0,0,.1); }
-        .nb-card-content { font-size: 13px; line-height: 1.5; color: #3f3a32; word-break: break-word; white-space: pre-wrap; max-height: 180px; overflow-y: auto; }
-        .nb-card-footer { display: flex; align-items: center; gap: 4px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
+        .nb-card.pinned { border-left-color: #f59e0b; box-shadow: 0 0 0 1px rgba(245,158,11,.35); }
+        .nb-card.selected { box-shadow: 0 0 0 2px #667eea; }
+        .nb-card-content { font-size: 13px; line-height: 1.6; color: #2b2b3a; word-break: break-word; white-space: pre-wrap; max-height: 180px; overflow-y: auto; }
+        body.dark-mode .nb-card-content { color: #dcdcea; }
+        .nb-card-tag { font-size: 10px; font-weight: 600; color: var(--ntag); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 42%; }
+        .nb-card-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
+        body.dark-mode .nb-card-footer { border-top-color: #2c2c3d; }
         .nb-card-time { font-size: 10px; color: rgba(0,0,0,.42); flex: 1; white-space: nowrap; overflow: hidden; }
+        body.dark-mode .nb-card-time { color: #6b6b85; }
         /* ===== v2.11 便签老化：按创建天数自然卷角落尘，点击拂尘恢复 ===== */
         .nb-card { --age: 0; }
         .nb-card.aged .nb-card-content { filter: sepia(.12) contrast(.94) brightness(.985); }
@@ -7620,7 +7627,7 @@
             font-weight: 600;
         }
         .nb-tag-chip:hover { border-color: #667eea; }
-        .nb-wall { columns: 4 220px; column-gap: 14px; padding: 4px 2px; }        .nb-wall .nb-card { break-inside: avoid; margin-bottom: 14px; transform: rotate(var(--rot, 0deg)); }
+        .nb-wall { columns: 4 220px; column-gap: 14px; padding: 4px 2px; }        .nb-wall .nb-card { break-inside: avoid; margin-bottom: 14px; }
         .nb-wall .nb-card:hover { transform: rotate(0deg) translateY(-2px); }
 
         /* 时间线 */
@@ -19563,13 +19570,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // v2.11 老化：创建超 14 天卷角落尘，超 30 天加深；拂尘即恢复
             const ageD = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
             const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}" style="background:${tag.bg};--rot:${noteRotation(n.id)}deg" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
                 <div class="nb-card-content">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
                     <div class="nb-card-actions">
@@ -19605,9 +19613,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbRecycleCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const days = n.deletedAt ? Math.floor((Date.now() - new Date(n.deletedAt).getTime()) / 86400000) : 0;
-            return `<div class="nb-card" style="background:${tag.bg};opacity:.78;">
+            return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.78;">
                 <div class="nb-card-content">${escapeHtml(n.content)}</div>
                 <div class="nb-card-footer">
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
                     <span class="nb-card-time">已删除 ${days === 0 ? '不到1天' : days + ' 天'}</span>
                     <div class="nb-card-actions" style="opacity:1;">
                         <button class="nb-icon-btn" title="恢复" onclick="nbRestore('${n.id}',event)">♻️</button>
@@ -19619,7 +19628,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function nbArchiveCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
-            return `<div class="nb-card" style="background:${tag.bg};opacity:.85;">
+            return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.85;">
                 <div class="nb-card-content">${escapeHtml(n.content)}</div>
                 <div class="nb-card-footer">
                     <span class="nb-card-time">${tag.icon} ${tag.name} · ${formatNoteTime(n.createdAt)}</span>
@@ -27193,7 +27202,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061226";
+        window.NIKO_VERSION = "202609061238";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
