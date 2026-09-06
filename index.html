@@ -2896,6 +2896,34 @@
         @media (max-width: 768px) {
             .habit-card.charge-3 { box-shadow: 0 0 0 1.5px rgba(251,191,36,.45), 0 0 12px rgba(251,191,36,.22); }
         }
+
+        /* ===== 习惯兽孵化（2026-09-06）：蛋→裂纹→幼崽→完全体，断签打瞌睡 ===== */
+        .habit-pet {
+            margin-left: auto; width: 27px; height: 27px; flex: 0 0 auto;
+            position: relative; line-height: 0; cursor: default;
+            filter: drop-shadow(0 1.5px 2px rgba(0,0,0,.18));
+        }
+        .habit-pet svg { width: 100%; height: 100%; display: block; }
+        .habit-pet .pet-body { animation: petBob 2.8s ease-in-out infinite; transform-origin: 50% 92%; }
+        .habit-pet.pet-sleep .pet-body { animation: none; }
+        .habit-pet.pet-happy .pet-body { animation: petBob 1.3s ease-in-out infinite; }
+        @keyframes petBob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-2px) } }
+        .habit-pet .pet-aura { animation: petAura 2.4s ease-in-out infinite; transform-origin: 50% 50%; }
+        @keyframes petAura { 0%, 100% { opacity: .35; transform: scale(1) } 50% { opacity: .8; transform: scale(1.12) } }
+        .habit-pet .pet-z { animation: petZ 2.2s ease-in-out infinite; opacity: 0; }
+        @keyframes petZ { 0% { opacity: 0; transform: translate(0, 0) } 25% { opacity: .9 } 70% { opacity: .5; transform: translate(2.5px, -4px) } 100% { opacity: 0; transform: translate(4px, -7px) } }
+        .habit-pet.pet-sleep::after {
+            content: ''; position: absolute; inset: -3px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(148,163,184,.18), transparent 70%);
+        }
+        .habit-card.done-card .habit-pet { filter: drop-shadow(0 1px 1px rgba(16,185,129,.35)); }
+        @media (prefers-reduced-motion: reduce) {
+            .habit-pet .pet-body, .habit-pet .pet-aura, .habit-pet .pet-z { animation: none; }
+            .habit-pet .pet-z { opacity: .7; }
+        }
+        @media (max-width: 768px) {
+            .habit-pet { width: 23px; height: 23px; }
+        }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
                    计划页面 (日历 + 看板)
@@ -12716,7 +12744,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             return ev.status || 'todo';
         }
         let currentPage = 'today';
-        let currentWeekStart = getMonday(new Date());
+        let currentWeekStart = calMonday(new Date());
         let selectedDate = new Date();
         let draggedEventId = null;
         let currentHotCategory = 'all';
@@ -13128,6 +13156,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ========== 日期工具 & 路由 ==========
         function getMonday(d) { const date = new Date(d); const ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1; const diff = (date.getDay() - ws + 7) % 7; return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff); }
+        // 显示用自然周周一：日历网格固定周一→周日排列（周末置尾），与统计周期（niko_week_start）解耦
+        function calMonday(d) { const date = new Date(d); const day = date.getDay(); const diff = date.getDate() - day + (day === 0 ? -6 : 1); return new Date(date.setDate(diff)); }
         function addDays(date, days) { const result = new Date(date); result.setDate(result.getDate() + days); return result; }
         function formatDate(date) { const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, '0'); const d = String(date.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
         function isSameDay(d1, d2) { return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate(); }
@@ -14914,6 +14944,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
+                        ${habitPetBadge(h, streak, burnt, isActive, d)}
                     </div>
                     <div class="habit-progress">
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
@@ -15213,6 +15244,39 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // 习惯打卡初始化（内置「读书」习惯幂等补建，保证读书板块联动可用）
+        // ===== 习惯兽孵化（2026-09-06）：每个习惯一只小生物，随连续天数进化 =====
+        // 阶段：0 蛋(未孵化) / 1 裂纹蛋(3天) / 2 幼崽(7天) / 3 完全体(21天)；断签未补卡 → 打瞌睡
+        function habitPetStage(streak) { return streak >= 21 ? 3 : (streak >= 7 ? 2 : (streak >= 3 ? 1 : 0)); }
+        function habitPetHue(name) { let x = 0; const s = String(name || ''); for (let i = 0; i < s.length; i++) x = (x * 31 + s.charCodeAt(i)) % 360; return x; }
+        function habitPetSVG(stage, hue, sleep) {
+            const c = `hsl(${hue},72%,68%)`, cD = `hsl(${hue},50%,52%)`, egg = `hsl(${hue},65%,90%)`, eggD = `hsl(${hue},42%,74%)`;
+            const eyes = sleep
+                ? `<path d="M9.4 14.2 q1.1 1 2.2 0 M13.4 14.2 q1.1 1 2.2 0" stroke="#3f3a33" stroke-width="1" fill="none" stroke-linecap="round"/>`
+                : `<circle cx="10" cy="14" r="1" fill="#3f3a33"/><circle cx="14" cy="14" r="1" fill="#3f3a33"/>`;
+            const zTxt = sleep ? `<text class="pet-z" x="17.5" y="8" font-size="5.5" fill="#94a3b8" font-weight="700" font-family="sans-serif">z</text>` : '';
+            const aura = stage === 3 ? `<circle class="pet-aura" cx="12" cy="13" r="10" fill="none" stroke="${c}" stroke-width="1.4" stroke-dasharray="3 3.4"/>` : '';
+            const body = stage <= 1
+                ? `<ellipse cx="12" cy="13.6" rx="7" ry="8.4" fill="${egg}" stroke="${eggD}" stroke-width="1.1"/>
+                   <circle cx="9.6" cy="11" r="1.5" fill="${eggD}" opacity=".5"/><circle cx="13.8" cy="16.6" r="1.9" fill="${eggD}" opacity=".45"/>`
+                : `<ellipse cx="12" cy="15.6" rx="3" ry="1.6" fill="${cD}"/><ellipse cx="16.4" cy="15.6" rx="3" ry="1.6" fill="${cD}"/>
+                   <circle cx="12" cy="12.4" r="6.6" fill="${c}"/>
+                   <ellipse cx="12" cy="15" rx="3.6" ry="2.6" fill="hsl(${hue},70%,84%)"/>
+                   ${eyes}
+                   ${stage === 3 ? `<path d="M7.2 8.6 L8.8 4.6 L11 7.6 Z M16.8 8.6 L15.2 4.6 L13 7.6 Z" fill="${cD}"/>` : `<path d="M8.6 7.4 q1 -1.8 2 0 M13.4 7.4 q1 -1.8 2 0" stroke="${cD}" stroke-width="1.1" fill="none" stroke-linecap="round"/>`}`;
+            const crack = stage === 1 ? `<path d="M9.4 8.4 l1.8 2.2 -1.4 1.6 2 2" stroke="${eggD}" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>` : '';
+            return `<svg viewBox="0 0 24 24" aria-hidden="true"><g class="pet-body">${aura}${body}${crack}${zTxt}</g></svg>`;
+        }
+        function habitPetBadge(h, streak, burnt, isActive, d) {
+            if (!isActive) return '';
+            const stage = habitPetStage(streak);
+            const hue = habitPetHue(h.name);
+            const sleep = burnt && !d;   // 昨天断签且今天还没补回来 → 打瞌睡
+            const stageName = ['蛋 · 连续 3 天开始孵化', '孵化中 · 连续 7 天破壳', '幼年期 · 连续 21 天进化完全体', '完全体！'][stage];
+            const title = `习惯兽 ${stageName}${sleep ? ' · 断签打瞌睡中，打卡唤醒' : (d ? ' · 今天已喂饱' : '')}`;
+            const cls = 'habit-pet' + (sleep ? ' pet-sleep' : '') + (d ? ' pet-happy' : '');
+            return `<span class="${cls}" data-stage="${stage}" title="${title}">${habitPetSVG(stage, hue, sleep)}</span>`;
+        }
+
         ensureBookHabit();
         renderTodayHabits();
 
@@ -15385,17 +15449,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         })();
 // ===== 计划看板专属JS =====
 
-        // ===== 每周起始日（2026-09-06）：动态表头 + 切换即全局重算（任务量/本周副本/底片全跟随） =====
+        // ===== 每周起始日（2026-09-06 v2）：日历网格固定周一→周日排列（周末置尾）；统计口径（本周副本/任务量/底片）仍按 nikoWeekStartDay（周四周期） =====
+        // calMonday（显示用自然周周一）定义在总框架 getMonday 旁，全站唯一
         function renderWeekHeader() {
             const row = document.getElementById('weekHeaderRow');
             if (!row) return;
-            const names = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-            let html = '';
-            for (let i = 0; i < 7; i++) {
-                const d = new Date(currentWeekStart); d.setDate(currentWeekStart.getDate() + i);
-                html += `<div class="week-header-cell">${names[d.getDay()]}</div>`;
-            }
-            row.innerHTML = html;
+            row.innerHTML = '<div class="week-header-cell">周一</div><div class="week-header-cell">周二</div><div class="week-header-cell">周三</div><div class="week-header-cell">周四</div><div class="week-header-cell">周五</div><div class="week-header-cell">周六</div><div class="week-header-cell">周日</div>';
             const sel = document.getElementById('weekStartSel');
             if (sel && Number(sel.value) !== nikoWeekStartDay()) sel.value = String(nikoWeekStartDay());
         }
@@ -15405,9 +15464,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const v = Number(sel.value);
             if (!(v >= 0 && v <= 6)) return;
             safeStorage.set('niko_week_start', v);
-            currentWeekStart = getMonday(new Date());
             render();
-            if (typeof showToast === 'function') showToast(`📅 每周从周${'日一二三四五六'[v]}开始 · 本周任务量/副本已按新周期结算`);
+            if (typeof showToast === 'function') showToast(`📅 统计周期已切为周${'日一二三四五六'[v]} → 周${'日一二三四五六'[(v + 6) % 7]} · 本周任务量/副本按新周期结算（日历网格固定周一排列）`);
         }
 
         // 日历显示周数：2/3/4 周循环切换（默认 2 周省空间）；持久化到 localStorage
@@ -16177,8 +16235,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function navigateWeeks(delta) { currentWeekStart = addDays(currentWeekStart, delta * 7); render(); }
-        function goToday() { currentWeekStart = getMonday(new Date()); selectedDate = new Date(); render(); }
-        function goToToday() { selectedDate = new Date(); currentWeekStart = getMonday(selectedDate); render(); }
+        function goToday() { currentWeekStart = calMonday(new Date()); selectedDate = new Date(); render(); }
+        function goToToday() { selectedDate = new Date(); currentWeekStart = calMonday(selectedDate); render(); }
         function updateMaxDisplay() {
             const val = parseInt(document.getElementById('maxDisplayInput').value);
             if (val >= 1 && val <= 20) { MAX_EVENTS_PER_DAY = val; render(); }
@@ -28679,7 +28737,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609062150";
+        window.NIKO_VERSION = "202609062228";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
