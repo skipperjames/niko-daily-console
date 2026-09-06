@@ -1689,6 +1689,30 @@
         body.dark-mode .pomo-min-btn.active { background: #f97316; color: #fff; }
         .pomo-today { text-align: center; font-size: 12px; color: #666; padding: 4px 0 8px; }
         body.dark-mode .pomo-today { color: #aaa; }
+        /* ===== 萤火虫罐（2026-09-06）：今日每完成一个番茄点亮一只萤火虫；中途放弃暗一只；满 4 只深夜照亮侧边栏 logo ===== */
+        .ff-jar-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 2px 0 10px; }
+        .ff-jar { position: relative; width: 92px; height: 56px; flex-shrink: 0; }
+        .ff-jar .ff-glass { position: absolute; inset: 0; border: 1.5px solid rgba(150,150,150,.4); border-radius: 10px 10px 14px 14px;
+            background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+            box-shadow: inset 0 0 12px rgba(255,255,255,.04); }
+        .ff-jar .ff-cork { position: absolute; left: 50%; top: -5px; transform: translateX(-50%); width: 26px; height: 7px;
+            border-radius: 3px; background: linear-gradient(180deg, #c9a26f, #9a7548); opacity: .9; }
+        .ff-jar .ff-glint { position: absolute; left: 12px; top: 10px; width: 10px; height: 26px; border-radius: 6px;
+            background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(255,255,255,0)); transform: rotate(14deg); pointer-events: none; }
+        .ff-bug { position: absolute; width: 9px; height: 9px; border-radius: 50%;
+            background: radial-gradient(circle at 40% 35%, #fff7c2, #fde047 55%, #f59e0b);
+            box-shadow: 0 0 7px 2.5px rgba(253,224,71,.55); opacity: .95;
+            animation: ffFloat 3.4s ease-in-out infinite alternate; }
+        .ff-bug.dim { background: radial-gradient(circle at 40% 35%, #e5e5e0, #a8a29e 60%, #78716c); box-shadow: none; opacity: .38; animation: none; }
+        @keyframes ffFloat { 0% { transform: translate(0,0); } 45% { transform: translate(7px,-5px); } 100% { transform: translate(-5px,4px); } }
+        .ff-jar.charging .ff-bug:not(.dim) { animation-duration: 1.6s; box-shadow: 0 0 10px 4px rgba(253,224,71,.75); }
+        .ff-jar-cap { font-size: 11px; color: #888; line-height: 1.55; text-align: left; max-width: 150px; }
+        body.dark-mode .ff-jar-cap { color: #9a9ab0; }
+        .ff-jar-cap b { color: inherit; }
+        /* 满罐深夜：侧边栏 logo 被萤火虫照亮 */
+        .logo-icon.ff-lit { color: #fde047 !important; text-shadow: 0 0 10px rgba(253,224,71,.75), 0 0 22px rgba(253,224,71,.4); }
+        @media (prefers-reduced-motion: reduce) { .ff-bug { animation: none !important; } }
+        @media (max-width: 768px) { .ff-jar { width: 74px; height: 48px; } .ff-jar-cap { font-size: 10px; max-width: 120px; } }
         .pomo-log {
             max-height: 140px; overflow-y: auto; display: flex; flex-direction: column;
             gap: 4px; border-top: 1px solid #f3f4f6; padding-top: 8px;
@@ -12599,6 +12623,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <label class="pomo-chain" title="番茄结束自动进入休息，休息结束自动开始下一个番茄——全程零点击"><input type="checkbox" id="pomoChainChk" onchange="setPomoChain(this.checked)"> 自动衔接</label>
             </div>
             <div class="pomo-today" id="pomoToday">今日 🍅 0 个 · 0 分钟</div>
+            <div class="ff-jar-wrap" id="ffJarWrap" title="萤火虫罐：今日每完成一个番茄点亮一只；中途放弃会暗一只；攒满 4 只，深夜它们会飞出去照亮侧边栏"></div>
             <div class="pomo-log" id="pomoLog"><div class="pomo-log-empty">还没有完成的番茄</div></div>
         </div>
     </div>
@@ -16281,7 +16306,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderRaidWall();
         }
 
-        // ===== 待办鸟群（2026-09-06）：今日任务=停在线上的鸟（色相随日期稳定）；完成一只飞走一只 =====
+        // ===== 待办鸟群（2026-09-06）：点击哪天，电线就停哪天的鸟（跟随 selectedDate）；完成一只飞走一只 =====
         function planTodayStr() {
             const n = new Date();
             return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
@@ -16290,11 +16315,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const wire = document.getElementById('birdWire');
             if (!wire) return;
             wire.innerHTML = '<div class="bird-wire-line"></div>';
-            const today = planTodayStr();
-            const isToday = e => (e.startDate === today || e.endDate === today);
-            const todays = events.filter(e => isToday(e) && e.status !== 'done');
-            const doneToday = events.filter(e => isToday(e) && e.status === 'done').length;
-            let seed = 0; const sk = 'bird' + today;
+            const selStr = formatDate(selectedDate);
+            const isToday = selStr === planTodayStr();
+            const selTasks = events.filter(e => (e.startDate === selStr || e.endDate === selStr));
+            const todays = selTasks.filter(e => e.status !== 'done');
+            const doneCnt = selTasks.length - todays.length;
+            let seed = 0; const sk = 'bird' + selStr;
             for (let i = 0; i < sk.length; i++) seed = (seed * 31 + sk.charCodeAt(i)) >>> 0;
             const shown = todays.slice(0, 7);
             shown.forEach((e, i) => {
@@ -16313,11 +16339,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 more.textContent = '+' + (todays.length - 7);
                 wire.appendChild(more);
             }
+            const dayLabel = isToday ? '今日' : (Number(selStr.slice(5, 7)) + '月' + Number(selStr.slice(8, 10)) + '日');
             const cap = document.createElement('span');
             cap.className = 'bird-wire-cap';
-            cap.textContent = todays.length === 0
-                ? (doneToday > 0 ? `🕊 放晴 · 今日 ${doneToday} 只全部飞走` : '今日无任务 · 电线留白')
-                : `今日停着 ${todays.length} 只${doneToday ? ' · 已飞走 ' + doneToday : ''} · 完成一只飞一只`;
+            cap.textContent = selTasks.length === 0
+                ? `${dayLabel}无任务 · 电线留白`
+                : (todays.length === 0
+                    ? `🕊 ${dayLabel}放晴 · ${doneCnt} 只全部飞走`
+                    : `${dayLabel}停着 ${todays.length} 只${doneCnt ? ' · 已飞走 ' + doneCnt : ''} · 完成一只飞一只`);
             wire.appendChild(cap);
         }
         // 完成任务瞬间的飞离动画（挂在打章/划掉的动作点，从被点的元素起飞）
@@ -23459,7 +23488,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 ? ['📖 微信读书', wereadFmtDur(wm.totalReadTime), (wo ? '累计 ' + wereadFmtDur(wo.totalReadTime) : '本月')]
                 : ['📖 微信读书', '—', '去「微信读书」页导入']);
             el.innerHTML = cards.map(([l, v, s]) => `<div class="book-stat" onclick="switchBookView('weread')" style="cursor:pointer;" title="查看微信读书阅读数据">
-                <div class="book-stat-label">${l}</div><div class="book-stat-value">${v}</div>${s ? `<div class="book-stat-sub">${s}</div>` : ''}</div>`).join('');
+                <div class="book-stat-label">${l}</div><div class="book-stat-value">${v}</div>${s ? `<div class="book-stat-sub">${s}</div>` : ''}</div>`).join('') +
+                // 🐛 书虫常驻卡：任何视图都看得见它长大了多少，点了直达打卡页喂它
+                (() => {
+                    const wm = bookWormTotalMin();
+                    const segs = Math.min(7, Math.floor(wm / 45));
+                    const toNext = segs >= 7 ? 0 : 45 - (wm % 45);
+                    return `<div class="book-stat" onclick="switchBookView('checkin')" style="cursor:pointer;" title="书虫住在「阅读打卡」页，吃阅读分钟长大（手动打卡+微信读书都算饭）——点这张卡直达打卡页">
+                        <div class="book-stat-label">🐛 书虫</div><div class="book-stat-value">${segs} 节</div><div class="book-stat-sub">${wm <= 0 ? '还没开饭 · 去打卡喂它' : (segs >= 7 ? '已长成 · 吃了 ' + bookFmtMin(wm) : '已吃 ' + bookFmtMin(wm) + ' · 再 ' + toNext + ' 分长一节')}</div></div>`;
+                })();
         }
         function renderBookCheckin() {
             const today = bookTodayStr();
@@ -28653,6 +28690,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const ms = document.getElementById('pomoMiniState');
                 if (ms) ms.textContent = pomoRunning ? (pomoPhase === 'break' ? '休息中' : '专注中') : (pomoPhase === 'break' ? '休息就绪' : '待命');
             }
+            renderFireflyJar();
         }
         function renderPomoOpts() {
             document.querySelectorAll('.pomo-min-btn').forEach(b => {
@@ -28664,6 +28702,46 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const minutes = logs.reduce((s, l) => s + (Number(l.minutes) || 0), 0);
             const el = document.getElementById('pomoToday');
             if (el) el.textContent = `今日 🍅 ${logs.length} 个 · ${minutes} 分钟`;
+            renderFireflyJar();
+        }
+        // ===== 萤火虫罐（2026-09-06）：今日完成番茄=点亮萤火虫（封顶 6）；中途放弃=niko_pomo_fizz 记暗一只；满 4 只且 22 点后照亮侧边栏 logo =====
+        function pomoFizzKey() {
+            const n = new Date();
+            return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
+        }
+        function renderFireflyJar() {
+            const wrap = document.getElementById('ffJarWrap');
+            if (!wrap) return;
+            const lit = Math.min(6, pomoTodayDone());
+            let fizz = 0;
+            try { const f = safeStorage.get('niko_pomo_fizz', null); if (f && f.d === pomoFizzKey()) fizz = Number(f.n) || 0; } catch (e) {}
+            const dim = Math.min(fizz, lit);
+            const running = typeof pomoRunning !== 'undefined' && pomoRunning && typeof pomoPhase !== 'undefined' && pomoPhase === 'work';
+            // 状态签名：没变就不动 DOM（renderPomoFace 每秒会路过）
+            const sig = lit + '|' + dim + '|' + (running ? 1 : 0);
+            if (wrap.dataset.sig === sig) return;
+            wrap.dataset.sig = sig;
+            let bugs = '';
+            // 罐内固定 6 个位置，点亮的排前，暗的在亮位之后
+            const spots = [[16, 34], [40, 22], [62, 36], [28, 14], [52, 12], [72, 20]];
+            for (let i = 0; i < 6; i++) {
+                const isDim = i >= lit - dim && i < lit;   // 暗虫排在已亮区间尾部
+                const on = i < lit;
+                if (!on && i >= Math.max(lit, Math.min(6, lit + 0)) && i >= lit) {
+                    // 未点亮的位置：留一个空位小点（只画第一个空位示意容量）
+                    bugs += i === lit ? `<span style="position:absolute;left:${spots[i][0]}px;top:${spots[i][1]}px;width:3px;height:3px;border-radius:50%;background:rgba(150,150,150,.3);"></span>` : '';
+                    continue;
+                }
+                const [x, y] = spots[i];
+                bugs += `<span class="ff-bug${isDim ? ' dim' : ''}" style="left:${x}px;top:${y}px;animation-delay:${(i * 0.7).toFixed(1)}s;"></span>`;
+            }
+            wrap.innerHTML = `<div class="ff-jar${running ? ' charging' : ''}"><span class="ff-glass"></span><span class="ff-cork"></span><span class="ff-glint"></span>${bugs}</div>` +
+                `<div class="ff-jar-cap">${lit === 0
+                    ? (running ? '专注中——第一只萤火虫正在充电' : '完成第一个番茄，点亮第一只萤火虫')
+                    : `已亮 <b>${lit - dim}/${lit}</b> 只${dim ? ` · 放弃暗了 ${dim} 只` : ''}${running ? ' · 专注中，正在充电' : ''}<br>${lit >= 4 ? (new Date().getHours() >= 22 ? '✨ 它们刚刚飞出去照亮了侧边栏' : '攒够了，22 点后飞出去照亮侧边栏') : `再 ${4 - lit} 只满罐`}`}</div>`;
+            // 满罐深夜：照亮侧边栏 logo
+            const logoIcon = document.querySelector('.sidebar-left .logo-icon');
+            if (logoIcon) logoIcon.classList.toggle('ff-lit', lit >= 4 && new Date().getHours() >= 22);
         }
         function renderPomoLog() {
             const el = document.getElementById('pomoLog');
@@ -28761,6 +28839,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoFace();
         }
         function pomoReset() {
+            // 萤火虫罐：工作中途放弃（重置丢进度）→ 今天暗一只
+            if (typeof pomoRunning !== 'undefined' && pomoRunning && pomoPhase === 'work') {
+                try {
+                    const k = pomoFizzKey();
+                    const f = safeStorage.get('niko_pomo_fizz', null);
+                    const n = (f && f.d === k) ? (Number(f.n) || 0) + 1 : 1;
+                    safeStorage.set('niko_pomo_fizz', { d: k, n });
+                } catch (e) {}
+            }
             pomoArmPhase(pomoPhase);
         }
         function pomoTick() {
@@ -29188,7 +29275,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609062311";
+        window.NIKO_VERSION = "202609062333";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
