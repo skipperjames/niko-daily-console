@@ -10113,6 +10113,35 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         .nav-leaf.withered { opacity: .4; filter: grayscale(.85); }
         .nav-leaf.bloom-pop { animation: navLeafPop .55s cubic-bezier(.34,1.56,.64,1); }
         @keyframes navLeafPop { 0% { transform: translateY(-50%) scale(.2) rotate(-40deg); opacity: 0; } 100% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: .92; } }
+        /* ===== 生态循环引擎（2026-09-06）：访客飞入 + 生态图鉴 ===== */
+        .eco-fly { position: fixed; left: 0; top: 0; z-index: 99999; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 5px; will-change: transform; transform: translate(-300px, -300px); }
+        .eco-fly .eco-av { width: 48px; height: 48px; filter: drop-shadow(0 3px 6px rgba(0,0,0,.28)); animation: ecoBob 1.5s ease-in-out infinite; }
+        .eco-fly .eco-av svg { width: 100%; height: 100%; display: block; }
+        @keyframes ecoBob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-4px) } }
+        .eco-fly .eco-tag { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 1; padding: 6px 11px; border-radius: 99px; color: #e5e7eb; background: rgba(15,23,42,.88); border: 1px solid rgba(148,163,184,.35); backdrop-filter: blur(6px); white-space: nowrap; box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+        .eco-fly .eco-tag b { color: #fbbf24; }
+        .eco-fly .eco-tier { color: #f59e0b; font-size: 9px; letter-spacing: 1px; }
+        .eco-fly .eco-msg { opacity: .82; }
+        .eco-fly .eco-cost { color: #6ee7b7; font-size: 11px; }
+        .eco-fly.eco-static { left: 50%; top: 34%; transform: translateX(-50%); animation: ecoFade 5s forwards; }
+        @keyframes ecoFade { 0% { opacity: 0 } 10%, 80% { opacity: 1 } 100% { opacity: 0 } }
+        .eco-dex-back { position: fixed; inset: 0; z-index: 100000; background: rgba(2,6,23,.62); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 18px; }
+        .eco-dex { width: min(760px, 96vw); max-height: 86vh; overflow: auto; border-radius: 18px; background: #f8fafc; color: #1e293b; border: 1px solid rgba(148,163,184,.4); box-shadow: 0 24px 60px rgba(0,0,0,.45); padding: 16px 16px 18px; }
+        body.dark-mode .eco-dex { background: #0f172a; color: #e2e8f0; border-color: rgba(71,85,105,.5); }
+        .eco-dex-head { display: flex; align-items: center; gap: 10px; font-size: 15px; margin-bottom: 6px; }
+        .eco-dex-head span { font-size: 12px; opacity: .75; flex: 1; }
+        .eco-dex-head button { all: unset; cursor: pointer; padding: 3px 9px; border-radius: 8px; background: rgba(148,163,184,.16); font-size: 12px; }
+        .eco-dex-note { font-size: 11.5px; opacity: .72; margin: 2px 2px 10px; line-height: 1.5; }
+        .eco-dex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+        .eco-card { border-radius: 12px; padding: 10px 6px 8px; text-align: center; background: rgba(148,163,184,.1); border: 1px solid rgba(148,163,184,.22); }
+        body.dark-mode .eco-card { background: rgba(51,65,85,.32); border-color: rgba(71,85,105,.4); }
+        .eco-card svg { width: 40px; height: 40px; }
+        .eco-card.miss svg { filter: grayscale(1) brightness(.32) opacity(.5); opacity: .45; }
+        .eco-card.miss { border-style: dashed; }
+        .eco-card-n { font-size: 12px; font-weight: 700; margin-top: 3px; }
+        .eco-card-i { font-size: 10px; opacity: .68; margin-top: 2px; }
+        @media (prefers-reduced-motion: reduce) { .eco-fly .eco-av { animation: none; } .eco-fly.eco-static { animation: none; opacity: 1; } }
+        @media (max-width: 768px) { .eco-fly .eco-av { width: 38px; height: 38px; } .eco-fly .eco-tag { font-size: 11px; padding: 5px 9px; } .eco-dex-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
     </style>
 </head>
 <body>
@@ -10318,6 +10347,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <span class="today-sec-sub">六个三十秒的小仪式 · 花开于九十</span>
                         <span class="garden-feed-chip" onclick="gardenOpenFeed()" title="把柱子交给习惯：打卡当天自动浇灌">🫗 投喂</span>
                         <span class="garden-feed-chip garden-preview-chip" id="gardenPreviewChip" onclick="gardenTogglePreview()" title="看看六树全部满开（100 分）时庭院的样子——那就是它们最终的美">🌸 满开</span>
+                        <span class="garden-feed-chip" onclick="nikoEcoDexOpen()" title="生态图鉴：30 只板块小生物，掉落材料会吸引它们来访">📖 图鉴</span>
                         <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
                     </div>
                     <div class="garden-trees" id="gardenTrees"></div>
@@ -13198,12 +13228,177 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const s = safeStorage.get('niko_combo_today', null);
             return (s && s.date === comboTodayKey() && s.count > 0) ? s : { date: comboTodayKey(), count: 0 };
         }
+        // ===== 生态循环引擎（2026-09-06）：30 只板块小生物 · ◆项目材料吸引 · 每日轮换访客 · 图鉴收集 =====
+        function ecoEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+        function ecoSeed(str) { let x = 2166136261; for (let i = 0; i < str.length; i++) { x ^= str.charCodeAt(i); x = Math.imul(x, 16777619); } return x >>> 0; }
+        // 7 种原型统一视觉语言：c1 身体 / c2 亮部 / c3 深色
+        function ecoArcSVG(arc, h) {
+            const c1 = `hsl(${h},66%,62%)`, c2 = `hsl(${h},74%,85%)`, c3 = `hsl(${h},50%,40%)`, ink = '#33302b';
+            const eye = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r || 1}" fill="${ink}"/>`;
+            let b = '';
+            if (arc === 'bee') b = `<ellipse cx="9" cy="8.5" rx="4.4" ry="3.2" fill="${c2}" opacity=".9"/><ellipse cx="16" cy="8" rx="3.8" ry="2.8" fill="${c2}" opacity=".9"/><ellipse cx="12.5" cy="14" rx="6.6" ry="5.4" fill="${c1}"/><path d="M8.8 12.6 q3.7 -1.7 7.4 0 M9.4 15.8 q3.1 -1.4 6.2 0" stroke="${c3}" stroke-width="1.7" fill="none" stroke-linecap="round"/>${eye(10.6,13)}${eye(14.4,13)}<path d="M19 14.2 l2.6 .9 -2.6 1z" fill="${c3}"/>`;
+            else if (arc === 'bird') b = `<path d="M17.5 13.5 l4.5 -1.5 -3.5 3.2z" fill="${c3}"/><circle cx="11.5" cy="13" r="6.6" fill="${c1}"/><path d="M8.5 12.5 q3 -3.4 6 -0.4" stroke="${c3}" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M5 13 l-3 .6 3 1.4z" fill="#f59e0b"/><path d="M5.2 19 l-0.8 2 M8 19.4 l-0.4 2" stroke="${c3}" stroke-width="1.1" stroke-linecap="round"/>${eye(9,11.6,1.1)}<circle cx="10" cy="15.4" r="1.9" fill="${c2}" opacity=".8"/>`;
+            else if (arc === 'fish') b = `<path d="M18 12 l4.5 -3 -1.2 3 1.2 3z" fill="${c3}"/><ellipse cx="11" cy="12.5" rx="7.4" ry="5.2" fill="${c1}"/><path d="M10 7.4 q2 -2.4 4.4 -0.6" stroke="${c3}" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="10" cy="13.6" rx="3.4" ry="2" fill="${c2}" opacity=".8"/>${eye(6.4,11.4)}<circle cx="21.5" cy="6" r="1" fill="${c2}" opacity=".8"/>`;
+            else if (arc === 'blob') b = `<path d="M4.5 19 a7.5 7.5 0 0 1 15 0z" fill="${c1}"/><ellipse cx="9.4" cy="10" rx="2.4" ry="1.5" fill="${c2}" opacity=".9" transform="rotate(-18 9.4 10)"/>${eye(9.6,14.4)}${eye(14.4,14.4)}<path d="M11 16.4 q1 .9 2 0" stroke="${ink}" stroke-width="1" fill="none" stroke-linecap="round"/>`;
+            else if (arc === 'moth') b = `<path d="M12 10 C7 4 2 6 3.5 11 C4.6 14.6 9 14 12 12.6z" fill="${c1}"/><path d="M12 10 C17 4 22 6 20.5 11 C19.4 14.6 15 14 12 12.6z" fill="${c2}"/><ellipse cx="12" cy="14.5" rx="1.9" ry="4.6" fill="${c3}"/><path d="M10.6 8 q-1.4 -2.6 -3 -3 M13.4 8 q1.4 -2.6 3 -3" stroke="${c3}" stroke-width="1.1" fill="none" stroke-linecap="round"/>${eye(10.8,12.4,.9)}${eye(13.2,12.4,.9)}<circle cx="7.4" cy="9" r="1.3" fill="#fff" opacity=".65"/><circle cx="16.6" cy="9" r="1.3" fill="#fff" opacity=".65"/>`;
+            else if (arc === 'spider') b = `<path d="M12 3.5 v3" stroke="${c2}" stroke-width="1" opacity=".7"/><path d="M5 9 l-3 -1.8 M5 12.6 l-3.2 .6 M5.4 16 l-2.6 2 M7.6 18.4 l-1.6 2.6 M19 9 l3 -1.8 M19 12.6 l3.2 .6 M18.6 16 l2.6 2 M16.4 18.4 l1.6 2.6" stroke="${c3}" stroke-width="1.2" stroke-linecap="round" fill="none"/><ellipse cx="12" cy="13" rx="6.6" ry="5.6" fill="${c1}"/><path d="M8.4 10.6 q3.6 -1.6 7.2 0" stroke="${c2}" stroke-width="1.2" fill="none" stroke-linecap="round" opacity=".8"/>${eye(10,12.6,1.1)}${eye(14,12.6,1.1)}<path d="M10.6 15.4 q1.4 1 2.8 0" stroke="${ink}" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
+            else b = `<path d="M5 8.6 l-1 -4 4 2z" fill="${c3}"/><path d="M19 8.6 l1 -4 -4 2z" fill="${c3}"/><circle cx="12" cy="13.6" r="7.4" fill="${c1}"/><ellipse cx="8.4" cy="15.8" rx="1.7" ry="1.1" fill="${c2}" opacity=".85"/><ellipse cx="15.6" cy="15.8" rx="1.7" ry="1.1" fill="${c2}" opacity=".85"/>${eye(9.4,12.6)}${eye(14.6,12.6)}<path d="M11 15 q1 .8 2 0" stroke="${ink}" stroke-width="1" fill="none" stroke-linecap="round"/><path d="M12 2.8 q1.8 1.6 0 3.4 q-1.8 -1.8 0 -3.4" fill="${c3}"/>`;
+            return `<svg viewBox="0 0 24 24" aria-hidden="true"><g>${b}</g></svg>`;
+        }
+        // ===== 30 物种图鉴：[id, 名, 原型, 色相, 稀有度, 饵◆, 触发act, 条件{k,v}, 板块, 一句话] =====
+        const ECO_DB = [
+            { id:'lu',  n:'露蜂',   arc:'bee',    h:96,  t:1, b:1, act:'habit',    c:{k:'n',v:1},   sec:'今日看板', tip:'循着第一次打卡的味道来' },
+            { id:'yk',  n:'焰尾雀', arc:'bird',   h:28,  t:2, b:2, act:'habit',    c:{k:'n',v:3},   sec:'今日看板', tip:'打卡到第三个，它就落在卡上了' },
+            { id:'js',  n:'金穗鼠', arc:'paw',    h:44,  t:2, b:3, act:'habitAll', c:{k:'flag',v:1},sec:'今日看板', tip:'今日习惯全清，来偷一颗金穗' },
+            { id:'zy',  n:'纸鸢鸟', arc:'bird',   h:210, t:1, b:1, act:'task',     c:{k:'n',v:1},   sec:'计划视图', tip:'新任务落格，它跟着纸片滑进来' },
+            { id:'gz',  n:'盖章蟹', arc:'paw',    h:340, t:2, b:2, act:'task',     c:{k:'n',v:3},   sec:'计划视图', tip:'收集完成章，壳上全是印' },
+            { id:'ld',  n:'落定龟', arc:'paw',    h:215, t:2, b:2, act:'task',     c:{k:'n',v:5},   sec:'计划视图', tip:'一天落定五件事，慢而稳' },
+            { id:'kl',  n:'凯龙',   arc:'blob',   h:0,   t:3, b:4, act:'raidClear',c:{k:'flag',v:1},sec:'计划视图', tip:'本周副本全清时降临的凯旋之灵' },
+            { id:'yj',  n:'萤晶蛾', arc:'moth',   h:50,  t:1, b:1, act:'review',   c:{k:'n',v:1},   sec:'知识库', tip:'每次复习的光都喂进它翅膀' },
+            { id:'zg',  n:'织光蛛', arc:'spider', h:280, t:2, b:3, act:'webClean', c:{k:'flag',v:1},sec:'知识库', tip:'蛛网散尽那刻，它收工搬走' },
+            { id:'my',  n:'墨鲸鱼', arc:'fish',   h:215, t:3, b:4, act:'review',   c:{k:'n',v:5},   sec:'知识库', tip:'复习五次，知识的海就养出鲸' },
+            { id:'sc',  n:'书虫',   arc:'blob',   h:100, t:1, b:1, act:'read',     c:{k:'n',v:1},   sec:'读书', tip:'住在书页里，吃分钟长大' },
+            { id:'zh',  n:'烛蛾',   arc:'moth',   h:40,  t:2, b:2, act:'read',     c:{k:'hour',v:21},sec:'读书', tip:'深夜读书，它扑向你的灯' },
+            { id:'ss',  n:'鲨书鱼', arc:'fish',   h:200, t:2, b:2, act:'read',     c:{k:'n',v:3},   sec:'读书', tip:'一周三读，它在字里游醒了' },
+            { id:'zjx', n:'纸鲸',   arc:'fish',   h:0,   t:1, b:1, act:'diary',    c:{k:'n',v:1},   sec:'日记', tip:'日记落笔，纸海起鲸' },
+            { id:'fxy', n:'风信燕', arc:'bird',   h:195, t:2, b:2, act:'diary',    c:{k:'n',v:2},   sec:'日记', tip:'第二篇写完，它带来一句风' },
+            { id:'ldz', n:'蜡豆虫', arc:'blob',   h:320, t:2, b:2, act:'diary',    c:{k:'hour',v:21},sec:'日记', tip:'夜写的日记有蜡香，它嗜这个' },
+            { id:'ppy', n:'泡泡鱼', arc:'fish',   h:190, t:2, b:2, act:'gameBal',  c:{k:'bal',v:100},sec:'游戏时间', tip:'余额攒过 100，缸里冒泡' },
+            { id:'sgg', n:'手柄龟', arc:'paw',    h:80,  t:1, b:1, act:'gameUse',  c:{k:'n',v:1},   sec:'游戏时间', tip:'你去玩游戏，它替你看家' },
+            { id:'xsd', n:'像素蝶', arc:'moth',   h:180, t:3, b:3, act:'gameBal',  c:{k:'bal',v:300},sec:'游戏时间', tip:'余额 300 的稀有鳞粉' },
+            { id:'fqx', n:'番茄蜥', arc:'paw',    h:5,   t:1, b:1, act:'pomo',     c:{k:'n',v:1},   sec:'番茄钟', tip:'一个番茄下肚，红得发亮' },
+            { id:'xly', n:'心流萤', arc:'moth',   h:55,  t:2, b:2, act:'pomo',     c:{k:'n',v:3},   sec:'番茄钟', tip:'三只番茄连烧，它就着火光来' },
+            { id:'wyx', n:'守夜枭', arc:'bird',   h:240, t:3, b:3, act:'pomo',     c:{k:'hour',v:22},sec:'番茄钟', tip:'22 点后还在专注，它向你致意' },
+            { id:'cln', n:'晨露鸟', arc:'bird',   h:350, t:3, b:3, act:'habit',    c:{k:'early',v:8},sec:'今日看板', tip:'8 点前的打卡带露水，只有它知道' },
+            { id:'yt',  n:'月兔',   arc:'paw',    h:0,   t:3, b:3, act:'any',      c:{k:'night',v:22},sec:'全局', tip:'22 点后的任何动静，它都听得见' },
+            { id:'sjd', n:'四季蝶', arc:'moth',   h:300, t:2, b:2, act:'water',    c:{k:'n',v:1},   sec:'六树庭院', tip:'翅膀随季节换色，浇灌时来' },
+            { id:'cmx', n:'采蜜熊', arc:'paw',    h:35,  t:3, b:3, act:'water',    c:{k:'n',v:3},   sec:'六树庭院', tip:'一天浇三棵树，蜜就熟了' },
+            { id:'xcj', n:'星尘鲸', arc:'fish',   h:260, t:3, b:4, act:'clear',    c:{k:'flag',v:1},sec:'今日看板', tip:'地下城通关的夜里，它游过星空' },
+            { id:'sl',  n:'树灵',   arc:'blob',   h:130, t:3, b:3, act:'waterAll', c:{k:'flag',v:1},sec:'六树庭院', tip:'六树满庭那天，树把自己走下来了' },
+            { id:'ljx', n:'连击狐', arc:'paw',    h:350, t:2, b:2, act:'combo',    c:{k:'n',v:3},   sec:'计划视图', tip:'连击 ×3，火苗尾巴藏不住' },
+            { id:'xgj', n:'鸮管家', arc:'bird',   h:25,  t:1, b:0, act:'dexOpen',  c:{k:'flag',v:1},sec:'图鉴', tip:'图鉴的管家，推了圆眼镜记下你' }
+        ];
+        const ECO_COMMONS = ['lu', 'zy', 'yj', 'sc', 'zjx', 'fqx'];
+        function ecoSp(id) { return ECO_DB.find(s => s.id === id); }
+        function ecoSpHue(sp) { if (sp.id !== 'sjd') return sp.h; const m = new Date().getMonth(); return [110, 185, 300, 30][Math.floor(m / 3) % 4]; }
+        function ecoDayState() {
+            const t = formatDate(new Date());
+            let s = safeStorage.get('niko_eco_day', null);
+            if (!s || s.d !== t) { s = { d: t, c: {}, met: [], wait: {}, gb: 0 }; safeStorage.set('niko_eco_day', s); }
+            return s;
+        }
+        function ecoDex() { return safeStorage.get('niko_eco_dex', {}); }
+        function ecoTotalDrops() { const d = safeStorage.get('niko_drops', {}); return Object.keys(d).reduce((a, k) => a + (Number(d[k]) || 0), 0); }
+        function ecoPool() {
+            const st = ecoDayState();
+            if (st.pool && st.pool.length) return st.pool;
+            const rest = ECO_DB.filter(s => !ECO_COMMONS.includes(s.id) && s.id !== 'xgj').map(s => s.id);
+            let seed = ecoSeed('niko' + st.d);
+            const pick = [];
+            while (pick.length < 8 && rest.length) { seed = (Math.imul(seed, 1103515245) + 12345) >>> 0; pick.push(rest.splice(seed % rest.length, 1)[0]); }
+            st.pool = ECO_COMMONS.concat(pick);
+            safeStorage.set('niko_eco_day', st);
+            return st.pool;
+        }
+        function ecoPay(cost) {
+            if (!(cost > 0)) return true;
+            const drops = safeStorage.get('niko_drops', {});
+            const ent = Object.entries(drops).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+            if (ent.reduce((a, [, n]) => a + n, 0) < cost) return false;
+            let left = cost;
+            for (const [pid] of ent) { if (left <= 0) break; const take = Math.min(drops[pid], left); drops[pid] -= take; left -= take; }
+            safeStorage.set('niko_drops', drops);
+            return true;
+        }
+        function ecoCond(sp, st, h, meta) {
+            const c = sp.c;
+            if (c.k === 'n') return (st.c[sp.act] || 0) >= c.v;
+            if (c.k === 'bal') return (st.gb || 0) >= c.v;
+            if (c.k === 'hour') return (st.c[sp.act] || 0) >= 1 && h >= c.v;
+            if (c.k === 'early') return (st.c[sp.act] || 0) >= 1 && h < c.v;
+            if (c.k === 'flag') return (st.c[sp.act] || 0) >= 1;
+            if (c.k === 'night') return h >= c.v;
+            return false;
+        }
+        function nikoEcoEmit(act, meta) {
+            try {
+                const h = new Date().getHours();
+                const st = ecoDayState();
+                if (act === 'combo' && meta && meta.count) st.c.combo = Math.max(st.c.combo || 0, meta.count);
+                else st.c[act] = (st.c[act] || 0) + 1;
+                if (act === 'gameBal') st.gb = Math.max(st.gb || 0, (meta && meta.bal) || 0);
+                safeStorage.set('niko_eco_day', st);
+                const pool = ecoPool();
+                const dexEmpty = Object.keys(ecoDex()).length === 0;
+                for (const sp of ECO_DB) {
+                    if (st.met.includes(sp.id)) continue;
+                    if (sp.id !== 'xgj' && !pool.includes(sp.id)) continue;
+                    if (!ecoCond(sp, st, h, meta)) continue;
+                    if (ecoVisit(sp, st, dexEmpty)) break;   // 成功引来一位即止，保持郑重；失败（如等饵）继续往后找
+                }
+            } catch (e) {}
+        }
+        function ecoVisit(sp, st, dexEmpty) {
+            const free = dexEmpty;
+            if (!free && !ecoPay(sp.b)) { st.wait = st.wait || {}; st.wait[sp.id] = sp.b; safeStorage.set('niko_eco_day', st); return false; }
+            const dex = ecoDex();
+            dex[sp.id] = { n: ((dex[sp.id] && dex[sp.id].n) || 0) + 1, first: st.d };
+            safeStorage.set('niko_eco_dex', dex);
+            st.met.push(sp.id);
+            delete st.wait[sp.id];
+            safeStorage.set('niko_eco_day', st);
+            ecoFly(sp, free ? -1 : sp.b);
+            return true;
+        }
+        function ecoFly(sp, cost) {
+            const old = document.getElementById('ecoFlyHost');
+            if (old) old.remove();
+            const host = document.createElement('div');
+            host.id = 'ecoFlyHost';
+            host.className = 'eco-fly';
+            host.innerHTML = `<div class="eco-av">${ecoArcSVG(sp.arc, ecoSpHue(sp))}</div><div class="eco-tag"><b>${ecoEsc(sp.n)}</b><span class="eco-tier">${'★'.repeat(sp.t)}</span><span class="eco-msg">${ecoEsc(sp.tip)}</span><span class="eco-cost">${cost < 0 ? '初见！' : (cost > 0 ? '−◆' + cost : '')}</span></div>`;
+            document.body.appendChild(host);
+            const W = (window.innerWidth || 1280), H = (window.innerHeight || 800);
+            const y0 = Math.round(H * 0.16 + Math.random() * H * 0.14), y1 = Math.round(H * 0.7), xm = Math.round(W * 0.52), xe = Math.round(W * 0.76);
+            if (host.animate) {
+                host.animate([
+                    { transform: `translate(${W + 90}px, ${y0}px)`, opacity: 0 },
+                    { transform: `translate(${xm}px, ${y0 + 34}px)`, opacity: 1, offset: 0.55 },
+                    { transform: `translate(${xe}px, ${y1}px)`, opacity: 1 }
+                ], { duration: 1700, easing: 'cubic-bezier(.45,.05,.3,1)', fill: 'forwards' });
+                setTimeout(() => { if (host.animate) host.animate([{ transform: `translate(${xe}px, ${y1}px)`, opacity: 1 }, { transform: `translate(-140px, ${Math.round(H * 0.18)}px)`, opacity: 0 }], { duration: 1300, easing: 'ease-in', fill: 'forwards' }); }, 5400);
+                setTimeout(() => host.remove(), 6900);
+            } else {
+                host.classList.add('eco-static');
+                setTimeout(() => host.remove(), 5200);
+            }
+        }
+        function nikoEcoDexOpen() {
+            try { nikoEcoEmit('dexOpen'); } catch (e) {}
+            const oldBack = document.getElementById('ecoDexBack');
+            if (oldBack) oldBack.remove();
+            const dex = ecoDex();
+            const got = Object.keys(dex).length;
+            const day = ecoDayState();
+            const waitHtml = day.wait && Object.keys(day.wait).length ? `<div class="eco-dex-note">💤 今天有客人在等材料：${Object.keys(day.wait).map(id => { const sp = ecoSp(id); return sp ? `${ecoEsc(sp.n)}（需 ◆×${day.wait[id]}）` : ''; }).filter(Boolean).join('、')}</div>` : '';
+            const cards = ECO_DB.map(sp => {
+                const m = dex[sp.id];
+                return `<div class="eco-card${m ? '' : ' miss'}" title="${m ? ecoEsc(sp.tip) : '尚未遇见 · ' + ecoEsc(sp.sec)}">${ecoArcSVG(sp.arc, ecoSpHue(sp))}<div class="eco-card-n">${m ? sp.n : '？？？'}</div><div class="eco-card-i">${m ? `×${m.n} · 初见 ${String(m.first).slice(5)}` : `${sp.sec} · 喜食 ◆×${sp.b}`}</div></div>`;
+            }).join('');
+            const bk = document.createElement('div');
+            bk.id = 'ecoDexBack';
+            bk.className = 'eco-dex-back';
+            bk.innerHTML = `<div class="eco-dex"><div class="eco-dex-head"><b>📖 生态图鉴</b><span>已遇见 ${got}/${ECO_DB.length} · 🎒 项目材料 ◆×${ecoTotalDrops()}</span><button onclick="this.closest('.eco-dex-back').remove()">✕</button></div><div class="eco-dex-note">完成任务掉落 ◆ 项目材料（计划看板「掉落图鉴」）→ 材料会吸引小生物来访 → 遇见过的都收进这本图鉴。每天的候选客人由日期轮换，不重样。</div>${waitHtml}<div class="eco-dex-grid">${cards}</div></div>`;
+            bk.addEventListener('click', e => { if (e.target === bk) bk.remove(); });
+            document.body.appendChild(bk);
+        }
         function nikoComboBump() {
             try {
                 const s = comboState();
                 s.count = (s.count || 0) + 1;
                 safeStorage.set('niko_combo_today', s);
                 const n = s.count;
+                if (typeof nikoEcoEmit === 'function') nikoEcoEmit('combo', { count: n });
                 if (n >= 3 && (n === 3 || n === 5 || n % 5 === 0)) nikoComboShow(n, null);
                 return n;
             } catch (e) { return 0; }
@@ -14198,6 +14393,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             gardenCloseRitual();
             const allDone = !wasAllDone && GARDEN_PILLARS.every(x => st.watered[x.key] === today);
+            try { if (typeof nikoEcoEmit === 'function') { nikoEcoEmit('water'); if (allDone) nikoEcoEmit('waterAll'); } } catch (e) {}
             setTimeout(() => {
                 renderGarden();
                 if (typeof showToast === 'function') {
@@ -14772,6 +14968,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     }
                 } catch (e) {}
                 habitSpark(id);
+                // 🦋 生态引擎：打卡 → 访客判定；全清 → 金穗鼠/星尘鲸判定
+                try {
+                    if (typeof nikoEcoEmit === 'function') {
+                        nikoEcoEmit('habit');
+                        const _ds = habitDoneSet(today);
+                        const _act = habitList().filter(habitShouldToday);
+                        if (_act.length && _act.every(h => _ds[h.id])) { nikoEcoEmit('habitAll'); nikoEcoEmit('clear'); }
+                    }
+                } catch (e) {}
                 // 🪙 金币飞入（方案4）：从习惯卡飞过整屏落入地下城余额 chip，落定叮一声+水位上涨
                 if (earnedMin > 0 && typeof nikoCoinFly === 'function') {
                     const flyCard = document.querySelector(`.habit-card[data-hid="${id}"]`);
@@ -16042,6 +16247,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             raidState[weekKey] = rs;
             safeStorage.set('niko_raid_state', raidState);
             const isClear = total > 0 && remain === 0;
+            // 🦋 凯龙：本周副本首次全清 → 生态访客
+            if (isClear && !rs.ecoClear) { rs.ecoClear = true; raidState[weekKey] = rs; safeStorage.set('niko_raid_state', raidState); if (typeof nikoEcoEmit === 'function') nikoEcoEmit('raidClear'); }
             const hpPct = total ? Math.round(remain / total * 100) : 0;
             const hpCls = hpPct <= 25 ? ' hp-low' : (hpPct <= 55 ? ' hp-mid' : '');
             // Boss：未完成里挑工期最长的（并列取开始早的）；全清则展示刚击倒的
@@ -16089,7 +16296,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const dropsNow = safeStorage.get('niko_drops', {});
             const dropEntries = Object.entries(dropsNow).filter(([pid]) => pid !== '_none' && getProject(pid)).sort((a, b) => b[1] - a[1]).slice(0, 10);
             if (dropEntries.length) {
-                html += `<div class="raid-drops"><span class="raid-drops-label">🎒 掉落图鉴</span>` + dropEntries.map(([pid, n]) => {
+                html += `<div class="raid-drops"><span class="raid-drops-label" onclick="nikoEcoDexOpen()" style="cursor:pointer" title="项目材料 = 生态的饵：它们会吸引小生物来访，点开看生态图鉴">🎒 掉落图鉴 ⤴</span>` + dropEntries.map(([pid, n]) => {
                     const p = getProject(pid);
                     return `<span class="raid-drop" style="border-color:${p.color};color:${p.color}" title="${escapeHtml(p.name)} 材料 ×${n}">◆${n}</span>`;
                 }).join('') + `</div>`;
@@ -17011,6 +17218,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 saveData();
                 if (ev.status === 'done') {
                     if (typeof nikoComboBump === 'function') nikoComboBump();
+                    if (typeof nikoEcoEmit === 'function') nikoEcoEmit('task');
                     if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(e && e.target);
                     else if (typeof nikoStampFx === 'function') nikoStampFx(e && e.target, ev.doneDate);   // 落章替代裸 ✓ 火花
                     // v4 全清播报：这一刀补完当日所有任务 → 小怪清剿战报
@@ -17040,6 +17248,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             saveData();
             if (ev.status === 'done') {
                 if (typeof nikoComboBump === 'function') nikoComboBump();
+                    if (typeof nikoEcoEmit === 'function') nikoEcoEmit('task');
                 if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(e && e.target);
                 else if (typeof nikoStampFx === 'function') nikoStampFx(e && e.target, ev.doneDate);   // 落章替代裸 ✓ 火花
                 checkProjectClear(ev);
@@ -17116,6 +17325,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             saveData();
             if (status === 'done') {
                 if (typeof nikoComboBump === 'function') nikoComboBump();
+                    if (typeof nikoEcoEmit === 'function') nikoEcoEmit('task');
                 if (wasOverdue && typeof nikoAsh === 'function') nikoAsh(targetEl);
                 else if (typeof nikoStampFx === 'function') nikoStampFx(targetEl, ev.doneDate);   // 落章替代裸 ✓ 火花
                 checkProjectClear(ev);
@@ -21793,6 +22003,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (g === 0) kbReviewStats.fail++;
             else if (g === 1) kbReviewStats.mid++;
             else kbReviewStats.easy++;
+            if (typeof nikoEcoEmit === 'function') nikoEcoEmit('review');
             kbReviewIdx++;
             renderKbReview();
             if (typeof drawKbWeb === 'function') setTimeout(() => { try { drawKbWeb(); } catch (e) {} }, 80);
@@ -22219,7 +22430,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     svg.classList.add('kb-web-scatter');
                     const dead = svg; setTimeout(() => dead.remove(), 1200);
                 }
-                if (kbWebPrevStale !== null && kbWebPrevStale >= 2 && stale.length < 2 && typeof showToast === 'function') showToast('🕸 蛛网散尽 · 这一页知识都醒着');
+                if (kbWebPrevStale !== null && kbWebPrevStale >= 2 && stale.length < 2) { if (typeof nikoEcoEmit === 'function') nikoEcoEmit('webClean'); if (typeof showToast === 'function') showToast('🕸 蛛网散尽 · 这一页知识都醒着'); }
                 kbWebPrevStale = stale.length;
                 return;
             }
@@ -23147,6 +23358,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (idx >= 0) bookLogs[idx].minutes = min;
             else bookLogs.unshift({ date: today, minutes: min });
             bookSaveLogs();
+            if (typeof nikoEcoEmit === 'function') nikoEcoEmit('read');
             // 联动今日看板「📖 读书」习惯：当天已打卡则不重复；有奖励则同步赚取游戏时间
             let habitLinked = false;
             if (typeof window.ensureBookHabit === 'function') {
@@ -23895,6 +24107,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             }
             diarySaveEntries();
+            if (typeof nikoEcoEmit === 'function') nikoEcoEmit('diary');
             // 阶段二：日记同步存入知识库（同日期已有条目则更新正文，保持同步）
             upsertKnowledge('日记 ' + ds, '日记', {
                 body: content + (diaryMood && diaryMood !== 'ok' ? '\n\n（心情：' + diaryMoodName(diaryMood) + '）' : ''),
@@ -23929,6 +24142,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!confirm('确定删除 ' + ds + ' 的日记吗？')) return;
             diaryEntries = diaryEntries.filter(x => x.date !== ds);
             diarySaveEntries();
+            if (typeof nikoEcoEmit === 'function') nikoEcoEmit('diary');
             renderDiaryPage();
             showToast('🗑 已删除');
         }
@@ -25780,6 +25994,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             if (d.history.length > GT_MAX_HISTORY) d.history.length = GT_MAX_HISTORY;
             gtSave(d);
+            if (typeof nikoEcoEmit === 'function') nikoEcoEmit('gameBal', { bal: d.balance || 0 });
             if (typeof renderGameTimePage === 'function' && document.getElementById('gamePage') &&
                 document.getElementById('gamePage').classList.contains('active')) renderGameTimePage();
             return true;
@@ -25816,6 +26031,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             d.history.unshift({ id: 'gu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), type: 'use', min: min, reason: '手动消耗', date: gtTodayStr(), at: new Date().toISOString() });
             if (d.history.length > GT_MAX_HISTORY) d.history.length = GT_MAX_HISTORY;
             gtSave(d);
+            if (typeof nikoEcoEmit === 'function') { nikoEcoEmit('gameUse'); nikoEcoEmit('gameBal', { bal: d.balance || 0 }); }
             // 消耗 = 去玩游戏，自动计入当天游玩日历
             gtAddPlay(min, null, gtTodayStr());
             if (input) input.value = '';
@@ -28337,6 +28553,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     doneAt: new Date().toISOString()
                 });
                 safeStorage.set('niko_pomodoro_logs', logs);
+                if (typeof nikoEcoEmit === 'function') nikoEcoEmit('pomo');
                 renderPomoToday();
                 renderPomoLog();
                 renderPomoBadge();
@@ -28737,7 +28954,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609062228";
+        window.NIKO_VERSION = "202609062250";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
