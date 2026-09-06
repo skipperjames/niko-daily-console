@@ -2833,6 +2833,54 @@
             .dg-coin-chip { margin-left: 5px; font-size: 9.5px; padding: 1px 6px; }
             .coin-fly { font-size: 17px; }
         }
+
+        /* ===== 方案2 卡片充能（2026-09-06）：习惯卡边框随连续天数充能 =====
+           3天微光(charge-1) / 7天流光(charge-2) / 21天常驻光环(charge-3) */
+        .habit-card.charge-1 {
+            border-color: rgba(251,191,36,.45);
+            box-shadow: inset 0 0 0 1px rgba(251,191,36,.12), 0 0 10px rgba(251,191,36,.12);
+        }
+        .habit-card.charge-2, .habit-card.charge-3 {
+            border-color: rgba(251,191,36,.65);
+            overflow: hidden;
+        }
+        /* 流光：一道暖光沿边框顶部缓缓扫过 */
+        .habit-card.charge-2::after, .habit-card.charge-3::after {
+            content: ''; position: absolute; top: 0; left: -60%; width: 45%; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(253,230,138,.95), rgba(251,191,36,.7), transparent);
+            filter: blur(.5px);
+            animation: chargeSweep 3.2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes chargeSweep {
+            0% { left: -60%; opacity: 0; }
+            15% { opacity: 1; }
+            60% { opacity: .9; }
+            100% { left: 115%; opacity: 0; }
+        }
+        /* 21天：常驻金环 + 缓慢呼吸 */
+        .habit-card.charge-3 {
+            box-shadow: 0 0 0 1.5px rgba(251,191,36,.5), 0 0 18px rgba(251,191,36,.28), 0 0 34px rgba(245,158,11,.14);
+            animation: chargeBreath 3.6s ease-in-out infinite;
+        }
+        @keyframes chargeBreath {
+            0%, 100% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.5), 0 0 18px rgba(251,191,36,.28), 0 0 34px rgba(245,158,11,.14); }
+            50% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.7), 0 0 26px rgba(251,191,36,.42), 0 0 46px rgba(245,158,11,.22); }
+        }
+        body.dark-mode .habit-card.charge-1 { border-color: rgba(251,191,36,.4); box-shadow: inset 0 0 0 1px rgba(251,191,36,.1), 0 0 12px rgba(251,191,36,.14); }
+        body.dark-mode .habit-card.charge-3 { animation-name: chargeBreathDark; }
+        @keyframes chargeBreathDark {
+            0%, 100% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.45), 0 0 16px rgba(251,191,36,.24), 0 0 32px rgba(245,158,11,.13); }
+            50% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.65), 0 0 24px rgba(251,191,36,.38), 0 0 44px rgba(245,158,11,.2); }
+        }
+        .habit-card.done-card.charge-2::after, .habit-card.done-card.charge-3::after { opacity: .55; } /* 完成卡流光减淡，不打抢 ✓ */
+        @media (prefers-reduced-motion: reduce) {
+            .habit-card.charge-2::after, .habit-card.charge-3::after { animation: none; display: none; }
+            .habit-card.charge-3 { animation: none; }
+        }
+        @media (max-width: 768px) {
+            .habit-card.charge-3 { box-shadow: 0 0 0 1.5px rgba(251,191,36,.45), 0 0 12px rgba(251,191,36,.22); }
+        }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
                    计划页面 (日历 + 看板)
@@ -3591,6 +3639,32 @@
             opacity: 0.8;
         }
         .event-item.dragging { opacity: 0.35; }
+        /* ===== 方案5 搬运重量感（2026-09-06）：拖起的任务像被拎起来的实体 ===== */
+        body .events-container .event-item.carry-lift.dragging,
+        body .event-item.carry-lift.dragging {
+            opacity: .92;
+            transform: scale(1.05) rotate(.4deg);
+            box-shadow: 0 14px 30px rgba(15,23,42,.38), 0 4px 10px rgba(15,23,42,.22);
+            z-index: 6;
+            cursor: grabbing;
+        }
+        /* 落点尘土粒子 */
+        .niko-dust {
+            position: fixed; width: 5px; height: 5px; border-radius: 50%;
+            pointer-events: none; z-index: 99998;
+            will-change: transform, opacity;
+        }
+        /* 看板卡拎起（同方案5） */
+        .board-card.carry-lift {
+            opacity: .92;
+            transform: scale(1.05) rotate(.4deg);
+            box-shadow: 0 14px 30px rgba(15,23,42,.38), 0 4px 10px rgba(15,23,42,.22);
+            z-index: 6;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .event-item.carry-lift.dragging { transform: none; }
+            .niko-dust { display: none; }
+        }
         /* v2.10：吸附光缝改由 ::after 绘制（发光呼吸），这里仅保留命中标记 */
         .event-item.drag-over-top, .event-item.drag-over-bottom { z-index: 3; }
         .event-item.completed {
@@ -8240,6 +8314,18 @@
         @media (max-width:600px) {
             #kbEditModal .modal { width: 100vw !important; max-width: 100vw !important; border-radius: 14px 14px 0 0; max-height: 90vh; }
             #kbImportModal .modal, #kbGraphModal .modal, #kbInsightModal .modal, #kbReviewModal .modal { width: 100vw !important; max-width: 100vw !important; }
+        }
+
+        /* ===== 方案11 萤火虫引路（2026-09-06）：到期待复习的卡，光先告诉你 ===== */
+        .kb-firefly {
+            position: absolute; width: 6px; height: 6px; border-radius: 50%;
+            pointer-events: none; z-index: 3; opacity: 0;
+            background: radial-gradient(circle, #fffbeb 0%, #fde68a 35%, #f59e0b 70%, transparent 78%);
+            box-shadow: 0 0 8px 2px rgba(251,191,36,.55), 0 0 18px 6px rgba(245,158,11,.22);
+            will-change: transform, opacity;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .kb-firefly { display: none; }
         }
 /* ===== 读书看板专属CSS ===== */
         /* ===== 读书看板 · 琥珀书房（对齐今日看板渐变玻璃语言，禁衬线字体） ===== */
@@ -14684,7 +14770,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     ? (d ? '点击取消打卡' : '点击打卡：' + escapeHtml(h.name))
                     : `今天不是打卡日（${freqLabel}），休息即可`;
                 const burnt = isActive && typeof habitBurntYesterday === 'function' && habitBurntYesterday(h.id);
-                return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}"${clickAttr} data-hid="${h.id}" title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
+                const chargeTier = streak >= 21 ? 3 : (streak >= 7 ? 2 : (streak >= 3 ? 1 : 0));   // 方案2 卡片充能档位
+                const chargeCls = (isActive && chargeTier) ? ` charge-${chargeTier}` : '';
+                return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}${chargeCls}"${clickAttr} data-hid="${h.id}" title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
@@ -16063,8 +16151,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${copyActionHtml}${ev.status === 'done' ? `<span class="stamp-mark" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     // v2.10 状态圈长按轮盘
                     if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
-                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
-                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom', 'nudge')); document.querySelectorAll('.events-container.is-dragging').forEach(x => x.classList.remove('is-dragging')); });
+                    item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); item.classList.add('carry-lift'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
+                    item.addEventListener('dragend', () => { draggedEventId = null; document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('drag-over')); document.querySelectorAll('.event-item').forEach(x => x.classList.remove('dragging', 'drag-over-top', 'drag-over-bottom', 'nudge', 'carry-lift')); document.querySelectorAll('.events-container.is-dragging').forEach(x => x.classList.remove('is-dragging')); });
                     // 任务条纵向拖拽：上/下半区决定插入位置；其余任务水波让位
                     item.addEventListener('dragover', (e) => {
                         e.preventDefault();
@@ -16100,6 +16188,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         } else {
                             moveEventToDateAndOrder(draggedEventId, dateStr, ev.id, isAfter);
                         }
+                        if (typeof nikoDustBurst === 'function') nikoDustBurst(e.clientX, e.clientY);   // 方案5 落定溅尘
                         document.querySelectorAll('.event-item').forEach(x => x.classList.remove('drag-over-top', 'drag-over-bottom'));
                     });
                     item.addEventListener('click', (e) => { e.stopPropagation(); openEventModal(ev.id); });
@@ -16108,7 +16197,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 cell.appendChild(eventsContainer);
                 cell.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drag-over'); });
                 cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
-                cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId && draggedEventId.startsWith('backlog:')) scheduleBacklogItem(draggedEventId.slice(8), dateStr); else if (draggedEventId) moveEventToDate(draggedEventId, dateStr); });
+                cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId && draggedEventId.startsWith('backlog:')) scheduleBacklogItem(draggedEventId.slice(8), dateStr); else if (draggedEventId) { moveEventToDate(draggedEventId, dateStr); if (typeof nikoDustBurst === 'function') nikoDustBurst(e.clientX, e.clientY); } });   // 方案5 落定溅尘
                 cell.addEventListener('click', () => { selectedDate = new Date(date); render(); });
                 cell.addEventListener('dblclick', (e) => { e.stopPropagation(); selectedDate = new Date(date); openEventModal(null, date); });
                 // P4 hover 快速新建（手机端无 hover 不显示，走原有新建入口）；v4 挂到日期行右侧
@@ -16526,11 +16615,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         document.addEventListener('dragstart', (e) => {
             const card = e.target.closest('.board-card');
-            if (card) { draggedEventId = card.dataset.eventId; e.dataTransfer.effectAllowed = 'move'; }
+            if (card) { draggedEventId = card.dataset.eventId; e.dataTransfer.effectAllowed = 'move'; card.classList.add('carry-lift'); }
         });
         document.addEventListener('dragend', () => {
             draggedEventId = null;
             document.querySelectorAll('.board-column-body').forEach(el => el.classList.remove('drag-over'));
+            document.querySelectorAll('.board-card.carry-lift').forEach(el => el.classList.remove('carry-lift'));
         });
 
         // ========== 甘特图渲染 ==========
@@ -17139,6 +17229,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 card.classList.add('stamp-thump');
                 setTimeout(() => { try { s.remove(); } catch (e) {} }, 1400);
                 setTimeout(() => card.classList.remove('stamp-thump'), 350);
+            } catch (e) {}
+        }
+
+        // ===== 方案5 搬运重量感（2026-09-06）：落点尘土粒子 =====
+        // 在落点溅起一小撮尘土：先向上外抛（带各自初速），再落下消散
+        function nikoDustBurst(x, y) {
+            try {
+                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                if (nikoDustBurst._n > 40) return;   // 防刷屏
+                nikoDustBurst._n = (nikoDustBurst._n || 0) + 1;
+                const colors = ['rgba(213,199,170,.9)', 'rgba(190,178,152,.85)', 'rgba(251,191,36,.55)', 'rgba(160,155,145,.8)'];
+                for (let i = 0; i < 8; i++) {
+                    const p = document.createElement('span');
+                    p.className = 'niko-dust';
+                    const sz = 3 + Math.random() * 4;
+                    p.style.width = sz + 'px'; p.style.height = sz + 'px';
+                    p.style.left = (x - sz / 2) + 'px'; p.style.top = (y - sz / 2) + 'px';
+                    p.style.background = colors[i % colors.length];
+                    document.body.appendChild(p);
+                    const ang = (-Math.PI / 2) + (Math.random() - 0.5) * 2.4;   // 全方向偏上
+                    const dist = 18 + Math.random() * 30;
+                    const dx = Math.cos(ang) * dist, dyUp = Math.sin(ang) * dist;
+                    const fall = 16 + Math.random() * 22;   // 二段下坠
+                    const dur = 480 + Math.random() * 320;
+                    const anim = p.animate([
+                        { transform: 'translate(0,0) scale(1)', opacity: .95, offset: 0, easing: 'cubic-bezier(.15,.6,.4,1)' },
+                        { transform: `translate(${dx * .7}px, ${dyUp * .7}px) scale(.9)`, opacity: .8, offset: .45, easing: 'cubic-bezier(.5,0,.8,.6)' },
+                        { transform: `translate(${dx}px, ${dyUp + fall}px) scale(.5)`, opacity: 0, offset: 1 }
+                    ], { duration: dur });
+                    anim.onfinish = function () { try { p.remove(); } catch (e) {} };
+                }
+                setTimeout(() => { nikoDustBurst._n = Math.max(0, (nikoDustBurst._n || 0) - 1); }, 900);
             } catch (e) {}
         }
 // ===== 媒体热点专属JS =====
@@ -20884,6 +21006,55 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderKbFroms();
             renderKbList();
             updateKbReviewBadge();
+            if (typeof kbFireflies === 'function') kbFireflies();   // 方案11 萤火虫引路
+        }
+
+        // ===== 方案11 萤火虫引路（2026-09-06）：到期待复习的条目化作萤火虫从卡里飘起、绕一下、落回 =====
+        let kbFireflyLast = 0;
+        function kbFireflies() {
+            try {
+                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                const now = Date.now();
+                if (now - kbFireflyLast < 3 * 60000) return;   // 3 分钟内不重复放，防止筛选切换刷屏
+                kbFireflyLast = now;
+                const dueIds = new Set((typeof getKbReviewQueue === 'function' ? getKbReviewQueue() : []).map(x => x.id));
+                if (!dueIds.size) return;
+                const box = document.getElementById('kbList');
+                if (!box) return;
+                const cards = [...box.querySelectorAll('.kb-card')].filter(c => {
+                    const onclick = c.getAttribute('onclick') || '';
+                    const m = onclick.match(/openKbDetail\('([^']+)'\)/);
+                    return m && dueIds.has(m[1]);
+                }).slice(0, 4);   // 最多 4 张卡，光不喧宾夺主
+                cards.forEach((card, ci) => {
+                    for (let k = 0; k < 2; k++) {
+                        setTimeout(() => kbSpawnFirefly(card), ci * 340 + k * 620 + Math.random() * 180);
+                    }
+                });
+            } catch (e) {}
+        }
+        function kbSpawnFirefly(card) {
+            try {
+                const W = card.clientWidth || 200, H = card.clientHeight || 120;
+                const f = document.createElement('span');
+                f.className = 'kb-firefly';
+                const x0 = W * (0.18 + Math.random() * 0.6);   // 底部随机起点
+                f.style.left = x0 + 'px';
+                f.style.top = (H - 6) + 'px';
+                card.appendChild(f);
+                const rise = H * (0.35 + Math.random() * 0.3);          // 升到卡片中部
+                const sway = (Math.random() - 0.5) * W * 0.36;          // 左右徘徊
+                const sway2 = -sway * (0.4 + Math.random() * 0.5);
+                const dur = 2600 + Math.random() * 900;
+                const anim = f.animate([
+                    { transform: 'translate(0,0) scale(.7)', opacity: 0, offset: 0 },
+                    { transform: `translate(${sway * .25}px, ${-rise * .45}px) scale(1)`, opacity: .95, offset: .3 },
+                    { transform: `translate(${sway}px, ${-rise}px) scale(1.1)`, opacity: 1, offset: .52 },
+                    { transform: `translate(${sway + sway2}px, ${-rise * .7}px) scale(1)`, opacity: .9, offset: .72 },
+                    { transform: `translate(${sway2 * .3}px, 0) scale(.7)`, opacity: 0, offset: 1 }
+                ], { duration: dur, easing: 'ease-in-out' });
+                anim.onfinish = function () { try { f.remove(); } catch (e) {} };
+            } catch (e) {}
         }
 
         // 守夜人简报：库藏 / 本周新进 / 到期待复习 + 一句书房旁白（全部来自真实数据）
@@ -28238,7 +28409,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061901";
+        window.NIKO_VERSION = "202609061931";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
