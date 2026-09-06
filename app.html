@@ -1088,6 +1088,13 @@
             color: #fff;
             border-left-color: #667eea;
         }
+        /* ===== 侧边栏板块自定义排序（2026-09-06）===== */
+        #mainNavSection .nav-item { display: flex; align-items: center; }
+        .sidebar-left.sorting #mainNavSection .nav-item { cursor: grab; }
+        .sidebar-left.sorting #mainNavSection .nav-item::after { content: '⠿'; margin-left: auto; opacity: .4; font-size: 11px; }
+        #mainNavSection .nav-item.dragging { opacity: .4; }
+        #mainNavSection .nav-item.drag-over { box-shadow: inset 0 2px 0 #8b5cf6; background: rgba(139,92,246,.10); }
+        .nav-item#navSortToggle.active { background: rgba(139,92,246,.16); color: #a78bfa; }
         body.dark-mode .dark-mode-toggle {
             background: #1a1a2a;
             border-color: #444;
@@ -1539,7 +1546,7 @@
         .badge-pop .bp-sub { font-size:11px; color:#9ca3af; margin-top:2px; }
         #badgeCorner { position:fixed; top:10px; right:12px; z-index:900; font-size:11px; color:#fbbf24; background:rgba(31,41,55,.85); border:1px solid rgba(251,191,36,.35); border-radius:10px; padding:2px 8px; cursor:pointer; display:none; backdrop-filter:blur(4px); }
         .sunday-letter-mask { position:fixed; inset:0; z-index:12200; background:rgba(8,8,14,.72); display:flex; align-items:center; justify-content:center; animation:closeIn .4s ease; }
-        .sunday-letter { width:min(400px,86vw); background:linear-gradient(175deg,#f5efe2,#ece2cd); color:#3f3a30; border-radius:6px; padding:26px 26px 20px; box-shadow:0 24px 60px rgba(0,0,0,.5); position:relative; font-family:KaiTi,'楷体',serif; animation:letterUp .7s ease forwards; }
+        .sunday-letter { width:min(400px,86vw); background:linear-gradient(175deg,#f5efe2,#ece2cd); color:#3f3a30; border-radius:6px; padding:26px 26px 20px; box-shadow:0 24px 60px rgba(0,0,0,.5); position:relative;  animation:letterUp .7s ease forwards; }
         @keyframes letterUp { from{opacity:0; transform:translateY(26px);} to{opacity:1; transform:translateY(0);} }
         .sunday-letter::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:66px; height:18px; background:rgba(139,92,246,.28); border-radius:0 0 6px 6px; }
         .sunday-letter h4 { margin:6px 0 12px; font-size:15px; letter-spacing:2px; text-align:center; }
@@ -7398,12 +7405,12 @@
         }
         .capsule-letter-eyebrow { font-size: 11px; letter-spacing: 2px; color: #a78bfa; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(167,139,250,.3); }
         .capsule-letter-body {
-            font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif;
+            
             font-size: 15.5px; line-height: 1.9; color: #efece6;
             white-space: pre-wrap; max-height: 42vh; overflow: auto;
             padding: 6px 2px 14px;
         }
-        .capsule-letter-sign { font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif; font-size: 13px; color: #b8b2a8; text-align: right; margin: 2px 0 8px; }
+        .capsule-letter-sign {  font-size: 13px; color: #b8b2a8; text-align: right; margin: 2px 0 8px; }
         .capsule-letter-meta { font-size: 10.5px; color: #6b7280; margin-bottom: 14px; }
         .capsule-letter-foot { display: flex; gap: 10px; justify-content: flex-end; }
         body:not(.dark-mode) .capsule-letter { background: #fbf8f2; border-color: rgba(124,58,237,.35); }
@@ -7745,7 +7752,7 @@
         .nr-card.leaving { animation: nrOut .28s ease forwards; pointer-events: none; }
         @keyframes nrOut { to { opacity: 0; transform: translateY(-14px) scale(.97); } }
         .nr-tag { align-self: flex-start; font-size: 10.5px; font-weight: 600; padding: 3px 11px; border-radius: 99px; color: #fff; opacity: .92; }
-        .nr-content { font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif; font-size: 21px; line-height: 2; color: #efece6; white-space: pre-wrap; word-break: break-word; padding: 18px 2px; flex: 1; overflow-y: auto; max-height: 46vh; }
+        .nr-content {  font-size: 21px; line-height: 2; color: #efece6; white-space: pre-wrap; word-break: break-word; padding: 18px 2px; flex: 1; overflow-y: auto; max-height: 46vh; }
         .nr-meta { font-size: 11px; color: #8d8778; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.12); }
         .nr-foot { display: flex; gap: 12px; margin-top: 20px; }
         .nr-btn { flex: 1; min-height: 46px; border-radius: 12px; font-size: 14px; cursor: pointer; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #c5c1cf; transition: all .2s; }
@@ -7758,7 +7765,7 @@
         .nr-arrow.r { right: 26px; }
         .nr-done-icon { font-size: 52px; margin-bottom: 8px; animation: nrPop .5s cubic-bezier(.22,1.4,.36,1); }
         @keyframes nrPop { from { transform: scale(.4); opacity: 0; } }
-        .nr-done-title { font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif; font-size: 24px; color: #efece6; margin: 4px 0 10px; }
+        .nr-done-title {  font-size: 24px; color: #efece6; margin: 4px 0 10px; }
         .nr-done-sub { font-size: 13px; color: #9a94a6; line-height: 2; }
         /* 浅色主题下的纸面变体（背景幕保持夜色，卡片转纸） */
         body:not(.dark-mode) .nr-card { background: linear-gradient(168deg, #fdfaf3, #f5efe2); border-color: rgba(124,58,237,.16); }
@@ -7859,10 +7866,9 @@
         .kb-card-top { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
         .kb-badge-para { background:transparent !important; border:1px solid; }
         .kb-badge-cat { background:rgba(127,127,159,.14) !important; color:#8a8fa8 !important; }
-        /* 撕页引文：日记/便签/读书笔记来源的条目，标题楷体 + 正文引文条，一眼区别于正式条目 */
-        .kb-card.kb-quote .kb-card-title { font-family:KaiTi,'楷体',serif; letter-spacing:.02em; }
+        /* 撕页引文：日记/便签/读书笔记来源的条目，用分区色引文条区分，字体与全站一致（用户铁律：禁宋体/楷体类衬线） */
         .kb-card.kb-quote .kb-card-body {
-            font-family:KaiTi,'楷体',serif; font-size:13.5px; line-height:1.85; color:#4b4257;
+            font-size:13px; line-height:1.8; color:#4b4257;
             padding-left:12px; border-left:2.5px solid color-mix(in srgb, var(--kc) 55%, transparent);
         }
         body.dark-mode .kb-card.kb-quote .kb-card-body { color:#cfc8e0; }
@@ -8118,31 +8124,35 @@
             #kbImportModal .modal, #kbGraphModal .modal, #kbInsightModal .modal, #kbReviewModal .modal { width: 100vw !important; max-width: 100vw !important; }
         }
 /* ===== 读书看板专属CSS ===== */
+        /* ===== 读书看板 · 琥珀书房（对齐今日看板渐变玻璃语言，禁衬线字体） ===== */
         .book-view-tabs {
             display: flex;
             gap: 8px;
             flex-shrink: 0;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 10px;
-            margin-bottom: 4px;
             flex-wrap: wrap;
         }
-        body.dark-mode .book-view-tabs { border-bottom-color: #333; }
         .book-view-tab {
             padding: 7px 16px;
-            border-radius: 20px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 13px;
-            background: #f1f3f5;
-            color: #555;
-            border: 1px solid transparent;
+            font-weight: 500;
+            background: linear-gradient(180deg, rgba(127,127,159,.10), rgba(127,127,159,.05));
+            color: #666;
+            border: 1px solid rgba(127,127,159,.16);
             transition: all .2s;
             white-space: nowrap;
         }
-        body.dark-mode .book-view-tab { background: #222; color: #aaa; }
-        .book-view-tab:hover { border-color: #888; }
-        .book-view-tab.active { background: #b45309; color: #fff; border-color: #b45309; }
-        .book-view-count { font-size: 11px; opacity: .85; margin-left: 2px; }
+        body.dark-mode .book-view-tab { background: rgba(255,255,255,.05); color: #a8a8b8; border-color: rgba(255,255,255,.09); }
+        .book-view-tab:hover { border-color: rgba(180,83,9,.45); color: #b45309; transform: translateY(-1px); }
+        body.dark-mode .book-view-tab:hover { color: #fbbf24; }
+        .book-view-tab.active {
+            background: linear-gradient(160deg, rgba(180,83,9,.18), rgba(251,191,36,.08));
+            color: #92400e; border-color: rgba(180,83,9,.5);
+            box-shadow: 0 0 14px rgba(251,191,36,.22), inset 0 1px 0 rgba(255,255,255,.25);
+        }
+        body.dark-mode .book-view-tab.active { color: #fcd34d; box-shadow: 0 0 16px rgba(251,191,36,.18); }
+        .book-view-count { font-size: 11px; opacity: .75; margin-left: 3px; }
 
         .book-stats {
             display: grid;
@@ -8151,16 +8161,25 @@
             flex-shrink: 0;
         }
         .book-stat {
-            background: #f8f6f1;
-            border: 1px solid #eee8dd;
-            border-radius: 12px;
-            padding: 10px 14px;
+            position: relative; overflow: hidden;
+            background: linear-gradient(165deg, #fff 0%, #fbf7ef 100%);
+            border: 1px solid #efe6d4;
+            border-radius: 14px;
+            padding: 12px 14px;
+            transition: transform .18s, box-shadow .18s;
         }
-        body.dark-mode .book-stat { background: #1f2937; border-color: #333; }
-        .book-stat-label { font-size: 12px; color: #888; }
-        .book-stat-sub { font-size: 11px; color: #aaa; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        body.dark-mode .book-stat-sub { color: #777; }
-        .book-stat-value { font-size: 22px; font-weight: 600; margin-top: 2px; color: #b45309; }
+        .book-stat::before { content:''; position:absolute; top:0; left:0; right:0; height:44px;
+            background:linear-gradient(180deg, rgba(251,191,36,.10), transparent); pointer-events:none; }
+        body.dark-mode .book-stat { background: linear-gradient(165deg, #262637, #20202e); border-color: #35323f; }
+        body.dark-mode .book-stat::before { background: linear-gradient(180deg, rgba(251,191,36,.07), transparent); }
+        .book-stat:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(180,83,9,.14); }
+        body.dark-mode .book-stat:hover { box-shadow: 0 8px 22px rgba(251,191,36,.10); }
+        .book-stat-label { font-size: 12px; color: #8a8478; font-weight: 500; }
+        body.dark-mode .book-stat-label { color: #a89f8d; }
+        .book-stat-sub { font-size: 11px; color: #b0a894; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        body.dark-mode .book-stat-sub { color: #7d766a; }
+        .book-stat-value { font-size: 24px; font-weight: 700; margin-top: 3px; color: #b45309;
+            text-shadow: 0 0 18px rgba(251,191,36,.35); font-variant-numeric: tabular-nums; }
         body.dark-mode .book-stat-value { color: #fbbf24; }
 
         /* 书架 */
@@ -8174,95 +8193,119 @@
         .book-status-tabs { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
         .book-status-tab {
             padding: 6px 14px;
-            border-radius: 16px;
+            border-radius: 11px;
             cursor: pointer;
             font-size: 12.5px;
-            background: #f1f3f5;
-            color: #555;
-            border: 1px solid transparent;
+            font-weight: 500;
+            background: rgba(127,127,159,.08);
+            color: #666;
+            border: 1px solid rgba(127,127,159,.16);
             transition: all .2s;
         }
-        body.dark-mode .book-status-tab { background: #222; color: #aaa; }
-        .book-status-tab.active { background: #b45309; color: #fff; }
+        body.dark-mode .book-status-tab { background: rgba(255,255,255,.05); color: #a8a8b8; border-color: rgba(255,255,255,.09); }
+        .book-status-tab.active { background: linear-gradient(160deg, rgba(180,83,9,.20), rgba(251,191,36,.08)); color: #92400e; border-color: rgba(180,83,9,.5); box-shadow: 0 0 12px rgba(251,191,36,.18); }
+        body.dark-mode .book-status-tab.active { color: #fcd34d; }
 
         #bookShelfGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+            gap: 12px;
             align-content: start;
         }
+        /* 书卡 = 一本立着的书：左侧状态色书脊 + 渐变玻璃封面，hover 同色光晕 */
         .book-card {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 12px 14px;
+            --bc: #b45309;
+            position: relative; overflow: hidden;
+            background: linear-gradient(168deg, #fff 0%, #fbf8f1 100%);
+            border: 1px solid #eee6d6;
+            border-radius: 14px;
+            padding: 13px 14px 13px 19px;
             display: flex;
             flex-direction: column;
             gap: 8px;
-            transition: all .2s;
+            transition: transform .18s, box-shadow .18s, border-color .18s;
             min-height: 128px;
         }
-        body.dark-mode .book-card { background: #1f2937; border-color: #333; }
-        .book-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.06); border-color: #f0d9a8; }
-        .book-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-        .book-card-title { font-size: 14.5px; font-weight: 600; line-height: 1.35; word-break: break-word; }
-        .book-status-chip { font-size: 11px; padding: 2px 9px; border-radius: 12px; color: #fff; flex-shrink: 0; white-space: nowrap; }
-        .book-card-meta { font-size: 12px; color: #888; }
+        body.dark-mode .book-card { background: linear-gradient(168deg, #262637, #21212f); border-color: #34323f; }
+        .book-card::before { content:''; position:absolute; left:0; top:10px; bottom:10px; width:4px;
+            border-radius:0 4px 4px 0; background:linear-gradient(180deg, var(--bc), color-mix(in srgb, var(--bc) 55%, transparent));
+            box-shadow:0 0 8px color-mix(in srgb, var(--bc) 45%, transparent); }
+        .book-card::after { content:''; position:absolute; top:0; left:0; right:0; height:40px;
+            background:linear-gradient(180deg, color-mix(in srgb, var(--bc) 9%, transparent), transparent); pointer-events:none; }
+        .book-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--bc) 50%, transparent);
+            box-shadow: 0 8px 22px color-mix(in srgb, var(--bc) 18%, transparent); }
+        .book-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; position: relative; }
+        .book-card-title { font-size: 14.5px; font-weight: 700; line-height: 1.4; word-break: break-word; }
+        .book-status-chip { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 10px; flex-shrink: 0; white-space: nowrap;
+            background: transparent !important; border: 1px solid; color: var(--bc); }
+        .book-card-meta { font-size: 12px; color: #98917f; }
+        body.dark-mode .book-card-meta { color: #8d8798; }
         .book-progress { display: flex; align-items: center; gap: 8px; }
-        .book-progress-bar { flex: 1; height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
-        body.dark-mode .book-progress-bar { background: #333; }
-        .book-progress-fill { height: 100%; background: #3b82f6; border-radius: 3px; }
-        .book-progress-txt { font-size: 11px; color: #666; }
-        .book-rating { font-size: 12px; color: #f59e0b; }
+        .book-progress-bar { flex: 1; height: 6px; background: rgba(127,127,159,.15); border-radius: 3px; overflow: hidden; }
+        body.dark-mode .book-progress-bar { background: rgba(255,255,255,.08); }
+        .book-progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #d97706, #fbbf24);
+            box-shadow: 0 0 8px rgba(251,191,36,.55); transition: width .3s; }
+        .book-progress-txt { font-size: 11px; color: #98917f; font-variant-numeric: tabular-nums; }
+        .book-rating { font-size: 12px; color: #f59e0b; letter-spacing: 1px; text-shadow: 0 0 10px rgba(251,191,36,.4); }
         .book-card-why {
-            font-size: 12px; color: #777; line-height: 1.5;
+            font-size: 12px; color: #7d7668; line-height: 1.55;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
+        body.dark-mode .book-card-why { color: #9a93a6; }
         .book-card-summary {
             font-size: 12px; color: #8b5cf6; line-height: 1.5;
-            background: rgba(139,92,246,.06); border-left: 2px solid #8b5cf6;
+            background: rgba(139,92,246,.06); border-left: 2px solid rgba(139,92,246,.55);
             padding: 5px 8px; border-radius: 0 6px 6px 0;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
         body.dark-mode .book-card-summary { color: #c4b5fd; background: rgba(139,92,246,.12); }
-        .book-card-summary.empty { color: #aaa; background: rgba(150,150,150,.06); border-left-color: #bbb; }
-        body.dark-mode .book-card-summary.empty { color: #777; }
-        .book-card-foot { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+        .book-card-summary.empty { color: #a8a29a; background: rgba(150,150,150,.05); border-left-color: rgba(150,150,150,.4); }
+        body.dark-mode .book-card-summary.empty { color: #6f6a7c; }
+        .book-card-foot { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; position: relative; }
         .book-btn {
-            font-size: 12px; padding: 5px 11px; border-radius: 8px; cursor: pointer;
-            background: #f8f6f1; border: 1px solid #e5dccb; color: #5f5e5a; transition: all .2s;
+            font-size: 12px; padding: 5px 11px; border-radius: 9px; cursor: pointer; font-weight: 500;
+            background: rgba(127,127,159,.08); border: 1px solid rgba(127,127,159,.18); color: #6b6459; transition: all .2s;
         }
-        body.dark-mode .book-btn { background: #1f2937; border-color: #444; color: #ccc; }
-        .book-btn:hover { border-color: #b45309; color: #b45309; }
-        .book-btn.primary { background: #b45309; border-color: #b45309; color: #fff; }
-        .book-btn.primary:hover { background: #92400e; }
+        body.dark-mode .book-btn { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.10); color: #b6b0c0; }
+        .book-btn:hover { border-color: #b45309; color: #b45309; transform: translateY(-1px); }
+        body.dark-mode .book-btn:hover { color: #fbbf24; border-color: rgba(251,191,36,.5); }
+        .book-btn.primary { background: linear-gradient(160deg, #d97706, #b45309); border-color: transparent; color: #fff;
+            box-shadow: 0 2px 10px rgba(180,83,9,.35); }
+        .book-btn.primary:hover { background: linear-gradient(160deg, #f59e0b, #d97706); color: #fff; }
         .book-btn.danger:hover { border-color: #dc2626; color: #dc2626; }
         .book-empty {
             grid-column: 1 / -1; text-align: center; color: #999; font-size: 13px;
-            padding: 40px 0; border: 1px dashed #ddd; border-radius: 12px;
+            padding: 40px 0; border: 1px dashed rgba(127,127,159,.3); border-radius: 14px;
         }
-        body.dark-mode .book-empty { border-color: #333; color: #777; }
+        body.dark-mode .book-empty { border-color: rgba(255,255,255,.12); color: #777; }
 
         /* AI 推荐 */
         #bookRecGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+            gap: 12px;
             align-content: start;
         }
         .book-rec-card {
-            background: #fffaf0;
-            border: 1px solid #f0e0c0;
-            border-radius: 12px;
-            padding: 12px 14px;
+            position: relative; overflow: hidden;
+            background: linear-gradient(168deg, #fff 0%, #fdf9f0 100%);
+            border: 1px solid #eee2cc;
+            border-radius: 14px;
+            padding: 13px 14px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 7px;
             min-height: 132px;
+            transition: transform .18s, box-shadow .18s, border-color .18s;
         }
-        body.dark-mode .book-rec-card { background: #1f2937; border-color: #3a3327; }
-        .book-rec-cat { font-size: 11px; color: #b45309; background: #fdf3e3; padding: 2px 9px; border-radius: 12px; align-self: flex-start; }
-        body.dark-mode .book-rec-cat { background: #3a3327; color: #fbbf24; }
+        body.dark-mode .book-rec-card { background: linear-gradient(168deg, #272735, #222230); border-color: #3a3527; }
+        .book-rec-card::before { content:''; position:absolute; top:0; left:0; right:0; height:42px;
+            background:linear-gradient(180deg, rgba(251,191,36,.10), transparent); pointer-events:none; }
+        .book-rec-card:hover { transform: translateY(-2px); border-color: rgba(180,83,9,.45);
+            box-shadow: 0 8px 22px rgba(180,83,9,.15); }
+        .book-rec-cat { font-size: 11px; font-weight: 600; color: #b45309; background: rgba(251,191,36,.12);
+            border: 1px solid rgba(180,83,9,.28); padding: 2px 10px; border-radius: 10px; align-self: flex-start; }
+        body.dark-mode .book-rec-cat { background: rgba(251,191,36,.10); color: #fbbf24; border-color: rgba(251,191,36,.3); }
         .book-rec-title { font-size: 14px; font-weight: 600; line-height: 1.35; }
         .book-rec-author { font-size: 12px; color: #888; }
         .book-rec-why { font-size: 12px; color: #666; line-height: 1.5; flex: 1; }
@@ -8277,25 +8320,30 @@
 
         /* 打卡视图 */
         .book-checkin-today {
-            background: #fffaf0;
-            border: 1px solid #f0e0c0;
-            border-radius: 12px;
-            padding: 14px 16px;
+            position: relative; overflow: hidden;
+            background: linear-gradient(150deg, rgba(180,83,9,.14), rgba(251,191,36,.05) 55%, transparent);
+            border: 1px solid rgba(180,83,9,.30);
+            border-radius: 14px;
+            padding: 16px 18px;
             display: flex;
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
             flex-shrink: 0;
         }
-        body.dark-mode .book-checkin-today { background: #1f2937; border-color: #3a3327; }
-        .book-checkin-today .label { font-size: 13px; color: #555; }
-        .book-checkin-today .big { font-size: 20px; font-weight: 600; color: #b45309; }
+        body.dark-mode .book-checkin-today { background: linear-gradient(150deg, rgba(180,83,9,.20), rgba(251,191,36,.06) 55%, rgba(38,38,55,.6)); border-color: rgba(251,191,36,.28); }
+        .book-checkin-today::before { content:'🔥'; position:absolute; right:14px; top:50%; transform:translateY(-50%);
+            font-size:44px; opacity:.14; pointer-events:none; }
+        .book-checkin-today .label { font-size: 13px; color: #7a6a52; }
+        body.dark-mode .book-checkin-today .label { color: #c9b890; }
+        .book-checkin-today .big { font-size: 30px; font-weight: 700; color: #b45309;
+            text-shadow: 0 0 20px rgba(251,191,36,.4); font-variant-numeric: tabular-nums; }
         body.dark-mode .book-checkin-today .big { color: #fbbf24; }
         .book-checkin-input {
-            width: 110px; padding: 8px 10px; border-radius: 8px; font-size: 14px;
-            border: 1px solid #e5dccb; background: #fff;
+            width: 110px; padding: 8px 10px; border-radius: 9px; font-size: 14px;
+            border: 1px solid rgba(180,83,9,.30); background: rgba(255,255,255,.85);
         }
-        body.dark-mode .book-checkin-input { background: #111827; border-color: #444; color: #eee; }
+        body.dark-mode .book-checkin-input { background: rgba(17,24,39,.8); border-color: rgba(251,191,36,.30); color: #eee; }
         .book-week-strip {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -8303,44 +8351,47 @@
             flex-shrink: 0;
         }
         .book-week-cell {
-            background: #f8f6f1;
-            border-radius: 10px;
-            padding: 8px 4px;
+            background: linear-gradient(168deg, rgba(127,127,159,.07), rgba(127,127,159,.03));
+            border-radius: 11px;
+            padding: 9px 4px;
             text-align: center;
-            border: 1px solid transparent;
+            border: 1px solid rgba(127,127,159,.14);
+            transition: transform .18s, box-shadow .18s;
         }
-        body.dark-mode .book-week-cell { background: #1f2937; }
-        .book-week-cell.done { background: #d1fae5; border-color: #6ee7b7; }
-        body.dark-mode .book-week-cell.done { background: #064e3b; border-color: #10b981; }
-        .book-week-cell.today { border-color: #b45309; }
-        .book-week-dow { font-size: 11px; color: #999; }
-        .book-week-day { font-size: 13px; font-weight: 600; margin-top: 2px; }
-        .book-week-min { font-size: 10px; color: #0f766e; margin-top: 2px; }
-        body.dark-mode .book-week-min { color: #6ee7b7; }
+        body.dark-mode .book-week-cell { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.07); }
+        .book-week-cell.done { background: linear-gradient(168deg, rgba(217,119,6,.16), rgba(251,191,36,.08));
+            border-color: rgba(217,119,6,.45); box-shadow: 0 0 12px rgba(251,191,36,.16); }
+        .book-week-cell.today { border-color: #b45309; box-shadow: 0 0 0 1px rgba(180,83,9,.35); }
+        .book-week-dow { font-size: 11px; color: #98917f; }
+        body.dark-mode .book-week-dow { color: #8d8798; }
+        .book-week-day { font-size: 13px; font-weight: 700; margin-top: 2px; }
+        .book-week-min { font-size: 10px; color: #b45309; margin-top: 2px; font-weight: 600; }
+        body.dark-mode .book-week-min { color: #fbbf24; }
 
         .book-heatmap { display: grid; grid-template-columns: repeat(15, 1fr); gap: 4px; flex-shrink: 0; }
         .book-heat-cell {
-            aspect-ratio: 1; border-radius: 4px; background: #f1f3f5;
+            aspect-ratio: 1; border-radius: 4px; background: rgba(127,127,159,.10);
             border: 1px solid transparent;
         }
-        body.dark-mode .book-heat-cell { background: #262626; }
-        .book-heat-cell.l1 { background: #fde68a; }
+        body.dark-mode .book-heat-cell { background: rgba(255,255,255,.05); }
+        .book-heat-cell.l1 { background: rgba(253,230,138,.55); }
         .book-heat-cell.l2 { background: #fbbf24; }
-        .book-heat-cell.l3 { background: #f59e0b; }
-        .book-heat-cell.l4 { background: #b45309; }
+        .book-heat-cell.l3 { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,.4); }
+        .book-heat-cell.l4 { background: #b45309; box-shadow: 0 0 8px rgba(180,83,9,.55); }
         .book-heat-cell.today { border-color: #dc2626; }
 
         /* 笔记视图 */
         .book-notes-form {
-            background: #f8f6f1;
-            border-radius: 12px;
+            background: linear-gradient(168deg, rgba(127,127,159,.07), rgba(127,127,159,.03));
+            border: 1px solid rgba(127,127,159,.14);
+            border-radius: 14px;
             padding: 14px 16px;
             display: flex;
             flex-direction: column;
             gap: 10px;
             flex-shrink: 0;
         }
-        body.dark-mode .book-notes-form { background: #1f2937; }
+        body.dark-mode .book-notes-form { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.08); }
         .book-notes-form-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .book-notes-form select, .book-notes-form input {
             padding: 8px 10px; border-radius: 8px; font-size: 13px;
@@ -9897,22 +9948,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div class="logo-icon">◉</div>
             <span>NIKO</span>
         </div>
-        <div class="nav-section">
+        <div class="nav-section" id="mainNavSection">
             <div class="nav-title">System</div>
-            <div class="nav-item active" onclick="switchPage('today')">📌 今日</div>
-            <div class="nav-item" onclick="switchPage('plan')">📋 计划</div>
-            <div class="nav-item" onclick="switchPage('hot')">🔥 热点</div>
-            <div class="nav-item" onclick="switchPage('notes')">🗂️ 便签看板</div>
-            <div class="nav-item" onclick="switchPage('knowledge')">🧠 知识库</div>
-            <div class="nav-item" onclick="switchPage('book')">📚 读书</div>
-            <div class="nav-item" onclick="switchPage('diary')">📔 日记</div>
-            <div class="nav-item" onclick="switchPage('member')">💰 会员</div>
-            <div class="nav-item" onclick="switchPage('game')">🎮 游戏时间</div>
-            <div class="nav-item" onclick="switchPage('compound')">📈 复利面板</div>
-            <div class="nav-item" onclick="switchPage('parenting')">👶 育儿手册</div>
+            <div class="nav-item active" data-nav="today" onclick="switchPage('today')">📌 今日</div>
+            <div class="nav-item" data-nav="plan" onclick="switchPage('plan')">📋 计划</div>
+            <div class="nav-item" data-nav="hot" onclick="switchPage('hot')">🔥 热点</div>
+            <div class="nav-item" data-nav="notes" onclick="switchPage('notes')">🗂️ 便签看板</div>
+            <div class="nav-item" data-nav="knowledge" onclick="switchPage('knowledge')">🧠 知识库</div>
+            <div class="nav-item" data-nav="book" onclick="switchPage('book')">📚 读书</div>
+            <div class="nav-item" data-nav="diary" onclick="switchPage('diary')">📔 日记</div>
+            <div class="nav-item" data-nav="member" onclick="switchPage('member')">💰 会员</div>
+            <div class="nav-item" data-nav="game" onclick="switchPage('game')">🎮 游戏时间</div>
+            <div class="nav-item" data-nav="compound" onclick="switchPage('compound')">📈 复利面板</div>
+            <div class="nav-item" data-nav="parenting" onclick="switchPage('parenting')">👶 育儿手册</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
             <div class="nav-title">Settings</div>
+            <div class="nav-item" id="navSortToggle" onclick="toggleNavSort()">⇅ 调整板块顺序</div>
             <div class="nav-item" onclick="openColorSettings()">🎨 颜色设置</div>
             <div class="nav-item" onclick="openDataManager()">💾 数据管理</div>
             <div class="nav-item" onclick="openPushSettings()" style="background:rgba(245,158,11,.12);color:#b45309;font-weight:600;">📢 推送设置</div>
@@ -9938,16 +9990,16 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="nav-more-item" onclick="toggleDarkMode();hideNavMore()">🌙 深色模式</div>
         <div class="nav-more-item" onclick="openColorSettings();hideNavMore()">🎨 颜色设置</div>
         <div class="nav-more-item" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
-        <div class="nav-more-item" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
-        <div class="nav-more-item" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
-        <div class="nav-more-item" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
-        <div class="nav-more-item" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
-        <div class="nav-more-item" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
-        <div class="nav-more-item" onclick="switchPage('member');hideNavMore()">💰 会员</div>
-        <div class="nav-more-item" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
-        <div class="nav-more-item" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
-        <div class="nav-more-item" onclick="switchPage('book');hideNavMore()">📚 读书</div>
-        <div class="nav-more-item" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
+        <div class="nav-more-item" data-navpage="hot" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
+        <div class="nav-more-item" data-navpage="meme" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
+        <div class="nav-more-item" data-navpage="copy" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
+        <div class="nav-more-item" data-navpage="notes" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
+        <div class="nav-more-item" data-navpage="knowledge" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
+        <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
+        <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
+        <div class="nav-more-item" data-navpage="compound" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
+        <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
+        <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
     </div>
 
     <!-- 手机端底部 Tab 栏：一键直达最常用 5 个板块（2026-08-20 调整：便签→复利面板，因复利需高频查看） -->
@@ -12897,12 +12949,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         function switchPage(page) {
+            if (typeof navSortMode !== 'undefined' && navSortMode) return; // 排序模式中不切换页面
             currentPage = page;
-            document.querySelectorAll('.sidebar-left .nav-item').forEach((item, idx) => {
-                const pages = ['today', 'plan', 'hot', 'notes', 'knowledge', 'book', 'diary', 'member', 'game', 'compound', 'parenting'];
+            document.querySelectorAll('.sidebar-left .nav-item[data-nav]').forEach(item => {
+                const key = item.getAttribute('data-nav');
                 // 文案库/梗文化已合并进热点板块：切到 copy/meme 时「热点」保持高亮
-                const isHotChild = (page === 'meme' || page === 'copy') && pages[idx] === 'hot';
-                item.classList.toggle('active', pages[idx] === page || isHotChild);
+                const isHotChild = (page === 'meme' || page === 'copy') && key === 'hot';
+                item.classList.toggle('active', key === page || isHotChild);
             });
             // 同步底部 Tab 栏激活态（手机端）
             document.querySelectorAll('.niko-mobile-tab').forEach(t => {
@@ -12948,6 +13001,89 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const p = document.getElementById('navMorePanel');
             if (p) p.classList.remove('show');
         }
+
+        // ===== 侧边栏板块自定义排序（2026-09-06）：拖拽调整 + localStorage 持久化 + 手机面板同步 =====
+        let navSortMode = false;
+        let navDragKey = null;
+        const NAV_ORDER_KEY = 'niko_nav_order';
+        function navItems() { return Array.from(document.querySelectorAll('#mainNavSection .nav-item[data-nav]')); }
+        function syncNavPanelOrder(order) {
+            // 手机「⋯ 更多」面板里同一批板块跟随侧边栏顺序（面板独有 meme/copy 排在已知键之后，保持原相对顺序）
+            const panel = document.getElementById('navMorePanel');
+            if (!panel) return;
+            const idxOf = k => { const i = order.indexOf(k); return i === -1 ? 999 : i; };
+            const pItems = Array.from(panel.querySelectorAll('.nav-more-item[data-navpage]'))
+                .sort((a, b) => idxOf(a.getAttribute('data-navpage')) - idxOf(b.getAttribute('data-navpage')));
+            pItems.forEach(it => panel.appendChild(it));
+        }
+        function applyNavOrder() {
+            let order = [];
+            try { order = JSON.parse(safeStorage.get(NAV_ORDER_KEY, '[]')); } catch (e) { order = []; }
+            if (!Array.isArray(order) || !order.length) return;
+            const sec = document.getElementById('mainNavSection');
+            if (!sec) return;
+            const title = sec.querySelector('.nav-title');
+            const map = {};
+            navItems().forEach(it => map[it.getAttribute('data-nav')] = it);
+            order.concat(Object.keys(map)).forEach(k => {
+                if (map[k]) { sec.insertBefore(map[k], null); delete map[k]; }
+            });
+            if (title) sec.insertBefore(title, sec.firstChild);
+            syncNavPanelOrder(order);
+        }
+        function saveNavOrder() {
+            const order = navItems().map(it => it.getAttribute('data-nav'));
+            safeStorage.set(NAV_ORDER_KEY, JSON.stringify(order));
+            syncNavPanelOrder(order);
+        }
+        function toggleNavSort() {
+            navSortMode = !navSortMode;
+            const sb = document.querySelector('.sidebar-left');
+            const btn = document.getElementById('navSortToggle');
+            if (sb) sb.classList.toggle('sorting', navSortMode);
+            if (btn) btn.classList.toggle('active', navSortMode);
+            navItems().forEach(it => {
+                it.draggable = navSortMode;
+                if (navSortMode && !it.dataset.navSortBound) {
+                    it.dataset.navSortBound = '1';
+                    it.addEventListener('dragstart', onNavDragStart);
+                    it.addEventListener('dragend', onNavDragEnd);
+                    it.addEventListener('dragover', onNavDragOver);
+                    it.addEventListener('dragleave', onNavDragLeave);
+                    it.addEventListener('drop', onNavDrop);
+                }
+            });
+            if (navSortMode) showToast('拖动板块调整顺序，再点「⇅ 调整板块顺序」完成');
+            else showToast('板块顺序已保存');
+            if (typeof nikoSpark === 'function' && btn) nikoSpark(btn, '⇅', '#8b5cf6');
+        }
+        function onNavDragStart(e) {
+            navDragKey = e.currentTarget.getAttribute('data-nav');
+            e.currentTarget.classList.add('dragging');
+            if (e.dataTransfer) { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', navDragKey); } catch (err) {} }
+        }
+        function onNavDragEnd(e) {
+            e.currentTarget.classList.remove('dragging');
+            navItems().forEach(it => it.classList.remove('drag-over'));
+            navDragKey = null;
+        }
+        function onNavDragOver(e) { if (!navSortMode) return; e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        function onNavDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+        function onNavDrop(e) {
+            if (!navSortMode || !navDragKey) return;
+            e.preventDefault();
+            const target = e.currentTarget;
+            target.classList.remove('drag-over');
+            if (target.getAttribute('data-nav') === navDragKey) return;
+            const sec = document.getElementById('mainNavSection');
+            const dragged = navItems().find(it => it.getAttribute('data-nav') === navDragKey);
+            if (dragged && dragged !== target) {
+                sec.insertBefore(dragged, target);
+                saveNavOrder();
+                if (typeof nikoSpark === 'function') nikoSpark(dragged, '✓', '#8b5cf6');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', applyNavOrder);
         // 悬浮工具坞：手机端折叠态切换
         function toggleDock(e) {
             if (e) { e.stopPropagation(); e.preventDefault(); }
@@ -21543,7 +21679,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 let act = '';
                 if (b.status === 'wish') act = `<button class="book-btn" onclick="moveBookStatus('${b.id}','reading')" title="开始读">▶ 开始读</button>`;
                 else if (b.status === 'reading') act = `<button class="book-btn" onclick="moveBookStatus('${b.id}','done')" title="标记读完">✅ 读完</button>`;
-                return `<div class="book-card" onclick="openBookDetail('${b.id}')" style="cursor:pointer;" title="点击查看详情">
+                return `<div class="book-card" onclick="openBookDetail('${b.id}')" style="--bc:${stColor};cursor:pointer;" title="点击查看详情">
                     <div class="book-card-head">
                         <div class="book-card-title">《${escapeHtml(b.title)}》</div>
                         <span class="book-status-chip" style="background:${stColor};">${stName}</span>
@@ -27767,7 +27903,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061422";
+        window.NIKO_VERSION = "202609061502";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
