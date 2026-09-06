@@ -1554,10 +1554,15 @@
         .pomo-face { display: flex; flex-direction: column; align-items: center; padding: 14px 0 8px; }
         .pomo-hg { width: 126px; border-radius: 26px; }
         .pomo-hg svg { width: 100%; display: block; overflow: visible; }
-        .pomo-glass { fill: none; stroke: #d7dce3; stroke-width: 2.4; stroke-linecap: round; }
-        body.dark-mode .pomo-glass { stroke: #4b5563; }
-        .pomo-plate { fill: #c9cfd8; }
-        body.dark-mode .pomo-plate { fill: #6b7280; }
+        .pomo-glass { fill: none; stroke: #c3cbd6; stroke-width: 2; stroke-linecap: round; }
+        body.dark-mode .pomo-glass { stroke: #59626f; }
+        .pomo-glass-fill { fill: url(#pomoGlass); stroke: none; }
+        .pomo-plate { fill: url(#pomoPlateG); }
+        body.dark-mode .pomo-plate { fill: url(#pomoPlateGDark); }
+        .pomo-pillar { fill: #b6bdc9; }
+        body.dark-mode .pomo-pillar { fill: #3a414d; }
+        .pomo-spec { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; opacity: .25; }
+        .pomo-spec.dim { opacity: .1; }
         .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 1px; color: #111827; margin-top: 2px; }
         body.dark-mode .pomo-time { color: #f9fafb; }
         .pomo-state { font-size: 12px; color: #f97316; margin-top: 2px; }
@@ -2201,6 +2206,33 @@
         .today-sec-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; white-space: nowrap; }
         body.dark-mode .today-sec-sub { color: #8f8fa3; }
         .today-sec-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
+        /* ===== 开机点灯（2026-09-06：一天一次，看板逐层点亮） ===== */
+        @keyframes igniteSec { 0% { opacity: 0; filter: brightness(.35) saturate(.4); transform: translateY(6px); } 60% { opacity: 1; filter: brightness(1.22); } 100% { opacity: 1; filter: none; transform: none; } }
+        @keyframes focusGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); } 40% { box-shadow: 0 0 0 4px rgba(249,115,22,.35); } }
+        /* ===== 本周底片 ===== */
+        .film-strip { display: flex; gap: 6px; }
+        .film-frame { flex: 1; min-width: 0; height: 58px; border-radius: 6px; background: #ececf2; border: 1px solid #d8d8e4; position: relative; padding: 8px 7px 5px; box-sizing: border-box; overflow: hidden; }
+        body.dark-mode .film-frame { background: #14141d; border-color: #2a2a3a; }
+        .film-frame::before, .film-frame::after { content: ''; position: absolute; left: 0; right: 0; height: 4px; background-image: repeating-linear-gradient(90deg, rgba(130,130,170,.55) 0 5px, transparent 5px 11px); }
+        .film-frame::before { top: 2px; }
+        .film-frame::after { bottom: 2px; }
+        .film-frame .ff-day { font-size: 9.5px; color: #8585a0; letter-spacing: 1px; }
+        .film-frame .ff-count { font-size: 15px; font-weight: 700; color: #3a3a52; margin-top: 1px; }
+        body.dark-mode .film-frame .ff-count { color: #e8e8f2; }
+        .film-frame .ff-label { font-size: 9px; color: #a0a0b8; white-space: nowrap; }
+        body.dark-mode .film-frame .ff-label { color: #55556e; }
+        .film-frame.future { opacity: .42; }
+        .film-frame.today { border-color: rgba(249,115,22,.6); box-shadow: 0 0 9px rgba(249,115,22,.22); }
+        @keyframes filmDevelop { 0% { opacity: .15; filter: brightness(2.6) blur(2px) sepia(.5); } 100% { opacity: 1; filter: none; } }
+        .film-frame.dev .ff-count { animation: filmDevelop 1.4s ease both; }
+        /* ===== 打烊小票 v2：逐行打印 + NIKO 手写附言 ===== */
+        @keyframes receiptLine { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+        .closing-receipt .rline { opacity: 0; }
+        .closing-receipt.print .rline { animation: receiptLine .5s ease both; }
+        .closing-ps { opacity: 0; margin-top: 8px; padding-top: 7px; border-top: 1px dashed #b9a888; font-size: 12px; font-style: italic; color: #8b5f4a; text-align: center; letter-spacing: .5px; }
+        body.dark-mode .closing-ps { color: #c9a86a; border-top-color: #3a3a4d; }
+        .closing-save { margin-top: 9px; font-size: 11px; color: #667eea; cursor: pointer; text-align: center; opacity: .85; }
+        .closing-save:hover { opacity: 1; text-decoration: underline; }
         /* 本周复盘：压缩成习惯头部行内的胶囊 chip（铁律10：禁止独占整行） */
         .weekly-chip {
             margin-left: auto; display: inline-flex; align-items: center;
@@ -9792,6 +9824,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                     <div class="garden-trees" id="gardenTrees"></div>
                 </section>
+                <section class="today-sec" id="filmStrip">
+                    <div class="today-sec-head">
+                        <span class="today-sec-title">🎞️ 本周底片</span>
+                        <span class="sec-badge" id="filmWeekBadge">0 格</span>
+                        <span class="today-sec-sub">拍下的每一天都会显影 · 周日收卷</span>
+                    </div>
+                    <div class="film-strip" id="filmStripRow"></div>
+                </section>
             </div>
 
             <!-- ===== 投喂设置弹窗（庭院自动驾驶） ===== -->
@@ -11873,20 +11913,33 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <svg viewBox="0 0 120 150" aria-hidden="true">
                         <defs>
                             <linearGradient id="pomoGlass" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stop-color="#f97316" stop-opacity=".10"/><stop offset="1" stop-color="#f97316" stop-opacity=".03"/>
+                                <stop offset="0" stop-color="#ffffff" stop-opacity=".10"/><stop offset="1" stop-color="#ffffff" stop-opacity=".02"/>
+                            </linearGradient>
+                            <linearGradient id="pomoPlateG" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#d4dae4"/><stop offset="1" stop-color="#a5adbb"/>
+                            </linearGradient>
+                            <linearGradient id="pomoPlateGDark" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#4d5563"/><stop offset="1" stop-color="#333a46"/>
                             </linearGradient>
                         </defs>
-                        <path class="pomo-glass-fill" d="M35,17 L85,17 L57,73 L63,73 L85,133 L35,133 L63,73 L57,73 Z" fill="url(#pomoGlass)" stroke="none"/>
+                        <rect class="pomo-pillar" x="26.5" y="14" width="3.5" height="122" rx="1.75"/>
+                        <rect class="pomo-pillar" x="90" y="14" width="3.5" height="122" rx="1.75"/>
+                        <path class="pomo-glass-fill" d="M36,20 C36,44 49,60 56,71 Q60,76 64,71 C71,60 84,44 84,20 Z"/>
+                        <path class="pomo-glass-fill" d="M36,130 C36,106 49,90 56,79 Q60,74 64,79 C71,90 84,106 84,130 Z"/>
                         <polygon id="pomoSandTop" points="" fill="#f97316" opacity=".92"/>
                         <polygon id="pomoSandBot" points="" fill="#f97316" opacity=".95"/>
-                        <line id="pomoStream" x1="60" y1="75" x2="60" y2="120" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" opacity="0" stroke-dasharray="3 4"/>
+                        <path id="pomoSandCrest" d="" fill="none" opacity=".95"/>
+                        <line id="pomoStream" x1="60" y1="77" x2="60" y2="120" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0" stroke-dasharray="2.5 4"/>
                         <g id="pomoStreamDots" opacity="0">
-                            <circle cx="60" cy="78" r="1.4" fill="#fdba74"/><circle cx="60" cy="88" r="1.2" fill="#fdba74"/><circle cx="60" cy="98" r="1.4" fill="#fdba74"/>
+                            <circle cx="60" cy="80" r="1.3" fill="#fdba74"/><circle cx="60" cy="89" r="1.1" fill="#fdba74"/><circle cx="60" cy="98" r="1.3" fill="#fdba74"/>
                         </g>
-                        <path d="M34,16 L52,68 Q56,73 56,78 Q56,83 52,88 L34,134" class="pomo-glass"/>
-                        <path d="M86,16 L68,68 Q64,73 64,78 Q64,83 68,88 L86,134" class="pomo-glass"/>
-                        <rect x="24" y="10" width="72" height="7" rx="3.5" class="pomo-plate"/>
-                        <rect x="24" y="133" width="72" height="7" rx="3.5" class="pomo-plate"/>
+                        <path d="M36,20 C36,44 49,60 56,71 Q60,76 64,71 C71,60 84,44 84,20" class="pomo-glass"/>
+                        <path d="M36,130 C36,106 49,90 56,79 Q60,74 64,79 C71,90 84,106 84,130" class="pomo-glass"/>
+                        <path d="M41,27 C41,44 48.5,55 53.5,64.5" class="pomo-spec"/>
+                        <path d="M79,103 C79,95 73.5,87.5 68.5,81" class="pomo-spec dim"/>
+                        <rect x="50.5" y="72" width="19" height="6" rx="3" class="pomo-plate"/>
+                        <rect x="20" y="9" width="80" height="7" rx="3.5" class="pomo-plate"/>
+                        <rect x="20" y="134" width="80" height="7" rx="3.5" class="pomo-plate"/>
                     </svg>
                 </div>
                 <div class="pomo-time" id="pomoTimeDisplay">25:00</div>
@@ -12880,8 +12933,62 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderClearSettle();
             renderBuddy();
             renderGarden();
+            renderFilmStrip();
+            boardIgnition();
             renderWeeklyEntry();
             renderCapsuleChip();
+        }
+
+        // ===== 开机点灯：每天第一次打开今日看板，逐层点亮（2026-09-06） =====
+        function boardIgnition() {
+            try {
+                const todayStr = formatDate(new Date());
+                if (safeStorage.get('niko_ignition_last') === todayStr) return;
+                safeStorage.set('niko_ignition_last', todayStr);
+                const brief = document.querySelector('#todayPage .cmd-brief');
+                const secs = Array.from(document.querySelectorAll('#todayPage .today-sec'));
+                const focus = document.querySelector('#todayPage .fp-focus');
+                [brief].concat(secs).forEach((el, i) => {
+                    if (!el) return;
+                    el.style.animation = 'igniteSec .8s ease ' + (i * 0.28) + 's both';
+                });
+                if (focus) focus.style.animation = 'focusGlow 1.5s ease ' + (0.3 + secs.length * 0.28) + 's both';
+                setTimeout(() => {
+                    [brief].concat(secs).forEach(el => { if (el) el.style.animation = ''; });
+                    if (focus) focus.style.animation = '';
+                }, 4500);
+            } catch (e) {}
+        }
+
+        // ===== 本周底片：一周七格，完成的事让底片显影（2026-09-06） =====
+        function renderFilmStrip() {
+            const row = document.getElementById('filmStripRow');
+            if (!row) return;
+            const now = new Date();
+            const todayStr = formatDate(now);
+            const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+            const pomoDays = {};
+            safeStorage.get('niko_pomodoro_logs', []).forEach(l => { pomoDays[l.date] = (pomoDays[l.date] || 0) + 1; });
+            let weekTotal = 0;
+            const frames = [0, 1, 2, 3, 4, 5, 6].map(i => {
+                const dt = new Date(mon); dt.setDate(mon.getDate() + i);
+                const ds = formatDate(dt);
+                const doneN = events.filter(e => e.status === 'done' && e.endDate === ds).length;
+                const habitN = Object.keys(habitDoneSet(ds)).length;
+                const cnt = doneN + habitN + (pomoDays[ds] || 0);
+                if (ds <= todayStr) weekTotal += cnt;
+                const cls = ds === todayStr ? 'today' : (ds > todayStr ? 'future' : '');
+                const dev = (ds === todayStr && cnt > 0) ? 'dev' : '';
+                const label = ds > todayStr ? '未曝光' : (cnt > 0 ? (ds === todayStr ? '显影中' : '已显影') : '空片');
+                return `<div class="film-frame ${cls} ${dev}" title="${ds}">
+                    <div class="ff-day">周${'一二三四五六日'[i]} · ${dt.getDate()}</div>
+                    <div class="ff-count">${cnt > 0 ? cnt + ' 件' : '·'}</div>
+                    <div class="ff-label">${label}</div>
+                </div>`;
+            }).join('');
+            row.innerHTML = frames;
+            const badge = document.getElementById('filmWeekBadge');
+            if (badge) badge.textContent = `本周 ${weekTotal} 件`;
         }
 
         // ===== 时间胶囊：到期便签今日裂开（铁律10：嵌入 cmd-brief 头部，不占行） =====
@@ -13775,6 +13882,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const now = new Date();
             const weekCn = '日一二三四五六'[now.getDay()];
             const tickets = Math.min(d.tomorrowCount || 0, 6);
+            const pomo = safeStorage.get('niko_pomodoro_logs', []).filter(l => l.date === d.todayStr);
+            const pomoMin = pomo.reduce((s, l) => s + (Number(l.minutes) || 0), 0);
+            const doneSet = habitDoneSet(d.todayStr);
+            const earnMin = (d.habits || []).filter(h => doneSet[h.id]).reduce((s, h) => s + (Number(h.rewardMin) || 0), 0);
+            const ps = d.habitAllDone ? '今天该浇的都浇了，好好休息。' : (d.todayDone.length ? `推进了 ${d.todayDone.length} 件，明天轻装上阵。` : (pomo.length ? `专注了 ${pomoMin} 分钟，沙没有白漏。` : '明天记得早点来开门。'));
             const ov = document.createElement('div');
             ov.id = 'closingOverlay';
             ov.innerHTML = `<div class="closing-card">
@@ -13783,25 +13895,49 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="closing-sign-wrap"><i class="closing-rope"></i><div class="closing-sign">本日打烊</div></div>
                 <div class="closing-sub">灯已熄 · 明天见</div>
                 <div class="closing-receipt">
-                    <div class="closing-receipt-head">今日结账</div>
-                    <div class="closing-line"><span>讨伐</span><i></i><b>${d.todayDone.length} 件</b></div>
-                    <div class="closing-line"><span>习惯</span><i></i><b>${d.habitDone}/${d.habits.length}</b></div>
-                    ${d.todayTasks.length ? `<div class="closing-line"><span>幸存</span><i></i><b>${d.todayTasks.length} 项</b></div>` : ''}
-                    <div class="closing-perf"></div>
+                    <div class="closing-receipt-head rline">今日结账</div>
+                    <div class="closing-line rline" style="animation-delay:.45s"><span>讨伐</span><i></i><b>${d.todayDone.length} 件</b></div>
+                    <div class="closing-line rline" style="animation-delay:.85s"><span>习惯</span><i></i><b>${d.habitDone}/${d.habits.length}</b></div>
+                    <div class="closing-line rline" style="animation-delay:1.25s"><span>番茄</span><i></i><b>${pomo.length} 个 · ${pomoMin} 分钟</b></div>
+                    <div class="closing-line rline" style="animation-delay:1.65s"><span>游戏时间</span><i></i><b>+${earnMin} 分钟</b></div>
+                    ${d.todayTasks.length ? `<div class="closing-line rline" style="animation-delay:2.05s"><span>幸存</span><i></i><b>${d.todayTasks.length} 项</b></div>` : ''}
+                    <div class="closing-perf rline" style="animation-delay:2.45s"></div>
+                    <div class="closing-ps rline" style="animation-delay:2.8s">— NIKO：${ps}</div>
                 </div>
+                <div class="closing-save" onclick="event.stopPropagation();saveReceiptToDiary()">🗂 把小票存进今天的日记</div>
                 ${d.tomorrowCount ? `<div class="closing-tickets">${'<i></i>'.repeat(tickets)}${d.tomorrowCount > 6 ? '<i class="draft"></i>' : ''}<span>明日期票 ×${d.tomorrowCount} 已备好</span></div>` : ''}
                 <div class="closing-tip">点击任意处重新开门</div>
             </div>`;
             document.body.appendChild(ov);
-            // 烛光序列：火苗亮 3.6 秒 → 吹熄（烟丝上升 + 全卡变暗 + 「灯已熄」浮现）
+            // 烛光序列：火苗亮 3.6 秒 → 吹熄（烟丝上升 + 全卡变暗 + 小票逐行打印）
             setTimeout(() => {
                 if (!ov.parentNode) return;
-                const candle = ov.querySelector('.closing-candle'), card = ov.querySelector('.closing-card');
+                const candle = ov.querySelector('.closing-candle'), card = ov.querySelector('.closing-card'), rc = ov.querySelector('.closing-receipt');
                 if (candle) candle.classList.add('out');
                 if (card) card.classList.add('dimmed');
+                if (rc) rc.classList.add('print');
             }, 3600);
             ov.onclick = () => ov.remove();
-            setTimeout(() => { if (ov.parentNode) ov.remove(); }, 14000);
+            setTimeout(() => { if (ov.parentNode) ov.remove(); }, 18000);
+        }
+        // 小票存进当天日记（去重：一天只存一张）
+        function saveReceiptToDiary() {
+            try {
+                const ov = document.getElementById('closingOverlay');
+                if (!ov) return;
+                const txt = ov.querySelector('.closing-receipt').innerText.trim();
+                const date = formatDate(new Date());
+                const entries = safeStorage.get('niko_diary_entries', []);
+                const stamp = '📋 打烊小票\n' + txt;
+                const dup = entries.find(x => x.date === date && x.content && x.content.includes('📋 打烊小票'));
+                if (dup) { showToast('今天的小票已经存过啦'); return; }
+                const e = entries.find(x => x.date === date);
+                if (e) { e.content = stamp + '\n\n' + (e.content || ''); e.updatedAt = Date.now(); }
+                else entries.push({ id: 'dia_' + Date.now(), date, content: stamp, mood: '', createdAt: Date.now(), updatedAt: Date.now() });
+                safeStorage.set('niko_diary_entries', entries);
+                if (typeof window.renderDiaryPage === 'function') { try { window.renderDiaryPage(); } catch (err) {} }
+                showToast('🗂 小票已存进今天的日记');
+            } catch (e) { showToast('存入失败：' + (e.message || e)); }
         }
 
         // ===== 习惯打卡 =====
@@ -26459,30 +26595,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             badge.textContent = n;
             badge.style.display = n ? 'flex' : 'none';
         }
-        // v2.13 沙量渲染：顶泡剩 (1-frac)，底泡堆 frac，运行中漏沙
+        // v2.14 沙量渲染：曲线球面玻璃内的沙体 + 圆顶沙堆
         function pomoRenderSand(frac, color) {
             const top = document.getElementById('pomoSandTop'), bot = document.getElementById('pomoSandBot');
+            const crest = document.getElementById('pomoSandCrest');
             const stream = document.getElementById('pomoStream'), dots = document.getElementById('pomoStreamDots');
             if (!top || !bot) return;
             top.setAttribute('fill', color); bot.setAttribute('fill', color);
+            if (crest) crest.setAttribute('fill', color);
             if (stream) stream.setAttribute('stroke', color);
             if (dots) dots.querySelectorAll('circle').forEach(c => c.setAttribute('fill', color));
-            const fx = y => 35 + (y - 17) / 56 * 22;
-            const fr = y => 85 - (y - 17) / 56 * 22;
+            const hwT = y => 4 + (75 - y) * 20 / 57;
+            const hwB = y => 4 + (y - 75) * 20 / 57;
             const r = 1 - frac;
             if (r <= 0.015) top.setAttribute('points', '');
             else {
-                const yT = 73 - 56 * r;
-                top.setAttribute('points', `60,73 ${fx(yT).toFixed(1)},${yT.toFixed(1)} ${fr(yT).toFixed(1)},${yT.toFixed(1)}`);
+                const yT = Math.max(20, 75 - 57 * r);
+                const hw = hwT(yT);
+                top.setAttribute('points', `60,76 ${(60 - hw).toFixed(1)},${yT.toFixed(1)} ${(60 + hw).toFixed(1)},${yT.toFixed(1)}`);
             }
-            if (frac <= 0.015) bot.setAttribute('points', '');
+            if (frac <= 0.015) { bot.setAttribute('points', ''); if (crest) crest.setAttribute('d', ''); }
             else {
-                const yB = Math.max(91, 133 - 56 * frac);
-                const bl = 57 - (yB - 87) / 56 * 22, br = 63 + (yB - 87) / 56 * 22;
-                bot.setAttribute('points', `${bl.toFixed(1)},${yB.toFixed(1)} ${br.toFixed(1)},${yB.toFixed(1)} 85,133 35,133`);
+                const yB = Math.min(126, 130 - 57 * frac);
+                const hw = hwB(yB);
+                bot.setAttribute('points', `${(60 - hw).toFixed(1)},${yB.toFixed(1)} ${(60 + hw).toFixed(1)},${yB.toFixed(1)} 84,130 36,130`);
+                if (crest) crest.setAttribute('d', `M ${(60 - hw).toFixed(1)},${yB.toFixed(1)} Q 60,${(yB - 4).toFixed(1)} ${(60 + hw).toFixed(1)},${yB.toFixed(1)} Z`);
             }
             const on = !!pomoRunning && frac > 0 && frac < 1;
-            if (stream) { stream.setAttribute('opacity', on ? .8 : 0); stream.setAttribute('y2', String(Math.max(104, 133 - 56 * frac - 5))); }
+            if (stream) {
+                const ySurf = frac <= 0.015 ? 126 : Math.min(126, 130 - 57 * frac);
+                stream.setAttribute('opacity', on ? .85 : 0);
+                stream.setAttribute('y2', String(Math.max(100, ySurf - 4)));
+            }
             if (dots) dots.setAttribute('opacity', on ? 1 : 0);
         }
         function renderPomoFace() {
@@ -27049,7 +27193,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061114";
+        window.NIKO_VERSION = "202609061226";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
