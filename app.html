@@ -2007,7 +2007,22 @@
             .garden-say { display:none; }
             .garden-term { display:none; }
         }
-        /* ===== 六树庭院 · 微仪式浮层（柱色光晕 --gc 由 JS 注入 modal 根上） ===== */
+        /* 满开预览（2026-09-06）：看看六树最终的美 */
+        .garden-tree-card { position: relative; }
+        .garden-preview-chip.on { background: rgba(244,114,182,.16); border-color: rgba(244,114,182,.55); color: #ec4899; }
+        body.dark-mode .garden-preview-chip.on { color: #f9a8d4; }
+        .garden-tree-card.preview-card { outline: 1.5px dashed rgba(236,72,153,.45); outline-offset: -3px; }
+        .garden-tree-card.preview-card::after { content: '满开预览'; position: absolute; top: 4px; right: 5px; font-size: 8.5px; color: #ec4899; background: rgba(244,114,182,.12); border: 1px solid rgba(236,72,153,.35); border-radius: 99px; padding: 1px 5px; pointer-events: none; }
+        /* 浇灌瞬间：整卡盛放闪光（花瓣由 nikoSpark 负责） */
+        .garden-tree-card.garden-bloom-flash { animation: gardenBloomFlash 1.05s ease; }
+        @keyframes gardenBloomFlash {
+            0% { box-shadow: 0 0 0 0 rgba(244, 114, 182, 0); }
+            30% { box-shadow: 0 0 18px 5px rgba(244, 114, 182, .4); transform: translateY(-2px); }
+            100% { box-shadow: 0 0 0 0 rgba(244, 114, 182, 0); }
+        }
+        @media (prefers-reduced-motion: reduce) { .garden-tree-card.garden-bloom-flash { animation: none; } }
+
+        /* ===== 微仪式浮层（柱色光晕 --gc 由 JS 注入 modal 根上） ===== */
         .garden-ritual-modal { width: min(92vw, 380px); max-height: 82vh; overflow-y: auto; border-radius: 16px; position: relative; }
         .gr-halo { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); width: 200px; height: 72px; border-radius: 50%; background: var(--gc, #888); opacity: .16; filter: blur(32px); pointer-events: none; }
         .gr-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -8327,6 +8342,20 @@
         @media (prefers-reduced-motion: reduce) {
             .kb-firefly { display: none; }
         }
+        /* ===== 蛛网封印（2026-09-06）：超30天未复习的卡片结蛛丝，复习清一层，全清散网 ===== */
+        #kbList { position: relative; }
+        #kbWebSvg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; overflow: visible; }
+        .kb-web-strand { fill: none; stroke: rgba(148,163,184,.55); stroke-width: 1.1; stroke-dasharray: 3 4; animation: kbWebIn .8s ease both; }
+        .kb-web-strand:nth-child(2n) { animation-delay: .12s; }
+        .kb-web-strand:nth-child(3n) { animation-delay: .24s; }
+        @keyframes kbWebIn { from { opacity: 0; stroke-dashoffset: 40; } to { opacity: 1; stroke-dashoffset: 0; } }
+        .kb-web-hub { fill: rgba(148,163,184,.85); }
+        .kb-card.kb-webbed { outline: 1.5px dashed rgba(148,163,184,.55); outline-offset: -4px; filter: saturate(.7); }
+        .kb-card.kb-webbed::after { content: '🕸'; position: absolute; top: 6px; right: 8px; font-size: 11px; opacity: .55; pointer-events: none; }
+        body.dark-mode .kb-web-strand { stroke: rgba(148,163,184,.38); }
+        body.dark-mode .kb-card.kb-webbed { outline-color: rgba(148,163,184,.4); }
+        .kb-web-scatter { animation: kbWebScatter 1.1s ease-in both; }
+        @keyframes kbWebScatter { 0% { opacity: 1; } 100% { opacity: 0; transform: translateY(26px) rotate(4deg); } }
 /* ===== 读书看板专属CSS ===== */
         /* ===== 读书看板 · 琥珀书房（对齐今日看板渐变玻璃语言，禁衬线字体） ===== */
         .book-view-tabs {
@@ -9283,6 +9312,22 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             .member-card { flex-direction: column; align-items: flex-start; }
             .member-card-meta { width: 100%; justify-content: space-between; }
         }
+        /* ===== 订阅牧场（2026-09-06）：每个订阅一只小生物。充足=打瞌睡，临近到期=躁动，过期=饿了 ===== */
+        .member-card-icon.has-pet { background: transparent; }
+        .member-pet { width: 100%; height: 100%; display: block; }
+        .member-pet .mp-wrap { transform-origin: 18px 26px; }
+        .member-pet.wrap-stir .mp-wrap { animation: petWiggle 3.4s ease-in-out infinite; }
+        .member-pet.wrap-restless .mp-wrap { animation: petWiggle 1.5s ease-in-out infinite; }
+        .member-pet.wrap-hungry .mp-wrap { animation: petHungry .9s ease-in-out infinite; }
+        @keyframes petWiggle { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+        @keyframes petHungry { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-2.5px) rotate(3deg); } }
+        .member-pet .zzz { animation: petZzz 2.6s ease-in-out infinite; }
+        @keyframes petZzz { 0%, 100% { opacity: .15; transform: translateY(0); } 50% { opacity: .85; transform: translateY(-2px); } }
+        .member-pet .mp-alert { animation: petAlert 1.5s ease-in-out infinite; }
+        @keyframes petAlert { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+        @media (prefers-reduced-motion: reduce) {
+            .member-pet.wrap-stir .mp-wrap, .member-pet.wrap-restless .mp-wrap, .member-pet.wrap-hungry .mp-wrap, .member-pet .zzz, .member-pet .mp-alert { animation: none; }
+        }
 /* ===== 游戏时间奖励专属CSS ===== */
         .gt-balance-card {
             background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
@@ -10033,6 +10078,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     .tag-color-pick { flex-wrap: nowrap; overflow-x: auto; }
     .tag-cloud { max-height: 108px; }
 }
+        /* ===== 侧边栏花园（2026-09-06）：常用板块门牌长叶，久不去枯 ===== */
+        #mainNavSection .nav-item[data-nav] { position: relative; }
+        .nav-leaf { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; pointer-events: none; opacity: .92; }
+        .nav-leaf svg { display: block; width: 100%; height: 100%; }
+        .nav-leaf.withered { opacity: .4; filter: grayscale(.85); }
+        .nav-leaf.bloom-pop { animation: navLeafPop .55s cubic-bezier(.34,1.56,.64,1); }
+        @keyframes navLeafPop { 0% { transform: translateY(-50%) scale(.2) rotate(-40deg); opacity: 0; } 100% { transform: translateY(-50%) scale(1) rotate(0deg); opacity: .92; } }
     </style>
 </head>
 <body>
@@ -10237,6 +10289,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <span class="garden-term" id="gardenTerm"></span>
                         <span class="today-sec-sub">六个三十秒的小仪式 · 花开于九十</span>
                         <span class="garden-feed-chip" onclick="gardenOpenFeed()" title="把柱子交给习惯：打卡当天自动浇灌">🫗 投喂</span>
+                        <span class="garden-feed-chip garden-preview-chip" id="gardenPreviewChip" onclick="gardenTogglePreview()" title="看看六树全部满开（100 分）时庭院的样子——那就是它们最终的美">🌸 满开</span>
                         <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
                     </div>
                     <div class="garden-trees" id="gardenTrees"></div>
@@ -10419,6 +10472,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <button class="nav-btn" onclick="navigateWeeks(1)">›</button>
                 <button class="today-btn" onclick="goToday()">Today</button>
                 <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示周数（2/3/4 周循环）" style="min-width:44px;">2周</button>
+                <div class="display-setting" title="你的流程周期从哪天开始：任务量/副本/底片全部跟随">
+                    <label>周起始</label>
+                    <select id="weekStartSel" onchange="changeWeekStart()" style="background:transparent;border:1px solid rgba(128,138,158,.3);border-radius:6px;color:inherit;font-size:11.5px;padding:2px 4px;cursor:pointer;">
+                        <option value="0">周日</option><option value="1">周一</option><option value="2">周二</option><option value="3">周三</option><option value="4">周四</option><option value="5">周五</option><option value="6">周六</option>
+                    </select>
+                </div>
                 <div class="display-setting">
                     <label>单日显示</label>
                     <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
@@ -10429,10 +10488,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div id="planContentArea" class="calendar-main" style="flex:1;overflow:hidden;display:flex;gap:12px;">
                 <div id="calendarWrapper" class="calendar-wrapper">
                     <div class="calendar-scroll-pane">
-                        <div class="week-header">
-                            <div class="week-header-cell">周一</div><div class="week-header-cell">周二</div><div class="week-header-cell">周三</div>
-                            <div class="week-header-cell">周四</div><div class="week-header-cell">周五</div><div class="week-header-cell">周六</div><div class="week-header-cell">周日</div>
-                        </div>
+                        <div class="week-header" id="weekHeaderRow"></div>
                         <div class="four-week-grid" id="fourWeekGrid"></div>
                     </div>
                     <!-- 闪捕条 + 停车场：随手输入回车即捕获，带日期自动排期，无日期入停车场待拖 -->
@@ -13071,7 +13127,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
 
         // ========== 日期工具 & 路由 ==========
-        function getMonday(d) { const date = new Date(d); const day = date.getDay(); const diff = date.getDate() - day + (day === 0 ? -6 : 1); return new Date(date.setDate(diff)); }
+        function getMonday(d) { const date = new Date(d); const ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1; const diff = (date.getDay() - ws + 7) % 7; return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff); }
         function addDays(date, days) { const result = new Date(date); result.setDate(result.getDate() + days); return result; }
         function formatDate(date) { const y = date.getFullYear(); const m = String(date.getMonth() + 1).padStart(2, '0'); const d = String(date.getDate()).padStart(2, '0'); return `${y}-${m}-${d}`; }
         function isSameDay(d1, d2) { return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate(); }
@@ -13155,6 +13211,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchPage(page) {
             if (typeof navSortMode !== 'undefined' && navSortMode) return; // 排序模式中不切换页面
             currentPage = page;
+            try { if (typeof navGardenVisit === 'function') navGardenVisit(page); } catch (e) {}
             document.querySelectorAll('.sidebar-left .nav-item[data-nav]').forEach(item => {
                 const key = item.getAttribute('data-nav');
                 // 文案库/梗文化已合并进热点板块：切到 copy/meme 时「热点」保持高亮
@@ -13193,6 +13250,54 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 render();
             }
         }
+
+        // ===== 每周起始日（2026-09-06）：用户流程周期 = 周四开始。niko_week_start: 0=周日..6=周六，全局周计算统一走这里 =====
+        function nikoWeekStartDay() { const v = Number(safeStorage.get('niko_week_start', 4)); return (v >= 0 && v <= 6) ? v : 4; }
+
+        // ===== 侧边栏花园（2026-09-06）：门牌上的使用痕迹。≥2 次冒芽，≥8 双叶，≥20 三叶+小花；21 天不去叶枯 =====
+        function navGardenState() { return safeStorage.get('niko_nav_garden', {}); }
+        function navGardenStageOf(rec) {
+            if (!rec || !rec.c) return 0;
+            const idle = Math.round((Date.now() - new Date(rec.t + 'T00:00:00').getTime()) / 86400000);
+            if (rec.c >= 2 && idle > 21) return -1;   // 枯萎
+            return rec.c >= 20 ? 3 : (rec.c >= 8 ? 2 : 1);
+        }
+        function navLeafSVG(stage) {
+            const L = '#4ade80', D = '#22c55e', F = '#f9a8d4';
+            const leaf = (x, y, r, flip) => `<path d="M ${x} ${y} q ${(flip ? -1 : 1) * r * .9} ${-r * 1.15} ${(flip ? -1 : 1) * r * 1.7} ${-r * .25} q ${-r * .25} ${r * 1.2} ${(flip ? -1 : 1) * r * 1.7} ${r * .25} Z" fill="${D}"/>`;
+            let s = `<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">`;
+            if (stage === 1) s += leaf(10, 14, 4);
+            else if (stage === 2) s += leaf(8, 15, 4) + leaf(12, 14, 4, true);
+            else if (stage === 3) s += leaf(7, 15, 4.4) + leaf(13, 14, 4.4, true) + leaf(10, 12, 3.6) + `<circle cx="10" cy="5.2" r="1.7" fill="${F}"/><circle cx="10" cy="5.2" r=".7" fill="#facc15"/>`;
+            s += `</svg>`;
+            return s;
+        }
+        function navGardenApply(popKey) {
+            const g = navGardenState();
+            document.querySelectorAll('#mainNavSection .nav-item[data-nav]').forEach(item => {
+                const key = item.getAttribute('data-nav');
+                const stage = navGardenStageOf(g[key]);
+                let leaf = item.querySelector('.nav-leaf');
+                if (stage === 0) { if (leaf) leaf.remove(); return; }
+                if (!leaf) { leaf = document.createElement('span'); leaf.className = 'nav-leaf'; item.appendChild(leaf); }
+                leaf.classList.toggle('withered', stage === -1);
+                leaf.title = stage === -1 ? '很久没来了，叶子枯了' : `来过 ${g[key].c} 次的小苗`;
+                leaf.innerHTML = navLeafSVG(stage === -1 ? 2 : stage);
+                if (popKey && key === popKey) { leaf.classList.remove('bloom-pop'); void leaf.offsetWidth; leaf.classList.add('bloom-pop'); }
+            });
+        }
+        function navGardenVisit(page) {
+            const g = navGardenState();
+            const before = navGardenStageOf(g[page]);
+            const rec = g[page] || { c: 0, t: '' };
+            rec.c = (Number(rec.c) || 0) + 1;
+            rec.t = new Date().toISOString().slice(0, 10);
+            g[page] = rec;
+            safeStorage.set('niko_nav_garden', g);
+            const after = navGardenStageOf(rec);
+            navGardenApply(after !== before && after > 0 ? page : null);
+        }
+        setTimeout(function () { try { navGardenApply(); } catch (e) {} }, 900);
 
         // 手机端「⋯ 更多」浮层
         function toggleNavMore(e) {
@@ -13442,6 +13547,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function render() {
             if (typeof renderPlanFocusStrip === 'function') { try { renderPlanFocusStrip(); } catch (e) {} } // v2.10 计划看板专注林地（图例行内）
+            if (currentPage === 'plan' && currentView === 'calendar') { if (typeof renderWeekHeader === 'function') { try { renderWeekHeader(); } catch (e) {} } } // 每周起始日：动态表头
             if (currentPage === 'today') renderTodayPage();
             else if (currentPage === 'plan') {
                 if (currentView === 'calendar') renderPlanPage();
@@ -13484,30 +13590,42 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } catch (e) {}
         }
 
-        // ===== 本周底片：一周七格，完成的事让底片显影（2026-09-06） =====
+        // ===== 本周底片：一周七格，完成的事让底片显影（2026-09-06 升级：周起点跟随自定义周期；每格显影出「干了什么」） =====
         function renderFilmStrip() {
             const row = document.getElementById('filmStripRow');
             if (!row) return;
             const now = new Date();
             const todayStr = formatDate(now);
-            const mon = new Date(now); mon.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+            const mon = getMonday(now);
             const pomoDays = {};
             safeStorage.get('niko_pomodoro_logs', []).forEach(l => { pomoDays[l.date] = (pomoDays[l.date] || 0) + 1; });
             let weekTotal = 0;
             const frames = [0, 1, 2, 3, 4, 5, 6].map(i => {
                 const dt = new Date(mon); dt.setDate(mon.getDate() + i);
                 const ds = formatDate(dt);
-                const doneN = events.filter(e => e.status === 'done' && e.endDate === ds).length;
-                const habitN = Object.keys(habitDoneSet(ds)).length;
-                const cnt = doneN + habitN + (pomoDays[ds] || 0);
+                const doneN = events.filter(e => e.status === 'done' && e.endDate === ds);
+                const habitIds = Object.keys(habitDoneSet(ds));
+                const cnt = doneN.length + habitIds.length + (pomoDays[ds] || 0);
                 if (ds <= todayStr) weekTotal += cnt;
                 const cls = ds === todayStr ? 'today' : (ds > todayStr ? 'future' : '');
                 const dev = (ds === todayStr && cnt > 0) ? 'dev' : '';
-                const label = ds > todayStr ? '未曝光' : (cnt > 0 ? (ds === todayStr ? '显影中' : '已显影') : '空片');
-                return `<div class="film-frame ${cls} ${dev}" title="${ds}">
-                    <div class="ff-day">周${'一二三四五六日'[i]} · ${dt.getDate()}</div>
+                // 显影出内容：格内直接亮出干了什么（最多 2 件），悬停看全量
+                const names = [
+                    ...doneN.slice(0, 2).map(e => e.title || '任务'),
+                    ...habitIds.slice(0, 2).map(hid => { const h = habitList().find(x => x.id === hid); return h ? (h.icon || '🎯') + h.name : null; }).filter(Boolean),
+                    ...(pomoDays[ds] ? ['🍅 ×' + pomoDays[ds]] : [])
+                ];
+                const tipNames = [
+                    ...doneN.map(e => '✓ ' + (e.title || '任务')),
+                    ...habitIds.map(hid => { const h = habitList().find(x => x.id === hid); return h ? '✓ ' + (h.icon || '🎯') + h.name : null; }).filter(Boolean),
+                    ...(pomoDays[ds] ? ['🍅 专注 ×' + pomoDays[ds]] : [])
+                ];
+                const label = ds > todayStr ? '未曝光' : (cnt > 0 ? (ds === todayStr ? '显影中' : (names[0] || '已显影')) : '空片');
+                const tip = ds > todayStr ? ds + ' · 还没拍到' : (tipNames.length ? ds + '\n' + tipNames.join('\n') : ds + ' · 空片，什么也没拍下');
+                return `<div class="film-frame ${cls} ${dev}" title="${escapeHtml(tip)}">
+                    <div class="ff-day">周${'一二三四五六日'[dt.getDay()]} · ${dt.getDate()}</div>
                     <div class="ff-count">${cnt > 0 ? cnt + ' 件' : '·'}</div>
-                    <div class="ff-label">${label}</div>
+                    <div class="ff-label">${escapeHtml(label)}</div>
                 </div>`;
             }).join('');
             row.innerHTML = frames;
@@ -13882,13 +14000,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const sc = st.score[p.key] || 0;
                 const done = st.watered[p.key] === today;
                 const autoFed = done && st.autoFed && st.autoFed[p.key] === today;
+                // 满开预览：树按 100 分绘制（数据不动，纯预览）
+                const drawSc = gardenPreviewAll ? 100 : sc;
                 let act;
-                if (autoFed) {
+                if (gardenPreviewAll) act = '👁 预览 · 满开姿态';
+                else if (autoFed) {
                     const hh = habitList().find(h => h.id === (st.feedMap || {})[p.key]);
                     act = `🌱 由「${hh ? escapeHtml(hh.name) : '习惯'}」投喂`;
                 } else act = done ? '✓ 今日已浇灌' : p.ritual.icon + ' ' + p.ritual.act;
-                return `<div class="garden-tree-card ${done ? 'done-card' : ''} ${sc < 30 ? 'withered-card' : ''}" data-key="${p.key}" style="--gc:${p.c}" title="${p.name} · ${p.ritual.act}">
-                    ${gardenTreeSVG(p, sc, done)}
+                return `<div class="garden-tree-card ${done ? 'done-card' : ''} ${sc < 30 ? 'withered-card' : ''} ${gardenPreviewAll ? 'preview-card' : ''}" data-key="${p.key}" style="--gc:${p.c}" title="${p.name} · ${p.ritual.act}">
+                    ${gardenTreeSVG(p, drawSc, done)}
                     <span class="garden-name-row"><span class="garden-dot"></span><span class="garden-name">${p.name}</span><span class="garden-score">${sc}</span></span>
                     <span class="garden-bar"><i style="width:${sc}%"></i></span>
                     <span class="garden-act">${act}</span>
@@ -13904,6 +14025,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             const avg = document.getElementById('gardenAvg');
             if (avg) avg.textContent = Math.round(GARDEN_PILLARS.reduce((a, p) => a + (st.score[p.key] || 0), 0) / GARDEN_PILLARS.length);
+        }
+        // ===== 满开预览（2026-09-06）：看看六树最终的美。8 秒自动收回，数据不动 =====
+        let gardenPreviewAll = false;
+        let gardenPreviewTimer = null;
+        function gardenTogglePreview() {
+            gardenPreviewAll = !gardenPreviewAll;
+            const chip = document.getElementById('gardenPreviewChip');
+            if (chip) chip.classList.toggle('on', gardenPreviewAll);
+            clearTimeout(gardenPreviewTimer);
+            renderGarden();
+            if (gardenPreviewAll) {
+                if (typeof showToast === 'function') showToast('🌸 满开预览 · 花开于九十，这是一百分的庭院');
+                gardenPreviewTimer = setTimeout(() => { if (gardenPreviewAll) gardenTogglePreview(); }, 8000);
+            }
         }
         // ===== 微仪式浮层（点树卡打开，完成动作才算浇灌） =====
         let gardenRitualCtx = null;   // { key, cardEl }
@@ -14023,6 +14158,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     drop.className = 'garden-water-anim';
                     c.cardEl.appendChild(drop);
                     setTimeout(() => drop.remove(), 900);
+                    // 盛放闪光：每次浇灌让树闪一下它满开时的姿态预感
+                    c.cardEl.classList.add('garden-bloom-flash');
+                    setTimeout(() => c.cardEl.classList.remove('garden-bloom-flash'), 1100);
                     if (typeof nikoSpark === 'function') nikoSpark(c.cardEl, p.ritual.spark, p.c);
                 }
                 var cross90 = old < 90 && st.score[key] >= 90;
@@ -15247,6 +15385,31 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         })();
 // ===== 计划看板专属JS =====
 
+        // ===== 每周起始日（2026-09-06）：动态表头 + 切换即全局重算（任务量/本周副本/底片全跟随） =====
+        function renderWeekHeader() {
+            const row = document.getElementById('weekHeaderRow');
+            if (!row) return;
+            const names = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            let html = '';
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(currentWeekStart); d.setDate(currentWeekStart.getDate() + i);
+                html += `<div class="week-header-cell">${names[d.getDay()]}</div>`;
+            }
+            row.innerHTML = html;
+            const sel = document.getElementById('weekStartSel');
+            if (sel && Number(sel.value) !== nikoWeekStartDay()) sel.value = String(nikoWeekStartDay());
+        }
+        function changeWeekStart() {
+            const sel = document.getElementById('weekStartSel');
+            if (!sel) return;
+            const v = Number(sel.value);
+            if (!(v >= 0 && v <= 6)) return;
+            safeStorage.set('niko_week_start', v);
+            currentWeekStart = getMonday(new Date());
+            render();
+            if (typeof showToast === 'function') showToast(`📅 每周从周${'日一二三四五六'[v]}开始 · 本周任务量/副本已按新周期结算`);
+        }
+
         // 日历显示周数：2/3/4 周循环切换（默认 2 周省空间）；持久化到 localStorage
         const _savedWeeks = safeStorage.get('niko_cal_weeks', 2);
         let CAL_WEEKS = [2, 3, 4].includes(_savedWeeks) ? _savedWeeks : 2;
@@ -15782,7 +15945,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const box = document.getElementById('raidWall');
             if (!box) return;
             const now = new Date();
-            const monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+            const monday = getMonday(now);
             const sunday = addDays(monday, 6);
             const weekKey = 'W' + formatDate(monday);
             const weekTasks = events.filter(e => !(e.endDate < formatDate(monday) || e.startDate > formatDate(sunday)));
@@ -20817,7 +20980,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const last = safeStorage.get(NB_SWEEP_KEY, '');
             if (last === today) return false;
             const day = now.getDay();
-            const windowOpen = (day === 0 && now.getHours() >= 20) || day === 1;   // 周日晚 20 点后 & 周一兜底
+            // 收巡窗口跟随自定义周周期：周起始前一天 20 点后 & 周起始日当天兜底（默认周四起 → 周三晚+周四）
+            const _ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1;
+            const _prev = (_ws + 6) % 7;
+            const windowOpen = (day === _prev && now.getHours() >= 20) || day === _ws;
             if (!windowOpen) return false;
             safeStorage.set(NB_SWEEP_KEY, today);
             if (last && (new Date(today + 'T00:00:00') - new Date(last + 'T00:00:00')) < 6 * 86400000) return false;   // 本周已巡过
@@ -21126,13 +21292,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (stats) stats.textContent = `共 ${knowledge.length} 条 · 当前显示 ${list.length} 条` + KB_PARA.map(p => ` · ${p.label.replace(/^[^ ]+ /, '')} ${knowledge.filter(x => x.para === p.key).length}`).join('');
             if (!list.length) {
                 box.innerHTML = `<div class="kb-empty">${knowledge.length ? '没有匹配的知识条目' : '知识库还是空的——各板块看到好内容点「📥 存入知识库」，或这里点「＋ 新增」写第一条'}</div>`;
+                if (typeof drawKbWeb === 'function') requestAnimationFrame(() => drawKbWeb());
                 return;
             }
             box.innerHTML = list.map(it => {
                 const paraColor = getKbParaColor(it.para);
                 const tags = (it.tags || []).slice(0, 4).map(t => `<span class="kb-tag">#${escapeHtml(t)}</span>`).join('');
                 const isQuote = !!(it.source && ['日记', '便签', '读书笔记'].includes(it.source.from));
-                return `<div class="kb-card${it.pinned ? ' pinned' : ''}${isQuote ? ' kb-quote' : ''}" style="--kc:${paraColor};" onclick="openKbDetail('${it.id}')">
+                return `<div class="kb-card${it.pinned ? ' pinned' : ''}${isQuote ? ' kb-quote' : ''}" data-kb-id="${it.id}" style="--kc:${paraColor};" onclick="openKbDetail('${it.id}')">
                     <span class="kb-ribbon"></span>
                     <div class="kb-card-top">
                         <span class="kb-badge kb-badge-para" style="color:${paraColor};">${getKbParaLabel(it.para)}</span>
@@ -21151,6 +21318,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                 </div>`;
             }).join('');
+            if (typeof drawKbWeb === 'function') requestAnimationFrame(() => drawKbWeb());
         }
         // 新手引导：默认显示，收起后可随时点顶栏「🧭 指南」重开
         function kbRenderGuide() {
@@ -21569,6 +21737,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             else kbReviewStats.easy++;
             kbReviewIdx++;
             renderKbReview();
+            if (typeof drawKbWeb === 'function') setTimeout(() => { try { drawKbWeb(); } catch (e) {} }, 80);
         }
         function kbJumpFrom() {
             const it = knowledge.find(x => x.id === kbDetailId);
@@ -21969,6 +22138,63 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }, 10);
         });
         document.addEventListener('mousedown', (e) => { if (kbInkBubble && !kbInkBubble.contains(e.target)) kbInkHide(); });
+        // ===== 蛛网封印（2026-09-06）：超30天没复习的卡之间结蛛丝；复习一张清一层；全清散网 =====
+        let kbWebPrevStale = null;
+        function kbStaleIds() {
+            const now = Date.now(), TH = 30 * 86400000;
+            return knowledge.filter(it => {
+                const st = it.reviewState || {};
+                if (st.reps > 0 && st.lastReviewedAt) return now - new Date(st.lastReviewedAt).getTime() > TH;
+                const base = it.createdAt || it.updatedAt;
+                return base ? (now - new Date(base).getTime() > TH) : false;
+            }).map(it => it.id);
+        }
+        function drawKbWeb() {
+            const box = document.getElementById('kbList');
+            if (!box) return;
+            const stale = kbStaleIds().filter(id => box.querySelector(`.kb-card[data-kb-id="${id}"]`));
+            // 清掉上一轮的卡片封印标记
+            box.querySelectorAll('.kb-card.kb-webbed').forEach(el => el.classList.remove('kb-webbed'));
+            let svg = document.getElementById('kbWebSvg');
+            if (stale.length < 2) {
+                if (svg) {
+                    svg.classList.add('kb-web-scatter');
+                    const dead = svg; setTimeout(() => dead.remove(), 1200);
+                }
+                if (kbWebPrevStale !== null && kbWebPrevStale >= 2 && stale.length < 2 && typeof showToast === 'function') showToast('🕸 蛛网散尽 · 这一页知识都醒着');
+                kbWebPrevStale = stale.length;
+                return;
+            }
+            if (!svg) {
+                svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.id = 'kbWebSvg';
+                box.appendChild(svg);
+            }
+            svg.classList.remove('kb-web-scatter');
+            const b = box.getBoundingClientRect();
+            svg.setAttribute('width', box.scrollWidth);
+            svg.setAttribute('height', box.scrollHeight);
+            const pts = stale.slice(0, 6).map(id => {
+                const el = box.querySelector(`.kb-card[data-kb-id="${id}"]`);
+                el.classList.add('kb-webbed');
+                const r = el.getBoundingClientRect();
+                return { x: r.left - b.left + r.width / 2, y: r.top - b.top + r.height / 2 };
+            });
+            let inner = '';
+            for (let i = 0; i < pts.length; i++) {
+                for (let j = i + 1; j < pts.length; j++) {
+                    const a = pts[i], c = pts[j];
+                    const mx = (a.x + c.x) / 2, my = (a.y + c.y) / 2 + 16;
+                    inner += `<path class="kb-web-strand" d="M ${a.x.toFixed(1)} ${a.y.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)} ${c.x.toFixed(1)} ${c.y.toFixed(1)}"/>`;
+                }
+            }
+            pts.forEach(p => { inner += `<circle class="kb-web-hub" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.2"/>`; });
+            svg.innerHTML = inner;
+            kbWebPrevStale = stale.length;
+        }
+        (function kbWebResize() {
+            let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { if (typeof drawKbWeb === 'function') drawKbWeb(); }, 240); });
+        })();
 // ===== 读书看板 =====
         const BOOK_SEED_VERSION = 'v2026-08-18';
         const BOOK_CATEGORIES = ['营销根基', '创意方法', '思维升级', '习惯养成', '行业前沿'];
@@ -22820,11 +23046,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 document.getElementById('bookCheckinBtn').textContent = todayLog ? '🔄 更新打卡' : '✅ 打卡';
             }
 
-            // 本周 7 天（周一起）
+            // 本周 7 天（跟随自定义周起始，默认周四）
             const monday = new Date(); {
-                const day = monday.getDay();
-                const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
-                monday.setDate(diff);
+                const _ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1;
+                const diff = (monday.getDay() - _ws + 7) % 7;
+                monday.setDate(monday.getDate() - diff);
             }
             const fmt = (dd) => dd.getFullYear() + '-' + String(dd.getMonth() + 1).padStart(2, '0') + '-' + String(dd.getDate()).padStart(2, '0');
             const dows = ['一', '二', '三', '四', '五', '六', '日'];
@@ -23389,9 +23615,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // ===== 本周心情回顾（有温度的周报，全部基于真实日记数据）=====
         function diaryWeekRange() {
             const now = new Date();
-            const day = now.getDay();
-            const diff = now.getDate() - day + (day === 0 ? -6 : 1);  // 本周一
-            const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
+            const _ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1;  // 跟随自定义周起始（默认周四）
+            const diff = (now.getDay() - _ws + 7) % 7;
+            const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - diff);
             return { start: diaryFmt(mon), end: diaryTodayStr() };
         }
         function renderDiaryWeekReview() {
@@ -25287,8 +25513,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
                 const altTip = memberAlternative(m.name);
                 const costTip = memberCostTip(m);
+                const pet = memberPetSVG(m, m.isLifetime ? 'life' : dl);
                 return `<div class="member-card">
-                    <div class="member-card-icon">${m.name ? escapeHtml(m.name).slice(0, 1) : '👤'}</div>
+                    <div class="member-card-icon has-pet" title="${pet.tip}">${pet.svg}</div>
                     <div class="member-card-main">
                         <div class="member-card-name">${escapeHtml(m.name || '未命名')} ${statusBadge}${m.startDate ? '<span style="font-size:11px;color:#bbb;font-weight:400;">' + escapeHtml(m.startDate) + ' 起</span>' : ''}</div>
                         ${m.note ? `<div class="member-card-note">${escapeHtml(m.note)}</div>` : ''}
@@ -25308,6 +25535,49 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 </div>`;
             }).join('');
             box.innerHTML = rows;
+        }
+
+        // ===== 订阅牧场（2026-09-06）：每个订阅一只小生物（名字哈希定色相） =====
+        // 状态：life=永生星灵 / >30天=打瞌睡 / 8-30=偶尔翻身 / 1-7=躁动蹭栏杆 / <=0=饿了 / 无到期=安静蹲着
+        function memberPetSVG(m, dl) {
+            const name = m.name || '会员';
+            let hue = 0;
+            for (let i = 0; i < name.length; i++) hue = (hue * 31 + name.charCodeAt(i)) % 360;
+            let body = `hsl(${hue},42%,60%)`, belly = `hsl(${hue},48%,78%)`, dark = `hsl(${hue},42%,34%)`;
+            let eyes, extra = '', wrapCls = '', tip;
+            if (dl === 'life') {
+                body = '#fbbf24'; belly = '#fde68a'; dark = '#92400e';
+                eyes = `<circle cx="13" cy="15" r="1.7" fill="${dark}"/><circle cx="23" cy="15" r="1.7" fill="${dark}"/><circle cx="13.6" cy="14.4" r=".55" fill="#fff"/><circle cx="23.6" cy="14.4" r=".55" fill="#fff"/>`;
+                extra = `<path d="M 18 5 l 1.2 2.6 2.8 .3 -2 2 .5 2.8 -2.5 -1.4 -2.5 1.4 .5 -2.8 -2 -2 2.8 -.3 Z" fill="#fef3c7" class="mp-alert"/><text x="27" y="9" font-size="6" fill="#fbbf24" class="zzz">✦</text>`;
+                tip = '✦ 永生星灵 · 终身会员不用吃饭';
+            } else if (dl === null || dl === undefined) {
+                eyes = `<circle cx="13" cy="15" r="1.6" fill="#1f2937"/><circle cx="23" cy="15" r="1.6" fill="#1f2937"/>`;
+                tip = '🪨 安静蹲着 · 未设到期日';
+            } else if (dl <= 0) {
+                body = '#f87171'; belly = '#fecaca'; dark = '#7f1d1d';
+                eyes = `<path d="M 11 14 l 4 2.4 M 25 14 l -4 2.4" stroke="${dark}" stroke-width="1.6" stroke-linecap="round"/><circle cx="18" cy="18.5" r="1.1" fill="${dark}"/>`;
+                extra = `<text x="24" y="8" font-size="7.5" fill="#ef4444" class="mp-alert">!</text>`;
+                wrapCls = 'wrap-hungry';
+                tip = `🔔 「${name}」饿了 · 已过期 ${-dl} 天，续饭（续费）吧`;
+            } else if (dl <= 7) {
+                body = '#fb923c'; belly = '#fed7aa'; dark = '#7c2d12';
+                eyes = `<circle cx="13" cy="14.5" r="1.7" fill="${dark}"/><circle cx="23" cy="14.5" r="1.7" fill="${dark}"/><circle cx="13.6" cy="13.9" r=".55" fill="#fff"/><circle cx="23.6" cy="13.9" r=".55" fill="#fff"/><path d="M 15.5 19.5 q 2.5 -1.8 5 0" stroke="${dark}" stroke-width="1.4" fill="none" stroke-linecap="round"/>`;
+                extra = `<text x="24" y="8" font-size="7" fill="#ea580c" class="mp-alert">!</text>`;
+                wrapCls = 'wrap-restless';
+                tip = `🐱 「${name}」开始蹭栏杆 · 只剩 ${dl} 天，该续了`;
+            } else if (dl <= 30) {
+                eyes = `<path d="M 11 15 q 2 1.8 4 0 M 21 15 q 2 1.8 4 0" stroke="#1f2937" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="15" cy="14.2" r="1.1" fill="#1f2937"/>`;
+                extra = `<text x="25" y="9" font-size="6" fill="#94a3b8" class="zzz">z</text>`;
+                wrapCls = 'wrap-stir';
+                tip = `😺 「${name}」偶尔翻身 · 剩 ${dl} 天，还安稳`;
+            } else {
+                eyes = `<path d="M 11 15 q 2 1.8 4 0 M 21 15 q 2 1.8 4 0" stroke="#1f2937" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+                extra = `<text x="24" y="8" font-size="6.5" fill="#94a3b8" class="zzz">z z</text>`;
+                wrapCls = 'wrap-stir';
+                tip = `😴 「${name}」睡得香 · 剩 ${dl} 天`;
+            }
+            const svg = `<span class="member-pet ${wrapCls}"><svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><g class="mp-wrap"><ellipse cx="18" cy="30" rx="11" ry="2.2" fill="rgba(0,0,0,.14)"/><path d="M 6 21 q 0 -12 12 -12 q 12 0 12 12 q 0 8.5 -12 8.5 q -12 0 -12 -8.5 Z" fill="${body}"/><path d="M 9 8 q 1.5 -3.5 4 -2 M 27 8 q -1.5 -3.5 -4 -2" stroke="${dark}" stroke-width="1.6" fill="none" stroke-linecap="round"/><ellipse cx="18" cy="22.5" rx="6.5" ry="4.4" fill="${belly}" opacity=".85"/><text x="18" y="24.6" font-size="5.6" font-weight="700" text-anchor="middle" fill="${dark}" opacity=".65">${escapeHtml(name.slice(0, 1))}</text>${eyes}${extra}</g></svg></span>`;
+            return { svg, tip };
         }
 
         function openMemberModal(id) {
@@ -25798,7 +26068,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const logs = gtPlayLogs();
             const minByDate = {};
             logs.forEach(l => minByDate[l.date] = l.minutes || 0);
-            const getMonday = (d) => { const date = new Date(d); const day = date.getDay(); const diff = date.getDate() - day + (day === 0 ? -6 : 1); return new Date(date.setDate(diff)); };
+            const getMonday = (d) => { const date = new Date(d); const ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 1; const diff = (date.getDay() - ws + 7) % 7; return new Date(date.getFullYear(), date.getMonth(), date.getDate() - diff); };
             const fmt = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
             const monday = getMonday(new Date());
             const weeks = [];
@@ -28409,7 +28679,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061931";
+        window.NIKO_VERSION = "202609062150";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -28566,7 +28836,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function ritualSundayLetter() {
             const now = new Date();
-            if (now.getDay() !== 0 || now.getHours() < 21) return;
+            // 触发日 = 周起始日的前一天（跟随自定义周期，默认周四起 → 周三晚收信）
+            const prevDay = ((typeof nikoWeekStartDay === 'function' ? nikoWeekStartDay() : 1) + 6) % 7;
+            if (now.getDay() !== prevDay || now.getHours() < 21) return;
             const weekKey = ritualTodayStr();
             if (safeStorage.get('niko_sunday_letter', '') === weekKey) return;
             safeStorage.set('niko_sunday_letter', weekKey);
