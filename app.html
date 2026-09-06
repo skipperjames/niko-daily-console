@@ -1550,21 +1550,13 @@
         .sunday-letter .sl-actions button.primary { background:#8b5cf6; border-color:#8b5cf6; color:#fff; }
         @media (max-width:768px) { .sunday-letter { padding:20px 18px 16px; } .badge-pop { padding:12px 18px; } #badgeCorner { top:auto; bottom:76px; } }
 
-        /* ===== 番茄钟（v2.13 沙漏钟面） ===== */
+        /* ===== 番茄钟（v2.15 沙漏钟面 · 安静线刻版：发丝线玻璃 + 主题令牌配色，与看板卡同一种安静） ===== */
         .pomo-face { display: flex; flex-direction: column; align-items: center; padding: 14px 0 8px; }
-        .pomo-hg { width: 126px; border-radius: 26px; }
+        .pomo-hg { width: 116px; border-radius: 26px; }
         .pomo-hg svg { width: 100%; display: block; overflow: visible; }
-        .pomo-glass { fill: none; stroke: #c3cbd6; stroke-width: 2; stroke-linecap: round; }
-        body.dark-mode .pomo-glass { stroke: #59626f; }
-        .pomo-glass-fill { fill: url(#pomoGlass); stroke: none; }
-        .pomo-plate { fill: url(#pomoPlateG); }
-        body.dark-mode .pomo-plate { fill: url(#pomoPlateGDark); }
-        .pomo-pillar { fill: #b6bdc9; }
-        body.dark-mode .pomo-pillar { fill: #3a414d; }
-        .pomo-spec { fill: none; stroke: #ffffff; stroke-width: 2; stroke-linecap: round; opacity: .25; }
-        .pomo-spec.dim { opacity: .1; }
-        .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 1px; color: #111827; margin-top: 2px; }
-        body.dark-mode .pomo-time { color: #f9fafb; }
+        .pomo-glass { fill: none; stroke: var(--text, #8a93a3); stroke-width: 1.5; stroke-linecap: round; opacity: .5; transition: stroke .3s ease; }
+        .pomo-cap { stroke: var(--text, #8a93a3); stroke-width: 2.2; stroke-linecap: round; opacity: .32; transition: stroke .3s ease; }
+        .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 2px; color: var(--text, #111827); margin-top: 2px; font-variant-numeric: tabular-nums; }
         .pomo-state { font-size: 12px; color: #f97316; margin-top: 2px; }
         /* 沙漏呼吸光环：进行中像一颗陪你漏沙的心脏 */
         #pomoRing.running { animation: pomoBreath 3.4s ease-in-out infinite; }
@@ -7701,6 +7693,62 @@
         @media (max-width: 900px) {
             .nb-wall { columns: 2 160px; }
         }
+
+        /* ============================================================
+               v2.12 墙的呼吸系统：晨读三张 / 复习模式 / 寂寂角
+               ============================================================ */
+        .nb-btn-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; margin-left: 5px; box-shadow: 0 0 6px rgba(245,158,11,.75); vertical-align: 2px; }
+
+        /* 全屏仪式层（晨读 / 复习 / 整理报告共用） */
+        .nb-ritual { position: fixed; inset: 0; z-index: 9500; display: flex; align-items: center; justify-content: center; padding: 64px 16px calc(24px + env(safe-area-inset-bottom)); background: radial-gradient(130% 90% at 50% -10%, rgba(41,35,28,.96), rgba(9,9,14,.985)); opacity: 0; transition: opacity .32s ease; }
+        .nb-ritual.visible { opacity: 1; }
+        .nr-top { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 14px 20px; color: #9a96a8; font-size: 12px; letter-spacing: 1.5px; }
+        .nr-hint { font-size: 10.5px; color: #6d6878; letter-spacing: .5px; }
+        .nr-close { margin-left: auto; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #c5c1cf; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .25s; flex-shrink: 0; }
+        .nr-close:hover { border-color: rgba(255,255,255,.4); color: #fff; transform: rotate(90deg); }
+        .nr-stage { width: min(620px, 94vw); display: flex; flex-direction: column; align-items: center; }
+        .nr-eyebrow { font-size: 12px; letter-spacing: 4px; color: #c8a86e; text-align: center; }
+        .nr-eyebrow .nr-count { font-variant-numeric: tabular-nums; color: #e8dcc2; }
+        .nr-dots { display: flex; gap: 8px; margin: 14px 0 20px; }
+        .nr-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.15); transition: all .35s; }
+        .nr-dot.cur { background: #fbbf24; transform: scale(1.3); box-shadow: 0 0 10px rgba(251,191,36,.55); }
+        .nr-dot.done { background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,.5); }
+        .nr-card { width: 100%; min-height: 300px; display: flex; flex-direction: column; background: linear-gradient(168deg, #2b2723, #211e1a); border: 1px solid rgba(255,255,255,.09); border-radius: 18px; padding: 26px 30px 22px; box-shadow: 0 24px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06); animation: nrIn .38s cubic-bezier(.22,1,.36,1); position: relative; }
+        .nr-card.center { align-items: center; justify-content: center; text-align: center; min-height: 260px; }
+        @keyframes nrIn { from { opacity: 0; transform: translateY(22px) scale(.97); } }
+        .nr-card.leaving { animation: nrOut .28s ease forwards; pointer-events: none; }
+        @keyframes nrOut { to { opacity: 0; transform: translateY(-14px) scale(.97); } }
+        .nr-tag { align-self: flex-start; font-size: 10.5px; font-weight: 600; padding: 3px 11px; border-radius: 99px; color: #fff; opacity: .92; }
+        .nr-content { font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif; font-size: 21px; line-height: 2; color: #efece6; white-space: pre-wrap; word-break: break-word; padding: 18px 2px; flex: 1; overflow-y: auto; max-height: 46vh; }
+        .nr-meta { font-size: 11px; color: #8d8778; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.12); }
+        .nr-foot { display: flex; gap: 12px; margin-top: 20px; }
+        .nr-btn { flex: 1; min-height: 46px; border-radius: 12px; font-size: 14px; cursor: pointer; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.05); color: #c5c1cf; transition: all .2s; }
+        .nr-btn:hover { background: rgba(255,255,255,.1); }
+        .nr-btn.primary { background: linear-gradient(135deg, #34d399, #10b981); border-color: transparent; color: #06281c; font-weight: 700; }
+        .nr-btn.primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+        .nr-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.04); color: #b9b4c4; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; z-index: 2; }
+        .nr-arrow:hover { background: rgba(255,255,255,.12); color: #fff; }
+        .nr-arrow.l { left: 26px; }
+        .nr-arrow.r { right: 26px; }
+        .nr-done-icon { font-size: 52px; margin-bottom: 8px; animation: nrPop .5s cubic-bezier(.22,1.4,.36,1); }
+        @keyframes nrPop { from { transform: scale(.4); opacity: 0; } }
+        .nr-done-title { font-family: 'Kaiti SC','STKaiti','KaiTi','SimKai',serif; font-size: 24px; color: #efece6; margin: 4px 0 10px; }
+        .nr-done-sub { font-size: 13px; color: #9a94a6; line-height: 2; }
+        /* 浅色主题下的纸面变体（背景幕保持夜色，卡片转纸） */
+        body:not(.dark-mode) .nr-card { background: linear-gradient(168deg, #fdfaf3, #f5efe2); border-color: rgba(124,58,237,.16); }
+        body:not(.dark-mode) .nr-content { color: #3f3a33; }
+        body:not(.dark-mode) .nr-meta { color: #8a8071; border-top-color: rgba(0,0,0,.14); }
+        body:not(.dark-mode) .nr-btn { border-color: rgba(0,0,0,.16); background: rgba(0,0,0,.03); color: #6b6558; }
+        body:not(.dark-mode) .nr-btn:hover { background: rgba(0,0,0,.07); }
+        body:not(.dark-mode) .nr-done-title { color: #3f3a33; }
+        body:not(.dark-mode) .nr-done-sub { color: #8a8071; }
+        @media (max-width: 768px) {
+            .nb-ritual { padding: 60px 12px calc(16px + env(safe-area-inset-bottom)); }
+            .nr-card { padding: 20px 18px 16px; border-radius: 14px; min-height: 250px; }
+            .nr-content { font-size: 18px; line-height: 1.95; max-height: 44vh; }
+            .nr-arrow { display: none; }
+            .nr-foot { gap: 10px; }
+        }
 /* ===== 知识库（PARA）专属CSS ===== */
         .kb-wrap { display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
         .kb-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; flex-shrink:0; }
@@ -10768,8 +10816,11 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                             <button id="nbViewList" onclick="nbSetView('list')">🕐 时间线</button>
                         </div>
                         <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建</button>
+                        <button class="nb-btn" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
+                        <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
                         <button class="nb-btn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
+                        <button class="nb-btn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
                         <button class="nb-btn" onclick="nbOpenSpecial('recycle')">🗑 回收站</button>
                         <button class="nb-btn" onclick="nbExport()" title="导出为 Markdown">⬇ 导出</button>
                     </div>
@@ -11919,34 +11970,24 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="pomo-hg" id="pomoRing">
                     <svg viewBox="0 0 120 150" aria-hidden="true">
                         <defs>
-                            <linearGradient id="pomoGlass" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stop-color="#ffffff" stop-opacity=".10"/><stop offset="1" stop-color="#ffffff" stop-opacity=".02"/>
+                            <linearGradient id="pomoSandGWork" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#fdba74"/><stop offset="1" stop-color="#f97316"/>
                             </linearGradient>
-                            <linearGradient id="pomoPlateG" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stop-color="#d4dae4"/><stop offset="1" stop-color="#a5adbb"/>
-                            </linearGradient>
-                            <linearGradient id="pomoPlateGDark" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0" stop-color="#4d5563"/><stop offset="1" stop-color="#333a46"/>
+                            <linearGradient id="pomoSandGBreak" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#34d399"/>
                             </linearGradient>
                         </defs>
-                        <rect class="pomo-pillar" x="26.5" y="14" width="3.5" height="122" rx="1.75"/>
-                        <rect class="pomo-pillar" x="90" y="14" width="3.5" height="122" rx="1.75"/>
-                        <path class="pomo-glass-fill" d="M36,20 C36,44 49,60 56,71 Q60,76 64,71 C71,60 84,44 84,20 Z"/>
-                        <path class="pomo-glass-fill" d="M36,130 C36,106 49,90 56,79 Q60,74 64,79 C71,90 84,106 84,130 Z"/>
-                        <polygon id="pomoSandTop" points="" fill="#f97316" opacity=".92"/>
-                        <polygon id="pomoSandBot" points="" fill="#f97316" opacity=".95"/>
-                        <path id="pomoSandCrest" d="" fill="none" opacity=".95"/>
+                        <line class="pomo-cap" x1="31" y1="17.5" x2="89" y2="17.5"/>
+                        <line class="pomo-cap" x1="31" y1="132.5" x2="89" y2="132.5"/>
+                        <polygon id="pomoSandTop" points="" fill="url(#pomoSandGWork)" opacity=".88"/>
+                        <polygon id="pomoSandBot" points="" fill="url(#pomoSandGWork)" opacity=".95"/>
+                        <path id="pomoSandCrest" d="" fill="url(#pomoSandGWork)" opacity=".95"/>
                         <line id="pomoStream" x1="60" y1="77" x2="60" y2="120" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0" stroke-dasharray="2.5 4"/>
                         <g id="pomoStreamDots" opacity="0">
                             <circle cx="60" cy="80" r="1.3" fill="#fdba74"/><circle cx="60" cy="89" r="1.1" fill="#fdba74"/><circle cx="60" cy="98" r="1.3" fill="#fdba74"/>
                         </g>
                         <path d="M36,20 C36,44 49,60 56,71 Q60,76 64,71 C71,60 84,44 84,20" class="pomo-glass"/>
                         <path d="M36,130 C36,106 49,90 56,79 Q60,74 64,79 C71,90 84,106 84,130" class="pomo-glass"/>
-                        <path d="M41,27 C41,44 48.5,55 53.5,64.5" class="pomo-spec"/>
-                        <path d="M79,103 C79,95 73.5,87.5 68.5,81" class="pomo-spec dim"/>
-                        <rect x="50.5" y="72" width="19" height="6" rx="3" class="pomo-plate"/>
-                        <rect x="20" y="9" width="80" height="7" rx="3.5" class="pomo-plate"/>
-                        <rect x="20" y="134" width="80" height="7" rx="3.5" class="pomo-plate"/>
                     </svg>
                 </div>
                 <div class="pomo-time" id="pomoTimeDisplay">25:00</div>
@@ -19410,12 +19451,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         let nbEditingTag = 'creative';
         let draggedNoteId = null;
 
-        const activeNotes   = () => notes.filter(n => !n.deleted && !n.archived);
+        const activeNotes   = () => notes.filter(n => !n.deleted && !n.archived && !n.quiet);
         const archivedNotes = () => notes.filter(n => !n.deleted && n.archived);
         const recycledNotes = () => notes.filter(n => n.deleted);
+        const quietNotes    = () => notes.filter(n => !n.deleted && n.quiet);
 
         function visibleList() {
-            let list = nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : activeNotes();
+            let list = nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : nbSpecial === 'quiet' ? quietNotes() : activeNotes();
             if (nbSearch) {
                 const k = nbSearch.toLowerCase();
                 list = list.filter(n => n.content.toLowerCase().includes(k));
@@ -19470,6 +19512,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 `<span class="nb-stat"><strong>${todayCnt}</strong> 今日新增</span>` +
                 `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>` +
                 `<span class="nb-stat"><strong>${archivedNotes().length}</strong> 归档</span>` +
+                `<span class="nb-stat"><strong>${quietNotes().length}</strong> 寂寂角</span>` +
                 `<span class="nb-stat"><strong>${recycledNotes().length}</strong> 回收站</span>`;
         }
 
@@ -19482,12 +19525,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 vl.classList.toggle('active', nbView === 'list');
             }
             syncNotes();
+            nbDailyTick();          // 晨读抽取 + 整理人巡墙（内部自带当日防抖）
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
             document.getElementById('nbSelCount').textContent = nbSelected.size;
             const c = document.getElementById('nbContent');
             if (nbSpecial === 'recycle') return renderRecycleView(c);
             if (nbSpecial === 'archive') return renderArchiveView(c);
+            if (nbSpecial === 'quiet') return renderQuietView(c);
             if (nbView === 'board') return renderNotesBoardView(c);
             if (nbView === 'wall') return renderNotesWallView(c);
             return renderNotesTimelineView(c);
@@ -19797,6 +19842,320 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
             showToast('⬇ 已导出 Markdown');
+        }
+
+        // ============================================================
+        // v2.12 墙的呼吸系统：晨读三张 / 复习模式 / 整理人NIKO（寂寂角）
+        // 设计口径：每天 30 秒早读消化旧便签；过卡复习抗遗忘；
+        //           每周日晚自动把 30 天没动的便签收进寂寂角（不删）。
+        // ============================================================
+        const NB_MORNING_KEY = 'niko_morning_read';
+        const NB_SWEEP_KEY = 'niko_quiet_sweep';
+        // quietNotes 已在上方 activeNotes 区块定义（寂寂角 = 未删除且 quiet）
+
+        // ---------- 仪式层外壳（晨读 / 复习 / 整理报告共用） ----------
+        function nbRitualShell(mode, topText, hint) {
+            let ov = document.getElementById('nbRitual');
+            if (ov) ov.remove();
+            ov = document.createElement('div');
+            ov.id = 'nbRitual';
+            ov.className = 'nb-ritual';
+            ov.dataset.mode = mode;
+            ov.innerHTML = `<div class="nr-top"><span>${topText}</span><span class="nr-hint">${hint || ''}</span><button class="nr-close" onclick="nbRitualClose()" title="收工">✕</button></div><div class="nr-stage" id="nrStage"></div>`;
+            ov.addEventListener('click', e => { if (e.target === ov) nbRitualClose(); });
+            document.body.appendChild(ov);
+            requestAnimationFrame(() => ov.classList.add('visible'));
+            return ov;
+        }
+        function nbRitualClose() {
+            const ov = document.getElementById('nbRitual');
+            if (!ov) return;
+            const mode = ov.dataset.mode;
+            if (mode === 'morning') {
+                // 中途收工：剩下没看的当「今天先留着」，明天重新抽
+                const mr = nbMorningState();
+                if (mr) {
+                    nbMorningQueue(mr).forEach(id => mr.kept.push(id));
+                    mr.dismissed = true;
+                    safeStorage.set(NB_MORNING_KEY, mr);
+                    nbSyncMorningBtn();
+                }
+            } else if (mode === 'review') {
+                nbReview = null;
+                document.removeEventListener('keydown', nbReviewKey);
+            }
+            ov.classList.remove('visible');
+            setTimeout(() => ov.remove(), 320);
+        }
+
+        // ---------- 晨读三张 ----------
+        function nbMorningPool() {
+            const now = Date.now();
+            return activeNotes()
+                .filter(n => !n.quiet && !n.pinned && !(n.capsule && !n.capsule.opened) && now - new Date(n.createdAt).getTime() >= 7 * 86400000)
+                .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        }
+        function nbMorningState() {
+            const mr = safeStorage.get(NB_MORNING_KEY, null);
+            return (mr && mr.date === formatDate(new Date())) ? mr : null;
+        }
+        function nbMorningQueue(mr) {
+            if (!mr) return [];
+            const handled = new Set([...(mr.digested || []), ...(mr.kept || [])]);
+            return (mr.ids || []).filter(id => {
+                const n = notes.find(x => x.id === id);
+                return n && !n.deleted && !n.archived && !handled.has(id);
+            });
+        }
+        function nbMaybeMorningRead(force, silent) {
+            if (!force && (nbSpecial || nbBatch || document.getElementById('nbRitual'))) return;
+            let mr = nbMorningState();
+            if (!mr) {
+                const ids = nbMorningPool().slice(0, 3).map(n => n.id);
+                safeStorage.set(NB_MORNING_KEY, { date: formatDate(new Date()), ids, digested: [], kept: [] });
+                nbSyncMorningBtn();
+                if (ids.length && !silent) nbOpenMorning();
+                return;
+            }
+            if (force && nbMorningQueue(mr).length) nbOpenMorning();
+        }
+        function nbSyncMorningBtn() {
+            const btn = document.getElementById('nbMorningBtn');
+            if (!btn) return;
+            const mr = nbMorningState();
+            const pending = mr ? nbMorningQueue(mr).length : 0;
+            btn.innerHTML = '🌅 早读' + (pending ? '<span class="nb-btn-dot"></span>' : '');
+        }
+        function nbOpenMorning() {
+            const mr = nbMorningState();
+            if (!mr) { nbMaybeMorningRead(true); return; }
+            if (!nbMorningQueue(mr).length) { showToast('☀️ 今日早读已完成，明天再抽三张'); return; }
+            nbRitualShell('morning', '☀️ 晨读三张', '看完一张消化一张，看完即归档');
+            nbRenderMorningCard();
+        }
+        function nbRenderMorningCard() {
+            const mr = nbMorningState();
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            if (!mr || !nbMorningQueue(mr).length) { nbMorningFinish(); return; }
+            const queue = nbMorningQueue(mr);
+            const idx = (mr.digested || []).length + (mr.kept || []).length;
+            const total = Math.max((mr.ids || []).length, idx + 1);
+            const n = notes.find(x => x.id === queue[0]);
+            const tag = noteTagDict()[n.tag] || noteTagDict().other;
+            const waitDays = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
+            stage.innerHTML = `
+                <div class="nr-eyebrow">今 日 早 读</div>
+                <div class="nr-dots">${Array.from({ length: total }).map((_, i) => `<span class="nr-dot ${i < idx ? 'done' : i === idx ? 'cur' : ''}"></span>`).join('')}</div>
+                <div class="nr-card" id="nrCard">
+                    <span class="nr-tag" style="background:${tag.chipBg}">${tag.icon} ${tag.name}</span>
+                    <div class="nr-content">${escapeHtml(n.content)}</div>
+                    <div class="nr-meta">写于 ${new Date(n.createdAt).toLocaleDateString('zh-CN')} · 已在墙上等了你 ${waitDays} 天</div>
+                    <div class="nr-foot">
+                        <button class="nr-btn" onclick="nbMorningKeep()">今天先留着</button>
+                        <button class="nr-btn primary" onclick="nbMorningDigest()">✓ 已消化</button>
+                    </div>
+                </div>`;
+        }
+        function nbMorningMark(kind) {
+            const mr = nbMorningState();
+            const queue = nbMorningQueue(mr);
+            if (!mr || !queue.length) return;
+            mr[kind].push(queue[0]);
+            safeStorage.set(NB_MORNING_KEY, mr);
+        }
+        function nbMorningCardLeave(next) {
+            const card = document.getElementById('nrCard');
+            if (card) { card.classList.add('leaving'); setTimeout(next, 260); } else next();
+        }
+        function nbMorningDigest() {
+            const mr = nbMorningState();
+            const queue = nbMorningQueue(mr);
+            const n = queue.length ? notes.find(x => x.id === queue[0]) : null;
+            nbMorningMark('digested');
+            if (n) { n.archived = true; saveNotes(); }   // 已消化 → 进归档箱，墙自动瘦身
+            const card = document.getElementById('nrCard');
+            if (typeof nikoSpark === 'function' && card) nikoSpark(card, '✨', '#34d399');
+            nbMorningCardLeave(nbRenderMorningCard);
+        }
+        function nbMorningKeep() {
+            nbMorningMark('kept');
+            nbMorningCardLeave(nbRenderMorningCard);
+        }
+        function nbMorningFinish() {
+            const mr = nbMorningState();
+            const d = mr ? (mr.digested || []).length : 0;
+            const k = mr ? (mr.kept || []).length : 0;
+            if (mr) { mr.dismissed = true; safeStorage.set(NB_MORNING_KEY, mr); }
+            nbSyncMorningBtn();
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            stage.innerHTML = `<div class="nr-card center">
+                <div class="nr-done-icon">☀️</div>
+                <div class="nr-done-title">早读完毕</div>
+                <div class="nr-done-sub">消化 ${d} 张 · 留着 ${k} 张${d ? '<br>消化掉的已收进归档箱，墙上轻了一点' : '<br>它们继续在墙上等你'}</div>
+            </div>`;
+            setTimeout(() => { const ov = document.getElementById('nbRitual'); if (ov && ov.dataset.mode === 'morning') nbRitualClose(); }, 1900);
+        }
+
+        // ---------- 复习模式（过卡） ----------
+        let nbReview = null;   // { deck:[id], pos, got, back }
+        function nbOpenReview() {
+            let pool = activeNotes().filter(n => !n.quiet);
+            if (nbTagFilter) pool = pool.filter(n => n.tag === nbTagFilter);
+            if (!pool.length) { showToast('🎴 墙上没有可复习的便签'); return; }
+            const deck = pool.map(n => n.id);
+            for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+            nbReview = { deck, pos: 0, got: 0, back: 0 };
+            nbRitualShell('review', '🎴 复习模式', '← 放回 · → 记住了 · 手机左右滑动');
+            document.addEventListener('keydown', nbReviewKey);
+            nbReviewBindSwipe();
+            nbRenderReviewCard();
+        }
+        function nbRenderReviewCard() {
+            const stage = document.getElementById('nrStage');
+            if (!stage || !nbReview) return;
+            if (nbReview.pos >= nbReview.deck.length) { nbReviewFinish(); return; }
+            const n = notes.find(x => x.id === nbReview.deck[nbReview.pos]);
+            if (!n || n.deleted || n.archived || n.quiet) { nbReview.deck.splice(nbReview.pos, 1); nbRenderReviewCard(); return; }
+            const tag = noteTagDict()[n.tag] || noteTagDict().other;
+            stage.innerHTML = `
+                <div class="nr-eyebrow">过 卡 · <span class="nr-count">${nbReview.pos + 1} / ${nbReview.deck.length}</span> · 记住了 ${nbReview.got} · 放回 ${nbReview.back}</div>
+                <div style="height:18px;"></div>
+                <div class="nr-card" id="nrCard">
+                    <span class="nr-tag" style="background:${tag.chipBg}">${tag.icon} ${tag.name}</span>
+                    <div class="nr-content">${escapeHtml(n.content)}</div>
+                    <div class="nr-meta">写于 ${new Date(n.createdAt).toLocaleDateString('zh-CN')}</div>
+                    <div class="nr-foot">
+                        <button class="nr-btn" onclick="nbReviewJudge(false)">↺ 再放回去</button>
+                        <button class="nr-btn primary" onclick="nbReviewJudge(true)">✓ 记住了</button>
+                    </div>
+                </div>
+                <button class="nr-arrow l" onclick="nbReviewJudge(false)" title="再放回去（←）">←</button>
+                <button class="nr-arrow r" onclick="nbReviewJudge(true)" title="记住了（→）">→</button>`;
+        }
+        function nbReviewJudge(remembered) {
+            if (!nbReview) return;
+            const id = nbReview.deck[nbReview.pos];
+            const n = notes.find(x => x.id === id);
+            if (remembered) {
+                // 记住了 = 刚刚「动过」：刷新 updatedAt，30 天内不会被整理人收走
+                if (n) { n.updatedAt = new Date().toISOString(); n.reviewedAt = n.updatedAt; saveNotes(); }
+                nbReview.got++;
+                nbReview.pos++;
+            } else {
+                nbReview.back++;
+                nbReview.deck.push(nbReview.deck.splice(nbReview.pos, 1)[0]);   // 挪到队尾再来
+            }
+            const card = document.getElementById('nrCard');
+            if (typeof nikoSpark === 'function' && card) nikoSpark(card, remembered ? '✓' : '↺', remembered ? '#34d399' : '#fbbf24');
+            nbMorningCardLeave(nbRenderReviewCard);
+        }
+        function nbReviewFinish() {
+            const stats = nbReview || { got: 0, back: 0 };
+            nbReview = null;
+            document.removeEventListener('keydown', nbReviewKey);
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            stage.innerHTML = `<div class="nr-card center">
+                <div class="nr-done-icon">🎴</div>
+                <div class="nr-done-title">过卡完毕</div>
+                <div class="nr-done-sub">记住了 ${stats.got} 张 · 放回 ${stats.back} 张<br>记住了的便签重新算「最近动过」，30 天内不会被整理人收走</div>
+                <div class="nr-foot" style="width:min(280px,84%);"><button class="nr-btn primary" onclick="nbRitualClose()">收工</button></div>
+            </div>`;
+        }
+        function nbReviewKey(e) {
+            if (!nbReview) { document.removeEventListener('keydown', nbReviewKey); return; }
+            if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nbReviewJudge(true); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); nbReviewJudge(false); }
+            else if (e.key === 'Escape') { e.preventDefault(); nbRitualClose(); }
+        }
+        function nbReviewBindSwipe() {
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            let sx = 0, sy = 0;
+            stage.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+            stage.addEventListener('touchend', e => {
+                const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) nbReviewJudge(dx < 0);   // 左滑放回，右滑记住
+            }, { passive: true });
+        }
+
+        // ---------- 整理人 NIKO（寂寂角） ----------
+        function nbMaybeSweep() {
+            const now = new Date();
+            const today = formatDate(now);
+            const last = safeStorage.get(NB_SWEEP_KEY, '');
+            if (last === today) return false;
+            const day = now.getDay();
+            const windowOpen = (day === 0 && now.getHours() >= 20) || day === 1;   // 周日晚 20 点后 & 周一兜底
+            if (!windowOpen) return false;
+            safeStorage.set(NB_SWEEP_KEY, today);
+            if (last && (new Date(today + 'T00:00:00') - new Date(last + 'T00:00:00')) < 6 * 86400000) return false;   // 本周已巡过
+            const mr = nbMorningState();
+            const morningIds = new Set(mr ? nbMorningQueue(mr) : []);
+            const cutoff = Date.now() - 30 * 86400000;
+            const candidates = activeNotes().filter(n =>
+                !n.quiet && !n.pinned &&
+                !morningIds.has(n.id) &&
+                !(n.capsule && !n.capsule.opened) &&
+                new Date(n.updatedAt || n.createdAt).getTime() < cutoff
+            );
+            if (!candidates.length) return false;
+            candidates.forEach(n => { n.quiet = true; });
+            saveNotes();
+            nbSweepReport(candidates.length);
+            return true;
+        }
+        function nbSweepReport(cnt) {
+            const ov = nbRitualShell('sweep', '🫥 整理人 NIKO', '每周日晚巡墙一次');
+            const closeBtn = ov.querySelector('.nr-close');
+            if (closeBtn) closeBtn.style.display = 'none';
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            stage.innerHTML = `<div class="nr-card center">
+                <div class="nr-done-icon">🧹</div>
+                <div class="nr-done-title">巡墙完毕</div>
+                <div class="nr-done-sub">${cnt} 张 30 天没动过的便签，被轻轻收进了「寂寂角」<br>一张都没删——想它们的时候，去寂寂角坐坐</div>
+                <div class="nr-foot" style="width:min(300px,86%);">
+                    <button class="nr-btn" onclick="nbRitualClose();nbBack()">稍后再说</button>
+                    <button class="nr-btn primary" onclick="nbRitualClose();nbOpenSpecial('quiet')">去看看</button>
+                </div>
+            </div>`;
+        }
+        function renderQuietView(c) {
+            const list = visibleList();
+            c.innerHTML = `<div class="nb-special-head">
+                <button class="nb-btn" onclick="nbBack()">← 返回看板</button>
+                <span class="nb-special-title">🫥 寂寂角（${list.length}）· 30 天没动的便签在这里安睡，一张都没删</span>
+            </div>` + (list.length
+                ? `<div class="nb-wall">${list.map(n => nbQuietCardHtml(n)).join('')}</div>`
+                : '<div class="nb-empty"><div class="icon">🫥</div><p>寂寂角是空的<br><span style="font-size:11px;">每周日晚，整理人 NIKO 会把 30 天没动的便签轻轻收进来</span></p></div>');
+        }
+        function nbQuietCardHtml(n) {
+            const tag = noteTagDict()[n.tag] || noteTagDict().other;
+            const days = Math.floor((Date.now() - new Date(n.updatedAt || n.createdAt).getTime()) / 86400000);
+            return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.72;">
+                <div class="nb-card-content">${escapeHtml(n.content)}</div>
+                <div class="nb-card-footer">
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
+                    <span class="nb-card-time">静置 ${days} 天</span>
+                    <div class="nb-card-actions" style="opacity:1;">
+                        <button class="nb-icon-btn" title="取回上墙" onclick="nbUnquiet('${n.id}',event)">📤</button>
+                        <button class="nb-icon-btn danger" title="删除（进回收站）" onclick="nbDelete('${n.id}',event)">🗑</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+        function nbUnquiet(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.quiet = false; n.updatedAt = new Date().toISOString(); saveNotes(); showToast('📤 已取回上墙'); } }
+
+        // ---------- 每日 tick：晨读抽取 + 巡墙（幂等，可反复调用） ----------
+        function nbDailyTick() {
+            try {
+                nbSyncMorningBtn();
+                const swept = nbMaybeSweep();          // 巡墙报告若弹出，晨读今天就不抢戏（入口带橙点提醒）
+                nbMaybeMorningRead(false, swept);
+            } catch (err) { console.warn('nbDailyTick', err); }
         }
 // ===== 知识库（PARA）=====
         const KB_PARA = [
@@ -26610,8 +26969,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const crest = document.getElementById('pomoSandCrest');
             const stream = document.getElementById('pomoStream'), dots = document.getElementById('pomoStreamDots');
             if (!top || !bot) return;
-            top.setAttribute('fill', color); bot.setAttribute('fill', color);
-            if (crest) crest.setAttribute('fill', color);
+            const fill = pomoPhase === 'break' ? 'url(#pomoSandGBreak)' : 'url(#pomoSandGWork)';
+            top.setAttribute('fill', fill); bot.setAttribute('fill', fill);
+            if (crest) crest.setAttribute('fill', fill);
             if (stream) stream.setAttribute('stroke', color);
             if (dots) dots.querySelectorAll('circle').forEach(c => c.setAttribute('fill', color));
             const hwT = y => 4 + (75 - y) * 20 / 57;
@@ -27202,7 +27562,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061238";
+        window.NIKO_VERSION = "202609061315";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
