@@ -1916,6 +1916,81 @@
             animation: gardenDrop .8s cubic-bezier(.4,0,.9,.6) forwards;
         }
         @keyframes gardenDrop { to { transform: translateY(50px); opacity: 0; } }
+        /* ===== 四季换装（节气粒子层） ===== */
+        .garden-season-layer { position:absolute; inset:0; pointer-events:none; z-index:3; overflow:hidden; border-radius:inherit; }
+        .gs-petal, .gs-leaf, .gs-snow { position:absolute; top:-14px; display:block; animation-name:gsFall; animation-timing-function:linear; animation-iteration-count:infinite; opacity:.85; }
+        .gs-petal { width:6px; height:6px; background:#f9a8d4; border-radius:60% 0 60% 0; }
+        .gs-leaf { width:7px; height:9px; background:#d97706; border-radius:60% 0 60% 0; }
+        .gs-snow { width:4px; height:4px; background:#e6edf8; border-radius:50%; opacity:.8; }
+        .gs-fly { position:absolute; width:3px; height:3px; border-radius:50%; background:#ffe9a3; box-shadow:0 0 6px 2px rgba(255,233,163,.55); animation:gsFly ease-in-out infinite alternate; }
+        @keyframes gsFall { 0% { transform:translate(0,0) rotate(0deg); opacity:0; } 8% { opacity:.85; } 85% { opacity:.6; } 100% { transform:translate(var(--sw,24px),190px) rotate(300deg); opacity:0; } }
+        @keyframes gsFly { from { transform:translate(0,0); opacity:.5; } to { transform:translate(26px,-14px); opacity:1; } }
+        .garden-term { font-size:10.5px; color:#8a8fa8; white-space:nowrap; }
+        body.dark-mode .garden-term { color:#9aa0bd; }
+        .garden-feed-chip { font-size:10.5px; padding:2px 9px; border-radius:10px; cursor:pointer; background:rgba(99,102,241,.12); color:#667eea; white-space:nowrap; }
+        body.dark-mode .garden-feed-chip { background:rgba(99,102,241,.22); color:#a5b4fc; }
+        /* ===== 树语气泡（hover 桌面端） ===== */
+        .garden-tree-card { position:relative; }
+        .garden-say { position:absolute; left:50%; bottom:calc(100% + 8px); transform:translateX(-50%) translateY(5px); width:176px; background:#20263a; color:#e6e9f5; font-size:11.5px; line-height:1.65; padding:9px 11px; border-radius:10px; border-left:2.5px solid var(--gc,#667eea); box-shadow:0 8px 22px rgba(0,0,0,.35); opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; z-index:5; text-align:left; }
+        .garden-say::after { content:''; position:absolute; left:50%; bottom:-4px; transform:translateX(-50%) rotate(45deg); width:9px; height:9px; background:#20263a; }
+        .garden-tree-card:hover .garden-say { opacity:1; transform:translateX(-50%) translateY(0); }
+        /* ===== 投喂设置弹窗 ===== */
+        .garden-feed-modal { width:min(92vw, 360px); }
+        .gf-head { font-size:15px; font-weight:700; margin-bottom:4px; }
+        .gf-sub { font-size:11.5px; color:#8a8fa8; line-height:1.6; margin-bottom:12px; }
+        .gf-row { display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px dashed rgba(128,128,160,.18); }
+        .gf-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+        .gf-name { font-size:12.5px; font-weight:600; width:38px; flex-shrink:0; }
+        .gf-row select { flex:1; min-width:0; font-size:12px; padding:6px 8px; border-radius:8px; border:1px solid rgba(128,128,160,.3); background:transparent; color:inherit; min-height:36px; }
+        .gf-row select option { color:#222; background:#fff; }
+        body.dark-mode .gf-row select { background:#232741; border-color:#3a3f5c; }
+        .gf-save { width:100%; margin-top:12px; padding:11px; border:none; border-radius:10px; background:#10b981; color:#fff; font-size:13px; font-weight:600; cursor:pointer; min-height:44px; }
+        /* ===== 打烊烛光 ===== */
+        .closing-candle { position:relative; width:22px; height:74px; margin:0 auto 2px; }
+        .c-stick { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:16px; height:44px; border-radius:4px 4px 3px 3px; background:linear-gradient(180deg,#f3e2c0,#d8bd90); }
+        .c-flame { position:absolute; bottom:42px; left:50%; width:10px; height:16px; margin-left:-5px; background:radial-gradient(circle at 50% 75%, #fff3c4 0%, #ffc24b 45%, #ff8a3c 80%, transparent 100%); border-radius:50% 50% 50% 50% / 62% 62% 38% 38%; transform-origin:50% 100%; animation:cFlicker .85s ease-in-out infinite alternate; filter:drop-shadow(0 0 8px rgba(255,178,74,.75)); transition:transform .6s ease, opacity .6s ease; z-index:2; }
+        .c-glow { position:absolute; bottom:34px; left:50%; transform:translateX(-50%); width:46px; height:46px; border-radius:50%; background:radial-gradient(circle, rgba(255,190,110,.4), transparent 70%); animation:cGlow 1.7s ease-in-out infinite alternate; transition:opacity .8s ease; }
+        .c-smoke { position:absolute; bottom:46px; left:50%; width:2px; height:26px; margin-left:-1px; background:linear-gradient(180deg, rgba(200,200,210,0), rgba(200,200,210,.55)); opacity:0; border-radius:2px; }
+        .closing-candle.out .c-flame { transform:scaleY(.05) scaleX(.6); opacity:0; animation:none; }
+        .closing-candle.out .c-glow { opacity:0; }
+        .closing-candle.out .c-smoke { animation:cSmoke 2.2s ease-out forwards; }
+        @keyframes cFlicker { from { transform:scale(1) rotate(-2deg); } to { transform:scale(1.08,.94) rotate(2.5deg); } }
+        @keyframes cGlow { from { opacity:.55; } to { opacity:.95; } }
+        @keyframes cSmoke { from { opacity:.7; transform:translateY(0); } to { opacity:0; transform:translateY(-26px); } }
+        .closing-card.dimmed { filter:brightness(.72); transition:filter 1.2s ease; }
+        .closing-card .closing-sub { opacity:0; transition:opacity 1s ease; }
+        .closing-card.dimmed .closing-sub { opacity:1; }
+        /* ===== 专注沙漏浮窗 ===== */
+        #focusDock { position:fixed; right:76px; bottom:18px; z-index:850; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+        .fd-pill { display:flex; align-items:center; gap:7px; padding:8px 13px; border-radius:20px; background:rgba(24,28,46,.92); color:#cfd4ee; font-size:12px; font-weight:600; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.3); border:1px solid rgba(129,140,248,.35); backdrop-filter:blur(6px); user-select:none; transition:border-color .3s; }
+        .fd-pill .fd-hg { width:16px; height:16px; color:#a5b4fc; flex-shrink:0; }
+        .fd-pill.running { border-color:rgba(52,211,153,.55); color:#d9f7e8; }
+        .fd-pill.running .fd-hg { color:#6ee7b7; }
+        .fd-panel { width:250px; background:rgba(24,28,46,.97); border:1px solid rgba(129,140,248,.3); border-radius:14px; padding:13px 14px; box-shadow:0 14px 34px rgba(0,0,0,.4); color:#dfe3f5; }
+        .fdp-head { font-size:13px; font-weight:700; margin-bottom:9px; }
+        .fdp-presets { display:flex; gap:7px; margin-bottom:9px; }
+        .fdp-min { flex:1; padding:9px 0; border-radius:9px; border:1px solid rgba(129,140,248,.35); background:rgba(99,102,241,.12); color:#c7d2fe; font-size:13px; font-weight:700; cursor:pointer; min-height:40px; }
+        .fdp-min small { font-weight:400; font-size:10px; margin-left:2px; }
+        .fdp-custom { display:flex; gap:7px; margin-bottom:8px; }
+        .fdp-custom input { flex:1; min-width:0; font-size:12.5px; padding:8px 10px; border-radius:9px; border:1px solid rgba(129,140,248,.3); background:rgba(255,255,255,.05); color:inherit; }
+        .fdp-custom button { padding:8px 14px; border-radius:9px; border:none; background:#6366f1; color:#fff; font-weight:600; cursor:pointer; min-height:38px; }
+        .fdp-tip { font-size:10.5px; color:#8a8fa8; line-height:1.5; }
+        .fdp-sub { font-size:11.5px; color:#9aa0bd; margin-bottom:8px; line-height:1.5; }
+        .fdp-list { margin-bottom:10px; max-height:150px; overflow-y:auto; }
+        .fdp-task { font-size:11.5px; color:#c9cdeb; padding:5px 0; border-bottom:1px dashed rgba(128,128,160,.15); line-height:1.5; }
+        .fdp-task:last-child { border-bottom:none; }
+        .fdp-stop { width:100%; padding:9px; border-radius:9px; border:1px solid rgba(248,113,113,.4); background:rgba(248,113,113,.1); color:#fca5a5; font-size:12px; cursor:pointer; min-height:40px; }
+        .fdp-log input { width:100%; box-sizing:border-box; font-size:12.5px; padding:9px 10px; border-radius:9px; border:1px solid rgba(129,140,248,.3); background:rgba(255,255,255,.05); color:inherit; margin-bottom:8px; }
+        .fdp-actions { display:flex; gap:7px; }
+        .fdp-ok, .fdp-skip { flex:1; padding:9px 0; border-radius:9px; border:none; font-size:12px; font-weight:600; cursor:pointer; min-height:40px; }
+        .fdp-ok { background:#10b981; color:#fff; }
+        .fdp-skip { background:rgba(129,140,248,.15); color:#c7d2fe; }
+        @media (max-width:768px) {
+            #focusDock { right:12px; bottom:66px; bottom:calc(66px + env(safe-area-inset-bottom)); }
+            .fd-panel { width:min(92vw, 260px); }
+            .garden-say { display:none; }
+            .garden-term { display:none; }
+        }
         /* ===== 六树庭院 · 微仪式浮层（柱色光晕 --gc 由 JS 注入 modal 根上） ===== */
         .garden-ritual-modal { width: min(92vw, 380px); max-height: 82vh; overflow-y: auto; border-radius: 16px; position: relative; }
         .gr-halo { position: absolute; top: -34px; left: 50%; transform: translateX(-50%); width: 200px; height: 72px; border-radius: 50%; background: var(--gc, #888); opacity: .16; filter: blur(32px); pointer-events: none; }
@@ -9724,11 +9799,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <div class="today-sec-head">
                         <span class="today-sec-title">🌱 六树庭院</span>
                         <span class="sec-badge" id="gardenWateredBadge">今日 0/6</span>
+                        <span class="garden-term" id="gardenTerm"></span>
                         <span class="today-sec-sub">六个三十秒的小仪式 · 花开于九十</span>
+                        <span class="garden-feed-chip" onclick="gardenOpenFeed()" title="把柱子交给习惯：打卡当天自动浇灌">🫗 投喂</span>
                         <span class="garden-avg">庭园值<b id="gardenAvg">0</b></span>
                     </div>
                     <div class="garden-trees" id="gardenTrees"></div>
                 </section>
+            </div>
+
+            <!-- ===== 投喂设置弹窗（庭院自动驾驶） ===== -->
+            <div class="modal-mask" id="gardenFeedModal" onclick="if(event.target===this)gardenCloseFeed()">
+                <div class="modal garden-feed-modal">
+                    <div class="gf-head">🫗 自动投喂</div>
+                    <div class="gf-sub">把一根柱子交给一个习惯：习惯打卡的当天，柱子自动被浇灌，那个仪式就可以休息一天。</div>
+                    <div id="gfRows"></div>
+                    <button class="gf-save" onclick="gardenSaveFeed()">保存</button>
+                </div>
             </div>
 
             <!-- ===== 每周复盘弹窗 ===== -->
@@ -12967,7 +13054,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function gardenState() {
             let st = safeStorage.get('niko_garden', null);
             if (!st || !st.score) {
-                st = { created: todayYmd(), day: todayYmd(), score: {}, watered: {} };
+                st = { created: todayYmd(), day: todayYmd(), score: {}, watered: {}, autoFed: {}, feedMap: {} };
                 GARDEN_PILLARS.forEach(p => { st.score[p.key] = 12; st.watered[p.key] = ''; });
                 safeStorage.set('niko_garden', st);
             }
@@ -12989,8 +13076,222 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 st.day = today;
                 safeStorage.set('niko_garden', st);
             }
+            gardenSyncAutoFeed(st);
             return st;
         }
+        // ===== 自动投喂（2026-09-06）：把柱子交给任意习惯，打卡当天自动浇灌 =====
+        // 数据：niko_garden.feedMap = { 柱key: habitId | '' }；autoFed 记录哪天被习惯投喂（展示用）
+        function gardenSyncAutoFeed(st) {
+            const today = todayYmd();
+            const fm = st.feedMap || {};
+            const done = habitDoneSet(today);
+            const fed = [];
+            GARDEN_PILLARS.forEach(p => {
+                const hid = fm[p.key];
+                if (hid && done[hid] && st.watered[p.key] !== today) {
+                    st.watered[p.key] = today;
+                    st.score[p.key] = Math.min(100, (st.score[p.key] || 0) + 1);
+                    if (!st.autoFed) st.autoFed = {};
+                    st.autoFed[p.key] = today;
+                    fed.push(p.key);
+                }
+            });
+            if (fed.length) safeStorage.set('niko_garden', st);
+            return fed;
+        }
+        // ===== 四季节气换装（24 节气固定日期表，±1 天误差可接受） =====
+        const SOLAR_TERMS = [['小寒',1,6],['大寒',1,20],['立春',2,4],['雨水',2,19],['惊蛰',3,6],['春分',3,21],['清明',4,5],['谷雨',4,20],['立夏',5,6],['小满',5,21],['芒种',6,6],['夏至',6,21],['小暑',7,7],['大暑',7,23],['立秋',8,8],['处暑',8,23],['白露',9,8],['秋分',9,23],['寒露',10,8],['霜降',10,23],['立冬',11,7],['小雪',11,22],['大雪',12,7],['冬至',12,22]];
+        function solarTermOf(dt) {
+            const m = dt.getMonth() + 1, day = dt.getDate();
+            let cur = SOLAR_TERMS[23];   // 跨年默认冬至（1月1-5日）
+            for (const t of SOLAR_TERMS) { if (m > t[1] || (m === t[1] && day >= t[2])) cur = t; }
+            return cur;
+        }
+        function seasonOfTerm(name) {
+            if (['立春','雨水','惊蛰','春分','清明','谷雨'].includes(name)) return 'spring';
+            if (['立夏','小满','芒种','夏至','小暑','大暑'].includes(name)) return 'summer';
+            if (['立秋','处暑','白露','秋分','寒露','霜降'].includes(name)) return 'autumn';
+            return 'winter';
+        }
+        const GARDEN_SEASONS = {
+            spring: { cls:'spring', icon:'🌸', words:'风变软了，正是种东西的时候' },
+            summer: { cls:'summer', icon:'🌞', words:'蝉声很吵，树荫很凉' },
+            autumn: { cls:'autumn', icon:'🍂', words:'叶子在慢慢换颜色' },
+            winter: { cls:'winter', icon:'❄️', words:'雪来之前，先把自己照顾好' }
+        };
+        let gardenSeasonNow = seasonOfTerm(solarTermOf(new Date())[0]);
+        function gardenSeasonParticles(season) {
+            let s = '';
+            const rnd = () => Math.random();
+            if (season === 'spring') for (let i = 0; i < 9; i++) s += `<i class="gs-petal" style="left:${(rnd()*94+3).toFixed(1)}%;animation-delay:-${(rnd()*14).toFixed(1)}s;animation-duration:${(12+rnd()*7).toFixed(1)}s;"></i>`;
+            if (season === 'autumn') for (let i = 0; i < 11; i++) s += `<i class="gs-leaf" style="left:${(rnd()*94+3).toFixed(1)}%;animation-delay:-${(rnd()*14).toFixed(1)}s;animation-duration:${(11+rnd()*7).toFixed(1)}s;"></i>`;
+            if (season === 'winter') for (let i = 0; i < 13; i++) s += `<i class="gs-snow" style="left:${(rnd()*96+2).toFixed(1)}%;animation-delay:-${(rnd()*16).toFixed(1)}s;animation-duration:${(10+rnd()*8).toFixed(1)}s;"></i>`;
+            if (season === 'summer') for (let i = 0; i < 3; i++) s += `<i class="gs-fly" style="top:${(22+rnd()*46).toFixed(0)}%;left:${(rnd()*78+10).toFixed(0)}%;animation-delay:-${(rnd()*9).toFixed(1)}s;animation-duration:${(5+rnd()*4).toFixed(1)}s;"></i>`;
+            return s;
+        }
+        // ===== 树语：每棵树每天说一句话（按日期确定性选句，像它记得你） =====
+        const TREE_WORDS = {
+            energy: { withered:['这几天风大，我先把叶子收起来了。你先歇着，我们明天慢慢来。','累坏了吧？我不催你，站一会儿也挺好。'], grow:['今天也稳稳站住了。不用跑得快，站着就算数。','你在，我就在。今天也一起。'], bloom:['九十天，你一天都没糊弄我。','这片红是你一天一天浇出来的，好看吧。'] },
+            money:  { withered:['粮仓空了点。别慌，一颗一颗捡回来就好。','最近紧了点？树不看一时，看的是年成。'], grow:['仓里有粮，心里不慌。今天也进了一颗。','稳稳的，就是最好的收成。'], bloom:['这仓粮食，是你一天一天攒出来的底气。','仓满了。是你应得的。'] },
+            relate: { withered:['有点想你了，也想你惦记的那些人。','没人来？我先陪着你。'], grow:['今天有人被你想到了。他不知道，但我知道。','惦记一个人，花就开一分。'], bloom:['你浇的不是我，是那些没说出口的惦记。','被你记着的人，都很幸运。'] },
+            mood:   { withered:['阴天不是坏天气，只是天也需要歇歇。','不晴也没关系，我陪你看云。'], grow:['今天的天空归你管。是什么天气都好。','情绪没有对错，你说了算。'], bloom:['你把日子过成了自己喜欢的天气。','今天的天空，很你。'] },
+            health: { withered:['水杯空了好几天了，我替你渴着。','先喝口水吧，喝完再说别的。'], grow:['今天的水，身体收到了。','一杯一杯来，不着急。'], bloom:['这具身体陪你打了一路仗，谢谢你一直喂它。','结实得很。继续。'] },
+            spirit: { withered:['思绪乱了？不急，三口气的事。','风大就先躲一躲，我在这儿。'], grow:['今天也留了三口气给自己，很好。','心里那块地方，今天也是静的。'], bloom:['你的安静，已经是很多人的奢侈品了。','心里有树荫的人，走到哪都不晒。'] }
+        };
+        function gardenTreeWord(p, sc) {
+            const bank = TREE_WORDS[p.key];
+            if (!bank) return '';
+            const arr = sc < 30 ? bank.withered : (sc >= 90 ? bank.bloom : bank.grow);
+            const seed = todayYmd().split('-').reduce((a, b) => a + (+b || 0), 0) + GARDEN_PILLARS.indexOf(p);
+            return arr[seed % arr.length];
+        }
+        // ===== 投喂设置弹窗 =====
+        function gardenOpenFeed() {
+            const st = gardenNormalize(gardenState());
+            if (!st.feedMap) st.feedMap = {};
+            const habits = habitList();
+            const rows = GARDEN_PILLARS.map(p => {
+                const cur = st.feedMap[p.key] || '';
+                return `<div class="gf-row"><span class="gf-dot" style="background:${p.c}"></span><span class="gf-name">${p.name}</span>
+                    <select id="gfSel_${p.key}">
+                        <option value=""${cur ? '' : ' selected'}>不自动 · 走每日仪式</option>
+                        ${habits.map(h => `<option value="${h.id}"${cur === h.id ? ' selected' : ''}>${h.icon || '🎯'} ${escapeHtml(h.name)}</option>`).join('')}
+                    </select></div>`;
+            }).join('');
+            document.getElementById('gfRows').innerHTML = rows;
+            document.getElementById('gardenFeedModal').classList.add('show');
+        }
+        function gardenCloseFeed() { document.getElementById('gardenFeedModal').classList.remove('show'); }
+        function gardenSaveFeed() {
+            const st = gardenState();
+            if (!st.feedMap) st.feedMap = {};
+            GARDEN_PILLARS.forEach(p => { const sel = document.getElementById('gfSel_' + p.key); if (sel) st.feedMap[p.key] = sel.value; });
+            safeStorage.set('niko_garden', st);
+            gardenCloseFeed();
+            renderGarden();
+            if (typeof showToast === 'function') showToast('🫗 已保存 · 打卡当天柱子自动浇灌');
+        }
+        // ===== ⏳ 专注沙漏：小浮窗不挡内容，专注时照常浏览日历/看板（2026-09-06） =====
+        const FOCUS_KEY = 'niko_focus';
+        function focusGet() { return safeStorage.get(FOCUS_KEY, null); }
+        function focusSet(f) { safeStorage.set(FOCUS_KEY, f); }
+        let _focusNotified = false, _focusPanelOpen = false;
+        function focusEnsureDock() {
+            if (document.getElementById('focusDock')) return;
+            const dock = document.createElement('div');
+            dock.id = 'focusDock';
+            dock.innerHTML = `<div class="fd-pill" id="fdPill" onclick="focusTogglePanel()" title="专注沙漏">
+                    <svg viewBox="0 0 20 20" class="fd-hg" aria-hidden="true"><path d="M5 2h10M5 18h10M6 2c0 4 3 5.5 3 8s-3 4-3 8M14 2c0 4-3 5.5-3 8s3 4 3 8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect id="fdSand" x="7.5" y="11" width="5" height="6" rx="1" fill="currentColor" opacity=".35"/></svg>
+                    <span id="fdTime">专注</span>
+                </div>
+                <div class="fd-panel" id="fdPanel" style="display:none;"></div>`;
+            document.body.appendChild(dock);
+            focusTick();
+            setInterval(focusTick, 1000);
+        }
+        function focusStart(min) {
+            focusSet({ started: Date.now(), end: Date.now() + min * 60000, dur: min });
+            _focusNotified = false;
+            if (_focusPanelOpen) focusRenderPanel();
+            focusTick();
+            if (typeof showToast === 'function') showToast(`⏳ 沙漏翻面 · ${min} 分钟，去忙吧`);
+        }
+        function focusStartCustom() {
+            const el = document.getElementById('fdCustomMin');
+            const m = Math.max(5, Math.min(180, Math.round(+el.value || 0)));
+            if (!m) { if (typeof showToast === 'function') showToast('给个 5-180 的分钟数'); return; }
+            focusStart(m);
+        }
+        function focusStop() {
+            focusClear();
+            if (typeof showToast === 'function') showToast('沙漏收起来了，不记这轮');
+        }
+        function focusClear() {
+            safeStorage.set(FOCUS_KEY, null);
+            _focusNotified = false;
+            if (_focusPanelOpen) focusRenderPanel();
+            focusTick();
+        }
+        function focusLog() {
+            const f = focusGet(); if (!f) return;
+            const el = document.getElementById('fdLogTitle');
+            const title = (el && el.value.trim()) || `专注 ${f.dur} 分钟`;
+            const s = new Date(f.started), e = new Date(Math.min(f.end, Date.now()));
+            const pad = n => String(n).padStart(2, '0');
+            const hm = d => pad(d.getHours()) + ':' + pad(d.getMinutes());
+            const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+            try {
+                events.push({ id: 'ev_' + Date.now(), title, type: 'execute', startDate: ymd(s), endDate: ymd(e), startTime: hm(s), endTime: hm(e), priority: 'next', status: 'done', track: 'content' });
+                saveData();
+            } catch (err) { console.warn('focusLog', err); }
+            focusClear();
+            if (typeof showToast === 'function') showToast(`✅ 已记到今天日历：${title}`);
+        }
+        function focusCelebrate() {
+            const pill = document.getElementById('fdPill');
+            if (pill && typeof nikoSpark === 'function') { nikoSpark(pill, '⏳', '#a5b4fc'); setTimeout(() => nikoSpark(pill, '✦', '#6ee7b7'), 240); }
+            if (typeof showToast === 'function') showToast('⏳ 沙漏走完了 · 点浮窗记一笔');
+            if (_focusPanelOpen) focusRenderPanel();
+        }
+        function focusTick() {
+            const pill = document.getElementById('fdPill');
+            if (!pill) return;
+            const f = focusGet();
+            const timeEl = document.getElementById('fdTime'), sand = document.getElementById('fdSand');
+            if (!f || !f.end) {
+                pill.classList.remove('running');
+                if (timeEl) timeEl.textContent = '专注';
+                if (sand) sand.style.opacity = .35;
+                return;
+            }
+            pill.classList.add('running');
+            const remain = Math.max(0, Math.round((f.end - Date.now()) / 1000));
+            if (sand) sand.style.opacity = remain > 0 ? .75 : .2;
+            if (remain > 0) {
+                _focusNotified = false;
+                if (timeEl) timeEl.textContent = Math.floor(remain / 60) + ':' + String(remain % 60).padStart(2, '0');
+                const pt = document.getElementById('fdpTime');
+                if (pt) pt.textContent = `${f.dur} 分钟 · ${Math.floor(remain / 60)}:${String(remain % 60).padStart(2, '0')}`;
+            } else {
+                if (timeEl) timeEl.textContent = '完成';
+                if (!_focusNotified) { _focusNotified = true; focusCelebrate(); }
+            }
+        }
+        function focusTogglePanel() {
+            _focusPanelOpen = !_focusPanelOpen;
+            const p = document.getElementById('fdPanel');
+            if (!p) return;
+            p.style.display = _focusPanelOpen ? 'block' : 'none';
+            if (_focusPanelOpen) focusRenderPanel();
+        }
+        function focusRenderPanel() {
+            const p = document.getElementById('fdPanel');
+            if (!p) return;
+            const f = focusGet();
+            if (!f || !f.end) {
+                p.innerHTML = `<div class="fdp-head">⏳ 专注沙漏</div>
+                    <div class="fdp-presets">${[25, 45, 60].map(m => `<button class="fdp-min" onclick="focusStart(${m})">${m}<small>分</small></button>`).join('')}</div>
+                    <div class="fdp-custom"><input id="fdCustomMin" type="number" min="5" max="180" placeholder="自定义分钟"><button onclick="focusStartCustom()">开始</button></div>
+                    <div class="fdp-tip">浮窗不挡内容，专注时照常看日历和看板</div>`;
+                return;
+            }
+            const remain = Math.max(0, Math.round((f.end - Date.now()) / 1000));
+            if (remain > 0) {
+                const tasks = (typeof todayBoardData === 'function') ? todayBoardData().todayTasks.filter(t => t.status !== 'done') : [];
+                const list = tasks.slice(0, 5).map(t => `<div class="fdp-task">· ${escapeHtml(t.title)}</div>`).join('') || '<div class="fdp-task" style="opacity:.55;">今天没有待办 · 安心专注</div>';
+                p.innerHTML = `<div class="fdp-head" id="fdpTime">${f.dur} 分钟 · ${Math.floor(remain / 60)}:${String(remain % 60).padStart(2, '0')}</div>
+                    <div class="fdp-sub">还剩这些没打完，看一眼就回来：</div>
+                    <div class="fdp-list">${list}</div>
+                    <button class="fdp-stop" onclick="focusStop()">放弃这轮</button>`;
+            } else {
+                p.innerHTML = `<div class="fdp-head">⏳ 沙漏走完了</div>
+                    <div class="fdp-sub">这 ${f.dur} 分钟干了什么？留个名，日历替你记得。</div>
+                    <div class="fdp-log"><input id="fdLogTitle" placeholder="一句话，可不填" onkeydown="if(event.key==='Enter')focusLog()"></div>
+                    <div class="fdp-actions"><button class="fdp-ok" onclick="focusLog()">记到今天日历</button><button class="fdp-skip" onclick="focusClear()">不记了</button></div>`;
+            }
+        }
+        if (document.body) focusEnsureDock();
+        else document.addEventListener('DOMContentLoaded', focusEnsureDock);
         // 迷你树 SVG（62px 高）：幼芽/凋零/成树/开花 四态，六树种冠形差异
         function gardenTreeSVG(p, sc, done) {
             const withered = sc < 30;
@@ -13021,6 +13322,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         s += `<circle cx="${(B+o[0]*CW).toFixed(1)}" cy="${(canY+o[1]*CW).toFixed(1)}" r="${(o[2]*CW).toFixed(1)}" fill="${pal.mid}"/>`;
                     });
                     s += `<circle cx="${(B-CW*.25).toFixed(1)}" cy="${(canY-CW*.3).toFixed(1)}" r="${(CW*.3).toFixed(1)}" fill="${pal.lite}" opacity=".55"/>`;
+                    if (gardenSeasonNow === 'winter' && !withered && sc > 12) s += `<ellipse cx="${B}" cy="${(canY-CW*.72).toFixed(1)}" rx="${(CW*.58).toFixed(1)}" ry="${(CW*.22).toFixed(1)}" fill="#dfe8ff" opacity=".8"/>`;
                     if (p.species === 'maple' || p.species === 'ginkgo') {
                         const dc = withered ? '#6b6b58' : (p.species === 'maple' ? '#ff7e45' : '#fef3a0');
                         for (let k = 0; k < 4; k++) {
@@ -13047,17 +13349,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!wrap) return;
             const st = gardenNormalize(gardenState());
             const today = todayYmd();
+            // 四季换装：节气 chip + 粒子层 + 树景色调
+            const term = solarTermOf(new Date());
+            const season = GARDEN_SEASONS[seasonOfTerm(term[0])];
+            gardenSeasonNow = seasonOfTerm(term[0]);
+            const termEl = document.getElementById('gardenTerm');
+            if (termEl) termEl.textContent = `${season.icon} ${term[0]} · ${season.words}`;
+            const strip = document.getElementById('gardenStrip');
+            if (strip) {
+                let layer = strip.querySelector('.garden-season-layer');
+                if (!layer) { layer = document.createElement('div'); layer.className = 'garden-season-layer'; strip.appendChild(layer); }
+                if (layer.dataset.season !== season.cls) { layer.dataset.season = season.cls; layer.innerHTML = gardenSeasonParticles(season.cls); }
+            }
             wrap.innerHTML = GARDEN_PILLARS.map(p => {
                 const sc = st.score[p.key] || 0;
                 const done = st.watered[p.key] === today;
-                const withered = sc < 30;
-                return `<div class="garden-tree-card ${done ? 'done-card' : ''} ${withered ? 'withered-card' : ''}" data-key="${p.key}" style="--gc:${p.c}" title="${p.name} · ${p.ritual.act}">
+                const autoFed = done && st.autoFed && st.autoFed[p.key] === today;
+                let act;
+                if (autoFed) {
+                    const hh = habitList().find(h => h.id === (st.feedMap || {})[p.key]);
+                    act = `🌱 由「${hh ? escapeHtml(hh.name) : '习惯'}」投喂`;
+                } else act = done ? '✓ 今日已浇灌' : p.ritual.icon + ' ' + p.ritual.act;
+                return `<div class="garden-tree-card ${done ? 'done-card' : ''} ${sc < 30 ? 'withered-card' : ''}" data-key="${p.key}" style="--gc:${p.c}" title="${p.name} · ${p.ritual.act}">
                     ${gardenTreeSVG(p, sc, done)}
                     <span class="garden-name-row"><span class="garden-dot"></span><span class="garden-name">${p.name}</span><span class="garden-score">${sc}</span></span>
                     <span class="garden-bar"><i style="width:${sc}%"></i></span>
-                    <span class="garden-act">${done ? '✓ 今日已浇灌' : p.ritual.icon + ' ' + p.ritual.act}</span>
+                    <span class="garden-act">${act}</span>
+                    <span class="garden-say">${gardenTreeWord(p, sc)}</span>
                 </div>`;
             }).join('');
+            // 树语：hover 时气泡已由 CSS 接管，这里只为触屏记录 title（无 hover 场景走仪式浮层）
             const n = GARDEN_PILLARS.filter(p => st.watered[p.key] === today).length;
             const badge = document.getElementById('gardenWateredBadge');
             if (badge) {
@@ -13572,6 +13893,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             ov.id = 'closingOverlay';
             ov.innerHTML = `<div class="closing-card">
                 <div class="closing-date">${now.getMonth() + 1}月${now.getDate()}日 · 周${weekCn}</div>
+                <div class="closing-candle"><i class="c-glow"></i><i class="c-stick"></i><i class="c-flame"></i><i class="c-smoke"></i></div>
                 <div class="closing-sign-wrap"><i class="closing-rope"></i><div class="closing-sign">本日打烊</div></div>
                 <div class="closing-sub">灯已熄 · 明天见</div>
                 <div class="closing-receipt">
@@ -13585,8 +13907,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="closing-tip">点击任意处重新开门</div>
             </div>`;
             document.body.appendChild(ov);
+            // 烛光序列：火苗亮 3.6 秒 → 吹熄（烟丝上升 + 全卡变暗 + 「灯已熄」浮现）
+            setTimeout(() => {
+                if (!ov.parentNode) return;
+                const candle = ov.querySelector('.closing-candle'), card = ov.querySelector('.closing-card');
+                if (candle) candle.classList.add('out');
+                if (card) card.classList.add('dimmed');
+            }, 3600);
             ov.onclick = () => ov.remove();
-            setTimeout(() => { if (ov.parentNode) ov.remove(); }, 12000);
+            setTimeout(() => { if (ov.parentNode) ov.remove(); }, 14000);
         }
 
         // ===== 习惯打卡 =====
@@ -13715,6 +14044,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             renderTodayHabits();
             if (justDone) {
+                // 庭院自动驾驶：映射了这根柱子的习惯打卡 → 柱子自动浇灌
+                try {
+                    const fed = gardenSyncAutoFeed(gardenState());
+                    if (fed.length) {
+                        renderGarden();
+                        fed.forEach((k, i) => {
+                            const card = document.querySelector(`#gardenTrees .garden-tree-card[data-key="${k}"]`);
+                            if (card && typeof nikoSpark === 'function') setTimeout(() => nikoSpark(card, '🌱', '#4ade80'), 300 + i * 200);
+                        });
+                    }
+                } catch (e) {}
                 habitSpark(id);
                 // 🏆 地下城通关爆发：今日应打全部完成的一瞬间，血条上方洒落一圈 ✦（每次通关只放一次）
                 const due = habitList().filter(habitShouldToday);
@@ -26776,7 +27116,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061009";
+        window.NIKO_VERSION = "202609061048";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
