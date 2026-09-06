@@ -1550,14 +1550,40 @@
         .sunday-letter .sl-actions button.primary { background:#8b5cf6; border-color:#8b5cf6; color:#fff; }
         @media (max-width:768px) { .sunday-letter { padding:20px 18px 16px; } .badge-pop { padding:12px 18px; } #badgeCorner { top:auto; bottom:76px; } }
 
-        /* ===== 番茄钟（v2.15 沙漏钟面 · 安静线刻版：发丝线玻璃 + 主题令牌配色，与看板卡同一种安静） ===== */
+        /* ===== 番茄钟（v2.16 翻转点火仪式版：黄铜框架 + 发光沙粒 + 颈口光尘，开始=亲手把沙漏翻过来） ===== */
         .pomo-face { display: flex; flex-direction: column; align-items: center; padding: 14px 0 8px; }
-        .pomo-hg { width: 116px; border-radius: 26px; }
+        .pomo-hg { width: 116px; border-radius: 26px; transform-origin: 50% 50%; }
         .pomo-hg svg { width: 100%; display: block; overflow: visible; }
-        .pomo-glass { fill: none; stroke: var(--text, #8a93a3); stroke-width: 1.5; stroke-linecap: round; opacity: .5; transition: stroke .3s ease; }
-        .pomo-cap { stroke: var(--text, #8a93a3); stroke-width: 2.2; stroke-linecap: round; opacity: .32; transition: stroke .3s ease; }
-        .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 2px; color: var(--text, #111827); margin-top: 2px; font-variant-numeric: tabular-nums; }
+        .pomo-glass { fill: none; stroke: var(--text, #8a93a3); stroke-width: 1.6; stroke-linecap: round; opacity: .55; transition: stroke .3s ease; }
+        .pomo-glass-hi { fill: none; stroke: #fff; stroke-width: 1.2; stroke-linecap: round; opacity: .26; }
+        body.dark-mode .pomo-glass-hi { opacity: .2; }
+        .pomo-post { stroke: url(#pomoFrameG); stroke-width: 2.4; stroke-linecap: round; opacity: .9; }
+        .pomo-capbar { fill: url(#pomoFrameG); opacity: .92; }
+        .pomo-time { font-size: 34px; font-weight: 500; letter-spacing: 2px; color: var(--text, #111827); margin-top: 2px; font-variant-numeric: tabular-nums; transition: text-shadow .3s ease; }
         .pomo-state { font-size: 12px; color: #f97316; margin-top: 2px; }
+        /* 运行中：时间微微发光（专注橙 / 休息绿） */
+        .pomo-hg.running ~ .pomo-time { text-shadow: 0 0 18px rgba(249, 115, 22, .35); }
+        .pomo-hg.running.breaking ~ .pomo-time { text-shadow: 0 0 18px rgba(52, 211, 153, .35); }
+        /* 翻转点火：点「开始」= 把沙漏 180° 翻过来，落定带弹性回正 */
+        #pomoRing.flipping { animation: pomoFlip .62s cubic-bezier(.34, 1.3, .4, 1) forwards !important; }
+        @keyframes pomoFlip {
+            0% { transform: rotate(0deg); }
+            62% { transform: rotate(196deg); }
+            82% { transform: rotate(172deg); }
+            100% { transform: rotate(180deg); }
+        }
+        /* 完成金光脉冲：收番茄瞬间整只沙漏闪一次 */
+        #pomoRing.pulse { animation: pomoPulse 1.1s ease-out 1 !important; }
+        @keyframes pomoPulse {
+            0% { filter: drop-shadow(0 0 0 rgba(251, 191, 36, 0)); }
+            35% { filter: drop-shadow(0 0 18px rgba(251, 191, 36, .9)); }
+            100% { filter: drop-shadow(0 0 0 rgba(251, 191, 36, 0)); }
+        }
+        /* 颈口光尘闪烁 */
+        #pomoNeckDust circle { animation: pomoDust 1.6s ease-in-out infinite; }
+        #pomoNeckDust circle:nth-child(2) { animation-delay: -.5s; }
+        #pomoNeckDust circle:nth-child(3) { animation-delay: -1.1s; }
+        @keyframes pomoDust { 0%, 100% { opacity: .15; transform: translateY(0); } 50% { opacity: .95; transform: translateY(2px); } }
         /* 沙漏呼吸光环：进行中像一颗陪你漏沙的心脏 */
         #pomoRing.running { animation: pomoBreath 3.4s ease-in-out infinite; }
         @keyframes pomoBreath {
@@ -7761,13 +7787,24 @@
         }
         body.dark-mode .kb-actions input { background:#232335; border-color:#2e2e42; color:#e5e7eb; }
         .kb-para-tabs { display:flex; gap:8px; flex-wrap:wrap; flex-shrink:0; }
+        /* 守夜人书房 · PARA 四扇透光拱窗（2026-09-06）：每扇窗带自己的色光，点亮的窗透出光晕 */
         .kb-para-tab {
+            --pc:#7c3aed;
             padding:7px 16px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:500;
-            background:#f1f3f5; color:#555; border:1px solid transparent; transition:all .2s;
+            background:color-mix(in srgb, var(--pc) 6%, transparent); color:#555;
+            border:1px solid color-mix(in srgb, var(--pc) 22%, transparent); transition:all .2s;
         }
-        body.dark-mode .kb-para-tab { background:#222; color:#aaa; }
-        .kb-para-tab:hover { border-color:#888; }
-        .kb-para-tab.active { background:#7c3aed; color:#fff; border-color:#7c3aed; }
+        body.dark-mode .kb-para-tab { background:color-mix(in srgb, var(--pc) 10%, transparent); color:#b8bccd; }
+        .kb-para-tab:hover { border-color:var(--pc); transform:translateY(-1px); }
+        .kb-para-tab.active {
+            background:linear-gradient(135deg, color-mix(in srgb, var(--pc) 26%, transparent), color-mix(in srgb, var(--pc) 12%, transparent));
+            color:var(--pc); border-color:var(--pc); font-weight:600;
+            box-shadow:0 0 16px color-mix(in srgb, var(--pc) 30%, transparent), inset 0 1px 0 rgba(255,255,255,.25);
+        }
+        body.dark-mode .kb-para-tab.active {
+            color:#fff; text-shadow:0 0 12px color-mix(in srgb, var(--pc) 80%, transparent);
+            box-shadow:0 0 18px color-mix(in srgb, var(--pc) 45%, transparent), inset 0 1px 0 rgba(255,255,255,.08);
+        }
         .kb-cats { display:flex; gap:6px; flex-wrap:wrap; flex-shrink:0; }
         .kb-cat {
             font-size:12px; padding:4px 12px; border-radius:14px; cursor:pointer;
@@ -7786,14 +7823,36 @@
         body.dark-mode .kb-from.active { background:#064e3b; border-color:#059669; color:#6ee7b7; }
         .kb-stats { font-size:12px; color:#999; flex-shrink:0; }
         .kb-list { display:flex; flex-direction:column; gap:10px; overflow-y:auto; min-height:0; }
+        /* 守夜人书房 · 条目卡：渐变玻璃 + 左上角发光书签（颜色=PARA 分区），hover 透同色微光 */
         .kb-card {
-            background:#fff; border:1px solid #eef0f3; border-radius:12px; padding:14px 16px;
-            cursor:pointer; transition:box-shadow .2s; position:relative; border-left:4px solid #c7d2fe;
+            --kc:#c7d2fe;
+            background:linear-gradient(180deg,#fff,#fbfafc); border:1px solid #eef0f3; border-radius:14px;
+            padding:14px 16px 14px 18px; cursor:pointer; position:relative; overflow:hidden;
+            transition:transform .18s, box-shadow .18s, border-color .18s;
         }
-        body.dark-mode .kb-card { background:#232335; border-color:#2e2e42; }
-        .kb-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.08); }
-        body.dark-mode .kb-card:hover { box-shadow:0 2px 10px rgba(0,0,0,.4); }
-        .kb-card.pinned { border-left-width:4px; }
+        body.dark-mode .kb-card { background:linear-gradient(180deg,#262637,#22222f); border-color:#31313f; }
+        .kb-card:hover {
+            transform:translateY(-1px);
+            border-color:color-mix(in srgb, var(--kc) 55%, transparent);
+            box-shadow:0 6px 18px color-mix(in srgb, var(--kc) 16%, transparent);
+        }
+        body.dark-mode .kb-card:hover { box-shadow:0 6px 20px color-mix(in srgb, var(--kc) 24%, transparent); }
+        .kb-ribbon {
+            position:absolute; top:0; left:12px; width:13px; height:20px;
+            background:var(--kc); clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%);
+            box-shadow:0 0 10px color-mix(in srgb, var(--kc) 65%, transparent); opacity:.92;
+        }
+        /* 置顶 = 金色光边 + 金书签 */
+        .kb-card.pinned { border-color:rgba(251,191,36,.5); box-shadow:0 0 0 1px rgba(251,191,36,.20), 0 4px 16px rgba(251,191,36,.10); }
+        .kb-card.pinned .kb-ribbon { background:linear-gradient(180deg,#fcd34d,#f59e0b); box-shadow:0 0 12px rgba(251,191,36,.7); }
+        /* 撕页引文：日记/便签/读书笔记来源的条目，正文用楷体 + 分区色引文条，一眼区别于正式条目 */
+        .kb-card.kb-quote .kb-card-body {
+            font-family:KaiTi,'楷体',serif; font-size:14px; line-height:1.9; color:#4b4257;
+            margin-top:8px; padding-left:12px; -webkit-line-clamp:3;
+            border-left:2.5px solid color-mix(in srgb, var(--kc) 55%, transparent);
+        }
+        body.dark-mode .kb-card.kb-quote .kb-card-body { color:#cfc8e0; }
+        .kb-badge-para { background:transparent !important; border:1px solid; }
         .kb-card-title { font-size:14.5px; font-weight:600; color:#1f2937; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
         body.dark-mode .kb-card-title { color:#e5e7eb; }
         .kb-card-body { font-size:12.5px; color:#666; margin-top:6px; line-height:1.7;
@@ -7977,7 +8036,32 @@
         .kb-guide .btn { margin-top:8px; font-size:12px; padding:6px 14px; }
         body.dark-mode .kb-guide .btn { background:#332d47; border-color:#4a3f6b; color:#c4b5fd; }
 
+        /* ===== 守夜人简报卡（2026-09-06）：与今日看板 cmd-brief 同一套渐变玻璃语言 ===== */
+        .kb-hero {
+            position:relative; overflow:hidden; flex-shrink:0;
+            background:linear-gradient(135deg, rgba(124,58,237,.12), rgba(99,102,241,.04));
+            border:1px solid rgba(124,58,237,.26); border-radius:16px; padding:13px 18px 11px;
+        }
+        body.dark-mode .kb-hero { background:linear-gradient(135deg, rgba(124,58,237,.16), rgba(99,102,241,.06)); border-color:rgba(139,92,246,.32); }
+        .kb-hero::after {
+            content:''; position:absolute; top:-46px; right:-24px; width:190px; height:190px;
+            border-radius:50%; background:radial-gradient(circle, rgba(167,139,250,.16), transparent 70%); pointer-events:none;
+        }
+        .kb-hero-top { display:flex; align-items:center; gap:8px; font-size:11.5px; color:#8a8fa8; letter-spacing:.05em; margin-bottom:6px; }
+        body.dark-mode .kb-hero-top { color:#8f94b3; }
+        .kb-hero-dot { width:8px; height:8px; border-radius:50%; background:#a78bfa; box-shadow:0 0 8px rgba(167,139,250,.85); flex-shrink:0; animation:kbHeroDot 2.6s ease-in-out infinite alternate; }
+        @keyframes kbHeroDot { from{opacity:.55;} to{opacity:1;} }
+        .kb-hero-main { font-size:16px; font-weight:600; color:#1f2937; line-height:1.5; }
+        body.dark-mode .kb-hero-main { color:#eceef8; }
+        .kb-hero-main b { color:#7c3aed; font-variant-numeric:tabular-nums; }
+        body.dark-mode .kb-hero-main b { color:#a78bfa; }
+        .kb-hero-sub { margin-top:3px; font-size:12px; color:#8a8fa8; }
+        body.dark-mode .kb-hero-sub { color:#9fa3bd; }
+
         @media (max-width:768px) {
+            .kb-hero { padding:11px 14px 9px; border-radius:14px; }
+            .kb-hero-main { font-size:14px; }
+            .kb-hero-sub { font-size:11.5px; }
             .kb-actions { width:100%; gap:6px; }
             .kb-actions input { width:100%; font-size:16px; padding:10px 12px; }
             .kb-actions .btn { padding:10px 11px; font-size:12.5px; min-height:38px; }
@@ -10852,6 +10936,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 </div>
                 <button class="btn" onclick="kbDismissGuide()">先这么用着（收起）</button>
             </div>
+            <!-- 守夜人简报卡：库藏/本周新增/待复习 + 一句书房旁白 -->
+            <div class="kb-hero">
+                <div class="kb-hero-top"><span class="kb-hero-dot"></span>守夜人简报 · 你的第二大脑此刻的状态</div>
+                <div class="kb-hero-main" id="kbHeroMain"></div>
+                <div class="kb-hero-sub" id="kbHeroSub"></div>
+            </div>
             <div class="kb-head">
                 <h1>🧠 知识库 <span class="kb-sub">PARA · 经验复利（分类色条=项目，角标=状态）</span></h1>
                 <div class="kb-actions">
@@ -11976,18 +12066,42 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                             <linearGradient id="pomoSandGBreak" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#34d399"/>
                             </linearGradient>
+                            <linearGradient id="pomoFrameG" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="#caa56a"/><stop offset="1" stop-color="#7d5f34"/>
+                            </linearGradient>
+                            <radialGradient id="pomoGlowWork" cx=".5" cy=".5" r=".5">
+                                <stop offset="0" stop-color="#fdba74" stop-opacity=".85"/><stop offset="1" stop-color="#fdba74" stop-opacity="0"/>
+                            </radialGradient>
+                            <radialGradient id="pomoGlowBreak" cx=".5" cy=".5" r=".5">
+                                <stop offset="0" stop-color="#6ee7b7" stop-opacity=".85"/><stop offset="1" stop-color="#6ee7b7" stop-opacity="0"/>
+                            </radialGradient>
                         </defs>
-                        <line class="pomo-cap" x1="31" y1="17.5" x2="89" y2="17.5"/>
-                        <line class="pomo-cap" x1="31" y1="132.5" x2="89" y2="132.5"/>
-                        <polygon id="pomoSandTop" points="" fill="url(#pomoSandGWork)" opacity=".88"/>
+                        <!-- 落地光晕（运行中发亮） -->
+                        <ellipse id="pomoGroundGlow" cx="60" cy="129" rx="30" ry="6" fill="url(#pomoGlowWork)" opacity=".18"/>
+                        <!-- 黄铜框柱 + 上下盖 -->
+                        <line x1="33" y1="16" x2="33" y2="134" class="pomo-post"/>
+                        <line x1="87" y1="16" x2="87" y2="134" class="pomo-post"/>
+                        <rect x="26" y="11" width="68" height="7" rx="3.5" class="pomo-capbar"/>
+                        <rect x="26" y="132" width="68" height="7" rx="3.5" class="pomo-capbar"/>
+                        <!-- 沙体（JS 驱动） -->
+                        <path id="pomoSandTop" d="" fill="url(#pomoSandGWork)" opacity=".88"/>
                         <polygon id="pomoSandBot" points="" fill="url(#pomoSandGWork)" opacity=".95"/>
                         <path id="pomoSandCrest" d="" fill="url(#pomoSandGWork)" opacity=".95"/>
+                        <!-- 流沙：宽光晕线 + 主线 + 光点 -->
+                        <line id="pomoStreamGlow" x1="60" y1="77" x2="60" y2="120" stroke="#f97316" stroke-width="5" stroke-linecap="round" opacity="0"/>
                         <line id="pomoStream" x1="60" y1="77" x2="60" y2="120" stroke="#f97316" stroke-width="2" stroke-linecap="round" opacity="0" stroke-dasharray="2.5 4"/>
                         <g id="pomoStreamDots" opacity="0">
                             <circle cx="60" cy="80" r="1.3" fill="#fdba74"/><circle cx="60" cy="89" r="1.1" fill="#fdba74"/><circle cx="60" cy="98" r="1.3" fill="#fdba74"/>
                         </g>
+                        <!-- 颈口光尘 -->
+                        <g id="pomoNeckDust" opacity="0">
+                            <circle cx="56.5" cy="72" r="1" fill="#fdba74"/><circle cx="63.5" cy="75" r=".8" fill="#fdba74"/><circle cx="60" cy="69" r=".7" fill="#fdba74"/>
+                        </g>
+                        <!-- 玻璃罩 + 高光弧 -->
                         <path d="M36,20 C36,44 49,60 56,71 Q60,76 64,71 C71,60 84,44 84,20" class="pomo-glass"/>
                         <path d="M36,130 C36,106 49,90 56,79 Q60,74 64,79 C71,90 84,106 84,130" class="pomo-glass"/>
+                        <path d="M41.5,26 C41.5,40 47,52 52.5,60" class="pomo-glass-hi"/>
+                        <path d="M41.5,124 C41.5,110 47,98 52.5,90" class="pomo-glass-hi"/>
                     </svg>
                 </div>
                 <div class="pomo-time" id="pomoTimeDisplay">25:00</div>
@@ -20271,6 +20385,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 铁律：渲染前重读 localStorage（云同步数据可见 + 防覆盖）
             knowledge = safeStorage.get(KB_STORE, []);
             if (!knowledge.length && !safeStorage.get('niko_knowledge_seeded', false)) seedKnowledge();
+            renderKbHero();
             renderKbParaTabs();
             renderKbCats();
             renderKbFroms();
@@ -20278,11 +20393,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             updateKbReviewBadge();
         }
 
+        // 守夜人简报：库藏 / 本周新进 / 到期待复习 + 一句书房旁白（全部来自真实数据）
+        function renderKbHero() {
+            const main = document.getElementById('kbHeroMain');
+            const sub = document.getElementById('kbHeroSub');
+            if (!main || !sub) return;
+            const total = knowledge.length;
+            const weekAgo = Date.now() - 7 * 86400000;
+            const fresh = knowledge.filter(it => new Date(it.createdAt || 0).getTime() >= weekAgo).length;
+            const due = (typeof getKbReviewQueue === 'function') ? getKbReviewQueue().length : 0;
+            main.innerHTML = `库藏 <b>${total}</b> 条 · 本周新进 <b>${fresh}</b> 条 · <b>${due}</b> 条到期待复习`;
+            let line;
+            if (!total) line = '书房还是空的——各板块看到好内容点「📥 存入知识库」，第一盏灯等你来点。';
+            else if (due >= 5) line = `架上有 ${due} 条知识在等你重温，别让它们吃灰——点上方「🎴 复习」。`;
+            else if (due > 0) line = `有 ${due} 条到期了，点上方「🎴 复习」翻一翻，三分钟的事。`;
+            else if (fresh > 0) line = `书架在生长，本周 +${fresh} 条。经验复利就是这么攒出来的。`;
+            else line = '书架这周有点安静——去读书 / 便签 / 热点里 📥 存点好东西进来。';
+            sub.textContent = line;
+        }
+
         function renderKbParaTabs() {
             const box = document.getElementById('kbParaTabs');
             if (!box) return;
-            box.innerHTML = `<span class="kb-para-tab${currentKbPara === 'all' ? ' active' : ''}" onclick="switchKbPara('all')">🗂 全部</span>` +
-                KB_PARA.map(p => `<span class="kb-para-tab${currentKbPara === p.key ? ' active' : ''}" style="${currentKbPara === p.key ? '' : 'border-left:3px solid ' + p.color + ';'}" onclick="switchKbPara('${p.key}')">${p.label} <span style="font-weight:400;font-size:11px;opacity:.75;">${p.sub}</span></span>`).join('');
+            box.innerHTML = `<span class="kb-para-tab${currentKbPara === 'all' ? ' active' : ''}" style="--pc:#7c3aed;" onclick="switchKbPara('all')">🗂 全部</span>` +
+                KB_PARA.map(p => `<span class="kb-para-tab${currentKbPara === p.key ? ' active' : ''}" style="--pc:${p.color};" onclick="switchKbPara('${p.key}')">${p.label} <span style="font-weight:400;font-size:11px;opacity:.75;">${p.sub}</span></span>`).join('');
         }
         function renderKbCats() {
             const box = document.getElementById('kbCats');
@@ -20333,11 +20467,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             box.innerHTML = list.map(it => {
                 const paraColor = getKbParaColor(it.para);
                 const tags = (it.tags || []).slice(0, 4).map(t => `<span class="kb-tag">#${escapeHtml(t)}</span>`).join('');
-                return `<div class="kb-card${it.pinned ? ' pinned' : ''}" style="border-left-color:${paraColor};" onclick="openKbDetail('${it.id}')">
+                const isQuote = !!(it.source && ['日记', '便签', '读书笔记'].includes(it.source.from));
+                return `<div class="kb-card${it.pinned ? ' pinned' : ''}${isQuote ? ' kb-quote' : ''}" style="--kc:${paraColor};" onclick="openKbDetail('${it.id}')">
+                    <span class="kb-ribbon"></span>
                     <div class="kb-card-title">
                         ${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}
-                        <span class="kb-badge" style="background:${paraColor};">${getKbParaLabel(it.para)}</span>
-                        <span class="kb-badge" style="background:#9ca3af;">${escapeHtml(it.category)}</span>
+                        <span class="kb-badge kb-badge-para" style="color:${paraColor};">${getKbParaLabel(it.para)}</span>
+                        <span class="kb-badge" style="background:rgba(127,127,159,.16);color:#8a8fa8;">${escapeHtml(it.category)}</span>
                     </div>
                     ${it.body ? `<div class="kb-card-body">${escapeHtml(it.body.replace(/[#*`\[]/g, '').slice(0, 120))}</div>` : ''}
                     <div class="kb-card-meta">
@@ -26963,25 +27099,35 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             badge.textContent = n;
             badge.style.display = n ? 'flex' : 'none';
         }
-        // v2.14 沙量渲染：曲线球面玻璃内的沙体 + 圆顶沙堆
+        // v2.16 沙量渲染：凹面顶沙 + 圆顶沙堆 + 流沙光晕 + 颈口光尘 + 落地光
         function pomoRenderSand(frac, color) {
             const top = document.getElementById('pomoSandTop'), bot = document.getElementById('pomoSandBot');
             const crest = document.getElementById('pomoSandCrest');
             const stream = document.getElementById('pomoStream'), dots = document.getElementById('pomoStreamDots');
+            const streamGlow = document.getElementById('pomoStreamGlow');
+            const dust = document.getElementById('pomoNeckDust');
+            const groundGlow = document.getElementById('pomoGroundGlow');
             if (!top || !bot) return;
             const fill = pomoPhase === 'break' ? 'url(#pomoSandGBreak)' : 'url(#pomoSandGWork)';
             top.setAttribute('fill', fill); bot.setAttribute('fill', fill);
             if (crest) crest.setAttribute('fill', fill);
             if (stream) stream.setAttribute('stroke', color);
+            if (streamGlow) streamGlow.setAttribute('stroke', color);
             if (dots) dots.querySelectorAll('circle').forEach(c => c.setAttribute('fill', color));
+            if (dust) dust.querySelectorAll('circle').forEach(c => c.setAttribute('fill', color));
+            if (groundGlow) {
+                groundGlow.setAttribute('fill', pomoPhase === 'break' ? 'url(#pomoGlowBreak)' : 'url(#pomoGlowWork)');
+                groundGlow.setAttribute('opacity', pomoRunning ? .55 : .18);
+            }
             const hwT = y => 4 + (75 - y) * 20 / 57;
             const hwB = y => 4 + (y - 75) * 20 / 57;
             const r = 1 - frac;
-            if (r <= 0.015) top.setAttribute('points', '');
+            // 顶沙：凹面漏斗（中间被流沙掏出一个坑）
+            if (r <= 0.015) top.setAttribute('d', '');
             else {
                 const yT = Math.max(20, 75 - 57 * r);
                 const hw = hwT(yT);
-                top.setAttribute('points', `60,76 ${(60 - hw).toFixed(1)},${yT.toFixed(1)} ${(60 + hw).toFixed(1)},${yT.toFixed(1)}`);
+                top.setAttribute('d', `M ${(60 - hw).toFixed(1)},${yT.toFixed(1)} Q 60,${(yT + 5).toFixed(1)} ${(60 + hw).toFixed(1)},${yT.toFixed(1)} L 60,76 Z`);
             }
             if (frac <= 0.015) { bot.setAttribute('points', ''); if (crest) crest.setAttribute('d', ''); }
             else {
@@ -26996,7 +27142,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 stream.setAttribute('opacity', on ? .85 : 0);
                 stream.setAttribute('y2', String(Math.max(100, ySurf - 4)));
             }
+            if (streamGlow) {
+                const ySurf2 = frac <= 0.015 ? 126 : Math.min(126, 130 - 57 * frac);
+                streamGlow.setAttribute('opacity', on ? .22 : 0);
+                streamGlow.setAttribute('y2', String(Math.max(100, ySurf2 - 4)));
+            }
             if (dots) dots.setAttribute('opacity', on ? 1 : 0);
+            if (dust) dust.setAttribute('opacity', on ? 1 : 0);
+        }
+        // v2.16 翻转点火：沙先落底 → 整只沙漏 180° 弹性翻转 → 落定洒光尘。对称造型 + 同帧换沙态，翻面瞬间无跳变
+        function pomoFlipIgnite(after) {
+            const ring = document.getElementById('pomoRing');
+            if (!ring) { if (after) after(); return; }
+            const color = pomoPhase === 'break' ? POMO_BREAK_COLOR : POMO_WORK_COLOR;
+            pomoRenderSand(1, color);
+            ring.classList.remove('flipping');
+            void ring.offsetWidth;
+            ring.classList.add('flipping');
+            setTimeout(() => {
+                ring.classList.remove('flipping');
+                if (after) after(); else renderPomoFace();
+                if (typeof nikoSpark === 'function') nikoSpark(ring, '✦', color);
+            }, 640);
         }
         function renderPomoFace() {
             const timeEl = document.getElementById('pomoTimeDisplay');
@@ -27010,7 +27177,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (timeEl) timeEl.textContent = pomoTimeText(pomoRemain);
             const pct = pomoTotalSeconds ? ((pomoTotalSeconds - pomoRemain) / pomoTotalSeconds) * 100 : 0;
             if (ringEl) {
-                pomoRenderSand(Math.min(1, Math.max(0, pct / 100)), color);
+                // 待命满钟 = 沙安稳沉在底部，等你亲手把它翻过来（翻转点火的前置画面）
+                const settled = !pomoRunning && !pomoEndAt && pomoRemain >= pomoTotalSeconds;
+                pomoRenderSand(settled ? 1 : Math.min(1, Math.max(0, pct / 100)), color);
                 ringEl.classList.toggle('running', !!pomoRunning);
                 ringEl.classList.toggle('breaking', pomoPhase === 'break');
             }
@@ -27117,6 +27286,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoFace();
         }
         function pomoStart() {
+            // 全新开跑（非暂停继续）：先播「翻转点火」仪式，落定后才真正计时
+            const fresh = !pomoEndAt && pomoRemain >= pomoDurationFor(pomoPhase);
+            if (fresh) { pomoFlipIgnite(pomoStartCore); return; }
+            pomoStartCore();
+        }
+        function pomoStartCore() {
             if (pomoEndAt) {
                 const diff = Math.round((pomoEndAt - Date.now()) / 1000);
                 if (diff <= 0) { pomoFinish(); return; }
@@ -27176,6 +27351,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 renderPomoBadge();
                 // 🌱 番茄林地：每完成一个番茄钟种下一棵树（游戏时间页 + 计划看板图例行同步可看）
                 if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('pomoTimeDisplay'), '🌱', '#34d399');
+                // ✨ 收番茄金光脉冲：整只沙漏闪一次（仪式感收尾）
+                try {
+                    const ringEl2 = document.getElementById('pomoRing');
+                    if (ringEl2) {
+                        ringEl2.classList.remove('pulse'); void ringEl2.offsetWidth;
+                        ringEl2.classList.add('pulse');
+                        setTimeout(() => { try { ringEl2.classList.remove('pulse'); } catch (e) {} }, 1150);
+                    }
+                } catch (e) {}
                 try { if (typeof window.renderPlanFocusStrip === 'function') window.renderPlanFocusStrip(); } catch (e) {}
                 // 🍅 v2.10 收获仪式：居中非阻塞播报这张番茄的"战利品"
                 try {
@@ -27562,7 +27746,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609061315";
+        window.NIKO_VERSION = "202609061406";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
