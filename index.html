@@ -8186,7 +8186,7 @@
         body.dark-mode #nbDraftHint { color: #d6c99a; background: #2b2733; border-color: #4a4258; }
         /* ===== v2.21 手机双列瀑布精修（375px 级窄屏保 2 列可读） ===== */
         @media (max-width: 768px) {
-            .nb-wall { column-gap: 10px; padding: 2px 0; }
+            .nb-wall { column-gap: 8px; padding: 0; }   /* 2026-09-07 吃满左右：墙体零内衬贴屏幕边，列缝 10→8 */
             .nb-wall .nb-card { margin-bottom: 10px; padding: 9px 11px 7px; }
             .nb-wall .nb-card.nb-slim { margin-bottom: 8px; }
             .nb-card.nb-slim { padding: 7px 10px 4px; }
@@ -8302,10 +8302,15 @@
             #noteModal .note-tag-picker { max-height: 30vh; overflow-y: auto; }
         }
 
-        /* ===== v2.25 页面容器（原行内样式落地为类；手机两侧 12px 对齐今日看板，不再大片留白）===== */
+        /* ===== v2.25 页面容器（原行内样式落地为类）===== */
         .nb-page-wrap { padding: 16px 24px; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px; }
         @media (max-width: 768px) {
-            .nb-page-wrap { padding: 10px 12px; gap: 10px; }
+            /* 2026-09-07 用户点名：便签看板手机端吃满左右不留任何间隔——容器两侧 padding 撤掉，墙体贴边 */
+            #notesPage { padding: 10px 0 !important; }
+            .nb-page-wrap { padding: 10px 0; gap: 10px; }
+            /* 工具行/筛选行不是主角，保留 10px 内衬防贴边；间隔全部让给便签墙 */
+            .nb-toolbar { padding-left: 10px; padding-right: 10px; }
+            .nb-tag-filter-bar { padding-left: 10px; padding-right: 10px; }
             /* 主墙卡片的快捷键行（📌✏️🗓📦🗑）手机端隐藏——点卡片进详情，操作全在详情里；归档/回收站的恢复按钮不受影响 */
             .nb-ca-main { display: none !important; }
             /* 新建按钮并进视图切换同一行，不再独占一行 */
@@ -30582,7 +30587,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072349";
+        window.NIKO_VERSION = "202609072359";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
