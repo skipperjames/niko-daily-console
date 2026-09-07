@@ -9616,20 +9616,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         .gt-balance-num { font-size: 40px; font-weight: 800; line-height: 1.1; }
         .gt-balance-num small { font-size: 15px; font-weight: 500; opacity: .75; }
         .gt-balance-sub { font-size: 12px; color: rgba(255,255,255,.75); }
-        .gt-balance-right { display: flex; gap: 8px; align-items: center; }
-        .gt-spend-box {
-            background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
-            border-radius: 12px; padding: 8px 12px; display: flex; gap: 8px; align-items: center;
-        }
-        .gt-spend-box input {
-            width: 80px; padding: 7px 10px; border-radius: 8px; border: none; outline: none;
-            background: rgba(255,255,255,.9); color: #333; font-size: 14px;
-        }
-        .gt-spend-box button {
-            border: none; border-radius: 8px; padding: 8px 14px; cursor: pointer;
-            background: #f59e0b; color: #fff; font-size: 13px; font-weight: 600;
-        }
-        .gt-spend-box button:disabled { opacity: .45; cursor: not-allowed; }
         .gt-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; flex-shrink: 0; }
         .gt-stat {
             background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 12px 16px;
@@ -9811,10 +9797,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             .gt-balance-card { flex-direction: column; align-items: stretch; padding: 16px; gap: 12px; border-radius: 14px; }
             .gt-balance-left { gap: 6px; }
             .gt-balance-num { font-size: 34px; }
-            .gt-balance-right { width: 100%; }
-            .gt-spend-box { width: 100%; justify-content: space-between; padding: 10px; }
-            .gt-spend-box input { width: 100% !important; min-height: 40px; font-size: 16px !important; }
-            .gt-spend-box button { flex: 1; min-height: 40px; font-size: 13px; padding: 10px 16px; }
 
             /* 4 列统计 → 2 列 */
             .gt-stats { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -12231,12 +12213,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <div class="gt-balance-label">⏱ 当前可玩游戏时长</div>
                         <div class="gt-balance-num" id="gtBalanceNum">0<small> 分钟</small></div>
                         <div class="gt-balance-sub" id="gtBalanceSub">累计赚取 0 · 累计消耗 0</div>
-                    </div>
-                    <div class="gt-balance-right">
-                        <div class="gt-spend-box">
-                            <input type="number" id="gtSpendInput" placeholder="分钟" min="1" step="1" value="">
-                            <button id="gtSpendBtn" onclick="gtSpend()">消耗</button>
-                        </div>
+                        <div style="font-size:11px;color:#888;margin-top:4px;">🎮 用上方「记录游玩」登记开玩，余额自动扣除</div>
                     </div>
                 </div>
 
@@ -26952,30 +26929,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 document.getElementById('gamePage').classList.contains('active')) renderGameTimePage();
         }
 
-        // 手动消耗游戏时间
-        function gtSpend() {
-            const input = document.getElementById('gtSpendInput');
-            const min = Math.round(Number(input && input.value) || 0);
-            if (min <= 0) { if (typeof showToast === 'function') showToast('请输入要消耗的分钟数'); return; }
-            const d = gtData();
-            if ((d.balance || 0) < min) {
-                if (typeof showToast === 'function') showToast(`余额不足：当前只剩 ${fmtMin(d.balance || 0)}`);
-                return;
-            }
-            d.balance -= min;
-            d.totalUsed = (d.totalUsed || 0) + min;
-            d.history.unshift({ id: 'gu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), type: 'use', min: min, reason: '手动消耗', date: gtTodayStr(), at: new Date().toISOString() });
-            if (d.history.length > GT_MAX_HISTORY) d.history.length = GT_MAX_HISTORY;
-            gtSave(d);
-            if (typeof nikoEcoEmit === 'function') { nikoEcoEmit('gameUse'); nikoEcoEmit('gameBal', { bal: d.balance || 0 }); }
-            // 消耗 = 去玩游戏，自动计入当天游玩日历
-            gtAddPlay(min, null, gtTodayStr());
-            if (input) input.value = '';
-            // 消耗瞬间：金币洒落（仪式感微反馈）
-            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('gtSpendBtn'), '🪙', '#fbbf24');
-            if (typeof showToast === 'function') showToast(`🎮 消耗 ${fmtMin(min)} 玩游戏，剩余 ${fmtMin(d.balance)}`);
-            renderGameTimePage();
-        }
+        // 手动消耗游戏时间（v2.19 已合并进 gtLogPlay：记录游玩 = 余额自动扣除，此函数保留为兼容占位）
+        function gtSpend() { gtLogPlay(); }
 
         // 设置某习惯的每次打卡奖励分钟数
         function gtSetReward(habitId, min) {
@@ -27059,8 +27014,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const last = (d.history || [])[0];
             const statLast = document.getElementById('gtStatLast');
             if (statLast) statLast.textContent = last ? ((last.type === 'earn' ? '赚取 ' : last.type === 'use' ? '消耗 ' : '') + fmtMin(last.min) + ' · ' + (last.reason || '')) : '—';
-            const spendBtn = document.getElementById('gtSpendBtn');
-            if (spendBtn) spendBtn.disabled = balance <= 0;
             renderGameTimeRules();
             renderGtHistory();
             renderGtForest();
@@ -27172,23 +27125,38 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             logs.sort((a, b) => a.date.localeCompare(b.date));
             gtSavePlayLogs(logs);
         }
-        // 撤销当天最后一次：优先扣减手动备注，没有备注则整体扣减
+        // 撤销当天最后一次：优先扣减手动备注，没有备注则整体扣减；同步返还该次扣除的余额
         function gtUndoPlay() {
             const today = gtTodayStr();
             const logs = gtPlayLogs();
             const day = logs.find(l => l.date === today);
             if (!day || !day.minutes) { if (typeof showToast === 'function') showToast('今天还没有游玩记录'); return; }
+            let undoneMin = 0;
             if (day.notes && day.notes.length) {
                 const last = day.notes.pop();
-                day.minutes = Math.max(0, (day.minutes || 0) - (Number(last.min) || 0));
+                undoneMin = Number(last.min) || 0;
+                day.minutes = Math.max(0, (day.minutes || 0) - undoneMin);
             }
             if (!day.minutes && (!day.notes || !day.notes.length)) {
                 const idx = logs.findIndex(l => l.date === today);
                 if (idx >= 0) logs.splice(idx, 1);
             }
             gtSavePlayLogs(logs);
+            // v2.19：该次游玩若从余额扣过，一并返还（最近一条今天的 use 流水）
+            let refundMin = 0;
+            const d = gtData();
+            const uidx = (d.history || []).findIndex(e => e.type === 'use' && e.date === today && (e.reason || '').indexOf('游玩') === 0);
+            if (uidx >= 0) {
+                const u = d.history[uidx];
+                refundMin = u.min;
+                d.balance = (d.balance || 0) + u.min;
+                d.totalUsed = Math.max(0, (d.totalUsed || 0) - u.min);
+                d.history.splice(uidx, 1);
+                gtSave(d);
+                if (typeof nikoEcoEmit === 'function') nikoEcoEmit('gameBal', { bal: d.balance || 0 });
+            }
             renderGameTimePage();
-            if (typeof showToast === 'function') showToast('↩ 已撤销今天的最后一次记录');
+            if (typeof showToast === 'function') showToast('↩ 已撤销最后一次记录' + (refundMin ? `，余额返还 ${fmtMin(refundMin)}` : ''));
         }
         function gtLogPlay() {
             const minInput = document.getElementById('gtPlayMin');
@@ -27197,14 +27165,26 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (min <= 0) { if (typeof showToast === 'function') showToast('请输入游玩分钟数'); return; }
             if (min > 1440) { if (typeof showToast === 'function') showToast('单次记录不要超过 24 小时哦'); return; }
             const note = (noteInput && noteInput.value.trim()) || '';
-            // 纯记录实际游玩时长（不扣余额）；"消耗"按钮会自动计入当天
+            // v2.19 合二为一：记录游玩 = 实际游玩入账 + 从余额自动扣除（余额不足则扣到 0 为止，不多扣不拦着记录）
+            const d = gtData();
+            const bal = d.balance || 0;
+            const deduct = Math.min(bal, min);
+            if (deduct > 0) {
+                d.balance -= deduct;
+                d.totalUsed = (d.totalUsed || 0) + deduct;
+                d.history.unshift({ id: 'gu_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), type: 'use', min: deduct, reason: note ? '游玩 · ' + note : '游玩消耗', date: gtTodayStr(), at: new Date().toISOString() });
+                if (d.history.length > GT_MAX_HISTORY) d.history.length = GT_MAX_HISTORY;
+                gtSave(d);
+                if (typeof nikoEcoEmit === 'function') { nikoEcoEmit('gameUse'); nikoEcoEmit('gameBal', { bal: d.balance || 0 }); }
+            }
             gtAddPlay(min, note ? { note: note, min: min } : null, gtTodayStr());
             if (minInput) minInput.value = '';
             if (noteInput) noteInput.value = '';
-            // 记录瞬间：手柄闪光（仪式感微反馈）
-            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('gtPlayBtn'), '🎮', '#34d399');
+            // 记录瞬间：余额足扣金币洒落，否则手柄闪光（仪式感微反馈）
+            if (typeof nikoSpark === 'function') nikoSpark(document.getElementById('gtPlayBtn'), deduct === min ? '🪙' : '🎮', deduct === min ? '#fbbf24' : '#34d399');
             renderGameTimePage();
-            if (typeof showToast === 'function') showToast(`🎮 已记录游玩 ${fmtMin(min)}${note ? '（' + note + '）' : ''}`);
+            const tail = deduct === min ? `，余额扣除 ${fmtMin(deduct)}` : (deduct > 0 ? `，余额不足仅扣 ${fmtMin(deduct)}` : '（余额已空，仅记录）');
+            if (typeof showToast === 'function') showToast(`🎮 已记录游玩 ${fmtMin(min)}${tail}`);
         }
         let gtCalOffset = 0; // 0=本月, -1=上月, 1=下月…
         let gtSelectedDate = null; // 选中查看明细的日期
@@ -30036,7 +30016,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072016";
+        window.NIKO_VERSION = "202609072027";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
