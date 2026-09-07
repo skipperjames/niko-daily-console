@@ -3176,6 +3176,25 @@
         }
         .task-status-mark svg { width: 14px; height: 14px; display: block; }
         .day-task-item { position: relative; }
+        /* ===== 批量操作（2026-09-07） ===== */
+        .batch-check {
+            width: 17px; height: 17px; flex-shrink: 0;
+            border: 2px solid #c5c2bb; border-radius: 50%;
+            margin-top: 2px; display: none;
+            transition: all .12s;
+        }
+        body.dark-mode .batch-check { border-color: #555; }
+        .day-task-item.batch-mode { cursor: pointer; }
+        .day-task-item.batch-mode .batch-check { display: block; }
+        .day-task-item.batch-selected { background: rgba(124, 58, 237, .1) !important; box-shadow: inset 3px 0 0 #7c3aed; }
+        .day-task-item.batch-selected .batch-check { background: #7c3aed; border-color: #7c3aed; }
+        .day-task-item.batch-selected .batch-check::after {
+            content: '✓'; color: #fff; font-size: 11px; font-weight: 700;
+            display: block; text-align: center; line-height: 13px;
+        }
+        #batchBar { gap: 4px; flex-wrap: wrap; }
+        #batchToggleBtn.active { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+        body.dark-mode #batchToggleBtn.active { background: #7c3aed; color: #fff; }
         /* 旧 task-status-pill 不再使用（保留类名避免破坏，设为 hidden） */
         .task-status-pill { display: none !important; }
         /* meta 行：项目名 pill + 时间/类型/重复 */
@@ -10793,6 +10812,15 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <div class="panel-actions">
                         <button class="btn-small primary" onclick="openEventModal(null, selectedDate)">+ 新建任务</button>
                         <button class="btn-small" onclick="goToToday()">回到今天</button>
+                        <button class="btn-small" id="batchToggleBtn" onclick="toggleBatchMode()" title="批量勾选：全选 / 批量完成 / 批量删除（重复任务可连带整个系列删）">☑ 批量</button>
+                    </div>
+                    <div class="panel-actions" id="batchBar" style="display:none;">
+                        <button class="btn-small" onclick="batchSelectAll()">全选</button>
+                        <span id="batchCount" style="font-size:11.5px;color:#888;align-self:center;">已选 0</span>
+                        <button class="btn-small" onclick="batchSetDone()" title="把选中的全部标记为完成">✓ 完成</button>
+                        <button class="btn-small" onclick="batchSetTodo()" title="把选中的全部改回未完成">↩ 未完成</button>
+                        <button class="btn-small danger" onclick="batchDelete()">🗑 删除</button>
+                        <button class="btn-small danger" id="batchSeriesBtn" onclick="batchDeleteSeries()" style="display:none;" title="连带删除选中任务所属的整个重复系列">🗑 整个系列</button>
                     </div>
                     <div class="day-task-list" id="dayTaskList"></div>
                 </div>
@@ -16737,9 +16765,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         // 把 dayEvents 按 dayOrder 优先排；缺失项按 startTime 兜底
         function sortDayEventsByUserOrder(dayEvents, dateStr) {
+            // 完成的任务永远沉底（2026-09-07 用户要求），同组内保持用户手排/时间序
+            const doneRank = e => e.status === 'done' ? 1 : 0;
             const order = getDayOrder(dateStr);
             if (order && order.length) {
                 dayEvents.sort((a, b) => {
+                    const dr = doneRank(a) - doneRank(b);
+                    if (dr) return dr;
                     const ai = order.indexOf(a.id), bi = order.indexOf(b.id);
                     if (ai >= 0 && bi >= 0) return ai - bi;
                     if (ai >= 0) return -1;
@@ -16747,7 +16779,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     return (a.startTime || '99:99').localeCompare(b.startTime || '99:99');
                 });
             } else {
-                dayEvents.sort((a, b) => (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
+                dayEvents.sort((a, b) => doneRank(a) - doneRank(b) || (a.startTime || '99:99').localeCompare(b.startTime || '99:99'));
             }
         }
         // 把 srcId 拖到 targetId 上半部/下半部：before / after；存 dayOrder，重渲染
@@ -17312,7 +17344,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const isOverdue = isEventOverdue(ev);
                 const project = getProject(ev.projectId);
                 const item = document.createElement('div');
-                item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '') + (isOverdue ? ' overdue-event' : '');
+                const inBatch = typeof batchMode !== 'undefined' && batchMode;
+                const sel = inBatch && batchSel.has(ev.id);
+                item.className = 'day-task-item status-' + ev.status + (isDone ? ' completed' : '') + (isOverdue ? ' overdue-event' : '') + (inBatch ? ' batch-mode' : '') + (sel ? ' batch-selected' : '');
                 item.style.setProperty('background-color', hexToRgba(project.color, 0.18), 'important');
                 item.style.setProperty('border-left', '4px solid ' + project.color, 'important');
                 const displayStatus = isOverdue ? 'overdue' : ev.status;
@@ -17325,8 +17359,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 };
                 const markData = STATUS_MARK_SVG_LG[displayStatus] || STATUS_MARK_SVG_LG['todo'];
                 const statusMarkHtml = `<span class="task-status-mark ${displayStatus}" title="${escapeHtml(markData.label)}">${markData.svg}</span>`;
-                item.innerHTML = `
-                    <div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
+                item.innerHTML = `${inBatch ? `<div class="batch-check${sel ? ' on' : ''}"></div>` : ''}<div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
                         <div class="task-row-main">
                             <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
@@ -17344,7 +17377,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <button class="icon-btn" onclick="openEventModal('${ev.id}'); event.stopPropagation();">✏️</button>
                         <button class="icon-btn danger" onclick="deleteEventById('${ev.id}'); event.stopPropagation();">🗑️</button>
                     </div>${statusMarkHtml}`;
-                item.onclick = () => openEventModal(ev.id);
+                item.onclick = inBatch ? () => batchToggleItem(ev.id) : () => openEventModal(ev.id);
                 list.appendChild(item);
             });
         }
@@ -17739,6 +17772,77 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             events = events.filter(e => e.id !== id);
             saveData();
             render();
+        }
+
+        // ===== 批量操作（2026-09-07）：日详情列表 全选/批量完成/批量删除/连系列删 =====
+        let batchMode = false;
+        const batchSel = new Set();
+        function toggleBatchMode() {
+            batchMode = !batchMode;
+            batchSel.clear();
+            document.getElementById('batchBar').style.display = batchMode ? 'flex' : 'none';
+            const btn = document.getElementById('batchToggleBtn');
+            if (btn) { btn.classList.toggle('active', batchMode); btn.textContent = batchMode ? '✕ 退出批量' : '☑ 批量'; }
+            renderDayDetail();
+        }
+        function batchToggleItem(id) {
+            batchSel.has(id) ? batchSel.delete(id) : batchSel.add(id);
+            updateBatchBar();
+            renderDayDetail();
+        }
+        function batchSelectAll() {
+            const dateStr = formatDate(selectedDate);
+            const dayEvents = events.filter(e => isDateInRange(dateStr, e.startDate, e.endDate) && scopeVisible(e));
+            const allOn = dayEvents.length && dayEvents.every(e => batchSel.has(e.id));
+            dayEvents.forEach(e => allOn ? batchSel.delete(e.id) : batchSel.add(e.id));
+            updateBatchBar();
+            renderDayDetail();
+        }
+        function updateBatchBar() {
+            const el = document.getElementById('batchCount');
+            if (el) el.textContent = '已选 ' + batchSel.size;
+            const seriesBtn = document.getElementById('batchSeriesBtn');
+            if (seriesBtn) {
+                const hasSeries = [...batchSel].some(id => { const ev = events.find(x => x.id === id); return ev && ev.repeatGroup; });
+                seriesBtn.style.display = hasSeries ? 'inline-block' : 'none';
+            }
+        }
+        function batchSetStatus(done) {
+            if (!batchSel.size) return showToast('先勾选任务');
+            let n = 0;
+            [...batchSel].forEach(id => {
+                const ev = events.find(x => x.id === id);
+                if (ev && (done ? ev.status !== 'done' : ev.status === 'done')) {
+                    ev.status = done ? 'done' : 'todo';
+                    applyStampStatus(ev, done);
+                    n++;
+                }
+            });
+            if (n) { saveData(); showToast(done ? '✅ 已完成 ' + n + ' 个任务' : '↩ 已改回未完成 ' + n + ' 个'); }
+            render();
+        }
+        function batchSetDone() { batchSetStatus(true); }
+        function batchSetTodo() { batchSetStatus(false); }
+        function batchDelete() {
+            if (!batchSel.size) return showToast('先勾选任务');
+            if (!confirm('确定删除选中的 ' + batchSel.size + ' 个任务吗？')) return;
+            events = events.filter(e => !batchSel.has(e.id));
+            batchSel.clear();
+            saveData();
+            updateBatchBar();
+            render();
+            showToast('🗑 已删除');
+        }
+        function batchDeleteSeries() {
+            const groups = new Set([...batchSel].map(id => events.find(x => x.id === id)).filter(ev => ev && ev.repeatGroup).map(ev => ev.repeatGroup));
+            if (!groups.size) return showToast('选中项里没有重复系列任务');
+            if (!confirm('连带删除选中任务所属的整个重复系列？共 ' + groups.size + ' 个系列（系列内所有日期的实例都会删除）')) return;
+            events = events.filter(e => !e.repeatGroup || !groups.has(e.repeatGroup));
+            batchSel.clear();
+            saveData();
+            updateBatchBar();
+            render();
+            showToast('🗑 已删除 ' + groups.size + ' 个系列');
         }
 
         function openEventModal(eventId = null, presetDate = null) {
@@ -29517,7 +29621,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071424";
+        window.NIKO_VERSION = "202609071453";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
