@@ -8692,17 +8692,30 @@
             .kb-guide { padding:10px 12px; font-size:11.5px; }
             .kb-tpl-group-label { min-width:84px; font-size:10.5px; }
             .kb-tpl-chip { font-size:11px; padding:2px 7px; }
-            /* ===== ⚙️ 工具抽屉（2026-09-07，同计划页模式）：收起态只留 搜索+复习+＋新增，次要工具全收进 ⚙️ ===== */
+            /* ===== ⚙️ 工具抽屉（2026-09-07 深度整理，用户点名"打开全是按钮/检索"）：收起态只留 ⚙️+复习+＋新增 一行，搜索/分类/来源/统计全收进 ⚙️ ===== */
             #knowledgePage #kbToolsToggle {
                 display: inline-flex !important; align-items: center; justify-content: center;
                 min-width: 38px; min-height: 38px; padding: 4px 10px !important;
                 font-size: 15px !important; border-radius: 8px; flex-shrink: 0;
             }
-            #knowledgePage:not(.tools-open) .kb-extra { display: none !important; }
+            #knowledgePage:not(.tools-open) .kb-extra,
+            #knowledgePage:not(.tools-open) #kbSearch,
+            #knowledgePage:not(.tools-open) #kbCats,
+            #knowledgePage:not(.tools-open) #kbFroms,
+            #knowledgePage:not(.tools-open) #kbStats { display: none !important; }
             #knowledgePage.tools-open .kb-actions { row-gap: 6px; }
+            #knowledgePage.tools-open #kbSearch { flex: 1 1 100% !important; width: 100% !important; min-width: 0; }
             #knowledgePage.tools-open #kbToolsToggle { border-color: #7c3aed; background: rgba(124,58,237,.14); }
             #knowledgePage .kb-actions { flex-wrap: wrap; }
-            #knowledgePage .kb-actions input { flex: 1 1 140px !important; width: 0 !important; min-width: 0; }  /* ⚙️ 与搜索同行 */
+            /* 页头瘦身：副标题收起、标题压小，第一屏让给卡片 */
+            #knowledgePage .kb-head h1 { font-size: 16px !important; }
+            #knowledgePage .kb-head .kb-sub { display: none !important; }
+            #knowledgePage { padding: 10px 8px !important; }
+            #knowledgePage .kb-wrap { gap: 9px; }
+            /* PARA 四芯片：不再折四行，压成单行横滑，副标题收起 */
+            #knowledgePage .kb-para-tabs { flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+            #knowledgePage .kb-para-tab { flex-shrink: 0; padding: 7px 11px; font-size: 12px; }
+            #knowledgePage .kb-para-tab span { display: none; }
         }
         /* 极窄屏（≤375px）进一步压缩 */
         @media (max-width:380px) {
@@ -10423,6 +10436,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         text-overflow: ellipsis;
         touch-action: pan-y;
     }
+    /* 看板手机端（2026-09-07 用户点名：参考知识看板版式，吃满左右不留任何间隔）：
+       状态列纵向堆叠、每列吃满整屏宽，拆掉列内滚动陷阱，整页单滑 */
+    #planPage #boardWrapper { margin: 0 -8px; }   /* 抵消页面两侧 padding，四列贴屏幕边 */
+    #planPage .board-view { flex-direction: column; gap: 8px; overflow: visible; padding: 0 0 12px; }
+    #planPage .board-column { min-width: 0; width: 100%; max-height: none; padding: 10px 12px; }
+    #planPage .board-column-body { overflow: visible; }
     .day-cell .market-node-chip { font-size: 10.5px; padding: 2px 8px; }
     /* 关键：planContentArea flex 行 → 手机端改纵向，否则 flex:1 的日历被详情面板挤成 0 宽看不见 */
     #planContentArea {
@@ -30563,7 +30582,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072341";
+        window.NIKO_VERSION = "202609072349";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
