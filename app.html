@@ -8200,8 +8200,16 @@
             .nr-foot { gap: 10px; }
         }
 
-        /* ===== 手机工具抽屉（2026-09-07）：收起态只留 ⚙️ + 视图切换 + 新建，次要工具全部进抽屉 ===== */
-        .nb-cog { display: none; border: none; background: transparent; cursor: pointer; font-size: 17px; padding: 6px 9px; margin-left: 10px; border-radius: 9px; vertical-align: middle; transition: background .2s, transform .35s cubic-bezier(.34,1.4,.4,1); line-height: 1; }
+        /* ===== 便签编辑弹窗手机端放大（2026-09-07 用户反馈：输入框想大一点）===== */
+        @media (max-width: 768px) {
+            #noteModal { align-items: flex-end; padding: 0; }
+            #noteModal .modal { width: 100vw !important; max-width: 100vw; margin: 0; border-radius: 18px 18px 0 0; max-height: 88vh; overflow-y: auto; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+            #noteModal textarea#noteModalContent { min-height: 200px; font-size: 16px; line-height: 1.7; }
+            #noteModal .form-item label { font-size: 12.5px; }
+            #noteModal .note-tag-picker { max-height: 30vh; overflow-y: auto; }
+        }
+
+        /* ===== 手机工具抽屉（2026-09-07）：收起态只留 ⚙️ + 视图切换 + 新建，次要工具全部进抽屉 ===== */        .nb-cog { display: none; border: none; background: transparent; cursor: pointer; font-size: 17px; padding: 6px 9px; margin-left: 10px; border-radius: 9px; vertical-align: middle; transition: background .2s, transform .35s cubic-bezier(.34,1.4,.4,1); line-height: 1; }
         .nb-cog:active { background: rgba(102,126,234,.16); }
         .nb-toolbar.drawer-open .nb-cog { background: rgba(102,126,234,.18); transform: rotate(180deg); }
         @media (max-width: 768px) {
@@ -10260,14 +10268,23 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         border-radius: 10px;
     }
     .day-cell .day-date {
-        width: 46px;
+        width: 48px;
         flex-shrink: 0;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 3px;
         font-size: 15px;
         font-weight: 600;
     }
+    /* v2.17 修复：46px 横排挤不下「今天」+ 今日圆圈 → 文字竖排、圆圈叠字。
+       改为日期列竖排：星期(今天/周二)在上、数字在下，节日/徽标挪出窄列 */
+    .day-cell .day-date .day-head-left { flex-direction: column; gap: 3px; overflow: visible; flex: none; }
+    .day-cell .day-date .day-weekday { white-space: nowrap; font-size: 10px; margin-right: 0; }
+    .day-cell .day-date .day-fest-inline,
+    .day-cell .day-date .day-head-right { display: none; }
+    .day-cell .day-date .cal-mood-wx { position: absolute; right: 5px; top: 5px; }
     .day-cell .day-date .day-count { font-size: 10px; margin-left: 2px; }
     .day-cell .events-container {
         flex: 1;
@@ -29778,7 +29795,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071647";
+        window.NIKO_VERSION = "202609071703";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
