@@ -439,6 +439,11 @@
         .niko-mobile-tab:active { background: rgba(102,126,234,.12); }
         .niko-mobile-tab.active { color: #667eea; font-weight: 600; }
         .niko-mobile-tab .tab-icon { font-size: 18px; line-height: 1; }
+        /* 6 Tab 时代：字号/图标微缩，保证 375px 窄屏不挤（2026-09-07 便签入 Tab） */
+        @media (max-width: 768px) {
+            .niko-mobile-tab { font-size: 10.5px; }
+            .niko-mobile-tab .tab-icon { font-size: 17px; }
+        }
         @media (max-width: 768px) {
             .niko-mobile-tabbar { display: flex; }
             body { padding-bottom: 56px; }
@@ -8194,6 +8199,28 @@
             .nr-arrow { display: none; }
             .nr-foot { gap: 10px; }
         }
+
+        /* ===== 手机工具抽屉（2026-09-07）：收起态只留 ⚙️ + 视图切换 + 新建，次要工具全部进抽屉 ===== */
+        .nb-cog { display: none; border: none; background: transparent; cursor: pointer; font-size: 17px; padding: 6px 9px; margin-left: 10px; border-radius: 9px; vertical-align: middle; transition: background .2s, transform .35s cubic-bezier(.34,1.4,.4,1); line-height: 1; }
+        .nb-cog:active { background: rgba(102,126,234,.16); }
+        .nb-toolbar.drawer-open .nb-cog { background: rgba(102,126,234,.18); transform: rotate(180deg); }
+        @media (max-width: 768px) {
+            .nb-toolbar { gap: 8px; }
+            .nb-title { flex-basis: 100%; }
+            .nb-title h1 { font-size: 19px; display: flex; align-items: center; }
+            .nb-title p { display: none; }
+            .nb-stats { display: none; margin-top: 0; }
+            .nb-toolbar.drawer-open .nb-stats { display: flex; }
+            .nb-cog { display: inline-flex; align-items: center; }
+            .nb-tools { gap: 8px; }
+            .nb-view-toggle { order: -2; margin-right: auto; }
+            .nb-btn.primary { order: -1; }
+            .nb-search { display: none; }
+            .nb-tools > .nb-btn:not(.primary) { display: none; }
+            .nb-toolbar.drawer-open .nb-search { display: flex; flex: 1 1 100%; min-width: 0; order: -3; height: 40px; font-size: 16px; }
+            .nb-toolbar.drawer-open .nb-tools > .nb-btn:not(.primary) { display: inline-flex; }
+            .nb-toolbar.drawer-open .nb-tools { padding-bottom: 10px; margin-bottom: 2px; border-bottom: 1px dashed rgba(128,128,128,.28); }
+        }
 /* ===== 知识库（PARA）专属CSS ===== */
         .kb-wrap { display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
         .kb-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; flex-shrink:0; }
@@ -10571,6 +10598,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <div class="niko-mobile-tab active" data-page="today" onclick="switchPage('today')"><span class="tab-icon">📌</span><span>今日</span></div>
         <div class="niko-mobile-tab" data-page="plan" onclick="switchPage('plan')"><span class="tab-icon">📋</span><span>计划</span></div>
         <div class="niko-mobile-tab" data-page="diary" onclick="switchPage('diary')"><span class="tab-icon">📔</span><span>日记</span></div>
+        <div class="niko-mobile-tab" data-page="notes" onclick="switchPage('notes')"><span class="tab-icon">🗂️</span><span>便签</span></div>
         <div class="niko-mobile-tab" data-page="game" onclick="switchPage('game')"><span class="tab-icon">🎮</span><span>游戏</span></div>
         <div class="niko-mobile-tab" data-page="knowledge" onclick="switchPage('knowledge')"><span class="tab-icon">🧠</span><span>知识</span></div>
     </div>
@@ -11542,18 +11570,14 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
         <div class="page" id="notesPage">
 <div style="padding:16px 24px;flex:1;overflow:hidden;display:flex;flex-direction:column;gap:12px;">
-                <div class="nb-toolbar">
+                <div class="nb-toolbar" id="nbToolbar">
                     <div class="nb-title">
-                        <h1>🗂️ 便签看板</h1>
+                        <h1>🗂️ 便签看板<button class="nb-cog" id="nbCogBtn" onclick="nbToggleDrawer()" title="工具抽屉">⚙️</button></h1>
                         <p>灵感的整理与中转站 —— 拖拽分类 · 置顶重点 · 归档沉淀 · 一键转任务</p>
                         <div class="nb-stats" id="nbStats"></div>
                     </div>
                     <div class="nb-tools">
                         <input type="text" class="nb-search" placeholder="🔍 搜索便签..." oninput="nbSearch=this.value;renderNotesPage()">
-                        <select class="nb-select" onchange="nbSort=this.value;renderNotesPage()">
-                            <option value="newest">🕐 最新优先</option>
-                            <option value="oldest">⏳ 最早优先</option>
-                        </select>
                         <div class="nb-view-toggle">
                             <button id="nbViewBoard" class="active" onclick="nbSetView('board')">▦ 看板</button>
                             <button id="nbViewWall" onclick="nbSetView('wall')">🧩 便签墙</button>
@@ -11563,9 +11587,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="nb-btn" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
                         <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
-                        <button class="nb-btn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
-                        <button class="nb-btn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
-                        <button class="nb-btn" onclick="nbOpenSpecial('recycle')">🗑 回收站</button>
+                        <button class="nb-btn" id="nbArchiveBtn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
+                        <button class="nb-btn" id="nbQuietBtn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
+                        <button class="nb-btn" id="nbRecycleBtn" onclick="nbOpenSpecial('recycle')">🗑 回收站</button>
                         <button class="nb-btn" onclick="nbExport()" title="导出为 Markdown">⬇ 导出</button>
                     </div>
                 </div>
@@ -21236,19 +21260,39 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbOpenSpecial(s) { nbSpecial = s; if (nbBatch) nbToggleBatch(); renderNotesPage(); }
         function nbBack() { nbSpecial = null; renderNotesPage(); }
 
+        // ===== 手机工具抽屉（铁律模式：收起态只留 ⚙️ + 视图切换 + 新建，展开态存 localStorage 记住）=====
+        function nbToggleDrawer() {
+            const tb = document.getElementById('nbToolbar');
+            if (!tb) return;
+            const open = tb.classList.toggle('drawer-open');
+            safeStorage.set('niko_nb_drawer', open ? 'open' : 'closed');
+        }
+        (function nbInitDrawer() {
+            const tb = document.getElementById('nbToolbar');
+            if (tb && safeStorage.get('niko_nb_drawer', 'closed') === 'open') tb.classList.add('drawer-open');
+        })();
+
         function renderNbStats() {
             const act = activeNotes(), now = new Date();
             const todayCnt = act.filter(n => {
                 const d = new Date(n.createdAt);
                 return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
             }).length;
+            // chips 只留活跃动态（2026-09-07 用户反馈：统计一行 + 收纳箱按钮一行是重复数据）
             document.getElementById('nbStats').innerHTML =
                 `<span class="nb-stat"><strong>${act.length}</strong> 活跃</span>` +
                 `<span class="nb-stat"><strong>${todayCnt}</strong> 今日新增</span>` +
-                `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>` +
-                `<span class="nb-stat"><strong>${archivedNotes().length}</strong> 归档</span>` +
-                `<span class="nb-stat"><strong>${quietNotes().length}</strong> 寂寂角</span>` +
-                `<span class="nb-stat"><strong>${recycledNotes().length}</strong> 回收站</span>`;
+                `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>`;
+            // 三个收纳箱的计数直接并入按钮文字，一处看清
+            const boxBtns = [
+                ['nbArchiveBtn', '📦 归档箱', archivedNotes().length],
+                ['nbQuietBtn', '🫥 寂寂角', quietNotes().length],
+                ['nbRecycleBtn', '🗑 回收站', recycledNotes().length]
+            ];
+            boxBtns.forEach(([id, label, n]) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = n ? `${label} ${n}` : label;
+            });
         }
 
         function renderNotesPage() {
@@ -29734,7 +29778,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071606";
+        window.NIKO_VERSION = "202609071647";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
