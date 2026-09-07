@@ -10849,6 +10849,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item"><label>重复截止日期</label><input type="date" id="eventRepeatUntil"></div>
                 <div class="form-item"><label>重复次数(可选)</label><input type="number" id="eventRepeatCount" min="1" max="52" placeholder="留空则按截止日期"></div>
             </div>
+            <div class="form-row" id="applySeriesRow" style="display:none;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(124,58,237,.45);border-radius:8px;background:rgba(124,58,237,.06);">
+                    <input type="checkbox" id="applySeries" checked>
+                    <span>🔁 修改同步到整个系列 <span id="applySeriesHint" style="color:#888;font-size:11px;">（标题/项目/时间等；各实例日期与完成状态保留）</span></span>
+                </label>
+            </div>
             <div class="form-row">
                 <div class="form-item"><label>类型</label>
                     <select id="eventType">
@@ -17889,6 +17895,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     document.getElementById('eventStatus').value = ev.status || 'todo';
                     document.getElementById('eventCustomBoss').checked = ev.customBoss === true;
                     // 回显重复选项
+                    const applyRow = document.getElementById('applySeriesRow');
+                    if (ev.repeatGroup) {
+                        const n = events.filter(x => x.repeatGroup === ev.repeatGroup).length;
+                        applyRow.style.display = 'flex';
+                        document.getElementById('applySeries').checked = true;   // 默认同步系列（改周会时间=整个系列都改）
+                        document.getElementById('applySeriesHint').textContent = '（本系列共 ' + n + ' 条 · 标题/项目/时间等同步，各实例日期与完成状态保留）';
+                    } else {
+                        applyRow.style.display = 'none';
+                    }
                     if (ev.repeat) {
                         document.getElementById('eventRepeat').value = ev.repeat.mode;
                         document.getElementById('repeatUntilRow').style.display = 'flex';
@@ -17905,6 +17920,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     return;
                 }
             }
+            document.getElementById('applySeriesRow').style.display = 'none';   // 新建任务无系列
             const base = presetDate || selectedDate || new Date();
             const dateStr = formatDate(base);
             document.getElementById('eventStartDate').value = dateStr;
@@ -17991,9 +18007,34 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 } : null
             };
 
-            // 删除旧的重复实例（如果是编辑已有重复任务）
-            if (existing && existing.repeatGroup) {
-                events = events.filter(e => e.repeatGroup !== existing.repeatGroup);
+            // ===== 重复系列处理（2026-09-07 重构） =====
+            const editingSeries = !!(existing && existing.repeatGroup);
+            const applySeries = editingSeries && document.getElementById('applySeriesRow').style.display !== 'none'
+                && document.getElementById('applySeries').checked;
+            // 重复规则是否没变（没变 → 属性同步即可，不必重建实例）
+            const sameRepeat = editingSeries && JSON.stringify(existing.repeat || null) === JSON.stringify(baseEvent.repeat);
+
+            if (editingSeries) {
+                if (applySeries && sameRepeat) {
+                    // 规则没变：把标题/备注/项目/类型/时间/优先级同步到系列全部实例，各自日期与完成状态保留
+                    events.forEach(m => {
+                        if (m.repeatGroup === existing.repeatGroup && m.id !== baseEvent.id) {
+                            m.title = baseEvent.title;
+                            m.desc = baseEvent.desc;
+                            m.projectId = baseEvent.projectId;
+                            m.type = baseEvent.type;
+                            m.startTime = baseEvent.startTime;
+                            m.endTime = baseEvent.endTime;
+                            m.priority = baseEvent.priority;
+                            m.customBoss = baseEvent.customBoss;
+                            m.scope = '';
+                        }
+                    });
+                    baseEvent.repeatGroup = existing.repeatGroup;
+                } else {
+                    // 规则变了 或 用户取消同步：整个系列按新配置重建（原行为）
+                    events = events.filter(e => e.repeatGroup !== existing.repeatGroup);
+                }
             }
 
             const idx = events.findIndex(e => e.id === id);
@@ -18099,6 +18140,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     priority: baseEvent.priority,
                     status: 'todo',
                     track: baseEvent.track,
+                    projectId: baseEvent.projectId,   // 修复：实例此前漏拷项目 → 回退到第一个项目（日本项目）挂错旗
+                    customBoss: baseEvent.customBoss,
+                    scope: '',
                     repeatGroup: repeatGroup,
                     repeatInstance: true,
                     parentId: baseEvent.id
@@ -29621,7 +29665,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071453";
+        window.NIKO_VERSION = "202609071510";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
