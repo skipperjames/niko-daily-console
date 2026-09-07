@@ -8302,6 +8302,18 @@
             #noteModal .note-tag-picker { max-height: 30vh; overflow-y: auto; }
         }
 
+        /* ===== v2.25 页面容器（原行内样式落地为类；手机两侧 12px 对齐今日看板，不再大片留白）===== */
+        .nb-page-wrap { padding: 16px 24px; flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 12px; }
+        @media (max-width: 768px) {
+            .nb-page-wrap { padding: 10px 12px; gap: 10px; }
+            /* 主墙卡片的快捷键行（📌✏️🗓📦🗑）手机端隐藏——点卡片进详情，操作全在详情里；归档/回收站的恢复按钮不受影响 */
+            .nb-ca-main { display: none !important; }
+            /* 新建按钮并进视图切换同一行，不再独占一行 */
+            .nb-view-toggle button { padding: 5px 9px; font-size: 12px; }
+            .nb-view-toggle { padding: 2px; }
+            .nb-tools .nb-btn.primary { flex: 0 0 auto; padding: 7px 14px; }
+        }
+
         /* ===== 手机工具抽屉（2026-09-07）：收起态只留 ⚙️ + 视图切换 + 新建，次要工具全部进抽屉 ===== */        .nb-cog { display: none; border: none; background: transparent; cursor: pointer; font-size: 17px; padding: 6px 9px; margin-left: 10px; border-radius: 9px; vertical-align: middle; transition: background .2s, transform .35s cubic-bezier(.34,1.4,.4,1); line-height: 1; }
         .nb-cog:active { background: rgba(102,126,234,.16); }
         .nb-toolbar.drawer-open .nb-cog { background: rgba(102,126,234,.18); transform: rotate(180deg); }
@@ -8325,6 +8337,7 @@
 
         /* ===== v2.20 便签详情弹窗（双击卡片打开）+ 手机操作热区 ===== */
         .nb-detail-modal { width: 480px; }
+        .nb-detail-modal .modal-close-x { display: none !important; }   /* 双保险：头部已有关闭键，框架注入的不再显示 */
         .nb-detail-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
         .nb-detail-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; color: #fff; }
         .nb-detail-pin { font-size: 11px; color: #f59e0b; font-weight: 600; }
@@ -11746,7 +11759,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             </div>
         </div>
         <div class="page" id="notesPage">
-<div style="padding:16px 24px;flex:1;overflow:hidden;display:flex;flex-direction:column;gap:12px;">
+<div class="nb-page-wrap">
                 <div class="nb-toolbar" id="nbToolbar">
                     <div class="nb-title">
                         <h1>🗂️ 便签看板<button class="nb-cog" id="nbCogBtn" onclick="nbToggleDrawer()" title="工具抽屉">⚙️</button></h1>
@@ -12637,7 +12650,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     </div>
 
     <!-- 便签详情弹窗（v2.20：双击卡片打开，看全文/编辑/复制一步到位） -->
-    <div class="modal-mask" id="nbDetailModal" onclick="if(event.target===this)closeNbDetail()">
+    <div class="modal-mask" id="nbDetailModal" data-modal-manual-close="1" onclick="if(event.target===this)closeNbDetail()">
         <div class="modal nb-detail-modal">
             <div id="nbDetailBody"></div>
         </div>
@@ -21871,7 +21884,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
-                    <div class="nb-card-actions">
+                    <div class="nb-card-actions nb-ca-main">
                         <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
                         <button class="nb-icon-btn" title="编辑" onclick="openNoteModal('${n.id}',null,event)">✏️</button>
                         <button class="nb-icon-btn" title="转为日历任务" onclick="nbConvert('${n.id}',event)">🗓</button>
@@ -21891,7 +21904,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="nb-tl-content">${n.pinned ? '📌 ' : ''}${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <span class="nb-tl-time">${formatNoteTime(n.createdAt)}</span>
-                <div class="nb-card-actions">
+                <div class="nb-card-actions nb-ca-main">
                     <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
                     <button class="nb-icon-btn" title="编辑" onclick="openNoteModal('${n.id}',null,event)">✏️</button>
                     <button class="nb-icon-btn" title="转为日历任务" onclick="nbConvert('${n.id}',event)">🗓</button>
@@ -22147,14 +22160,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const next = list[(i + dir + list.length) % list.length];
             openNbDetail(next.id);
         }
-        function openNbDetail(id) {
+        function openNbDetail(id, skipCount) {
             const n = notes.find(x => x.id === id);
             if (!n) return;
             nbDetailId = id;
             // v2.21 生命感：翻阅即「碰过」——刷新 lastOpenAt + 计数（静默写盘，不触发重渲染抢滚动位）
-            n.lastOpenAt = new Date().toISOString();
-            n.openCount = (n.openCount || 0) + 1;
-            safeStorage.set('niko_inspiration_notes', notes);
+            // v2.24 修复：纸色切换/置顶刷新等「重开详情」场景不计数（skipCount），只有真实翻阅才 +1
+            if (!skipCount) {
+                n.lastOpenAt = new Date().toISOString();
+                n.openCount = (n.openCount || 0) + 1;
+                safeStorage.set('niko_inspiration_notes', notes);
+            }
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const created = new Date(n.createdAt);
             const updated = n.updatedAt ? new Date(n.updatedAt) : null;
@@ -22198,7 +22214,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (typeof nikoSpark === 'function' && n.pinned) { const el = document.getElementById('nbDetailBody'); nikoSpark(el, '📌', '#f59e0b'); }
             showToast(n.pinned ? '📌 已置顶' : '已取消置顶');
             renderNotesPage();
-            openNbDetail(id); // 刷新详情按钮文案
+            openNbDetail(id, true); // 刷新详情按钮文案（不计数）
         }
         function nbDetailCopy(id) {
             const n = notes.find(x => x.id === id);
@@ -22663,7 +22679,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbSetPaper(v) {
             nbPaper = v;
             safeStorage.set('niko_nb_paper', v);
-            if (nbDetailId) openNbDetail(nbDetailId);   // 详情开着就即时换纸
+            if (nbDetailId) openNbDetail(nbDetailId, true);   // 详情开着就即时换纸（不计数）
         }
 
         // ===== v2.22 骰子模式：随手摇一张旧便签（娱乐+回访，摇到即算翻过） =====
@@ -30545,7 +30561,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072311";
+        window.NIKO_VERSION = "202609072332";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -30607,6 +30623,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             for (var i = 0; i < mods.length; i++) {
                 var m = mods[i];
                 if (m.querySelector('.modal-close-x')) continue;
+                /* 弹窗自管关闭（自带 ✕ 的详情类弹窗）不重复注入，避免出现两个关闭键（2026-09-07 用户反馈） */
+                var mmask = m.closest ? m.closest('.modal-mask') : null;
+                if ((mmask && mmask.getAttribute('data-modal-manual-close') === '1') || m.hasAttribute('data-modal-manual-close')) continue;
                 var btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'modal-close-x';
