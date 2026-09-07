@@ -11114,13 +11114,24 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item"><label>日期</label><input type="date" id="memorialDate"></div>
             </div>
             <div class="form-item"><label>备注（可选）</label><input type="text" id="memorialNote" placeholder="例如：提前准备礼物 / 预约餐厅"></div>
-            <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#888;margin-bottom:12px;cursor:pointer;">
+            <div class="form-item"><label>图标</label><div id="memorialIconPick" style="display:flex;gap:6px;flex-wrap:wrap;"></div></div>
+            <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#888;margin-bottom:10px;cursor:pointer;">
                 <input type="checkbox" id="memorialRepeat" checked style="width:auto;">🔁 每年循环（生日 / 周年勾选；单次事件取消勾选，仅当天显示）
             </label>
-            <div style="display:flex;gap:8px;margin-bottom:12px;">
-                <button class="btn primary" style="flex:1;" onclick="addMemorialDay()">+ 添加纪念日</button>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:#888;">
+                ⏰ 提前提醒
+                <select id="memorialRemindDays" onchange="saveMemorialRemindDays()" style="padding:4px 8px;border-radius:8px;border:1px solid #e5e7eb;background:transparent;color:inherit;font-size:12px;">
+                    <option value="7">提前 7 天</option>
+                    <option value="14">提前 14 天</option>
+                    <option value="30">提前 30 天</option>
+                </select>
+                <span style="font-size:11px;opacity:.7;">每天打开时提醒一次</span>
             </div>
-            <h4 style="font-size:13px;margin-bottom:8px;">📅 已有纪念日</h4>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+                <button class="btn" id="memorialCancelBtn" style="display:none;flex:0 0 auto;" onclick="resetMemorialForm()">取消</button>
+                <button class="btn primary" id="memorialSubmitBtn" style="flex:1;" onclick="addMemorialDay()">+ 添加纪念日</button>
+            </div>
+            <h4 style="font-size:13px;margin-bottom:8px;">📅 已有纪念日 <span id="memorialEditHint" style="font-size:11px;color:#999;font-weight:400;">（点条目可修改）</span></h4>
             <div class="node-list" id="memorialList" style="max-height:260px;"></div>
             <div class="modal-footer">
                 <button class="btn" onclick="closeMemorialModal()">关闭</button>
@@ -16518,7 +16529,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             try {
                 const todayKey = new Date().toISOString().slice(0, 10);
                 if (safeStorage.get('niko_memorial_reminded', '') === todayKey) return;
-                const soon = memorialDays.map(m => ({ m, i: memorialInfo(m) })).filter(x => x.i.daysUntil !== null && x.i.daysUntil <= 30).sort((a, b) => a.i.daysUntil - b.i.daysUntil);
+                const soon = memorialDays.map(m => ({ m, i: memorialInfo(m) })).filter(x => x.i.daysUntil !== null && x.i.daysUntil <= (Number(safeStorage.get('niko_memorial_remind_days', 30)) || 30)).sort((a, b) => a.i.daysUntil - b.i.daysUntil);
                 if (!soon.length) return;
                 safeStorage.set('niko_memorial_reminded', todayKey);
                 const first = soon[0];
@@ -16528,6 +16539,56 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } catch (e) {}
         }
         setTimeout(checkMemorialRemind, 2000);
+        // ===== 编辑 / 图标 / 排序（2026-09-07 纪念日常规功能补齐） =====
+        const MEM_ICONS = ['💝', '🎂', '👶', '💍', '🏆', '🎓', '📌', '🌟'];
+        let memIcon = '💝';
+        let editingMemorialId = null;
+        function renderMemIconPick() {
+            const box = document.getElementById('memorialIconPick');
+            if (!box) return;
+            box.innerHTML = MEM_ICONS.map(ic => `<span onclick="pickMemIcon('${ic}')" style="font-size:18px;padding:5px 9px;border-radius:8px;cursor:pointer;border:1.5px solid ${ic === memIcon ? '#667eea' : 'transparent'};background:${ic === memIcon ? 'rgba(102,126,234,.14)' : 'transparent'};">${ic}</span>`).join('');
+        }
+        function pickMemIcon(ic) { memIcon = ic; renderMemIconPick(); }
+        function saveMemorialRemindDays() {
+            const el = document.getElementById('memorialRemindDays');
+            if (el) safeStorage.set('niko_memorial_remind_days', Number(el.value) || 30);
+        }
+        function resetMemorialForm() {
+            editingMemorialId = null;
+            memIcon = '💝';
+            const name = document.getElementById('memorialName');
+            const date = document.getElementById('memorialDate');
+            const note = document.getElementById('memorialNote');
+            const rep = document.getElementById('memorialRepeat');
+            if (name) name.value = '';
+            if (date) date.value = '';
+            if (note) note.value = '';
+            if (rep) rep.checked = true;
+            const btn = document.getElementById('memorialSubmitBtn');
+            const cancel = document.getElementById('memorialCancelBtn');
+            if (btn) btn.textContent = '+ 添加纪念日';
+            if (cancel) cancel.style.display = 'none';
+            renderMemIconPick();
+        }
+        function editMemorialDay(id) {
+            const m = memorialDays.find(x => x.id === id);
+            if (!m) return;
+            editingMemorialId = id;
+            memIcon = m.icon || '💝';
+            document.getElementById('memorialName').value = m.name;
+            document.getElementById('memorialDate').value = m.date;
+            document.getElementById('memorialNote').value = m.note || '';
+            document.getElementById('memorialRepeat').checked = memIsYearly(m);
+            const btn = document.getElementById('memorialSubmitBtn');
+            const cancel = document.getElementById('memorialCancelBtn');
+            if (btn) btn.textContent = '💾 保存修改';
+            if (cancel) cancel.style.display = 'block';
+            renderMemIconPick();
+            renderMemorialList();
+            // 手机端：表单在列表上方，编辑时滚回表单让用户看到正在改哪条
+            try { document.getElementById('memorialName').scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+            document.getElementById('memorialName').focus();
+        }
         function toggleMemorialRepeat(id) {
             const m = memorialDays.find(x => x.id === id);
             if (!m) return;
@@ -16550,6 +16611,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         })();
         function openMemorialModal() {
             document.getElementById('memorialModal').classList.add('show');
+            resetMemorialForm();
+            const rd = document.getElementById('memorialRemindDays');
+            if (rd) rd.value = String(safeStorage.get('niko_memorial_remind_days', 30));
             renderMemorialList();
             setTimeout(() => document.getElementById('memorialName').focus(), 50);
         }
@@ -16559,24 +16623,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const date = document.getElementById('memorialDate').value;
             if (!name) { if (typeof showToast === 'function') showToast('请输入纪念日名称'); else alert('请输入纪念日名称'); return; }
             if (!date) { if (typeof showToast === 'function') showToast('请选择日期'); else alert('请选择日期'); return; }
-            const dup = memorialDays.find(m => m.name === name && m.date === date);
+            const dup = memorialDays.find(m => m.name === name && m.date === date && m.id !== editingMemorialId);
             if (dup) { if (typeof showToast === 'function') showToast('这个纪念日已经存在啦'); return; }
-            memorialDays.push({
-                id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                name: name, date: date,
-                repeat: document.getElementById('memorialRepeat') && document.getElementById('memorialRepeat').checked ? 'yearly' : 'once',
-                note: document.getElementById('memorialNote').value.trim() || ''
-            });
+            const repeatVal = document.getElementById('memorialRepeat') && document.getElementById('memorialRepeat').checked ? 'yearly' : 'once';
+            const noteVal = document.getElementById('memorialNote').value.trim() || '';
+            if (editingMemorialId) {
+                const m = memorialDays.find(x => x.id === editingMemorialId);
+                if (m) { m.name = name; m.date = date; m.repeat = repeatVal; m.note = noteVal; m.icon = memIcon; }
+                if (typeof showToast === 'function') showToast('💾 修改已保存');
+            } else {
+                memorialDays.push({
+                    id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    name: name, date: date,
+                    repeat: repeatVal,
+                    icon: memIcon,
+                    note: noteVal
+                });
+                if (typeof showToast === 'function') showToast('💝 纪念日已添加，日历上会显示标签');
+            }
             memorialDays.sort((a, b) => a.date.localeCompare(b.date));
             saveMemorialDays();
-            document.getElementById('memorialName').value = '';
-            document.getElementById('memorialNote').value = '';
+            resetMemorialForm();
             renderMemorialList();
             render();
-            if (typeof showToast === 'function') showToast('💝 纪念日已添加，日历上会显示标签');
         }
         function removeMemorialDay(id) {
             memorialDays = memorialDays.filter(m => m.id !== id);
+            if (editingMemorialId === id) resetMemorialForm();
             saveMemorialDays();
             renderMemorialList();
             render();
@@ -16586,13 +16659,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!box) return;
             // 铁律#7：渲染前重读 localStorage（云同步写入的外部数据不可见问题），纪念日无编辑草稿可安全重读
             memorialDays = safeStorage.get('niko_memorial_days', memorialDays);
+            if (editingMemorialId && !memorialDays.some(m => m.id === editingMemorialId)) resetMemorialForm();
             if (!memorialDays.length) {
                 box.innerHTML = '<div class="mem-empty">还没有纪念日，添加一个生日或纪念日吧</div>';
                 return;
             }
-            box.innerHTML = memorialDays.map(m => {
-                const inf = memorialInfo(m);
+            // 按距下次天数升序：越临近的排越前，单次已过期的沉底
+            const rows = memorialDays.map(m => ({ m, i: memorialInfo(m) }));
+            rows.sort((a, b) => (a.i.daysUntil === null ? 99999 : a.i.daysUntil) - (b.i.daysUntil === null ? 99999 : b.i.daysUntil));
+            box.innerHTML = rows.map(({ m, i: inf }) => {
                 const soon = inf.daysUntil !== null && inf.daysUntil <= 30;
+                const icon = m.icon || '💝';
                 const elapsedTxt = inf.yearly
                     ? (inf.elapsedYears > 0 ? `已 ${inf.elapsedYears} 周年 + ${inf.elapsedDays} 天` : `已 ${inf.totalDays} 天`)
                     : `已 ${inf.totalDays} 天`;
@@ -16600,10 +16677,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     : (inf.daysUntil === 0 ? '就是今天 🎉'
                         : (inf.yearly && inf.nextYears > 0 ? `下次 ${inf.nextDate} · ${inf.nextYears} 周年（还有 ${inf.daysUntil} 天）` : `下次 ${inf.nextDate}（还有 ${inf.daysUntil} 天）`));
                 return `
-                <div class="mem-item">
-                    <span style="font-size:16px;">💝</span>
-                    <div class="mem-item-info">
-                        <div class="mem-item-name">${escapeHtml(m.name)}${soon ? `<span class="mem-soon">⏰ ${inf.daysUntil === 0 ? '今天' : inf.daysUntil + ' 天后'}</span>` : ''}</div>
+                <div class="mem-item" ${editingMemorialId === m.id ? 'style="outline:1.5px solid #667eea;"' : ''}>
+                    <span style="font-size:16px;">${icon}</span>
+                    <div class="mem-item-info" style="cursor:pointer;" onclick="editMemorialDay('${m.id}')" title="点击修改这条纪念日">
+                        <div class="mem-item-name">${escapeHtml(m.name)}${soon ? `<span class="mem-soon">⏰ ${inf.daysUntil === 0 ? '今天' : inf.daysUntil + ' 天后'}</span>` : ''}${editingMemorialId === m.id ? '<span class="mem-soon" style="background:#667eea;">编辑中</span>' : ''}</div>
                         <div class="mem-item-date">📅 ${m.date}${m.note ? ' · ' + escapeHtml(m.note) : ''}</div>
                         <div class="mem-item-date">⏱ ${elapsedTxt} · ${nextTxt}</div>
                     </div>
@@ -17161,7 +17238,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (festChips.length || memChips.length || dayNodes.length) {
                     const allTags = [
                         ...festChips.map(f => `<span class="cal-fest-chip-inline${f.holiday ? ' holiday' : ''}" title="${escapeHtml(f.name)}">${f.holiday ? '🎉' : '🏮'}${escapeHtml(f.name)}</span>`),
-                        ...memChips.map(m => `<span class="cal-mem-chip-inline" title="${escapeHtml((m.note || m.name) + ' · ' + m.date + (m._years ? ' · ' + m._years + ' 周年' : ''))}" onclick="event.stopPropagation();openMemorialModal()">💝${escapeHtml(m.name + (m._years ? ' ' + m._years + '周年' : ''))}</span>`),
+                        ...memChips.map(m => `<span class="cal-mem-chip-inline" title="${escapeHtml((m.note || m.name) + ' · ' + m.date + (m._years ? ' · ' + m._years + ' 周年' : ''))}" onclick="event.stopPropagation();openMemorialModal()">${escapeHtml(m.icon || '💝')}${escapeHtml(m.name + (m._years ? ' ' + m._years + '周年' : ''))}</span>`),
                         ...dayNodes.slice(0, 2).map(n => `<span class="cal-node-chip-inline${n.done ? ' done' : ''}" title="${escapeHtml(n.title + ' (' + n.date + ')' + (n.note ? ' — ' + n.note : ''))}" onclick="event.stopPropagation();openMarketNodeModal('${n.id}')">${n.done ? '✅' : '🎯'}${escapeHtml(n.title)}</span>`)
                     ];
                     if (dayNodes.length > 2) {
@@ -29959,7 +30036,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072007";
+        window.NIKO_VERSION = "202609072016";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
