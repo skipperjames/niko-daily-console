@@ -836,6 +836,25 @@
         body.dark-mode .color-picker-row { border-bottom-color: #2a2a3a; }
         body.dark-mode .color-picker-row input[type="color"] { border-color: #444; }
 
+        /* 项目旗帜选择面板（2026-09-07） */
+        .flag-palette {
+            display: flex; flex-wrap: wrap; gap: 4px;
+            padding: 8px; margin-top: 2px;
+            border: 1px dashed rgba(124,58,237,.4); border-radius: 8px;
+            background: rgba(124,58,237,.06);
+        }
+        .flag-opt {
+            width: 34px; height: 30px; padding: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 16px; line-height: 1;
+            border: 1px solid transparent; border-radius: 6px;
+            background: transparent; cursor: pointer;
+            transition: all .12s;
+        }
+        .flag-opt:hover { background: rgba(124,58,237,.14); }
+        .flag-opt.on { border-color: #7c3aed; background: rgba(124,58,237,.16); }
+        .flag-opt.flag-auto, .flag-opt.flag-none { width: auto; padding: 0 8px; font-size: 12px; color: inherit; }
+
         /* 主题风格选择 */
         .theme-picker-row { display: flex; flex-wrap: wrap; gap: 8px; }
         /* 全局字号档位设置 */
@@ -4030,6 +4049,10 @@
             flex: 1;
             min-width: 0;
         }
+        /* 项目旗帜（2026-09-07）：任务条标题前的地区旗 */
+        .ev-flag { flex-shrink: 0; font-size: 11px; line-height: 1; }
+        /* 标题主体：桌面单行截断（悬停有全名），手机端两行折行 */
+        .ev-title-main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
         .event-desc {
             font-size: 10.5px;
             opacity: 0.85;
@@ -4874,6 +4897,27 @@
             }
             /* 日历滚动区最小高度，避免 1080p/手机端被底部副本完全挤掉 */
             #planPage .calendar-scroll-pane { min-height: 180px !important; }
+            /* 长任务名不再截断：手机端日历任务条折两行显示（2026-09-07） */
+            #planPage .ev-title-main {
+                white-space: normal !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                line-height: 1.25;
+                text-overflow: clip;
+                overflow: hidden;
+            }
+            #planPage .event-item { height: auto !important; }
+            /* 备注不再绝对定位压字：随折行流式排在标题下（保持始终显示的口径） */
+            #planPage .event-desc {
+                position: static !important;
+                margin-top: 1px;
+                max-width: none !important;
+                -webkit-line-clamp: 1;
+                display: -webkit-box !important;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
         }
 
         /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边（v3 角标由 SVG 状态图标替代） */
@@ -8422,6 +8466,17 @@
             .kb-guide { padding:10px 12px; font-size:11.5px; }
             .kb-tpl-group-label { min-width:84px; font-size:10.5px; }
             .kb-tpl-chip { font-size:11px; padding:2px 7px; }
+            /* ===== ⚙️ 工具抽屉（2026-09-07，同计划页模式）：收起态只留 搜索+复习+＋新增，次要工具全收进 ⚙️ ===== */
+            #knowledgePage #kbToolsToggle {
+                display: inline-flex !important; align-items: center; justify-content: center;
+                min-width: 38px; min-height: 38px; padding: 4px 10px !important;
+                font-size: 15px !important; border-radius: 8px; flex-shrink: 0;
+            }
+            #knowledgePage:not(.tools-open) .kb-extra { display: none !important; }
+            #knowledgePage.tools-open .kb-actions { row-gap: 6px; }
+            #knowledgePage.tools-open #kbToolsToggle { border-color: #7c3aed; background: rgba(124,58,237,.14); }
+            #knowledgePage .kb-actions { flex-wrap: wrap; }
+            #knowledgePage .kb-actions input { flex: 1 1 140px !important; width: 0 !important; min-width: 0; }  /* ⚙️ 与搜索同行 */
         }
         /* 极窄屏（≤375px）进一步压缩 */
         @media (max-width:380px) {
@@ -11476,14 +11531,15 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <div class="kb-head">
                 <h1>🧠 知识库 <span class="kb-sub">PARA · 经验复利（分类色条=项目，角标=状态）</span></h1>
                 <div class="kb-actions">
-                    <button class="btn" onclick="kbShowGuide()" title="再看一遍知识库使用指南">🧭 指南</button>
+                    <button class="btn" id="kbToolsToggle" onclick="toggleKbTools()" title="更多工具" style="display:none;">⚙️</button>
                     <input id="kbSearch" placeholder="🔍 搜索标题/正文/标签…" oninput="kbSearchText=this.value;renderKbList()" />
-                    <button class="btn" onclick="openKbGraph()" title="可视化整个知识库：节点=条目、边=双向引用，PARA 染色">🕸️ 图谱</button>
+                    <button class="btn kb-extra" onclick="kbShowGuide()" title="再看一遍知识库使用指南">🧭 指南</button>
+                    <button class="btn kb-extra" onclick="openKbGraph()" title="可视化整个知识库：节点=条目、边=双向引用，PARA 染色">🕸️ 图谱</button>
                     <button class="btn" onclick="openKbReview()" title="间隔复习：FSRS 算法推今日该复习的条目，忘了/模糊/流畅 3 档评分">🎴 复习 <span id="kbReviewBadge" class="kb-review-badge" style="display:none;">0</span></button>
-                    <button class="btn" onclick="openKbInsight()" title="AI 总结：月度新增统计 / PARA 趋势 / 标签云 / 来源占比">📊 AI 洞察</button>
-                    <button class="btn" onclick="openKbImportHot()" title="把热点看板里收藏的条目一键存入知识库（03-Resources/时事热点库）">📥 导入热点收藏</button>
-                    <button class="btn" onclick="exportKnowledgeJson()" title="完整 JSON 备份">💾 导出 JSON</button>
-                    <button class="btn" onclick="exportKnowledgeMd()" title="按 PARA 目录导出 Markdown 文件（可迁移到 Obsidian）">📄 导出 Markdown</button>
+                    <button class="btn kb-extra" onclick="openKbInsight()" title="AI 总结：月度新增统计 / PARA 趋势 / 标签云 / 来源占比">📊 AI 洞察</button>
+                    <button class="btn kb-extra" onclick="openKbImportHot()" title="把热点看板里收藏的条目一键存入知识库（03-Resources/时事热点库）">📥 导入热点收藏</button>
+                    <button class="btn kb-extra" onclick="exportKnowledgeJson()" title="完整 JSON 备份">💾 导出 JSON</button>
+                    <button class="btn kb-extra" onclick="exportKnowledgeMd()" title="按 PARA 目录导出 Markdown 文件（可迁移到 Obsidian）">📄 导出 Markdown</button>
                     <button class="btn primary" onclick="openKbEdit(null)">＋ 新增</button>
                 </div>
             </div>
@@ -12861,9 +12917,54 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             safeStorage.set('niko_projects', projects);
             return id;
         }
-        function updateProject(id, name, color, scope) {
+        function updateProject(id, name, color, scope, flag) {
             const p = projects.find(x => x.id === id);
-            if (p) { if (name !== undefined) p.name = name; if (color !== undefined) p.color = color; if (scope !== undefined) p.scope = scope; safeStorage.set('niko_projects', projects); }
+            if (p) {
+                if (name !== undefined) p.name = name;
+                if (color !== undefined) p.color = color;
+                if (scope !== undefined) p.scope = scope;
+                if (flag !== undefined) p.flag = flag;
+                safeStorage.set('niko_projects', projects);
+            }
+        }
+        // ===== 项目旗帜（2026-09-07）：每个项目一面旗帜，任务条标题前显示，代替手打「日本-」「韩国-」前缀 =====
+        // 未自定义时按项目名推断：日本→🇯🇵，韩→🇰🇷；设为 'none' 表示明确不要旗
+        const NIKO_FLAG_BY_WORD = [['日本', '🇯🇵'], ['jp', '🇯🇵'], ['韩', '🇰🇷'], ['kr', '🇰🇷']];
+        function inferProjectFlagByName(name) {
+            name = (name || '').toLowerCase();
+            for (const [w, f] of NIKO_FLAG_BY_WORD) { if (name.includes(w)) return f; }
+            return '';
+        }
+        function getProjectFlag(p) {
+            if (!p) return '';
+            if (p.flag === 'none') return '';
+            return p.flag || inferProjectFlagByName(p.name);
+        }
+        function setProjectFlag(id, flag) {
+            updateProject(id, undefined, undefined, undefined, flag);
+            renderProjectPickerList();
+            if (typeof render === 'function') { try { render(); } catch (err) {} }
+        }
+        // 项目管理列表里的旗帜选择面板（内联展开，选完即收）
+        function toggleFlagPicker(id) {
+            const row = document.querySelector('.color-picker-row[data-project-id="' + id + '"]');
+            if (!row) return;
+            const old = row.querySelector('.flag-palette');
+            if (old) { old.remove(); return; }
+            row.querySelectorAll('.flag-palette').forEach(x => x.remove());
+            const pal = document.createElement('div');
+            pal.className = 'flag-palette';
+            const FLAGS = ['🇯🇵','🇰🇷','🇺🇸','🇬🇧','🇩🇪','🇫🇷','🇨🇳','🇭🇰','🇹🇼','🇸🇬','🇹🇭','🇻🇳','🇮🇳','🇧🇷','🇨🇦','🇦🇺','🇷🇺','🇮🇹','🇪🇸','🇲🇽','🇸🇪','🇳🇱','🇵🇭','🇲🇾','🚩','🎯','🎮','🎬','📣','🧪','🏛️','🏠'];
+            const p = projects.find(x => x.id === id);
+            const cur = p ? getProjectFlag(p) : '';
+            const auto = p ? inferProjectFlagByName(p.name) : '';
+            pal.innerHTML = FLAGS.map(f => `<button class="flag-opt${f === cur ? ' on' : ''}" onclick="pickProjectFlag('${id}','${f}')">${f}</button>`).join('')
+                + `<button class="flag-opt flag-auto${!cur ? ' on' : ''}" onclick="pickProjectFlag('${id}','auto')" title="按项目名自动判断">自动${auto ? ' ' + auto : ''}</button>`
+                + `<button class="flag-opt flag-none${(!cur && !auto) ? ' on' : ''}" onclick="pickProjectFlag('${id}','none')" title="不显示旗帜">✕ 无</button>`;
+            row.appendChild(pal);
+        }
+        function pickProjectFlag(id, flag) {
+            setProjectFlag(id, flag);
         }
         function deleteProjectById(id) {
             if (projects.length <= 1) { showToast('⚠️ 至少保留一个项目'); return false; }
@@ -16778,7 +16879,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     item.style.setProperty('background-color', hexToRgba(project.color, 0.22), 'important');
                     item.style.setProperty('border-left', '6px solid ' + project.color, 'important');
                     const displayStatus = isOverdue ? 'overdue' : ev.status;
-                    item.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
+                    const projFlag = getProjectFlag(project);
+                    // 2026-09-07：旗帜前置代替手打地区前缀；悬停标题给全名
+                    item.title = `${projFlag ? projFlag + ' ' : ''}${project.name} · ${ev.title || ''} · ${statusNames[displayStatus] || displayStatus}${ev.status === 'done' && ev.doneDate ? ' · 完成于 ' + ev.doneDate : ''}`;
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
@@ -16794,7 +16897,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     };
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
                     const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span>${statusMarkHtml}${copyActionHtml}${ev.status === 'done' ? `<span class="stamp-mark" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
+                    // 2026-09-07：去掉第二个 ✓（stamp-mark），完成信息移入悬停 title，只留前面的勾选框
+                    const flagHtml = projFlag ? `<span class="ev-flag">${projFlag}</span>` : '';
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     // v2.10 状态圈长按轮盘
                     if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); item.classList.add('carry-lift'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
@@ -16920,7 +17025,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     bar.style.borderRadius = (startHere ? '3px' : '0') + ' ' + (endHere ? '3px' : '0') + ' ' + (endHere ? '3px' : '0') + ' ' + (startHere ? '3px' : '0');
                     if (startHere) bar.style.borderLeft = '6px solid ' + project.color;
                     // 文字颜色按项目色亮度自动取深/浅
-                    bar.title = project.name + ' · ' + (statusNames[displayStatus] || displayStatus);
+                    const gFlag = getProjectFlag(project);
+                    bar.title = `${gFlag ? gFlag + ' ' : ''}${project.name} · ${ev.title || ''} · ${statusNames[displayStatus] || displayStatus}`;
                     const safeTitle = escapeHtml(ev.title || '');
                     const repeatIcon = (ev.repeat || ev.repeatInstance) ? '🔄 ' : '';
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${GANTT_MARK_SVG[displayStatus] || ''}</span>`;
@@ -16935,7 +17041,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         const pct = Math.round(done / total * 100);
                         if (pct > 0) progressHtml = `<i class="gantt-progress" style="width:${pct}%"></i>`;
                     }
-                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
+                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${gFlag ? `<span class="ev-flag">${gFlag}</span>` : ''}${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
                     overlay.appendChild(bar);
                 }
             }
@@ -17175,7 +17281,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                             <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
                         </div>
                         <div class="task-row-meta">
-                            <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${escapeHtml(project.name)}</span>
+                            <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? getProjectFlag(project) + ' ' : ''}${escapeHtml(project.name)}</span>
                             ${isLong ? '<span class="task-meta-tag">📅 长期</span>' : ''}
                             ${ev.repeat || ev.repeatInstance ? '<span class="task-meta-tag">🔄 重复</span>' : ''}
                             ${ev.startTime ? `<span class="task-meta-tag">🕐 ${ev.startTime}${ev.endTime ? '-' + ev.endTime : ''}</span>` : ''}
@@ -17242,7 +17348,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${getProjectFlag(project)}</span> ` : ''}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
                         <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
@@ -21567,6 +21673,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         ];
         const KB_CATS = ['全部', '工作', '副业', '学习', '生活'];
         const KB_STORE = 'niko_knowledge';
+
+        // ===== 手机端 ⚙️ 工具抽屉（2026-09-07，同计划页模式）：次要工具收起，主内容占比最大 =====
+        function toggleKbTools() {
+            const pg = document.getElementById('knowledgePage');
+            if (!pg) return;
+            const open = pg.classList.toggle('tools-open');
+            try { localStorage.setItem('niko_kb_tools_open', open ? '1' : '0'); } catch (e) {}
+        }
+        (function nikoKbToolsInit() {
+            try { if (localStorage.getItem('niko_kb_tools_open') === '1') { const pg = document.getElementById('knowledgePage'); if (pg) pg.classList.add('tools-open'); else document.addEventListener('DOMContentLoaded', () => document.getElementById('knowledgePage').classList.add('tools-open')); } } catch (e) {}
+        })();
+
         // 知识库模板库（按 PARA 4 维 × 使用场景全覆盖；点编辑弹窗「📋 用模板」一键填表）
         // 字段：id / name(按钮文字) / para(默认目录) / category(默认分类) / tags(默认标签) / title(默认标题示例) / body(Markdown 模板)
         const KB_TEMPLATES = [
@@ -27769,6 +27887,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             box.innerHTML = projects.map(p => {
                 const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
                 const pScope = getProjectScope(p);
+                const pFlag = getProjectFlag(p);
+                const flagBtn = `<button onclick="toggleFlagPicker('${p.id}')" title="项目旗帜：显示在任务条标题前（可自定义）" style="padding:4px 8px;font-size:14px;border:1px solid var(--card-border,#333);border-radius:6px;cursor:pointer;background:transparent;color:inherit;line-height:1;">${pFlag || '🏳️'}</button>`;
                 const scopeSeg = `<span style="display:inline-flex;border:1px solid var(--card-border,#333);border-radius:6px;overflow:hidden;flex-shrink:0;" title="项目归属：工作/生活模式筛选时决定显示谁（未手动标记时按项目名推断）">
                         <button onclick="setProjectScope('${p.id}','work')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'work' ? 'rgba(59,130,246,0.28)' : 'transparent'};color:inherit;">💼</button>
                         <button onclick="setProjectScope('${p.id}','life')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'life' ? 'rgba(16,185,129,0.28)' : 'transparent'};color:inherit;">🏡</button>
@@ -27787,6 +27907,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="color-picker-row" data-project-id="${p.id}" style="flex-direction:column;align-items:stretch;gap:4px;">
                     <div style="display:flex;align-items:center;gap:8px;">
                         <input type="color" value="${p.color}" oninput="updateProject('${p.id}', undefined, this.value)" style="width:42px;height:32px;padding:0;border:none;background:transparent;cursor:pointer;">
+                        ${flagBtn}
                         <input type="text" value="${escapeHtml(p.name)}" onchange="updateProject('${p.id}', this.value, undefined)" maxlength="20" style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--card-border, #333);background:transparent;color:inherit;font-size:13px;">
                         ${scopeSeg}
                         ${usedTag}
@@ -29345,7 +29466,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071151";
+        window.NIKO_VERSION = "202609071307";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
