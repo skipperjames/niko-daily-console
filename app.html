@@ -836,24 +836,37 @@
         body.dark-mode .color-picker-row { border-bottom-color: #2a2a3a; }
         body.dark-mode .color-picker-row input[type="color"] { border-color: #444; }
 
-        /* 项目旗帜选择面板（2026-09-07） */
+        /* 项目旗帜选择面板（2026-09-07）：分组网格 + 玻璃质感 */
         .flag-palette {
-            display: flex; flex-wrap: wrap; gap: 4px;
-            padding: 8px; margin-top: 2px;
-            border: 1px dashed rgba(124,58,237,.4); border-radius: 8px;
-            background: rgba(124,58,237,.06);
+            display: flex; flex-wrap: wrap; align-items: center; gap: 3px;
+            padding: 10px; margin-top: 2px;
+            border: 1px solid rgba(124,58,237,.35); border-radius: 10px;
+            background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(99,102,241,.04));
+            box-shadow: inset 0 1px 6px rgba(124,58,237,.08);
         }
+        .flag-palette-label {
+            width: 100%; font-size: 10px; letter-spacing: .12em;
+            color: #8a8fa8; margin: 4px 2px 1px; user-select: none;
+        }
+        .flag-palette-label:first-child { margin-top: 0; }
         .flag-opt {
-            width: 34px; height: 30px; padding: 0;
+            width: 34px; height: 32px; padding: 0;
             display: inline-flex; align-items: center; justify-content: center;
-            font-size: 16px; line-height: 1;
-            border: 1px solid transparent; border-radius: 6px;
-            background: transparent; cursor: pointer;
-            transition: all .12s;
+            font-size: 17px; line-height: 1;
+            border: 1px solid transparent; border-radius: 8px;
+            background: rgba(255,255,255,.04); cursor: pointer;
+            transition: transform .12s, box-shadow .12s, background .12s;
         }
-        .flag-opt:hover { background: rgba(124,58,237,.14); }
-        .flag-opt.on { border-color: #7c3aed; background: rgba(124,58,237,.16); }
-        .flag-opt.flag-auto, .flag-opt.flag-none { width: auto; padding: 0 8px; font-size: 12px; color: inherit; }
+        .flag-opt:hover { background: rgba(124,58,237,.16); transform: translateY(-1px) scale(1.08); }
+        .flag-opt:active { transform: scale(.92); }
+        .flag-opt.on {
+            border-color: #a78bfa; background: rgba(124,58,237,.22);
+            box-shadow: 0 0 0 2px rgba(167,139,250,.35), 0 0 10px rgba(139,92,246,.35);
+        }
+        /* Twemoji 旗帜/图标：内联尺寸对齐文字（Windows 无国旗 emoji 字体，统一走 SVG 图片） */
+        .niko-twemoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; display: inline-block; }
+        .flag-opt .niko-twemoji { width: 20px; height: 20px; vertical-align: middle; }
+        .ev-flag .niko-twemoji { width: 13px; height: 13px; vertical-align: -2px; }
 
         /* 主题风格选择 */
         .theme-picker-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -12938,14 +12951,24 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         function getProjectFlag(p) {
             if (!p) return '';
             if (p.flag === 'none') return '';
-            return p.flag || inferProjectFlagByName(p.name);
+            if (p.flag === 'auto' || !p.flag) return inferProjectFlagByName(p.name);
+            return p.flag;
+        }
+        // 旗帜/图标统一走 Twemoji SVG：Windows 没有国旗 emoji 字体（会显示成 KR/JP 字母），图片渲染全平台一致
+        // 加载失败（离线等）自动降级回系统 emoji
+        function nikoFlagImg(flag, cls) {
+            if (!flag) return '';
+            try {
+                const cp = [...flag].map(c => c.codePointAt(0).toString(16)).join('-');
+                return `<img class="niko-twemoji${cls ? ' ' + cls : ''}" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.1.0/assets/svg/${cp}.svg" alt="${flag}" loading="lazy" onerror="this.outerHTML='${flag}'">`;
+            } catch (err) { return flag; }
         }
         function setProjectFlag(id, flag) {
             updateProject(id, undefined, undefined, undefined, flag);
             renderProjectPickerList();
             if (typeof render === 'function') { try { render(); } catch (err) {} }
         }
-        // 项目管理列表里的旗帜选择面板（内联展开，选完即收）
+        // 项目管理列表里的旗帜选择面板（内联展开，分组：国旗 / 信号旗 / 生活 / 工作；选完即收）
         function toggleFlagPicker(id) {
             const row = document.querySelector('.color-picker-row[data-project-id="' + id + '"]');
             if (!row) return;
@@ -12954,13 +12977,22 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             row.querySelectorAll('.flag-palette').forEach(x => x.remove());
             const pal = document.createElement('div');
             pal.className = 'flag-palette';
-            const FLAGS = ['🇯🇵','🇰🇷','🇺🇸','🇬🇧','🇩🇪','🇫🇷','🇨🇳','🇭🇰','🇹🇼','🇸🇬','🇹🇭','🇻🇳','🇮🇳','🇧🇷','🇨🇦','🇦🇺','🇷🇺','🇮🇹','🇪🇸','🇲🇽','🇸🇪','🇳🇱','🇵🇭','🇲🇾','🚩','🎯','🎮','🎬','📣','🧪','🏛️','🏠'];
+            const GROUPS = [
+                { label: '旗帜', items: ['🇯🇵','🇰🇷','🇺🇸','🇬🇧','🇫🇷','🇩🇪','🇮🇹','🇪🇸','🇷🇺','🇨🇳','🇭🇰','🇹🇼','🇸🇬','🇹🇭','🇻🇳','🇲🇾','🇵🇭','🇮🇩','🇮🇳','🇦🇺','🇨🇦','🇧🇷','🇲🇽','🇸🇪','🇳🇱','🇨🇭','🇪🇬','🇦🇪','🇪🇺','🇺🇳','🏴󠁧󠁢󠁥󠁮󠁧󠁿','🏴󠁧󠁢󠁳󠁣󠁴󠁿'] },
+                { label: '信号', items: ['🚩','🏁','🎌','🎏','⛳','🏳️','🏴','🪽'] },
+                { label: '生活', items: ['🏠','🛏️','🛋️','🚿','🛁','🧹','🧺','🛒','🍳','☕','🍰','🍓','💡','🔧','📦','🪴','🌱','🌸','🌻','🍀','🎀','🫧','🐶','🐱','🐰','🦊','🐻','🐼','🦄','🧸'] },
+                { label: '工作', items: ['💻','🎧','📸','🎥','🎬','🎮','🕹️','✂️','🖊️','📚','📊','🧠','⚡','🔥','⭐','🎯','🎨','🧪'] }
+            ];
             const p = projects.find(x => x.id === id);
             const cur = p ? getProjectFlag(p) : '';
-            const auto = p ? inferProjectFlagByName(p.name) : '';
-            pal.innerHTML = FLAGS.map(f => `<button class="flag-opt${f === cur ? ' on' : ''}" onclick="pickProjectFlag('${id}','${f}')">${f}</button>`).join('')
-                + `<button class="flag-opt flag-auto${!cur ? ' on' : ''}" onclick="pickProjectFlag('${id}','auto')" title="按项目名自动判断">自动${auto ? ' ' + auto : ''}</button>`
-                + `<button class="flag-opt flag-none${(!cur && !auto) ? ' on' : ''}" onclick="pickProjectFlag('${id}','none')" title="不显示旗帜">✕ 无</button>`;
+            const curRaw = p ? p.flag : '';
+            pal.innerHTML = GROUPS.map(g => {
+                const items = [...new Set(g.items)].map(f => `<button class="flag-opt${f === cur ? ' on' : ''}" onclick="pickProjectFlag('${id}','${f}')" title="${f}">${nikoFlagImg(f)}</button>`).join('');
+                return `<span class="flag-palette-label">${g.label}</span>${items}`;
+            }).join('')
+                + `<span class="flag-palette-label">状态</span>`
+                + `<button class="flag-opt${curRaw === 'auto' ? ' on' : ''}" onclick="pickProjectFlag('${id}','auto')" title="自动：按项目名判断旗帜">🪄</button>`
+                + `<button class="flag-opt${curRaw === 'none' ? ' on' : ''}" onclick="pickProjectFlag('${id}','none')" title="不显示旗帜">🚫</button>`;
             row.appendChild(pal);
         }
         function pickProjectFlag(id, flag) {
@@ -16898,7 +16930,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${STATUS_MARK_SVG[displayStatus] || ''}</span>`;
                     const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
                     // 2026-09-07：去掉第二个 ✓（stamp-mark），完成信息移入悬停 title，只留前面的勾选框
-                    const flagHtml = projFlag ? `<span class="ev-flag">${projFlag}</span>` : '';
+                    const flagHtml = projFlag ? `<span class="ev-flag">${nikoFlagImg(projFlag)}</span>` : '';
                     item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
                     // v2.10 状态圈长按轮盘
                     if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
@@ -17041,7 +17073,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         const pct = Math.round(done / total * 100);
                         if (pct > 0) progressHtml = `<i class="gantt-progress" style="width:${pct}%"></i>`;
                     }
-                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${gFlag ? `<span class="ev-flag">${gFlag}</span>` : ''}${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
+                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${gFlag ? `<span class="ev-flag">${nikoFlagImg(gFlag)}</span>` : ''}${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
                     overlay.appendChild(bar);
                 }
             }
@@ -17281,7 +17313,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                             <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
                         </div>
                         <div class="task-row-meta">
-                            <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? getProjectFlag(project) + ' ' : ''}${escapeHtml(project.name)}</span>
+                            <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${escapeHtml(project.name)}</span>
                             ${isLong ? '<span class="task-meta-tag">📅 长期</span>' : ''}
                             ${ev.repeat || ev.repeatInstance ? '<span class="task-meta-tag">🔄 重复</span>' : ''}
                             ${ev.startTime ? `<span class="task-meta-tag">🕐 ${ev.startTime}${ev.endTime ? '-' + ev.endTime : ''}</span>` : ''}
@@ -17348,7 +17380,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${getProjectFlag(project)}</span> ` : ''}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
                         <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
@@ -27888,7 +27920,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const usedTag = usedIds.has(p.id) ? `<span style="font-size:11px;color:#888;background:rgba(124,58,237,0.12);padding:1px 6px;border-radius:4px;">有任务</span>` : `<span style="font-size:11px;color:#aaa;">未使用</span>`;
                 const pScope = getProjectScope(p);
                 const pFlag = getProjectFlag(p);
-                const flagBtn = `<button onclick="toggleFlagPicker('${p.id}')" title="项目旗帜：显示在任务条标题前（可自定义）" style="padding:4px 8px;font-size:14px;border:1px solid var(--card-border,#333);border-radius:6px;cursor:pointer;background:transparent;color:inherit;line-height:1;">${pFlag || '🏳️'}</button>`;
+                const flagBtn = `<button onclick="toggleFlagPicker('${p.id}')" title="项目旗帜/图标：显示在任务条标题前（可自定义）" style="padding:4px 8px;font-size:14px;border:1px solid var(--card-border,#333);border-radius:6px;cursor:pointer;background:transparent;color:inherit;line-height:1;">${nikoFlagImg(pFlag) || nikoFlagImg('🏳️')}</button>`;
                 const scopeSeg = `<span style="display:inline-flex;border:1px solid var(--card-border,#333);border-radius:6px;overflow:hidden;flex-shrink:0;" title="项目归属：工作/生活模式筛选时决定显示谁（未手动标记时按项目名推断）">
                         <button onclick="setProjectScope('${p.id}','work')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'work' ? 'rgba(59,130,246,0.28)' : 'transparent'};color:inherit;">💼</button>
                         <button onclick="setProjectScope('${p.id}','life')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'life' ? 'rgba(16,185,129,0.28)' : 'transparent'};color:inherit;">🏡</button>
@@ -29466,7 +29498,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071307";
+        window.NIKO_VERSION = "202609071319";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
