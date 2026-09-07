@@ -8014,7 +8014,12 @@
         .nb-card:active { cursor: grabbing; }
         .nb-card.pinned { border-left-color: #f59e0b; box-shadow: 0 0 0 1px rgba(245,158,11,.35); }
         .nb-card.selected { box-shadow: 0 0 0 2px #667eea; }
-        .nb-card-content { font-size: 13px; line-height: 1.6; color: #2b2b3a; word-break: break-word; white-space: pre-wrap; max-height: 180px; overflow-y: auto; }
+        /* v2.20 拆内滚：卡片内容不再自带滚动条（手机误触根修，铁律单滚架构），超长clamp+渐隐，点击展开/收起 */
+        .nb-card-content { font-size: 13px; line-height: 1.6; color: #2b2b3a; word-break: break-word; white-space: pre-wrap; max-height: 180px; overflow: hidden; position: relative; }
+        .nb-card-content.nb-clamped::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 38px; background: linear-gradient(transparent, #fff 82%); pointer-events: none; }
+        body.dark-mode .nb-card-content.nb-clamped::after { background: linear-gradient(transparent, #1f1f2e 82%); }
+        .nb-card-content.expanded { max-height: none; }
+        .nb-card-content.expanded::after { display: none; }
         body.dark-mode .nb-card-content { color: #dcdcea; }
         .nb-card-tag { font-size: 10px; font-weight: 600; color: var(--ntag); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 42%; }
         .nb-card-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
@@ -8233,6 +8238,33 @@
             .nb-toolbar.drawer-open .nb-search { display: flex; flex: 1 1 100%; min-width: 0; order: -3; height: 40px; font-size: 16px; }
             .nb-toolbar.drawer-open .nb-tools > .nb-btn:not(.primary) { display: inline-flex; }
             .nb-toolbar.drawer-open .nb-tools { padding-bottom: 10px; margin-bottom: 2px; border-bottom: 1px dashed rgba(128,128,128,.28); }
+        }
+
+        /* ===== v2.20 便签详情弹窗（双击卡片打开）+ 手机操作热区 ===== */
+        .nb-detail-modal { width: 480px; }
+        .nb-detail-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .nb-detail-tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; color: #fff; }
+        .nb-detail-pin { font-size: 11px; color: #f59e0b; font-weight: 600; }
+        .nb-detail-close { margin-left: auto; width: 34px; height: 34px; border: 1px solid #e5e2dc; background: transparent; border-radius: 50%; cursor: pointer; color: #888; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+        body.dark-mode .nb-detail-close { border-color: #3a3a4d; color: #aaa; }
+        .nb-detail-text { font-size: 14.5px; line-height: 1.9; white-space: pre-wrap; word-break: break-word; color: #2b2b3a; max-height: 52vh; overflow-y: auto; padding: 4px 2px; user-select: text; -webkit-user-select: text; }
+        body.dark-mode .nb-detail-text { color: #e3e1ef; }
+        .nb-detail-meta { font-size: 11px; color: #9a96a8; padding: 10px 2px 0; border-top: 1px dashed rgba(128,128,128,.3); margin-top: 12px; }
+        .nb-detail-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+        .nb-detail-actions button { min-height: 44px; border: 1px solid #e5e2dc; background: #faf9f6; border-radius: 10px; font-size: 12.5px; cursor: pointer; color: #555; transition: all .15s; }
+        .nb-detail-actions button:hover { background: #f0ede6; }
+        .nb-detail-actions button.danger { color: #ef4444; border-color: rgba(239,68,68,.35); }
+        body.dark-mode .nb-detail-actions button { background: #26263a; border-color: #3a3a4d; color: #c9c6d8; }
+        body.dark-mode .nb-detail-actions button:hover { background: #30304a; }
+        body.dark-mode .nb-detail-actions button.danger { color: #f87171; border-color: rgba(248,113,113,.4); }
+        @media (max-width: 768px) {
+            /* 手机端操作按钮常显 + 热区达标（铁律误触治理：≥32px） */
+            .nb-card-actions { opacity: 1; }
+            .nb-icon-btn { width: 30px; height: 30px; font-size: 13px; }
+            #nbDetailModal { align-items: flex-end; padding: 0; }
+            #nbDetailModal .modal { width: 100vw !important; max-width: 100vw; margin: 0; border-radius: 18px 18px 0 0; max-height: 88vh; overflow-y: auto; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+            .nb-detail-text { font-size: 15.5px; max-height: 48vh; }
+            .nb-detail-actions button { min-height: 46px; font-size: 13px; }
         }
 /* ===== 知识库（PARA）专属CSS ===== */
         .kb-wrap { display:flex; flex-direction:column; gap:14px; flex:1; min-height:0; }
@@ -12507,6 +12539,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <button class="btn" onclick="closeNoteModal()">取消</button>
                 <button class="btn primary" onclick="saveNoteModal()">保存</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 便签详情弹窗（v2.20：双击卡片打开，看全文/编辑/复制一步到位） -->
+    <div class="modal-mask" id="nbDetailModal" onclick="if(event.target===this)closeNbDetail()">
+        <div class="modal nb-detail-modal">
+            <div id="nbDetailBody"></div>
         </div>
     </div>
 
@@ -21544,12 +21583,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderNbStats();
             document.getElementById('nbSelCount').textContent = nbSelected.size;
             const c = document.getElementById('nbContent');
-            if (nbSpecial === 'recycle') return renderRecycleView(c);
-            if (nbSpecial === 'archive') return renderArchiveView(c);
-            if (nbSpecial === 'quiet') return renderQuietView(c);
-            if (nbView === 'board') return renderNotesBoardView(c);
-            if (nbView === 'wall') return renderNotesWallView(c);
-            return renderNotesTimelineView(c);
+            if (nbSpecial === 'recycle') { renderRecycleView(c); nbMarkClamp(); return; }
+            if (nbSpecial === 'archive') { renderArchiveView(c); nbMarkClamp(); return; }
+            if (nbSpecial === 'quiet') { renderQuietView(c); nbMarkClamp(); return; }
+            if (nbView === 'board') { renderNotesBoardView(c); nbMarkClamp(); return; }
+            if (nbView === 'wall') { renderNotesWallView(c); nbMarkClamp(); return; }
+            renderNotesTimelineView(c);
+            nbMarkClamp();
         }
 
         function nbEmptyHtml(title, hint) {
@@ -21808,10 +21848,104 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderNotesPage();
         }
         function nbCardClick(id, e) {
-            if (!nbBatch) return;
-            e && e.stopPropagation();
-            nbSelected.has(id) ? nbSelected.delete(id) : nbSelected.add(id);
+            if (nbBatch) {
+                e && e.stopPropagation();
+                nbSelected.has(id) ? nbSelected.delete(id) : nbSelected.add(id);
+                renderNotesPage();
+                return;
+            }
+            // v2.20：双击（320ms 内两次点击）打开详情页；单击展开/收起超长内容
+            const now = Date.now();
+            if (_nbLastTap[id] && now - _nbLastTap[id] < 320) {
+                _nbLastTap[id] = 0;
+                e && e.stopPropagation();
+                openNbDetail(id);
+                return;
+            }
+            _nbLastTap[id] = now;
+            const card = e && e.currentTarget;
+            if (card) nbToggleExpand(card);
+        }
+
+        // ===== v2.20 便签详情页（手机误触根修配套：拆内滚后长文看全靠它）=====
+        let _nbLastTap = {};
+        let nbDetailId = null;
+        function nbToggleExpand(card) {
+            const c = card && card.querySelector ? card.querySelector('.nb-card-content') : null;
+            if (!c) return;
+            if (c.classList.contains('expanded')) {
+                c.classList.remove('expanded');
+                if (c.scrollHeight > c.clientHeight + 2) c.classList.add('nb-clamped');
+            } else if (c.classList.contains('nb-clamped')) {
+                c.classList.remove('nb-clamped');
+                c.classList.add('expanded');
+            }
+        }
+        function nbMarkClamp() {
+            requestAnimationFrame(() => {
+                document.querySelectorAll('.nb-card-content').forEach(el => {
+                    if (el.classList.contains('expanded')) return;
+                    const clamped = el.scrollHeight > el.clientHeight + 2;
+                    el.classList.toggle('nb-clamped', clamped);
+                    // 回收站/归档/寂寂角卡片没有 nbCardClick，直接绑在内容上
+                    if (clamped && !el.dataset.expandBound && !el.closest('[data-note-id]')) {
+                        el.style.cursor = 'pointer';
+                        el.addEventListener('click', ev => { ev.stopPropagation(); el.classList.toggle('expanded'); if (!el.classList.contains('expanded')) el.classList.add('nb-clamped'); else el.classList.remove('nb-clamped'); });
+                        el.dataset.expandBound = '1';
+                    }
+                });
+            });
+        }
+        function openNbDetail(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            nbDetailId = id;
+            const tag = noteTagDict()[n.tag] || noteTagDict().other;
+            const created = new Date(n.createdAt);
+            const updated = n.updatedAt ? new Date(n.updatedAt) : null;
+            const ageD = Math.floor((Date.now() - created.getTime()) / 86400000);
+            document.getElementById('nbDetailBody').innerHTML = `
+                <div class="nb-detail-head">
+                    <span class="nb-detail-tag" style="background:${tag.chipBg};">${tag.icon} ${escapeHtml(tag.name)}</span>
+                    ${n.pinned ? '<span class="nb-detail-pin">📌 置顶</span>' : ''}
+                    <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
+                </div>
+                <div class="nb-detail-text">${escapeHtml(n.content)}</div>
+                ${capsuleBadgeHtml(n)}
+                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}</div>
+                <div class="nb-detail-actions">
+                    <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
+                    <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
+                    <button onclick="nbDetailCopy('${id}')">📋 复制全文</button>
+                    <button onclick="closeNbDetail();nbConvert('${id}',event);">🗓 转任务</button>
+                    <button onclick="nbArchive('${id}',event);closeNbDetail();renderNotesPage();">📦 归档</button>
+                    <button class="danger" onclick="nbDelete('${id}',event);closeNbDetail();renderNotesPage();">🗑 删除</button>
+                </div>`;
+            document.getElementById('nbDetailModal').classList.add('show');
+        }
+        function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; }
+        function nbDetailEdit(id) { closeNbDetail(); openNoteModal(id, null, null); }
+        function nbDetailPin(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            n.pinned = !n.pinned;
+            saveNotes();
+            if (typeof nikoSpark === 'function' && n.pinned) { const el = document.getElementById('nbDetailBody'); nikoSpark(el, '📌', '#f59e0b'); }
+            showToast(n.pinned ? '📌 已置顶' : '已取消置顶');
             renderNotesPage();
+            openNbDetail(id); // 刷新详情按钮文案
+        }
+        function nbDetailCopy(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            const done = () => showToast('📋 全文已复制');
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(n.content).then(done).catch(() => {});
+            else {
+                const ta = document.createElement('textarea');
+                ta.value = n.content; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); done(); } catch (err) {}
+                document.body.removeChild(ta);
+            }
         }
         function nbBatchDo(action) {
             if (!nbSelected.size) { showToast('先勾选便签'); return; }
@@ -30016,7 +30150,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072027";
+        window.NIKO_VERSION = "202609072143";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
