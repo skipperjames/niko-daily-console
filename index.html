@@ -10114,7 +10114,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     .niko-mobile-tabbar { display: flex; }
     .niko-float-dock { display: flex; }
     .main-container {
-        padding-bottom: 66px;
+        /* v2.17 底部大黑条修复：66px 固定留白 + 页面自身 padding 叠出 ~100px 死区。
+           改为精确等于 tabbar 高度（含安卓手势条安全区），内容顶到 tabbar 边缘 */
+        padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
     }
     .page {
         overflow-y: auto;
@@ -29839,7 +29841,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071739";
+        window.NIKO_VERSION = "202609071806";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
