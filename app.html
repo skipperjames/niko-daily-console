@@ -8191,12 +8191,15 @@
             .nb-wall .nb-card.nb-slim { margin-bottom: 8px; }
             .nb-card.nb-slim { padding: 7px 10px 4px; }
             body.nb-compact .nb-card.nb-slim { padding: 6px 9px 4px; }
-            .nb-card-content { font-size: 12.5px; line-height: 1.5; max-height: 140px; }
+            .nb-card-content { font-size: 12.5px; line-height: 1.5; max-height: 76px; }   /* v2.24 预览压缩：外面只看前 4 行，全文进详情看 */
+            .nb-card-content.nb-clamped::after { height: 26px; }
             body.nb-compact .nb-wall .nb-card { padding: 7px 9px 5px; }
-            body.nb-compact .nb-card-content { max-height: 100px; }
+            body.nb-compact .nb-card-content { max-height: 68px; }
         }
+        /* ===== v2.24 手机真双列瀑布：去掉 column-width 下限（160px 下限会让 375px 屏装不下两列而静默回退单列）===== */
         @media (max-width: 900px) {
-            .nb-wall { columns: 2 160px; }
+            body:not(.nb-onecol) .nb-wall { columns: 2; }
+            body.nb-onecol .nb-wall { columns: 1; }
         }
         /* ===== v2.22 骰子模式：摇骰开面动画 ===== */
         @keyframes nbDiceRoll { 0% { transform: rotate(0deg) scale(.5); opacity: 0; } 45% { transform: rotate(220deg) scale(1.12); opacity: 1; } 75% { transform: rotate(330deg) scale(.95); } 100% { transform: rotate(360deg) scale(1); } }
@@ -8207,6 +8210,24 @@
         .nb-paper-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: all .15s; padding: 0; }
         .nb-paper-dot.active { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,.25); }
         .nb-paper-dot.cream { background: #f5ecd7; }
+        /* ===== v2.24 详情页连续翻阅：左右箭头 + 进度指示（桌面键盘 ←/→，手机左右滑）===== */
+        .nb-detail-idx { margin-left: auto; margin-right: 10px; font-size: 10.5px; color: #9a96a8; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .nb-detail-nav { position: fixed; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.16); background: rgba(20,20,26,.72); color: #c5c1cf; font-size: 22px; line-height: 1; cursor: pointer; z-index: 60; display: flex; align-items: center; justify-content: center; transition: background .15s, color .15s; backdrop-filter: blur(4px); padding: 0; }
+        .nb-detail-nav:hover { background: rgba(60,60,80,.88); color: #fff; }
+        .nb-detail-nav.l { left: 14px; }
+        .nb-detail-nav.r { right: 14px; }
+        body:not(.dark-mode) .nb-detail-nav { background: rgba(255,255,255,.86); border-color: rgba(0,0,0,.14); color: #57534e; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+        body:not(.dark-mode) .nb-detail-nav:hover { background: #fff; color: #1f2937; }
+        @media (max-width: 768px) {
+            .nb-detail-nav { width: 36px; height: 36px; top: 40%; }
+            .nb-detail-nav.l { left: 6px; }
+            .nb-detail-nav.r { right: 6px; }
+        }
+        /* ===== v2.24 季节纸纹：便签纸随四季换极淡的 CSS 纹理（纯样式，深浅主题都压得住）===== */
+        body.nb-season-spring .nb-card { background-image: radial-gradient(rgba(244, 114, 182, .055) 1px, transparent 1.4px); background-size: 14px 14px; }
+        body.nb-season-summer .nb-card { background-image: linear-gradient(rgba(45, 212, 191, .05) 1px, transparent 1px); background-size: 100% 12px; }
+        body.nb-season-autumn .nb-card { background-image: radial-gradient(rgba(234, 88, 12, .06) 1.2px, transparent 1.7px); background-size: 16px 16px; }
+        body.nb-season-winter .nb-card { background-image: radial-gradient(rgba(148, 163, 184, .09) 1px, transparent 1.5px), radial-gradient(rgba(148, 163, 184, .055) 1px, transparent 1.5px); background-size: 18px 18px, 11px 11px; background-position: 0 0, 5px 7px; }
         .nb-paper-dot.gray { background: #e8e8e4; }
         .nb-paper-dot.dark { background: #26262e; }
         .nb-detail-text.paper-cream { background: #f7efdc; color: #4a4030; border-radius: 10px; padding: 14px 16px; }
@@ -11750,6 +11771,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
                         <button class="nb-btn" onclick="nbOpenDice()" title="随手摇一张旧便签，摇到哪张看哪张">🎲 摇一张</button>
                         <button class="nb-btn" id="nbDensityBtn" onclick="nbToggleDensity()" title="切换卡片密度（紧凑一屏看更多）">🌿 舒适</button>
+                        <button class="nb-btn" id="nbColsBtn" onclick="nbToggleCols()" title="手机便签墙单列/双列瀑布切换">▦ 双列</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
                         <button class="nb-btn" id="nbArchiveBtn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
                         <button class="nb-btn" id="nbQuietBtn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
@@ -22116,6 +22138,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             });
         }
+        // v2.24 连续翻阅：详情页在「当前墙上可见的便签」里按顺序翻（与墙同序，含置顶优先）
+        function nbDetailList() { return visibleList(); }
+        function nbDetailNav(dir) {
+            const list = nbDetailList();
+            const i = list.findIndex(n => n.id === nbDetailId);
+            if (i < 0 || !list.length) return;
+            const next = list[(i + dir + list.length) % list.length];
+            openNbDetail(next.id);
+        }
         function openNbDetail(id) {
             const n = notes.find(x => x.id === id);
             if (!n) return;
@@ -22129,12 +22160,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const updated = n.updatedAt ? new Date(n.updatedAt) : null;
             const touchTs = Math.max(created.getTime(), new Date(n.updatedAt || n.createdAt).getTime(), n.lastOpenAt ? new Date(n.lastOpenAt).getTime() : 0);
             const ageD = Math.floor((Date.now() - touchTs) / 86400000);
+            const dList = nbDetailList();
+            const dIdx = dList.findIndex(x => x.id === id);
+            const dTotal = dList.length;
             document.getElementById('nbDetailBody').innerHTML = `
                 <div class="nb-detail-head">
                     <span class="nb-detail-tag" style="background:${tag.chipBg};">${tag.icon} ${escapeHtml(tag.name)}</span>
                     ${n.pinned ? '<span class="nb-detail-pin">📌 置顶</span>' : ''}
+                    ${dIdx >= 0 && dTotal > 1 ? `<span class="nb-detail-idx">${dIdx + 1} / ${dTotal}</span>` : ''}
                     <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
                 </div>
+                ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button></div>
                 <div class="nb-detail-text ${nbPaperClass()}">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
@@ -22149,6 +22185,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     ${nbSort === 'manual' ? `<button onclick="nbMoveTop('${id}');closeNbDetail();">🔝 移到最前</button>` : ''}
                 </div>`;
             document.getElementById('nbDetailModal').classList.add('show');
+            const mBox = document.querySelector('#nbDetailModal .modal');
+            if (mBox) mBox.scrollTop = 0;   // 翻到下一张回到顶部
         }
         function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; }
         function nbDetailEdit(id) { closeNbDetail(); openNoteModal(id, null, null); }
@@ -22577,6 +22615,47 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         try { document.getElementById('noteModalContent').addEventListener('input', nbDraftSave); } catch (e) {}
         nbApplyDensity();
         nbSyncSortUI();
+
+        // ===== v2.24 详情页连续翻阅：桌面键盘 ←/→ 关闭，手机左右滑翻卡（绑一次） =====
+        try {
+            document.addEventListener('keydown', (e) => {
+                if (!nbDetailId) return;
+                const noteModal = document.getElementById('noteModal');
+                if (noteModal && noteModal.classList.contains('show')) return;   // 编辑弹窗优先
+                if (e.key === 'ArrowLeft') { e.preventDefault(); nbDetailNav(-1); }
+                else if (e.key === 'ArrowRight') { e.preventDefault(); nbDetailNav(1); }
+                else if (e.key === 'Escape') closeNbDetail();
+            });
+            const dm = document.getElementById('nbDetailModal');
+            let nbSwipeX = 0, nbSwipeY = 0;
+            dm.addEventListener('touchstart', (e) => { nbSwipeX = e.touches[0].clientX; nbSwipeY = e.touches[0].clientY; }, { passive: true });
+            dm.addEventListener('touchend', (e) => {
+                if (!nbDetailId) return;
+                const dx = e.changedTouches[0].clientX - nbSwipeX, dy = e.changedTouches[0].clientY - nbSwipeY;
+                if (Math.abs(dx) > 56 && Math.abs(dx) > Math.abs(dy) * 1.6) nbDetailNav(dx < 0 ? 1 : -1);
+            }, { passive: true });
+        } catch (err) { console.warn('nbDetailNav init', err); }
+
+        // ===== v2.24 手机双列瀑布开关：默认双列，可切单列（记住选择） =====
+        function nbSyncColsBtn() {
+            const b = document.getElementById('nbColsBtn');
+            if (b) b.textContent = document.body.classList.contains('nb-onecol') ? '▥ 单列' : '▦ 双列';
+        }
+        function nbToggleCols() {
+            const one = document.body.classList.toggle('nb-onecol');
+            safeStorage.set('niko_note_wall_cols', one ? '1' : '2');
+            nbSyncColsBtn();
+            showToast(one ? '▥ 已切单列（手机便签墙）' : '▦ 已切双列瀑布（手机便签墙）');
+        }
+        if (safeStorage.get('niko_note_wall_cols', '2') === '1') document.body.classList.add('nb-onecol');
+        nbSyncColsBtn();
+
+        // ===== v2.24 季节纸纹：按当前月份挂春夏秋冬纹理类（便签卡极淡纹理） =====
+        (function nbSeasonSkin() {
+            const m = new Date().getMonth() + 1;
+            const s = (m >= 3 && m <= 5) ? 'spring' : (m >= 6 && m <= 8) ? 'summer' : (m >= 9 && m <= 11) ? 'autumn' : 'winter';
+            document.body.classList.add('nb-season-' + s);
+        })();
 
         // ===== v2.22 详情页护眼纸色：米黄 / 浅灰 / 深，选择持久化 =====
         let nbPaper = safeStorage.get('niko_nb_paper', 'cream');
@@ -30466,7 +30545,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072253";
+        window.NIKO_VERSION = "202609072311";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
