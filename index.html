@@ -10377,17 +10377,18 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
     /* 计划日历：手机单列列表（隐藏周表头，格子横排：日期+事件） */
     .week-header { display: none; }
-    .four-week-grid { grid-template-columns: 1fr; gap: 6px; grid-auto-rows: auto !important; } /* v2.12: 行高改内容自适应，空日子不再被 1fr 撑到等高 */
+    #planPage { padding: 10px 8px !important; } /* 2026-09-07 用户点名：计划页两侧留白收紧，任务条才是主角 */
+    .four-week-grid { grid-template-columns: 1fr; gap: 5px; grid-auto-rows: auto !important; } /* v2.12: 行高改内容自适应，空日子不再被 1fr 撑到等高 */
     .day-cell {
         min-height: 0 !important;   /* !important：parts 合并顺序在总框架之后，压过桌面 min-height:110px */
         flex-direction: row;
         align-items: center;
-        gap: 10px;
-        padding: 8px 10px;
+        gap: 7px;
+        padding: 5px 6px 5px 7px;   /* 2026-09-07 收紧：8px 10px → 5px 6px，把宽度还给任务条 */
         border-radius: 10px;
     }
     .day-cell .day-date {
-        width: 48px;
+        width: 33px;                /* 2026-09-07 收紧：48px → 33px，「今天」二字 10px 竖排 + 20px 圆圈都放得下 */
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
@@ -10413,7 +10414,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         gap: 4px;
     }
     .day-cell .event-item {
-        padding: 4px 8px;
+        padding: 4px 6px;
+        padding-right: 26px;        /* 2026-09-07：右上状态圈 20px + 6px 呼吸，旧 32px 浪费窄屏宽度 */
         border-radius: 6px;
         font-size: 12.5px;
         white-space: nowrap;
@@ -30561,7 +30563,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072332";
+        window.NIKO_VERSION = "202609072341";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
