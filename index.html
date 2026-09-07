@@ -2948,6 +2948,13 @@
         @media (max-width: 768px) {
             .habit-pet { width: 23px; height: 23px; }
         }
+
+        /* ===== 手机端小触点加大（2026-09-07）：热区 ≥36px，视觉不占位（负 margin 抵消） ===== */
+        @media (max-width: 768px) {
+            .today-sec-more { padding: 10px 8px; margin: -10px -2px -10px 0; }
+            .weekly-chip, .garden-feed-chip { padding: 7px 11px; }
+            .sec-badge { padding: 3px 9px; }
+        }
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
                    计划页面 (日历 + 看板)
@@ -4812,20 +4819,34 @@
         .node-btn:hover { opacity: 1; background: #e5e7eb; }
         body.dark-mode .node-btn:hover { background: #374151; }
 
-        /* ===== 计划看板手机端紧凑化 ===== */
+        /* ===== 手机端紧凑化 + ⚙️ 工具抽屉（2026-09-07） ===== */
+        /* 桌面端不显示抽屉按钮（全部工具直接可见） */
+        #planToolsToggle { display: none; }
         @media (max-width: 768px) {
-            /* 顶栏：页头描述完全隐藏、图例只显示色块、H1 缩小、整顶栏收缩 */
+            /* 顶栏：页头描述完全隐藏、H1 缩小、整顶栏收缩 */
             #planPage .top-bar { padding: 8px 10px !important; gap: 6px !important; flex-wrap: wrap !important; }
             #planPage .top-title h1 { font-size: 18px !important; margin-bottom: 0 !important; line-height: 1.2; }
             #planPage .top-title p { display: none !important; }
-            #planPage .legend {
-                display: flex !important; flex-wrap: wrap !important; gap: 6px !important;
-                margin-top: 4px !important; padding: 4px 8px !important;
-                background: rgba(0,0,0,.03) !important; border-radius: 6px !important;
+            /* 图例文字收起，只保留番茄林地（planFocusStrip） */
+            #planPage .legend { display: flex !important; gap: 3px !important; margin-top: 2px !important; padding: 0 !important; background: none !important; }
+            #planPage .legend-item { display: none !important; }
+            /* ⚙️ 抽屉按钮：手机端唯一可见的工具入口 */
+            #planPage #planToolsToggle {
+                display: inline-flex !important; align-items: center; justify-content: center;
+                flex: 0 0 auto !important; width: auto !important;
+                min-width: 44px; min-height: 36px; padding: 4px 12px !important;
+                font-size: 15px !important; border-radius: 8px;
             }
-            body.dark-mode #planPage .legend { background: rgba(255,255,255,.04) !important; }
-            #planPage .legend-item { font-size: 10px !important; }
-            #planPage .legend-item .legend-dot { width: 8px !important; height: 8px !important; }
+            /* 收起态：顶栏右侧只留 ⚙️ + 视图切换，其余全部隐藏（scopeModeGroup 也带 view-toggle 类，需单独点名） */
+            #planPage:not(.tools-open) .top-bar > div:nth-child(2) > *:not(.view-toggle):not(#planToolsToggle) { display: none !important; }
+            #planPage:not(.tools-open) #scopeModeGroup,
+            #planPage:not(.tools-open) #scopeOffTime { display: none !important; }
+            #planPage:not(.tools-open) .date-nav-bar .display-setting,
+            #planPage:not(.tools-open) .date-nav-bar .search-box { display: none !important; }
+            /* 展开态：工具流式换行铺开 */
+            #planPage.tools-open .top-bar > div:nth-child(2) { width: 100%; gap: 8px; }
+            /* 统计卡：手机端整块撤掉（数字看板是桌面场景），空间让给日历 */
+            #planPage .top-stats { display: none !important; }
             /* 视图切换：标签只保留图标 */
             #planPage .view-toggle button { padding: 4px 8px !important; font-size: 11px !important; }
             #planPage .view-toggle button > span { font-size: 12px; }
@@ -4833,20 +4854,7 @@
             #planPage .node-toggle > span:last-child { font-size: 11px !important; }
             /* 买量节点按钮缩小 */
             #planPage .top-bar .btn-small { padding: 4px 8px !important; font-size: 11px !important; }
-            /* 统计卡：横排、变小（4 张卡 2×2） */
-            #planPage .top-stats {
-                display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 4px !important;
-                width: 100% !important;
-            }
-            #planPage .top-stats .stat-card {
-                padding: 4px 6px !important; border-radius: 6px !important;
-                min-height: 38px !important;
-                display: flex; flex-direction: column; align-items: center; justify-content: center;
-            }
-            #planPage .top-stats .stat-num { font-size: 14px !important; line-height: 1.1 !important; }
-            #planPage .top-stats .stat-label { font-size: 9.5px !important; }
+            #planPage .top-bar .btn-small#planToolsToggle { font-size: 15px !important; }
             /* 日期导航栏：紧凑、单行 */
             #planPage .date-nav-bar {
                 padding: 6px 10px !important; flex-wrap: wrap !important; gap: 6px !important;
@@ -4856,8 +4864,8 @@
             #planPage .date-nav-bar .today-btn { padding: 3px 8px !important; font-size: 11px !important; }
             #planPage .display-setting { font-size: 11px !important; gap: 3px !important; }
             #planPage .display-setting input { width: 36px !important; padding: 2px 4px !important; }
-            /* 搜索框：收窄 */
-            #planPage .search-box { width: 110px !important; padding: 4px 10px !important; font-size: 12px !important; }
+            /* 搜索框：展开工具时占满一行 */
+            #planPage .search-box { width: 100% !important; padding: 6px 10px !important; font-size: 13px !important; }
             /* 任务条操作按钮：手机无 hover，默认半显 */
             #planPage .event-action { opacity: 0.85 !important; right: 18px !important; }
             /* 顶部右侧按钮组：水平滚动 */
@@ -6340,6 +6348,17 @@
         }
         body.dark-mode .meme-search { background: #111827; color: #e5e7eb; border-color: #444; }
         .meme-search:focus { outline: none; border-color: #8b5cf6; }
+        /* ===== 手机端适配（2026-09-07）：单列布局 + 触点加大 + 主内容占比最大 ===== */
+        @media (max-width: 768px) {
+            .meme-layout { grid-template-columns: 1fr; gap: 10px; }   /* 添加栏 300px 侧柱落到底部 */
+            .meme-region-tabs { gap: 6px; }
+            .meme-region-tab { padding: 8px 14px; font-size: 12.5px; }  /* 触点 ≥36px，防误触 */
+            .meme-view-tabs { gap: 6px; width: 100%; }
+            .meme-view-tab { padding: 8px 10px; font-size: 12px; }
+            .meme-toolbar { gap: 8px; }
+            .meme-search { min-width: 0; width: 100%; padding: 9px 12px; }
+            #memeList { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }  /* 手机 2 列卡，不浪费宽 */
+        }
 /* ===== 文案速查库专属CSS ===== */
         /* 地区分区 tabs */
         .copy-region-tabs {
@@ -6568,6 +6587,18 @@
         .copy-add-btn:hover { background: #0284c7; }
         .copy-empty { padding: 30px 0; text-align: center; color: #aaa; font-size: 13px; }
         .copy-count { font-size: 11px; color: #999; margin-left: auto; }
+
+        /* ===== 手机端适配（2026-09-07）：单列布局 + 触点加大 + 主内容占比最大 ===== */
+        @media (max-width: 768px) {
+            .copy-layout { grid-template-columns: 1fr; gap: 10px; }   /* 添加栏 300px 侧柱落到底部，主列表占满宽 */
+            .copy-sidebar { position: static; max-height: none; }
+            .copy-region-tabs { gap: 6px; }
+            .copy-region-tab { padding: 8px 14px; font-size: 12.5px; }  /* 触点 ≥36px，防误触 */
+            .copy-view-tabs { gap: 6px; width: 100%; }
+            .copy-view-tab { padding: 8px 10px; font-size: 12px; }
+            .copy-toolbar { gap: 8px; }
+            .copy-search { min-width: 0; width: 100%; padding: 9px 12px; }
+        }
 /* ===== 全局重置 & 基础 ===== */
         * {
             margin: 0;
@@ -9936,7 +9967,15 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     .page {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
     }
+    /* ===== v2.12 手机端统一单滚（2026-09-07）：.page 是全站唯一滚动容器，任何位置都能滑 =====
+       根因：桌面版各页用内联 flex:1 + overflow-y:auto 的包装层 + overflow:hidden 的主板卡各自滚动，
+       手机端 .page 又被 flex 压扁 → 出现「今日页被剪掉/整页划不动/双层滚动打架」。 */
+    .page > * { flex: 0 0 auto !important; min-height: 0 !important; }   /* 子元素一律自然高度，禁止 flex 压缩与填充 */
+    .page > div[style*="overflow-y"] { overflow: visible !important; }   /* 拆除内层滚动陷阱（各页包装层的内联 overflow-y:auto 失效） */
+    .page > div[style*="padding:20px 32px"],
+    .page > div[style*="padding: 20px 32px"] { padding: 12px 13px 18px !important; }  /* 手机端留白收紧：两侧 64px → 26px，内容占比最大 */
     #planContentArea { overflow: visible !important; height: auto; }
     #hotViewMain, #aiViewMain { min-height: 0; }
 
@@ -10000,6 +10039,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         font-size: 16px;
     }
     .btn { min-height: 38px; }
+    /* v2.12 误触治理：小按钮统一抬到可靠触区，同时收紧相邻间距防连点 */
+    .btn-small { min-height: 32px !important; padding-top: 6px !important; padding-bottom: 6px !important; }
+    .node-btn, .event-action button { min-width: 28px; min-height: 28px; }
 
     /* 今日看板：双列任务卡改单列 */
     .fp-section-content.two-col { grid-template-columns: 1fr; }
@@ -10068,9 +10110,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
     /* 计划日历：手机单列列表（隐藏周表头，格子横排：日期+事件） */
     .week-header { display: none; }
-    .four-week-grid { grid-template-columns: 1fr; gap: 6px; }
+    .four-week-grid { grid-template-columns: 1fr; gap: 6px; grid-auto-rows: auto !important; } /* v2.12: 行高改内容自适应，空日子不再被 1fr 撑到等高 */
     .day-cell {
-        min-height: 0;
+        min-height: 0 !important;   /* !important：parts 合并顺序在总框架之后，压过桌面 min-height:110px */
         flex-direction: row;
         align-items: center;
         gap: 10px;
@@ -10114,11 +10156,10 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     #calendarWrapper {
         width: 100% !important;
         flex: none !important;
-        max-height: 52vh;
-        overflow-x: hidden !important;
-        overflow-y: auto;
+        max-height: none;           /* v2.12 单滚：日历不再自滚，整页统一滑 */
+        overflow: visible !important;
     }
-    #dayDetailPanel { width: 100% !important; flex: none !important; max-height: 46vh; }
+    #dayDetailPanel { width: 100% !important; flex: none !important; max-height: none; }
 
     /* 底部导航瘦身：设置项收进「⋯ 更多」浮层 */
     .sidebar-left .nav-section.settings-section,
@@ -10575,6 +10616,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+                    <button id="planToolsToggle" class="btn-small" onclick="togglePlanTools()" title="显示选项：模式 / 开关 / 统计 / 搜索" style="background:#f1f5f9;border-color:#cbd5e1;">⚙️</button>
                     <div class="view-toggle">
                         <button id="viewCalendarBtn" class="active" onclick="setView('calendar')">📅 日历</button>
                         <button id="viewBoardBtn" onclick="setView('board')">📋 看板</button>
@@ -15780,6 +15822,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 日历显示周数：2/3/4 周循环切换（默认 2 周省空间）；持久化到 localStorage
         const _savedWeeks = safeStorage.get('niko_cal_weeks', 2);
         let CAL_WEEKS = [2, 3, 4].includes(_savedWeeks) ? _savedWeeks : 2;
+
+        // ===== 手机端 ⚙️ 工具抽屉（2026-09-07）：次要开关/统计/搜索收起，主内容占比最大 =====
+        function togglePlanTools() {
+            const pg = document.getElementById('planPage');
+            if (!pg) return;
+            const open = pg.classList.toggle('tools-open');
+            try { safeStorage.set('niko_plan_tools_open', open ? 1 : 0); } catch (e) {}
+        }
+        (function nikoPlanToolsInit() {
+            try { if (safeStorage.get('niko_plan_tools_open', 0) == 1) document.getElementById('planPage').classList.add('tools-open'); } catch (e) {}
+        })();
+
         function toggleWeekCount() {
             CAL_WEEKS = CAL_WEEKS >= 4 ? 2 : CAL_WEEKS + 1;
             safeStorage.set('niko_cal_weeks', CAL_WEEKS);
@@ -29275,7 +29329,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609062333";
+        window.NIKO_VERSION = "202609070922";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
