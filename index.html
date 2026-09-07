@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <!-- 缓存控制：告诉浏览器每次都要校验是否最新版，防止设备缓存旧版 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -3862,7 +3862,7 @@
             font-size: 13px; color: #1f2937; min-width: 0;
         }
         body.dark-mode .quick-capture-bar input { color: #e5e7eb; }
-        body.dark-mode .quick-capture-bar input::placeholder { color: #6b7280; }
+        body.dark-mode .quick-capture-bar input::placeholder { color: #98a0b8; } /* v2.17 调亮：之前太暗被误认成不明长条 */
         .qc-hint { font-size: 11px; color: #667eea; white-space: nowrap; flex-shrink: 0; }
         body.dark-mode .qc-hint { color: #8b9cf5; }
         .backlog-parking {
@@ -10104,7 +10104,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
 @media (max-width: 768px) {
-    body { overflow: auto; }
+    /* v2.17 顶部遮挡修复：100vh 在 Chrome Android 动态地址栏下比可视区高 → 标题被吃、底部被裁。
+       dvh 跟随真实可视高度；viewport-fit=cover（meta）配合安全区 */
+    body { overflow: auto; height: 100vh; height: 100dvh; }
     /* 手机端完全隐藏侧栏（12 项横排仍是地狱），用底部 tabbar + 浮动 ⋮ 入口 */
     .sidebar-left { display: none !important; }
     .niko-mobile-tabbar { display: flex; }
@@ -10590,12 +10592,17 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             <span class="toggle-icon" id="darkModeIcon">🌙</span>
             <span id="darkModeLabel">深色模式</span>
         </button>
+        <button class="dark-mode-toggle" onclick="toggleNikoFullscreen()" id="fullscreenToggleBtn" title="全屏模式：隐藏浏览器地址栏，屏幕全是 NIKO">
+            <span class="toggle-icon">⛶</span>
+            <span>全屏模式</span>
+        </button>
     </div>
 
     <!-- 手机端「⋯ 更多」浮层 -->
     <div class="nav-more-panel" id="navMorePanel">
         <div class="nav-more-item" id="navMoreSync" onclick="openDataManager();hideNavMore()" style="font-size:12.5px;">☁ 云端：未连接</div>
         <div class="nav-more-item" onclick="toggleDarkMode();hideNavMore()">🌙 深色模式</div>
+        <div class="nav-more-item" onclick="toggleNikoFullscreen();hideNavMore()">⛶ 全屏模式（地址栏消失）</div>
         <div class="nav-more-item" onclick="openColorSettings();hideNavMore()">🎨 颜色设置</div>
         <div class="nav-more-item" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
         <div class="nav-more-item" data-navpage="hot" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
@@ -13359,6 +13366,41 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 applyTheme('midnight');
             }
         }
+        /* ===== 全屏模式（2026-09-07 用户需求：手机好挤，地址栏+状态栏吃掉太多空间）===== */
+        function toggleNikoFullscreen() {
+            const el = document.documentElement;
+            const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+            if (fsEl) {
+                const exit = document.exitFullscreen || document.webkitExitFullscreen;
+                if (exit) exit.call(document);
+                return;
+            }
+            const req = el.requestFullscreen || el.webkitRequestFullscreen;
+            if (!req) {
+                const tip = '当前浏览器不支持网页全屏；iPhone 请用 Safari「分享 → 添加到主屏幕」，从主屏图标打开即是全屏';
+                if (typeof showToast === 'function') showToast(tip); else alert(tip);
+                return;
+            }
+            try {
+                const p = req.call(el, { navigationUI: 'hide' });
+                if (p && p.catch) p.catch(() => { if (typeof showToast === 'function') showToast('浏览器暂时拒绝了全屏请求，请再点一次'); });
+            } catch (err) {
+                if (typeof showToast === 'function') showToast('进入全屏失败：' + err.message);
+            }
+        }
+        // 全屏状态变化时同步两处入口文案（桌面侧栏按钮 + 手机 ⋮ 菜单）
+        (function watchFullscreen() {
+            const evts = ['fullscreenchange', 'webkitfullscreenchange'];
+            const handler = () => {
+                const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+                const lbl = document.querySelector('#fullscreenToggleBtn span:last-child');
+                if (lbl) lbl.textContent = on ? '退出全屏' : '全屏模式';
+                document.querySelectorAll('#navMorePanel .nav-more-item').forEach(it => {
+                    if (it.textContent.indexOf('全屏') !== -1) it.textContent = on ? '⛶ 退出全屏' : '⛶ 全屏模式（地址栏消失）';
+                });
+            };
+            evts.forEach(ev => document.addEventListener(ev, handler));
+        })();
         (function initTheme() {
             const saved = safeStorage.get('niko_theme', null);
             if (saved && NIKO_THEMES[saved]) { applyTheme(saved); return; }
@@ -29795,7 +29837,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071703";
+        window.NIKO_VERSION = "202609071727";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
