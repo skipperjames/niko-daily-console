@@ -8159,6 +8159,14 @@
         /* ===== v2.21 密度切换（舒适/紧凑，body.nb-compact） ===== */
         body.nb-compact .nb-card { padding: 7px 11px 5px; }
         body.nb-compact .nb-card-content { font-size: 12px; line-height: 1.45; max-height: 120px; }
+        /* ===== v2.23 短便签自适应密排：一两行的短卡自动收紧留白，瀑布更密更齐 ===== */
+        .nb-card.nb-slim { padding: 8px 12px 5px; }
+        .nb-slim .nb-card-content { line-height: 1.5; }
+        .nb-slim .nb-card-footer { margin-top: 4px; padding-top: 4px; }
+        .nb-wall .nb-card.nb-slim { margin-bottom: 10px; }
+        body.nb-compact .nb-card.nb-slim { padding: 6px 10px 4px; }
+        body.nb-compact .nb-slim .nb-card-footer { margin-top: 3px; padding-top: 3px; }
+        body.nb-compact .nb-wall .nb-card.nb-slim { margin-bottom: 8px; }
         body.nb-compact .nb-card-content.expanded { max-height: none; }   /* v2.22 修复：紧凑档特异性压过 expanded 导致长文展不开 */
         body.nb-compact .nb-card-footer { margin-top: 5px; padding-top: 4px; }
         body.nb-compact .nb-wall { column-gap: 10px; }
@@ -8180,6 +8188,9 @@
         @media (max-width: 768px) {
             .nb-wall { column-gap: 10px; padding: 2px 0; }
             .nb-wall .nb-card { margin-bottom: 10px; padding: 9px 11px 7px; }
+            .nb-wall .nb-card.nb-slim { margin-bottom: 8px; }
+            .nb-card.nb-slim { padding: 7px 10px 4px; }
+            body.nb-compact .nb-card.nb-slim { padding: 6px 9px 4px; }
             .nb-card-content { font-size: 12.5px; line-height: 1.5; max-height: 140px; }
             body.nb-compact .nb-wall .nb-card { padding: 7px 9px 5px; }
             body.nb-compact .nb-card-content { max-height: 100px; }
@@ -12581,6 +12592,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         <select class="nb-batch-select" id="nbBatchTagSelect" onchange="if(this.value){nbBatchDo('tag:'+this.value);this.value='';}">
             <option value="">🏷 换标签…</option>
         </select>
+        <button onclick="nbBatchDo('merge')">🔗 合并</button>
         <button onclick="nbBatchDo('pin')">📌 置顶</button>
         <button onclick="nbBatchDo('archive')">📦 归档</button>
         <button class="danger" onclick="nbBatchDo('delete')">🗑 删除</button>
@@ -21824,7 +21836,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const retouched = touchTs - new Date(n.createdAt).getTime() > 60000;   // 创建之后被翻过/改过
             const fresh = retouched && ageD <= 7;
             const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            // v2.23 短便签自适应密排：单行且 ≤32 字的短卡挂 nb-slim 收紧留白（有胶囊角标的除外）
+            const slim = n.content.length <= 32 && !n.content.includes('\n') && !capsuleBadgeHtml(n);
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
@@ -22124,7 +22138,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button></div>
                 <div class="nb-detail-text ${nbPaperClass()}">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
-                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}</div>
+                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
                     <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
                     <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
@@ -22163,7 +22177,27 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbBatchDo(action) {
             if (!nbSelected.size) { showToast('先勾选便签'); return; }
             const cnt = nbSelected.size;
-            if (action === 'delete') {
+            if (action === 'merge') {
+                // v2.23 批量合并：按当前排序拼接为一张，原便签进回收站可反悔
+                if (cnt < 2) { showToast('至少勾选 2 张才能合并'); return; }
+                const order = visibleList().map(n => n.id);
+                const sel = notes.filter(n => nbSelected.has(n.id) && !n.deleted && !n.archived)
+                    .sort((a, b) => ((order.indexOf(a.id) + 1) || 9e9) - ((order.indexOf(b.id) + 1) || 9e9));
+                const mergedContent = sel.map(n => n.content.trim()).join('\n\n─────\n\n');
+                // 标签取多数（并列取第一张的）
+                const tagCount = {};
+                sel.forEach(n => { tagCount[n.tag] = (tagCount[n.tag] || 0) + 1; });
+                const mergedTag = sel.slice().sort((a, b) => (tagCount[b.tag] || 0) - (tagCount[a.tag] || 0))[0].tag;
+                const nowIso = new Date().toISOString();
+                notes.push({
+                    id: 'note_' + Date.now(), content: mergedContent, tag: mergedTag,
+                    createdAt: sel[0].createdAt, updatedAt: nowIso,
+                    pinned: false, archived: false, deleted: false,
+                    mergedFrom: sel.map(n => n.id), mergedAt: nowIso
+                });
+                sel.forEach(n => { n.deleted = true; n.deletedAt = nowIso; });
+                showToast(`🔗 已合并 ${sel.length} 张为 1 张（原便签在回收站，可反悔）`);
+            } else if (action === 'delete') {
                 if (!confirm(`将 ${cnt} 张便签移入回收站？`)) return;
                 notes.forEach(n => { if (nbSelected.has(n.id)) { n.deleted = true; n.deletedAt = new Date().toISOString(); } });
                 showToast(`🗑 ${cnt} 张已入回收站`);
@@ -22578,6 +22612,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 safeStorage.set('niko_inspiration_notes', notes);
                 const tag = noteTagDict()[n.tag] || noteTagDict().other;
                 const waitDays = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
+                card.classList.remove('center');   // 2026-09-07 用户反馈：开面后正文左对齐（摇骰动画阶段仍居中）
                 card.innerHTML = `
                     <span class="nr-tag" style="background:${tag.chipBg}">${tag.icon} ${tag.name}</span>
                     <div class="nr-content">${escapeHtml(n.content)}</div>
@@ -30431,7 +30466,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072238";
+        window.NIKO_VERSION = "202609072253";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
