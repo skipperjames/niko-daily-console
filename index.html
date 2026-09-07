@@ -446,7 +446,9 @@
         }
         @media (max-width: 768px) {
             .niko-mobile-tabbar { display: flex; }
-            body { padding-bottom: 56px; }
+            /* v2.18 大黑条修复：原 body{padding-bottom:56px} 与下方 .main-container 的
+               calc(56px + safe-area) 重复留白，叠出一条 56~90px 纯黑死区（所有页面）。
+               tabbar 偏移统一由 .main-container padding-bottom 承担，此处删除。 */
         }
         .modal h3 {
             margin-bottom: 14px;
@@ -29841,7 +29843,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071806";
+        window.NIKO_VERSION = "202609071820";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
