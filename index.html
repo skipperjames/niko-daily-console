@@ -8149,7 +8149,40 @@
         body.dark-mode .nb-special-title { color: #bbb; }
         body.dark-mode .nb-empty { color: #666; }
 
-        /* 移动端适配：便签栏变悬浮抽屉 */
+        /* ===== v2.21 排序选择器（手动/最新/最早/最近更新） ===== */
+        .nb-sort-select { padding: 6px 8px; border: 1px solid #e8e6e1; border-radius: 6px; font-size: 12px; background: #fff; color: #555; outline: none; cursor: pointer; transition: all .3s; }
+        body.dark-mode .nb-sort-select { background: #252535; border-color: #444; color: #ccc; }
+        @media (max-width: 768px) {
+            .nb-sort-select { display: none; }
+            .nb-toolbar.drawer-open .nb-sort-select { display: inline-block; flex: 1 1 45%; min-width: 0; height: 40px; font-size: 15px; }
+        }
+        /* ===== v2.21 密度切换（舒适/紧凑，body.nb-compact） ===== */
+        body.nb-compact .nb-card { padding: 7px 11px 5px; }
+        body.nb-compact .nb-card-content { font-size: 12px; line-height: 1.45; max-height: 120px; }
+        body.nb-compact .nb-card-footer { margin-top: 5px; padding-top: 4px; }
+        body.nb-compact .nb-wall { column-gap: 10px; }
+        body.nb-compact .nb-wall .nb-card { margin-bottom: 10px; }
+        body.nb-compact .nb-column-body { gap: 5px; }
+        body.nb-compact .nb-tl-item { padding: 6px 10px; margin-bottom: 4px; }
+        body.nb-compact .nb-tl-content { font-size: 12px; }
+        /* ===== v2.21 便签墙手动拖拽排序指示线 ===== */
+        .nb-card.nb-drop-before { box-shadow: 0 -3px 0 0 #667eea, 0 1px 3px rgba(0,0,0,.05); }
+        .nb-card.nb-drop-after { box-shadow: 0 3px 0 0 #667eea, 0 1px 3px rgba(0,0,0,.05); }
+        body.dark-mode .nb-card.nb-drop-before, body.dark-mode .nb-card.nb-drop-after { box-shadow: 0 -3px 0 0 #8b9ef5; }
+        body.dark-mode .nb-card.nb-drop-after { box-shadow: 0 3px 0 0 #8b9ef5; }
+        /* ===== v2.21 常翻常新：最近被翻过/改过的便签保持崭新 ===== */
+        .nb-fresh-mark { font-size: 10px; line-height: 1; flex-shrink: 0; opacity: .85; cursor: default; }
+        /* ===== v2.21 草稿恢复提示条 ===== */
+        #nbDraftHint { display: none; font-size: 11px; color: #8a6d1f; background: #fdf6e3; border: 1px solid #f0e6c8; border-radius: 6px; padding: 4px 10px; margin-bottom: 10px; }
+        body.dark-mode #nbDraftHint { color: #d6c99a; background: #2b2733; border-color: #4a4258; }
+        /* ===== v2.21 手机双列瀑布精修（375px 级窄屏保 2 列可读） ===== */
+        @media (max-width: 768px) {
+            .nb-wall { column-gap: 10px; padding: 2px 0; }
+            .nb-wall .nb-card { margin-bottom: 10px; padding: 9px 11px 7px; }
+            .nb-card-content { font-size: 12.5px; line-height: 1.5; max-height: 140px; }
+            body.nb-compact .nb-wall .nb-card { padding: 7px 9px 5px; }
+            body.nb-compact .nb-card-content { max-height: 100px; }
+        }
         @media (max-width: 900px) {
             .nb-wall { columns: 2 160px; }
         }
@@ -11672,6 +11705,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     </div>
                     <div class="nb-tools">
                         <input type="text" class="nb-search" placeholder="🔍 搜索便签..." oninput="nbSearch=this.value;renderNotesPage()">
+                        <select class="nb-sort-select" id="nbSortSelect" onchange="nbSetSort(this.value)" title="排序方式">
+                            <option value="manual">🔀 手动排序</option>
+                            <option value="newest">🕘 最新优先</option>
+                            <option value="oldest">🕰 最早优先</option>
+                            <option value="updated">⏱ 最近更新</option>
+                        </select>
                         <div class="nb-view-toggle">
                             <button id="nbViewBoard" class="active" onclick="nbSetView('board')">▦ 看板</button>
                             <button id="nbViewWall" onclick="nbSetView('wall')">🧩 便签墙</button>
@@ -11680,6 +11719,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建</button>
                         <button class="nb-btn" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
                         <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
+                        <button class="nb-btn" id="nbDensityBtn" onclick="nbToggleDensity()" title="切换卡片密度（紧凑一屏看更多）">🌿 舒适</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
                         <button class="nb-btn" id="nbArchiveBtn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
                         <button class="nb-btn" id="nbQuietBtn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
@@ -12532,6 +12572,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     <div class="modal-mask" id="noteModal">
         <div class="modal" style="width:440px;">
             <h3 id="noteModalTitle">新建便签</h3>
+            <div id="nbDraftHint"></div>
             <div class="form-item"><label>便签内容</label><textarea id="noteModalContent" rows="4" placeholder="记录一闪而过的灵感… Ctrl+Enter 快速保存"></textarea></div>
             <div class="form-item"><label>标签分类</label><div class="note-tag-picker" id="noteModalTagPicker" style="margin:0;"></div></div>
             <div class="modal-footer">
@@ -21324,6 +21365,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             notes = notes.filter(n => !(n.deleted && n.deletedAt && Date.now() - new Date(n.deletedAt).getTime() > 30 * 86400000));
             if (notes.length !== before) safeStorage.set('niko_inspiration_notes', notes);
         })();
+        // v2.21 手动排序初始化：补 order 字段（默认按创建时间排，等价于原「最新优先」）
+        (function nbInitOrder() {
+            let changed = false;
+            notes.forEach(n => { if (n.order === undefined) { n.order = new Date(n.createdAt || Date.now()).getTime() || Date.now(); changed = true; } });
+            if (changed) safeStorage.set('niko_inspiration_notes', notes);
+        })();
 
         // 从存储重新同步便签数据（热点转灵感等其他面板写入后，切回便签能看到最新）
         function syncNotes() {
@@ -21475,7 +21522,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // ========== 便签看板（新增） ==========
         let nbView = safeStorage.get('niko_notes_view', 'wall');   // board | wall | list，默认便签墙（持久化记忆）
         let nbSpecial = null;        // null | 'recycle' | 'archive'
-        let nbSort = 'newest';       // newest | oldest
+        let nbSort = safeStorage.get('niko_notes_sort', 'newest');       // manual | newest | oldest | updated（持久化记忆）
         let nbSearch = '';
         let nbTagFilter = null;      // null=全部 | tag key=只看该分类
         let nbBatch = false;
@@ -21500,6 +21547,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             return list.slice().sort((a, b) => {
                 if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1; // 置顶永远优先
+                if (nbSort === 'manual') return (a.order || 0) - (b.order || 0);   // v2.21 手动拖拽排序
+                if (nbSort === 'updated') return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt); // v2.21 最近更新
                 const ta = new Date(a.createdAt), tb = new Date(b.createdAt);
                 return nbSort === 'oldest' ? ta - tb : tb - ta;
             });
@@ -21533,6 +21582,87 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function nbOpenSpecial(s) { nbSpecial = s; if (nbBatch) nbToggleBatch(); renderNotesPage(); }
         function nbBack() { nbSpecial = null; renderNotesPage(); }
+
+        // ===== v2.21 排序自由度：手动拖拽 / 最新 / 最早 / 最近更新（选择持久化） =====
+        function nbSetSort(v) {
+            nbSort = v;
+            safeStorage.set('niko_notes_sort', v);
+            renderNotesPage();
+        }
+        function nbSyncSortUI() {
+            const s = document.getElementById('nbSortSelect');
+            if (s) s.value = nbSort;
+        }
+        // 便签墙拖拽重排（仅手动排序下生效；其他模式下拖起即自动切手动）
+        function bindNotesWallDnD(c) {
+            if (nbBatch) return;
+            c.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
+                card.addEventListener('dragstart', e => {
+                    draggedNoteId = card.dataset.noteId;
+                    e.dataTransfer.effectAllowed = 'move';
+                    if (nbSort !== 'manual') {
+                        nbSort = 'manual';
+                        safeStorage.set('niko_notes_sort', 'manual');
+                        nbSyncSortUI();
+                    }
+                });
+                card.addEventListener('dragend', () => {
+                    draggedNoteId = null;
+                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after'));
+                });
+                card.addEventListener('dragover', e => {
+                    if (!draggedNoteId || draggedNoteId === card.dataset.noteId) return;
+                    e.preventDefault();
+                    const r = card.getBoundingClientRect();
+                    const before = (e.clientY - r.top) < r.height / 2;
+                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after'));
+                    card.classList.add(before ? 'nb-drop-before' : 'nb-drop-after');
+                });
+                card.addEventListener('drop', e => {
+                    e.preventDefault(); e.stopPropagation();
+                    const targetId = card.dataset.noteId;
+                    const pos = card.classList.contains('nb-drop-before') ? 'before' : 'after';
+                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after'));
+                    if (draggedNoteId && draggedNoteId !== targetId) nbReorder(draggedNoteId, targetId, pos);
+                    draggedNoteId = null;
+                });
+            });
+        }
+        // 重排：无筛选时全量重写 order；有筛选/搜索时只给被拖卡在中点插入，不污染被过滤的便签
+        function nbReorder(dragId, targetId, pos) {
+            const vis = visibleList();
+            const ids = vis.map(n => n.id).filter(id => id !== dragId);
+            let ti = ids.indexOf(targetId);
+            if (ti < 0) return;
+            if (pos === 'after') ti++;
+            ids.splice(ti, 0, dragId);
+            const getOrd = id => { const n = notes.find(x => x.id === id); return n ? (n.order || 0) : 0; };
+            const filtered = !!(nbSearch || nbTagFilter || nbSpecial);
+            if (!filtered) {
+                ids.forEach((id, i) => { const n = notes.find(x => x.id === id); if (n) n.order = i; });
+            } else {
+                const n = notes.find(x => x.id === dragId);
+                if (!n) return;
+                const prevId = ids[ti - 1], nextId = ids[ti + 1];
+                let lo = prevId ? getOrd(prevId) : (nextId ? getOrd(nextId) - 2 : 0);
+                let hi = nextId ? getOrd(nextId) : lo + 2;
+                if (hi <= lo) hi = lo + 1;
+                n.order = (lo + hi) / 2;
+            }
+            saveNotes();
+            showToast('🔀 顺序已记住');
+        }
+        // 手动排序下把便签移到最前（手机端没有拖拽，详情页给一个入口）
+        function nbMoveTop(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            const minOrd = Math.min(...activeNotes().map(x => x.order || 0), 0);
+            n.order = minOrd - 1;
+            nbSort = 'manual';
+            safeStorage.set('niko_notes_sort', 'manual');
+            saveNotes();
+            showToast('🔝 已移到最前');
+        }
 
         // ===== 手机工具抽屉（铁律模式：收起态只留 ⚙️ + 视图切换 + 新建，展开态存 localStorage 记住）=====
         function nbToggleDrawer() {
@@ -21578,6 +21708,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 vl.classList.toggle('active', nbView === 'list');
             }
             syncNotes();
+            nbApplyDensity();       // v2.21 密度档位同步（幂等）
+            nbSyncSortUI();         // v2.21 排序下拉同步
             nbDailyTick();          // 晨读抽取 + 整理人巡墙（内部自带当日防抖）
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
@@ -21625,6 +21757,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             c.innerHTML = list.length
                 ? `<div class="nb-wall">${list.map(n => nbCardHtml(n)).join('')}</div>`
                 : nbEmptyHtml(filterTip, filterHint);
+            bindNotesWallDnD(c);    // v2.21 便签墙手动拖拽排序
         }
 
         function renderNotesTimelineView(c) {
@@ -21666,10 +21799,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function nbCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const sel = nbSelected.has(n.id);
-            // v2.11 老化：创建超 14 天卷角落尘，超 30 天加深；拂尘即恢复
-            const ageD = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
+            // v2.21 生命感：老化按「最近一次被碰」（创建/编辑/翻阅/复习取最新）计算——常翻常新，久放泛黄
+            const touchTs = Math.max(new Date(n.createdAt).getTime(), new Date(n.updatedAt || n.createdAt).getTime(), n.lastOpenAt ? new Date(n.lastOpenAt).getTime() : 0);
+            const ageD = Math.floor((Date.now() - touchTs) / 86400000);
+            const retouched = touchTs - new Date(n.createdAt).getTime() > 60000;   // 创建之后被翻过/改过
+            const fresh = retouched && ageD <= 7;
             const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
@@ -21678,6 +21814,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
+                    ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
                     <div class="nb-card-actions">
                         <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
@@ -21789,6 +21926,46 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 看板中转任务：直接复用侧栏的转换逻辑（打开日历任务弹窗并预填）
         function nbConvert(id, e) { e && e.stopPropagation(); convertNoteToTask(id); }
 
+        // ===== v2.21 草稿保护：编辑/新建中途退出不丢字（参考日记草稿保护模式） =====
+        // 存储结构：{ '__new': {...}, 'note_xxx': {...} }，按便签 id 分槽，7 天过期自动清
+        const NB_DRAFT_KEY = 'niko_note_drafts';
+        let nbDrafts = safeStorage.get(NB_DRAFT_KEY, {});
+        (function nbPruneDrafts() {
+            const cut = Date.now() - 7 * 86400000;
+            let changed = false;
+            Object.keys(nbDrafts).forEach(k => {
+                if (!nbDrafts[k] || !nbDrafts[k].savedAt || new Date(nbDrafts[k].savedAt).getTime() < cut) { delete nbDrafts[k]; changed = true; }
+            });
+            if (changed) safeStorage.set(NB_DRAFT_KEY, nbDrafts);
+        })();
+        function nbDraftSlot() { return nbEditingId || '__new'; }
+        function nbDraftSave() {
+            const m = document.getElementById('noteModal');
+            if (!m || !m.classList.contains('show')) return;
+            const content = document.getElementById('noteModalContent').value;
+            nbDrafts[nbDraftSlot()] = { content, tag: nbEditingTag, capsulePick, savedAt: new Date().toISOString() };
+            safeStorage.set(NB_DRAFT_KEY, nbDrafts);
+        }
+        function nbDraftClear(k) {
+            k = k || nbDraftSlot();
+            if (nbDrafts[k]) { delete nbDrafts[k]; safeStorage.set(NB_DRAFT_KEY, nbDrafts); }
+        }
+        function nbDraftTryRestore() {
+            const d = nbDrafts[nbDraftSlot()];
+            if (!d || !d.content || !d.content.trim()) return;
+            // 编辑已有便签时：草稿和已存内容一致就清掉，不重复提示
+            if (nbEditingId) {
+                const n = notes.find(x => x.id === nbEditingId);
+                if (n && d.content.trim() === (n.content || '').trim()) { nbDraftClear(); return; }
+            }
+            document.getElementById('noteModalContent').value = d.content;
+            if (d.tag && noteTagDict()[d.tag]) { nbEditingTag = d.tag; renderModalTagPicker(); }
+            if (d.capsulePick && CAPSULE_SPANS[d.capsulePick]) { capsulePick = d.capsulePick; updateCapsuleChips(); }
+            const hint = document.getElementById('nbDraftHint');
+            if (hint) { hint.style.display = 'block'; hint.textContent = '📝 已恢复 ' + formatNoteTime(d.savedAt) + ' 没写完的草稿'; }
+            if (typeof showToast === 'function') showToast('📝 已恢复上次没写完的草稿');
+        }
+
         // 新建 / 编辑弹窗
         function openNoteModal(id, presetTag, e) {
             e && e.stopPropagation();
@@ -21800,10 +21977,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             capsulePick = (n && n.capsule && CAPSULE_SPANS[n.capsule.span]) ? n.capsule.span : '';
             updateCapsuleChips();
             renderModalTagPicker();
+            const hint = document.getElementById('nbDraftHint');
+            if (hint) hint.style.display = 'none';
+            nbDraftTryRestore();    // v2.21 有未保存草稿则自动恢复
             document.getElementById('noteModal').classList.add('show');
             setTimeout(() => document.getElementById('noteModalContent').focus(), 50);
         }
-        function closeNoteModal() { document.getElementById('noteModal').classList.remove('show'); nbEditingId = null; }
+        function closeNoteModal() {
+            // v2.21 草稿保护：内容被清空再关闭 = 主动放弃草稿
+            const content = document.getElementById('noteModalContent').value;
+            if (!content.trim()) nbDraftClear();
+            document.getElementById('noteModal').classList.remove('show');
+            nbEditingId = null;
+        }
         function renderModalTagPicker() {
             document.getElementById('noteModalTagPicker').innerHTML = Object.entries(noteTagDict()).map(([k, t]) =>
                 `<span class="note-tag-option ${nbEditingTag === k ? 'selected' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbEditingTag='${k}';renderModalTagPicker()">${t.icon} ${t.name}</span>`).join('');
@@ -21819,7 +22005,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
                 showToast('✅ 便签已更新');
             } else {
-                const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false };
+                const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false, order: Date.now() };
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -21835,6 +22021,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast('📌 便签已创建');
             }
             closeNoteModal();
+            nbDraftClear();         // v2.21 已保存，草稿完成使命
             capsulePick = ''; updateCapsuleChips();
             saveNotes();
         }
@@ -21900,10 +22087,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const n = notes.find(x => x.id === id);
             if (!n) return;
             nbDetailId = id;
+            // v2.21 生命感：翻阅即「碰过」——刷新 lastOpenAt + 计数（静默写盘，不触发重渲染抢滚动位）
+            n.lastOpenAt = new Date().toISOString();
+            n.openCount = (n.openCount || 0) + 1;
+            safeStorage.set('niko_inspiration_notes', notes);
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const created = new Date(n.createdAt);
             const updated = n.updatedAt ? new Date(n.updatedAt) : null;
-            const ageD = Math.floor((Date.now() - created.getTime()) / 86400000);
+            const touchTs = Math.max(created.getTime(), new Date(n.updatedAt || n.createdAt).getTime(), n.lastOpenAt ? new Date(n.lastOpenAt).getTime() : 0);
+            const ageD = Math.floor((Date.now() - touchTs) / 86400000);
             document.getElementById('nbDetailBody').innerHTML = `
                 <div class="nb-detail-head">
                     <span class="nb-detail-tag" style="background:${tag.chipBg};">${tag.icon} ${escapeHtml(tag.name)}</span>
@@ -21912,7 +22104,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 </div>
                 <div class="nb-detail-text">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
-                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}</div>
+                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}</div>
                 <div class="nb-detail-actions">
                     <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
                     <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
@@ -21920,6 +22112,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <button onclick="closeNbDetail();nbConvert('${id}',event);">🗓 转任务</button>
                     <button onclick="nbArchive('${id}',event);closeNbDetail();renderNotesPage();">📦 归档</button>
                     <button class="danger" onclick="nbDelete('${id}',event);closeNbDetail();renderNotesPage();">🗑 删除</button>
+                    ${nbSort === 'manual' ? `<button onclick="nbMoveTop('${id}');closeNbDetail();">🔝 移到最前</button>` : ''}
                 </div>`;
             document.getElementById('nbDetailModal').classList.add('show');
         }
@@ -22308,6 +22501,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 nbMaybeMorningRead(false, swept);
             } catch (err) { console.warn('nbDailyTick', err); }
         }
+
+        // ===== v2.21 密度切换：舒适 / 紧凑（一屏多看 40% 卡片，档位持久化） =====
+        let nbDensity = safeStorage.get('niko_notes_density', 'cozy');
+        function nbApplyDensity() {
+            document.body.classList.toggle('nb-compact', nbDensity === 'compact');
+            const b = document.getElementById('nbDensityBtn');
+            if (b) {
+                b.textContent = nbDensity === 'compact' ? '🪶 紧凑' : '🌿 舒适';
+                b.title = nbDensity === 'compact' ? '当前：紧凑（点我切回舒适）' : '当前：舒适（点我切到紧凑，一屏看更多）';
+            }
+        }
+        function nbToggleDensity() {
+            nbDensity = nbDensity === 'compact' ? 'cozy' : 'compact';
+            safeStorage.set('niko_notes_density', nbDensity);
+            nbApplyDensity();
+            renderNotesPage();
+        }
+
+        // ===== v2.21 初始化绑定（草稿输入监听 + 档位同步；必须在本 SECTION 内，合并才会提取） =====
+        try { document.getElementById('noteModalContent').addEventListener('input', nbDraftSave); } catch (e) {}
+        nbApplyDensity();
+        nbSyncSortUI();
 // ===== 知识库（PARA）=====
         const KB_PARA = [
             { key: '01-Projects', label: '📁 01-Projects', sub: '当前任务 · 有截止日期', color: '#7c3aed' },
@@ -30150,7 +30365,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072143";
+        window.NIKO_VERSION = "202609072213";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
