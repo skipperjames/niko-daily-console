@@ -8715,7 +8715,7 @@
             /* 页头瘦身：副标题收起、标题压小，第一屏让给卡片 */
             #knowledgePage .kb-head h1 { font-size: 16px !important; }
             #knowledgePage .kb-head .kb-sub { display: none !important; }
-            #knowledgePage { padding: 10px 8px !important; }
+            #knowledgePage { padding: 10px 0 !important; } /* 2026-09-08 用户点名：吃满左右零侧距 */
             #knowledgePage .kb-wrap { gap: 9px; }
             /* PARA 四芯片：不再折四行，压成单行横滑，副标题收起 */
             #knowledgePage .kb-para-tabs { flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
@@ -9414,8 +9414,8 @@
 
         /* ===== 日记手机端紧凑化 ===== */
         @media (max-width: 768px) {
-            /* 整页 padding 缩紧 */
-            #diaryPage > div { padding: 8px 10px !important; gap: 8px !important; }
+            /* 整页 padding 缩紧（2026-09-08 用户点名：吃满左右零侧距） */
+            #diaryPage > div { padding: 8px 0 !important; gap: 8px !important; }
             /* 顶部标题栏：H1 与描述紧凑 */
             #diaryPage > div > div:first-child { gap: 6px !important; }
             #diaryPage h1 { font-size: 18px !important; gap: 6px !important; }
@@ -9933,8 +9933,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
         /* ===== 手机端适配（2026-09-02 与知识库/计划/日记同步强化） ===== */
         @media (max-width:768px) {
-            /* 主容器 padding 收紧 + 底部安全区 */
-            #gamePage > div { padding: 14px 14px calc(20px + env(safe-area-inset-bottom, 0)) !important; gap: 12px !important; }
+            /* 主容器 padding 收紧 + 底部安全区（2026-09-08 用户点名：吃满左右零侧距） */
+            #gamePage > div { padding: 14px 0 calc(20px + env(safe-area-inset-bottom, 0)) !important; gap: 12px !important; }
             /* 标题缩小 */
             #gamePage h1 { font-size: 18px !important; }
             #gamePage p { font-size: 12.5px !important; }
@@ -10260,7 +10260,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     .page > * { flex: 0 0 auto !important; min-height: 0 !important; }   /* 子元素一律自然高度，禁止 flex 压缩与填充 */
     .page > div[style*="overflow-y"] { overflow: visible !important; }   /* 拆除内层滚动陷阱（各页包装层的内联 overflow-y:auto 失效） */
     .page > div[style*="padding:20px 32px"],
-    .page > div[style*="padding: 20px 32px"] { padding: 12px 13px 18px !important; }  /* 手机端留白收紧：两侧 64px → 26px，内容占比最大 */
+    .page > div[style*="padding: 20px 32px"] { padding: 12px 0 18px !important; }  /* 2026-09-08 用户点名：吃满左右，包装层两侧 26px → 0 */
     #planContentArea { overflow: visible !important; height: auto; }
     #hotViewMain, #aiViewMain { min-height: 0; }
 
@@ -10385,8 +10385,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     .notes-sidebar .notes-panel { width: 100%; }
 
     /* 页面内边距紧凑化 + 今日主区纵向 */
-    #todayPage { padding: 14px 14px; }
-    #planPage, #hotPage, #memePage, #copyPage, #notesPage, #bookPage, #diaryPage, #parentingPage { padding: 14px 12px; }
+    /* 2026-09-08 用户点名：手机端所有看板吃满左右，零侧距（参考知识看板/便签满幅卡片） */
+    #todayPage, #planPage, #hotPage, #memePage, #copyPage, #notesPage, #bookPage, #diaryPage, #parentingPage, #memberPage, #gamePage, #compoundPage, #knowledgePage { padding: 10px 0 !important; }
     #todayPage .today-main { flex-direction: column; overflow: visible; }
     #todayPage .today-main .flight-plan,
     #todayPage .today-main .today-panel,
@@ -10395,7 +10395,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
     /* 计划日历：手机单列列表（隐藏周表头，格子横排：日期+事件） */
     .week-header { display: none; }
-    #planPage { padding: 10px 8px !important; } /* 2026-09-07 用户点名：计划页两侧留白收紧，任务条才是主角 */
     .four-week-grid { grid-template-columns: 1fr; gap: 5px; grid-auto-rows: auto !important; } /* v2.12: 行高改内容自适应，空日子不再被 1fr 撑到等高 */
     .day-cell {
         min-height: 0 !important;   /* !important：parts 合并顺序在总框架之后，压过桌面 min-height:110px */
@@ -10443,7 +10442,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     }
     /* 看板手机端（2026-09-07 用户点名：参考知识看板版式，吃满左右不留任何间隔）：
        状态列纵向堆叠、每列吃满整屏宽，拆掉列内滚动陷阱，整页单滑 */
-    #planPage #boardWrapper { margin: 0 -8px; }   /* 抵消页面两侧 padding，四列贴屏幕边 */
+    #planPage #boardWrapper { margin: 0; }   /* 2026-09-08 页面侧距已清零，不再需要负 margin 抵消 */
     #planPage .board-view { flex-direction: column; gap: 8px; overflow: visible; padding: 0 0 12px; }
     #planPage .board-column { min-width: 0; width: 100%; max-height: none; padding: 10px 12px; }
     #planPage .board-column-body { overflow: visible; }
@@ -30587,7 +30586,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072359";
+        window.NIKO_VERSION = "202609080018";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
