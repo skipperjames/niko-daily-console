@@ -3849,6 +3849,8 @@
         }
         /* ===== 闪捕条 + 停车场 ===== */
         .quick-capture-wrap { padding: 10px 2px 4px; display: flex; flex-direction: column; gap: 8px; }
+        /* v2.17 手机端隐藏闪烁条（2026-09-07 用户反馈：很挡视野，手机上没啥用） */
+        @media (max-width: 768px) { .quick-capture-wrap { display: none !important; } }
         .quick-capture-bar {
             display: flex; align-items: center; gap: 8px;
             background: #fff; border: 1px solid #e8e6e1; border-radius: 10px;
@@ -29837,7 +29839,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071728";
+        window.NIKO_VERSION = "202609071739";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
