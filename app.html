@@ -10769,16 +10769,15 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item">
                     <label>项目</label>
                     <div style="display:flex;gap:6px;">
-                        <select id="eventProject" style="flex:1;"></select>
+                        <select id="eventProject" onchange="updateEventScopeHint()" style="flex:1;"></select>
                         <button class="btn" type="button" onclick="quickAddProjectForEvent()" style="padding:0 10px;font-size:12px;">＋ 新建</button>
                     </div>
                 </div>
-                <div class="form-item"><label>归属（工作/生活模式筛选用）</label>
-                    <select id="eventScope">
-                        <option value="">跟随项目</option>
-                        <option value="work">💼 工作</option>
-                        <option value="life">🏡 生活</option>
-                    </select>
+                <div class="form-item"><label>归属（自动跟随项目）</label>
+                    <div id="eventScopeHint" style="display:flex;align-items:center;gap:8px;min-height:38px;padding:7px 12px;border-radius:8px;border:1px dashed var(--card-border,#444);font-size:13px;color:var(--text-main,inherit);cursor:default;">
+                        <span id="eventScopeBadge">💼 工作</span>
+                        <span id="eventScopeSrc" style="font-size:11px;opacity:.55;"></span>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
@@ -15843,7 +15842,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ===== 工作 / 生活模式（2026-09-04）：上班看工作项目，下班看生活任务 =====
-        // 三层归属：任务级 ev.scope > 项目级 project.scope > 按项目名推断（装修/健康/关系/生活/家庭/孩子/读书/钢琴 → 生活，其余 → 工作）
+        // 归属（2026-09-07 起只看项目级）：project.scope > 按项目名推断（装修/健康/关系/生活/家庭/孩子/读书/钢琴 → 生活，其余 → 工作）；任务级 scope 覆盖已废弃
         function setScopeMode(m) {
             safeStorage.set('niko_scope_mode', m);
             updateScopeUI();
@@ -15864,7 +15863,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return new Date().getHours() >= h ? 'life' : 'work';
         }
         function eventScope(ev) {
-            if (ev && (ev.scope === 'work' || ev.scope === 'life')) return ev.scope;
+            // 2026-09-07：归属只由项目决定（项目级 scope > 按项目名推断），任务级覆盖废弃
             let p = null;
             try { p = (typeof projects !== 'undefined') && projects.find(x => x.id === (ev && ev.projectId)); } catch (err) {}
             if (p) return (typeof getProjectScope === 'function') ? getProjectScope(p) : (p.scope || 'work');
@@ -17608,6 +17607,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
             }
             projSelect.value = defaultProjId || '__legacy__';
+            updateEventScopeHint();
 
             // 重置重复选项
             document.getElementById('eventRepeat').value = 'none';
@@ -17659,20 +17659,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             setTimeout(() => document.getElementById('eventTitle').focus(), 50);
         }
 
+        // 归属自动跟随项目（2026-09-07）：表单里不再单独设任务归属，只读展示所选项目的归属
+        function updateEventScopeHint() {
+            const sel = document.getElementById('eventProject');
+            const badge = document.getElementById('eventScopeBadge');
+            const src = document.getElementById('eventScopeSrc');
+            if (!sel || !badge || !src) return;
+            const p = (typeof projects !== 'undefined') ? projects.find(x => x.id === sel.value) : null;
+            const scope = p ? getProjectScope(p) : 'work';
+            badge.textContent = scope === 'life' ? '🏡 生活' : '💼 工作';
+            src.textContent = p ? (p.scope ? '来自项目「' + p.name + '」' : '项目「' + p.name + '」· 按名推断，可在 设置→项目管理 固定') : '未挂项目 · 默认工作';
+        }
+
         // 弹窗内一键新建项目（轻量：弹小窗输入名字 + 默认色；保存后自动选中新项目）
         function quickAddProjectForEvent() {
             const name = prompt('给项目起个名字（建议与作品/活动同名，如「日本项目」「韩国项目」）：');
             if (!name || !name.trim()) return;
+            const isLife = confirm('新项目「' + name.trim() + '」归属哪个模式？\n\n【确定】= 🏡 生活\n【取消】= 💼 工作');
+            const scope = isLife ? 'life' : 'work';
             const palette = ['#fb923c','#e879f9','#f472b6','#22d3ee','#84cc16','#fbbf24','#a78bfa','#34d399','#fb7185','#60a5fa','#facc15','#4ade80'];
             const used = new Set(projects.map(p => p.color.toLowerCase()));
             const color = palette.find(c => !used.has(c)) || '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
             const id = addProjectSilent(name.trim(), color);
+            updateProject(id, undefined, undefined, scope);
             const sel = document.getElementById('eventProject');
             const opt = document.createElement('option');
             opt.value = id; opt.textContent = name.trim();
             sel.appendChild(opt);
             sel.value = id;
-            showToast('✅ 项目「' + name.trim() + '」已新建');
+            updateEventScopeHint();
+            showToast(scope === 'life' ? '🏡 项目「' + name.trim() + '」已新建 · 归属生活' : '💼 项目「' + name.trim() + '」已新建 · 归属工作');
         }
 
         function closeEventModal() { document.getElementById('eventModal').classList.remove('show'); }
@@ -17705,7 +17721,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 priority: document.getElementById('eventPriority').value,
                 status: document.getElementById('eventStatus').value,
                 customBoss: document.getElementById('eventCustomBoss').checked,
-                scope: document.getElementById('eventScope').value || '',
+                scope: '',  // 归属统一跟随项目（2026-09-07），不再存任务级覆盖
                 projectId,
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
@@ -29329,7 +29345,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609070922";
+        window.NIKO_VERSION = "202609071151";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
