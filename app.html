@@ -866,7 +866,7 @@
         /* Twemoji 旗帜/图标：内联尺寸对齐文字（Windows 无国旗 emoji 字体，统一走 SVG 图片） */
         .niko-twemoji { width: 1.2em; height: 1.2em; vertical-align: -0.2em; display: inline-block; }
         .flag-opt .niko-twemoji { width: 20px; height: 20px; vertical-align: middle; }
-        .ev-flag .niko-twemoji { width: 13px; height: 13px; vertical-align: -2px; }
+        .ev-flag .niko-twemoji { width: 16px; height: 16px; vertical-align: -3px; }
 
         /* 主题风格选择 */
         .theme-picker-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -12978,10 +12978,13 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             const pal = document.createElement('div');
             pal.className = 'flag-palette';
             const GROUPS = [
-                { label: '旗帜', items: ['🇯🇵','🇰🇷','🇺🇸','🇬🇧','🇫🇷','🇩🇪','🇮🇹','🇪🇸','🇷🇺','🇨🇳','🇭🇰','🇹🇼','🇸🇬','🇹🇭','🇻🇳','🇲🇾','🇵🇭','🇮🇩','🇮🇳','🇦🇺','🇨🇦','🇧🇷','🇲🇽','🇸🇪','🇳🇱','🇨🇭','🇪🇬','🇦🇪','🇪🇺','🇺🇳','🏴󠁧󠁢󠁥󠁮󠁧󠁿','🏴󠁧󠁢󠁳󠁣󠁴󠁿'] },
-                { label: '信号', items: ['🚩','🏁','🎌','🎏','⛳','🏳️','🏴','🪽'] },
-                { label: '生活', items: ['🏠','🛏️','🛋️','🚿','🛁','🧹','🧺','🛒','🍳','☕','🍰','🍓','💡','🔧','📦','🪴','🌱','🌸','🌻','🍀','🎀','🫧','🐶','🐱','🐰','🦊','🐻','🐼','🦄','🧸'] },
-                { label: '工作', items: ['💻','🎧','📸','🎥','🎬','🎮','🕹️','✂️','🖊️','📚','📊','🧠','⚡','🔥','⭐','🎯','🎨','🧪'] }
+                { label: '旗帜', items: ['🇯🇵','🇰🇷','🇨🇳'] },
+                { label: '信号', items: ['🚩','🏁','🎌','🎏','⛳','🪽'] },
+                { label: '生活', items: ['🏠','🛏️','🛋️','🚿','🛁','🧹','🧺','🛒','🍳','☕','🍰','🍓','💡','📦','🪴','🌱','🌸','🌻','🍀','🎀','🫧','🐶','🐱','🐰','🦊','🐻','🐼','🦄','🧸'] },
+                { label: '梦想', items: ['🌟','✨','🌈','🚀','🪐','🏰','🎡','🎠','🎪','🎈','🎁','🔮','🗺️','🧭','👑','💎','🏆','🦋','🧚','🕯️'] },
+                { label: '游戏开发', items: ['🎮','🕹️','👾','🎲','🧩','🪄','⚔️','🗡️','🛡️','🐉','🧙','🧟','👽','🏗️','⚙️','🔧','💻','🖥️','📱','🎨','✏️','📝','🚢','🧪'] },
+                { label: '运动健身', items: ['🏋️','🏃','🚴','🏊','🧘','⚽','🏀','🎾','🏸','🏓','🥊','🤸','💪','🧗','🥗','⏱️','⛰️','🏄'] },
+                { label: '工作', items: ['🎧','📸','🎥','🎬','✂️','🖊️','📚','📊','⚡','🔥','⭐','🎯'] }
             ];
             const p = projects.find(x => x.id === id);
             const cur = p ? getProjectFlag(p) : '';
@@ -16484,6 +16487,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             planDayOrder = safeStorage.get('niko_plan_day_order', planDayOrder);
             backlog = safeStorage.get('niko_backlog', backlog);
             renderBacklogParking();
+            updateScopeUI();   // 初始化/刷新工作·生活模式高亮（修复：此前只在手动点击时调用，默认「自动」无选中态）
             updateDateRangeText();
             renderFourWeekGrid();
             renderDayDetail();
@@ -29498,7 +29502,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071319";
+        window.NIKO_VERSION = "202609071417";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
