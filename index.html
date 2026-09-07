@@ -4865,7 +4865,8 @@
         .mem-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: #faf9f7; margin-bottom: 6px; }
         body.dark-mode .mem-item { background: #232335; }
         .mem-item-info { flex: 1; min-width: 0; }
-        .mem-item-name { font-size: 13px; font-weight: 500; }
+        .mem-item-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .mem-soon { font-size: 10px; color: #fff; background: #ec4899; border-radius: 8px; padding: 1px 7px; font-weight: 600; white-space: nowrap; }
         .mem-item-date { font-size: 11px; color: #999; margin-top: 1px; }
         .mem-item-rm { cursor: pointer; font-size: 12px; color: #dc2626; padding: 4px 8px; border-radius: 6px; }
         .mem-item-rm:hover { background: #fee2e2; }
@@ -11113,6 +11114,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="form-item"><label>日期</label><input type="date" id="memorialDate"></div>
             </div>
             <div class="form-item"><label>备注（可选）</label><input type="text" id="memorialNote" placeholder="例如：提前准备礼物 / 预约餐厅"></div>
+            <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:#888;margin-bottom:12px;cursor:pointer;">
+                <input type="checkbox" id="memorialRepeat" checked style="width:auto;">🔁 每年循环（生日 / 周年勾选；单次事件取消勾选，仅当天显示）
+            </label>
             <div style="display:flex;gap:8px;margin-bottom:12px;">
                 <button class="btn primary" style="flex:1;" onclick="addMemorialDay()">+ 添加纪念日</button>
             </div>
@@ -16468,8 +16472,70 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // ===== 纪念日（用户自定义，显示开关 + 管理弹窗） =====
         let memorialDays = safeStorage.get('niko_memorial_days', []);
         function saveMemorialDays() { safeStorage.set('niko_memorial_days', memorialDays); }
+        // v2.19 每年循环：老数据无 repeat 字段 → 默认视为每年循环（生日/周年的自然语义）；单次事件可手动切为 once
+        function memIsYearly(m) { return (m.repeat || 'yearly') === 'yearly'; }
+        function isLeapYear(y) { return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0; }
         function getMemorialsForDate(dateStr) {
-            return memorialDays.filter(m => m.date === dateStr);
+            return memorialDays.filter(m => {
+                if (!memIsYearly(m)) return m.date === dateStr;
+                const md = m.date.slice(5), dmd = dateStr.slice(5);
+                if (md === dmd) return true;
+                // 2月29 的日子在平年顺延到 2月28 显示，不丢年
+                return md === '02-29' && dmd === '02-28' && !isLeapYear(Number(dateStr.slice(0, 4)));
+            }).map(m => {
+                const years = Number(dateStr.slice(0, 4)) - Number(m.date.slice(0, 4));
+                return Object.assign({}, m, { _years: memIsYearly(m) && years > 0 ? years : 0 });
+            });
+        }
+        // 汇总信息：已过多少年多少天 / 距下次周年还有多少天（列表 + 提前提醒共用）
+        function memorialInfo(m) {
+            const now = new Date();
+            const today0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const oy = Number(m.date.slice(0, 4)), om = Number(m.date.slice(5, 7));
+            let od = Number(m.date.slice(8, 10));
+            // 2月29 在平年按 2月28 计算周年，避免 Date 进位到 3 月
+            if (om === 2 && od === 29 && !isLeapYear(now.getFullYear())) od = 28;
+            const orig = new Date(oy, om - 1, od);
+            const info = { yearly: memIsYearly(m), totalDays: Math.max(0, Math.round((today0 - orig) / 86400000)), elapsedYears: 0, elapsedDays: 0, daysUntil: null, nextDate: '', nextYears: 0 };
+            if (info.yearly) {
+                const annivThisYear = new Date(now.getFullYear(), om - 1, od);
+                const passed = annivThisYear <= today0;
+                info.elapsedYears = Math.max(0, (passed ? now.getFullYear() : now.getFullYear() - 1) - oy);
+                const lastAnniv = passed ? annivThisYear : new Date(now.getFullYear() - 1, om - 1, od);
+                info.elapsedDays = Math.max(0, Math.round((today0 - lastAnniv) / 86400000));
+                const next = passed ? new Date(now.getFullYear() + 1, om - 1, od) : annivThisYear;
+                info.nextDate = next.getFullYear() + '-' + String(om).padStart(2, '0') + '-' + String(od).padStart(2, '0');
+                info.daysUntil = Math.round((next - today0) / 86400000);
+                info.nextYears = next.getFullYear() - oy;
+            } else if (orig >= today0) {
+                info.daysUntil = Math.round((orig - today0) / 86400000);
+                info.nextDate = m.date;
+            }
+            return info;
+        }
+        // 提前一个月提醒：每天首次打开时检查一次，30 天内的纪念日弹 toast（一天只提醒一次，不打扰）
+        function checkMemorialRemind() {
+            try {
+                const todayKey = new Date().toISOString().slice(0, 10);
+                if (safeStorage.get('niko_memorial_reminded', '') === todayKey) return;
+                const soon = memorialDays.map(m => ({ m, i: memorialInfo(m) })).filter(x => x.i.daysUntil !== null && x.i.daysUntil <= 30).sort((a, b) => a.i.daysUntil - b.i.daysUntil);
+                if (!soon.length) return;
+                safeStorage.set('niko_memorial_reminded', todayKey);
+                const first = soon[0];
+                const dTxt = first.i.daysUntil === 0 ? '就是今天 🎉' : `还有 ${first.i.daysUntil} 天`;
+                const extra = soon.length > 1 ? `（等 ${soon.length} 个纪念日临近）` : '';
+                if (typeof showToast === 'function') showToast(`💝 ${first.m.name} ${dTxt}${extra}`);
+            } catch (e) {}
+        }
+        setTimeout(checkMemorialRemind, 2000);
+        function toggleMemorialRepeat(id) {
+            const m = memorialDays.find(x => x.id === id);
+            if (!m) return;
+            m.repeat = memIsYearly(m) ? 'once' : 'yearly';
+            saveMemorialDays();
+            renderMemorialList();
+            render();
+            if (typeof showToast === 'function') showToast(m.repeat === 'yearly' ? '🔁 已切换为每年循环' : '1️⃣ 已切换为单次（仅当年显示）');
         }
         let memorialShow = safeStorage.get('niko_memorial_show', true);
         function toggleMemorialShow() {
@@ -16498,6 +16564,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             memorialDays.push({
                 id: 'mem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
                 name: name, date: date,
+                repeat: document.getElementById('memorialRepeat') && document.getElementById('memorialRepeat').checked ? 'yearly' : 'once',
                 note: document.getElementById('memorialNote').value.trim() || ''
             });
             memorialDays.sort((a, b) => a.date.localeCompare(b.date));
@@ -16517,19 +16584,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function renderMemorialList() {
             const box = document.getElementById('memorialList');
             if (!box) return;
+            // 铁律#7：渲染前重读 localStorage（云同步写入的外部数据不可见问题），纪念日无编辑草稿可安全重读
+            memorialDays = safeStorage.get('niko_memorial_days', memorialDays);
             if (!memorialDays.length) {
                 box.innerHTML = '<div class="mem-empty">还没有纪念日，添加一个生日或纪念日吧</div>';
                 return;
             }
-            box.innerHTML = memorialDays.map(m => `
+            box.innerHTML = memorialDays.map(m => {
+                const inf = memorialInfo(m);
+                const soon = inf.daysUntil !== null && inf.daysUntil <= 30;
+                const elapsedTxt = inf.yearly
+                    ? (inf.elapsedYears > 0 ? `已 ${inf.elapsedYears} 周年 + ${inf.elapsedDays} 天` : `已 ${inf.totalDays} 天`)
+                    : `已 ${inf.totalDays} 天`;
+                const nextTxt = inf.daysUntil === null ? '日期已过（单次）'
+                    : (inf.daysUntil === 0 ? '就是今天 🎉'
+                        : (inf.yearly && inf.nextYears > 0 ? `下次 ${inf.nextDate} · ${inf.nextYears} 周年（还有 ${inf.daysUntil} 天）` : `下次 ${inf.nextDate}（还有 ${inf.daysUntil} 天）`));
+                return `
                 <div class="mem-item">
                     <span style="font-size:16px;">💝</span>
                     <div class="mem-item-info">
-                        <div class="mem-item-name">${escapeHtml(m.name)}</div>
+                        <div class="mem-item-name">${escapeHtml(m.name)}${soon ? `<span class="mem-soon">⏰ ${inf.daysUntil === 0 ? '今天' : inf.daysUntil + ' 天后'}</span>` : ''}</div>
                         <div class="mem-item-date">📅 ${m.date}${m.note ? ' · ' + escapeHtml(m.note) : ''}</div>
+                        <div class="mem-item-date">⏱ ${elapsedTxt} · ${nextTxt}</div>
                     </div>
+                    <span class="mem-item-rm" style="color:${inf.yearly ? '#0ea5e9' : '#999'};" onclick="toggleMemorialRepeat('${m.id}')" title="点击切换：每年循环 / 单次显示">${inf.yearly ? '🔁' : '1️⃣'}</span>
                     <span class="mem-item-rm" onclick="removeMemorialDay('${m.id}')" title="删除">🗑</span>
-                </div>`).join('');
+                </div>`;
+            }).join('');
         }
 
         // 注入 AI 预置节点（幂等：自动只注入一次，删掉后不会复活；可点「重新载入AI预置」手动去重合并）
@@ -17080,7 +17161,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (festChips.length || memChips.length || dayNodes.length) {
                     const allTags = [
                         ...festChips.map(f => `<span class="cal-fest-chip-inline${f.holiday ? ' holiday' : ''}" title="${escapeHtml(f.name)}">${f.holiday ? '🎉' : '🏮'}${escapeHtml(f.name)}</span>`),
-                        ...memChips.map(m => `<span class="cal-mem-chip-inline" title="${escapeHtml((m.note || m.name) + ' · ' + m.date)}" onclick="event.stopPropagation();openMemorialModal()">💝${escapeHtml(m.name)}</span>`),
+                        ...memChips.map(m => `<span class="cal-mem-chip-inline" title="${escapeHtml((m.note || m.name) + ' · ' + m.date + (m._years ? ' · ' + m._years + ' 周年' : ''))}" onclick="event.stopPropagation();openMemorialModal()">💝${escapeHtml(m.name + (m._years ? ' ' + m._years + '周年' : ''))}</span>`),
                         ...dayNodes.slice(0, 2).map(n => `<span class="cal-node-chip-inline${n.done ? ' done' : ''}" title="${escapeHtml(n.title + ' (' + n.date + ')' + (n.note ? ' — ' + n.note : ''))}" onclick="event.stopPropagation();openMarketNodeModal('${n.id}')">${n.done ? '✅' : '🎯'}${escapeHtml(n.title)}</span>`)
                     ];
                     if (dayNodes.length > 2) {
@@ -29878,7 +29959,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071828";
+        window.NIKO_VERSION = "202609072007";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
