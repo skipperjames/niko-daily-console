@@ -29279,6 +29279,40 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderPomoFace();
             if (diff <= 0) pomoFinish();
         }
+        // ===== 番茄钟提示音（Web Audio 合成，零权限依赖，页面在后台也能响）=====
+        let pomoAudioCtx = null;
+        function pomoChime(kind) {
+            try {
+                if (!pomoAudioCtx) pomoAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (pomoAudioCtx.state === 'suspended') { try { pomoAudioCtx.resume(); } catch (e) {} }
+                const now = pomoAudioCtx.currentTime;
+                // 完成=上行双音（收番茄的轻快雀跃）；休息结束=下行双音（回到工位的沉稳提醒）
+                const notes = kind === 'work' ? [523.25, 783.99] : [659.25, 440.0];
+                notes.forEach((f, i) => {
+                    const osc = pomoAudioCtx.createOscillator();
+                    const gain = pomoAudioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = f;
+                    const t0 = now + i * 0.18;
+                    gain.gain.setValueAtTime(0.0001, t0);
+                    gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+                    osc.connect(gain); gain.connect(pomoAudioCtx.destination);
+                    osc.start(t0); osc.stop(t0 + 0.55);
+                });
+            } catch (e) {}
+        }
+        // 通知权限被浏览器拒绝时：声音兜底已在响，但每隔几天提醒一次去开权限（不烦人）
+        function pomoNotifyHint() {
+            try {
+                if (!('Notification' in window) || Notification.permission !== 'denied') return;
+                const last = Number(safeStorage.get('niko_pomo_perm_hint_at', 0)) || 0;
+                if (Date.now() - last > 3 * 86400000) {
+                    safeStorage.set('niko_pomo_perm_hint_at', Date.now());
+                    showToast('🔔 提示音已响。想要弹窗通知：点地址栏左侧 🔒 图标，把「通知」设为允许');
+                }
+            } catch (e) {}
+        }
         function pomoFinish() {
             const finishedPhase = pomoPhase;
             pomoRunning = false;
@@ -29322,6 +29356,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     setTimeout(() => { try { hv.remove(); } catch (e) {} }, 2700);
                 } catch (e) {}
                 // 浏览器系统通知 + 标题闪烁兜底
+                pomoChime('work');
+                pomoNotifyHint();
                 const breakMin = pomoBreakFor(pomoTodayDone());
                 try {
                     if ('Notification' in window && Notification.permission === 'granted') {
@@ -29333,6 +29369,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast(`🍅 完成一个番茄，休息 ${breakMin} 分钟`);
             } else {
                 // 休息结束：轻提示即可，不再标题闪烁打扰
+                pomoChime('break');
                 try {
                     if ('Notification' in window && Notification.permission === 'granted') {
                         new Notification('☕ 休息结束', { body: '下一个番茄已就位，继续冲', tag: 'niko-pomo-break' });
@@ -29697,7 +29734,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071514";
+        window.NIKO_VERSION = "202609071606";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
