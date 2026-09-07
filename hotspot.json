@@ -1,23 +1,289 @@
 {
-  "version": 1,
-  "fetchedAt": "2026-09-07T08:31:34+08:00",
+  "version": 2,
+  "fetchedAt": "2026-09-07T13:00:17+08:00",
   "date": "2026-09-07",
-  "summary": "郑钦文美网0-5落后连扳7局逆转凯斯，官方称\"年度最佳逆转\"；王一博赛车被撞退赛登热搜，华为今日全场景发布会。日本岐阜甜品店火灾3死疑纵火，流感季罕见提前、39都道府县扩散，高市与NHK及俄方双线龃龉。韩国李在明抵法国事访问聚焦霍尔木兹派兵，KOSPI高开大涨3.33%，累计出口破去年全年纪录。",
+  "summary": "今日热点：微博热搜「中秋放假3天不调休高速不免费」；百度热搜「习主席中亚中东行的三点启示」；B站热搜「复盘IG战胜WE」；B站热门「华为全场景新品发布会今日14:30举行」；百度热点「广电总局：微短剧须\"凡播必审\"」。",
   "regions": {
     "国内": [
       {
-        "title": "郑钦文美网0-5逆转凯斯晋级16强",
-        "desc": "美网女单第三轮决胜盘0-5落后连赢7局、挽救赛点逆转前澳网冠军凯斯，美网官方称\"年度最佳逆转\"，她赛后发文\"迎万难，赢万难\"",
+        "title": "中秋放假3天不调休高速不免费",
+        "desc": "",
         "platform": "微博热搜",
-        "hot": "榜首",
-        "link": "https://s.weibo.com/top/summary"
+        "hot": "115.6万",
+        "link": "https://s.weibo.com/weibo?q=%E4%B8%AD%E7%A7%8B%E6%94%BE%E5%81%873%E5%A4%A9%E4%B8%8D%E8%B0%83%E4%BC%91%E9%AB%98%E9%80%9F%E4%B8%8D%E5%85%8D%E8%B4%B9&Refer=top"
       },
       {
-        "title": "王一博赛车被撞退赛 吴彦祖同日撞车",
-        "desc": "China GT上海站第二回合，王一博85号车从17位超至12位时被116号车强行内线撞击车门致退赛，主持人称\"无妄之灾\"，赛会将调查；同日吴彦祖86号车也撞车退赛，两人均平安",
+        "title": "葫芦娃爷爷隔壁咖啡店挂了7个葫芦",
+        "desc": "",
         "platform": "微博热搜",
+        "hot": "94.1万",
+        "link": "https://s.weibo.com/weibo?q=%E8%91%AB%E8%8A%A6%E5%A8%83%E7%88%B7%E7%88%B7%E9%9A%94%E5%A3%81%E5%92%96%E5%95%A1%E5%BA%97%E6%8C%82%E4%BA%867%E4%B8%AA%E8%91%AB%E8%8A%A6&Refer=top"
+      },
+      {
+        "title": "失去双腿的他说继续冲锋",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "67.5万",
+        "link": "https://s.weibo.com/weibo?q=%E5%A4%B1%E5%8E%BB%E5%8F%8C%E8%85%BF%E7%9A%84%E4%BB%96%E8%AF%B4%E7%BB%A7%E7%BB%AD%E5%86%B2%E9%94%8B&Refer=top"
+      },
+      {
+        "title": "在三国志战略版偶遇张靓颖",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "67.4万",
+        "link": "https://s.weibo.com/weibo?q=%E5%9C%A8%E4%B8%89%E5%9B%BD%E5%BF%97%E6%88%98%E7%95%A5%E7%89%88%E5%81%B6%E9%81%87%E5%BC%A0%E9%9D%93%E9%A2%96&Refer=top"
+      },
+      {
+        "title": "官方回应赴港看演唱会被取消全家低保",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "67.4万",
+        "link": "https://s.weibo.com/weibo?q=%E5%AE%98%E6%96%B9%E5%9B%9E%E5%BA%94%E8%B5%B4%E6%B8%AF%E7%9C%8B%E6%BC%94%E5%94%B1%E4%BC%9A%E8%A2%AB%E5%8F%96%E6%B6%88%E5%85%A8%E5%AE%B6%E4%BD%8E%E4%BF%9D&Refer=top"
+      },
+      {
+        "title": "家长群 教师负担",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "65.2万",
+        "link": "https://s.weibo.com/weibo?q=%E5%AE%B6%E9%95%BF%E7%BE%A4%20%E6%95%99%E5%B8%88%E8%B4%9F%E6%8B%85&Refer=top"
+      },
+      {
+        "title": "单亲妈妈说没钱再捐后公益机构笑了",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "54.5万",
+        "link": "https://s.weibo.com/weibo?q=%E5%8D%95%E4%BA%B2%E5%A6%88%E5%A6%88%E8%AF%B4%E6%B2%A1%E9%92%B1%E5%86%8D%E6%8D%90%E5%90%8E%E5%85%AC%E7%9B%8A%E6%9C%BA%E6%9E%84%E7%AC%91%E4%BA%86&Refer=top"
+      },
+      {
+        "title": "星宇人力资源总监免职",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "54.3万",
+        "link": "https://s.weibo.com/weibo?q=%E6%98%9F%E5%AE%87%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90%E6%80%BB%E7%9B%91%E5%85%8D%E8%81%8C&Refer=top"
+      },
+      {
+        "title": "明日方舟新周边",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "54.1万",
+        "link": "https://s.weibo.com/weibo?q=%E6%98%8E%E6%97%A5%E6%96%B9%E8%88%9F%E6%96%B0%E5%91%A8%E8%BE%B9&Refer=top"
+      },
+      {
+        "title": "詹青云宣传早春晴朗被吐槽",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "54.1万",
+        "link": "https://s.weibo.com/weibo?q=%E8%A9%B9%E9%9D%92%E4%BA%91%E5%AE%A3%E4%BC%A0%E6%97%A9%E6%98%A5%E6%99%B4%E6%9C%97%E8%A2%AB%E5%90%90%E6%A7%BD&Refer=top"
+      },
+      {
+        "title": "现在不是出轨的问题",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "53.9万",
+        "link": "https://s.weibo.com/weibo?q=%E7%8E%B0%E5%9C%A8%E4%B8%8D%E6%98%AF%E5%87%BA%E8%BD%A8%E7%9A%84%E9%97%AE%E9%A2%98&Refer=top"
+      },
+      {
+        "title": "母亲哄睡3岁儿子外出喝酒儿子坠亡",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "53.5万",
+        "link": "https://s.weibo.com/weibo?q=%E6%AF%8D%E4%BA%B2%E5%93%84%E7%9D%A13%E5%B2%81%E5%84%BF%E5%AD%90%E5%A4%96%E5%87%BA%E5%96%9D%E9%85%92%E5%84%BF%E5%AD%90%E5%9D%A0%E4%BA%A1&Refer=top"
+      },
+      {
+        "title": "星宇股份发布情况通报",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "53.5万",
+        "link": "https://s.weibo.com/weibo?q=%E6%98%9F%E5%AE%87%E8%82%A1%E4%BB%BD%E5%8F%91%E5%B8%83%E6%83%85%E5%86%B5%E9%80%9A%E6%8A%A5&Refer=top"
+      },
+      {
+        "title": "陈晓 陈妍希",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "53.3万",
+        "link": "https://s.weibo.com/weibo?q=%E9%99%88%E6%99%93%20%E9%99%88%E5%A6%8D%E5%B8%8C&Refer=top"
+      },
+      {
+        "title": "曝井柏然刘雯结婚了",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "53.1万",
+        "link": "https://s.weibo.com/weibo?q=%E6%9B%9D%E4%BA%95%E6%9F%8F%E7%84%B6%E5%88%98%E9%9B%AF%E7%BB%93%E5%A9%9A%E4%BA%86&Refer=top"
+      },
+      {
+        "title": "习主席中亚中东行的三点启示",
+        "desc": "",
+        "platform": "百度热搜",
         "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
+        "link": "https://m.baidu.com/s?word=%E4%B9%A0%E4%B8%BB%E5%B8%AD%E4%B8%AD%E4%BA%9A%E4%B8%AD%E4%B8%9C%E8%A1%8C%E7%9A%84%E4%B8%89%E7%82%B9%E5%90%AF%E7%A4%BA&sa=fyb_news"
+      },
+      {
+        "title": "多地楼市有新变化",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%A4%9A%E5%9C%B0%E6%A5%BC%E5%B8%82%E6%9C%89%E6%96%B0%E5%8F%98%E5%8C%96&sa=fyb_news"
+      },
+      {
+        "title": "吉隆泥石流部分遇难人员身份确认",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E5%90%89%E9%9A%86%E6%B3%A5%E7%9F%B3%E6%B5%81%E9%83%A8%E5%88%86%E9%81%87%E9%9A%BE%E4%BA%BA%E5%91%98%E8%BA%AB%E4%BB%BD%E7%A1%AE%E8%AE%A4&sa=fyb_news"
+      },
+      {
+        "title": "“国家需要什么 我们就做什么”",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E2%80%9C%E5%9B%BD%E5%AE%B6%E9%9C%80%E8%A6%81%E4%BB%80%E4%B9%88+%E6%88%91%E4%BB%AC%E5%B0%B1%E5%81%9A%E4%BB%80%E4%B9%88%E2%80%9D&sa=fyb_news"
+      },
+      {
+        "title": "看演唱会全家被取消低保原帖已删除",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E7%9C%8B%E6%BC%94%E5%94%B1%E4%BC%9A%E5%85%A8%E5%AE%B6%E8%A2%AB%E5%8F%96%E6%B6%88%E4%BD%8E%E4%BF%9D%E5%8E%9F%E5%B8%96%E5%B7%B2%E5%88%A0%E9%99%A4&sa=fyb_news"
+      },
+      {
+        "title": "手机少了8千多张照片 用户质疑系统",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E6%89%8B%E6%9C%BA%E5%B0%91%E4%BA%868%E5%8D%83%E5%A4%9A%E5%BC%A0%E7%85%A7%E7%89%87+%E7%94%A8%E6%88%B7%E8%B4%A8%E7%96%91%E7%B3%BB%E7%BB%9F&sa=fyb_news"
+      },
+      {
+        "title": "星宇股份4名管理人员被处理",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E6%98%9F%E5%AE%87%E8%82%A1%E4%BB%BD4%E5%90%8D%E7%AE%A1%E7%90%86%E4%BA%BA%E5%91%98%E8%A2%AB%E5%A4%84%E7%90%86&sa=fyb_news"
+      },
+      {
+        "title": "《给阿嬷的情书》王晓慧疑要进圈",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E3%80%8A%E7%BB%99%E9%98%BF%E5%AC%B7%E7%9A%84%E6%83%85%E4%B9%A6%E3%80%8B%E7%8E%8B%E6%99%93%E6%85%A7%E7%96%91%E8%A6%81%E8%BF%9B%E5%9C%88&sa=fyb_news"
+      },
+      {
+        "title": "山寨版葫芦出现 葫芦爷爷最新发声",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%B1%B1%E5%AF%A8%E7%89%88%E8%91%AB%E8%8A%A6%E5%87%BA%E7%8E%B0+%E8%91%AB%E8%8A%A6%E7%88%B7%E7%88%B7%E6%9C%80%E6%96%B0%E5%8F%91%E5%A3%B0&sa=fyb_news"
+      },
+      {
+        "title": "李荣浩演唱会女子中亲签后激动晕倒",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E6%9D%8E%E8%8D%A3%E6%B5%A9%E6%BC%94%E5%94%B1%E4%BC%9A%E5%A5%B3%E5%AD%90%E4%B8%AD%E4%BA%B2%E7%AD%BE%E5%90%8E%E6%BF%80%E5%8A%A8%E6%99%95%E5%80%92&sa=fyb_news"
+      },
+      {
+        "title": "郑钦文 美网认证Queen",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E9%83%91%E9%92%A6%E6%96%87+%E7%BE%8E%E7%BD%91%E8%AE%A4%E8%AF%81Queen&sa=fyb_news"
+      },
+      {
+        "title": "“毁草原种枸杞”系谣言",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E2%80%9C%E6%AF%81%E8%8D%89%E5%8E%9F%E7%A7%8D%E6%9E%B8%E6%9D%9E%E2%80%9D%E7%B3%BB%E8%B0%A3%E8%A8%80&sa=fyb_news"
+      },
+      {
+        "title": "贵州3名未成年女孩接连失联",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E8%B4%B5%E5%B7%9E3%E5%90%8D%E6%9C%AA%E6%88%90%E5%B9%B4%E5%A5%B3%E5%AD%A9%E6%8E%A5%E8%BF%9E%E5%A4%B1%E8%81%94&sa=fyb_news"
+      },
+      {
+        "title": "贫困生能不能追星",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E8%B4%AB%E5%9B%B0%E7%94%9F%E8%83%BD%E4%B8%8D%E8%83%BD%E8%BF%BD%E6%98%9F&sa=fyb_news"
+      },
+      {
+        "title": "《交锋》尺度好大",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E3%80%8A%E4%BA%A4%E9%94%8B%E3%80%8B%E5%B0%BA%E5%BA%A6%E5%A5%BD%E5%A4%A7&sa=fyb_news"
+      },
+      {
+        "title": "复盘IG战胜WE",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%A4%8D%E7%9B%98IG%E6%88%98%E8%83%9CWE"
+      },
+      {
+        "title": "邓亚萍对话赵蕊蕊",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E9%82%93%E4%BA%9A%E8%90%8D%E5%AF%B9%E8%AF%9D%E8%B5%B5%E8%95%8A%E8%95%8A"
+      },
+      {
+        "title": "瓦伦西亚0-5巴萨",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E7%93%A6%E4%BC%A6%E8%A5%BF%E4%BA%9A0-5%E5%B7%B4%E8%90%A8"
+      },
+      {
+        "title": "该不该取消英语主科地位",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E8%AF%A5%E4%B8%8D%E8%AF%A5%E5%8F%96%E6%B6%88%E8%8B%B1%E8%AF%AD%E4%B8%BB%E7%A7%91%E5%9C%B0%E4%BD%8D"
+      },
+      {
+        "title": "吉隆泥石流已确认部分遇难人员身份",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%90%89%E9%9A%86%E6%B3%A5%E7%9F%B3%E6%B5%81%E5%B7%B2%E7%A1%AE%E8%AE%A4%E9%83%A8%E5%88%86%E9%81%87%E9%9A%BE%E4%BA%BA%E5%91%98%E8%BA%AB%E4%BB%BD"
+      },
+      {
+        "title": "单亲妈妈回应停捐后遭催捐",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%8D%95%E4%BA%B2%E5%A6%88%E5%A6%88%E5%9B%9E%E5%BA%94%E5%81%9C%E6%8D%90%E5%90%8E%E9%81%AD%E5%82%AC%E6%8D%90"
+      },
+      {
+        "title": "锐评T1战胜DK",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E9%94%90%E8%AF%84T1%E6%88%98%E8%83%9CDK"
+      },
+      {
+        "title": "5090显卡价格暴涨",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=5090%E6%98%BE%E5%8D%A1%E4%BB%B7%E6%A0%BC%E6%9A%B4%E6%B6%A8"
+      },
+      {
+        "title": "上海冠军赛CN队伍出线分析",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E4%B8%8A%E6%B5%B7%E5%86%A0%E5%86%9B%E8%B5%9BCN%E9%98%9F%E4%BC%8D%E5%87%BA%E7%BA%BF%E5%88%86%E6%9E%90"
+      },
+      {
+        "title": "谭成义古典健体职业夺冠",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E8%B0%AD%E6%88%90%E4%B9%89%E5%8F%A4%E5%85%B8%E5%81%A5%E4%BD%93%E8%81%8C%E4%B8%9A%E5%A4%BA%E5%86%A0"
       },
       {
         "title": "华为全场景新品发布会今日14:30举行",
@@ -25,34 +291,6 @@
         "platform": "B站热门",
         "hot": "热",
         "link": "https://www.bilibili.com/v/popular/all"
-      },
-      {
-        "title": "《披荆斩棘2026》二公舞台刷屏",
-        "desc": "二公舞台播出后多个话题冲上微博抖音百度热榜，曹骏获舞台第二名、粉丝量破千万，赛果走势引海量网友热议",
-        "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
-      },
-      {
-        "title": "张真源\"滚筒洗衣机\"梗登热搜",
-        "desc": "《密室大逃脱8》中张真源成首个钻入103房间圆形通道的嘉宾，第一人称机位似滚筒洗衣机视角，又与\"脱水甩头\"名场面联动，又怂又勇反差出圈",
-        "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
-      },
-      {
-        "title": "\"早春难哄\"热梗引热议",
-        "desc": "网友将《早春晴朗》栾念与《难哄》桑延对比，调侃毒舌傲娇的栾念\"比桑延还难哄\"，井柏然白敬亭两剧联动被剪辑成对抗路兄弟",
-        "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
-      },
-      {
-        "title": "南京面包店临期面包免费送骑手",
-        "desc": "店长将每天剩余十几个到七八十个的临期面包放筐供外卖骑手自取，已坚持小半年，筐旁写着\"隔夜面包 免费自取 骑手专供\"，网友纷纷点赞暖心",
-        "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
       },
       {
         "title": "广电总局：微短剧须\"凡播必审\"",
@@ -72,20 +310,6 @@
         "title": "江西遂川地质灾害致4人遇难",
         "desc": "江西遂川县发生地质灾害已致4人遇难，当地启动应急响应组织抢险救援和隐患排查，严防次生灾害",
         "platform": "百度热点",
-        "hot": "热",
-        "link": "https://top.baidu.com/board"
-      },
-      {
-        "title": "百度9月7日起正式纳入港股通",
-        "desc": "恒指季检9月4日生效，百度完成双重主要上市转换后纳入港股通，机构以分部估值看其AI资产，南向资金全周净流入约73.63亿港元",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://top.baidu.com/board"
-      },
-      {
-        "title": "百度AI编犯罪记录被判侵权拒道歉",
-        "desc": "律师搜索自己名字被百度AI弹出\"犯爆炸罪判三年\"虚假信息，南京法院一二审均认定名誉侵权判令书面道歉，百度至今未道歉，当事人已申请强制执行",
-        "platform": "百度热搜",
         "hot": "热",
         "link": "https://top.baidu.com/board"
       },
