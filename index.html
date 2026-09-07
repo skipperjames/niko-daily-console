@@ -8159,6 +8159,7 @@
         /* ===== v2.21 密度切换（舒适/紧凑，body.nb-compact） ===== */
         body.nb-compact .nb-card { padding: 7px 11px 5px; }
         body.nb-compact .nb-card-content { font-size: 12px; line-height: 1.45; max-height: 120px; }
+        body.nb-compact .nb-card-content.expanded { max-height: none; }   /* v2.22 修复：紧凑档特异性压过 expanded 导致长文展不开 */
         body.nb-compact .nb-card-footer { margin-top: 5px; padding-top: 4px; }
         body.nb-compact .nb-wall { column-gap: 10px; }
         body.nb-compact .nb-wall .nb-card { margin-bottom: 10px; }
@@ -8186,6 +8187,23 @@
         @media (max-width: 900px) {
             .nb-wall { columns: 2 160px; }
         }
+        /* ===== v2.22 骰子模式：摇骰开面动画 ===== */
+        @keyframes nbDiceRoll { 0% { transform: rotate(0deg) scale(.5); opacity: 0; } 45% { transform: rotate(220deg) scale(1.12); opacity: 1; } 75% { transform: rotate(330deg) scale(.95); } 100% { transform: rotate(360deg) scale(1); } }
+        .nb-dice-face { animation: nbDiceRoll .55s cubic-bezier(.22, 1, .36, 1); }
+        /* ===== v2.22 详情页护眼纸色（米黄/浅灰/深，三档持久化） ===== */
+        .nb-paper-row { display: flex; align-items: center; gap: 8px; margin: 12px 2px 8px; }
+        .nb-paper-label { font-size: 10.5px; color: #9a96a8; margin-right: 2px; }
+        .nb-paper-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: all .15s; padding: 0; }
+        .nb-paper-dot.active { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,.25); }
+        .nb-paper-dot.cream { background: #f5ecd7; }
+        .nb-paper-dot.gray { background: #e8e8e4; }
+        .nb-paper-dot.dark { background: #26262e; }
+        .nb-detail-text.paper-cream { background: #f7efdc; color: #4a4030; border-radius: 10px; padding: 14px 16px; }
+        .nb-detail-text.paper-gray { background: #efefec; color: #3c3c3c; border-radius: 10px; padding: 14px 16px; }
+        .nb-detail-text.paper-dark { background: #20202a; color: #c9c9d6; border-radius: 10px; padding: 14px 16px; }
+        body.dark-mode .nb-detail-text.paper-cream { background: #37301f; color: #d9cba4; }
+        body.dark-mode .nb-detail-text.paper-gray { background: #2a2a30; color: #c5c5cc; }
+        body.dark-mode .nb-detail-text.paper-dark { background: #17171d; color: #a8a8b6; }
 
         /* ============================================================
                v2.12 墙的呼吸系统：晨读三张 / 复习模式 / 寂寂角
@@ -11719,6 +11737,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建</button>
                         <button class="nb-btn" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
                         <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
+                        <button class="nb-btn" onclick="nbOpenDice()" title="随手摇一张旧便签，摇到哪张看哪张">🎲 摇一张</button>
                         <button class="nb-btn" id="nbDensityBtn" onclick="nbToggleDensity()" title="切换卡片密度（紧凑一屏看更多）">🌿 舒适</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
                         <button class="nb-btn" id="nbArchiveBtn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
@@ -22102,7 +22121,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     ${n.pinned ? '<span class="nb-detail-pin">📌 置顶</span>' : ''}
                     <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
                 </div>
-                <div class="nb-detail-text">${escapeHtml(n.content)}</div>
+                <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button></div>
+                <div class="nb-detail-text ${nbPaperClass()}">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}</div>
                 <div class="nb-detail-actions">
@@ -22503,7 +22523,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ===== v2.21 密度切换：舒适 / 紧凑（一屏多看 40% 卡片，档位持久化） =====
-        let nbDensity = safeStorage.get('niko_notes_density', 'cozy');
+        let nbDensity = safeStorage.get('niko_notes_density', 'compact');   // v2.22 默认紧凑（2026-09-07 用户指定）
         function nbApplyDensity() {
             document.body.classList.toggle('nb-compact', nbDensity === 'compact');
             const b = document.getElementById('nbDensityBtn');
@@ -22523,6 +22543,52 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         try { document.getElementById('noteModalContent').addEventListener('input', nbDraftSave); } catch (e) {}
         nbApplyDensity();
         nbSyncSortUI();
+
+        // ===== v2.22 详情页护眼纸色：米黄 / 浅灰 / 深，选择持久化 =====
+        let nbPaper = safeStorage.get('niko_nb_paper', 'cream');
+        function nbPaperClass() { return nbPaper === 'gray' ? 'paper-gray' : nbPaper === 'dark' ? 'paper-dark' : 'paper-cream'; }
+        function nbSetPaper(v) {
+            nbPaper = v;
+            safeStorage.set('niko_nb_paper', v);
+            if (nbDetailId) openNbDetail(nbDetailId);   // 详情开着就即时换纸
+        }
+
+        // ===== v2.22 骰子模式：随手摇一张旧便签（娱乐+回访，摇到即算翻过） =====
+        let nbDiceLast = null;
+        function nbDicePool() { return activeNotes().filter(n => !n.quiet && !(n.capsule && !n.capsule.opened)); }
+        function nbOpenDice() {
+            const pool = nbDicePool();
+            if (!pool.length) { showToast('🎲 墙上没有可摇的便签'); return; }
+            nbRitualShell('dice', '🎲 随手一摇', '摇到哪张看哪张 · 翻过就算数');
+            nbDiceRender(pool);
+        }
+        function nbDiceRender(pool) {
+            const stage = document.getElementById('nrStage');
+            if (!stage) return;
+            let n;
+            do { n = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && n.id === nbDiceLast);
+            nbDiceLast = n.id;
+            stage.innerHTML = `<div class="nr-eyebrow">随 手 一 摇</div><div class="nr-card center" id="nrCard"><div class="nr-done-icon nb-dice-face">🎲</div></div>`;
+            setTimeout(() => {
+                const card = document.getElementById('nrCard');
+                if (!card) return;
+                // 摇到即算翻过：刷新 lastOpenAt + 计数（静默写盘，常翻常新）
+                n.lastOpenAt = new Date().toISOString();
+                n.openCount = (n.openCount || 0) + 1;
+                safeStorage.set('niko_inspiration_notes', notes);
+                const tag = noteTagDict()[n.tag] || noteTagDict().other;
+                const waitDays = Math.floor((Date.now() - new Date(n.createdAt).getTime()) / 86400000);
+                card.innerHTML = `
+                    <span class="nr-tag" style="background:${tag.chipBg}">${tag.icon} ${tag.name}</span>
+                    <div class="nr-content">${escapeHtml(n.content)}</div>
+                    <div class="nr-meta">写于 ${new Date(n.createdAt).toLocaleDateString('zh-CN')} · 已在墙上等你 ${waitDays} 天${n.openCount > 1 ? ' · 翻过 ' + n.openCount + ' 次' : ''}</div>
+                    <div class="nr-foot">
+                        <button class="nr-btn" onclick="nbDiceRender(nbDicePool())">🎲 再摇一次</button>
+                        <button class="nr-btn primary" onclick="nbRitualClose()">✓ 翻过它了</button>
+                    </div>`;
+                if (typeof nikoSpark === 'function') nikoSpark(card, '🎲', '#a78bfa');
+            }, 520);
+        }
 // ===== 知识库（PARA）=====
         const KB_PARA = [
             { key: '01-Projects', label: '📁 01-Projects', sub: '当前任务 · 有截止日期', color: '#7c3aed' },
@@ -30365,7 +30431,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609072213";
+        window.NIKO_VERSION = "202609072238";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
