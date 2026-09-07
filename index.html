@@ -1457,6 +1457,22 @@
             padding: 0 4px; font-weight: 500;
         }
         body.dark-mode .dock-btn { background: #1f2937; border-color: #374151; }
+        /* ===== 工具坞/番茄胶囊 计划页停靠模式（2026-09-07 用户要求：计划视图不常看右下角） ===== */
+        .floating-dock.in-plan { position: static; flex-direction: row; gap: 6px; align-items: center; z-index: auto; }
+        .floating-dock.in-plan .dock-btn { width: 30px; height: 30px; font-size: 14px; border-radius: 8px; box-shadow: none; }
+        .floating-dock.in-plan .dock-btn:hover { transform: none; }
+        .floating-dock.in-plan.open {
+            position: absolute; top: calc(100% + 8px); right: 0; left: auto;
+            flex-direction: column; gap: 8px; align-items: stretch;
+            padding: 10px; border-radius: 14px;
+            background: rgba(255,255,255,.96); border: 1px solid #e5e7eb;
+            box-shadow: 0 12px 32px rgba(0,0,0,.18);
+            z-index: 1200;
+        }
+        body.dark-mode .floating-dock.in-plan.open { background: rgba(26,26,38,.97); border-color: #374151; }
+        .floating-dock.in-plan.open .dock-btn { width: 40px; height: 40px; font-size: 18px; border-radius: 50%; box-shadow: none; }
+        #pomoMini.in-plan { position: static; padding: 4px 12px; font-size: 12.5px; border-radius: 14px; box-shadow: none; gap: 6px; }
+        #pomoMini.in-plan.show { display: flex; }
         /* ===== 全局微反馈引擎（nikoSpark）：粒子 + 光环，纯视觉层不挡触控 ===== */
         .niko-spark-ring { position:fixed; width:10px; height:10px; margin:-5px 0 0 -5px; border:2px solid; border-radius:50%; opacity:.85; animation:nikoSparkRing .7s ease-out forwards; }
         .niko-spark-glyph { position:fixed; font-size:15px; transform:translate(-50%,-50%); text-shadow:0 0 10px currentColor; opacity:0; animation:nikoSparkFly .95s cubic-bezier(.2,.7,.3,1) var(--sd,0s) forwards; }
@@ -10777,6 +10793,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
                     <span>条</span>
                 </div>
+                <span id="planDockSlot" style="position:relative;display:inline-flex;align-items:center;gap:6px;margin-left:4px;"></span>
                 <input type="text" class="search-box" id="searchInput" placeholder="搜索任务..." oninput="render()">
             </div>
             <div id="planContentArea" class="calendar-main" style="flex:1;overflow:hidden;display:flex;gap:12px;">
@@ -13761,6 +13778,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchPage(page) {
             if (typeof navSortMode !== 'undefined' && navSortMode) return; // 排序模式中不切换页面
             currentPage = page;
+            try { if (typeof nikoPlanDockPlace === 'function') nikoPlanDockPlace(page); } catch (err) {}
             try { if (typeof navGardenVisit === 'function') navGardenVisit(page); } catch (e) {}
             document.querySelectorAll('.sidebar-left .nav-item[data-nav]').forEach(item => {
                 const key = item.getAttribute('data-nav');
@@ -13949,6 +13967,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const d = document.getElementById('floatingDock');
             if (!d) return;
             d.classList.toggle('open');
+        }
+        // ===== 工具坞/番茄胶囊 计划页停靠（2026-09-07）：计划页时搬到日历上方导航栏，其他页回右下角 =====
+        function nikoPlanDockPlace(page) {
+            const slot = document.getElementById('planDockSlot');
+            const dock = document.getElementById('floatingDock');
+            const mini = document.getElementById('pomoMini');
+            if (!dock || !mini) return;
+            const toPlan = page === 'plan' && slot && window.innerWidth > 768;   // 手机端导航栏太挤，保持右下角
+            if (toPlan) {
+                if (dock.parentElement !== slot) { slot.appendChild(dock); slot.appendChild(mini); }
+                dock.classList.add('in-plan'); mini.classList.add('in-plan');
+            } else {
+                if (dock.classList.contains('in-plan')) { document.body.appendChild(dock); document.body.appendChild(mini); dock.classList.remove('in-plan', 'open'); mini.classList.remove('in-plan'); }
+            }
         }
         function closeDock() {
             const d = document.getElementById('floatingDock');
@@ -29665,7 +29697,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071510";
+        window.NIKO_VERSION = "202609071514";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
