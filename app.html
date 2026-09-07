@@ -10351,18 +10351,46 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         position: fixed;
         bottom: 74px;
         right: 12px;
-        width: 168px;
+        width: 250px;
+        /* v2.18 优化：板块越加越多，15 项单列在矮屏上顶出屏幕外。
+           分组 + 双列紧凑排布 + 超高内部滚动，任何屏幕都放得下 */
+        max-height: calc(100dvh - 74px - 16px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
         background: #fff;
         border: 1px solid #e5e7eb;
         border-radius: 14px;
         box-shadow: 0 8px 30px rgba(0,0,0,0.18);
-        padding: 6px;
+        padding: 10px;
         display: none;
         flex-direction: column;
         z-index: 1300;
     }
     body.dark-mode .nav-more-panel { background: #1f1f2b; border-color: #333; }
     .nav-more-panel.show { display: flex; }
+    .nmp-group-label {
+        font-size: 10.5px;
+        color: #999;
+        letter-spacing: .1em;
+        padding: 4px 4px 6px;
+        user-select: none;
+    }
+    .nmp-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+    }
+    .nmp-grid .nav-more-item {
+        padding: 11px 6px;
+        font-size: 12.5px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /* 云端状态文字长度动态变化，独占一整行更稳 */
+    #navMoreSync { grid-column: 1 / -1; text-align: left; padding: 9px 10px; }
     .nav-more-item {
         padding: 12px 14px;
         font-size: 13.5px;
@@ -10373,6 +10401,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
     body.dark-mode .nav-more-item { color: #e5e5e5; }
     .nav-more-item:active { background: #f3f4f6; }
     body.dark-mode .nav-more-item:active { background: #2a2a38; }
+    .nmp-group-label + .nmp-grid { margin-bottom: 4px; }
     .sidebar-left .nav-section.settings-section { display: none; }
 
     /* 长按拖动：源卡视觉反馈 */
@@ -10604,23 +10633,29 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </button>
     </div>
 
-    <!-- 手机端「⋯ 更多」浮层 -->
+    <!-- 手机端「⋯ 更多」浮层：分组 + 双列，矮屏内部滚动 -->
     <div class="nav-more-panel" id="navMorePanel">
-        <div class="nav-more-item" id="navMoreSync" onclick="openDataManager();hideNavMore()" style="font-size:12.5px;">☁ 云端：未连接</div>
-        <div class="nav-more-item" onclick="toggleDarkMode();hideNavMore()">🌙 深色模式</div>
-        <div class="nav-more-item" onclick="toggleNikoFullscreen();hideNavMore()">⛶ 全屏模式（地址栏消失）</div>
-        <div class="nav-more-item" onclick="openColorSettings();hideNavMore()">🎨 颜色设置</div>
-        <div class="nav-more-item" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
-        <div class="nav-more-item" data-navpage="hot" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
-        <div class="nav-more-item" data-navpage="meme" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
-        <div class="nav-more-item" data-navpage="copy" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
-        <div class="nav-more-item" data-navpage="notes" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
-        <div class="nav-more-item" data-navpage="knowledge" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
-        <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
-        <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
-        <div class="nav-more-item" data-navpage="compound" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
-        <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
-        <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
+        <div class="nmp-group-label">同步与设置</div>
+        <div class="nmp-grid">
+            <div class="nav-more-item" id="navMoreSync" onclick="openDataManager();hideNavMore()" style="font-size:12.5px;">☁ 云端：未连接</div>
+            <div class="nav-more-item" onclick="toggleDarkMode();hideNavMore()">🌙 深色模式</div>
+            <div class="nav-more-item" onclick="toggleNikoFullscreen();hideNavMore()">⛶ 全屏模式</div>
+            <div class="nav-more-item" onclick="openColorSettings();hideNavMore()">🎨 颜色设置</div>
+            <div class="nav-more-item" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
+        </div>
+        <div class="nmp-group-label">全部板块</div>
+        <div class="nmp-grid">
+            <div class="nav-more-item" data-navpage="hot" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
+            <div class="nav-more-item" data-navpage="meme" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
+            <div class="nav-more-item" data-navpage="copy" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
+            <div class="nav-more-item" data-navpage="notes" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
+            <div class="nav-more-item" data-navpage="knowledge" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
+            <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
+            <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
+            <div class="nav-more-item" data-navpage="compound" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
+            <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
+            <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
+        </div>
     </div>
 
     <!-- 手机端底部 Tab 栏：一键直达最常用 5 个板块（2026-08-20 调整：便签→复利面板，因复利需高频查看） -->
@@ -13402,7 +13437,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const lbl = document.querySelector('#fullscreenToggleBtn span:last-child');
                 if (lbl) lbl.textContent = on ? '退出全屏' : '全屏模式';
                 document.querySelectorAll('#navMorePanel .nav-more-item').forEach(it => {
-                    if (it.textContent.indexOf('全屏') !== -1) it.textContent = on ? '⛶ 退出全屏' : '⛶ 全屏模式（地址栏消失）';
+                    if (it.textContent.indexOf('全屏') !== -1) it.textContent = on ? '⛶ 退出全屏' : '⛶ 全屏模式';
                 });
             };
             evts.forEach(ev => document.addEventListener(ev, handler));
@@ -29843,7 +29878,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609071820";
+        window.NIKO_VERSION = "202609071828";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
