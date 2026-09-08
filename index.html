@@ -417,6 +417,18 @@
         body.dark-mode .niko-update-tip b { color: #34d399; }
         .niko-update-tip.show { display: flex; }
         .niko-update-tip:active { transform: scale(0.97); }
+        /* 常显微型版本戳（2026-09-08 用户要求：一眼对出版本，不再一头雾水）。
+           9px 半透明角标，不遮挡任何内容；点击 = 手动检测更新 */
+        .niko-ver-stamp {
+            position: fixed; left: 8px; bottom: 10px; z-index: 690;
+            font-size: 9px; line-height: 1; color: #9ca3af; opacity: .45;
+            cursor: pointer; user-select: none; padding: 3px 5px; border-radius: 8px;
+        }
+        .niko-ver-stamp:hover { opacity: .85; }
+        .niko-ver-stamp:active { opacity: 1; }
+        body.dark-mode .niko-ver-stamp { color: #6b7280; }
+        .niko-ver-stamp.stale { opacity: .95; color: #f59e0b; font-weight: 700; } /* 有新版时亮橙提示 */
+        @media (max-width: 768px) { .niko-ver-stamp { bottom: 60px; } } /* 手机避开 56px 底部 Tab 栏 */
         /* 手机端底部快捷 Tab 栏（替代繁琐的侧边栏滚动） */
         .niko-mobile-tabbar {
             display: none;
@@ -12617,6 +12629,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </button>
         <button class="niko-float-more" onclick="toggleNavMore(event)" aria-label="更多">⋮</button>
     </div>
+    <!-- 常显微型版本戳：一眼对版本，点击手动检测更新（2026-09-08 用户要求） -->
+    <div class="niko-ver-stamp" id="nikoVerStamp" onclick="nikoManualVerCheck()">v—</div>
     <!-- 新版本提示气泡（发现新版本时显示，点击立即更新） -->
     <div class="niko-update-tip" id="nikoUpdateTip" onclick="nikoApplyUpdate()">
         <span class="dot"></span>
@@ -12636,6 +12650,9 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
         <div class="niko-sync-popover-row">
             <span>推送/拉取</span><span id="nikoSyncPopoverN">0 / 0</span>
+        </div>
+        <div class="niko-sync-popover-row" onclick="nikoManualVerCheck()" style="cursor:pointer;" title="点一下立即检测是否最新版">
+            <span>版本 <span style="font-size:9px;opacity:.55;">点检</span></span><span id="nikoSyncPopoverVer">—</span>
         </div>
         <div class="niko-sync-popover-actions">
             <button class="btn" onclick="hideSyncPopover();toggleNavMore()">📋 更多</button>
@@ -30629,7 +30646,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609081339";
+        window.NIKO_VERSION = "202609081502";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -30672,6 +30689,61 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }, 2500); // 等首屏渲染完再检测，不抢加载带宽
             } catch (e) {}
         })();
+
+        // ===== 常显版本戳 + 手动检测（2026-09-08 用户要求：不再"是不是最新版"一头雾水） =====
+        // 202609081456 → 09.08 14:56（构建时间即版本，与我汇报的版本号可直接对照）
+        function nikoFmtVer(v) {
+            if (!v || v.indexOf('__NIKO') === 0) return 'dev';
+            if (/^\d{12}$/.test(v)) return v.slice(4, 6) + '.' + v.slice(6, 8) + ' ' + v.slice(8, 10) + ':' + v.slice(10, 12);
+            return v;
+        }
+        function nikoFillVer() {
+            var s = 'v' + nikoFmtVer(window.NIKO_VERSION);
+            var stamp = document.getElementById('nikoVerStamp');
+            var row = document.getElementById('nikoSyncPopoverVer');
+            if (stamp && stamp.textContent !== '检测中…' && stamp.textContent.indexOf('有新版') !== 0) stamp.textContent = s;
+            if (row && row.textContent !== '检测中…' && row.textContent.indexOf('有新版') !== 0 && row.textContent !== '已最新 ✓') row.textContent = s;
+        }
+        // 手动检测：点左下角版本戳 / popover 版本行触发，绕过自动检测的 1 分钟节流
+        function nikoManualVerCheck() {
+            if (typeof location === 'undefined' || typeof fetch !== 'function') return;
+            if (location.protocol === 'file:' || location.protocol === 'about:') return;
+            var cur = window.NIKO_VERSION || '';
+            if (!cur || cur.indexOf('__NIKO') === 0) return;
+            var stamp = document.getElementById('nikoVerStamp');
+            var row = document.getElementById('nikoSyncPopoverVer');
+            if (stamp) stamp.textContent = '检测中…';
+            if (row) row.textContent = '检测中…';
+            fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
+                .then(function (r) { return r.text(); })
+                .then(function (txt) {
+                    var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/);
+                    var online = m && m[1] ? m[1] : '';
+                    var isNew = !!(online && Number(online) > Number(cur));
+                    if (isNew) {
+                        // 复用右下角小绿点提示，点它即更新
+                        var tip = document.getElementById('nikoUpdateTip');
+                        if (tip) {
+                            document.getElementById('nikoUpdateVer').textContent = 'v' + nikoFmtVer(online);
+                            tip.setAttribute('data-ver', online);
+                            tip.classList.add('show');
+                        }
+                        if (stamp) { stamp.textContent = '有新版 → 点绿点更新'; stamp.classList.add('stale'); }
+                        if (row) row.textContent = '有新版 v' + nikoFmtVer(online);
+                    } else {
+                        if (stamp) { stamp.textContent = '已最新 ✓'; stamp.classList.remove('stale'); }
+                        if (row) row.textContent = '已最新 ✓';
+                    }
+                    setTimeout(nikoFillVer, 4000); // 4 秒后还原为常显版本号
+                })
+                .catch(function () {
+                    if (row) row.textContent = '检测失败';
+                    setTimeout(nikoFillVer, 2500);
+                });
+        }
+        window.nikoFillVer = nikoFillVer;
+        window.nikoManualVerCheck = nikoManualVerCheck;
+        nikoFillVer();
 
         // ===== Service Worker 注册：接管缓存策略，确保每次加载最新版本 =====
         // SW 注册后，所有 fetch 请求走 network-first（优先网络，离线降级缓存），
