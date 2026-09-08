@@ -10144,6 +10144,148 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             .gt-aqua-fish.swim, .gt-aqua-fish.sleep, .gt-aqua-bub { animation: none !important; }
         }
         @media (max-width:768px) { .gt-aqua-cap { display: none; } .gt-aqua-tank { height: 36px; } .gt-aqua-fish { width: 22px; height: 22px; } .gt-aqua-egg { top: 12px; } .gt-aqua-hint { top: 14px; } }
+
+        /* ==================================================================
+           2026-09-08 十项重构（用户点名 1+2+3+4+5+6+7+9+11+20）：
+           HUD 状态栏 / 说明书折页 / 流水进弹窗 / 记录浮层化 / 手机单屏化 /
+           鱼缸升门面 / 鱼进化图鉴 / 枯竭态 / 开机仪式 / 缸景账房双模式
+           ================================================================== */
+        /* ---- 缸景/账房双模式 ---- */
+        .gt-mode-seg { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: rgba(128,128,128,.12); border: 1px solid rgba(128,128,128,.18); flex-shrink: 0; }
+        .gt-mode-seg button { border: none; background: transparent; color: #888; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: 8px; cursor: pointer; transition: all .2s; white-space: nowrap; }
+        body.dark-mode .gt-mode-seg button { color: #9a97ad; }
+        .gt-mode-seg button.active { background: #667eea; color: #fff; box-shadow: 0 2px 8px rgba(102,126,234,.35); }
+        /* 缸景模式：账房区（日历/统计/说明书）整块退场 */
+        #gtWrap.scenery .gt-ledger { display: none !important; }
+        /* ---- HUD 状态栏：一行顶五排 ---- */
+        .gt-hud { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; flex-shrink: 0; }
+        .gt-hud-batt {
+            flex: 1.6; min-width: 220px; text-align: left; cursor: pointer; user-select: none;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 65%, #7c3aed 100%);
+            border: none; border-radius: 14px; padding: 12px 16px; color: #fff;
+            display: flex; flex-direction: column; gap: 6px;
+            box-shadow: 0 6px 18px rgba(124,58,237,.22); transition: transform .15s, box-shadow .2s;
+            font-family: inherit;
+        }
+        .gt-hud-batt:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(124,58,237,.3); }
+        .gt-hud-batt-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+        .gt-hud-label { font-size: 11px; color: #999; letter-spacing: .3px; }
+        .gt-hud-batt .gt-hud-label { color: rgba(255,255,255,.72); }
+        .gt-hud-batt-num { font-size: 30px; font-weight: 800; line-height: 1; }
+        .gt-hud-batt-num small { font-size: 13px; font-weight: 500; opacity: .75; }
+        .gt-hud-batt-track { display: block; height: 8px; border-radius: 99px; background: rgba(255,255,255,.18); overflow: hidden; }
+        .gt-hud-batt-fill { display: block; height: 100%; width: 0%; border-radius: 99px;
+            background: linear-gradient(90deg, #34d399, #a7f3d0); transition: width .8s cubic-bezier(.34,1.2,.4,1), background .4s; }
+        .gt-hud-batt-fill.mid { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+        .gt-hud-batt-fill.low { background: linear-gradient(90deg, #ef4444, #fca5a5); }
+        .gt-hud-batt-sub { font-size: 11px; color: rgba(255,255,255,.72); }
+        .gt-hud-chip {
+            flex: 1; min-width: 96px; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+            background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 10px 14px;
+        }
+        body.dark-mode .gt-hud-chip { background: #1f1f2e; border-color: #333345; }
+        .gt-hud-val { font-size: 16px; font-weight: 700; }
+        .gt-hud-val.earn { color: #10b981; } body.dark-mode .gt-hud-val.earn { color: #34d399; }
+        .gt-hud-val.use { color: #ef4444; }
+        .gt-hud-val.today { color: #f59e0b; }
+        /* ---- 主缸（缸景门面） ---- */
+        .gt-tank-hero {
+            position: relative; min-height: 190px; border-radius: 16px; overflow: hidden;
+            background: linear-gradient(180deg, rgba(96,165,250,.16) 0%, rgba(14,116,144,.10) 62%, rgba(120,90,40,.12) 100%);
+            border: 1px solid rgba(128,128,128,.22); cursor: pointer; user-select: none;
+            flex-shrink: 0; transition: filter .8s;
+        }
+        .gt-tank-water { position: absolute; inset: 0 0 18% 0; background: linear-gradient(180deg, rgba(125,211,252,.14), rgba(59,130,246,.06)); border-bottom: 1.5px dashed rgba(96,165,250,.35); transition: opacity .8s; }
+        .gt-tank-sand { position: absolute; left: 0; right: 0; bottom: 0; height: 18%;
+            background: linear-gradient(180deg, rgba(180,150,90,.16), rgba(120,90,40,.22)); border-radius: 0; }
+        .gt-tank-hero .gt-aqua-tank { position: absolute; inset: 6% 3% 12% 3%; height: auto; }
+        .gt-tank-hero .gt-aqua-fish { width: 38px; height: 38px; }
+        .gt-tank-hero .gt-aqua-fish.gt-ep1 { width: 46px; height: 46px; }
+        .gt-tank-hero .gt-aqua-fish.gt-ep2 { width: 56px; height: 56px; filter: drop-shadow(0 0 6px rgba(248,180,90,.45)); }
+        .gt-tank-whale { position: absolute; right: 6%; top: 16%; width: 64px; height: 64px; opacity: .5; pointer-events: none;
+            animation: gtWhaleDrift 16s ease-in-out infinite alternate; }
+        @keyframes gtWhaleDrift { 0% { transform: translate(0,0); } 100% { transform: translate(-60px,14px); } }
+        .gt-tank-cap { position: absolute; left: 12px; bottom: 9px; font-size: 11px; color: #997; color: #8a8aa0; z-index: 2; pointer-events: none; }
+        .gt-tank-dex { position: absolute; right: 10px; bottom: 8px; z-index: 3; border: 1px solid rgba(128,128,128,.3); background: rgba(20,20,32,.35); color: #ccc; font-size: 11px; padding: 4px 10px; border-radius: 99px; cursor: pointer; backdrop-filter: blur(4px); }
+        .gt-tank-dex:hover { background: rgba(102,126,234,.3); color: #fff; }
+        .gt-aqua-egg { position: absolute; width: 14px; height: 17px; left: 8%; bottom: 20%;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: linear-gradient(180deg,#fde68a,#f59e0b); opacity: .9; box-shadow: 0 0 10px rgba(245,158,11,.35); }
+        .gt-aqua-hint { position: absolute; left: calc(8% + 22px); bottom: 21%; font-size: 11.5px; color: #999; }
+        body.dark-mode .gt-aqua-hint { color: #8a8aa0; }
+        /* ---- 枯竭态（余额=0）：缸干林灰，打卡回血复苏 ---- */
+        #gtWrap.gt-dry .gt-tank-water { opacity: .15; }
+        #gtWrap.gt-dry .gt-tank-hero { filter: saturate(.35) brightness(.82); }
+        #gtWrap.gt-dry .gt-forest-strip { filter: grayscale(.85) opacity(.7); }
+        #gtWrap.gt-dry .gt-hud-batt { background: linear-gradient(135deg, #27272a, #3f3f46); box-shadow: none; }
+        #gtWrap.gt-dry .gt-hud-batt-fill { background: #52525b !important; }
+        #gtWrap.gt-dry .gt-tank-cap { color: #b6a48a; }
+        /* ---- FAB：记录游玩浮层化 ---- */
+        .gt-fab { position: fixed; right: 26px; bottom: 26px; z-index: 68; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        .gt-fab-btn { width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+            background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 20px;
+            box-shadow: 0 8px 22px rgba(16,185,129,.4); transition: transform .25s cubic-bezier(.34,1.5,.4,1), box-shadow .2s; }
+        .gt-fab-btn:hover { transform: scale(1.07); }
+        .gt-fab.open .gt-fab-btn { transform: rotate(45deg); }
+        .gt-fab-pop { display: none; background: #fff; border: 1px solid #e5e2dc; border-radius: 14px; padding: 12px;
+            box-shadow: 0 12px 32px rgba(0,0,0,.18); width: 264px; flex-direction: column; gap: 8px; }
+        body.dark-mode .gt-fab-pop { background: #23233a; border-color: #3a3a50; }
+        .gt-fab.open .gt-fab-pop { display: flex; animation: gtFabIn .22s cubic-bezier(.34,1.3,.4,1); }
+        @keyframes gtFabIn { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+        .gt-fab-pop .gt-play-input { flex-wrap: nowrap; }
+        .gt-fab-pop .gt-play-input input#gtPlayMin { width: 74px; }
+        .gt-fab-pop .gt-fab-row2 { display: flex; gap: 8px; }
+        .gt-fab-pop .gt-fab-row2 button { flex: 1; }
+        .gt-fab-pop .gt-play-input button#gtPlayBtn { flex: 1; }
+        /* ---- 说明书折页 ---- */
+        .gt-manual-head { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+        .gt-manual-head .gt-manual-arrow { margin-left: auto; transition: transform .25s; color: #999; font-size: 12px; }
+        .gt-card.gt-manual.open .gt-manual-arrow { transform: rotate(180deg); }
+        .gt-card.gt-manual .gt-manual-body { display: none; }
+        .gt-card.gt-manual.open .gt-manual-body { display: block; }
+        /* ---- 流水 / 图鉴 弹窗 ---- */
+        .gt-hist-modal { width: 420px; max-width: 92vw; }
+        .gt-hist-modal .gt-history { max-height: 54vh; }
+        .gt-hist-sub { font-size: 11.5px; color: #999; margin: 2px 0 10px; }
+        .gt-dex-item { display: flex; align-items: center; gap: 12px; padding: 10px 4px; border-bottom: 1px dashed rgba(128,128,128,.22); }
+        .gt-dex-item:last-child { border-bottom: none; }
+        .gt-dex-item .gt-dex-ico { width: 42px; height: 42px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .gt-dex-item .gt-dex-ico svg { width: 100%; height: 100%; }
+        .gt-dex-item.miss { opacity: .38; filter: grayscale(.8); }
+        .gt-dex-name { font-weight: 700; font-size: 14px; }
+        .gt-dex-desc { font-size: 11.5px; color: #999; margin-top: 2px; }
+        .gt-dex-next { margin-top: 10px; font-size: 12px; color: #a78bfa; }
+        /* ---- 开机仪式 ---- */
+        .gt-boot { position: absolute; inset: 0; z-index: 5; display: none; align-items: center; justify-content: center;
+            background: #0b0b14; }
+        .gt-boot.on { display: flex; animation: gtBootFade 1.5s ease forwards; }
+        @keyframes gtBootFade { 0% { opacity: 1; } 12% { opacity: .2; } 20% { opacity: .9; } 26% { opacity: .3; } 34%,72% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
+        .gt-boot-txt { font-size: 17px; font-weight: 800; letter-spacing: 4px; color: #34d399; text-align: center; line-height: 2;
+            animation: gtBootGlow 1.2s ease infinite alternate; }
+        .gt-boot-txt small { display: block; font-size: 10px; letter-spacing: 2px; color: #6ee7b7; font-weight: 500; }
+        @keyframes gtBootGlow { from { text-shadow: 0 0 4px rgba(52,211,153,.4); } to { text-shadow: 0 0 16px rgba(52,211,153,.9); } }
+        /* ---- 手机端：单屏化 + FAB 安全区 ---- */
+        @media (max-width:768px) {
+            .gt-hud-chip { min-width: calc(50% - 5px); }
+            .gt-hud-batt-num { font-size: 26px; }
+            .gt-tank-hero { min-height: 158px; }
+            .gt-tank-hero .gt-aqua-fish { width: 30px; height: 30px; }
+            .gt-tank-hero .gt-aqua-fish.gt-ep1 { width: 36px; height: 36px; }
+            .gt-tank-hero .gt-aqua-fish.gt-ep2 { width: 42px; height: 42px; }
+            /* 标题占满首行，模式切换换行到右侧第二行——避开右上角 ⋮ 浮层 */
+            .gt-mode-seg { margin-left: auto; }
+            #gtWrap > div:first-child > div:first-child { flex-basis: 100% !important; min-width: 0 !important; }
+            /* 图鉴键挪到缸右上角，避让框架右下 ✦ 浮钮 */
+            .gt-tank-dex { bottom: auto; top: 10px; }
+            .gt-fab { right: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+            .gt-fab-pop { width: min(300px, calc(100vw - 32px)); }
+            .gt-fab-pop .gt-play-input input { min-height: 40px; font-size: 16px !important; }
+            .gt-fab-pop .gt-fab-row2 button, .gt-fab-pop .gt-play-input button { min-height: 40px; }
+            .gt-mode-seg button { padding: 6px 10px; font-size: 12px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .gt-tank-whale, .gt-fab-pop, .gt-boot.on, .gt-boot-txt { animation: none !important; }
+        }
 /* ===== 复利面板专属CSS ===== */
         @keyframes cpOvernightRise { 0%{opacity:0; transform:translateY(8px);} 18%{opacity:1; transform:translateY(0);} 82%{opacity:1;} 100%{opacity:0; transform:translateY(-10px);} }
         .cp-wrap { display:flex; flex-direction:column; gap:14px; }
@@ -12467,72 +12609,111 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             </div>
         </div>
         <div class="page" id="gamePage">
-<div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
-                <div style="flex-shrink:0;">
-                    <h1 style="font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;">
-                        🎮 游戏时间
-                    </h1>
-                    <p style="color:#888;font-size:13px;margin-top:2px;">用良好习惯换取游戏时间——打卡习惯自动入账，这里随时查看余额与流水</p>
+<div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;" id="gtWrap">
+                <div style="flex-shrink:0;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:200px;">
+                        <h1 style="font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;">
+                            🎮 游戏时间
+                        </h1>
+                        <p style="color:#888;font-size:13px;margin-top:2px;">先赚后玩——打卡习惯自动入账，缸里的鱼就是你的坚持</p>
+                    </div>
+                    <div class="gt-mode-seg" id="gtModeSeg">
+                        <button id="gtModeScenery" onclick="gtSetMode('scenery')" title="生态门面：HUD + 鱼缸，一眼见底">🌊 缸景</button>
+                        <button id="gtModeLedger" onclick="gtSetMode('ledger')" title="账房模式：日历 / 统计 / 说明书全展开">📒 账房</button>
+                    </div>
                 </div>
 
-                <!-- ===== 游玩记录：日历表跟踪 + 每周时长总结 ===== -->
-                <div class="gt-card" style="margin-top:2px;">
-                    <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                        🎮 游玩日历
-                        <span>记录每天实际游玩时长，自动汇总每周进度</span>
-                        <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
+                <!-- ===== HUD 状态栏：余额=电量，一行顶五排；点电量卡看流水 ===== -->
+                <div class="gt-hud">
+                    <button class="gt-hud-batt" onclick="gtOpenHistory()" title="点击查看最近流水">
+                        <span class="gt-hud-batt-top">
+                            <span class="gt-hud-label">⏱ 可玩游戏时长</span>
+                            <span class="gt-hud-batt-num" id="gtBalanceNum">0<small> 分钟</small></span>
+                        </span>
+                        <span class="gt-hud-batt-track"><span class="gt-hud-batt-fill" id="gtBattFill"></span></span>
+                        <span class="gt-hud-batt-sub" id="gtBalanceSub">累计赚取 0 · 累计消耗 0</span>
+                    </button>
+                    <div class="gt-hud-chip"><span class="gt-hud-label">🪙 累计赚取</span><span class="gt-hud-val earn" id="gtStatEarned">0 分钟</span></div>
+                    <div class="gt-hud-chip"><span class="gt-hud-label">🔥 累计消耗</span><span class="gt-hud-val use" id="gtStatUsed">0 分钟</span></div>
+                    <div class="gt-hud-chip"><span class="gt-hud-label">📅 今日赚取</span><span class="gt-hud-val today" id="gtStatToday">0 分钟</span></div>
+                </div>
+
+                <!-- ===== 主缸：生态门面，鱼=累计赚取÷30分，点缸吐泡泡 ===== -->
+                <div class="gt-tank-hero" id="gtTankHero" onclick="gtAquaBurst()" title="点缸逗鱼玩">
+                    <div class="gt-tank-water"></div>
+                    <div class="gt-tank-sand"></div>
+                    <span class="gt-aqua-tank" id="gtAquaTank"></span>
+                    <span class="gt-tank-cap" id="gtTankCap">🐟 生态水族箱</span>
+                    <button class="gt-tank-dex" onclick="event.stopPropagation();gtOpenDex()">📖 图鉴</button>
+                    <div class="gt-boot" id="gtBoot"><div class="gt-boot-txt">NIKO GAME<small>▶ POWER ON</small></div></div>
+                </div>
+
+                <!-- ===== 番茄林地：两种模式都保留，缸景里当缸边绿化 ===== -->
+                <div class="gt-forest-strip" title="番茄林地：每完成一个番茄钟种一棵树，树的高度 = 该次专注时长">
+                    <span class="gt-forest-cap" style="margin-left:0;">🌲 番茄林地</span>
+                    <span class="gt-forest" id="gtForest"></span>
+                </div>
+
+                <!-- ===== 账房区：缸景模式整块退场 ===== -->
+                <div class="gt-ledger" style="display:flex;flex-direction:column;gap:14px;">
+                    <div class="gt-card">
+                        <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            🎮 游玩日历
+                            <span>记录每天实际游玩时长，自动汇总每周进度</span>
+                            <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
+                        </div>
+                        <div class="gt-play-stats">
+                            <div class="gt-play-stat"><span class="gt-play-stat-label">📅 今日</span><span class="gt-play-stat-val" id="gtPlayToday">0 分钟</span></div>
+                            <div class="gt-play-stat"><span class="gt-play-stat-label">🗓 本周</span><span class="gt-play-stat-val" id="gtPlayWeek">0 分钟</span></div>
+                            <div class="gt-play-stat"><span class="gt-play-stat-label">📆 本月</span><span class="gt-play-stat-val" id="gtPlayMonth">0 分钟</span></div>
+                            <div class="gt-play-stat"><span class="gt-play-stat-label">⚡ 日均(本周)</span><span class="gt-play-stat-val" id="gtPlayDaily">0 分钟</span></div>
+                        </div>
+                        <div class="gt-calendar" id="gtPlayCalendar"></div>
+                        <div class="gt-day-detail" id="gtDayDetail"></div>
+                        <div class="gt-week-summary" id="gtWeekSummary"></div>
                     </div>
-                    <div class="gt-forest-strip" title="番茄林地：每完成一个番茄钟种一棵树，树的高度 = 该次专注时长">
-                        <span class="gt-forest-cap" style="margin-left:0;">🌲 番茄林地</span>
-                        <span class="gt-forest" id="gtForest"></span>
+
+                    <div class="gt-card gt-manual" id="gtManualCard">
+                        <div class="gt-manual-head" onclick="gtToggleManual()">
+                            <div class="gt-card-title" style="margin:0;">🎯 奖励规则说明书 <span>打卡自动赚分钟 · 点开查看与调整</span></div>
+                            <span class="gt-manual-arrow">▼</span>
+                        </div>
+                        <div class="gt-manual-body" id="gtRulesList" style="margin-top:6px;"></div>
                     </div>
-                    <div class="gt-aqua-strip" onclick="gtAquaBurst()" title="生态水族箱：累计赚取的每 30 分钟孵化一尾鱼；余额耗光它们就沉底打盹；点缸会吐泡泡">
-                        <span class="gt-aqua-cap">🐟 生态水族箱</span>
-                        <span class="gt-aqua-tank" id="gtAquaTank"></span>
-                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== FAB：记录游玩（点开小气泡，主区不再被表单占行） ===== -->
+            <div class="gt-fab" id="gtFab">
+                <div class="gt-fab-pop">
                     <div class="gt-play-input">
                         <input type="number" id="gtPlayMin" placeholder="分钟" min="1" step="1">
-                        <input type="text" id="gtPlayNote" placeholder="备注（游戏名，可选）" style="flex:1;min-width:120px;">
-                        <button id="gtPlayBtn" onclick="gtLogPlay()">+ 记录游玩</button>
+                        <input type="text" id="gtPlayNote" placeholder="游戏名（可选）" style="flex:1;min-width:0;">
+                    </div>
+                    <div class="gt-fab-row2">
+                        <button id="gtPlayBtn" onclick="gtFabLog()">🎮+ 记录游玩</button>
                         <button class="gt-play-minus" onclick="gtUndoPlay()" title="撤销今天最后一次记录" style="display:none;" id="gtUndoPlayBtn">↩ 撤销</button>
                     </div>
-                    <div class="gt-play-stats">
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">📅 今日</span><span class="gt-play-stat-val" id="gtPlayToday">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">🗓 本周</span><span class="gt-play-stat-val" id="gtPlayWeek">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">📆 本月</span><span class="gt-play-stat-val" id="gtPlayMonth">0 分钟</span></div>
-                        <div class="gt-play-stat"><span class="gt-play-stat-label">⚡ 日均(本周)</span><span class="gt-play-stat-val" id="gtPlayDaily">0 分钟</span></div>
-                    </div>
-                    <div class="gt-calendar" id="gtPlayCalendar"></div>
-                    <div class="gt-day-detail" id="gtDayDetail"></div>
-                    <div class="gt-week-summary" id="gtWeekSummary"></div>
                 </div>
-                <div class="gt-balance-card">
-                    <div class="gt-balance-left">
-                        <div class="gt-balance-label">⏱ 当前可玩游戏时长</div>
-                        <div class="gt-balance-num" id="gtBalanceNum">0<small> 分钟</small></div>
-                        <div class="gt-balance-sub" id="gtBalanceSub">累计赚取 0 · 累计消耗 0</div>
-                        <div style="font-size:11px;color:#888;margin-top:4px;">🎮 用上方「记录游玩」登记开玩，余额自动扣除</div>
-                    </div>
-                </div>
+                <button class="gt-fab-btn" onclick="gtToggleFab()" title="记录游玩">🎮+</button>
+            </div>
 
-                <div class="gt-stats">
-                    <div class="gt-stat"><div class="gt-stat-label">🎁 累计赚取</div><div class="gt-stat-value earn" id="gtStatEarned">0 分钟</div></div>
-                    <div class="gt-stat"><div class="gt-stat-label">🔥 累计消耗</div><div class="gt-stat-value use" id="gtStatUsed">0 分钟</div></div>
-                    <div class="gt-stat"><div class="gt-stat-label">📅 今日赚取</div><div class="gt-stat-value today" id="gtStatToday">0 分钟</div></div>
-                    <div class="gt-stat"><div class="gt-stat-label">🖱 最近一次</div><div class="gt-stat-value" id="gtStatLast" style="font-size:15px;font-weight:500;color:#888;">—</div></div>
+            <!-- ===== 最近流水弹窗（点 HUD 电量卡呼出） ===== -->
+            <div class="modal-mask" id="gtHistModal" data-modal-manual-close="1" onclick="if(event.target===this)gtCloseHistory()">
+                <div class="modal gt-hist-modal">
+                    <h3 style="margin-bottom:0;">📜 最近流水</h3>
+                    <div class="gt-hist-sub" id="gtStatLast">最近一次：—</div>
+                    <div class="gt-history" id="gtHistory"></div>
                 </div>
+            </div>
 
-                <div class="gt-layout">
-                    <div class="gt-card">
-                        <div class="gt-card-title">🎯 奖励规则 <span>每次打卡自动赚取分钟数</span></div>
-                        <div id="gtRulesList"></div>
-                    </div>
-                    <div class="gt-card">
-                        <div class="gt-card-title">📜 最近流水</div>
-                        <div class="gt-history" id="gtHistory"></div>
-                    </div>
+            <!-- ===== 孵化图鉴弹窗 ===== -->
+            <div class="modal-mask" id="gtDexModal" data-modal-manual-close="1" onclick="if(event.target===this)gtCloseDex()">
+                <div class="modal" style="width:400px;max-width:92vw;">
+                    <h3>🐟 孵化图鉴</h3>
+                    <div id="gtDexBody"></div>
                 </div>
-
             </div>
         </div>
         <div class="page" id="compoundPage">
@@ -27958,16 +28139,152 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (statToday) statToday.textContent = fmtMin(todayEarn);
             const last = (d.history || [])[0];
             const statLast = document.getElementById('gtStatLast');
-            if (statLast) statLast.textContent = last ? ((last.type === 'earn' ? '赚取 ' : last.type === 'use' ? '消耗 ' : '') + fmtMin(last.min) + ' · ' + (last.reason || '')) : '—';
+            if (statLast) statLast.textContent = last ? ('最近一次：' + (last.type === 'earn' ? '赚取 ' : last.type === 'use' ? '消耗 ' : '') + fmtMin(last.min) + ' · ' + (last.reason || '')) : '最近一次：—';
+            // HUD 电量条（300 分 = 满格），20%/50% 两档变色
+            const fill = document.getElementById('gtBattFill');
+            if (fill) {
+                const pct = Math.min(100, Math.round(balance / 300 * 100));
+                fill.style.width = pct + '%';
+                fill.classList.toggle('low', balance <= 0 || pct < 20);
+                fill.classList.toggle('mid', pct >= 20 && pct < 50);
+            }
+            // 枯竭态：余额=0 缸干林灰，打卡回血自动复苏
+            const wrap = document.getElementById('gtWrap');
+            if (wrap) wrap.classList.toggle('gt-dry', balance <= 0);
+            gtSyncMode();
             renderGameTimeRules();
             renderGtHistory();
             renderGtForest();
             renderGtAqua();
             renderPlayCalendar();
             renderWeekSummary();
+            gtBootRitual(balance);
         }
 
-        // ===== 生态水族箱（2026-09-06）：鱼 = 累计赚取分钟（每 30 分钟一尾，封顶 8）；余额=0 全体沉底打盹；点缸吐泡泡 =====
+        // ===== 缸景/账房双模式（默认缸景；localStorage 持久记忆） =====
+        function gtGetMode() { return safeStorage.get('niko_gt_view', 'scenery'); }
+        function gtSetMode(m) { safeStorage.set('niko_gt_view', m === 'ledger' ? 'ledger' : 'scenery'); gtSyncMode(); }
+        function gtSyncMode() {
+            const wrap = document.getElementById('gtWrap');
+            if (!wrap) return;
+            const m = gtGetMode();
+            wrap.classList.toggle('scenery', m !== 'ledger');
+            const b1 = document.getElementById('gtModeScenery'), b2 = document.getElementById('gtModeLedger');
+            if (b1) b1.classList.toggle('active', m !== 'ledger');
+            if (b2) b2.classList.toggle('active', m === 'ledger');
+            // 说明书开合状态回读（渲染前重读 localStorage，铁律）
+            const manual = document.getElementById('gtManualCard');
+            if (manual) manual.classList.toggle('open', !!safeStorage.get('niko_gt_manual_open', false));
+        }
+
+        // ===== 说明书折页 =====
+        function gtToggleManual() {
+            const card = document.getElementById('gtManualCard');
+            if (!card) return;
+            const open = card.classList.toggle('open');
+            safeStorage.set('niko_gt_manual_open', open);
+        }
+
+        // ===== FAB：记录游玩浮层 =====
+        function gtToggleFab() {
+            const fab = document.getElementById('gtFab');
+            if (!fab) return;
+            fab.classList.toggle('open');
+            if (fab.classList.contains('open')) {
+                const inp = document.getElementById('gtPlayMin');
+                if (inp) setTimeout(() => inp.focus(), 120);
+            }
+        }
+        function gtFabLog() { gtLogPlay(); const fab = document.getElementById('gtFab'); if (fab) fab.classList.remove('open'); }
+
+        // ===== 最近流水弹窗（点 HUD 呼出） =====
+        function gtOpenHistory() {
+            const m = document.getElementById('gtHistModal');
+            if (m) m.classList.add('show');
+        }
+        function gtCloseHistory() {
+            const m = document.getElementById('gtHistModal');
+            if (m) m.classList.remove('show');
+        }
+
+        // ===== 鱼进化图鉴：纪元 = 累计赚取里程碑，整缸随纪元长大 =====
+        const GT_DEX = [
+            { name: '鱼苗', at: 0, hue: 200, desc: '最初 30 分钟认真打卡，孵出第一尾鱼苗' },
+            { name: '金鱼', at: 300, hue: 45, desc: '累计赚取 300 分，缸里住进发亮的金鱼' },
+            { name: '锦鲤', at: 900, hue: 320, desc: '累计赚取 900 分，锦鲤入缸，好事将近' },
+            { name: '鲸', at: 1800, hue: 210, desc: '累计赚取 1800 分，鲸落于此——整缸都是你的坚持' }
+        ];
+        function gtEpoch() {
+            const te = gtData().totalEarned || 0;
+            let ep = 0;
+            GT_DEX.forEach((s, i) => { if (te >= s.at) ep = i; });
+            return ep;
+        }
+        function gtOpenDex() {
+            const m = document.getElementById('gtDexModal');
+            const body = document.getElementById('gtDexBody');
+            if (!m || !body) return;
+            const te = gtData().totalEarned || 0;
+            const ep = gtEpoch();
+            body.innerHTML = GT_DEX.map((s, i) => {
+                const got = te >= s.at;
+                const ico = i === 3 ? '🐋' : (typeof ecoArcSVG === 'function' ? ecoArcSVG('fish', s.hue) : '🐟');
+                return `<div class="gt-dex-item${got ? '' : ' miss'}">
+                    <span class="gt-dex-ico">${ico}</span>
+                    <span><div class="gt-dex-name">${got ? s.name : '？？？'}${i === ep && got ? ' · 当前纪元' : ''}</div>
+                    <div class="gt-dex-desc">${s.desc}（${s.at} 分解锁）</div></span>
+                </div>`;
+            }).join('') + (ep < GT_DEX.length - 1
+                ? `<div class="gt-dex-next">下一纪元「${GT_DEX[ep + 1].name}」还差 ${GT_DEX[ep + 1].at - te} 分 —— 打卡去</div>`
+                : '<div class="gt-dex-next">图鉴已集满，整缸都是你的 🎉</div>');
+            m.classList.add('show');
+        }
+        function gtCloseDex() {
+            const m = document.getElementById('gtDexModal');
+            if (m) m.classList.remove('show');
+        }
+
+        // ===== 开机仪式：每天本会话第一次进页，缸屏通电 + 两声轻响 + 余额滚动 =====
+        function gtBootRitual(balance) {
+            const boot = document.getElementById('gtBoot');
+            if (!boot) return;
+            let done = '';
+            try { done = sessionStorage.getItem('niko_gt_boot') || ''; } catch (e) {}
+            if (done === gtTodayStr()) return;
+            try { sessionStorage.setItem('niko_gt_boot', gtTodayStr()); } catch (e) {}
+            boot.classList.remove('on'); void boot.offsetWidth; boot.classList.add('on');
+            setTimeout(() => boot.classList.remove('on'), 1600);
+            // 余额数字滚动（无 rAF 环境直接跳过动画）
+            const num = document.getElementById('gtBalanceNum');
+            if (num && balance > 0 && typeof requestAnimationFrame === 'function') {
+                const t0 = performance.now(), dur = 850;
+                const tick = (t) => {
+                    const p = Math.min(1, (t - t0) / dur);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    num.innerHTML = `${Math.round(balance * eased)}<small> 分钟</small>`;
+                    if (p < 1) requestAnimationFrame(tick); else num.innerHTML = `${balance}<small> 分钟</small>`;
+                };
+                requestAnimationFrame(tick);
+            }
+            // WebAudio 两声轻响（E5 → A5）
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                const ctx = new AC();
+                [[659.25, 0], [880, 0.16]].forEach(([f, dl]) => {
+                    const o = ctx.createOscillator(), g = ctx.createGain();
+                    o.type = 'sine'; o.frequency.value = f;
+                    g.gain.setValueAtTime(0.0001, ctx.currentTime + dl);
+                    g.gain.exponentialRampToValueAtTime(0.11, ctx.currentTime + dl + 0.02);
+                    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dl + 0.3);
+                    o.connect(g); g.connect(ctx.destination);
+                    o.start(ctx.currentTime + dl); o.stop(ctx.currentTime + dl + 0.32);
+                });
+                setTimeout(() => { try { ctx.close(); } catch (e) {} }, 900);
+            } catch (e) {}
+        }
+
+        // ===== 生态水族箱 · 主缸门面（2026-09-08 升级）：鱼 = 累计赚取每 30 分钟一尾（封顶 8）；余额=0 全体沉底打盹；纪元随累计赚取进化 =====
         function renderGtAqua() {
             const tank = document.getElementById('gtAquaTank');
             if (!tank) return;
@@ -27976,6 +28293,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const balance = d.balance || 0;
             const nFish = Math.min(8, Math.floor(totalEarned / 30));
             const dayKey = gtTodayStr();
+            const ep = gtEpoch();
             let html = '';
             if (nFish === 0) {
                 html = '<span class="gt-aqua-egg" title="攒够 30 分钟赚取，第一尾鱼就孵化"></span><span class="gt-aqua-hint">第一尾鱼在等前 30 分钟入账</span>';
@@ -27984,14 +28302,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 let seed = 0; for (let i = 0; i < dayKey.length; i++) seed = (seed * 31 + dayKey.charCodeAt(i)) >>> 0;
                 for (let i = 0; i < nFish; i++) {
                     seed = (Math.imul(seed, 1103515245) + 12345) >>> 0;
-                    const hue = seed % 360;
-                    const top = 3 + ((seed >>> 8) % 13);
-                    const left = 3 + ((seed >>> 16) % 62);
+                    const hue = ep >= 2 ? (seed % 60 + 300) : (seed % 360); // 锦鲤纪元偏锦鲤色
+                    const top = 4 + ((seed >>> 8) % 62);   // 主缸高度用百分比
+                    const left = 3 + ((seed >>> 16) % 80);
                     const dur = 6 + ((seed >>> 4) % 6);
                     const del = -((seed >>> 12) % 8);
                     const cls = balance <= 0 ? ' sleep' : ' swim';
-                    html += `<span class="gt-aqua-fish${cls}" style="left:${left}%;top:${top}px;--dur:${dur}s;animation-delay:${del}s;" title="第 ${i + 1} 尾 · 来自前 ${(i + 1) * 30} 分钟赚取">${typeof ecoArcSVG === 'function' ? ecoArcSVG('fish', hue) : '🐟'}</span>`;
+                    html += `<span class="gt-aqua-fish gt-ep${ep}${cls}" style="left:${left}%;top:${top}%;--dur:${dur}s;animation-delay:${del}s;" title="第 ${i + 1} 尾 · 来自前 ${(i + 1) * 30} 分钟赚取 · ${GT_DEX[ep].name}纪元">${typeof ecoArcSVG === 'function' ? ecoArcSVG('fish', hue) : '🐟'}</span>`;
                 }
+                if (ep >= 3) html += '<span class="gt-tank-whale" title="鲸纪元">🐋</span>';
             }
             tank.innerHTML = html;
             // 今日消耗过（=真的去玩了）→ 缸里持续冒小气泡，全站数据真实性
@@ -28005,6 +28324,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     b.style.animationDelay = (i * 0.9) + 's';
                     tank.appendChild(b);
                 }
+            }
+            // 缸沿字幕：纪元 / 枯竭叙事
+            const cap = document.getElementById('gtTankCap');
+            if (cap) {
+                cap.textContent = balance <= 0
+                    ? (nFish ? `🫙 缸干了 · ${nFish} 尾在打盹——打卡来回血` : '🫙 缸是干的 · 打卡攒满 30 分钟就孵化第一尾鱼')
+                    : `🐟 ${GT_DEX[ep].name}纪元 · ${nFish} 尾在游 · 点缸逗鱼`;
             }
         }
         // 点缸：一串气泡哄鱼玩（纯情绪价值，不写任何数据）
@@ -30961,7 +31287,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082228";
+        window.NIKO_VERSION = "202609082253";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
