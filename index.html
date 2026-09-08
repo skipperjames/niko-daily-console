@@ -12081,10 +12081,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 
                         <div class="weread-import-box" id="wereadImportBox" style="display:none;">
                             <div class="weread-hint">
-                                <b>为什么需要导入？</b>微信读书接口不开放网页跨域调用，且 Key 不能放进公开网页，所以由本地脚本拉数据：<br>
-                                ① 双击项目里的「<b>微信读书同步.bat</b>」（生成 weread_data.json）<br>
-                                ② 点下方「选择文件」上传它，或用记事本打开后整段复制粘贴到输入框<br>
-                                ③ 导入后数据存入 localStorage，经 NIKO 云同步自动分发到手机端
+                                <b>为什么需要导入？</b>微信读书接口不开放网页跨域调用，且 Key 不能放进公开网页，所以由本地脚本拉数据。<b>完整教程（忘了就照这里走）</b>：<br>
+                                ① 确认 Key 就位：项目根目录（K:\AI工作台\WorkBuddy\AI Agent）下要有 <b>weread.key</b> 文件——记事本新建一个，Key（wrk- 开头）单独一行粘进去保存即可；也可改用环境变量 WEREAD_API_KEY<br>
+                                ② 双击项目根目录里的「<b>微信读书同步.bat</b>」→ 自动运行 weread_sync.js，拉取阅读统计 / 书架 / 划线笔记，在同目录生成 <b>weread_data.json</b><br>
+                                ③ 回到本页点下方「<b>选择文件</b>」上传 weread_data.json；或用记事本打开它全选复制，粘贴到输入框后点「⚡ 导入」<br>
+                                ④ 导入后存入 localStorage（niko_weread_snapshot），经 NIKO 云同步自动分发到手机端，手机无需重复导入<br>
+                                <span style="opacity:.75;">💡 常见情况：报「Key 缺失」= weread.key 不在项目根目录或内容不对；书多时默认只拉前 20 本的划线，想多拉就运行 node weread_sync.js --notes-limit 50；重复导入不会翻倍（书架按书名、笔记按内容去重）</span>
                             </div>
                             <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                                 <button class="book-btn" onclick="document.getElementById('wereadFileInput').click()">📄 选择文件</button>
@@ -30661,7 +30663,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609081941";
+        window.NIKO_VERSION = "202609081947";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
