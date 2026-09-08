@@ -10220,8 +10220,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         #gtWrap.gt-dry .gt-hud-batt { background: linear-gradient(135deg, #27272a, #3f3f46); box-shadow: none; }
         #gtWrap.gt-dry .gt-hud-batt-fill { background: #52525b !important; }
         #gtWrap.gt-dry .gt-tank-cap { color: #b6a48a; }
-        /* ---- FAB：记录游玩浮层化 ---- */
-        .gt-fab { position: fixed; right: 26px; bottom: 26px; z-index: 68; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        /* ---- FAB：记录游玩浮层化（避让右侧框架 dock 列：desktop right 20+46，mobile 12+42） ---- */
+        .gt-fab { position: fixed; right: 88px; bottom: 70px; z-index: 68; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
         .gt-fab-btn { width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
             background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 20px;
             box-shadow: 0 8px 22px rgba(16,185,129,.4); transition: transform .25s cubic-bezier(.34,1.5,.4,1), box-shadow .2s; }
@@ -10277,7 +10277,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             #gtWrap > div:first-child > div:first-child { flex-basis: 100% !important; min-width: 0 !important; }
             /* 图鉴键挪到缸右上角，避让框架右下 ✦ 浮钮 */
             .gt-tank-dex { bottom: auto; top: 10px; }
-            .gt-fab { right: 16px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+            .gt-fab { right: 74px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
             .gt-fab-pop { width: min(300px, calc(100vw - 32px)); }
             .gt-fab-pop .gt-play-input input { min-height: 40px; font-size: 16px !important; }
             .gt-fab-pop .gt-fab-row2 button, .gt-fab-pop .gt-play-input button { min-height: 40px; }
@@ -31287,7 +31287,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082253";
+        window.NIKO_VERSION = "202609082301";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
