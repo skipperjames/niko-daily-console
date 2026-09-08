@@ -9214,22 +9214,38 @@
             .book-worm-strip.chew .book-worm-head, .book-worm-strip.chew .book-worm-body { animation: none !important; }
         }
         @media (max-width: 768px) { .book-worm-cap { font-size: 10px; } .book-worm-strip { gap: 9px; padding: 6px 9px; } }
-/* ===== 日记专属CSS ===== */
+/* ===== 日记专属CSS（2026-09-08 设计语言对齐今日看板：主板卡壳 + 分区 + 区头语法） ===== */
+        /* 主板卡壳：与今日看板 .today-board 同构 */
+        .diary-board { background: #fff; border: 1px solid #e8e6e1; border-radius: 14px; overflow: hidden; }
+        body.dark-mode .diary-board { background: #1f1f2e; border-color: #333345; }
+        .diary-sec { padding: 12px 16px; }
+        .diary-sec + .diary-sec { border-top: 1px solid #eeece8; }
+        body.dark-mode .diary-sec + .diary-sec { border-top-color: #2c2c3d; }
+        /* 区头语法：图标标题 · 徽章 · 说明（与 .today-sec-head 同构） */
+        .diary-sec-head { display: flex; align-items: center; gap: 8px; min-height: 24px; margin-bottom: 8px; flex-wrap: wrap; }
+        .diary-sec-title { font-size: 13px; font-weight: 600; white-space: nowrap; }
+        .diary-sec-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; white-space: nowrap; }
+        body.dark-mode .diary-sec-sub { color: #8f8fa3; }
         .diary-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
             flex-shrink: 0;
         }
         .diary-stat {
-            background: #fffaf0;
-            border: 1px solid #f0e0c0;
-            border-radius: 12px;
-            padding: 10px 14px;
+            display: flex; align-items: baseline; gap: 7px;
+            background: #faf9f6;
+            border: 1px solid #e8e6e1;
+            border-radius: 10px;
+            padding: 7px 12px;
+            transition: border-color .2s;
         }
-        body.dark-mode .diary-stat { background: #1f2937; border-color: #3a3327; }
-        .diary-stat-label { font-size: 12px; color: #888; }
-        .diary-stat-value { font-size: 22px; font-weight: 600; margin-top: 2px; color: #d97706; }
+        .diary-stat:hover { border-color: #d5d2ee; }
+        body.dark-mode .diary-stat { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
+        body.dark-mode .diary-stat:hover { border-color: #4a4668; }
+        .diary-stat-label { font-size: 11.5px; color: #999; }
+        body.dark-mode .diary-stat-label { color: #8f8fa3; }
+        .diary-stat-value { font-size: 15px; font-weight: 700; color: #d97706; }
         body.dark-mode .diary-stat-value { color: #fbbf24; }
 
         .diary-layout {
@@ -9240,15 +9256,19 @@
             flex-shrink: 0;
         }
         .diary-calendar-card, .diary-editor-card {
-            background: #fff;
-            border: 1px solid #eee;
+            background: #faf9f6;
+            border: 1px solid #e8e6e1;
             border-radius: 14px;
             padding: 14px 16px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            transition: border-color .2s, box-shadow .2s;
         }
-        body.dark-mode .diary-calendar-card, body.dark-mode .diary-editor-card { background: #1f2937; border-color: #333; }
+        .diary-editor-card { background: #fff; }
+        .diary-calendar-card:hover { border-color: #d5d2ee; }
+        body.dark-mode .diary-calendar-card, body.dark-mode .diary-editor-card { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
+        body.dark-mode .diary-calendar-card:hover { border-color: #4a4668; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
         .diary-cal-head { display: flex; align-items: center; gap: 8px; }
         .diary-cal-title { flex: 1; font-size: 14.5px; font-weight: 600; }
         .diary-cal-nav {
@@ -9256,21 +9276,22 @@
             background: #f1f3f5; border: 1px solid transparent; color: #555; font-size: 15px;
             display: flex; align-items: center; justify-content: center; transition: all .2s;
         }
-        body.dark-mode .diary-cal-nav { background: #262626; color: #ccc; }
-        .diary-cal-nav:hover { border-color: #d97706; color: #d97706; }
+        body.dark-mode .diary-cal-nav { background: #2a2a3c; color: #ccc; }
+        .diary-cal-nav:hover { border-color: #667eea; color: #667eea; }
+        body.dark-mode .diary-cal-nav:hover { color: #a5b4fc; }
         .diary-cal-today-btn {
             font-size: 12px; padding: 4px 10px; border-radius: 12px; cursor: pointer;
-            background: #fdf3e3; border: 1px solid #f0d9a8; color: #b45309; transition: all .2s;
+            background: rgba(102,126,234,.1); border: 1px solid transparent; color: #667eea; transition: all .2s;
         }
-        body.dark-mode .diary-cal-today-btn { background: #3a3327; border-color: #4a3f2f; color: #fbbf24; }
-        .diary-cal-today-btn:hover { background: #fde68a; }
+        body.dark-mode .diary-cal-today-btn { background: rgba(99,102,241,.22); color: #a5b4fc; }
+        .diary-cal-today-btn:hover { background: #667eea; color: #fff; }
         /* v2.12.1 日历折叠：手机端默认收起，点标题栏右侧箭头展开（省掉大块月历占位） */
         .diary-cal-fold {
             font-size: 11px; padding: 3px 8px; border-radius: 10px; cursor: pointer;
             background: transparent; border: 1px solid #e5e2da; color: #888; transition: all .2s; margin-left: auto;
         }
-        body.dark-mode .diary-cal-fold { border-color: #3a3a3a; color: #999; }
-        .diary-cal-fold:hover { border-color: #d97706; color: #b45309; }
+        body.dark-mode .diary-cal-fold { border-color: #3a3a4d; color: #999; }
+        .diary-cal-fold:hover { border-color: #667eea; color: #667eea; }
         .diary-calendar-card.folded .diary-cal-grid { display: none; }
         .diary-calendar-card.folded .diary-cal-head { margin-bottom: 0; }
         .diary-cal-fold .fold-arrow { display: inline-block; transition: transform .2s; }
@@ -9287,13 +9308,15 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             position: relative; transition: all .15s; font-size: 12.5px; color: #444;
         }
-        body.dark-mode .diary-cal-cell { background: #1a1a1a; color: #ddd; }
-        .diary-cal-cell:hover { border-color: #d97706; }
+        body.dark-mode .diary-cal-cell { background: #1a1a28; color: #ddd; }
+        .diary-cal-cell:hover { border-color: #667eea; }
+        body.dark-mode .diary-cal-cell:hover { border-color: #4a4668; }
         .diary-cal-cell.muted { color: #c4c0b8; background: transparent; }
-        body.dark-mode .diary-cal-cell.muted { color: #4a4a4a; }
-        .diary-cal-cell.today { border-color: #d97706; font-weight: 600; }
-        .diary-cal-cell.selected { background: #fde68a; border-color: #d97706; font-weight: 600; }
-        body.dark-mode .diary-cal-cell.selected { background: #3a3327; border-color: #fbbf24; color: #fbbf24; }
+        body.dark-mode .diary-cal-cell.muted { color: #4a4a5c; }
+        .diary-cal-cell.today { border-color: #667eea; font-weight: 600; }
+        body.dark-mode .diary-cal-cell.today { border-color: #667eea; }
+        .diary-cal-cell.selected { background: #667eea; border-color: #667eea; font-weight: 600; color: #fff; }
+        body.dark-mode .diary-cal-cell.selected { background: rgba(99,102,241,.32); border-color: #667eea; color: #c7d2fe; }
         .diary-cal-dot {
             width: 5px; height: 5px; border-radius: 50%; background: #d97706;
             position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%);
@@ -9307,39 +9330,40 @@
         body.dark-mode .diary-editor-state { color: #fbbf24; }
         .diary-mood-row { display: flex; gap: 6px; flex-wrap: wrap; }
         .diary-mood {
-            padding: 6px 12px; border-radius: 16px; cursor: pointer; font-size: 13px;
-            background: #f1f3f5; border: 1px solid transparent; transition: all .2s; color: #555;
+            padding: 5px 12px; border-radius: 16px; cursor: pointer; font-size: 12.5px;
+            background: rgba(102,126,234,.08); border: 1px solid transparent; transition: all .2s; color: #7a86c9;
         }
-        body.dark-mode .diary-mood { background: #262626; color: #ccc; }
-        .diary-mood:hover { border-color: #d97706; }
-        .diary-mood.active { background: #fde68a; border-color: #d97706; color: #92400e; font-weight: 500; }
-        body.dark-mode .diary-mood.active { background: #3a3327; border-color: #fbbf24; color: #fbbf24; }
+        body.dark-mode .diary-mood { background: rgba(99,102,241,.14); color: #a5b4fc; }
+        .diary-mood:hover { border-color: #667eea; }
+        .diary-mood.active { background: #667eea; border-color: #667eea; color: #fff; font-weight: 500; }
+        body.dark-mode .diary-mood.active { background: #6366f1; border-color: #7c8cf0; color: #fff; }
         .diary-editor-input {
             width: 100%; min-height: 120px; resize: vertical; padding: 10px 12px;
             border-radius: 10px; font-size: 14px; line-height: 1.7;
-            border: 1px solid #e5dccb; background: #fffaf0; color: #333; box-sizing: border-box;
+            border: 1px solid #e8e6e1; background: #faf9f6; color: #333; box-sizing: border-box;
         }
-        body.dark-mode .diary-editor-input { background: #111827; border-color: #444; color: #eee; }
-        .diary-editor-input:focus { outline: none; border-color: #d97706; }
+        body.dark-mode .diary-editor-input { background: #14141d; border-color: #2a2a3a; color: #eee; }
+        .diary-editor-input:focus { outline: none; border-color: #667eea; }
+        body.dark-mode .diary-editor-input:focus { border-color: #667eea; }
         .diary-editor-foot { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
         .diary-btn {
-            font-size: 12.5px; padding: 7px 16px; border-radius: 8px; cursor: pointer;
-            background: #f8f6f1; border: 1px solid #e5dccb; color: #5f5e5a; transition: all .2s;
+            font-size: 12.5px; padding: 7px 16px; border-radius: 9px; cursor: pointer;
+            background: #faf9f6; border: 1px solid #e8e6e1; color: #666; transition: all .2s;
         }
-        body.dark-mode .diary-btn { background: #1f2937; border-color: #444; color: #ccc; }
-        .diary-btn:hover { border-color: #d97706; color: #d97706; }
-        .diary-btn.primary { background: #d97706; border-color: #d97706; color: #fff; }
-        .diary-btn.primary:hover { background: #b45309; }
+        body.dark-mode .diary-btn { background: #2a2a3c; border-color: #3a3a4d; color: #ccc; }
+        .diary-btn:hover { border-color: #667eea; color: #667eea; }
+        .diary-btn.primary { background: linear-gradient(135deg, #667eea, #7c8cf0); border-color: transparent; color: #fff; box-shadow: 0 2px 8px rgba(102,126,234,.35); }
+        .diary-btn.primary:hover { background: linear-gradient(135deg, #5a6fd8, #6e7fe4); color: #fff; }
         .diary-btn.danger:hover { border-color: #dc2626; color: #dc2626; }
         .diary-editor-actions { display: flex; gap: 8px; }
-        .diary-btn.ai { background: #fff; border: 1px solid #a78bfa; color: #7c3aed; }
-        .diary-btn.ai:hover { background: #7c3aed; color: #fff; }
-        body.dark-mode .diary-btn.ai { background: #2d2a3d; border-color: #6d5bb3; color: #c4b5fd; }
-        body.dark-mode .diary-btn.ai:hover { background: #6d5bb3; color: #fff; }
+        .diary-btn.ai { background: rgba(102,126,234,.08); border: 1px solid rgba(102,126,234,.45); color: #667eea; }
+        .diary-btn.ai:hover { background: #667eea; color: #fff; }
+        body.dark-mode .diary-btn.ai { background: rgba(99,102,241,.16); border-color: rgba(129,140,248,.5); color: #a5b4fc; }
+        body.dark-mode .diary-btn.ai:hover { background: #6366f1; color: #fff; }
         /* 成长档案弹窗 */
         .diary-g-mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .diary-g-box { background: #fdfcf9; border: 1px solid #e5dccb; border-radius: 14px; width: 560px; max-width: 94vw; max-height: 82vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
-        body.dark-mode .diary-g-box { background: #1f2430; border-color: #3a3327; }
+        .diary-g-box { background: #fdfcf9; border: 1px solid #e8e6e1; border-radius: 14px; width: 560px; max-width: 94vw; max-height: 82vh; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,.18); }
+        body.dark-mode .diary-g-box { background: #1f1f2e; border-color: #333345; }
         .diary-g-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #eee5d6; flex-shrink: 0; }
         body.dark-mode .diary-g-head { border-color: #333a48; }
         .diary-g-head h3 { font-size: 15px; font-weight: 600; }
@@ -9354,8 +9378,8 @@
 
         .diary-list { display: flex; flex-direction: column; gap: 8px; }
         .diary-item {
-            background: #fff;
-            border: 1px solid #eee;
+            background: #faf9f6;
+            border: 1px solid #e8e6e1;
             border-radius: 12px;
             padding: 12px 14px;
             display: flex;
@@ -9364,8 +9388,9 @@
             cursor: pointer;
             transition: all .2s;
         }
-        body.dark-mode .diary-item { background: #1f2937; border-color: #333; }
-        .diary-item:hover { border-color: #f0d9a8; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        body.dark-mode .diary-item { background: linear-gradient(180deg, #262637, #22222f); border-color: #31313f; }
+        .diary-item:hover { border-color: #667eea; box-shadow: 0 2px 10px rgba(102,126,234,0.12); }
+        body.dark-mode .diary-item:hover { border-color: #4a4668; box-shadow: 0 3px 14px rgba(0,0,0,0.4); }
         .diary-item-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .diary-item-date { font-size: 12px; color: #d97706; font-weight: 500; }
         body.dark-mode .diary-item-date { color: #fbbf24; }
@@ -9378,41 +9403,40 @@
         body.dark-mode .diary-item-content { color: #bbb; }
         .diary-item-empty {
             text-align: center; color: #999; font-size: 13px;
-            padding: 36px 0; border: 1px dashed #ddd; border-radius: 12px;
+            padding: 36px 0; border: 1px dashed #d8d8e4; border-radius: 12px;
         }
-        body.dark-mode .diary-item-empty { border-color: #333; color: #777; }
+        body.dark-mode .diary-item-empty { border-color: #3a3a4d; color: #777; }
 
         /* 今日战报卡 */
         .diary-battle {
             display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-            background: #fdf6e9; border: 1px solid #f0e0c0; border-radius: 10px;
-            padding: 7px 12px; font-size: 12.5px; color: #8a6d3b;
+            background: rgba(102,126,234,.06); border: 1px solid rgba(102,126,234,.22); border-radius: 10px;
+            padding: 7px 12px; font-size: 12.5px; color: #7a86c9;
         }
-        body.dark-mode .diary-battle { background: #2a2519; border-color: #4a3f2f; color: #d9b96a; }
-        .diary-battle b { color: #b45309; }
+        body.dark-mode .diary-battle { background: rgba(99,102,241,.1); border-color: rgba(129,140,248,.28); color: #a5b4fc; }
+        .diary-battle b { color: #d97706; }
         body.dark-mode .diary-battle b { color: #fbbf24; }
         /* 每日一问 */
         .diary-q {
-            background: #f4f1fa; border: 1px dashed #cabdf0; border-radius: 10px;
-            padding: 9px 12px; font-size: 13px; color: #5b4a8a; line-height: 1.6;
+            background: rgba(102,126,234,.05); border: 1px solid rgba(102,126,234,.2); border-radius: 10px;
+            padding: 9px 12px; font-size: 13px; color: #5a66a8; line-height: 1.6;
         }
-        body.dark-mode .diary-q { background: #262233; border-color: #4a3f6b; color: #c4b5fd; }
+        body.dark-mode .diary-q { background: rgba(99,102,241,.1); border-color: rgba(129,140,248,.25); color: #c7d2fe; }
         .diary-q-actions { margin-top: 6px; display: flex; gap: 8px; }
         .diary-q-btn {
             font-size: 11.5px; padding: 3px 10px; border-radius: 12px; cursor: pointer;
-            background: #fff; border: 1px solid #cabdf0; color: #6d5bb3; transition: all .2s;
+            background: transparent; border: 1px solid rgba(102,126,234,.4); color: #667eea; transition: all .2s;
         }
-        body.dark-mode .diary-q-btn { background: #332d47; border-color: #4a3f6b; color: #c4b5fd; }
-        .diary-q-btn:hover { border-color: #7c3aed; color: #7c3aed; }
-        /* 本周心情回顾 */
+        body.dark-mode .diary-q-btn { background: transparent; border-color: rgba(129,140,248,.4); color: #a5b4fc; }
+        .diary-q-btn:hover { border-color: #667eea; background: rgba(102,126,234,.12); }
+        /* 本周心情回顾（现在是主板卡内的一个分区，壳样式由 .diary-sec 提供） */
         .diary-week {
-            background: #fff; border: 1px solid #eee; border-radius: 14px;
-            padding: 12px 16px; display: flex; flex-direction: column; gap: 6px;
+            display: flex; flex-direction: column; gap: 6px;
         }
-        body.dark-mode .diary-week { background: #1f2937; border-color: #333; }
         .diary-week-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-        .diary-week-title { font-size: 13.5px; font-weight: 600; }
+        .diary-week-title { font-size: 13px; font-weight: 600; }
         .diary-week-meta { font-size: 12px; color: #999; }
+        body.dark-mode .diary-week-meta { color: #8f8fa3; }
         .diary-week-text { font-size: 13px; color: #666; line-height: 1.7; }
         body.dark-mode .diary-week-text { color: #bbb; }
         .diary-week-moods { font-size: 13px; }
@@ -9447,15 +9471,15 @@
             animation: diaryCoverShut .72s ease forwards; }
         @keyframes diaryCoverShut { to { left: 135%; } }
         /* 写作心跳线：随打字起伏，停笔缓缓平息 */
-        .diary-heartbeat { height: 2px; border-radius: 2px; background: linear-gradient(90deg, #d97706, #fbbf24); opacity: .22;
+        .diary-heartbeat { height: 2px; border-radius: 2px; background: linear-gradient(90deg, #667eea, #a5b4fc); opacity: .22;
             transform-origin: left center; transform: scaleX(.08); transition: opacity .9s ease, transform .55s cubic-bezier(.34,1.3,.64,1); }
         .diary-heartbeat.alive { opacity: .85; }
         .diary-heartbeat.idle-anim { animation: diaryBreath 3.4s ease-in-out infinite; }
         @keyframes diaryBreath { 0%, 100% { transform: scaleX(.08); } 50% { transform: scaleX(.15); } }
         /* NIKO 读日记回贴（色条区分，不换字体） */
-        .diary-niko-note { margin-top: 2px; border-left: 2.5px solid #8b7cf6; background: rgba(139,124,246,.08);
-            border-radius: 0 10px 10px 0; padding: 8px 11px; font-size: 12.5px; line-height: 1.7; color: #6d5bb3; min-height: 1em; }
-        body.dark-mode .diary-niko-note { color: #c4b5fd; background: rgba(139,124,246,.13); }
+        .diary-niko-note { margin-top: 2px; border-left: 2.5px solid #667eea; background: rgba(102,126,234,.07);
+            border-radius: 0 10px 10px 0; padding: 8px 11px; font-size: 12.5px; line-height: 1.7; color: #5a66a8; min-height: 1em; }
+        body.dark-mode .diary-niko-note { color: #c7d2fe; background: rgba(99,102,241,.12); }
         .diary-niko-note .who { font-weight: 600; margin-right: 4px; }
         /* 首行金句：月历格丝带 + 列表金句行 */
         .diary-cal-cell .diary-quote-ribbon { position: absolute; top: 0; right: 4px; width: 5px; height: 12px;
@@ -9464,22 +9488,21 @@
         body.dark-mode .diary-item-quote { color: #fcd34d; }
         .diary-item-quote::before { content: ''; width: 3px; height: 12px; border-radius: 2px; flex-shrink: 0;
             background: linear-gradient(180deg, #fbbf24, #d97706); }
-        /* 日记柜：按月装订的书脊立在木板上 */
-        .diary-shelf-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 12px 16px 10px; }
-        body.dark-mode .diary-shelf-card { background: #1f2937; border-color: #333; }
+        /* 日记柜：按月装订的书脊立在主板上（分区壳由 .diary-sec 提供） */
+        .diary-shelf-card { padding: 2px 0 0; }
         .diary-shelf-row { display: flex; align-items: flex-end; gap: 6px; min-height: 74px; padding: 6px 8px 0; overflow-x: auto; }
         .diary-book { position: relative; width: 26px; min-width: 26px; border-radius: 4px 4px 2px 2px; cursor: pointer;
             border: none; padding: 0; transition: transform .18s ease, box-shadow .18s ease; }
         .diary-book:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,.25); }
-        .diary-book.selected { transform: translateY(-7px); box-shadow: 0 0 0 2px #d97706, 0 6px 12px rgba(0,0,0,.25); }
+        .diary-book.selected { transform: translateY(-7px); box-shadow: 0 0 0 2px #667eea, 0 6px 12px rgba(0,0,0,.25); }
         .diary-book-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
             writing-mode: vertical-rl; font-size: 10px; color: rgba(255,255,255,.92); letter-spacing: 1px; pointer-events: none; }
         .diary-book-thick { position: absolute; right: 3px; top: 4px; bottom: 4px; width: 2px; border-radius: 2px; background: rgba(255,255,255,.35); }
         .diary-shelf-plank { height: 8px; border-radius: 3px; background: linear-gradient(180deg, #8a6a45, #6b4f31); box-shadow: 0 3px 6px rgba(0,0,0,.22); }
         body.dark-mode .diary-shelf-plank { background: linear-gradient(180deg, #4d3b26, #3a2b1a); }
         .diary-shelf-empty { font-size: 12.5px; color: #999; padding: 10px 2px; }
-        .diary-month-list-title { font-size: 12.5px; color: #8a6d3b; margin: 2px 0 8px; font-weight: 600; }
-        body.dark-mode .diary-month-list-title { color: #d9b96a; }
+        .diary-month-list-title { font-size: 12.5px; color: #667eea; margin: 2px 0 8px; font-weight: 600; }
+        body.dark-mode .diary-month-list-title { color: #a5b4fc; }
         .diary-month-list-title .shelve-back { cursor: pointer; font-size: 11px; color: #999; font-weight: 400; margin-left: 6px; }
         .diary-month-list-title .shelve-back:hover { color: #d97706; }
 
@@ -9489,7 +9512,7 @@
             #diaryPage .diary-heartbeat { margin: 1px 0; }
             #diaryPage .diary-book { width: 21px; min-width: 21px; }
             #diaryPage .diary-shelf-row { min-height: 60px; gap: 4px; }
-            #diaryPage .diary-shelf-card { padding: 9px 10px 8px !important; }
+            #diaryPage .diary-shelf-card { padding: 0 !important; }
             #diaryPage .diary-niko-note { font-size: 12px; padding: 7px 9px; }
         }
 
@@ -9502,15 +9525,17 @@
             #diaryPage h1 { font-size: 18px !important; gap: 6px !important; }
             #diaryPage h1 + p { font-size: 11px !important; margin-top: 1px !important; line-height: 1.4; }
             #diaryPage .diary-btn { padding: 4px 10px !important; font-size: 11px !important; }
-            /* 3 个统计卡：横排紧凑、变小 */
+            /* 主板卡分区：手机端吃满 + 分区内边距收紧 */
+            #diaryPage .diary-board { border-radius: 12px; }
+            #diaryPage .diary-sec { padding: 9px 10px !important; }
+            /* 3 个统计胶囊：横排紧凑 */
             #diaryPage .diary-stats {
-                display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
+                display: flex !important;
                 gap: 4px !important;
             }
-            #diaryPage .diary-stat { padding: 6px 4px !important; gap: 1px !important; }
+            #diaryPage .diary-stat { padding: 5px 8px !important; gap: 4px !important; flex: 1 !important; justify-content: center; }
             #diaryPage .diary-stat-label { font-size: 10px !important; }
-            #diaryPage .diary-stat-value { font-size: 16px !important; margin-top: 0 !important; }
+            #diaryPage .diary-stat-value { font-size: 13px !important; }
             /* 日历：卡片缩小、格子更紧凑 */
             #diaryPage .diary-calendar-card { padding: 8px !important; }
             #diaryPage .diary-cal-head { gap: 4px !important; margin-bottom: 4px !important; }
@@ -9518,8 +9543,11 @@
             #diaryPage .diary-cal-nav { padding: 2px 6px !important; font-size: 11px !important; min-width: 24px; }
             #diaryPage .diary-cal-today-btn { padding: 2px 8px !important; font-size: 10.5px !important; }
             #diaryPage .diary-cal-grid { gap: 2px !important; }
-            /* v2.12.1 手机端：写日记框提到首屏最前（不用下翻），统计/周卡顺势下移，日历默认收起 */
-            #diaryPage .diary-layout { order: -1 !important; display: flex !important; flex-direction: column !important; gap: 8px !important; }
+            /* v2.12.1 手机端：写日记分区提到主板卡最前，足迹次之，日历默认收起 */
+            #diaryPage .diary-board { display: flex !important; flex-direction: column !important; }
+            #diaryPage .diary-board .diary-sec:nth-child(3) { order: -2 !important; }
+            #diaryPage .diary-board .diary-sec:nth-child(1) { order: -1 !important; }
+            #diaryPage .diary-layout { display: flex !important; flex-direction: column !important; gap: 8px !important; }
             #diaryPage .diary-editor-card { order: -1 !important; }
             #diaryPage .diary-cal-fold { padding: 2px 7px !important; font-size: 10.5px !important; }
             #diaryPage .diary-cal-dow { font-size: 10px !important; padding: 1px 0 !important; }
@@ -12308,28 +12336,41 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <button class="diary-btn ai" onclick="diaryOpenGrowth()" title="把历史日记打包成成长档案，交给 AI 做长期成长分析（含书籍观点建议）">📊 成长档案</button>
                 </div>
 
-                <div class="diary-stats" id="diaryStatCards"></div>
-
-                <div class="diary-week" id="diaryWeekCard"></div>
-
-                <div class="diary-layout">
-                    <div class="diary-calendar-card">
-                        <div class="diary-cal-head">
-                            <button class="diary-cal-nav" onclick="switchDiaryMonth(-1)" title="上个月">‹</button>
-                            <span class="diary-cal-title" id="diaryCalTitle"></span>
-                            <button class="diary-cal-nav" onclick="switchDiaryMonth(1)" title="下个月">›</button>
-                            <button class="diary-cal-today-btn" onclick="diaryGoToday()">今天</button>
-                            <button class="diary-cal-fold" id="diaryCalFoldBtn" onclick="diaryToggleCal()" title="收起 / 展开日历">月历 <span class="fold-arrow">▾</span></button>
+                <div class="diary-board">
+                    <section class="diary-sec">
+                        <div class="diary-sec-head">
+                            <span class="diary-sec-title">📈 记录足迹</span>
+                            <span class="diary-sec-sub">连续越久，墨水瓶越满</span>
                         </div>
-                        <div class="diary-cal-grid" id="diaryCalGrid"></div>
-                    </div>
-                    <div class="diary-editor-card" id="diaryEditorCard"></div>
-                </div>
+                        <div class="diary-stats" id="diaryStatCards"></div>
+                    </section>
 
-                <div>
-                    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#555;">📚 日记柜 <span id="diaryShelfHint" style="font-weight:400;color:#999;font-size:11px;">每写满一个月，自动装订成一册 · 点书脊翻开</span></div>
-                    <div class="diary-shelf-card" id="diaryShelfCard"></div>
-                    <div class="diary-list" id="diaryList" style="margin-top:8px;"></div>
+                    <section class="diary-sec diary-week" id="diaryWeekCard"></section>
+
+                    <section class="diary-sec">
+                        <div class="diary-layout">
+                            <div class="diary-calendar-card">
+                                <div class="diary-cal-head">
+                                    <button class="diary-cal-nav" onclick="switchDiaryMonth(-1)" title="上个月">‹</button>
+                                    <span class="diary-cal-title" id="diaryCalTitle"></span>
+                                    <button class="diary-cal-nav" onclick="switchDiaryMonth(1)" title="下个月">›</button>
+                                    <button class="diary-cal-today-btn" onclick="diaryGoToday()">今天</button>
+                                    <button class="diary-cal-fold" id="diaryCalFoldBtn" onclick="diaryToggleCal()" title="收起 / 展开日历">月历 <span class="fold-arrow">▾</span></button>
+                                </div>
+                                <div class="diary-cal-grid" id="diaryCalGrid"></div>
+                            </div>
+                            <div class="diary-editor-card" id="diaryEditorCard"></div>
+                        </div>
+                    </section>
+
+                    <section class="diary-sec">
+                        <div class="diary-sec-head">
+                            <span class="diary-sec-title">📚 日记柜</span>
+                            <span class="diary-sec-sub" id="diaryShelfHint">每写满一个月，自动装订成一册 · 点书脊翻开</span>
+                        </div>
+                        <div class="diary-shelf-card" id="diaryShelfCard"></div>
+                        <div class="diary-list" id="diaryList" style="margin-top:8px;"></div>
+                    </section>
                 </div>
 
                 <!-- 成长档案弹窗 -->
@@ -25884,7 +25925,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 保存瞬间：合上本子扫光 + NIKO 读一遍回贴 + 墨羽闪光
             diaryCoverShutFx();
             diaryNikoSpeak(content, diaryMood, computeDiaryStreak(), isNew);
-            if (typeof nikoSpark === 'function') nikoSpark(document.querySelector('.diary-btn.primary'), '🪶', '#8b7cf6');
+            if (typeof nikoSpark === 'function') nikoSpark(document.querySelector('.diary-btn.primary'), '🪶',  '#667eea' );
             showToast('💾 已保存 ' + ds);
         }
 
@@ -30913,7 +30954,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082138";
+        window.NIKO_VERSION = "202609082151";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
