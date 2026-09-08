@@ -9418,6 +9418,81 @@
         .diary-week-moods { font-size: 13px; }
         .diary-week-empty { font-size: 12.5px; color: #999; }
 
+        /* ===== 仪式感套装（2026-09-08）：钢笔墨水瓶/信纸晨昏/写作心跳/开篇研墨/合上本子/金句丝带/日记柜 ===== */
+        .diary-editor-card { position: relative; }
+        /* 钢笔+墨水瓶（嵌编辑卡头部右侧，不占整行） */
+        .diary-ink-set { display: flex; align-items: flex-end; flex-shrink: 0; }
+        .diary-ink-set svg { display: block; }
+        /* 信纸晨昏：随时段换纸色 */
+        .diary-editor-input { transition: background .6s ease, border-color .6s ease, box-shadow .6s ease; }
+        .diary-paper-dawn .diary-editor-input { border-color: #e8c98a; background: linear-gradient(180deg, #fffdf6, #fdf6e5); box-shadow: inset 0 0 24px rgba(232,190,110,.14); }
+        body.dark-mode .diary-paper-dawn .diary-editor-input { border-color: #7a6134; background: linear-gradient(180deg, #1c1a14, #211d13); }
+        .diary-paper-noon .diary-editor-input { }
+        .diary-paper-dusk .diary-editor-input { border-color: #8a93c9; background: linear-gradient(180deg, #f4f5fd, #eceefb); box-shadow: inset 0 0 24px rgba(122,134,201,.14); }
+        body.dark-mode .diary-paper-dusk .diary-editor-input { border-color: #3d466f; background: linear-gradient(180deg, #141726, #171a2c); }
+        .diary-paper-night .diary-editor-input { border-color: #2c3355; background: #0e1220; box-shadow: 0 0 0 1px rgba(90,110,190,.15); }
+        body.dark-mode .diary-paper-night .diary-editor-input { background: #0b0e19; }
+        /* 夜写台灯：编辑卡上一圈暖光圈（23 点后自动） */
+        .diary-lamp::before { content: ''; position: absolute; inset: -6px; border-radius: 18px; pointer-events: none; z-index: 0;
+            background: radial-gradient(150px 80px at 70% 0%, rgba(251,191,36,.15), transparent 70%); animation: diaryLampOn 1.4s ease; }
+        @keyframes diaryLampOn { from { opacity: 0; } to { opacity: 1; } }
+        /* 开篇研墨：第一次落笔时墨晕在纸上漾开 */
+        .diary-ink-open::after { content: ''; position: absolute; inset: 0; border-radius: 14px; pointer-events: none; z-index: 3;
+            background: radial-gradient(210px 130px at 22% 30%, rgba(124,92,214,.17), transparent 70%);
+            animation: diaryInkBloom .95s ease forwards; }
+        @keyframes diaryInkBloom { 0% { opacity: 0; transform: scale(.55); } 45% { opacity: 1; } 100% { opacity: 0; transform: scale(1); } }
+        /* 合上本子：保存时封面合拢的扫光 */
+        .diary-cover-close::before { content: ''; position: absolute; top: 0; bottom: 0; left: -35%; width: 35%; pointer-events: none; z-index: 4;
+            background: linear-gradient(105deg, transparent, rgba(217,119,6,.15) 45%, rgba(30,20,5,.26) 56%, transparent);
+            animation: diaryCoverShut .72s ease forwards; }
+        @keyframes diaryCoverShut { to { left: 135%; } }
+        /* 写作心跳线：随打字起伏，停笔缓缓平息 */
+        .diary-heartbeat { height: 2px; border-radius: 2px; background: linear-gradient(90deg, #d97706, #fbbf24); opacity: .22;
+            transform-origin: left center; transform: scaleX(.08); transition: opacity .9s ease, transform .55s cubic-bezier(.34,1.3,.64,1); }
+        .diary-heartbeat.alive { opacity: .85; }
+        .diary-heartbeat.idle-anim { animation: diaryBreath 3.4s ease-in-out infinite; }
+        @keyframes diaryBreath { 0%, 100% { transform: scaleX(.08); } 50% { transform: scaleX(.15); } }
+        /* NIKO 读日记回贴（色条区分，不换字体） */
+        .diary-niko-note { margin-top: 2px; border-left: 2.5px solid #8b7cf6; background: rgba(139,124,246,.08);
+            border-radius: 0 10px 10px 0; padding: 8px 11px; font-size: 12.5px; line-height: 1.7; color: #6d5bb3; min-height: 1em; }
+        body.dark-mode .diary-niko-note { color: #c4b5fd; background: rgba(139,124,246,.13); }
+        .diary-niko-note .who { font-weight: 600; margin-right: 4px; }
+        /* 首行金句：月历格丝带 + 列表金句行 */
+        .diary-cal-cell .diary-quote-ribbon { position: absolute; top: 0; right: 4px; width: 5px; height: 12px;
+            border-radius: 0 0 3px 3px; background: linear-gradient(180deg, #fbbf24, #d97706); box-shadow: 0 1px 3px rgba(217,119,6,.4); }
+        .diary-item-quote { display: flex; gap: 6px; align-items: center; font-size: 12px; color: #b45309; }
+        body.dark-mode .diary-item-quote { color: #fcd34d; }
+        .diary-item-quote::before { content: ''; width: 3px; height: 12px; border-radius: 2px; flex-shrink: 0;
+            background: linear-gradient(180deg, #fbbf24, #d97706); }
+        /* 日记柜：按月装订的书脊立在木板上 */
+        .diary-shelf-card { background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 12px 16px 10px; }
+        body.dark-mode .diary-shelf-card { background: #1f2937; border-color: #333; }
+        .diary-shelf-row { display: flex; align-items: flex-end; gap: 6px; min-height: 74px; padding: 6px 8px 0; overflow-x: auto; }
+        .diary-book { position: relative; width: 26px; min-width: 26px; border-radius: 4px 4px 2px 2px; cursor: pointer;
+            border: none; padding: 0; transition: transform .18s ease, box-shadow .18s ease; }
+        .diary-book:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,.25); }
+        .diary-book.selected { transform: translateY(-7px); box-shadow: 0 0 0 2px #d97706, 0 6px 12px rgba(0,0,0,.25); }
+        .diary-book-label { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+            writing-mode: vertical-rl; font-size: 10px; color: rgba(255,255,255,.92); letter-spacing: 1px; pointer-events: none; }
+        .diary-book-thick { position: absolute; right: 3px; top: 4px; bottom: 4px; width: 2px; border-radius: 2px; background: rgba(255,255,255,.35); }
+        .diary-shelf-plank { height: 8px; border-radius: 3px; background: linear-gradient(180deg, #8a6a45, #6b4f31); box-shadow: 0 3px 6px rgba(0,0,0,.22); }
+        body.dark-mode .diary-shelf-plank { background: linear-gradient(180deg, #4d3b26, #3a2b1a); }
+        .diary-shelf-empty { font-size: 12.5px; color: #999; padding: 10px 2px; }
+        .diary-month-list-title { font-size: 12.5px; color: #8a6d3b; margin: 2px 0 8px; font-weight: 600; }
+        body.dark-mode .diary-month-list-title { color: #d9b96a; }
+        .diary-month-list-title .shelve-back { cursor: pointer; font-size: 11px; color: #999; font-weight: 400; margin-left: 6px; }
+        .diary-month-list-title .shelve-back:hover { color: #d97706; }
+
+        /* 仪式套装手机端 */
+        @media (max-width: 768px) {
+            #diaryPage .diary-ink-set svg { width: 62px; height: 29px; }
+            #diaryPage .diary-heartbeat { margin: 1px 0; }
+            #diaryPage .diary-book { width: 21px; min-width: 21px; }
+            #diaryPage .diary-shelf-row { min-height: 60px; gap: 4px; }
+            #diaryPage .diary-shelf-card { padding: 9px 10px 8px !important; }
+            #diaryPage .diary-niko-note { font-size: 12px; padding: 7px 9px; }
+        }
+
         /* ===== 日记手机端紧凑化 ===== */
         @media (max-width: 768px) {
             /* 整页 padding 缩紧（2026-09-08 用户点名：吃满左右零侧距） */
@@ -12252,8 +12327,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 </div>
 
                 <div>
-                    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#555;">📜 最近日记</div>
-                    <div class="diary-list" id="diaryList"></div>
+                    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:#555;">📚 日记柜 <span id="diaryShelfHint" style="font-weight:400;color:#999;font-size:11px;">每写满一个月，自动装订成一册 · 点书脊翻开</span></div>
+                    <div class="diary-shelf-card" id="diaryShelfCard"></div>
+                    <div class="diary-list" id="diaryList" style="margin-top:8px;"></div>
                 </div>
 
                 <!-- 成长档案弹窗 -->
@@ -25514,6 +25590,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderDiaryWeekReview();
             renderDiaryCalendar();
             renderDiaryEditor();
+            renderDiaryShelf();
             renderDiaryList();
         }
 
@@ -25573,12 +25650,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             for (let d = 1; d <= daysInMonth; d++) {
                 const ds = diaryFmt(new Date(diaryMonthY, diaryMonthM, d));
-                const has = !!diaryEntry(ds);
+                const en = diaryEntry(ds);
+                const has = !!en;
                 const cls = ['diary-cal-cell'];
                 if (ds === today) cls.push('today');
                 if (has) cls.push('has-diary');
                 if (ds === diarySelectedDate) cls.push('selected');
-                html += `<div class="${cls.join(' ')}" data-date="${ds}" onclick="selectDiaryDate('${ds}')">${d}${has ? '<span class="diary-cal-dot"></span>' : ''}</div>`;
+                const ribbon = (en && en.firstLine) ? `<span class="diary-quote-ribbon" title="${diaryEsc(en.firstLine)}"></span>` : '';
+                html += `<div class="${cls.join(' ')}" data-date="${ds}" onclick="selectDiaryDate('${ds}')"${en && en.firstLine ? ` title="${diaryEsc(en.firstLine)}"` : ''}>${d}${has ? '<span class="diary-cal-dot"></span>' : ''}${ribbon}</div>`;
             }
             const total = startDow + daysInMonth;
             const fill = (total % 7 === 0) ? 0 : 7 - (total % 7);
@@ -25610,6 +25689,70 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ===== 编辑卡 =====
+        // 信纸晨昏：随时段换纸色（5-11 晨金 / 11-17 午米 / 17-22 暮蓝 / 22-5 夜灯）
+        function diaryPaperPhase() {
+            const hr = new Date().getHours();
+            if (hr >= 5 && hr < 11) return 'dawn';
+            if (hr < 17) return 'noon';
+            if (hr < 22) return 'dusk';
+            return 'night';
+        }
+        // 钢笔与墨水瓶：液面 = 连续记录天数（30 天满瓶），断更干涸，写一篇回一点
+        function diaryInkHtml() {
+            const streak = computeDiaryStreak();
+            const wroteToday = !!diaryEntry(diaryTodayStr());
+            const dry = streak === 0 && !wroteToday;
+            const pct = Math.min(streak, 30) / 30;
+            const liquidH = dry ? 2 : (4 + 22 * pct).toFixed(1);
+            const y = (34 - Number(liquidH)).toFixed(1);
+            const tip = '墨水瓶 · 连续记录 ' + streak + ' 天' + (wroteToday ? ' · 今天已蘸墨' : (dry ? ' · 墨水有点干了，写一篇润润它' : ''));
+            const glow = wroteToday ? '<circle cx="24" cy="11" r="1.6" fill="#fbbf24"><animate attributeName="opacity" values=".3;1;.3" dur="2.4s" repeatCount="indefinite"/></circle>' : '';
+            return `<svg width="88" height="40" viewBox="0 0 88 40"><title>${tip}</title>` +
+                `<rect x="10" y="8" width="28" height="28" rx="6" fill="rgba(124,92,214,.12)" stroke="#8a7bd8" stroke-width="1.4"/>` +
+                `<rect x="18" y="3" width="12" height="7" rx="2" fill="#8a7bd8" opacity=".8"/>` +
+                `<rect x="12.5" y="${y}" width="23" height="${liquidH}" rx="2.5" fill="#7c5cd6" opacity="${dry ? .35 : .85}"/>` + glow +
+                `<g transform="rotate(38 66 22)"><rect x="58" y="14" width="5" height="22" rx="2" fill="#b45309"/>` +
+                `<rect x="58.8" y="6" width="3.4" height="9" rx="1.5" fill="#d97706"/><path d="M60.5 3 L62.2 7 L58.8 7 Z" fill="#4a4a4a"/></g></svg>`;
+        }
+        // 极轻音效（WebAudio，音量极低，仪式佐餐）
+        function diaryTone(freq, dur, type, vol) {
+            try {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                const ctx = diaryTone._ctx || (diaryTone._ctx = new AC());
+                const o = ctx.createOscillator(), g = ctx.createGain();
+                o.type = type || 'sine'; o.frequency.value = freq;
+                g.gain.setValueAtTime(vol || .04, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + dur);
+                o.connect(g); g.connect(ctx.destination);
+                o.start(); o.stop(ctx.currentTime + dur);
+            } catch (e) {}
+        }
+        // 开篇研墨：当天第一次落笔，墨晕漾开 + 轻声
+        let diaryInkOpenedFor = null;
+        function diaryEditorFocus() {
+            diaryHeartbeat();
+            const ds = diarySelectedDate || diaryTodayStr();
+            if (diaryInkOpenedFor === ds) return;
+            diaryInkOpenedFor = ds;
+            const card = document.getElementById('diaryEditorCard');
+            if (card) {
+                card.classList.remove('diary-ink-open'); void card.offsetWidth; card.classList.add('diary-ink-open');
+                setTimeout(() => card.classList.remove('diary-ink-open'), 1000);
+            }
+            diaryTone(520, .09, 'sine', .035); setTimeout(() => diaryTone(340, .13, 'sine', .028), 90);
+        }
+        // 写作心跳：打字起伏，停笔平息回归呼吸
+        function diaryHeartbeat() {
+            const hb = document.getElementById('diaryHeartbeat');
+            if (!hb) return;
+            const input = document.getElementById('diaryEditorInput');
+            const len = input ? input.value.length : 0;
+            hb.classList.add('alive'); hb.classList.remove('idle-anim');
+            hb.style.transform = 'scaleX(' + Math.min(.12 + len / 420, .95).toFixed(2) + ')';
+            clearTimeout(hb._t);
+            hb._t = setTimeout(() => { hb.classList.remove('alive'); hb.classList.add('idle-anim'); hb.style.transform = ''; }, 1500);
+        }
         function renderDiaryEditor() {
             const el = document.getElementById('diaryEditorCard');
             if (!el) return;
@@ -25624,11 +25767,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const dateLabel = ds === today ? '今天 · ' + ds : ds + ' 周' + week;
             const state = e ? (e.updatedAt ? '已记录' : '已记录') : (ds === today ? '记录今天的第一句话' : '这一天还没有日记');
             const mood = (e && e.mood) || 'ok';
+            const phase = diaryPaperPhase();
+            el.className = 'diary-editor-card diary-paper-' + phase + (phase === 'night' ? ' diary-lamp' : '');
             el.innerHTML = `
                 <div class="diary-editor-head">
                     <span class="diary-editor-date">${dateLabel}</span>
-                    <span class="diary-editor-state">${state}</span>
+                    <span style="display:flex;align-items:center;gap:10px;">
+                        <span class="diary-editor-state">${state}</span>
+                        <span class="diary-ink-set" id="diaryInkSet">${diaryInkHtml()}</span>
+                    </span>
                 </div>
+                <div class="diary-heartbeat idle-anim" id="diaryHeartbeat"></div>
                 <div class="diary-mood-row" id="diaryMoodRow">
                     ${DIARY_MOODS.map(m => `<span class="diary-mood${mood === m.key ? ' active' : ''}" data-mood="${m.key}" onclick="diarySetMood('${m.key}')">${m.icon} ${m.name}</span>`).join('')}
                 </div>
@@ -25640,14 +25789,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <button class="diary-q-btn" onclick="diaryUseQuestion()">✍️ 帮我开头</button>
                     </div>
                 </div>
-                <textarea class="diary-editor-input" id="diaryEditorInput" data-date="${ds}" placeholder="一句话也行，今天过得怎么样…">${draft !== null ? diaryEsc(draft) : (e ? diaryEsc(e.content) : '')}</textarea>
+                <textarea class="diary-editor-input" id="diaryEditorInput" data-date="${ds}" onfocus="diaryEditorFocus()" oninput="diaryHeartbeat()" placeholder="一句话也行，今天过得怎么样…">${draft !== null ? diaryEsc(draft) : (e ? diaryEsc(e.content) : '')}</textarea>
                 <div class="diary-editor-foot">
                     <button class="diary-btn danger" id="diaryDeleteBtn" style="${e ? '' : 'display:none;'}" onclick="diaryDeleteCurrent()">🗑 删除这一天</button>
                     <span class="diary-editor-actions">
                         <button class="diary-btn ai" id="diaryAiBtn" onclick="diaryCopyForAI()" title="复制这篇日记 + 提问语，粘贴到 WorkBuddy 里和 AI 聊聊">🤖 交给 AI 聊聊</button>
                         <button class="diary-btn primary" onclick="diarySave()">💾 保存日记</button>
                     </span>
-                </div>`;
+                </div>
+                <div class="diary-niko-note" id="diaryNikoNote" style="display:none;"></div>`;
         }
         function diarySetMood(key) {
             diaryMood = key;
@@ -25658,20 +25808,64 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             }
         }
+        // 合上本子：保存瞬间封面合拢扫光 + 纸声
+        function diaryCoverShutFx() {
+            const card = document.getElementById('diaryEditorCard');
+            if (!card) return;
+            card.classList.remove('diary-cover-close'); void card.offsetWidth; card.classList.add('diary-cover-close');
+            diaryTone(220, .16, 'triangle', .045);
+            setTimeout(() => diaryTone(165, .2, 'triangle', .035), 100);
+            setTimeout(() => card.classList.remove('diary-cover-close'), 800);
+        }
+        // NIKO 读日记：本地规则生成回贴（零积分），打字机吐字
+        const DIARY_NIKO_LINES = {
+            great: ['今天的光都从字缝里漏出来了，存好了。', '这么好的日子，纸也替你高兴。它已经住进日记柜了。', '笑着的你被完整收进来了，哪天累了就回来翻翻。'],
+            ok: ['平静的日子也值得收藏，稳稳的一天。', '收到。今天也认真过了一遍，很好。', '写下来的日子就不会丢，今晚安心。'],
+            meh: ['一般般的日子也是日子，你诚实记下它，这就很难得。', '收到了。不精彩也没关系，我在。', '把它放在纸上，就别再背在身上了。'],
+            sad: ['低落被写下来，就轻了一半。我陪你。', '今天辛苦了。这句话我替你收着，明天再看会不一样。', '你不欠自己一份开心，先休息吧。'],
+            tired: ['累的时候就写到这里，剩下的交给睡眠。', '收到啦。去休息吧，纸会替你守着今天。', '疲惫也是真实的一天，谢谢你还愿意记下来。']
+        };
+        const DIARY_NIKO_NIGHT = ['夜深了还在写字的人，心里都装着认真。快去睡吧，灯我看着。', '这么晚还写了一笔，今天的句号画得很温柔。'];
+        function diaryNikoSpeak(content, moodKey, streak, isNew) {
+            const el = document.getElementById('diaryNikoNote');
+            if (!el) return;
+            el.style.display = 'block';
+            const h = new Date().getHours();
+            let line;
+            if (isNew && streak > 0 && streak % 7 === 0) line = '连续 ' + streak + ' 天了。你正在把「写日记」长成自己的器官，我看着呢。';
+            else if (String(content).length > 220) line = '写了这么多，今天是值得慢慢重读的一天。';
+            else if (h >= 23 || h < 5) line = DIARY_NIKO_NIGHT[Math.floor(Math.random() * DIARY_NIKO_NIGHT.length)];
+            else {
+                const bank = DIARY_NIKO_LINES[moodKey] || DIARY_NIKO_LINES.ok;
+                line = bank[Math.floor(Math.random() * bank.length)];
+            }
+            el.innerHTML = '<span class="who">NIKO：</span><span id="diaryNikoTypeText"></span>';
+            const t = document.getElementById('diaryNikoTypeText');
+            if (diaryNikoSpeak._tmr) clearInterval(diaryNikoSpeak._tmr);
+            let i = 0;
+            diaryNikoSpeak._tmr = setInterval(() => {
+                i++;
+                if (t) t.textContent = line.slice(0, i);
+                if (i >= line.length) clearInterval(diaryNikoSpeak._tmr);
+            }, 42);
+        }
         function diarySave() {
             const input = document.getElementById('diaryEditorInput');
             const content = input ? input.value.trim() : '';
             if (!content) { showToast('✏️ 写点什么再保存吧'); return; }
             const ds = diarySelectedDate || diaryTodayStr();
+            const firstLine = content.split(/\n/)[0].trim().slice(0, 30);   // 首行金句：只记第一句，最多 30 字
             const idx = diaryEntries.findIndex(x => x.date === ds);
-            if (idx >= 0) {
+            const isNew = idx < 0;
+            if (!isNew) {
                 diaryEntries[idx].content = content;
                 diaryEntries[idx].mood = diaryMood;
+                diaryEntries[idx].firstLine = firstLine;
                 diaryEntries[idx].updatedAt = new Date().toISOString();
             } else {
                 diaryEntries.unshift({
                     id: 'diary_' + Date.now(),
-                    date: ds, content: content, mood: diaryMood,
+                    date: ds, content: content, mood: diaryMood, firstLine: firstLine,
                     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
                 });
             }
@@ -25687,7 +25881,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             diaryAutoCheckHabit(ds);
             renderDiaryPage();
-            // 保存瞬间：墨羽落点闪光（仪式感微反馈）
+            // 保存瞬间：合上本子扫光 + NIKO 读一遍回贴 + 墨羽闪光
+            diaryCoverShutFx();
+            diaryNikoSpeak(content, diaryMood, computeDiaryStreak(), isNew);
             if (typeof nikoSpark === 'function') nikoSpark(document.querySelector('.diary-btn.primary'), '🪶', '#8b7cf6');
             showToast('💾 已保存 ' + ds);
         }
@@ -25875,26 +26071,61 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return Object.keys(freq).filter(k => freq[k] >= 2).sort((a, b) => freq[b] - freq[a]).slice(0, 8);
         }
 
-        // ===== 最近日记列表 =====
+        // ===== 日记柜（按月装订，书脊立在柜板上；点书脊翻开该月） =====
+        let diaryShelfMonth = null;   // 'YYYY-MM'，null = 最近模式
+        const DIARY_BOOK_COLORS = ['#7c5cd6', '#d97706', '#2f8f6b', '#b45374', '#4a7dc9', '#8a6a45', '#5b4a8a', '#3d7a8c'];
+        function renderDiaryShelf() {
+            const el = document.getElementById('diaryShelfCard');
+            if (!el) return;
+            if (!diaryEntries.length) {
+                el.innerHTML = '<div class="diary-shelf-empty">柜子还空着——写第一篇日记，第一本书就上架了。</div>';
+                return;
+            }
+            const months = {};
+            diaryEntries.forEach(e => { const m = String(e.date || '').slice(0, 7); if (m) (months[m] = months[m] || []).push(e); });
+            const keys = Object.keys(months).sort().reverse();
+            el.innerHTML = '<div class="diary-shelf-row">' + keys.map((m, i) => {
+                const cnt = months[m].length;
+                const bh = Math.min(46 + cnt * 5, 72);
+                const c = DIARY_BOOK_COLORS[i % DIARY_BOOK_COLORS.length];
+                const mm = m.slice(5, 7).replace(/^0/, '');
+                return `<button class="diary-book${diaryShelfMonth === m ? ' selected' : ''}" style="height:${bh}px;background:linear-gradient(90deg,${c},${c}cc);" onclick="diaryShelfOpen('${m}')" title="${m} · ${cnt} 篇"><span class="diary-book-label">${mm}月</span><span class="diary-book-thick"></span></button>`;
+            }).join('') + '</div><div class="diary-shelf-plank"></div>';
+        }
+        function diaryShelfOpen(m) {
+            diaryShelfMonth = (diaryShelfMonth === m) ? null : m;
+            renderDiaryShelf();
+            renderDiaryList();
+        }
+
+        // ===== 最近日记列表（日记柜选中某月时翻那一册） =====
         function renderDiaryList() {
             const el = document.getElementById('diaryList');
             if (!el) return;
+            if (diaryShelfMonth) {
+                const list = diaryEntries.filter(e => String(e.date || '').startsWith(diaryShelfMonth)).sort((a, b) => b.date.localeCompare(a.date));
+                el.innerHTML = `<div class="diary-month-list-title">📖 ${diaryShelfMonth} · ${list.length} 篇<span class="shelve-back" onclick="diaryShelfOpen('${diaryShelfMonth}')">放回柜子</span></div>` +
+                    list.map(diaryItemHtml).join('') || '<div class="diary-item-empty">这一册是空的</div>';
+                return;
+            }
             if (!diaryEntries.length) {
                 el.innerHTML = '<div class="diary-item-empty">还没有日记——从今天开始，写第一句话吧</div>';
                 return;
             }
             const sorted = diaryEntries.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 12);
-            el.innerHTML = sorted.map(x => {
-                const m = DIARY_MOODS.find(mm => mm.key === x.mood);
-                const moodIcon = m ? m.icon : '📝';
-                return `<div class="diary-item" onclick="selectDiaryDate('${x.date}')">
+            el.innerHTML = sorted.map(diaryItemHtml).join('');
+        }
+        function diaryItemHtml(x) {
+            const m = DIARY_MOODS.find(mm => mm.key === x.mood);
+            const moodIcon = m ? m.icon : '📝';
+            return `<div class="diary-item" onclick="selectDiaryDate('${x.date}')">
                     <div class="diary-item-head">
                         <span class="diary-item-date">${x.date}</span>
                         <span class="diary-item-mood">${moodIcon}</span>
                     </div>
+                    ${x.firstLine ? `<div class="diary-item-quote">${diaryEsc(x.firstLine)}</div>` : ''}
                     <div class="diary-item-content">${diaryEsc(x.content)}</div>
                 </div>`;
-            }).join('');
         }
 
         // 渲染由框架初始化时调用（typeof 兜底）；独立运行时走下方初始化
@@ -30682,7 +30913,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082104";
+        window.NIKO_VERSION = "202609082138";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
