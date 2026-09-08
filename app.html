@@ -10266,22 +10266,30 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         @keyframes gtBootGlow { from { text-shadow: 0 0 4px rgba(52,211,153,.4); } to { text-shadow: 0 0 16px rgba(52,211,153,.9); } }
         /* ---- 手机端：单屏化 + FAB 安全区 ---- */
         @media (max-width:768px) {
-            .gt-hud-chip { min-width: calc(50% - 5px); }
-            .gt-hud-batt-num { font-size: 26px; }
-            .gt-tank-hero { min-height: 158px; }
+            /* 紧凑化（2026-09-08 用户反馈手机端浪费空间）：三枚芯片与电量卡副标题信息重复，直接退场 */
+            .gt-hud-chip { display: none; }
+            .gt-hud { gap: 0; }
+            .gt-hud-batt { padding: 9px 12px; gap: 4px; border-radius: 12px; }
+            .gt-hud-batt-num { font-size: 22px; }
+            .gt-hud-batt-track { height: 6px; }
+            .gt-hud-batt-sub { font-size: 10px; }
+            /* 标题区压扁：副标题退场，标题缩小 */
+            #gtWrap h1 { font-size: 17px !important; }
+            #gtWrap > div:first-child > div:first-child > p { display: none; }
+            #gtWrap { padding: 10px 12px !important; gap: 8px !important; }
+            .gt-mode-seg { margin-left: auto; }
+            #gtWrap > div:first-child > div:first-child { flex-basis: 100% !important; min-width: 0 !important; }
+            .gt-mode-seg button { padding: 5px 9px; font-size: 11.5px; }
+            .gt-tank-hero { min-height: 148px; }
             .gt-tank-hero .gt-aqua-fish { width: 30px; height: 30px; }
             .gt-tank-hero .gt-aqua-fish.gt-ep1 { width: 36px; height: 36px; }
             .gt-tank-hero .gt-aqua-fish.gt-ep2 { width: 42px; height: 42px; }
-            /* 标题占满首行，模式切换换行到右侧第二行——避开右上角 ⋮ 浮层 */
-            .gt-mode-seg { margin-left: auto; }
-            #gtWrap > div:first-child > div:first-child { flex-basis: 100% !important; min-width: 0 !important; }
             /* 图鉴键挪到缸右上角，避让框架右下 ✦ 浮钮 */
             .gt-tank-dex { bottom: auto; top: 10px; }
             .gt-fab { right: 74px; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
             .gt-fab-pop { width: min(300px, calc(100vw - 32px)); }
             .gt-fab-pop .gt-play-input input { min-height: 40px; font-size: 16px !important; }
             .gt-fab-pop .gt-fab-row2 button, .gt-fab-pop .gt-play-input button { min-height: 40px; }
-            .gt-mode-seg button { padding: 6px 10px; font-size: 12px; }
         }
         @media (prefers-reduced-motion: reduce) {
             .gt-tank-whale, .gt-fab-pop, .gt-boot.on, .gt-boot-txt { animation: none !important; }
@@ -16623,6 +16631,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
                 if (cards.length < 2) return;
                 const lr = list.getBoundingClientRect();
+                // 黄底事故修复（2026-09-08）：列表不可见/刚切页时 rect 量到 0 → viewBox 退化成 '0 0 1 1'，
+                // preserveAspectRatio:none 会把 2px 引线拉伸成几百 px 的金色色块铺满整个习惯列表
+                if (lr.width < 60 || lr.height < 40) return;
                 const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
                 svg.id = 'habitChainSvg';
                 svg.setAttribute('viewBox', '0 0 ' + Math.max(1, lr.width) + ' ' + Math.max(1, lr.height));
@@ -31287,7 +31298,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082301";
+        window.NIKO_VERSION = "202609082321";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
