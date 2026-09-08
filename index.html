@@ -8340,7 +8340,12 @@
             .nb-view-toggle { order: -2; margin-right: auto; }
             .nb-btn.primary { order: -1; }
             .nb-search { display: none; }
-            .nb-tools > .nb-btn:not(.primary) { display: none; }
+            /* 2026-09-08 用户点名：分类筛选条手机端收进 ⚙️ 抽屉，原位置让给 早读/复习/摇一张/寂寂角 */
+            .nb-tools > .nb-btn:not(.primary):not(.nb-quick) { display: none; }
+            .nb-tools > .nb-btn.nb-quick { display: inline-flex; padding: 8px 12px; font-size: 12px; min-height: 32px; }
+            .nb-tag-filter-bar { display: none; }
+            .nb-toolbar.drawer-open ~ .nb-tag-filter-bar { display: flex; }
+            .nb-tag-filter-bar.nb-filter-on { display: flex !important; }
             .nb-toolbar.drawer-open .nb-search { display: flex; flex: 1 1 100%; min-width: 0; order: -3; height: 40px; font-size: 16px; }
             .nb-toolbar.drawer-open .nb-tools > .nb-btn:not(.primary) { display: inline-flex; }
             .nb-toolbar.drawer-open .nb-tools { padding-bottom: 10px; margin-bottom: 2px; border-bottom: 1px dashed rgba(128,128,128,.28); }
@@ -11920,14 +11925,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <button id="nbViewList" onclick="nbSetView('list')">🕐 时间线</button>
                         </div>
                         <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建</button>
-                        <button class="nb-btn" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
-                        <button class="nb-btn" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
-                        <button class="nb-btn" onclick="nbOpenDice()" title="随手摇一张旧便签，摇到哪张看哪张">🎲 摇一张</button>
+                        <button class="nb-btn nb-quick" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
+                        <button class="nb-btn nb-quick" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
+                        <button class="nb-btn nb-quick" onclick="nbOpenDice()" title="随手摇一张旧便签，摇到哪张看哪张">🎲 摇一张</button>
                         <button class="nb-btn" id="nbDensityBtn" onclick="nbToggleDensity()" title="切换卡片密度（紧凑一屏看更多）">🌿 舒适</button>
                         <button class="nb-btn" id="nbColsBtn" onclick="nbToggleCols()" title="手机便签墙单列/双列瀑布切换">▦ 双列</button>
                         <button class="nb-btn" id="nbBatchBtn" onclick="nbToggleBatch()">☑️ 批量</button>
                         <button class="nb-btn" id="nbArchiveBtn" onclick="nbOpenSpecial('archive')">📦 归档箱</button>
-                        <button class="nb-btn" id="nbQuietBtn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
+                        <button class="nb-btn nb-quick" id="nbQuietBtn" onclick="nbOpenSpecial('quiet')" title="30 天没动的便签被整理人收在这里">🫥 寂寂角</button>
                         <button class="nb-btn" id="nbRecycleBtn" onclick="nbOpenSpecial('recycle')">🗑 回收站</button>
                         <button class="nb-btn" onclick="nbExport()" title="导出为 Markdown">⬇ 导出</button>
                     </div>
@@ -21852,6 +21857,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function renderNbTagFilter() {
             const bar = document.getElementById('nbTagFilterBar');
             if (!bar) return;
+            // 2026-09-08 手机端筛选条默认收进抽屉；但筛选生效中必须回显，否则墙被过滤了却看不见原因
+            bar.classList.toggle('nb-filter-on', !!nbTagFilter);
             const dict = noteTagDict();
             const entries = Object.entries(dict);
             let html = `<span class="nb-tag-chip ${!nbTagFilter ? 'active' : ''}" onclick="nbSetTagFilter(null)">全部</span>`;
@@ -30954,7 +30961,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082151";
+        window.NIKO_VERSION = "202609082228";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
