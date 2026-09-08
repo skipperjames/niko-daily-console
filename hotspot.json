@@ -1,37 +1,289 @@
 {
-  "version": 1,
-  "fetchedAt": "2026-09-08T08:38:00+08:00",
+  "version": 2,
+  "fetchedAt": "2026-09-08T12:57:55+08:00",
   "date": "2026-09-08",
-  "summary": "郑钦文美网0-5落后连赢7局逆转斯瓦泰克，首进美网八强霸榜热搜；国家反诈AI上线、央视曝光幽灵外卖。日本高市早苗拟16日改组内阁并推食品降税，日元升至6个月新高。韩国KOSPI高开，半导体出口8月暴增209%破纪录，伊朗发韩文警告勿派兵霍尔木兹，李在明宣布对法电影投5亿欧元。",
+  "summary": "今日热点：微博热搜「22岁男子看望生病奶奶过桥时坠亡」；百度热搜「历史坐标里的“中埃时刻”」；B站热搜「复盘郑钦文让5追7前世界第一」；百度热点「国家反诈AI App正式上线」；腾讯热点「中美恢复战区层级对话」；抖音热榜「AI短剧72小时登顶抖音热榜」；B站热门「离婚逆袭短剧B站走红」。",
   "regions": {
     "国内": [
       {
-        "title": "郑钦文0-5逆转斯瓦泰克 首进美网八强",
-        "desc": "女单第四轮7-5、6-3力克8号种子斯瓦泰克，连续两轮0-5落后连赢7局翻盘，从资格赛起七连胜，成2021年拉杜卡努后首位打进美网八强的资格赛选手；美网官方将她与\"G6的乔丹、周日的伍兹\"并列盛赞，微博热搜霸屏独占三席",
+        "title": "22岁男子看望生病奶奶过桥时坠亡",
+        "desc": "",
         "platform": "微博热搜",
-        "hot": "榜首",
-        "link": "https://s.weibo.com/top/summary"
+        "hot": "107.4万",
+        "link": "https://s.weibo.com/weibo?q=22%E5%B2%81%E7%94%B7%E5%AD%90%E7%9C%8B%E6%9C%9B%E7%94%9F%E7%97%85%E5%A5%B6%E5%A5%B6%E8%BF%87%E6%A1%A5%E6%97%B6%E5%9D%A0%E4%BA%A1&Refer=top"
       },
       {
-        "title": "郭德纲篡改抗战歌曲被顶格罚款超60万",
-        "desc": "郭德纲因篡改抗战歌曲被顶格处罚、罚款超60万的消息登上微博热搜，引发网友对经典作品严肃性的讨论",
+        "title": "阿维塔9系",
+        "desc": "",
         "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
+        "hot": "78万",
+        "link": "https://s.weibo.com/weibo?q=%E9%98%BF%E7%BB%B4%E5%A1%949%E7%B3%BB&Refer=top"
       },
       {
-        "title": "叶润泽淘汰后玩梗 要骑单车去锦州蹭烧烤",
-        "desc": "《披荆斩棘2026》叶润泽二公淘汰后直播玩梗，称要扫共享单车骑1800公里去张睿家蹭锦州烧烤，松弛不卖惨的兄弟情冲上热搜，衍生大量二创",
+        "title": "王戟说与其内耗不如放手去干",
+        "desc": "",
         "platform": "微博热搜",
-        "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
+        "hot": "70.2万",
+        "link": "https://s.weibo.com/weibo?q=%E7%8E%8B%E6%88%9F%E8%AF%B4%E4%B8%8E%E5%85%B6%E5%86%85%E8%80%97%E4%B8%8D%E5%A6%82%E6%94%BE%E6%89%8B%E5%8E%BB%E5%B9%B2&Refer=top"
       },
       {
-        "title": "金晨36岁直言着急恋爱 怒斥恋情传闻",
-        "desc": "金晨公开表示36岁希望找到稳定有担当的另一半，同时怒斥网传恋情全是捏造，宣布起诉造谣者：\"必须告黑，太猖狂了\"",
+        "title": "小米18Fold首发评测",
+        "desc": "",
         "platform": "微博热搜",
+        "hot": "70.2万",
+        "link": "https://s.weibo.com/weibo?q=%E5%B0%8F%E7%B1%B318Fold%E9%A6%96%E5%8F%91%E8%AF%84%E6%B5%8B&Refer=top"
+      },
+      {
+        "title": "4岁男童的手是碰还是摸不该情绪定罪",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "70.1万",
+        "link": "https://s.weibo.com/weibo?q=4%E5%B2%81%E7%94%B7%E7%AB%A5%E7%9A%84%E6%89%8B%E6%98%AF%E7%A2%B0%E8%BF%98%E6%98%AF%E6%91%B8%E4%B8%8D%E8%AF%A5%E6%83%85%E7%BB%AA%E5%AE%9A%E7%BD%AA&Refer=top"
+      },
+      {
+        "title": "霸王茶姬 茶叶蛋",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "67.2万",
+        "link": "https://s.weibo.com/weibo?q=%E9%9C%B8%E7%8E%8B%E8%8C%B6%E5%A7%AC%20%E8%8C%B6%E5%8F%B6%E8%9B%8B&Refer=top"
+      },
+      {
+        "title": "早春晴朗",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "45万",
+        "link": "https://s.weibo.com/weibo?q=%E6%97%A9%E6%98%A5%E6%99%B4%E6%9C%97&Refer=top"
+      },
+      {
+        "title": "丁禹兮和冠军来真的",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "44.8万",
+        "link": "https://s.weibo.com/weibo?q=%E4%B8%81%E7%A6%B9%E5%85%AE%E5%92%8C%E5%86%A0%E5%86%9B%E6%9D%A5%E7%9C%9F%E7%9A%84&Refer=top"
+      },
+      {
+        "title": "心动的信号9",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "43.5万",
+        "link": "https://s.weibo.com/weibo?q=%E5%BF%83%E5%8A%A8%E7%9A%84%E4%BF%A1%E5%8F%B79&Refer=top"
+      },
+      {
+        "title": "美网8强",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.7万",
+        "link": "https://s.weibo.com/weibo?q=%E7%BE%8E%E7%BD%918%E5%BC%BA&Refer=top"
+      },
+      {
+        "title": "檀健次为几秒戏份生吞七十包山楂粉",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.6万",
+        "link": "https://s.weibo.com/weibo?q=%E6%AA%80%E5%81%A5%E6%AC%A1%E4%B8%BA%E5%87%A0%E7%A7%92%E6%88%8F%E4%BB%BD%E7%94%9F%E5%90%9E%E4%B8%83%E5%8D%81%E5%8C%85%E5%B1%B1%E6%A5%82%E7%B2%89&Refer=top"
+      },
+      {
+        "title": "小米18Fold中折叠评测",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.6万",
+        "link": "https://s.weibo.com/weibo?q=%E5%B0%8F%E7%B1%B318Fold%E4%B8%AD%E6%8A%98%E5%8F%A0%E8%AF%84%E6%B5%8B&Refer=top"
+      },
+      {
+        "title": "4岁男童摸臀算性骚扰吗",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.5万",
+        "link": "https://s.weibo.com/weibo?q=4%E5%B2%81%E7%94%B7%E7%AB%A5%E6%91%B8%E8%87%80%E7%AE%97%E6%80%A7%E9%AA%9A%E6%89%B0%E5%90%97&Refer=top"
+      },
+      {
+        "title": "网红宣传捐款百万实际只捐1元",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.4万",
+        "link": "https://s.weibo.com/weibo?q=%E7%BD%91%E7%BA%A2%E5%AE%A3%E4%BC%A0%E6%8D%90%E6%AC%BE%E7%99%BE%E4%B8%87%E5%AE%9E%E9%99%85%E5%8F%AA%E6%8D%901%E5%85%83&Refer=top"
+      },
+      {
+        "title": "赵今麦风格大变",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "39.4万",
+        "link": "https://s.weibo.com/weibo?q=%E8%B5%B5%E4%BB%8A%E9%BA%A6%E9%A3%8E%E6%A0%BC%E5%A4%A7%E5%8F%98&Refer=top"
+      },
+      {
+        "title": "历史坐标里的“中埃时刻”",
+        "desc": "",
+        "platform": "百度热搜",
         "hot": "热",
-        "link": "https://s.weibo.com/top/summary"
+        "link": "https://m.baidu.com/s?word=%E5%8E%86%E5%8F%B2%E5%9D%90%E6%A0%87%E9%87%8C%E7%9A%84%E2%80%9C%E4%B8%AD%E5%9F%83%E6%97%B6%E5%88%BB%E2%80%9D&sa=fyb_news"
+      },
+      {
+        "title": "铜价“爆了”",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E9%93%9C%E4%BB%B7%E2%80%9C%E7%88%86%E4%BA%86%E2%80%9D&sa=fyb_news"
+      },
+      {
+        "title": "今年下半年最强冷空气来袭",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E4%BB%8A%E5%B9%B4%E4%B8%8B%E5%8D%8A%E5%B9%B4%E6%9C%80%E5%BC%BA%E5%86%B7%E7%A9%BA%E6%B0%94%E6%9D%A5%E8%A2%AD&sa=fyb_news"
+      },
+      {
+        "title": "数贸会一大批新技术新产品即将解锁",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E6%95%B0%E8%B4%B8%E4%BC%9A%E4%B8%80%E5%A4%A7%E6%89%B9%E6%96%B0%E6%8A%80%E6%9C%AF%E6%96%B0%E4%BA%A7%E5%93%81%E5%8D%B3%E5%B0%86%E8%A7%A3%E9%94%81&sa=fyb_news"
+      },
+      {
+        "title": "考研圈大地震！顶尖名校陆续停招学硕",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E8%80%83%E7%A0%94%E5%9C%88%E5%A4%A7%E5%9C%B0%E9%9C%87%EF%BC%81%E9%A1%B6%E5%B0%96%E5%90%8D%E6%A0%A1%E9%99%86%E7%BB%AD%E5%81%9C%E6%8B%9B%E5%AD%A6%E7%A1%95&sa=fyb_news"
+      },
+      {
+        "title": "郑钦文实现千万分之一概率事件",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E9%83%91%E9%92%A6%E6%96%87%E5%AE%9E%E7%8E%B0%E5%8D%83%E4%B8%87%E5%88%86%E4%B9%8B%E4%B8%80%E6%A6%82%E7%8E%87%E4%BA%8B%E4%BB%B6&sa=fyb_news"
+      },
+      {
+        "title": "陈佩斯朱时茂同框",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E9%99%88%E4%BD%A9%E6%96%AF%E6%9C%B1%E6%97%B6%E8%8C%82%E5%90%8C%E6%A1%86&sa=fyb_news"
+      },
+      {
+        "title": "郑钦文获470积分和78万美元奖金",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E9%83%91%E9%92%A6%E6%96%87%E8%8E%B7470%E7%A7%AF%E5%88%86%E5%92%8C78%E4%B8%87%E7%BE%8E%E5%85%83%E5%A5%96%E9%87%91&sa=fyb_news"
+      },
+      {
+        "title": "华为、小米、苹果对决“万元机”",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%8D%8E%E4%B8%BA%E3%80%81%E5%B0%8F%E7%B1%B3%E3%80%81%E8%8B%B9%E6%9E%9C%E5%AF%B9%E5%86%B3%E2%80%9C%E4%B8%87%E5%85%83%E6%9C%BA%E2%80%9D&sa=fyb_news"
+      },
+      {
+        "title": "杨洋 反正你也播不了",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E6%9D%A8%E6%B4%8B+%E5%8F%8D%E6%AD%A3%E4%BD%A0%E4%B9%9F%E6%92%AD%E4%B8%8D%E4%BA%86&sa=fyb_news"
+      },
+      {
+        "title": "男子看奶奶路上坠亡 9天后奶奶去世",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E7%94%B7%E5%AD%90%E7%9C%8B%E5%A5%B6%E5%A5%B6%E8%B7%AF%E4%B8%8A%E5%9D%A0%E4%BA%A1+9%E5%A4%A9%E5%90%8E%E5%A5%B6%E5%A5%B6%E5%8E%BB%E4%B8%96&sa=fyb_news"
+      },
+      {
+        "title": "网传新疆一加气站重度漏气系谣言",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E7%BD%91%E4%BC%A0%E6%96%B0%E7%96%86%E4%B8%80%E5%8A%A0%E6%B0%94%E7%AB%99%E9%87%8D%E5%BA%A6%E6%BC%8F%E6%B0%94%E7%B3%BB%E8%B0%A3%E8%A8%80&sa=fyb_news"
+      },
+      {
+        "title": "网红宣称捐款百万实际只捐1元",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E7%BD%91%E7%BA%A2%E5%AE%A3%E7%A7%B0%E6%8D%90%E6%AC%BE%E7%99%BE%E4%B8%87%E5%AE%9E%E9%99%85%E5%8F%AA%E6%8D%901%E5%85%83&sa=fyb_news"
+      },
+      {
+        "title": "冯小刚《抓特务》口碑逆袭",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%86%AF%E5%B0%8F%E5%88%9A%E3%80%8A%E6%8A%93%E7%89%B9%E5%8A%A1%E3%80%8B%E5%8F%A3%E7%A2%91%E9%80%86%E8%A2%AD&sa=fyb_news"
+      },
+      {
+        "title": "赵一鸣致歉 承诺称错赔十倍",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E8%B5%B5%E4%B8%80%E9%B8%A3%E8%87%B4%E6%AD%89+%E6%89%BF%E8%AF%BA%E7%A7%B0%E9%94%99%E8%B5%94%E5%8D%81%E5%80%8D&sa=fyb_news"
+      },
+      {
+        "title": "复盘郑钦文让5追7前世界第一",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%A4%8D%E7%9B%98%E9%83%91%E9%92%A6%E6%96%87%E8%AE%A95%E8%BF%BD7%E5%89%8D%E4%B8%96%E7%95%8C%E7%AC%AC%E4%B8%80"
+      },
+      {
+        "title": "NIP官宣Hoya离队",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=NIP%E5%AE%98%E5%AE%A3Hoya%E7%A6%BB%E9%98%9F"
+      },
+      {
+        "title": "为何美国反对修改世界地图",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E4%B8%BA%E4%BD%95%E7%BE%8E%E5%9B%BD%E5%8F%8D%E5%AF%B9%E4%BF%AE%E6%94%B9%E4%B8%96%E7%95%8C%E5%9C%B0%E5%9B%BE"
+      },
+      {
+        "title": "中国女篮大胜意大利全场集锦",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E4%B8%AD%E5%9B%BD%E5%A5%B3%E7%AF%AE%E5%A4%A7%E8%83%9C%E6%84%8F%E5%A4%A7%E5%88%A9%E5%85%A8%E5%9C%BA%E9%9B%86%E9%94%A6"
+      },
+      {
+        "title": "百日成王",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "百日成王龙傲没有天",
+        "link": "https://search.bilibili.com/all?keyword=%E7%99%BE%E6%97%A5%E6%88%90%E7%8E%8B"
+      },
+      {
+        "title": "郑钦文确认参赛中网",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E9%83%91%E9%92%A6%E6%96%87%E7%A1%AE%E8%AE%A4%E5%8F%82%E8%B5%9B%E4%B8%AD%E7%BD%91"
+      },
+      {
+        "title": "小学生开学第一课",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%B0%8F%E5%AD%A6%E7%94%9F%E5%BC%80%E5%AD%A6%E7%AC%AC%E4%B8%80%E8%AF%BE"
+      },
+      {
+        "title": "一饭封神大厨同款脆皮叉烧",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E4%B8%80%E9%A5%AD%E5%B0%81%E7%A5%9E%E5%A4%A7%E5%8E%A8%E5%90%8C%E6%AC%BE%E8%84%86%E7%9A%AE%E5%8F%89%E7%83%A7"
+      },
+      {
+        "title": "中国女篮世界杯大胜意大利",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E4%B8%AD%E5%9B%BD%E5%A5%B3%E7%AF%AE%E4%B8%96%E7%95%8C%E6%9D%AF%E5%A4%A7%E8%83%9C%E6%84%8F%E5%A4%A7%E5%88%A9"
+      },
+      {
+        "title": "北方这波降温有多猛",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "热",
+        "link": "https://search.bilibili.com/all?keyword=%E5%8C%97%E6%96%B9%E8%BF%99%E6%B3%A2%E9%99%8D%E6%B8%A9%E6%9C%89%E5%A4%9A%E7%8C%9B"
       },
       {
         "title": "国家反诈AI App正式上线",
@@ -48,18 +300,25 @@
         "link": "https://top.baidu.com/board"
       },
       {
-        "title": "中美恢复战区层级对话",
-        "desc": "解放军东部战区司令员与美军太平洋司令部司令首次面对面会晤，标志中美两军在东海、台海方向恢复战区层级直接沟通并着手建立新机制",
-        "platform": "腾讯热点",
-        "hot": "热",
-        "link": "https://news.qq.com/"
-      },
-      {
         "title": "长鑫科技LPDDR6量产 小米18 Fold首发",
         "desc": "长鑫科技确认LPDDR6由小米18 Fold首发搭载、9月面世，为全球首次落地商用；公司上半年营收1503亿元同比增873%，将适时启动分红论证",
         "platform": "百度热点",
         "hot": "热",
         "link": "https://top.baidu.com/board"
+      },
+      {
+        "title": "中国女篮力克捷克 掌握出线主动权",
+        "desc": "关键赛事中国女篮全员在线、攻防兼备战胜捷克队，稳稳拿下赛事出线主动权，网友为女篮拼搏精神点赞刷屏",
+        "platform": "百度热点",
+        "hot": "热",
+        "link": "https://top.baidu.com/board"
+      },
+      {
+        "title": "中美恢复战区层级对话",
+        "desc": "解放军东部战区司令员与美军太平洋司令部司令首次面对面会晤，标志中美两军在东海、台海方向恢复战区层级直接沟通并着手建立新机制",
+        "platform": "腾讯热点",
+        "hot": "热",
+        "link": "https://news.qq.com/"
       },
       {
         "title": "汕头通报潮阳化妆品制假售假",
@@ -74,13 +333,6 @@
         "platform": "抖音热榜",
         "hot": "热",
         "link": "https://www.douyin.com/hot"
-      },
-      {
-        "title": "中国女篮力克捷克 掌握出线主动权",
-        "desc": "关键赛事中国女篮全员在线、攻防兼备战胜捷克队，稳稳拿下赛事出线主动权，网友为女篮拼搏精神点赞刷屏",
-        "platform": "百度热点",
-        "hot": "热",
-        "link": "https://top.baidu.com/board"
       },
       {
         "title": "离婚逆袭短剧B站走红",
