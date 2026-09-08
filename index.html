@@ -417,18 +417,6 @@
         body.dark-mode .niko-update-tip b { color: #34d399; }
         .niko-update-tip.show { display: flex; }
         .niko-update-tip:active { transform: scale(0.97); }
-        /* 常显微型版本戳（2026-09-08 用户要求：一眼对出版本，不再一头雾水）。
-           9px 半透明角标，不遮挡任何内容；点击 = 手动检测更新 */
-        .niko-ver-stamp {
-            position: fixed; left: 8px; bottom: 10px; z-index: 690;
-            font-size: 9px; line-height: 1; color: #9ca3af; opacity: .45;
-            cursor: pointer; user-select: none; padding: 3px 5px; border-radius: 8px;
-        }
-        .niko-ver-stamp:hover { opacity: .85; }
-        .niko-ver-stamp:active { opacity: 1; }
-        body.dark-mode .niko-ver-stamp { color: #6b7280; }
-        .niko-ver-stamp.stale { opacity: .95; color: #f59e0b; font-weight: 700; } /* 有新版时亮橙提示 */
-        @media (max-width: 768px) { .niko-ver-stamp { bottom: 60px; } } /* 手机避开 56px 底部 Tab 栏 */
         /* 手机端底部快捷 Tab 栏（替代繁琐的侧边栏滚动） */
         .niko-mobile-tabbar {
             display: none;
@@ -2059,6 +2047,12 @@
         .gs-fly { position:absolute; width:3px; height:3px; border-radius:50%; background:#ffe9a3; box-shadow:0 0 6px 2px rgba(255,233,163,.55); animation:gsFly ease-in-out infinite alternate; }
         @keyframes gsFall { 0% { transform:translate(0,0) rotate(0deg); opacity:0; } 8% { opacity:.85; } 85% { opacity:.6; } 100% { transform:translate(var(--sw,24px),190px) rotate(300deg); opacity:0; } }
         @keyframes gsFly { from { transform:translate(0,0); opacity:.5; } to { transform:translate(26px,-14px); opacity:1; } }
+        /* ===== 今日风物：SVG 粒子（12 主题每日轮换） ===== */
+        .gs-fx { position:absolute; top:-16px; display:block; animation-name:gsFall; animation-timing-function:linear; animation-iteration-count:infinite; opacity:.85; will-change:transform; pointer-events:none; }
+        .gs-fx svg { display:block; width:100%; height:100%; filter:drop-shadow(0 1px 2px rgba(0,0,0,.15)); }
+        @keyframes gsDrift { 0% { transform:translate(0,0) rotate(0deg); opacity:0; } 10% { opacity:.9; } 50% { transform:translate(var(--sw,36px),95px) rotate(150deg); opacity:.75; } 88% { opacity:.5; } 100% { transform:translate(calc(var(--sw,36px) * -.55),190px) rotate(300deg); opacity:0; } }
+        .garden-feed-chip.fx-previewing { background:rgba(251,191,36,.22); color:#b45309; }
+        body.dark-mode .garden-feed-chip.fx-previewing { background:rgba(251,191,36,.28); color:#fcd34d; }
         .garden-term { font-size:10.5px; color:#8a8fa8; white-space:nowrap; }
         body.dark-mode .garden-term { color:#9aa0bd; }
         .garden-feed-chip { font-size:10.5px; padding:2px 9px; border-radius:10px; cursor:pointer; background:rgba(99,102,241,.12); color:#667eea; white-space:nowrap; }
@@ -4977,18 +4971,6 @@
             }
             /* 日历滚动区最小高度，避免 1080p/手机端被底部副本完全挤掉 */
             #planPage .calendar-scroll-pane { min-height: 180px !important; }
-            /* ===== 2026-09-08 用户点名：表头再紧凑，给任务条让出更多位置 ===== */
-            #planPage .top-title h1 { font-size: 15px !important; }
-            /* 番茄林地手机端收起（装饰性占用一整行，桌面保留） */
-            #planPage .plan-focus-strip { display: none !important; }
-            #planPage .legend { margin-top: 0 !important; }
-            #planPage .top-bar { padding: 5px 10px !important; }
-            /* 收起态：标题行与 ⚙️+视图切换尽量并成一行（390px 放得下，放不下自然换行） */
-            #planPage:not(.tools-open) .top-bar { flex-wrap: nowrap; }
-            #planPage:not(.tools-open) .top-bar > div:nth-child(2) { width: auto !important; flex: 0 0 auto; min-width: 0; margin-right: 64px; } /* 预留右上角全局图标位，防甘特图被遮 */
-            #planPage:not(.tools-open) .top-title { flex: 1 1 auto; min-width: 0; }
-            #planPage .date-nav-bar { padding: 4px 10px !important; gap: 4px !important; }
-            #planPage .date-nav-bar .today-btn { padding: 2px 7px !important; }
             /* 长任务名不再截断：手机端日历任务条折两行显示（2026-09-07） */
             #planPage .ev-title-main {
                 white-space: normal !important;
@@ -8745,26 +8727,6 @@
             #knowledgePage .kb-para-tabs { flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
             #knowledgePage .kb-para-tab { flex-shrink: 0; padding: 7px 11px; font-size: 12px; }
             #knowledgePage .kb-para-tab span { display: none; }
-            /* ===== 2026-09-08 用户点名：工具按钮再紧凑 + 默认紧凑双列瀑布（参考便签模式） ===== */
-            #knowledgePage .kb-actions .btn { padding: 5px 9px !important; min-height: 32px !important; font-size: 12px !important; }
-            #knowledgePage #kbToolsToggle { min-width: 32px !important; min-height: 32px !important; padding: 3px 8px !important; }
-            #knowledgePage #kbViewBtn { display: inline-flex !important; align-items: center; min-height: 32px !important; }
-            /* 紧凑双列瀑布：CSS columns，卡片自适应高度错落排布，一屏看更多条目 */
-            #knowledgePage.kb-view-fall .kb-list { display: block !important; column-count: 2; column-gap: 8px; overflow-y: visible !important; padding: 0 !important; }
-            #knowledgePage.kb-view-fall .kb-card { display: inline-flex !important; width: 100%; break-inside: avoid; margin-bottom: 8px; padding: 14px 10px 6px !important; border-radius: 12px; }
-            #knowledgePage.kb-view-fall .kb-card::before { height: 38px; }
-            #knowledgePage.kb-view-fall .kb-ribbon { left: 9px; width: 10px; height: 15px; }
-            #knowledgePage.kb-view-fall .kb-card-top { gap: 4px; }
-            #knowledgePage.kb-view-fall .kb-badge { font-size: 10px !important; padding: 1px 6px; }
-            #knowledgePage.kb-view-fall .kb-card-title { font-size: 12.5px !important; margin-top: 5px; line-height: 1.35; }
-            #knowledgePage.kb-view-fall .kb-card-body { font-size: 11px !important; line-height: 1.5; margin-top: 3px; -webkit-line-clamp: 2; }
-            #knowledgePage.kb-view-fall .kb-card.kb-quote .kb-card-body { font-size: 11px !important; line-height: 1.5; padding-left: 8px; }
-            #knowledgePage.kb-view-fall .kb-card-foot { margin-top: 5px; padding-top: 4px; flex-direction: column; align-items: flex-start; gap: 3px; } /* 窄列防日期被裁切：标签/日期上下排 */
-            #knowledgePage.kb-view-fall .kb-card-foot .kb-card-tags { gap: 4px; }
-            #knowledgePage.kb-view-fall .kb-tag { font-size: 10px; padding: 1px 6px; }
-            #knowledgePage.kb-view-fall .kb-card-date { font-size: 10px; gap: 5px; }
-            #knowledgePage.kb-view-fall .kb-card-actions { top: 6px; right: 8px; gap: 3px; }
-            #knowledgePage.kb-view-fall .kb-icon-btn { min-width: 32px; min-height: 32px; padding: 2px 5px; font-size: 11px; } /* 误触治理：热区≥32px */
         }
         /* 极窄屏（≤375px）进一步压缩 */
         @media (max-width:380px) {
@@ -9997,16 +9959,12 @@ body.dark-mode .sync-indicator-sub { color: #555; }
             /* 游玩日历紧凑 */
             .gt-card { padding: 12px 12px; border-radius: 12px; }
             .gt-card-title { font-size: 13px; }
-            /* 2026-09-08 用户点名：页头已有同样的说明，卡内重复文案手机端隐藏 */
-            .gt-cal-desc { display: none !important; }
-            /* 2026-09-08 用户点名：记录按钮组更紧凑（输入保持 16px 字号防 iOS 缩放） */
-            .gt-play-input { gap: 5px; }
-            .gt-play-input input { min-height: 34px !important; padding: 4px 8px; font-size: 16px !important; }
-            .gt-play-input button { min-height: 34px !important; padding: 5px 10px !important; font-size: 12px !important; }
-            .gt-play-stats { grid-template-columns: repeat(4, 1fr); gap: 5px; }
-            .gt-play-stat { padding: 6px 7px; }
-            .gt-play-stat-label { font-size: 10px; }
-            .gt-play-stat-val { font-size: 12.5px; }
+            .gt-play-input { gap: 6px; }
+            .gt-play-input input { min-height: 40px; font-size: 16px !important; }
+            .gt-play-input button { min-height: 40px; padding: 8px 12px; font-size: 12.5px; }
+            .gt-play-stats { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            .gt-play-stat { padding: 7px 10px; }
+            .gt-play-stat-val { font-size: 14px; }
 
             /* 日历格子更紧凑 */
             .gt-calendar { gap: 3px; padding: 8px 6px; border-radius: 10px; }
@@ -10872,6 +10830,7 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                         <span class="today-sec-title">🌱 六树庭院</span>
                         <span class="sec-badge" id="gardenWateredBadge">今日 0/6</span>
                         <span class="garden-term" id="gardenTerm"></span>
+                        <span class="garden-feed-chip" id="gardenFxChip" onclick="gardenFxPreviewCycle()" title="今日风物：粒子每天换一种。点一下可以先预览下一款，8 秒后自动回到今天"></span>
                         <span class="today-sec-sub">六个三十秒的小仪式 · 花开于九十</span>
                         <span class="garden-feed-chip" onclick="gardenOpenFeed()" title="把柱子交给习惯：打卡当天自动浇灌">🫗 投喂</span>
                         <span class="garden-feed-chip garden-preview-chip" id="gardenPreviewChip" onclick="gardenTogglePreview()" title="看看六树全部满开（100 分）时庭院的样子——那就是它们最终的美">🌸 满开</span>
@@ -11911,7 +11870,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                     <button class="btn kb-extra" onclick="exportKnowledgeJson()" title="完整 JSON 备份">💾 导出 JSON</button>
                     <button class="btn kb-extra" onclick="exportKnowledgeMd()" title="按 PARA 目录导出 Markdown 文件（可迁移到 Obsidian）">📄 导出 Markdown</button>
                     <button class="btn primary" onclick="openKbEdit(null)">＋ 新增</button>
-                    <button class="btn" id="kbViewBtn" onclick="kbToggleView()" title="手机端卡片视图：紧凑双列瀑布 / 舒适单列" style="display:none;">▦ 瀑布</button>
                 </div>
             </div>
             <div class="kb-para-tabs" id="kbParaTabs"></div>
@@ -12392,8 +12350,8 @@ body.dark-mode .sync-indicator-sub { color: #555; }
                 <div class="gt-card" style="margin-top:2px;">
                     <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                         🎮 游玩日历
-                        <span class="gt-cal-desc">记录每天实际游玩时长，自动汇总每周进度</span>
-                        <span class="gt-cal-desc" style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
+                        <span>记录每天实际游玩时长，自动汇总每周进度</span>
+                        <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
                     </div>
                     <div class="gt-forest-strip" title="番茄林地：每完成一个番茄钟种一棵树，树的高度 = 该次专注时长">
                         <span class="gt-forest-cap" style="margin-left:0;">🌲 番茄林地</span>
@@ -12629,8 +12587,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </button>
         <button class="niko-float-more" onclick="toggleNavMore(event)" aria-label="更多">⋮</button>
     </div>
-    <!-- 常显微型版本戳：一眼对版本，点击手动检测更新（2026-09-08 用户要求） -->
-    <div class="niko-ver-stamp" id="nikoVerStamp" onclick="nikoManualVerCheck()">v—</div>
     <!-- 新版本提示气泡（发现新版本时显示，点击立即更新） -->
     <div class="niko-update-tip" id="nikoUpdateTip" onclick="nikoApplyUpdate()">
         <span class="dot"></span>
@@ -12650,9 +12606,6 @@ body.dark-mode .sync-indicator-sub { color: #555; }
         </div>
         <div class="niko-sync-popover-row">
             <span>推送/拉取</span><span id="nikoSyncPopoverN">0 / 0</span>
-        </div>
-        <div class="niko-sync-popover-row" onclick="nikoManualVerCheck()" style="cursor:pointer;" title="点一下立即检测是否最新版">
-            <span>版本 <span style="font-size:9px;opacity:.55;">点检</span></span><span id="nikoSyncPopoverVer">—</span>
         </div>
         <div class="niko-sync-popover-actions">
             <button class="btn" onclick="hideSyncPopover();toggleNavMore()">📋 更多</button>
@@ -14799,14 +14752,87 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             winter: { cls:'winter', icon:'❄️', words:'雪来之前，先把自己照顾好' }
         };
         let gardenSeasonNow = seasonOfTerm(solarTermOf(new Date())[0]);
-        function gardenSeasonParticles(season) {
+        // ===== 今日风物（2026-09-08）：12 种粒子主题按日期轮换，每天推门进来都不一样 =====
+        const GARDEN_FX = [
+            { id:'sakura', name:'樱花', icon:'🌸', count:10, anim:'gsFall', dur:[11,18], sway:[14,32], size:[9,13],
+              pal:['#f9a8d4','#fbcfe8','#f472b6'],
+              svg:s=>`<path d="M6 11 C3 8.5 1.4 6 2.2 3.3 C2.7 1.6 4.2 .9 6 1.6 C7.8 .9 9.3 1.6 9.8 3.3 C10.6 6 9 8.5 6 11 Z" fill="${s}"/><path d="M4.7 2.7 L6 4.1 L7.3 2.7" stroke="#fff" stroke-width=".9" fill="none" opacity=".65" stroke-linecap="round"/>` },
+            { id:'rose', name:'玫瑰', icon:'🌹', count:8, anim:'gsFall', dur:[12,19], sway:[12,26], size:[10,14],
+              pal:['#f43f5e','#fb7185','#e11d48'],
+              svg:s=>`<path d="M6 11 C3.4 9 .9 6.4 1.8 3.6 C2.5 1.6 4.6 1 6 1.8 C7.4 1 9.5 1.6 10.2 3.6 C11.1 6.4 8.6 9 6 11 Z" fill="${s}"/><path d="M6 8.4 C4.9 7.8 4.4 6.7 4.8 5.6 C5.2 4.7 6.5 4.5 7.1 5.3 C7.6 6 7.3 6.9 6.5 7.1" stroke="rgba(120,10,35,.55)" stroke-width=".8" fill="none" stroke-linecap="round"/>` },
+            { id:'maple', name:'枫叶', icon:'🍁', count:10, anim:'gsFall', dur:[10,17], sway:[16,34], size:[10,14],
+              pal:['#ff7e45','#f97316','#fb923c','#ea580c'],
+              svg:s=>`<path d="M6 .9 L7 3.1 L9.5 2 L8.8 4.7 L11.3 5.7 L8.6 6.7 L9.6 9.5 L6.7 8.3 L6 11.2 L5.3 8.3 L2.4 9.5 L3.4 6.7 L.7 5.7 L3.2 4.7 L2.5 2 L5 3.1 Z" fill="${s}"/>` },
+            { id:'ginkgo', name:'银杏', icon:'🍂', count:12, anim:'gsFall', dur:[11,18], sway:[14,30], size:[9,13],
+              pal:['#fbbf24','#fcd34d','#f59e0b'],
+              svg:s=>`<path d="M6 10.6 L2.4 5.4 C1.9 3.1 3.7 1.2 6 1.2 C8.3 1.2 10.1 3.1 9.6 5.4 Z" fill="${s}"/><path d="M6 9.8 L6 4.6" stroke="rgba(120,53,15,.4)" stroke-width=".8"/><path d="M6 10.6 L6 11.6" stroke="${s}" stroke-width=".9" stroke-linecap="round"/>` },
+            { id:'bamboo', name:'竹叶', icon:'🎋', count:8, anim:'gsFall', dur:[9,15], sway:[18,36], size:[10,14],
+              pal:['#4ade80','#34d399','#86efac'],
+              svg:s=>`<path d="M1.8 10.6 C3.6 6.4 6.6 3.4 10.6 1.4 C9.4 5.4 6.6 8.8 2.6 10.9 Z" fill="${s}"/><path d="M3.2 10 C5 7.4 7.2 5 9.6 2.8" stroke="rgba(6,78,59,.35)" stroke-width=".7" fill="none"/>` },
+            { id:'dandelion', name:'蒲公英', icon:'🌼', count:7, anim:'gsDrift', dur:[14,22], sway:[26,48], size:[11,15],
+              pal:['#e8edf7','#f8fafc','#dbe4f3'],
+              svg:s=>`<g stroke="${s}" stroke-width=".75" fill="${s}" stroke-linecap="round"><path d="M6 7.2 L6 11.6" fill="none"/><path d="M6 7 L6 1.8 M6 7 L2 3.2 M6 7 L10 3.2 M6 7 L2.8 6.2 M6 7 L9.2 6.2" fill="none"/><circle cx="6" cy="1.5" r=".75" stroke="none"/><circle cx="1.8" cy="3" r=".75" stroke="none"/><circle cx="10.2" cy="3" r=".75" stroke="none"/><circle cx="2.6" cy="6.3" r=".75" stroke="none"/><circle cx="9.4" cy="6.3" r=".75" stroke="none"/><circle cx="6" cy="7" r=".9" stroke="none"/></g>` },
+            { id:'plum', name:'梅花', icon:'🌺', count:9, anim:'gsFall', dur:[12,20], sway:[10,24], size:[9,12],
+              pal:['#e11d48','#f43f5e','#be123c'],
+              svg:s=>`<g fill="${s}"><circle cx="6" cy="3.4" r="1.8"/><circle cx="8.3" cy="5" r="1.8"/><circle cx="7.4" cy="7.6" r="1.8"/><circle cx="4.6" cy="7.6" r="1.8"/><circle cx="3.7" cy="5" r="1.8"/></g><circle cx="6" cy="5.5" r="1" fill="#fbbf24"/>` },
+            { id:'peach', name:'桃花', icon:'🍑', count:9, anim:'gsFall', dur:[12,19], sway:[12,28], size:[9,13],
+              pal:['#fda4af','#f9a8d4','#fecdd3'],
+              svg:s=>`<g fill="${s}"><circle cx="6" cy="3.6" r="2"/><circle cx="8.4" cy="5.4" r="2"/><circle cx="7.5" cy="8" r="2"/><circle cx="4.5" cy="8" r="2"/><circle cx="3.6" cy="5.4" r="2"/></g><circle cx="6" cy="5.8" r="1.1" fill="#fde68a"/>` },
+            { id:'osmanthus', name:'桂花', icon:'✨', count:16, anim:'gsFall', dur:[9,16], sway:[10,22], size:[7,10],
+              pal:['#fcd34d','#fbbf24','#f59e0b'],
+              svg:s=>`<g fill="${s}"><circle cx="4.4" cy="4.2" r="1.5"/><circle cx="7.8" cy="3.6" r="1.2"/><circle cx="6.2" cy="6.6" r="1.3"/><circle cx="8.8" cy="7.4" r="1"/><circle cx="3.4" cy="7.6" r="1"/></g>` },
+            { id:'snow', name:'初雪', icon:'❄️', count:13, anim:'gsFall', dur:[10,18], sway:[6,16], size:[4,6], plain:true },
+            { id:'firefly', name:'流萤', icon:'🌟', count:4, anim:'gsFly', float:true },
+            { id:'stardust', name:'星屑', icon:'💫', count:10, anim:'gsFall', dur:[10,17], sway:[12,28], size:[8,12],
+              pal:['#a78bfa','#c4b5fd','#818cf8'],
+              svg:s=>`<path d="M6 .6 L7.1 4.9 L11.4 6 L7.1 7.1 L6 11.4 L4.9 7.1 L.6 6 L4.9 4.9 Z" fill="${s}"/><circle cx="6" cy="6" r=".8" fill="#fff" opacity=".85"/>` }
+        ];
+        function gardenFxOfDate(dt) {
+            const start = new Date(dt.getFullYear(), 0, 0);
+            const doy = Math.floor((dt - start) / 864e5);
+            return GARDEN_FX[doy % GARDEN_FX.length];
+        }
+        function gardenFxParticles(fx) {
             let s = '';
             const rnd = () => Math.random();
-            if (season === 'spring') for (let i = 0; i < 9; i++) s += `<i class="gs-petal" style="left:${(rnd()*94+3).toFixed(1)}%;animation-delay:-${(rnd()*14).toFixed(1)}s;animation-duration:${(12+rnd()*7).toFixed(1)}s;"></i>`;
-            if (season === 'autumn') for (let i = 0; i < 11; i++) s += `<i class="gs-leaf" style="left:${(rnd()*94+3).toFixed(1)}%;animation-delay:-${(rnd()*14).toFixed(1)}s;animation-duration:${(11+rnd()*7).toFixed(1)}s;"></i>`;
-            if (season === 'winter') for (let i = 0; i < 13; i++) s += `<i class="gs-snow" style="left:${(rnd()*96+2).toFixed(1)}%;animation-delay:-${(rnd()*16).toFixed(1)}s;animation-duration:${(10+rnd()*8).toFixed(1)}s;"></i>`;
-            if (season === 'summer') for (let i = 0; i < 3; i++) s += `<i class="gs-fly" style="top:${(22+rnd()*46).toFixed(0)}%;left:${(rnd()*78+10).toFixed(0)}%;animation-delay:-${(rnd()*9).toFixed(1)}s;animation-duration:${(5+rnd()*4).toFixed(1)}s;"></i>`;
+            for (let i = 0; i < fx.count; i++) {
+                if (fx.float) {
+                    s += `<i class="gs-fly" style="top:${(22+rnd()*46).toFixed(0)}%;left:${(rnd()*78+10).toFixed(0)}%;animation-delay:-${(rnd()*9).toFixed(1)}s;animation-duration:${(5+rnd()*4).toFixed(1)}s;"></i>`;
+                } else if (fx.plain) {
+                    s += `<i class="gs-snow" style="left:${(rnd()*96+2).toFixed(1)}%;animation-delay:-${(rnd()*16).toFixed(1)}s;animation-duration:${(10+rnd()*8).toFixed(1)}s;"></i>`;
+                } else {
+                    const size = fx.size[0] + rnd()*(fx.size[1]-fx.size[0]);
+                    const c = fx.pal[Math.floor(rnd()*fx.pal.length)];
+                    const flip = rnd() > .5 ? ' style="transform:scaleX(-1)"' : '';
+                    s += `<i class="gs-fx" style="left:${(rnd()*94+3).toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;animation-name:${fx.anim};animation-delay:-${(rnd()*18).toFixed(1)}s;animation-duration:${(fx.dur[0]+rnd()*(fx.dur[1]-fx.dur[0])).toFixed(1)}s;--sw:${(fx.sway[0]+rnd()*(fx.sway[1]-fx.sway[0])).toFixed(0)}px"><svg viewBox="0 0 12 12"${flip}>${fx.svg(c)}</svg></i>`;
+                }
+            }
             return s;
+        }
+        let gardenFxPreviewId = null, gardenFxPreviewTimer = null;
+        function gardenFxActive() {
+            return (gardenFxPreviewId && GARDEN_FX.find(f => f.id === gardenFxPreviewId)) || gardenFxOfDate(new Date());
+        }
+        function gardenFxApply() {
+            const fx = gardenFxActive();
+            const chip = document.getElementById('gardenFxChip');
+            if (chip) {
+                chip.textContent = `${fx.icon} ${gardenFxPreviewId ? '预览' : '今日风物'} · ${fx.name}`;
+                chip.classList.toggle('fx-previewing', !!gardenFxPreviewId);
+            }
+            const strip = document.getElementById('gardenStrip');
+            if (!strip) return;
+            let layer = strip.querySelector('.garden-season-layer');
+            if (!layer) { layer = document.createElement('div'); layer.className = 'garden-season-layer'; strip.appendChild(layer); }
+            if (layer.dataset.fx !== fx.id) { layer.dataset.fx = fx.id; layer.innerHTML = gardenFxParticles(fx); }
+        }
+        function gardenFxPreviewCycle() {
+            const todayIdx = GARDEN_FX.indexOf(gardenFxOfDate(new Date()));
+            const curIdx = gardenFxPreviewId ? GARDEN_FX.findIndex(f => f.id === gardenFxPreviewId) : todayIdx;
+            gardenFxPreviewId = GARDEN_FX[(curIdx + 1) % GARDEN_FX.length].id;
+            gardenFxApply();
+            clearTimeout(gardenFxPreviewTimer);
+            gardenFxPreviewTimer = setTimeout(() => { gardenFxPreviewId = null; gardenFxApply(); }, 8000);
         }
         // ===== 树语：每棵树每天说一句话（按日期确定性选句，像它记得你） =====
         const TREE_WORDS = {
@@ -14907,18 +14933,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!wrap) return;
             const st = gardenNormalize(gardenState());
             const today = todayYmd();
-            // 四季换装：节气 chip + 粒子层 + 树景色调
+            // 四季换装：节气 chip + 树景色调；粒子层走「今日风物」每日轮换
             const term = solarTermOf(new Date());
             const season = GARDEN_SEASONS[seasonOfTerm(term[0])];
             gardenSeasonNow = seasonOfTerm(term[0]);
             const termEl = document.getElementById('gardenTerm');
             if (termEl) termEl.textContent = `${season.icon} ${term[0]} · ${season.words}`;
-            const strip = document.getElementById('gardenStrip');
-            if (strip) {
-                let layer = strip.querySelector('.garden-season-layer');
-                if (!layer) { layer = document.createElement('div'); layer.className = 'garden-season-layer'; strip.appendChild(layer); }
-                if (layer.dataset.season !== season.cls) { layer.dataset.season = season.cls; layer.innerHTML = gardenSeasonParticles(season.cls); }
-            }
+            gardenFxApply();
             wrap.innerHTML = GARDEN_PILLARS.map(p => {
                 const sc = st.score[p.key] || 0;
                 const done = st.watered[p.key] === today;
@@ -18574,8 +18595,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast('✅ 灵感已转为正式任务');
             }
 
-            // 2026-09-08 用户明确：计划任务一律不自动写入知识库（原「任务变 done 存入 02-Areas」逻辑已移除）。
-            // 知识库 renderKnowledgePage 另有 from=计划看板 的存量清理，双保险。
+            // 阶段二：任务变 done 时，同步存入知识库 02-Areas（项目轨迹/复盘入口）
+            if (baseEvent.status === 'done') {
+                const projName = (() => {
+                    const p = (typeof projects !== 'undefined') && projects.find(x => x.id === baseEvent.projectId);
+                    return p ? p.name : '';
+                })();
+                upsertKnowledge('任务 ' + baseEvent.title, '计划看板', {
+                    body: (projName ? '【项目】' + projName + '\n' : '') +
+                          (baseEvent.desc ? baseEvent.desc + '\n' : '') +
+                          '时间：' + baseEvent.startDate + (baseEvent.endDate && baseEvent.endDate !== baseEvent.startDate ? ' ~ ' + baseEvent.endDate : '') +
+                          (baseEvent.startTime ? ' ' + baseEvent.startTime : '') +
+                          (baseEvent.priority && baseEvent.priority !== 'normal' ? '\n优先级：' + baseEvent.priority : ''),
+                    para: '02-Areas',
+                    category: '工作',
+                    tags: ['计划', projName || '未分类'].filter(Boolean),
+                    date: baseEvent.endDate || baseEvent.startDate,
+                    dedup: true
+                });
+            }
         }
 
         function generateRepeatInstances(baseEvent) {
@@ -22903,33 +22941,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             safeStorage.set('niko_knowledge_seeded', true);
         }
 
-        // ===== 手机端卡片视图：紧凑双列瀑布 / 舒适单列（2026-09-08 用户点名默认紧凑双列，参考便签） =====
-        let kbView = safeStorage.get('niko_kb_view', 'fall');
-        function kbApplyView() {
-            const p = document.getElementById('knowledgePage');
-            if (!p) return;
-            p.classList.toggle('kb-view-fall', kbView === 'fall');
-            const b = document.getElementById('kbViewBtn');
-            if (b) b.textContent = kbView === 'fall' ? '▦ 瀑布' : '▤ 单列';
-        }
-        function kbToggleView() {
-            kbView = kbView === 'fall' ? 'single' : 'fall';
-            safeStorage.set('niko_kb_view', kbView);
-            kbApplyView();
-        }
-
         function renderKnowledgePage() {
             // 铁律：渲染前重读 localStorage（云同步数据可见 + 防覆盖）
             knowledge = safeStorage.get(KB_STORE, []);
             if (!knowledge.length && !safeStorage.get('niko_knowledge_seeded', false)) seedKnowledge();
-            // 清理（2026-09-08 用户明确：计划任务不进知识库）：无条件过滤 from=计划看板 的误入条目，
-            // 不设一次性开关——云同步旧快照若把它们带回来，下次渲染照样清掉
-            const _planJunk = knowledge.filter(it => it.source && it.source.from === '计划看板');
-            if (_planJunk.length) {
-                knowledge = knowledge.filter(it => !(it.source && it.source.from === '计划看板'));
-                safeStorage.set(KB_STORE, knowledge);
-            }
-            kbApplyView();
             renderKbHero();
             renderKbParaTabs();
             renderKbCats();
@@ -30646,7 +30661,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609081502";
+        window.NIKO_VERSION = "202609081941";
         function nikoApplyUpdate() {
             var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
             if (v && location.pathname) {
@@ -30689,61 +30704,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }, 2500); // 等首屏渲染完再检测，不抢加载带宽
             } catch (e) {}
         })();
-
-        // ===== 常显版本戳 + 手动检测（2026-09-08 用户要求：不再"是不是最新版"一头雾水） =====
-        // 202609081456 → 09.08 14:56（构建时间即版本，与我汇报的版本号可直接对照）
-        function nikoFmtVer(v) {
-            if (!v || v.indexOf('__NIKO') === 0) return 'dev';
-            if (/^\d{12}$/.test(v)) return v.slice(4, 6) + '.' + v.slice(6, 8) + ' ' + v.slice(8, 10) + ':' + v.slice(10, 12);
-            return v;
-        }
-        function nikoFillVer() {
-            var s = 'v' + nikoFmtVer(window.NIKO_VERSION);
-            var stamp = document.getElementById('nikoVerStamp');
-            var row = document.getElementById('nikoSyncPopoverVer');
-            if (stamp && stamp.textContent !== '检测中…' && stamp.textContent.indexOf('有新版') !== 0) stamp.textContent = s;
-            if (row && row.textContent !== '检测中…' && row.textContent.indexOf('有新版') !== 0 && row.textContent !== '已最新 ✓') row.textContent = s;
-        }
-        // 手动检测：点左下角版本戳 / popover 版本行触发，绕过自动检测的 1 分钟节流
-        function nikoManualVerCheck() {
-            if (typeof location === 'undefined' || typeof fetch !== 'function') return;
-            if (location.protocol === 'file:' || location.protocol === 'about:') return;
-            var cur = window.NIKO_VERSION || '';
-            if (!cur || cur.indexOf('__NIKO') === 0) return;
-            var stamp = document.getElementById('nikoVerStamp');
-            var row = document.getElementById('nikoSyncPopoverVer');
-            if (stamp) stamp.textContent = '检测中…';
-            if (row) row.textContent = '检测中…';
-            fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
-                .then(function (r) { return r.text(); })
-                .then(function (txt) {
-                    var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/);
-                    var online = m && m[1] ? m[1] : '';
-                    var isNew = !!(online && Number(online) > Number(cur));
-                    if (isNew) {
-                        // 复用右下角小绿点提示，点它即更新
-                        var tip = document.getElementById('nikoUpdateTip');
-                        if (tip) {
-                            document.getElementById('nikoUpdateVer').textContent = 'v' + nikoFmtVer(online);
-                            tip.setAttribute('data-ver', online);
-                            tip.classList.add('show');
-                        }
-                        if (stamp) { stamp.textContent = '有新版 → 点绿点更新'; stamp.classList.add('stale'); }
-                        if (row) row.textContent = '有新版 v' + nikoFmtVer(online);
-                    } else {
-                        if (stamp) { stamp.textContent = '已最新 ✓'; stamp.classList.remove('stale'); }
-                        if (row) row.textContent = '已最新 ✓';
-                    }
-                    setTimeout(nikoFillVer, 4000); // 4 秒后还原为常显版本号
-                })
-                .catch(function () {
-                    if (row) row.textContent = '检测失败';
-                    setTimeout(nikoFillVer, 2500);
-                });
-        }
-        window.nikoFillVer = nikoFillVer;
-        window.nikoManualVerCheck = nikoManualVerCheck;
-        nikoFillVer();
 
         // ===== Service Worker 注册：接管缓存策略，确保每次加载最新版本 =====
         // SW 注册后，所有 fetch 请求走 network-first（优先网络，离线降级缓存），
