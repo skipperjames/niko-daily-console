@@ -3066,11 +3066,13 @@
         }
         /* 状态色：仅作用于 checkbox + 删除线 + 透明度，不再覆盖背景 */
         .event-item.status-todo .event-checkbox,
+        .gantt-bar.status-todo .event-checkbox,
         .day-task-item.status-todo .task-checkbox {
             background: #fff;
             border: 2px solid #f59e0b;
         }
         .event-item.status-in-progress .event-checkbox,
+        .gantt-bar.status-in-progress .event-checkbox,
         .day-task-item.status-in-progress .task-checkbox {
             background: #fff;
             border: 2px solid #3b82f6;
@@ -3094,12 +3096,14 @@
             text-decoration-color: rgba(0,0,0,0.4);
         }
         .event-item.status-done .event-checkbox,
+        .gantt-bar.status-done .event-checkbox,
         .day-task-item.status-done .task-checkbox {
             background: #10b981;
             border-color: #10b981;
             position: relative;
         }
         .event-item.status-done .event-checkbox::after,
+        .gantt-bar.status-done .event-checkbox::after,
         .day-task-item.status-done .task-checkbox::after {
             content: '✓';
             color: #fff;
@@ -3149,11 +3153,13 @@
             color: #e5e7eb;
         }
         body.dark-mode .event-item.status-todo .event-checkbox,
+        body.dark-mode .gantt-bar.status-todo .event-checkbox,
         body.dark-mode .day-task-item.status-todo .task-checkbox {
             background: #1f2937;
             border-color: #f59e0b;
         }
         body.dark-mode .event-item.status-in-progress .event-checkbox,
+        body.dark-mode .gantt-bar.status-in-progress .event-checkbox,
         body.dark-mode .day-task-item.status-in-progress .task-checkbox {
             background: #1f2937;
             border-color: #3b82f6;
@@ -4033,39 +4039,25 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            height: 22px;                       /* 与短事件 item 等高 */
-            padding: 0 18px 0 5px;              /* 与 event-item 一致 */
-            font-size: 12px;
-            line-height: 1.2;
+            height: 24px;                       /* 与短事件 item 等高（checkbox 撑出的 24px） */
+            padding: 0 32px 0 5px;              /* 与 event-item 完全一致（右 32 留状态图标位） */
+            font-size: 12px;                    /* 与 event-item 同字号 */
             border-radius: 3px;                 /* 与 event-item 一致 */
             white-space: nowrap;
             overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-            color: #1f2937;
+            color: #1f2937;                     /* 浅色同 event-item；深色走下方继承规则 */
             box-sizing: border-box;
         }
+        body.dark-mode .gantt-bar { color: inherit; }   /* 深色下与 chip 同源继承（此前漏配 → 深灰字在暗背景上不可读） */
         .gantt-bar .event-checkbox {
             pointer-events: auto;               /* 覆盖层默认透传，单独启勾选点击 */
             cursor: pointer;
         }
         .gantt-bar.completed {
-            opacity: 0.5;
+            opacity: 0.5;                       /* 与 .event-item.completed 同透明度 */
         }
-        .gantt-bar.completed .gantt-bar-text {
+        .gantt-bar.completed .event-text {
             text-decoration: line-through;
-        }
-        .gantt-bar .gantt-bar-text {
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .gantt-bar .status-mark {
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            margin: 0;
         }
         .event-checkbox {
             width: 14px;
@@ -4681,7 +4673,10 @@
         .gantt-row:hover {
             background: #faf9f7;
         }
-        .gantt-bar {
+        /* 2026-09-09：独立甘特视图样式必须圈进 #ganttWrapper——此前裸写 .gantt-bar，
+           同名选择器污染日历覆盖层长条（字号 11≠12、padding 8px、白字、hover 上浮、
+           completed 0.6≠0.5 全被覆盖），导致长期任务条与当天任务条样式不一致 */
+        #ganttWrapper .gantt-bar {
             position: absolute;
             top: 8px;
             height: 24px;
@@ -4698,15 +4693,15 @@
             transition: all 0.2s;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .gantt-bar:hover {
+        #ganttWrapper .gantt-bar:hover {
             transform: translateY(-1px);
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
             z-index: 10;
         }
-        .gantt-bar.completed {
+        #ganttWrapper .gantt-bar.completed {
             opacity: 0.6;
         }
-        .gantt-bar.repeat-bar {
+        #ganttWrapper .gantt-bar.repeat-bar {
             background-image: repeating-linear-gradient(
                 45deg,
                 rgba(255,255,255,0.15),
@@ -4802,7 +4797,7 @@
         body.dark-mode .gantt-row:hover {
             background: #1a1a28;
         }
-        body.dark-mode .gantt-bar {
+        body.dark-mode #ganttWrapper .gantt-bar {
             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         /* v2.10 跨天任务进度底条：白色微光随推进天数变亮变宽 */
@@ -18012,8 +18007,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const isDone = ev.status === 'done';
                     // 视觉与短任务同源：项目色 0.22 透明底 + 项目色 6px 左色条 + 22px 高度，与 event-item 一致
                     const bar = document.createElement('div');
-                    bar.className = 'gantt-bar' + (isDone ? ' completed' : '');
+                    // 2026-09-09：挂与 chip 同款状态类——勾选框按状态上色（todo 橙框/进行中蓝框/完成绿勾）完全复用 event-item 的规则
+                    bar.className = 'gantt-bar status-' + ev.status + (isDone ? ' completed' : '');
                     bar.style.background = hexToRgba(project.color, 0.22);
+                    bar.style.color = getComputedStyle(firstSeg).color;   // 2026-09-09：字色直接取 chip 计算值，任何主题下与任务条逐像素一致
                     bar.style.left = (a.left - gridRect.left) + 'px';
                     bar.style.top = (a.top - gridRect.top) + 'px';
                     bar.style.height = Math.max(18, a.height) + 'px';   // 2026-09-09：与幽灵占位实测等高（幽灵已统一钳制 24px）→ 相邻车道条永不互相重叠
@@ -18022,7 +18019,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const startHere = ev.startDate === run[0];
                     const endHere = ev.endDate === run[run.length - 1];
                     bar.style.borderRadius = (startHere ? '3px' : '0') + ' ' + (endHere ? '3px' : '0') + ' ' + (endHere ? '3px' : '0') + ' ' + (startHere ? '3px' : '0');
-                    if (startHere) bar.style.borderLeft = '6px solid ' + project.color;
+                    bar.style.borderLeft = '6px solid ' + project.color;
                     // 文字颜色按项目色亮度自动取深/浅
                     const gFlag = getProjectFlag(project);
                     bar.title = `${gFlag ? gFlag + ' ' : ''}${project.name} · ${ev.title || ''} · ${statusNames[displayStatus] || displayStatus}`;
@@ -18040,7 +18037,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         const pct = Math.round(done / total * 100);
                         if (pct > 0) progressHtml = `<i class="gantt-progress" style="width:${pct}%"></i>`;
                     }
-                    bar.innerHTML = `${checkHtml}<span class="gantt-bar-text">${gFlag ? `<span class="ev-flag">${nikoFlagImg(gFlag)}</span>` : ''}${repeatIcon}${safeTitle}</span>${statusMarkHtml}${progressHtml}`;
+                    // 2026-09-09：文字结构对齐 event-item——同款 event-text + ev-title-main 包裹（含旗帜/重复图标/逾期史莱姆），字号字色截断行为完全一致
+                    const slimeHtml = (isOverdue && !isDone) ? '<span class="slime-mark" title="逾期史莱姆 · 完成后啵地蒸发">🟢</span>' : '';
+                    bar.innerHTML = `${checkHtml}<span class="event-text">${gFlag ? `<span class="ev-flag">${nikoFlagImg(gFlag)}</span>` : ''}<span class="ev-title-main">${repeatIcon}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${progressHtml}`;
                     overlay.appendChild(bar);
                 }
             }
@@ -31346,7 +31345,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609091218";
+        window.NIKO_VERSION = "202609091315";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
