@@ -4068,7 +4068,9 @@
         }
         .event-checkbox:hover { box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4); }
         .event-checkbox:active { transform: scale(0.82); }
-        .event-item.completed .event-checkbox {
+        /* 2026-09-09：甘特长条（长期任务可见载体）补上完成态绿勾——此前选择器漏了 .gantt-bar，长期任务完成后 ✓ 一直透明不可见 */
+        .event-item.completed .event-checkbox,
+        .gantt-bar.completed .event-checkbox {
             background-color: rgba(16, 185, 129, 0.16);
             color: #10b981;
             font-size: 10px;
@@ -4076,7 +4078,8 @@
         }
         body.dark-mode .event-checkbox { background-color: rgba(255, 255, 255, 0.24); }
         body.dark-mode .event-checkbox:hover { box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.45); }
-        body.dark-mode .event-item.completed .event-checkbox {
+        body.dark-mode .event-item.completed .event-checkbox,
+        body.dark-mode .gantt-bar.completed .event-checkbox {
             background-color: rgba(16, 185, 129, 0.22);
             color: #34d399;
         }
@@ -31298,7 +31301,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609082321";
+        window.NIKO_VERSION = "202609091129";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
