@@ -3747,6 +3747,10 @@
             justify-content: space-between;
             align-items: center;
             transition: color 0.3s ease;
+            /* 2026-09-09：钉死日期行高度——此前 today 格的 20px 日期圆圈把该行撑高 ~4px，
+               导致今天格子的任务基线整体下沉、跨行甘特条在 today 格错位重叠 */
+            height: 20px;
+            overflow: visible;
         }
         /* 星期标签：桌面 28 天格子小默认隐藏，手机端当周列表显示 */
         .day-weekday {
@@ -3841,6 +3845,21 @@
         /* 跨天任务真甘特：格子内保留透明占位（承接拖拽/点击），覆盖层画连续实色长条 */
         .event-item.long-task.is-ghost {
             opacity: 0 !important;
+        }
+        /* 2026-09-09 车道几何统一：幽灵/垫片一律钳制为普通任务条等高（24px）。
+           此前 done 态幽灵 30px、垫片 22px、普通幽灵 24px 三种高度并存，
+           同一条车道在不同格子的 Y 不一致 → 甘特条互相重叠、与任务条错位。
+           幽灵本身透明，裁切内容零损失。 */
+        .event-item.long-task.is-ghost,
+        .event-item.lane-pad {
+            height: 24px;
+            min-height: 24px;
+            max-height: 24px;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            overflow: hidden;
+            box-sizing: border-box;
+            align-items: center;
         }
         /* 甘特车道垫片：本行其他长任务在该格的空车道占位，保持整行长条 Y 对齐 */
         .event-item.lane-pad {
@@ -17748,7 +17767,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 let dayEvents = allDayEvents.filter(scopeVisible);
                 if (keyword) dayEvents = dayEvents.filter(e => e.title.toLowerCase().includes(keyword) || (e.desc && e.desc.toLowerCase().includes(keyword)));
                 sortDayEventsByUserOrder(dayEvents, dateStr);
-                dayEventsDisplay[dateStr] = dayEvents.slice(0, MAX_EVENTS_PER_DAY);
+                // 2026-09-09：不再提前截断——长任务被「单日 N 条」截掉会让甘特条半路断裂、
+                // 幽灵缺失（用户截图：蜜蜂-5d 断成两截）。「单日最多 N 条」上限改到格子
+                // 渲染时只作用于当日任务条（见下方 renderList 组装处）。
+                dayEventsDisplay[dateStr] = dayEvents;
             }
             // 甘特车道（按周行统一分配）：先收集每个周行内出现过的所有跨天任务，
             // 按 startDate 稳定排序定车道号；同一条长条在整行所有格子的 Y 完全一致，
@@ -17763,8 +17785,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         if (e.startDate !== e.endDate && !seen.has(e.id)) { seen.add(e.id); rowLongs.push(e); }
                     }
                 }
-                rowLongs.sort((a, b) => a.startDate < b.startDate ? -1 : (a.startDate > b.startDate ? 1 : 0));
-                rowLaneLongs[r] = rowLongs;
+                rowLongs.sort((a, b) => a.startDate.localeCompare(b.startDate) || a.endDate.localeCompare(b.endDate));
+                // 2026-09-09 车道压缩：互不重叠的长任务共享一条车道（贪心区间装箱），
+                // 车道总数变少 → 长条区更紧凑（对齐用户要求"参考当天任务条的摆放"）
+                const lanes = [];
+                const laneOf = {};
+                for (const ev of rowLongs) {
+                    let placed = false;
+                    for (let li = 0; li < lanes.length; li++) {
+                        const last = lanes[li][lanes[li].length - 1];
+                        if (last.endDate < ev.startDate) { lanes[li].push(ev); laneOf[ev.id] = li; placed = true; break; }
+                    }
+                    if (!placed) { lanes.push([ev]); laneOf[ev.id] = lanes.length - 1; }
+                }
+                rowLaneLongs[r] = { lanes, laneOf };
             }
             for (let i = 0; i < daysToShow; i++) {
                 const date = addDays(currentWeekStart, i);
@@ -17804,12 +17838,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 eventsContainer.className = 'events-container';
                 // 甘特车道：本行所有跨天任务按行级车道号排到格子顶部；
                 // 该天不存在的长任务放透明垫片，保证每条长条整行 Y 对齐
-                const rowLongs = rowLaneLongs[Math.floor(i / 7)] || [];
-                const renderList = [];
-                rowLongs.forEach(le => {
-                    renderList.push(dayEvents.find(e => e.id === le.id) || { __lanePad: true });
+                const rowInfo = rowLaneLongs[Math.floor(i / 7)] || { lanes: [], laneOf: {} };
+                // 当天活跃的最高车道号：其上方的空车道一律不垫占位（垫片越少越紧凑），
+                // 活跃车道的幽灵照常占位，保证整行长条 Y 对齐
+                let maxActiveLane = -1;
+                rowInfo.lanes.forEach((lane, li) => {
+                    if (lane.some(le => dayEvents.some(e => e.id === le.id))) maxActiveLane = Math.max(maxActiveLane, li);
                 });
-                dayEvents.forEach(ev => { if (ev.startDate === ev.endDate) renderList.push(ev); });
+                const renderList = [];
+                rowInfo.lanes.forEach((lane, li) => {
+                    if (li > maxActiveLane) return;
+                    const le = lane.find(x => dayEvents.some(e => e.id === x.id));
+                    renderList.push(le ? dayEvents.find(e => e.id === le.id) : { __lanePad: true });
+                });
+                // 「单日最多 N 条」只限当日任务条：总可见条数 = 活跃车道数 + 当日条 ≤ N
+                let chipShown = 0;
+                const chipBudget = Math.max(0, MAX_EVENTS_PER_DAY - (maxActiveLane + 1));
+                dayEvents.forEach(ev => { if (ev.startDate === ev.endDate && chipShown < chipBudget) { renderList.push(ev); chipShown++; } });
                 renderList.forEach(ev => {
                     if (ev.__lanePad) {
                         const pad = document.createElement('div');
@@ -17971,7 +18016,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     bar.style.background = hexToRgba(project.color, 0.22);
                     bar.style.left = (a.left - gridRect.left) + 'px';
                     bar.style.top = (a.top - gridRect.top) + 'px';
-                    bar.style.height = '22px';
+                    bar.style.height = Math.max(18, a.height) + 'px';   // 2026-09-09：与幽灵占位实测等高（幽灵已统一钳制 24px）→ 相邻车道条永不互相重叠
                     bar.style.width = (b.right - a.left) + 'px';
                     // 起止圆角：真正起点/终点圆角，被视野截断处平切
                     const startHere = ev.startDate === run[0];
@@ -31301,7 +31346,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609091129";
+        window.NIKO_VERSION = "202609091218";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
