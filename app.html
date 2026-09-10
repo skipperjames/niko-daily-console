@@ -2481,7 +2481,7 @@
         body.dark-mode .habit-progress-num { color: #8f8fa3; }
         .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; min-height: 16px; }
         .habit-card-foot .hcl { margin-left: auto; }
-        .habit-card .habit-reward { font-size: 10.5px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; }
+        .habit-card .habit-reward { font-size: 10.5px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
         body.dark-mode .habit-card .habit-reward { color: #a89bd6; }
         /* 连击：只保留小火苗数字，弱化为文字 */
         .habit-streak-chip {
@@ -2523,18 +2523,24 @@
         /* ===== v2.11.2 习惯水晶链：近7天打卡结晶 ===== */
         /* v2.11.2 修复：链移到卡底行右侧——名字行零竞争，桌面/手机常显（此前窄卡整条隐身=功能消失）；
            同时移除 container-type: inline-size（容器查询已删，遗留该属性会使 flex 基准尺寸=0，手机端卡片被挤成 28px） */
-        .hcl { display: inline-flex; align-items: flex-end; gap: 2.5px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; min-width: 0; }
+        .hcl { display: inline-flex; align-items: flex-end; gap: 2px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; min-width: 0; }
+        /* 2026-09-10：星期标签列——用户反馈看不出哪天打卡哪天没打 */
+        .hcl-col { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; }
+        .hcl-lbl { font-size: 8px; line-height: 1; color: #9ca3af; opacity: .8; font-weight: 600; }
+        .hcl-lbl-today { color: #10b981; opacity: 1; }
+        body.dark-mode .hcl-lbl { color: #7a8190; }
+        body.dark-mode .hcl-lbl-today { color: #34d399; }
         .hcl-node { width: 6px; height: 6px; border-radius: 2px; background: rgba(0,0,0,0.06); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.10); position: relative; }
         .hcl-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 4px rgba(16,185,129,0.55), inset 0 0 2px rgba(255,255,255,0.7); }
         .hcl-node.today-node { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(16,185,129,0.45); border-radius: 50%; }
         .hcl-node.today-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 6px rgba(16,185,129,0.75), inset 0 0 2px rgba(255,255,255,0.8); }
         .hcl-node.rest-node { opacity: .32; border-radius: 50%; }
-        .hcl-node.withered { background: rgba(120,113,108,0.28); box-shadow: inset 0 0 0 1px rgba(87,83,78,0.25); }
-        .hcl-node.withered::after { content:''; position:absolute; right:-1px; top:-1px; width:3px; height:3px; border-radius:50%; background:rgba(87,83,78,0.4); }
+        /* 2026-09-10：未打卡改空心圈——此前与底格几乎同色，看不出打没打 */
+        .hcl-node.withered { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(87,83,78,0.45); border-radius: 50%; }
+        body.dark-mode .hcl-node { background: rgba(255,255,255,0.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
+        body.dark-mode .hcl-node.withered { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.30); border-radius: 50%; }
         .hcl-node.crystal-new { animation: hclCrystallize .8s cubic-bezier(.34,1.56,.64,1); }
         @keyframes hclCrystallize { 0% { transform: scale(.2) rotate(45deg); filter: brightness(2); } 55% { transform: scale(1.7) rotate(0deg); filter: brightness(1.6); } 100% { transform: scale(1); filter: brightness(1); } }
-        body.dark-mode .hcl-node { background: rgba(255,255,255,0.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
-        body.dark-mode .hcl-node.withered { background: rgba(255,255,255,0.07); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10); }
         /* ===== v2.11 地下城 Boss 进化 ===== */
         .dg-boss { display: inline-flex; align-items: center; gap: 4px; margin-right: 6px; padding: 1px 7px 1px 4px; border-radius: 10px; background: rgba(0,0,0,0.05); font-size: 11px; font-weight: 600; color: #6b7280; }
         .dg-boss .dg-boss-face { font-size: 14px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2)); }
@@ -15929,22 +15935,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function habitSaveList(list) { safeStorage.set('niko_habits', list); }
         function habitSaveLogs(list) { safeStorage.set('niko_habit_logs', list); }
 
+        // 2026-09-10 兼容修复：历史/他端写入的日志日期可能是 ISO 带时间或非补零格式（如 2026-9-9），
+        // 打卡判断此前全靠字符串精确比对 → 差一位就永远匹配不上（统计 0、水晶链全灰、取消打卡失效产生重复记录）。
+        // 统一在读取边界归一化为 YYYY-MM-DD。
+        function habitLogDate(l) {
+            if (!l || !l.date) return '';
+            let d = String(l.date).slice(0, 10);
+            const m = d.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+            if (m) d = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+            return d;
+        }
+
         // 某天已打卡的 habitId 集合（用于勾选态判断）
         function habitDoneSet(date) {
             const s = {};
-            habitLogs().forEach(l => { if (l.date === date) s[l.habitId] = true; });
+            habitLogs().forEach(l => { if (habitLogDate(l) === date) s[l.habitId] = true; });
             return s;
         }
 
         // 某习惯本周（offset 周）打卡次数
         function habitWeekCount(id, offset) {
             const range = weeklyRange(offset || 0);
-            return habitLogs().filter(l => l.habitId === id && wrInRange(l.date, range)).length;
+            return habitLogs().filter(l => l.habitId === id && wrInRange(habitLogDate(l), range)).length;
         }
 
         // 某习惯连续打卡天数（今天未打卡不算断）
         function habitStreak(id) {
-            const done = new Set(habitLogs().filter(l => l.habitId === id).map(l => l.date));
+            const done = new Set(habitLogs().filter(l => l.habitId === id).map(habitLogDate));
             const today = formatDate(new Date());
             let streak = 0;
             let cursor = new Date();
@@ -15973,7 +15990,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const _prevBal = (function(){ try { return Math.round(safeStorage.get('niko_game_time', {}).balance || 0); } catch (e) { return 0; } })();
             const today = formatDate(new Date());
             const logs = habitLogs();
-            const idx = logs.findIndex(l => l.habitId === id && l.date === today);
+            const idx = logs.findIndex(l => l.habitId === id && habitLogDate(l) === today);
             // 取消打卡任何时候都允许（避免误操作后无法撤回）
             if (idx >= 0) {
                 logs.splice(idx, 1);
@@ -16039,7 +16056,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
                 // 🏆 地下城通关爆发：今日应打全部完成的一瞬间，血条上方洒落一圈 ✦（每次通关只放一次）
                 const due = habitList().filter(habitShouldToday);
-                const allDone = due.length > 0 && due.every(x => habitLogs().some(l => l.habitId === x.id && l.date === today));
+                const allDone = due.length > 0 && due.every(x => habitLogs().some(l => l.habitId === x.id && habitLogDate(l) === today));
                 if (allDone && !window._dgBurstShown) {
                     window._dgBurstShown = true;
                     if (typeof nikoSpark === 'function') {
@@ -16106,9 +16123,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return true;
         }
         // 水晶链：近 7 天节点（lit 结晶 / withered 风化 / today-node 今日未定 / rest-node 休息日）
+        // 2026-09-10：加星期标签（一二三四五六日）——用户反馈看不出哪天打没打
         function habitCrystalChain(h) {
-            const logs = new Set(habitLogs().filter(l => l.habitId === h.id).map(l => l.date));
+            const logs = new Set(habitLogs().filter(l => l.habitId === h.id).map(habitLogDate));
             const today = formatDate(new Date());
+            const WD = ['日', '一', '二', '三', '四', '五', '六'];
             let nodes = '';
             for (let i = 6; i >= 0; i--) {
                 const dt = new Date(); dt.setDate(dt.getDate() - i);
@@ -16122,9 +16141,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (ds === today && logs.has(ds)) cls += ' today-node';
                 if (ds === today && logs.has(ds) && window._hclNewId === h.id) { cls += ' crystal-new'; window._hclNewId = null; }
                 const tip = `${ds}${active ? '' : ' · 休息日'}${logs.has(ds) ? ' · 已打卡 ✓' : ''}`;
-                nodes += `<span class="${cls}" title="${tip}"></span>`;
+                nodes += `<span class="hcl-col"><span class="${cls}" title="${tip}"></span><span class="hcl-lbl${ds === today ? ' hcl-lbl-today' : ''}">${WD[dt.getDay()]}</span></span>`;
             }
-            return `<span class="hcl" title="近 7 天打卡结晶">${nodes}</span>`;
+            return `<span class="hcl" title="近 7 天打卡结晶（下为星期）">${nodes}</span>`;
         }
         // Boss 进化：连续全勤天数（休息日跳过不计不断；今天未打满不中断不计）
         const DG_BOSS_TIERS = [
@@ -16137,7 +16156,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function dungeonPerfectStreak() {
             const habits = habitList().filter(h => habitActiveOnDate(h, formatDate(new Date())) || (h.frequency || 'daily') !== 'daily');
             if (!habits.length) return 0;
-            const doneSet = new Set(habitLogs().map(l => l.habitId + '@' + l.date));
+            const doneSet = new Set(habitLogs().map(l => l.habitId + '@' + habitLogDate(l)));
             let streak = 0;
             for (let i = 0; i < 120; i++) {
                 const dt = new Date(); dt.setDate(dt.getDate() - i);
@@ -31342,7 +31361,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101011";
+        window.NIKO_VERSION = "202609101049";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
