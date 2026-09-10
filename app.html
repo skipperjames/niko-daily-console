@@ -4931,6 +4931,10 @@
         .node-btn:hover { opacity: 1; background: #e5e7eb; }
         body.dark-mode .node-btn:hover { background: #374151; }
 
+        /* ===== 计划看板金币收集（2026-09-10）：余额 chip 复用今日看板 .dg-coin-chip/.coin-fly 样式，撒落金币为本页新增 ===== */
+        .plan-coin-burst { position: fixed; z-index: 99999; pointer-events: none; font-size: 12px; filter: drop-shadow(0 1px 2px rgba(0,0,0,.5)); will-change: transform, opacity; }
+        @media (prefers-reduced-motion: reduce) { .plan-coin-burst { display: none; } }
+        @media (max-width: 768px) { .plan-coin-burst { font-size: 10px; } }
         /* ===== 手机端紧凑化 + ⚙️ 工具抽屉（2026-09-07） ===== */
         /* 桌面端不显示抽屉按钮（全部工具直接可见） */
         #planToolsToggle { display: none; }
@@ -4950,7 +4954,7 @@
                 font-size: 15px !important; border-radius: 8px;
             }
             /* 收起态：顶栏右侧只留 ⚙️ + 视图切换，其余全部隐藏（scopeModeGroup 也带 view-toggle 类，需单独点名） */
-            #planPage:not(.tools-open) .top-bar > div:nth-child(2) > *:not(.view-toggle):not(#planToolsToggle) { display: none !important; }
+            #planPage:not(.tools-open) .top-bar > div:nth-child(2) > *:not(.view-toggle):not(#planToolsToggle):not(#planCoinChip) { display: none !important; }
             #planPage:not(.tools-open) #scopeModeGroup,
             #planPage:not(.tools-open) #scopeOffTime { display: none !important; }
             #planPage:not(.tools-open) .date-nav-bar .display-setting,
@@ -11263,6 +11267,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button id="viewBoardBtn" onclick="setView('board')">📋 看板</button>
                         <button id="viewGanttBtn" onclick="setView('gantt')">📊 甘特图</button>
                     </div>
+                    <span class="dg-coin-chip" id="planCoinChip" title="游戏时间余额 · 水位 = 距 4 小时（和今日看板同一本账）"><span class="dg-coin-fill"></span><span class="dg-coin-txt">🪙 0分</span></span>
                     <div class="view-toggle" id="scopeModeGroup" title="工作 / 生活模式：上班专注工作项目，下班只看生活任务（看书、接孩子…）。自动 = 到点自动切换">
                         <button data-mode="auto" onclick="setScopeMode('auto')">⏰ 自动</button>
                         <button data-mode="work" onclick="setScopeMode('work')" title="只看工作项目">💼</button>
@@ -18563,40 +18568,115 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== v6 任务金币入账（2026-09-10 用户要求：勾选完成 = 今日习惯打卡同款金币收集系统） =====
         // 单日任务 +5 分，跨天任务 +8 分；同一天同一任务只入账一次（gtEarn 去重）；取消完成自动回滚
+        // ===== v7 计划看板金币收集（2026-09-10）：完全对齐今日习惯打卡方案4 ——
+        // 金币飞入余额 chip + 落定撒金币 + 数字滚动 + 水位上涨 + 叮一声；
+        // 每个任务统一 +5 分（用户口径），取消完成自动扣回（gameTimeRefund 同一笔账） =====
+        function planCoinSetBalance() {
+            try {
+                const chip = document.getElementById('planCoinChip');
+                if (!chip) return;
+                const bal = Math.round(safeStorage.get('niko_game_time', {}).balance || 0);
+                const txt = chip.querySelector('.dg-coin-txt'), fill = chip.querySelector('.dg-coin-fill');
+                if (txt) txt.textContent = '🪙 ' + bal + '分';
+                if (fill) fill.style.width = Math.min(100, bal / 240 * 100) + '%';
+            } catch (e) {}
+        }
+        // 落定撒金币：8 枚小金币从 chip 中心迸开抛落（prefers-reduced-motion 下由 CSS 隐藏）
+        function planCoinScatter(chip) {
+            try {
+                const r = chip.getBoundingClientRect();
+                if (r.width < 10) return;
+                const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+                for (let i = 0; i < 8; i++) {
+                    const c = document.createElement('div');
+                    c.className = 'plan-coin-burst'; c.textContent = '🪙';
+                    c.style.left = (cx - 7) + 'px'; c.style.top = (cy - 7) + 'px';
+                    document.body.appendChild(c);
+                    const dx = Math.random() * 150 - 75;
+                    const up = 34 + Math.random() * 46;
+                    const down = 46 + Math.random() * 50;
+                    const dur = 620 + Math.random() * 320;
+                    const anim = c.animate([
+                        { transform: 'translate(0,0) scale(.6)', opacity: 0 },
+                        { transform: `translate(${dx * 0.55}px, -${up}px) scale(1)`, opacity: 1, offset: .38 },
+                        { transform: `translate(${dx}px, ${down}px) scale(.5) rotate(${dx > 0 ? 80 : -80}deg)`, opacity: 0 }
+                    ], { duration: dur, easing: 'cubic-bezier(.25,.6,.4,1)' });
+                    anim.onfinish = function () { try { c.remove(); } catch (e2) {} };
+                }
+            } catch (e) {}
+        }
+        // 金币抛物线飞行：任务卡 → 计划页余额 chip（参数与今日打卡 nikoCoinFly 一致）
+        function planCoinFly(fromEl, prevBal, min) {
+            try {
+                const chip = document.getElementById('planCoinChip');
+                if (!chip) return;
+                const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                if (reduce) { planCoinSetBalance(); return; }
+                const fr = (fromEl || document.body).getBoundingClientRect(), tr = chip.getBoundingClientRect();
+                if (tr.width < 10) { planCoinSetBalance(); return; }   // chip 不可见（理论不发生）→ 直接对账兜底
+                const coin = document.createElement('div');
+                coin.className = 'coin-fly'; coin.textContent = '🪙';
+                const sx = fr.left + fr.width / 2 - 10, sy = fr.top + fr.height / 2 - 10;
+                const ex = tr.left + tr.width / 2 - 10, ey = tr.top + tr.height / 2 - 10;
+                coin.style.left = sx + 'px'; coin.style.top = sy + 'px';
+                document.body.appendChild(coin);
+                const midY = Math.min(sy, ey) - 130 - sy;   // 抛物线顶点
+                const anim = coin.animate([
+                    { transform: 'translate(0,0) scale(.5)', opacity: .35, offset: 0, easing: 'cubic-bezier(.25,.6,.4,1)' },
+                    { transform: `translate(${(ex - sx) / 2}px, ${midY}px) scale(1.3)`, opacity: 1, offset: .5, easing: 'cubic-bezier(.55,0,.75,.45)' },
+                    { transform: `translate(${ex - sx}px, ${ey - sy}px) scale(.75)`, opacity: .95, offset: 1 }
+                ], { duration: 950, fill: 'forwards' });
+                anim.onfinish = function () {
+                    try { coin.remove(); } catch (e) {}
+                    const chip2 = document.getElementById('planCoinChip');
+                    if (!chip2) return;
+                    chip2.classList.remove('land'); void chip2.offsetWidth; chip2.classList.add('land');
+                    // 数字滚动：prevBal → 新余额（读真实账本，不累加估算）
+                    const txt = chip2.querySelector('.dg-coin-txt');
+                    const fill = chip2.querySelector('.dg-coin-fill');
+                    const nowBal = (function () { try { return Math.round(safeStorage.get('niko_game_time', {}).balance || 0); } catch (e) { return prevBal + min; } })();
+                    const t0 = performance.now(), dur = 620;
+                    (function tick(t) {
+                        const p = Math.min(1, (t - t0) / dur);
+                        const eased = 1 - Math.pow(1 - p, 3);
+                        const v = Math.round(prevBal + (nowBal - prevBal) * eased);
+                        if (txt) txt.textContent = '🪙 ' + v + '分';
+                        if (fill) fill.style.width = Math.min(100, v / 240 * 100) + '%';
+                        if (p < 1) requestAnimationFrame(tick);
+                    })(t0);
+                    if (typeof nikoCoinDing === 'function') nikoCoinDing();   // 落定叮一声（与今日打卡同一音效）
+                    planCoinScatter(chip2);   // 金币撒落
+                };
+            } catch (e) {}
+        }
         function taskCoinReward(ev, targetEl) {
             try {
                 if (!window.gameTimeEarn) return;
                 const hid = 'task_' + ev.id;
-                const min = (ev.startDate && ev.endDate && ev.startDate !== ev.endDate) ? 8 : 5;
+                const min = 5;   // 2026-09-10 用户口径：每个任务统一 +5 分
                 const prevBal = Math.round(window.gameTimeBalance ? window.gameTimeBalance() : 0);
                 const ok = window.gameTimeEarn(hid, min, '✅ ' + (ev.title || '任务'));
                 if (!ok) return;
-                const chip = document.getElementById('dgCoinChip');
-                const chipVisible = chip && chip.getBoundingClientRect().width > 0;
-                if (chipVisible && typeof nikoCoinFly === 'function') {
-                    nikoCoinFly(targetEl || document.body, prevBal, min);   // 金币飞越整屏落入地下城余额 chip
-                } else {
-                    // 计划页就地庆祝：金币火花 + 浮字 + 叮一声
-                    if (targetEl && typeof nikoSpark === 'function') nikoSpark(targetEl, '🪙', '#fbbf24');
-                    if (targetEl) {
-                        const f = document.createElement('span');
-                        f.textContent = '+' + min + '分';
-                        f.style.cssText = 'position:fixed;z-index:99999;font-size:13px;font-weight:700;color:#fbbf24;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.6);transition:transform 1.1s ease-out,opacity 1.1s ease-out;';
-                        const r = targetEl.getBoundingClientRect();
-                        f.style.left = (r.left + r.width / 2 - 12) + 'px';
-                        f.style.top = (r.top - 4) + 'px';
-                        document.body.appendChild(f);
-                        requestAnimationFrame(() => { f.style.transform = 'translateY(-28px)'; f.style.opacity = '0'; });
-                        setTimeout(() => { try { f.remove(); } catch (e2) {} }, 1200);
-                    }
-                    if (typeof nikoCoinDing === 'function') nikoCoinDing();
-                    if (typeof showToast === 'function') showToast('🪙 任务入账 +' + min + ' 分游戏时间');
-                }
+                planCoinFly(targetEl, prevBal, min);   // 金币从任务卡飞入计划页余额 chip
             } catch (e) {}
         }
         function taskCoinRefund(ev) {
-            try { if (window.gameTimeRefund) window.gameTimeRefund('task_' + ev.id); } catch (e) {}
+            try {
+                if (window.gameTimeRefund) window.gameTimeRefund('task_' + ev.id);
+                planCoinSetBalance();   // 扣回后立刻对账
+            } catch (e) {}
         }
+        // render 包一层：每次渲染后把计划页余额 chip 对齐真实账本（切页/任务变动/习惯打卡入账后都不掉队）
+        (function () {
+            if (typeof render === 'function' && !render.__planCoinWrap) {
+                const __oldRender = render;
+                window.render = function () {
+                    try { planCoinSetBalance(); } catch (e) {}
+                    __oldRender();
+                };
+                window.render.__planCoinWrap = true;
+            }
+        })();
 
         function toggleComplete(id, e) {
             if (e) e.stopPropagation();
@@ -18798,16 +18878,29 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function batchSetStatus(done) {
             if (!batchSel.size) return showToast('先勾选任务');
-            let n = 0;
+            let n = 0, credited = 0, gain = 0;
+            const prevBal = Math.round(window.gameTimeBalance ? window.gameTimeBalance() : 0);
             [...batchSel].forEach(id => {
                 const ev = events.find(x => x.id === id);
                 if (ev && (done ? ev.status !== 'done' : ev.status === 'done')) {
                     ev.status = done ? 'done' : 'todo';
                     applyStampStatus(ev, done);
                     n++;
+                    try {
+                        if (done) {
+                            // v7 批量完成也入账：每个任务 +5 分（先补上此前批量完成不入账的缺口）
+                            if (window.gameTimeEarn && window.gameTimeEarn('task_' + ev.id, 5, '✅ ' + (ev.title || '任务'))) { credited++; gain += 5; }
+                        } else if (window.gameTimeRefund) {
+                            window.gameTimeRefund('task_' + ev.id);   // 批量撤销同步扣回
+                        }
+                    } catch (e) {}
                 }
             });
-            if (n) { saveData(); showToast(done ? '✅ 已完成 ' + n + ' 个任务' : '↩ 已改回未完成 ' + n + ' 个'); }
+            if (n) {
+                saveData();
+                if (credited > 0) planCoinFly(document.getElementById('batchBar') || document.body, prevBal, gain);   // 合并成一枚金币飞入
+                showToast(done ? '✅ 已完成 ' + n + ' 个任务' + (credited ? ' · 🪙 +' + gain + '分' : '') : '↩ 已改回未完成 ' + n + ' 个');
+            }
             render();
         }
         function batchSetDone() { batchSetStatus(true); }
@@ -31419,7 +31512,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101319";
+        window.NIKO_VERSION = "202609101440";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
