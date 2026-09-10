@@ -3092,7 +3092,7 @@
         .event-item.status-done .event-title,
         .event-item.status-done .event-time,
         .day-task-item.status-done .task-title-text {
-            text-decoration: line-through;
+            text-decoration: none;   /* 2026-09-10 用户口径：完成只打勾，不划删除线 */
             text-decoration-color: rgba(0,0,0,0.4);
         }
         .event-item.status-done .event-checkbox,
@@ -3194,7 +3194,7 @@
             color: inherit;
         }
         .task-row-main .task-title.completed-title {
-            text-decoration: line-through;
+            text-decoration: none;   /* 2026-09-10 同口径：只打勾不划线 */
             opacity: 0.55;
         }
         /* v3 状态图标：右上角绝对定位 SVG（与日历格统一） */
@@ -3842,8 +3842,7 @@
         /* v2.10：吸附光缝改由 ::after 绘制（发光呼吸），这里仅保留命中标记 */
         .event-item.drag-over-top, .event-item.drag-over-bottom { z-index: 3; }
         .event-item.completed {
-            opacity: 0.5;
-            text-decoration: line-through;
+            opacity: 0.5;   /* 2026-09-10：完成只淡出不划线 */
         }
         .event-item.long-task {
             /* 仅作为标记类，不覆盖项目色背景 */
@@ -4056,9 +4055,7 @@
         .gantt-bar.completed {
             opacity: 0.5;                       /* 与 .event-item.completed 同透明度 */
         }
-        .gantt-bar.completed .event-text {
-            text-decoration: line-through;
-        }
+        /* 2026-09-10：完成态删除线已按用户口径移除（与 chip 一致，只打勾不划线） */
         .event-checkbox {
             width: 14px;
             height: 14px;
@@ -4255,7 +4252,7 @@
             background: #faf9f7;
         }
         .day-task-item.completed .task-title-text {
-            text-decoration: line-through;
+            text-decoration: none;   /* 2026-09-10 同口径：只打勾不划线 */
             color: #999;
         }
         .day-task-item .plan-badge {
@@ -31345,7 +31342,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609091315";
+        window.NIKO_VERSION = "202609101011";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
