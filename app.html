@@ -2535,6 +2535,8 @@
         .hcl-node.today-node { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(16,185,129,0.45); border-radius: 50%; }
         .hcl-node.today-node.lit { background: linear-gradient(135deg, #6ee7b7, #10b981 60%, #047857); box-shadow: 0 0 6px rgba(16,185,129,0.75), inset 0 0 2px rgba(255,255,255,0.8); }
         .hcl-node.rest-node { opacity: .32; border-radius: 50%; }
+        .hcl-node.future-node { background: transparent; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.07); opacity: .45; }
+        body.dark-mode .hcl-node.future-node { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10); opacity: .4; }
         /* 2026-09-10：未打卡改空心圈——此前与底格几乎同色，看不出打没打 */
         .hcl-node.withered { background: transparent; box-shadow: inset 0 0 0 1.5px rgba(87,83,78,0.45); border-radius: 50%; }
         body.dark-mode .hcl-node { background: rgba(255,255,255,0.10); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14); }
@@ -3083,14 +3085,7 @@
             background: #fff;
             border: 2px solid #3b82f6;
         }
-        .event-item.status-in-progress .event-title::after,
-        .day-task-item.status-in-progress .task-title-text::after {
-            content: '▶';
-            color: #3b82f6;
-            font-size: 10px;
-            margin-left: 4px;
-            opacity: 0.7;
-        }
+        /* v5：旧标题后淡▶已删——▶ 移入状态图标内部 */
         .event-item.status-done,
         .day-task-item.status-done {
             opacity: 0.55;
@@ -5090,13 +5085,19 @@
         .event-item:hover .event-action { opacity: 1; }
         .event-action:hover { background: rgba(0,0,0,0.12); color: #1f2937; }
         .status-mark.todo svg circle { stroke: #f59e0b; fill: none; stroke-width: 2; }
-        .status-mark.in-progress svg circle.bg { fill: rgba(59, 130, 246, 0.25); stroke: #3b82f6; stroke-width: 1.5; }
-        .status-mark.in-progress svg circle.dot { fill: #3b82f6; stroke: none; }
+        /* v5 状态辨识度升级（2026-09-10 用户反馈区分不够明显）：
+           进行中 = 实心蓝圆 + 白▶（替代淡蓝圈+小点）；四态各带状态色辉光，深色卡上一眼可辨 */
+        .status-mark.in-progress svg circle.bg { fill: #3b82f6; stroke: none; }
+        .status-mark.in-progress svg .dot { fill: #fff; stroke: none; }
         .status-mark.done svg rect { fill: #10b981; stroke: none; rx: 2; }
         .status-mark.done svg path { stroke: #fff; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .status-mark.overdue svg rect { fill: #ef4444; stroke: none; rx: 1.5; }
         .status-mark.overdue svg line { stroke: #fff; stroke-width: 1.6; stroke-linecap: round; }
         .status-mark.overdue svg circle { fill: #fff; stroke: none; }
+        .status-mark.todo svg { filter: drop-shadow(0 0 3px rgba(245,158,11,.55)); }
+        .status-mark.in-progress svg { filter: drop-shadow(0 0 3.5px rgba(59,130,246,.7)); }
+        .status-mark.done svg { filter: drop-shadow(0 0 3px rgba(16,185,129,.55)); }
+        .status-mark.overdue svg { filter: drop-shadow(0 0 3.5px rgba(239,68,68,.7)); }
         /* 大号状态图标（详情卡 14px） */
         .task-status-mark {
             position: absolute;
@@ -5111,13 +5112,18 @@
         }
         .task-status-mark svg { width: 14px; height: 14px; }
         .task-status-mark.todo svg circle { stroke: #f59e0b; fill: none; stroke-width: 2; }
-        .task-status-mark.in-progress svg circle.bg { fill: rgba(59, 130, 246, 0.25); stroke: #3b82f6; stroke-width: 1.5; }
-        .task-status-mark.in-progress svg circle.dot { fill: #3b82f6; stroke: none; }
+        /* v5：与大号统一——实心蓝 + 白▶ + 四态辉光 */
+        .task-status-mark.in-progress svg circle.bg { fill: #3b82f6; stroke: none; }
+        .task-status-mark.in-progress svg .dot { fill: #fff; stroke: none; }
         .task-status-mark.done svg rect { fill: #10b981; stroke: none; rx: 2; }
         .task-status-mark.done svg path { stroke: #fff; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
         .task-status-mark.overdue svg rect { fill: #ef4444; stroke: none; rx: 1.5; }
         .task-status-mark.overdue svg line { stroke: #fff; stroke-width: 1.8; stroke-linecap: round; }
         .task-status-mark.overdue svg circle { fill: #fff; stroke: none; }
+        .task-status-mark.todo svg { filter: drop-shadow(0 0 3px rgba(245,158,11,.55)); }
+        .task-status-mark.in-progress svg { filter: drop-shadow(0 0 3.5px rgba(59,130,246,.7)); }
+        .task-status-mark.done svg { filter: drop-shadow(0 0 3px rgba(16,185,129,.55)); }
+        .task-status-mark.overdue svg { filter: drop-shadow(0 0 3.5px rgba(239,68,68,.7)); }
         .day-task-item { position: relative; }
         /* 深色模式下加亮让图标更清晰 */
         body.dark-mode .event-action { color: rgba(255,255,255,0.5); }
@@ -5125,9 +5131,9 @@
         body.dark-mode .status-mark.todo svg circle,
         body.dark-mode .task-status-mark.todo svg circle { stroke: #fbbf24; }
         body.dark-mode .status-mark.in-progress svg circle.bg,
-        body.dark-mode .task-status-mark.in-progress svg circle.bg { stroke: #60a5fa; }
-        body.dark-mode .status-mark.in-progress svg circle.dot,
-        body.dark-mode .task-status-mark.in-progress svg circle.dot { fill: #60a5fa; }
+        body.dark-mode .task-status-mark.in-progress svg circle.bg { fill: #60a5fa; stroke: none; }
+        body.dark-mode .status-mark.in-progress svg .dot,
+        body.dark-mode .task-status-mark.in-progress svg .dot { fill: #fff; }
         body.dark-mode .status-mark.done svg rect,
         body.dark-mode .task-status-mark.done svg rect { fill: #34d399; }
         body.dark-mode .status-mark.overdue svg rect,
@@ -16122,28 +16128,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             return true;
         }
-        // 水晶链：近 7 天节点（lit 结晶 / withered 风化 / today-node 今日未定 / rest-node 休息日）
-        // 2026-09-10：加星期标签（一二三四五六日）——用户反馈看不出哪天打没打
+        // 水晶链：本周节点（2026-09-10 用户口径：固定从周一起算，不再滚动近 7 天）
+        // lit 结晶 / withered 风化 / today-node 今日未定 / rest-node 休息日 / future-node 本周未到
         function habitCrystalChain(h) {
             const logs = new Set(habitLogs().filter(l => l.habitId === h.id).map(habitLogDate));
             const today = formatDate(new Date());
             const WD = ['日', '一', '二', '三', '四', '五', '六'];
+            const now = new Date();
+            const monday = new Date(now);
+            monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));   // 周一为一周起点（此条用户点名固定周一，不跟随 niko_week_start）
             let nodes = '';
-            for (let i = 6; i >= 0; i--) {
-                const dt = new Date(); dt.setDate(dt.getDate() - i);
+            for (let i = 0; i < 7; i++) {
+                const dt = new Date(monday); dt.setDate(monday.getDate() + i);
                 const ds = formatDate(dt);
+                const future = ds > today;
                 const active = habitActiveOnDate(h, ds);
                 let cls = 'hcl-node';
                 if (logs.has(ds)) cls += ' lit';
                 else if (ds === today) cls += ' today-node';
+                else if (future) cls += ' future-node';
                 else if (!active) cls += ' rest-node';
                 else cls += ' withered';
                 if (ds === today && logs.has(ds)) cls += ' today-node';
                 if (ds === today && logs.has(ds) && window._hclNewId === h.id) { cls += ' crystal-new'; window._hclNewId = null; }
-                const tip = `${ds}${active ? '' : ' · 休息日'}${logs.has(ds) ? ' · 已打卡 ✓' : ''}`;
+                const tip = `${ds}${future ? ' · 未到' : (active ? '' : ' · 休息日')}${logs.has(ds) ? ' · 已打卡 ✓' : ''}`;
                 nodes += `<span class="hcl-col"><span class="${cls}" title="${tip}"></span><span class="hcl-lbl${ds === today ? ' hcl-lbl-today' : ''}">${WD[dt.getDay()]}</span></span>`;
             }
-            return `<span class="hcl" title="近 7 天打卡结晶（下为星期）">${nodes}</span>`;
+            return `<span class="hcl" title="本周打卡结晶（周一起算）">${nodes}</span>`;
         }
         // Boss 进化：连续全勤天数（休息日跳过不计不断；今天未打满不中断不计）
         const DG_BOSS_TIERS = [
@@ -17901,7 +17912,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     // v3 状态图标：右上角 12px SVG（4 态不同形状）
                     const STATUS_MARK_SVG = {
                         'todo':        '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.2"/></svg>',
-                        'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><circle class="dot" cx="6" cy="6" r="2.2"/></svg>',
+                        'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><path class="dot" d="M4.6 3.6 L8.6 6 L4.6 8.4 Z"/></svg>',
                         'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
                         'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
                     };
@@ -17986,7 +17997,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             overlay.className = 'calendar-gantt-layer';
             const GANTT_MARK_SVG = {
                 'todo':        '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.2"/></svg>',
-                'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><circle class="dot" cx="6" cy="6" r="2.2"/></svg>',
+                'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><path class="dot" d="M4.6 3.6 L8.6 6 L4.6 8.4 Z"/></svg>',
                 'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
                 'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
             };
@@ -18284,7 +18295,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 // v3 状态图标：右上角 14px SVG（与日历格统一）
                 const STATUS_MARK_SVG_LG = {
                     'todo':        { svg: '<svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5"/></svg>', label: '待办' },
-                    'in-progress': { svg: '<svg viewBox="0 0 14 14"><circle class="bg" cx="7" cy="7" r="5.3"/><circle class="dot" cx="7" cy="7" r="2.5"/></svg>', label: '进行中' },
+                    'in-progress': { svg: '<svg viewBox="0 0 14 14"><circle class="bg" cx="7" cy="7" r="5.3"/><path class="dot" d="M5.4 4.2 L10 7 L5.4 9.8 Z"/></svg>', label: '进行中' },
                     'done':        { svg: '<svg viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12"/><path d="M3.8 7.2 L6 9.4 L10.2 4.8"/></svg>', label: '已完成' },
                     'overdue':     { svg: '<svg viewBox="0 0 14 14"><rect x="1.5" y="3" width="11" height="8.5"/><line x1="7" y1="5.8" x2="7" y2="8.4"/><circle cx="7" cy="10.1" r="0.6"/></svg>', label: '已延期' }
                 };
@@ -31361,7 +31372,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101049";
+        window.NIKO_VERSION = "202609101123";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
