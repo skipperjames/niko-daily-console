@@ -11429,6 +11429,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         #tblImportModal .tbl-ditem em{font-style:normal;font-size:10.5px;color:var(--muted,#8a93a5);}
         #tblImportModal .tbl-ditem i{font-style:normal;font-size:11px;color:#6ea8fe;}
         #tblImportModal .tbl-empty{font-size:12.5px;color:#ffb454;padding:10px 0;}
+        #tblImportModal .tbl-chip.reg{border-color:rgba(110,168,254,.45);background:rgba(110,168,254,.10);color:inherit;}
+        /* 需求卡列表（2026-09-11）：一个项目×素材类型 = 一条需求 */
+        #tblImportModal .tbl-rlist{display:flex;flex-direction:column;gap:6px;}
+        #tblImportModal .tbl-ritem{display:flex;align-items:center;gap:10px;padding:7px 11px;border-radius:10px;border:1px solid var(--card-border,#333);background:rgba(127,127,127,.05);}
+        #tblImportModal .tbl-rdot{width:3px;align-self:stretch;border-radius:2px;flex-shrink:0;min-height:22px;}
+        #tblImportModal .tbl-rmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+        #tblImportModal .tbl-rmain b{font-size:12.5px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        #tblImportModal .tbl-rmain em{font-style:normal;font-size:10.5px;color:var(--muted,#8a93a5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+        #tblImportModal .tbl-rtime{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+        #tblImportModal .tbl-rtime input{font-family:inherit;font-size:11.5px;padding:4px 6px;border-radius:8px;border:1px solid var(--card-border,#333);background:transparent;color:inherit;cursor:pointer;}
+        #tblImportModal .tbl-rday{font-size:11px;color:#3ddc97;min-width:64px;text-align:right;white-space:nowrap;}
+        #tblImportModal .tbl-rnote{font-size:11px;color:var(--muted,#8a93a5);margin-top:9px;line-height:1.7;}
         #tblImportModal .tbl-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--card-border,#333);}
         #tblImportModal .tbl-fld,#tblImportModal .tbl-ck{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted,#8a93a5);cursor:pointer;}
         #tblImportModal .tbl-fld input,#tblImportModal .tbl-ck input{font-family:inherit;font-size:12px;padding:5px 8px;border-radius:8px;border:1px solid var(--card-border,#333);background:transparent;color:inherit;}
@@ -11445,6 +11457,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             #tblImportModal .tbl-grid td{padding:5px 8px;font-size:11px;}
             #tblImportModal .tbl-sp{display:none;}
             #tblImportModal .tbl-foot button{flex:1;}
+            #tblImportModal .tbl-ritem{flex-wrap:wrap;}
+            #tblImportModal .tbl-rtime{width:100%;justify-content:space-between;}
+            #tblImportModal .tbl-rtime input{font-size:16px;padding:5px 8px;}
+            #tblImportModal .tbl-rday{text-align:left;}
         }
         </style>
         <div class="modal-mask" id="tblImportModal" data-close-fn="tblImportClosed">
@@ -19469,7 +19485,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function tblImportClosed() { tblReset(); }
         function tblReset() {
-            TBL = { rows: [], cols: 0, merges: 0, leaves: [], degraded: false };
+            TBL = { rows: [], cols: 0, merges: 0, leaves: [], reqs: [], reqDates: {}, degraded: false };
             tblStage(1);
             var z = document.getElementById('tblPasteZone'); if (z) z.classList.remove('hot');
             var c = document.getElementById('tblPasteChips'); if (c) c.innerHTML = '<span class="tbl-chip">等待粘贴…</span>';
@@ -19540,6 +19556,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 return;
             }
             TBL.rows = grid.rows; TBL.cols = grid.cols; TBL.merges = grid.merges || 0; TBL.degraded = degraded;
+            TBL.reqDates = {};
             var z = document.getElementById('tblPasteZone'); if (z) z.classList.add('hot');
             if (chips) chips.innerHTML = '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
                 + '<span class="tbl-chip">合并单元格 <b>' + TBL.merges + '</b> 处</span>'
@@ -19549,10 +19566,32 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (typeof nikoSpark === 'function') { try { nikoSpark(document.getElementById('tblSteps'), '📋', '#8b5cf6'); } catch (e) {} }
         }
 
+        // ---- 地区识别（2026-09-11）：表头里写「日本 / 韩国」→ 其下所有列继承该地区 ----
+        var TBL_REGIONS = [
+            { code: 'JP', flag: '🇯🇵', name: '日本', re: /日本|日版|🇯🇵|(^|[^a-z])jp([^a-z]|$)/i },
+            { code: 'KR', flag: '🇰🇷', name: '韩国', re: /韩国|韩版|韩方|🇰🇷|(^|[^a-z])kr([^a-z]|$)/i }
+        ];
+        function tblRegionOf(v) {
+            var s = String(v || '').trim();
+            if (!s) return '';
+            for (var i = 0; i < TBL_REGIONS.length; i++) { if (TBL_REGIONS[i].re.test(s)) return TBL_REGIONS[i].code; }
+            return '';
+        }
+        function tblRegionMeta(code) {
+            for (var i = 0; i < TBL_REGIONS.length; i++) { if (TBL_REGIONS[i].code === code) return TBL_REGIONS[i]; }
+            return null;
+        }
+        function tblRegionFlag(code) { var m = tblRegionMeta(code); return m ? m.flag : ''; }
+        function tblFlagToRegion(flag) {
+            var s = String(flag || '');
+            for (var i = 0; i < TBL_REGIONS.length; i++) { if (s.indexOf(TBL_REGIONS[i].flag) >= 0) return TBL_REGIONS[i].code; }
+            return '';
+        }
+
         // ---- 还原归属：标签行向前填充（合并单元格的横跨），数量行不做填充 ----
         function tblDerive() {
             var rows = TBL.rows, cols = TBL.cols, n = rows.length;
-            if (n < 2) return { filled: [], leaves: [], nRows: n };
+            if (n < 2) return { filled: [], leaves: [], reqs: [], nRows: n };
             var filled = [];
             for (var r = 0; r < n; r++) {
                 var last = '', out = [], isNum = (r === n - 1);
@@ -19570,6 +19609,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 filled.push(out);
             }
             var numRow = filled[n - 1] || [], unitRow = filled[n - 2] || [], typeRow = filled[n - 3] || [], projRow = filled[n - 4] || [];
+            // 地区：每一列取「最靠下的一次命中」（嵌套时以更靠数量行的那个为准）
+            var regionByCol = [];
+            for (var rc = 0; rc < cols; rc++) regionByCol[rc] = '';
+            for (var rr = 0; rr < n - 1; rr++) {
+                var rowv = filled[rr] || [];
+                for (var cc = 0; cc < cols; cc++) {
+                    var code = tblRegionOf(rowv[cc]);
+                    if (code) regionByCol[cc] = code;
+                }
+            }
             var leaves = [];
             for (var i = 0; i < cols; i++) {
                 var raw = String(numRow[i] || '').trim();
@@ -19580,30 +19629,142 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     project: String(projRow[i] || '').trim(),
                     mtype: String(typeRow[i] || '').trim(),
                     unit: String(unitRow[i] || '').trim(),
+                    region: regionByCol[i] || '',
                     prefix: filled.slice(0, Math.max(0, n - 4)).map(function (rr) { return rr[i]; }).filter(function (x) { return x && String(x).trim(); })
                 });
             }
-            return { filled: filled, leaves: leaves, nRows: n };
+            var d = { filled: filled, leaves: leaves, nRows: n };
+            d.reqs = tblAssignDates(tblGroupReqs(leaves), tblStartDate(), tblRollOn());
+            return d;
+        }
+
+        // ---- 合并成「需求」：一个 项目 × 素材类型 = 一条需求 ----
+        // 命名：{项目}-{C}C{D}D（有 C 有 D）/ {项目}-{D}D（只有 D）；真人素材单独成卡
+        function tblReqCode(c, d, real) {
+            var t = '';
+            if (c > 0) t += c + 'C';
+            if (d > 0) t += d + 'D';
+            if (real > 0) t += (t ? '+' : '') + real + '真人';
+            return t || '';
+        }
+        function tblGroupReqs(leaves) {
+            var order = [], map = {};
+            leaves.forEach(function (L) {
+                var key = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '');
+                if (!map[key]) {
+                    map[key] = { key: key, project: L.project || '', mtype: L.mtype || '', region: L.region || '', cCount: 0, dCount: 0, realCount: 0, leaves: [] };
+                    order.push(key);
+                }
+                var g = map[key], u = String(L.unit || '').trim();
+                g.leaves.push(L);
+                if (/^C$/i.test(u)) g.cCount += L.qty;
+                else if (/真人/.test(u)) g.realCount += L.qty;
+                else g.dCount += L.qty;   // D 或认不出的单位一律按迭代计
+            });
+            var out = [];
+            order.forEach(function (k) {
+                var g = map[k];
+                var base = g.project || '（未识别项目）';
+                if (g.cCount > 0 || g.dCount > 0) {
+                    out.push({ project: g.project, mtype: g.mtype, region: g.region, cCount: g.cCount, dCount: g.dCount, realCount: 0, leaves: g.leaves, kind: 'main', code: tblReqCode(g.cCount, g.dCount, 0), title: base + '-' + tblReqCode(g.cCount, g.dCount, 0) });
+                }
+                if (g.realCount > 0) {
+                    var rl = g.leaves.filter(function (L) { return /真人/.test(String(L.unit || '')); });
+                    out.push({ project: g.project, mtype: g.mtype, region: g.region, cCount: 0, dCount: 0, realCount: g.realCount, leaves: rl, kind: 'real', code: g.realCount + '真人', title: base + '-' + g.realCount + '真人' });
+                }
+            });
+            // 同名撞车（同项目多素材类型）时补上素材类型，避免日历里两条一模一样的任务
+            var seen = {};
+            out.forEach(function (rq) { seen[rq.title] = (seen[rq.title] || 0) + 1; });
+            out.forEach(function (rq) { if (seen[rq.title] > 1 && rq.mtype) rq.title += '（' + rq.mtype + '）'; });
+            return out;
+        }
+
+        // ---- 日期摊派：每个 C 一天一个，从「落在哪天」起往后顺延；D 跟它所属的 C 同一天 ----
+        function tblStartDate() {
+            var el = document.getElementById('tblDate');
+            if (el && el.value) return el.value;
+            return (typeof formatDate === 'function') ? formatDate(new Date()) : new Date().toISOString().slice(0, 10);
+        }
+        function tblDateAdd(dateStr, n) {
+            var p = String(dateStr || '').split('-');
+            var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            if (isNaN(d.getTime())) d = new Date();
+            d.setDate(d.getDate() + (n || 0));
+            var mm = ('0' + (d.getMonth() + 1)).slice(-2), dd = ('0' + d.getDate()).slice(-2);
+            return d.getFullYear() + '-' + mm + '-' + dd;
+        }
+        function tblFmtDay(dateStr) {
+            var p = String(dateStr || '').split('-');
+            var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            if (isNaN(d.getTime())) return '';
+            return (d.getMonth() + 1) + '/' + d.getDate() + ' 周' + ['日', '一', '二', '三', '四', '五', '六'][d.getDay()];
+        }
+        function tblRollOn() { try { return !!safeStorage.get('niko_tbl_roll_days', 1); } catch (e) { return true; } }
+        function tblAssignDates(reqs, startStr, roll) {
+            var idx = 0;
+            reqs.forEach(function (rq, i) {
+                if (TBL.reqDates && TBL.reqDates[i]) { rq.date = TBL.reqDates[i]; }
+                else if (roll && rq.cCount > 0) { rq.date = tblDateAdd(startStr, idx); idx++; }
+                else { rq.date = startStr; }
+            });
+            return reqs;
+        }
+        function tblRollChanged() {
+            var ck = document.getElementById('tblRollDays');
+            try { safeStorage.set('niko_tbl_roll_days', (ck && (ck.checked || ck.hasAttribute('checked'))) ? 1 : 0); } catch (e) {}
+            TBL.reqDates = {};
+            tblRefreshDerive();
+        }
+        function tblStartChanged() { TBL.reqDates = {}; tblRefreshDerive(); }
+        function tblReqDateChanged(inp) {
+            var i = Number(inp.dataset.i);
+            TBL.reqDates[i] = inp.value || '';
+            var sp = inp.parentNode.parentNode.querySelector('.tbl-rday');
+            if (sp) sp.textContent = tblFmtDay(inp.value);
         }
 
         function tblChipsHtml(d) {
-            return '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
+            var reqs = d.reqs || [];
+            var h = '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
                 + '<span class="tbl-chip">合并 <b>' + TBL.merges + '</b> 处</span>'
-                + '<span class="tbl-chip ' + (d.leaves.length ? 'ok' : 'bad') + '">可落库 <b>' + d.leaves.length + '</b> 格</span>'
-                + (TBL.degraded ? '<span class="tbl-chip bad">纯文本降级：列归属可能不准</span>' : '');
+                + '<span class="tbl-chip ' + (reqs.length ? 'ok' : 'bad') + '"><b>' + d.leaves.length + '</b> 格 → <b>' + reqs.length + '</b> 条需求</span>';
+            var rc = {};
+            reqs.forEach(function (rq) { if (rq.region) rc[rq.region] = (rc[rq.region] || 0) + 1; });
+            Object.keys(rc).forEach(function (k) {
+                h += '<span class="tbl-chip reg">' + tblRegionFlag(k) + ' ' + tblRegionMeta(k).name + ' <b>' + rc[k] + '</b> 条</span>';
+            });
+            if (TBL.degraded) h += '<span class="tbl-chip bad">纯文本降级：列归属可能不准</span>';
+            return h;
         }
         function tblDeriveHtml(d) {
+            var reqs = d.reqs || [];
             var h = '<div class="tbl-derive">';
-            if (!d.leaves.length) {
+            if (!reqs.length) {
                 h += '<div class="tbl-empty">没解析出可落库的格子。检查最后一行是不是「数量」行 —— 格子里可以直接点进去改。</div>';
             } else {
-                h += '<div class="tbl-dtitle">将生成 <b>' + d.leaves.length + '</b> 条任务</div><div class="tbl-dlist">';
-                d.leaves.forEach(function (L) {
-                    h += '<span class="tbl-ditem"><b>' + escapeHtml(L.project || '（未识别项目）') + '</b>'
-                        + (L.prefix.length ? '<em>' + escapeHtml(L.prefix.slice(-2).join(' · ')) + '</em>' : '')
-                        + '<i>' + escapeHtml(L.mtype || '—') + ' · ' + escapeHtml(L.unit || '—') + ' × ' + L.qty + '</i></span>';
+                h += '<div class="tbl-dtitle">将生成 <b>' + reqs.length + '</b> 条需求</div><div class="tbl-rlist" id="tblReqList">';
+                reqs.forEach(function (rq, i) {
+                    var meta = [];
+                    if (rq.region) meta.push(tblRegionFlag(rq.region) + ' ' + tblRegionMeta(rq.region).name);
+                    if (rq.mtype) meta.push(rq.mtype);
+                    var bits = [];
+                    if (rq.cCount) bits.push(rq.cCount + ' 条完整制作 C');
+                    if (rq.dCount) bits.push(rq.dCount + ' 条迭代 D');
+                    if (rq.realCount) bits.push(rq.realCount + ' 条真人素材');
+                    meta.push(bits.join(' + '));
+                    h += '<div class="tbl-ritem">'
+                        + '<span class="tbl-rdot" style="background:' + tblPickColor(i) + '"></span>'
+                        + '<div class="tbl-rmain"><b>' + escapeHtml((rq.region ? tblRegionFlag(rq.region) + ' ' : '') + rq.title) + '</b>'
+                        + '<em>' + escapeHtml(meta.filter(Boolean).join(' · ')) + '</em></div>'
+                        + '<span class="tbl-rtime"><input type="date" class="tbl-rinput" data-i="' + i + '" value="' + (rq.date || '') + '" onchange="tblReqDateChanged(this)">'
+                        + '<span class="tbl-rday">' + tblFmtDay(rq.date) + '</span></span>'
+                        + '</div>';
                 });
                 h += '</div>';
+                h += '<div class="tbl-rnote">' + (tblRollOn()
+                    ? '每个 C 一天一个，从「落在哪天」那天起往后顺延（周五 → 下周四）；迭代 D 跟它所属的 C 同一天。日期可直接改。'
+                    : '已关掉按天顺延：所有需求都落在「落在哪天」那一天。日期可直接改。') + '</div>';
             }
             return h + '</div>';
         }
@@ -19611,7 +19772,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function tblBuildProof() {
             var s2 = document.getElementById('tblStage2');
             if (!s2) return;
-            var d = tblDerive(); TBL.leaves = d.leaves;
+            var d = tblDerive(); TBL.leaves = d.leaves; TBL.reqs = d.reqs;
             var grid = '<div class="tbl-gridwrap"><table class="tbl-grid">';
             for (var r = 0; r < TBL.rows.length; r++) {
                 grid += '<tr>';
@@ -19628,11 +19789,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             grid += '</table></div>';
             var today = (typeof formatDate === 'function') ? formatDate(new Date()) : new Date().toISOString().slice(0, 10);
             var foot = '<div class="tbl-foot">'
-                + '<label class="tbl-fld">落在哪天<input type="date" id="tblDate" value="' + today + '"></label>'
+                + '<label class="tbl-fld">落在哪天<input type="date" id="tblDate" value="' + today + '" onchange="tblStartChanged()"></label>'
+                + '<label class="tbl-ck"><input type="checkbox" id="tblRollDays"' + (tblRollOn() ? ' checked' : '') + ' onchange="tblRollChanged()">每个 C 一天一个顺延</label>'
                 + '<label class="tbl-ck"><input type="checkbox" id="tblNewProj" checked>没匹配到的项目自动建</label>'
                 + '<span class="tbl-sp"></span>'
                 + '<button class="btn-small" onclick="tblReset()">↺ 重新粘贴</button>'
-                + '<button class="btn-small primary" id="tblCommitBtn" onclick="tblCommit()"' + (d.leaves.length ? '' : ' disabled') + '>✓ 确认落库（' + d.leaves.length + ' 条）</button>'
+                + '<button class="btn-small primary" id="tblCommitBtn" onclick="tblCommit()"' + (d.reqs.length ? '' : ' disabled') + '>✓ 确认落库（' + d.reqs.length + ' 条）</button>'
                 + '</div>';
             s2.innerHTML = '<div class="tbl-chips">' + tblChipsHtml(d) + '</div>'
                 + '<div class="tbl-hint">蓝左边框 = 合并单元格起点 · 斜纹 = 被合并覆盖的格子 · <b>任何一格都能直接点进去改</b>（项目名认错了就在这改，改完下面立刻重算）</div>'
@@ -19652,66 +19814,91 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function tblRefreshDerive() {
             var s2 = document.getElementById('tblStage2'); if (!s2) return;
-            var d = tblDerive(); TBL.leaves = d.leaves;
+            var d = tblDerive(); TBL.leaves = d.leaves; TBL.reqs = d.reqs;
             var oc = s2.querySelector('.tbl-chips'), od = s2.querySelector('.tbl-derive'), btn = document.getElementById('tblCommitBtn');
             if (oc) oc.outerHTML = '<div class="tbl-chips">' + tblChipsHtml(d) + '</div>';
             if (od) od.outerHTML = tblDeriveHtml(d);
-            if (btn) { btn.textContent = '✓ 确认落库（' + d.leaves.length + ' 条）'; btn.disabled = !d.leaves.length; }
+            if (btn) { btn.textContent = '✓ 确认落库（' + d.reqs.length + ' 条）'; btn.disabled = !d.reqs.length; }
         }
 
-        // ---- 落库：叶子格 → 任务卡（带 项目 / 素材类型 / 单位 / 条数）----
+        // ---- 落库：一条需求 = 一张卡（带 项目 / 素材类型 / 地区 / C·D 条数 / 落库日期）----
+        function tblMatchProjectId(pname, region, plist, allowNew, newProjects) {
+            if (!pname) return '';
+            var exact = plist.filter(function (p) { return p.name === pname; });
+            var pool = exact.length ? exact : plist.filter(function (p) { return pname.indexOf(p.name) >= 0 || p.name.indexOf(pname) >= 0; });
+            if (region && pool.length > 1 && typeof getProjectFlag === 'function') {
+                var prefer = pool.filter(function (p) { return tblFlagToRegion(getProjectFlag(p)) === region; });
+                if (prefer.length) pool = prefer;
+            }
+            if (pool.length) return pool[0].id;
+            if (allowNew && typeof addProjectSilent === 'function') {
+                var id = addProjectSilent(pname, tblPickColor(newProjects.length));
+                newProjects.push(pname);
+                plist.push({ id: id, name: pname });
+                return id;
+            }
+            return '';
+        }
         function tblCommit() {
             var d = tblDerive();
-            if (!d.leaves.length) { if (typeof showToast === 'function') showToast('没有可落库的格子'); return; }
-            var el = document.getElementById('tblDate');
-            var dateStr = (el && el.value) || ((typeof formatDate === 'function') ? formatDate(new Date()) : '');
+            var reqs = d.reqs || [];
+            if (!reqs.length) { if (typeof showToast === 'function') showToast('没有可落库的格子'); return; }
+            // 先抓用户手改过的日期
+            var s2 = document.getElementById('tblStage2');
+            if (s2) s2.querySelectorAll('#tblReqList input.tbl-rinput').forEach(function (inp) {
+                var i = Number(inp.dataset.i);
+                if (inp.value) TBL.reqDates[i] = inp.value;
+            });
             var ck = document.getElementById('tblNewProj');
             var allowNew = !ck || ck.checked || ck.hasAttribute('checked');
             var evs = safeStorage.get('work_calendar_events', []) || [];
-            var newProjects = [];
             var plist = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : [];
-            d.leaves.forEach(function (L) {
-                var pname = L.project || '';
-                var pid = '';
-                if (pname) {
-                    var hit = plist.find(function (p) { return p.name === pname; })
-                        || plist.find(function (p) { return pname.indexOf(p.name) >= 0 || p.name.indexOf(pname) >= 0; });
-                    if (hit) pid = hit.id;
-                    else if (allowNew && typeof addProjectSilent === 'function') {
-                        pid = addProjectSilent(pname, tblPickColor(newProjects.length));
-                        newProjects.push(pname);
-                        plist.push({ id: pid, name: pname });
-                    }
+            var newProjects = [], days = [];
+            reqs.forEach(function (rq, i) {
+                var dateStr = (TBL.reqDates[i] || rq.date || tblStartDate());
+                var pid = tblMatchProjectId(rq.project, rq.region, plist, allowNew, newProjects);
+                var flag = rq.region ? tblRegionFlag(rq.region) : '';
+                if (flag && pid && typeof getProjectFlag === 'function' && typeof getProject === 'function') {
+                    try { if (tblFlagToRegion(getProjectFlag(getProject(pid))) === rq.region) flag = ''; } catch (e) {}
                 }
-                var title = [pname, L.mtype, L.unit].filter(Boolean).join(' · ') + (L.qty > 1 ? ' ×' + L.qty : '');
+                var parts = [];
+                if (rq.cCount) parts.push(rq.cCount + ' 条完整制作 C');
+                if (rq.dCount) parts.push(rq.dCount + ' 条迭代 D');
+                if (rq.realCount) parts.push(rq.realCount + ' 条真人素材');
                 evs.push({
                     id: 'ev_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-                    title: title,
-                    desc: '排期表录入 · ' + (L.mtype || '—') + ' / ' + (L.unit || '—') + ' ×' + L.qty + ' 条'
-                        + (L.prefix.length ? '\n' + L.prefix.join(' · ') : ''),
+                    title: (flag ? flag + ' ' : '') + rq.title,
+                    desc: '排期表录入 · ' + (parts.join(' + ') || '—') + (rq.mtype ? '｜' + rq.mtype : '') + (rq.region ? '｜' + tblRegionMeta(rq.region).name : ''),
                     startDate: dateStr, endDate: dateStr,
                     type: 'execute', startTime: '', endTime: '',
                     priority: 'next', status: 'todo', projectId: pid, repeat: null,
-                    qty: L.qty, unit: L.unit, materialType: L.mtype, fromTable: true
+                    qty: (rq.cCount + rq.dCount + rq.realCount) || 1,
+                    unit: rq.code, materialType: rq.mtype, region: rq.region || '',
+                    cCount: rq.cCount, dCount: rq.dCount, fromTable: true
                 });
+                if (days.indexOf(dateStr) < 0) days.push(dateStr);
             });
+            days.sort();
             safeStorage.set('work_calendar_events', evs);
             try { if (typeof events !== 'undefined' && events !== evs) events = evs; } catch (e) {}
             try { if (typeof render === 'function') render(); } catch (e) {}
             try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (e) {}
             tblStage(3);
             var s3 = document.getElementById('tblStage3');
+            var span = days.length > 1
+                ? ('已排到 ' + tblFmtDay(days[0]) + ' → ' + tblFmtDay(days[days.length - 1]))
+                : ('已落在 ' + tblFmtDay(days[0] || ''));
             if (s3) {
                 s3.innerHTML = '<div class="tbl-result">'
-                    + '<div class="big">' + d.leaves.length + ' 条</div>'
-                    + '<p>已落到 ' + dateStr + (newProjects.length ? '<br><span class="newpj">顺带新建了 ' + newProjects.length + ' 个项目：' + escapeHtml(newProjects.join('、')) + '</span>' : '') + '</p>'
+                    + '<div class="big">' + reqs.length + ' 条</div>'
+                    + '<p>' + span + (newProjects.length ? '<br><span class="newpj">顺带新建了 ' + newProjects.length + ' 个项目：' + escapeHtml(newProjects.join('、')) + '</span>' : '') + '</p>'
                     + '<div style="display:flex;gap:10px;justify-content:center;">'
                     + '<button class="btn-small" onclick="tblReset()">↺ 再录一张</button>'
                     + '<button class="btn-small primary" onclick="tblCloseAndGo()">去计划看板看 →</button>'
                     + '</div></div>';
             }
             if (typeof nikoSpark === 'function') { try { nikoSpark(document.getElementById('tblStage3'), '✓', '#3ddc97'); } catch (e) {} }
-            if (typeof showToast === 'function') showToast('📋 已落库 ' + d.leaves.length + ' 条任务');
+            if (typeof showToast === 'function') showToast('📋 已落库 ' + reqs.length + ' 条需求');
         }
         function tblCloseAndGo() {
             var m = document.getElementById('tblImportModal');
@@ -31957,7 +32144,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609110003";
+        window.NIKO_VERSION = "202609110033";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
