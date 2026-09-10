@@ -18003,11 +18003,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!gridRect.width) return;   // 容器不可见（页面隐藏）时跳过
             const overlay = document.createElement('div');
             overlay.className = 'calendar-gantt-layer';
+            // v7 状态图标（2026-09-10）：长期任务甘特条与单日任务条统一用反应釜四态 SVG
+            // （铁律：改任务条状态图标，长期任务这条渲染点必须一起改——此前 v6 漏了这里，长期任务还是旧圆圈/方块勾）
             const GANTT_MARK_SVG = {
-                'todo':        '<svg viewBox="0 0 12 12"><circle cx="6" cy="6" r="4.2"/></svg>',
-                'in-progress': '<svg viewBox="0 0 12 12"><circle class="bg" cx="6" cy="6" r="4.5"/><path class="dot" d="M4.6 3.6 L8.6 6 L4.6 8.4 Z"/></svg>',
-                'done':        '<svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10"/><path d="M3.2 6.2 L5.2 8.2 L8.8 4.2"/></svg>',
-                'overdue':     '<svg viewBox="0 0 12 12"><rect x="1.5" y="2.5" width="9" height="7"/><line x1="6" y1="5" x2="6" y2="7.2"/><circle cx="6" cy="8.6" r="0.5"/></svg>'
+                'todo':        '<svg viewBox="0 0 12 12"><path class="rv-t" d="M4.6 1.4h2.8v2.4a4 4 0 1 1-2.8 0Z"/><ellipse class="rv-pow" cx="6" cy="8.6" rx="2.4" ry="1"/></svg>',
+                'in-progress': '<svg viewBox="0 0 12 12"><path class="rv-v" d="M4.6 1.4h2.8v2.4a4 4 0 1 1-2.8 0Z"/><circle class="rv-sw" cx="6" cy="7.3" r="2.1"/><circle class="rv-bub" cx="6" cy="9.1" r=".8"/></svg>',
+                'done':        '<svg viewBox="0 0 12 12"><path class="rv-d" d="M4.6 1.4h2.8v2.4a4 4 0 1 1-2.8 0Z"/><polygon class="rv-x" points="6,5.2 8.1,7.3 6,9.6 3.9,7.3"/></svg>',
+                'overdue':     '<svg viewBox="0 0 12 12"><path class="rv-o" d="M4.6 1.4h2.8v2.4a4 4 0 1 1-2.8 0Z"/><circle class="rv-sw rv-hot" cx="6" cy="7.3" r="2.1"/><circle class="rv-bub rv-bub2" cx="5" cy="9.1" r=".7"/><circle class="rv-bub rv-bub3" cx="7" cy="9.3" r=".6"/></svg>'
             };
             for (let i = 0; i < daysToShow; i++) {
                 const startStr = formatDate(addDays(currentWeekStart, i));
@@ -31512,7 +31514,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101440";
+        window.NIKO_VERSION = "202609101453";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
