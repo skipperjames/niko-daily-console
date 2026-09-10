@@ -16614,7 +16614,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const ex = tr.left + tr.width / 2 - 10, ey = tr.top + tr.height / 2 - 10;
                 coin.style.left = sx + 'px'; coin.style.top = sy + 'px';
                 document.body.appendChild(coin);
-                const midY = Math.min(sy, ey) - 130 - sy;   // 抛物线顶点
+                const midY = Math.max(16, Math.min(sy, ey) - 130) - sy;   // 抛物线顶点（钳制在视口内，防飞出画面）
                 const anim = coin.animate([
                     { transform: 'translate(0,0) scale(.5)', opacity: .35, offset: 0, easing: 'cubic-bezier(.25,.6,.4,1)' },
                     { transform: `translate(${(ex - sx) / 2}px, ${midY}px) scale(1.3)`, opacity: 1, offset: .5, easing: 'cubic-bezier(.55,0,.75,.45)' },
@@ -18622,7 +18622,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const ex = tr.left + tr.width / 2 - 10, ey = tr.top + tr.height / 2 - 10;
                 coin.style.left = sx + 'px'; coin.style.top = sy + 'px';
                 document.body.appendChild(coin);
-                const midY = Math.min(sy, ey) - 130 - sy;   // 抛物线顶点
+                // 抛物线顶点：钳制在视口内（计划页 chip 在页面最顶部，从下方任务卡起飞时
+                // 若按"较高点上方 130px"取顶点会直接飞出画面 —— 2026-09-10 用户截图点名）
+                const apex = Math.max(16, Math.min(sy, ey) - 130);
+                const midY = apex - sy;
                 const anim = coin.animate([
                     { transform: 'translate(0,0) scale(.5)', opacity: .35, offset: 0, easing: 'cubic-bezier(.25,.6,.4,1)' },
                     { transform: `translate(${(ex - sx) / 2}px, ${midY}px) scale(1.3)`, opacity: 1, offset: .5, easing: 'cubic-bezier(.55,0,.75,.45)' },
@@ -31514,7 +31517,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101453";
+        window.NIKO_VERSION = "202609101557";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
