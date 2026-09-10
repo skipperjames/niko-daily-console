@@ -11298,6 +11298,12 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <button class="btn-small primary" style="background:#ec4899;border-color:#ec4899;" onclick="openMemorialModal()">💝 纪念日</button>
                     <button class="btn-small primary" style="background:#8b5cf6;border-color:#8b5cf6;" onclick="openMarketNodeModal()">🎯 买量节点</button>
                     <button class="btn-small primary" style="background:#f59e0b;border-color:#f59e0b;" onclick="openTimeAudit()" title="自动统计各轨道时长占比 vs 上周，回答时间花哪了">⏱ 时间审计</button>
+                    <button class="btn-small primary" style="background:#0ea5e9;border-color:#0ea5e9;" onclick="openTableImport()" title="从排期表框选复制，粘进来就变成任务。读的是表格格式，不识别、不会认错字，落库前先在「校对台」过一眼">📋 表格录入</button>
+                    <label class="node-toggle" title="没做完的任务跨天自动往后挪到今天，不用手动拖。顺延过的任务卡上会标「↷ 顺延 N 天」">
+                        <input type="checkbox" id="autoRolloverToggle" onchange="toggleAutoRollover(this.checked)" checked>
+                        <span class="node-toggle-track"></span>
+                        <span style="font-size:12px;color:#888;">↷ 顺延</span>
+                    </label>
                     <div class="top-stats">
                         <div class="stat-card sc-total"><div class="stat-num" id="statTotal">0</div><div class="stat-label">全部任务</div></div>
                         <div class="stat-card sc-done"><div class="stat-num" id="statDone">0</div><div class="stat-label">已完成</div></div>
@@ -11383,6 +11389,84 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 </div>
             </div>
 
+
+        <!-- 排期表剪贴板录入 + 校对台（2026-09-10 新增） -->
+        <style>
+        #tblImportModal .tbl-import{width:min(1120px,94vw);max-width:min(1120px,94vw);max-height:88vh;overflow:auto;text-align:left;}
+        #tblImportModal .tbl-steps{display:flex;align-items:center;gap:8px;margin:4px 0 16px;}
+        #tblImportModal .tbl-step{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted,#8a93a5);padding:4px 11px;border-radius:999px;border:1px solid var(--card-border,#333);transition:.18s;}
+        #tblImportModal .tbl-step i{font-style:normal;font-size:11px;width:15px;height:15px;line-height:15px;text-align:center;border-radius:50%;background:rgba(127,127,127,.16);}
+        #tblImportModal .tbl-step.on{color:inherit;border-color:rgba(110,168,254,.55);background:rgba(110,168,254,.10);}
+        #tblImportModal .tbl-step.on i{background:#6ea8fe;color:#0b1220;}
+        #tblImportModal .tbl-steps em{flex:1;max-width:52px;height:1px;background:var(--card-border,#333);}
+        #tblImportModal .tbl-paste{border:1.5px dashed var(--card-border,#3a4253);border-radius:14px;padding:34px 20px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:copy;text-align:center;transition:.18s;outline:none;}
+        #tblImportModal .tbl-paste:hover,#tblImportModal .tbl-paste:focus{border-color:#6ea8fe;background:rgba(110,168,254,.05);}
+        #tblImportModal .tbl-paste.hot{border-color:#3ddc97;background:rgba(61,220,151,.06);}
+        #tblImportModal .tbl-paste b{font-size:14px;}
+        #tblImportModal .tbl-paste span{font-size:12.5px;color:var(--muted,#8a93a5);}
+        #tblImportModal .tbl-paste em{font-style:normal;font-size:11.5px;color:var(--muted,#6b7484);max-width:520px;line-height:1.7;}
+        #tblImportModal .tbl-chips{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 0;}
+        #tblImportModal .tbl-chip{font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--card-border,#333);color:var(--muted,#8a93a5);}
+        #tblImportModal .tbl-chip b{color:inherit;font-weight:600;}
+        #tblImportModal .tbl-chip.ok{border-color:rgba(61,220,151,.45);background:rgba(61,220,151,.09);color:inherit;}
+        #tblImportModal .tbl-chip.bad{border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.09);color:inherit;}
+        #tblImportModal .tbl-hint{font-size:11.5px;color:var(--muted,#8a93a5);margin:14px 0 8px;}
+        #tblImportModal .tbl-hint b{color:inherit;}
+        #tblImportModal .tbl-gridwrap{overflow:auto;max-height:40vh;border:1px solid var(--card-border,#333);border-radius:11px;background:rgba(127,127,127,.04);}
+        #tblImportModal .tbl-grid{border-collapse:separate;border-spacing:0;font-size:12px;white-space:nowrap;min-width:100%;}
+        #tblImportModal .tbl-grid td{border-right:1px solid var(--card-border,#333);border-bottom:1px solid var(--card-border,#333);padding:6px 10px;vertical-align:middle;min-width:26px;}
+        #tblImportModal .tbl-grid tr:first-child td{position:sticky;top:0;z-index:2;background:var(--card-bg,#171a21);font-weight:600;}
+        #tblImportModal .tbl-grid td.span{border-left:2px solid #6ea8fe;}
+        #tblImportModal .tbl-grid td.ghost{background:repeating-linear-gradient(45deg,rgba(127,127,127,.10),rgba(127,127,127,.10) 5px,transparent 5px,transparent 10px);}
+        #tblImportModal .tbl-grid td.num{color:#3ddc97;font-weight:600;}
+        #tblImportModal .tbl-grid td:focus{outline:2px solid #6ea8fe;outline-offset:-2px;background:rgba(110,168,254,.12);}
+        #tblImportModal .tbl-derive{margin-top:14px;}
+        #tblImportModal .tbl-dtitle{font-size:12.5px;margin-bottom:8px;color:var(--muted,#8a93a5);}
+        #tblImportModal .tbl-dtitle b{font-size:16px;color:#3ddc97;margin:0 3px;}
+        #tblImportModal .tbl-dlist{display:flex;flex-wrap:wrap;gap:7px;}
+        #tblImportModal .tbl-ditem{display:inline-flex;align-items:baseline;gap:7px;padding:6px 11px;border-radius:9px;border:1px solid var(--card-border,#333);background:rgba(127,127,127,.05);font-size:12px;}
+        #tblImportModal .tbl-ditem b{font-weight:650;}
+        #tblImportModal .tbl-ditem em{font-style:normal;font-size:10.5px;color:var(--muted,#8a93a5);}
+        #tblImportModal .tbl-ditem i{font-style:normal;font-size:11px;color:#6ea8fe;}
+        #tblImportModal .tbl-empty{font-size:12.5px;color:#ffb454;padding:10px 0;}
+        #tblImportModal .tbl-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px solid var(--card-border,#333);}
+        #tblImportModal .tbl-fld,#tblImportModal .tbl-ck{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted,#8a93a5);cursor:pointer;}
+        #tblImportModal .tbl-fld input,#tblImportModal .tbl-ck input{font-family:inherit;font-size:12px;padding:5px 8px;border-radius:8px;border:1px solid var(--card-border,#333);background:transparent;color:inherit;}
+        #tblImportModal .tbl-ck input{padding:0;width:14px;height:14px;cursor:pointer;}
+        #tblImportModal .tbl-sp{flex:1;min-width:8px;}
+        #tblImportModal .tbl-result{text-align:center;padding:22px 10px 8px;}
+        #tblImportModal .tbl-result .big{font-size:34px;font-weight:700;color:#3ddc97;line-height:1.2;}
+        #tblImportModal .tbl-result p{font-size:13px;color:var(--muted,#8a93a5);margin:6px 0 16px;}
+        #tblImportModal .tbl-result .newpj{font-size:11.5px;color:#ffb454;}
+        .roll-tag{color:#0ea5e9 !important;border-color:rgba(14,165,233,.4) !important;background:rgba(14,165,233,.09) !important;}
+        @media (max-width:768px){
+            #tblImportModal .tbl-import{width:96vw;max-width:96vw;max-height:92vh;padding:16px 14px;}
+            #tblImportModal .tbl-gridwrap{max-height:34vh;}
+            #tblImportModal .tbl-grid td{padding:5px 8px;font-size:11px;}
+            #tblImportModal .tbl-sp{display:none;}
+            #tblImportModal .tbl-foot button{flex:1;}
+        }
+        </style>
+        <div class="modal-mask" id="tblImportModal" data-close-fn="tblImportClosed">
+            <div class="modal tbl-import">
+                <h3 style="display:flex;align-items:center;gap:9px;margin-bottom:2px;">📋 排期表录入<span style="font-size:11.5px;font-weight:400;color:var(--muted,#8a93a5);">粘贴 · 校对 · 落库</span></h3>
+                <div class="tbl-steps" id="tblSteps">
+                    <span class="tbl-step on" data-s="1"><i>1</i>粘贴表格</span><em></em>
+                    <span class="tbl-step" data-s="2"><i>2</i>校对</span><em></em>
+                    <span class="tbl-step" data-s="3"><i>3</i>落库</span>
+                </div>
+                <div class="tbl-stage" id="tblStage1">
+                    <div class="tbl-paste" id="tblPasteZone" tabindex="0">
+                        <b>点这里，然后按 Ctrl+V</b>
+                        <span>在排期表里框选 → Ctrl+C → 粘到这里</span>
+                        <em>读的是剪贴板里的「表格格式」：项目横跨哪几列、哪些格是空的，原样保留。不用识别，也不会认错字。</em>
+                    </div>
+                    <div class="tbl-chips" id="tblPasteChips"><span class="tbl-chip">等待粘贴…</span></div>
+                </div>
+                <div class="tbl-stage" id="tblStage2" style="display:none;"></div>
+                <div class="tbl-stage" id="tblStage3" style="display:none;"></div>
+            </div>
+        </div>
 
         <!-- 任务编辑弹窗 -->
     <div class="modal-mask" id="eventModal">
@@ -13730,6 +13814,51 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             if (isEventOverdue(ev)) return 'overdue';
             return ev.status || 'todo';
         }
+
+        // ===== 自动顺延（2026-09-10）：没做完的任务跨天自动往后挪到今天，用户不用手动拖 =====
+        // 零输入：不新增任何录入动作；幂等：顺延后 endDate 已是今天，再跑不会重复顺延
+        function nikoDateStr(d) { const x = d || new Date(); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); }
+        function nikoShiftDateStr(s, days) { const x = new Date(String(s) + 'T00:00:00'); if (isNaN(x)) return s; x.setDate(x.getDate() + days); return nikoDateStr(x); }
+        function nikoDayDiff(aStr, bStr) { const a = new Date(String(aStr) + 'T00:00:00'); const b = new Date(String(bStr) + 'T00:00:00'); if (isNaN(a) || isNaN(b)) return 0; return Math.round((b - a) / 86400000); }
+        function nikoRolloverEnabled() { return safeStorage.get('niko_auto_rollover', 1) == 1; }
+        // 返回本次顺延条数；每天最多处理一次，force=true 时忽略"今天已处理"标记
+        function nikoAutoRollover(force) {
+            try {
+                if (!nikoRolloverEnabled()) return 0;
+                const today = nikoDateStr();
+                if (!force && safeStorage.get('niko_rollover_last', '') === today) return 0;
+                const evs = safeStorage.get('work_calendar_events', []) || [];
+                let n = 0;
+                evs.forEach(function (ev) {
+                    if (!ev || ev.status === 'done' || !ev.endDate) return;
+                    if (ev.repeat || ev.repeatInstance) return;   // 重复任务由重复逻辑自己滚动
+                    if (ev.endDate >= today) return;
+                    const d = nikoDayDiff(ev.endDate, today);
+                    if (d <= 0) return;
+                    if (ev.startDate) ev.startDate = nikoShiftDateStr(ev.startDate, d);
+                    ev.endDate = nikoShiftDateStr(ev.endDate, d);
+                    ev.rolledDays = (ev.rolledDays || 0) + d;     // 累计顺延天数，卡片上标出来
+                    ev.rolledAt = today;
+                    n++;
+                });
+                safeStorage.set('niko_rollover_last', today);
+                if (n) {
+                    safeStorage.set('work_calendar_events', evs);
+                    safeStorage.set('niko_rollover_pending', n);
+                    // 关键：内存里的 events 是启动时快照，必须同步换掉，否则页面渲染的还是顺延前的旧数据
+                    try { events = evs; } catch (e2) {}
+                }
+                return n;
+            } catch (e) { return 0; }
+        }
+        // 全站统一入口：切页前先顺延，保证看到的永远是顺延后的数据
+        function nikoRolloverTick() {
+            try {
+                const n = nikoAutoRollover();
+                if (n > 0) setTimeout(function () { if (typeof showToast === 'function') showToast('↷ ' + n + ' 条没做完的已自动顺延到今天'); }, 500);
+                return n;
+            } catch (e) { return 0; }
+        }
         let currentPage = 'today';
         let currentWeekStart = calMonday(new Date());
         let selectedDate = new Date();
@@ -14428,6 +14557,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function switchPage(page) {
             if (typeof navSortMode !== 'undefined' && navSortMode) return; // 排序模式中不切换页面
             currentPage = page;
+            nikoRolloverTick();   // 切页前先把没做完的任务顺延掉，页面拿到的就是新数据
             try { if (typeof nikoPlanDockPlace === 'function') nikoPlanDockPlace(page); } catch (err) {}
             try { if (typeof navGardenVisit === 'function') navGardenVisit(page); } catch (e) {}
             document.querySelectorAll('.sidebar-left .nav-item[data-nav]').forEach(item => {
@@ -18319,6 +18449,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <div class="task-row-meta">
                             <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${escapeHtml(project.name)}</span>
                             ${isLong ? '<span class="task-meta-tag">📅 长期</span>' : ''}
+                            ${ev.rolledDays ? `<span class="task-meta-tag roll-tag" title="跨天没做完，已自动顺延 ${ev.rolledDays} 天（最近一次：${ev.rolledAt || ''}）">↷ 顺延${ev.rolledDays}天</span>` : ''}
                             ${ev.repeat || ev.repeatInstance ? '<span class="task-meta-tag">🔄 重复</span>' : ''}
                             ${ev.startTime ? `<span class="task-meta-tag">🕐 ${ev.startTime}${ev.endTime ? '-' + ev.endTime : ''}</span>` : ''}
                             ${isLong ? `<span class="task-meta-tag">${ev.startDate} ~ ${ev.endDate}</span>` : ''}
@@ -19318,6 +19449,315 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 setTimeout(() => { nikoDustBurst._n = Math.max(0, (nikoDustBurst._n || 0) - 1); }, 900);
             } catch (e) {}
         }
+
+        // ============================================================================
+        // 排期表剪贴板录入 + 校对台（2026-09-10 新增 v1）
+        // 通道：剪贴板 text/html（带 colspan/rowspan）→ 展开成网格 → 向前填充还原"归属"
+        //      → 校对台（原样复刻、格子可直接改）→ 用户确认才落库
+        // 铁律：零 OCR（不识别文字）；校对台是硬门槛，未经确认一律不落库
+        // ============================================================================
+        var TBL = { rows: [], cols: 0, merges: 0, leaves: [], degraded: false };
+        var TBL_PROJ_COLORS = ['#0ea5e9', '#8b5cf6', '#f59e0b', '#10b981', '#ec4899', '#6366f1', '#14b8a6', '#f43f5e', '#a855f7', '#84cc16'];
+        function tblPickColor(i) { return TBL_PROJ_COLORS[i % TBL_PROJ_COLORS.length]; }
+
+        function openTableImport() {
+            var m = document.getElementById('tblImportModal');
+            if (!m) return;
+            tblReset();
+            m.classList.add('show');
+            setTimeout(function () { var z = document.getElementById('tblPasteZone'); if (z) z.focus(); }, 80);
+        }
+        function tblImportClosed() { tblReset(); }
+        function tblReset() {
+            TBL = { rows: [], cols: 0, merges: 0, leaves: [], degraded: false };
+            tblStage(1);
+            var z = document.getElementById('tblPasteZone'); if (z) z.classList.remove('hot');
+            var c = document.getElementById('tblPasteChips'); if (c) c.innerHTML = '<span class="tbl-chip">等待粘贴…</span>';
+            var s2 = document.getElementById('tblStage2'); if (s2) s2.innerHTML = '';
+            var s3 = document.getElementById('tblStage3'); if (s3) s3.innerHTML = '';
+        }
+        function tblStage(n) {
+            ['tblStage1', 'tblStage2', 'tblStage3'].forEach(function (id, i) {
+                var el = document.getElementById(id); if (el) el.style.display = (i + 1 === n) ? '' : 'none';
+            });
+            document.querySelectorAll('#tblSteps .tbl-step').forEach(function (el) {
+                el.classList.toggle('on', Number(el.dataset.s) <= n);
+            });
+        }
+
+        // ---- 剪贴板：读表格 HTML（合并单元格信息完整），无 HTML 才降级纯文本 ----
+        function tblParseHtml(html) {
+            var doc = new DOMParser().parseFromString(String(html), 'text/html');
+            var table = doc.querySelector('table');
+            if (!table) return null;
+            var trs = [].slice.call(table.querySelectorAll('tr'));
+            var rows = [], merges = 0, maxCols = 0;
+            trs.forEach(function (tr, r) {
+                var cells = [].slice.call(tr.children).filter(function (el) { return /^(TD|TH)$/.test(el.tagName); });
+                if (!cells.length) return;
+                rows[r] = rows[r] || [];
+                var ci = 0;
+                cells.forEach(function (td) {
+                    while (rows[r][ci] !== undefined) ci++;
+                    var cs = parseInt(td.getAttribute('colspan') || '1', 10) || 1;
+                    var rs = parseInt(td.getAttribute('rowspan') || '1', 10) || 1;
+                    if (cs > 1 || rs > 1) merges++;
+                    var txt = (td.textContent || '').replace(/\s+/g, ' ').trim();
+                    for (var x = 0; x < cs; x++) {
+                        for (var y = 0; y < rs; y++) {
+                            var rr = rows[r + y] = rows[r + y] || [];
+                            while (rr.length < ci + x) rr.push(undefined);
+                            rr[ci + x] = { t: (x === 0 && y === 0) ? txt : '', ghost: !(x === 0 && y === 0), start: (x === 0 && y === 0) };
+                        }
+                    }
+                    ci += cs;
+                });
+                if (rows[r].length > maxCols) maxCols = rows[r].length;
+            });
+            rows.forEach(function (r) { for (var i = 0; i < maxCols; i++) if (r[i] === undefined) r[i] = { t: '', ghost: false, start: false }; });
+            return { rows: rows, cols: maxCols, merges: merges };
+        }
+        function tblParsePlain(text) {
+            var lines = String(text || '').replace(/\r/g, '').split('\n').filter(function (l) { return l.replace(/\t/g, '').trim().length; });
+            if (lines.length < 2) return null;
+            var rows = [], maxCols = 0;
+            lines.forEach(function (l) {
+                var cells = l.split('\t').map(function (t) { return { t: t.trim(), ghost: false, start: false }; });
+                rows.push(cells);
+                if (cells.length > maxCols) maxCols = cells.length;
+            });
+            rows.forEach(function (r) { for (var i = 0; i < maxCols; i++) if (!r[i]) r[i] = { t: '', ghost: false, start: false }; });
+            return { rows: rows, cols: maxCols, merges: 0 };
+        }
+
+        function tblIngest(html, text) {
+            var grid = (html && /<table/i.test(html)) ? tblParseHtml(html) : null;
+            var degraded = false;
+            if (!grid || grid.rows.length < 2) { grid = tblParsePlain(text); degraded = true; }
+            var chips = document.getElementById('tblPasteChips');
+            if (!grid || grid.rows.length < 2) {
+                if (chips) chips.innerHTML = '<span class="tbl-chip bad">没读到表格 —— 重新在表里框选一次再复制（要连表头一起选）</span>';
+                return;
+            }
+            TBL.rows = grid.rows; TBL.cols = grid.cols; TBL.merges = grid.merges || 0; TBL.degraded = degraded;
+            var z = document.getElementById('tblPasteZone'); if (z) z.classList.add('hot');
+            if (chips) chips.innerHTML = '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
+                + '<span class="tbl-chip">合并单元格 <b>' + TBL.merges + '</b> 处</span>'
+                + (degraded ? '<span class="tbl-chip bad">剪贴板里没有表格格式，已按纯文本尽力还原 —— 列归属可能不准，请重点校对</span>' : '');
+            tblStage(2);
+            tblBuildProof();
+            if (typeof nikoSpark === 'function') { try { nikoSpark(document.getElementById('tblSteps'), '📋', '#8b5cf6'); } catch (e) {} }
+        }
+
+        // ---- 还原归属：标签行向前填充（合并单元格的横跨），数量行不做填充 ----
+        function tblDerive() {
+            var rows = TBL.rows, cols = TBL.cols, n = rows.length;
+            if (n < 2) return { filled: [], leaves: [], nRows: n };
+            var filled = [];
+            for (var r = 0; r < n; r++) {
+                var last = '', out = [], isNum = (r === n - 1);
+                for (var c = 0; c < cols; c++) {
+                    var cell = rows[r][c] || { t: '' };
+                    var v = cell.t || '';
+                    if (isNum) {
+                        if (!v && cell.ghost) v = last;   // 被合并覆盖的数字才继承；真空格就是"没数量"
+                        if (v) last = v;
+                    } else {
+                        if (v) last = v; else v = last;
+                    }
+                    out.push(v);
+                }
+                filled.push(out);
+            }
+            var numRow = filled[n - 1] || [], unitRow = filled[n - 2] || [], typeRow = filled[n - 3] || [], projRow = filled[n - 4] || [];
+            var leaves = [];
+            for (var i = 0; i < cols; i++) {
+                var raw = String(numRow[i] || '').trim();
+                var qty = parseInt(raw.replace(/[^\d]/g, ''), 10);
+                if (!qty || qty <= 0) continue;
+                leaves.push({
+                    col: i, qty: qty,
+                    project: String(projRow[i] || '').trim(),
+                    mtype: String(typeRow[i] || '').trim(),
+                    unit: String(unitRow[i] || '').trim(),
+                    prefix: filled.slice(0, Math.max(0, n - 4)).map(function (rr) { return rr[i]; }).filter(function (x) { return x && String(x).trim(); })
+                });
+            }
+            return { filled: filled, leaves: leaves, nRows: n };
+        }
+
+        function tblChipsHtml(d) {
+            return '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
+                + '<span class="tbl-chip">合并 <b>' + TBL.merges + '</b> 处</span>'
+                + '<span class="tbl-chip ' + (d.leaves.length ? 'ok' : 'bad') + '">可落库 <b>' + d.leaves.length + '</b> 格</span>'
+                + (TBL.degraded ? '<span class="tbl-chip bad">纯文本降级：列归属可能不准</span>' : '');
+        }
+        function tblDeriveHtml(d) {
+            var h = '<div class="tbl-derive">';
+            if (!d.leaves.length) {
+                h += '<div class="tbl-empty">没解析出可落库的格子。检查最后一行是不是「数量」行 —— 格子里可以直接点进去改。</div>';
+            } else {
+                h += '<div class="tbl-dtitle">将生成 <b>' + d.leaves.length + '</b> 条任务</div><div class="tbl-dlist">';
+                d.leaves.forEach(function (L) {
+                    h += '<span class="tbl-ditem"><b>' + escapeHtml(L.project || '（未识别项目）') + '</b>'
+                        + (L.prefix.length ? '<em>' + escapeHtml(L.prefix.slice(-2).join(' · ')) + '</em>' : '')
+                        + '<i>' + escapeHtml(L.mtype || '—') + ' · ' + escapeHtml(L.unit || '—') + ' × ' + L.qty + '</i></span>';
+                });
+                h += '</div>';
+            }
+            return h + '</div>';
+        }
+
+        function tblBuildProof() {
+            var s2 = document.getElementById('tblStage2');
+            if (!s2) return;
+            var d = tblDerive(); TBL.leaves = d.leaves;
+            var grid = '<div class="tbl-gridwrap"><table class="tbl-grid">';
+            for (var r = 0; r < TBL.rows.length; r++) {
+                grid += '<tr>';
+                for (var c = 0; c < TBL.cols; c++) {
+                    var cell = TBL.rows[r][c] || { t: '' };
+                    var cls = [];
+                    if (TBL.merges && cell.start) cls.push('span');
+                    if (cell.ghost) cls.push('ghost');
+                    if (r === TBL.rows.length - 1) cls.push('num');
+                    grid += '<td class="' + cls.join(' ') + '" contenteditable="true" data-r="' + r + '" data-c="' + c + '">' + escapeHtml(cell.t || '') + '</td>';
+                }
+                grid += '</tr>';
+            }
+            grid += '</table></div>';
+            var today = (typeof formatDate === 'function') ? formatDate(new Date()) : new Date().toISOString().slice(0, 10);
+            var foot = '<div class="tbl-foot">'
+                + '<label class="tbl-fld">落在哪天<input type="date" id="tblDate" value="' + today + '"></label>'
+                + '<label class="tbl-ck"><input type="checkbox" id="tblNewProj" checked>没匹配到的项目自动建</label>'
+                + '<span class="tbl-sp"></span>'
+                + '<button class="btn-small" onclick="tblReset()">↺ 重新粘贴</button>'
+                + '<button class="btn-small primary" id="tblCommitBtn" onclick="tblCommit()"' + (d.leaves.length ? '' : ' disabled') + '>✓ 确认落库（' + d.leaves.length + ' 条）</button>'
+                + '</div>';
+            s2.innerHTML = '<div class="tbl-chips">' + tblChipsHtml(d) + '</div>'
+                + '<div class="tbl-hint">蓝左边框 = 合并单元格起点 · 斜纹 = 被合并覆盖的格子 · <b>任何一格都能直接点进去改</b>（项目名认错了就在这改，改完下面立刻重算）</div>'
+                + grid + tblDeriveHtml(d) + foot;
+            s2.querySelectorAll('td[contenteditable]').forEach(function (td) { td.addEventListener('input', tblCellEdited); });
+        }
+        function tblCellEdited() {
+            clearTimeout(tblCellEdited._t);
+            tblCellEdited._t = setTimeout(function () {
+                var s2 = document.getElementById('tblStage2'); if (!s2) return;
+                s2.querySelectorAll('td[contenteditable]').forEach(function (td) {
+                    var r = Number(td.dataset.r), c = Number(td.dataset.c);
+                    if (TBL.rows[r] && TBL.rows[r][c]) TBL.rows[r][c].t = (td.textContent || '').trim();
+                });
+                tblRefreshDerive();
+            }, 260);
+        }
+        function tblRefreshDerive() {
+            var s2 = document.getElementById('tblStage2'); if (!s2) return;
+            var d = tblDerive(); TBL.leaves = d.leaves;
+            var oc = s2.querySelector('.tbl-chips'), od = s2.querySelector('.tbl-derive'), btn = document.getElementById('tblCommitBtn');
+            if (oc) oc.outerHTML = '<div class="tbl-chips">' + tblChipsHtml(d) + '</div>';
+            if (od) od.outerHTML = tblDeriveHtml(d);
+            if (btn) { btn.textContent = '✓ 确认落库（' + d.leaves.length + ' 条）'; btn.disabled = !d.leaves.length; }
+        }
+
+        // ---- 落库：叶子格 → 任务卡（带 项目 / 素材类型 / 单位 / 条数）----
+        function tblCommit() {
+            var d = tblDerive();
+            if (!d.leaves.length) { if (typeof showToast === 'function') showToast('没有可落库的格子'); return; }
+            var el = document.getElementById('tblDate');
+            var dateStr = (el && el.value) || ((typeof formatDate === 'function') ? formatDate(new Date()) : '');
+            var ck = document.getElementById('tblNewProj');
+            var allowNew = !ck || ck.checked || ck.hasAttribute('checked');
+            var evs = safeStorage.get('work_calendar_events', []) || [];
+            var newProjects = [];
+            var plist = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : [];
+            d.leaves.forEach(function (L) {
+                var pname = L.project || '';
+                var pid = '';
+                if (pname) {
+                    var hit = plist.find(function (p) { return p.name === pname; })
+                        || plist.find(function (p) { return pname.indexOf(p.name) >= 0 || p.name.indexOf(pname) >= 0; });
+                    if (hit) pid = hit.id;
+                    else if (allowNew && typeof addProjectSilent === 'function') {
+                        pid = addProjectSilent(pname, tblPickColor(newProjects.length));
+                        newProjects.push(pname);
+                        plist.push({ id: pid, name: pname });
+                    }
+                }
+                var title = [pname, L.mtype, L.unit].filter(Boolean).join(' · ') + (L.qty > 1 ? ' ×' + L.qty : '');
+                evs.push({
+                    id: 'ev_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+                    title: title,
+                    desc: '排期表录入 · ' + (L.mtype || '—') + ' / ' + (L.unit || '—') + ' ×' + L.qty + ' 条'
+                        + (L.prefix.length ? '\n' + L.prefix.join(' · ') : ''),
+                    startDate: dateStr, endDate: dateStr,
+                    type: 'execute', startTime: '', endTime: '',
+                    priority: 'next', status: 'todo', projectId: pid, repeat: null,
+                    qty: L.qty, unit: L.unit, materialType: L.mtype, fromTable: true
+                });
+            });
+            safeStorage.set('work_calendar_events', evs);
+            try { if (typeof events !== 'undefined' && events !== evs) events = evs; } catch (e) {}
+            try { if (typeof render === 'function') render(); } catch (e) {}
+            try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (e) {}
+            tblStage(3);
+            var s3 = document.getElementById('tblStage3');
+            if (s3) {
+                s3.innerHTML = '<div class="tbl-result">'
+                    + '<div class="big">' + d.leaves.length + ' 条</div>'
+                    + '<p>已落到 ' + dateStr + (newProjects.length ? '<br><span class="newpj">顺带新建了 ' + newProjects.length + ' 个项目：' + escapeHtml(newProjects.join('、')) + '</span>' : '') + '</p>'
+                    + '<div style="display:flex;gap:10px;justify-content:center;">'
+                    + '<button class="btn-small" onclick="tblReset()">↺ 再录一张</button>'
+                    + '<button class="btn-small primary" onclick="tblCloseAndGo()">去计划看板看 →</button>'
+                    + '</div></div>';
+            }
+            if (typeof nikoSpark === 'function') { try { nikoSpark(document.getElementById('tblStage3'), '✓', '#3ddc97'); } catch (e) {} }
+            if (typeof showToast === 'function') showToast('📋 已落库 ' + d.leaves.length + ' 条任务');
+        }
+        function tblCloseAndGo() {
+            var m = document.getElementById('tblImportModal');
+            if (m) m.classList.remove('show');
+            try { switchPage('plan'); } catch (e) {}
+            try { if (typeof render === 'function') render(); } catch (e) {}
+        }
+
+        // ---- 绑定粘贴（只绑一次）----
+        (function tblImportBind() {
+            function bind() {
+                var z = document.getElementById('tblPasteZone');
+                if (!z || z._tblBound) return;
+                z._tblBound = true;
+                z.addEventListener('paste', function (e) {
+                    var dt = e.clipboardData; if (!dt) return;
+                    e.preventDefault();
+                    var html = '', text = '';
+                    try { html = dt.getData('text/html') || ''; } catch (x) {}
+                    try { text = dt.getData('text/plain') || ''; } catch (x) {}
+                    tblIngest(html, text);
+                });
+                z.addEventListener('click', function () { try { z.focus(); } catch (x) {} });
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
+            window.addEventListener('load', bind);
+        })();
+
+        // ---- 自动顺延开关（默认开；关掉后不再自动挪）----
+        function toggleAutoRollover(on) {
+            safeStorage.set('niko_auto_rollover', on ? 1 : 0);
+            if (on && typeof nikoAutoRollover === 'function') {
+                var n = nikoAutoRollover(true);
+                try { if (typeof render === 'function') render(); } catch (e) {}
+                if (typeof showToast === 'function') showToast(n > 0 ? ('↷ 已顺延 ' + n + ' 条到今天') : '↷ 自动顺延已开：没做完的任务每天自动挪到今天');
+            } else if (typeof showToast === 'function') {
+                showToast('↷ 自动顺延已关：没做完的任务会留在原日期，标为已延期');
+            }
+        }
+        (function tblRolloverSyncUI() {
+            function sync() {
+                var ck = document.getElementById('autoRolloverToggle');
+                if (ck) ck.checked = (typeof nikoRolloverEnabled === 'function') ? nikoRolloverEnabled() : true;
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync); else sync();
+        })();
 // ===== 媒体热点专属JS =====
         // ========== 热点数据系统 ==========
         let hotData = { '日本': [], '韩国': [], '国内': [] };
@@ -31517,7 +31957,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609101557";
+        window.NIKO_VERSION = "202609110003";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
@@ -31625,7 +32065,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (t.classList && t.classList.contains('modal-mask')) hideMask(t);
         }, false);
 
-        function init() { injectCloseBtns(document); }
+        function init() { injectCloseBtns(document); try { nikoAutoRollover(); } catch (e) {} }
         // ===== 仪式系统 =====
         function ritualTodayStr() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
         function ritualDoorOpening() {
