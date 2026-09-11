@@ -11431,6 +11431,30 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         #tblImportModal .tbl-sechd h4{font-size:13px;margin:0;color:inherit;}
         #tblImportModal .tbl-sechd .n{font-size:11.5px;}
         #tblImportModal .tbl-sechd .sp{flex:1;}
+        /* v5：② 右侧「原表合计 C×? D×?」—— 拿它跟原表「数量」行对数 */
+        #tblImportModal .tbl-sechd .sum{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted,#8a93a5);padding:3px 11px;border-radius:999px;border:1px solid rgba(61,220,151,.38);background:rgba(61,220,151,.07);white-space:nowrap;}
+        #tblImportModal .tbl-sechd .sum .lb{opacity:.85;}
+        #tblImportModal .tbl-sechd .sum b{font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums;}
+        #tblImportModal .tbl-sechd .sum b.c{color:#3ddc97;}
+        #tblImportModal .tbl-sechd .sum b.d{color:#6ea8fe;}
+        #tblImportModal .tbl-sechd .sum b.r{color:#ffb454;}
+        #tblImportModal .tbl-sechd .sum .sep{opacity:.35;}
+        /* chips 里的旗小一号，别把 chip 撑高 */
+        #tblImportModal .tbl-chip .niko-twemoji{width:14px;height:14px;vertical-align:-3px;}
+        /* v5：多选 / 全选 → 批量统一地区 */
+        #tblImportModal .tbl-selbar{display:flex;align-items:center;gap:11px;flex-wrap:wrap;font-size:11.5px;color:var(--muted,#8a93a5);padding:7px 12px;margin:0 0 10px;border-radius:10px;border:1px dashed var(--card-border,#333);background:rgba(127,127,127,.05);transition:.16s;}
+        #tblImportModal .tbl-selbar.on{border-style:solid;border-color:rgba(110,168,254,.5);background:rgba(110,168,254,.08);}
+        #tblImportModal .tbl-selbar .ck{display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:inherit;}
+        #tblImportModal .tbl-selbar .ck input{width:14px;height:14px;margin:0;cursor:pointer;accent-color:#6ea8fe;}
+        #tblImportModal .tbl-selbar .cnt b{color:#6ea8fe;font-weight:700;font-variant-numeric:tabular-nums;}
+        #tblImportModal .tbl-selbar select{font-family:inherit;font-size:11.5px;padding:4px 8px;border-radius:8px;border:1px solid var(--card-border,#333);background:transparent;color:inherit;cursor:pointer;}
+        #tblImportModal .tbl-selbar button{font-family:inherit;font-size:11.5px;padding:5px 13px;border-radius:8px;border:1px solid var(--card-border,#333);background:transparent;color:var(--muted,#8a93a5);cursor:pointer;transition:.15s;}
+        #tblImportModal .tbl-selbar button:hover:not(:disabled){border-color:#6ea8fe;color:inherit;}
+        #tblImportModal .tbl-selbar button.primary{border-color:rgba(110,168,254,.55);background:rgba(110,168,254,.18);color:#cfe0ff;font-weight:600;}
+        #tblImportModal .tbl-selbar button:disabled{opacity:.38;cursor:not-allowed;}
+        #tblImportModal .tbl-selbar .tip{font-size:11px;opacity:.8;}
+        #tblImportModal .tbl-rsel{width:15px;height:15px;margin:0;flex:0 0 auto;cursor:pointer;accent-color:#6ea8fe;}
+        #tblImportModal .tbl-rcard.is-sel{border-color:rgba(110,168,254,.55);background:rgba(110,168,254,.075);}
         #tblImportModal .tbl-tgl{font-family:inherit;font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--card-border,#333);background:transparent;color:var(--muted,#8a93a5);cursor:pointer;white-space:nowrap;}
         #tblImportModal .tbl-tgl:hover{color:inherit;border-color:rgba(110,168,254,.5);}
         #tblImportModal .tbl-empty{font-size:12.5px;color:#ffb454;padding:10px 0;}
@@ -11484,6 +11508,16 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             #tblImportModal .tbl-steps{gap:5px;}
             #tblImportModal .tbl-steps em{max-width:18px;}
             #tblImportModal .tbl-rfld input[type=date]{font-size:16px;}
+            /* v5：合计与批量条窄屏换行 */
+            #tblImportModal .tbl-sechd{flex-wrap:wrap;gap:7px;}
+            #tblImportModal .tbl-sechd .sum{padding:3px 9px;font-size:11px;}
+            #tblImportModal .tbl-sechd .sum b{font-size:12px;}
+            #tblImportModal .tbl-selbar{gap:8px;padding:8px 10px;}
+            #tblImportModal .tbl-selbar .ck,#tblImportModal .tbl-selbar select,#tblImportModal .tbl-selbar button{flex:0 0 auto;}
+            #tblImportModal .tbl-selbar select{max-width:42vw;}
+            #tblImportModal .tbl-selbar button{padding:7px 12px;}
+            #tblImportModal .tbl-selbar .tip{flex:1 1 100%;font-size:11px;}
+            #tblImportModal .tbl-rsel{width:17px;height:17px;}
         }
         </style>
         <div class="modal-mask" id="tblImportModal" data-close-fn="tblImportClosed">
@@ -19515,7 +19549,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   ⑥ 落库前直接把任务条画出来（复刻线上样式）
         // 铁律：零 OCR（不识别文字）；校对台是硬门槛，未经确认一律不落库
         // ============================================================================
-        var TBL = { rows: [], cols: 0, merges: 0, leaves: [], reqs: [], degraded: false, dates: {}, acts: {}, ovr: {}, skipWeekend: true, skipped: [], gridOpen: false, start: '', lastResult: null };
+        var TBL = { rows: [], cols: 0, merges: 0, leaves: [], reqs: [], degraded: false, dates: {}, acts: {}, ovr: {}, sel: {}, selNote: '', skipWeekend: true, skipped: [], gridOpen: false, start: '', lastResult: null };
 
         // ---- 2026 年法定节假日（国务院办公厅《关于 2026 年部分节假日安排的通知》国办发明电〔2025〕7 号）----
         var TBL_CN_HOLIDAYS = {
@@ -19570,7 +19604,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function tblReset() {
             TBL.rows = []; TBL.cols = 0; TBL.merges = 0; TBL.leaves = []; TBL.reqs = [];
             TBL.degraded = false; TBL.dates = {}; TBL.acts = {}; TBL.ovr = {}; TBL.skipped = [];
-            TBL.gridOpen = false; TBL.start = ''; TBL.lastResult = null;
+            TBL.gridOpen = false; TBL.start = ''; TBL.lastResult = null; TBL.sel = {}; TBL.selNote = '';
             TBL.skipWeekend = tblSkipsWeekend();
             tblStage(1);
             var z = document.getElementById('tblPasteZone'); if (z) z.classList.remove('hot');
@@ -19644,7 +19678,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 return;
             }
             TBL.rows = grid.rows; TBL.cols = grid.cols; TBL.merges = grid.merges || 0; TBL.degraded = degraded;
-            TBL.dates = {}; TBL.acts = {}; TBL.ovr = {}; TBL.gridOpen = false;
+            TBL.dates = {}; TBL.acts = {}; TBL.ovr = {}; TBL.sel = {}; TBL.selNote = ''; TBL.gridOpen = false;
             TBL.skipWeekend = tblSkipsWeekend();
             var z = document.getElementById('tblPasteZone'); if (z) z.classList.add('hot');
             if (chips) chips.innerHTML = '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
@@ -19933,9 +19967,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 + '<span class="tbl-chip">本周期 <b>' + tblFmtDay(w.start) + ' → ' + tblFmtDay(w.end) + '</b></span>'
                 + '<span class="tbl-chip rest">🏖 法定节假日不排' + (TBL.skipWeekend !== false ? ' · 周末不排' : '') + '</span>';
             var rc = {};
-            reqs.forEach(function (rq) { if (rq.region) rc[rq.region] = (rc[rq.region] || 0) + 1; });
+            reqs.forEach(function (rq) {
+                if (!rq.region) return;
+                var o = rc[rq.region] || (rc[rq.region] = { n: 0, c: 0, d: 0, r: 0 });
+                o.n++; o.c += rq.cCount || 0; o.d += rq.dCount || 0; o.r += rq.realCount || 0;
+            });
             Object.keys(rc).forEach(function (k) {
-                h += '<span class="tbl-chip reg">' + nikoFlagImg(tblRegionFlag(k), 'tbl-chip-flag') + ' ' + tblRegionMeta(k).name + ' <b>' + rc[k] + '</b> 条</span>';
+                var o = rc[k];
+                h += '<span class="tbl-chip reg">' + nikoFlagImg(tblRegionFlag(k), 'tbl-chip-flag') + ' ' + tblRegionMeta(k).name
+                    + ' <b>' + o.n + '</b> 条 · ' + o.c + 'C ' + o.d + 'D' + (o.r ? ' ' + o.r + '真人' : '') + '</span>';
             });
             if (TBL.degraded) h += '<span class="tbl-chip bad">纯文本降级：列归属可能不准</span>';
             return h;
@@ -19946,6 +19986,87 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (t !== cur) h += '<option value="' + escapeHtml(t) + '">' + escapeHtml(t) + '</option>';
             });
             return h;
+        }
+        // ---- v5：原表合计（C / D / 真人）→ 跟原表「数量」行对数 ----
+        function tblTotals(d) {
+            var t = { c: 0, d: 0, r: 0 };
+            ((d && d.reqs) || []).forEach(function (rq) {
+                t.c += rq.cCount || 0; t.d += rq.dCount || 0; t.r += rq.realCount || 0;
+            });
+            return t;
+        }
+        function tblTotalsHtml(d) {
+            var t = tblTotals(d);
+            return '<span class="sum" id="tblSum" title="按解析出的需求合计 —— 拿它跟原表的「数量」行对数">'
+                + '<span class="lb">原表合计</span>'
+                + '<b class="c">C×' + t.c + '</b><span class="sep">·</span>'
+                + '<b class="d">D×' + t.d + '</b>'
+                + (t.r ? '<span class="sep">·</span><b class="r">真人×' + t.r + '</b>' : '')
+                + '</span>';
+        }
+        // ---- v5：多选 / 全选 → 批量统一地区 ----
+        function tblSelList() {
+            return (TBL.reqs || []).filter(function (rq) { return !!TBL.sel[rq.k]; });
+        }
+        function tblSelbarHtml(n) {
+            var total = (TBL.reqs || []).length;
+            var allOn = total > 0 && n === total;
+            var opts = '<option value="">统一设为…</option>';
+            TBL_REGIONS.forEach(function (m) { opts += '<option value="' + m.code + '">' + m.name + '</option>'; });
+            var tip = TBL.selNote || (n ? '选好地区，右边一次改完' : '勾左边的小方框，或者点「全选」');
+            return '<div class="tbl-selbar' + (n ? ' on' : '') + '" id="tblSelbar">'
+                + '<label class="ck"><input type="checkbox" id="tblSelAll"' + (allOn ? ' checked' : '') + ' onchange="tblSelAll(this.checked)">全选</label>'
+                + '<span class="cnt">已选 <b>' + n + '</b> / ' + total + ' 条</span>'
+                + '<select id="tblSelRegion" onchange="tblSelTargetChanged(this)"' + (n ? '' : ' disabled') + '>' + opts + '</select>'
+                + '<button class="primary" id="tblSelApply" onclick="tblApplyRegion()"' + (n ? '' : ' disabled') + '>✓ 应用到选中</button>'
+                + (n ? '<button onclick="tblSelClear()">清空</button>' : '')
+                + '<span class="tip">' + escapeHtml(tip) + '</span>'
+                + '</div>';
+        }
+        // 勾选/取消时只更 UI，不整块重画（保住滚动位置）
+        function tblSyncSelUI() {
+            var n = tblSelList().length;
+            document.querySelectorAll('#tblCards .tbl-rcard').forEach(function (el) {
+                var ck = el.querySelector('.tbl-rsel');
+                el.classList.toggle('is-sel', !!(ck && ck.checked));
+            });
+            var bar = document.getElementById('tblSelbar');
+            if (bar) bar.outerHTML = tblSelbarHtml(n);
+        }
+        function tblSelToggle(el) {
+            var k = el.getAttribute('data-k') || '';
+            if (!k) return;
+            if (el.checked) TBL.sel[k] = true; else delete TBL.sel[k];
+            TBL.selNote = '';
+            tblSyncSelUI();
+        }
+        function tblSelAll(on) {
+            (TBL.reqs || []).forEach(function (rq) { if (on) TBL.sel[rq.k] = true; else delete TBL.sel[rq.k]; });
+            TBL.selNote = '';
+            tblRender();
+        }
+        function tblSelClear() { TBL.sel = {}; TBL.selNote = ''; tblRender(); }
+        function tblSelTargetChanged(sel) {
+            var b = document.getElementById('tblSelApply'); if (!b) return;
+            var m = TBL_REGIONS.filter(function (x) { return x.code === sel.value; })[0];
+            var n = tblSelList().length;
+            b.textContent = m ? ('✓ 全部设为「' + m.name + '」（' + n + ' 条）') : '✓ 应用到选中';
+        }
+        function tblApplyRegion() {
+            var sel = document.getElementById('tblSelRegion');
+            if (!sel || !sel.value) return;
+            var code = sel.value, hits = tblSelList();
+            if (!hits.length) return;
+            var nm = '';
+            var m = tblRegionMeta(code); if (m) nm = m.name;
+            hits.forEach(function (rq) {
+                rq.region = code;
+                var o = TBL.ovr[rq.k] = TBL.ovr[rq.k] || {};
+                o.region = code;                       // 写进 ovr，跨重渲染保活
+            });
+            TBL.sel = {};
+            TBL.selNote = '已把 ' + hits.length + ' 条需求统一设为「' + (nm || code) + '」';
+            tblRender();
         }
         function tblCardsHtml(d) {
             var reqs = d.reqs || [];
@@ -19969,8 +20090,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 TBL_REGIONS.forEach(function (x) {
                     projOpts += '<option value="' + x.code + '"' + (x.code === rq.region ? ' selected' : '') + '>' + x.name + '</option>';
                 });
-                h += '<div class="tbl-rcard" style="border-left-color:' + col + '">'
+                var isSel = !!TBL.sel[rq.k];
+                h += '<div class="tbl-rcard' + (isSel ? ' is-sel' : '') + '" style="border-left-color:' + col + '">'
                     + '<div class="tbl-rhd">'
+                    + '<input type="checkbox" class="tbl-rsel" data-k="' + escapeHtml(rq.k) + '"' + (isSel ? ' checked' : '') + ' onchange="tblSelToggle(this)" title="勾上可批量统一地区">'
                     + '<span class="tbl-rno">' + (i + 1) + '</span>'
                     + (m ? nikoFlagImg(m.flag, 'tbl-rflag') : '')
                     + '<input class="tbl-rname" data-i="' + i + '" value="' + escapeHtml(rq.game) + '" oninput="tblGameEdited(this)" title="游戏名，可改">'
@@ -20085,7 +20208,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 + '<div class="tbl-hint" id="tblGridHint" style="display:' + (TBL.gridOpen ? '' : 'none') + '">蓝左边框 = 合并单元格起点 · 斜纹 = 被合并覆盖的格子 · <b>任何一格都能直接点进去改</b>，改完下面立刻重算。</div>'
                 + '</div>'
                 + '<div class="tbl-sec">'
-                + '<div class="tbl-sechd"><h4>② 需求（合并 + 命名 + 选地区 + 查重）</h4><span class="n">一条需求 = 一个「地区 × 游戏 × 素材类型」</span></div>'
+                + '<div class="tbl-sechd"><h4>② 需求（合并 + 命名 + 选地区 + 查重）</h4><span class="n">一条需求 = 一个「地区 × 游戏 × 素材类型」</span><span class="sp"></span>' + tblTotalsHtml(d) + '</div>'
+                + tblSelbarHtml(tblSelList().length)
                 + '<div id="tblCards">' + tblCardsHtml(d) + '</div>'
                 + '</div>'
                 + '<div class="tbl-sec">'
@@ -20101,6 +20225,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             TBL.leaves = d.leaves; TBL.reqs = d.reqs;
             var oc = document.getElementById('tblChips');
             if (oc) oc.innerHTML = tblChipsHtml(d);
+            var osm = document.getElementById('tblSum');
+            if (osm) osm.outerHTML = tblTotalsHtml(d);
+            var osb = document.getElementById('tblSelbar');
+            if (osb) osb.outerHTML = tblSelbarHtml(tblSelList().length);
             var ok = document.getElementById('tblCards');
             if (ok) ok.innerHTML = tblCardsHtml(d);
             var ob = document.getElementById('tblBarsBox');
@@ -32501,7 +32629,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609111253";
+        window.NIKO_VERSION = "202609111329";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
