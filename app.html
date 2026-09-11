@@ -20325,12 +20325,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 var act = TBL.acts[i] || 'new';
                 if (act === 'skip') { skipped++; return; }
                 var day = TBL.dates[i] || rq.date || tblStartDate();
-                var rm = tblRegionMeta(rq.region);
                 var dd = tblDedup({ title: rq.title, date: day, game: rq.game, mtype: rq.mtype, region: rq.region, cCount: rq.cCount, dCount: rq.dCount }, evs);
-                var parts = [];
-                if (rq.cCount) parts.push(rq.cCount + ' 条完整制作 C');
-                if (rq.dCount) parts.push(rq.dCount + ' 条迭代 D');
-                if (rq.realCount) parts.push(rq.realCount + ' 条真人素材');
                 var isUpdate = (act === 'update' && dd.hits.length);
                 var payload = {
                     title: rq.title, startDate: day, endDate: day,
@@ -20339,7 +20334,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     materialType: rq.mtype, unit: rq.code,
                     qty: (rq.cCount + rq.dCount + rq.realCount) || 1,
                     cCount: rq.cCount, dCount: rq.dCount, realCount: rq.realCount, fromTable: true,
-                    desc: '排期表录入 · ' + (parts.join(' + ') || '—') + (rq.mtype ? '｜' + rq.mtype : '') + (rm ? '｜' + rm.name : '')
+                    // 别往 desc 里塞「排期表录入 · …」：任务条 .task-desc-line / 看板卡 .card-desc 会把它渲染出来
+                    desc: ''
                 };
                 var pid = tblEnsureRegionProject(rq.region, plist, newProjects);
                 // 更新替换时若这次没解析出地区，别把原来挂好的项目冲掉
@@ -20410,6 +20406,31 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
             window.addEventListener('load', bind);
+        })();
+
+        // ---- 一次性清理：把早期导入时误写进 desc 的「排期表录入 · …」抹掉 ----
+        // 本体任务条（.task-desc-line）/ 看板卡（.card-desc）会渲染 ev.desc；那行字是重复信息，还会把卡片撑高
+        function tblPurgeImportedDesc() {
+            try {
+                if (localStorage.getItem('niko_tbl_desc_purged') === '1') return 0;
+                var evs = safeStorage.get('work_calendar_events', []) || [];
+                var n = 0;
+                evs.forEach(function (ev) {
+                    if (ev && typeof ev.desc === 'string' && ev.desc.indexOf('排期表录入') === 0) { ev.desc = ''; n++; }
+                });
+                localStorage.setItem('niko_tbl_desc_purged', '1');
+                if (!n) return 0;
+                safeStorage.set('work_calendar_events', evs);
+                try { if (typeof events !== 'undefined') events = evs; } catch (x) {}
+                try { if (typeof render === 'function') render(); } catch (x) {}
+                try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (x) {}
+                try { if (typeof showToast === 'function') showToast('🧹 已清掉 ' + n + ' 条任务上的「排期表录入」说明'); } catch (x) {}
+                return n;
+            } catch (x) { return 0; }
+        }
+        (function tblPurgeBind() {
+            function fire() { setTimeout(tblPurgeImportedDesc, 80); }
+            if (document.readyState === 'complete') fire(); else window.addEventListener('load', fire);
         })();
 
         // ---- 自动顺延开关（默认开；关掉后不再自动挪）----
@@ -32629,7 +32650,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609111329";
+        window.NIKO_VERSION = "202609111343";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
