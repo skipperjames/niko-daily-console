@@ -4138,14 +4138,6 @@
         .ev-flag { flex-shrink: 0; font-size: 11px; line-height: 1; }
         /* 标题主体：桌面单行截断（悬停有全名），手机端两行折行 */
         .ev-title-main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-        .event-desc {
-            font-size: 10.5px;
-            opacity: 0.85;
-            line-height: 1.25;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
         .more-events {
             font-size: 10px;
             color: #999;
@@ -5001,16 +4993,6 @@
                 overflow: hidden;
             }
             #planPage .event-item { height: auto !important; }
-            /* 备注不再绝对定位压字：随折行流式排在标题下（保持始终显示的口径） */
-            #planPage .event-desc {
-                position: static !important;
-                margin-top: 1px;
-                max-width: none !important;
-                -webkit-line-clamp: 1;
-                display: -webkit-box !important;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
         }
 
         /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边（v3 角标由 SVG 状态图标替代） */
@@ -18130,7 +18112,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
                     const safeTitle = escapeHtml(ev.title || '');
-                    const safeDesc = ev.desc ? escapeHtml(ev.desc) : '';
+                    // 2026-09-11 用户点名：备注（desc）只在「右边看板」显示，日历视图任务条一律不显示
+                    // 曾经这里渲染过 .event-desc（绝对定位压条底），会把任务条压字、撑高 → 已删，勿再加回
                     // ③ 逾期史莱姆：逾期未完成粘一只小史莱姆在标题后（完成后消失）
                     const slimeHtml = (isOverdue && ev.status !== 'done') ? `<span class="slime-mark" title="逾期史莱姆 · 完成后啵地蒸发">🟢</span>` : '';
                     // v3 状态图标：右上角 12px SVG（4 态不同形状）
@@ -18144,7 +18127,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
                     // 2026-09-07：去掉第二个 ✓（stamp-mark），完成信息移入悬停 title，只留前面的勾选框
                     const flagHtml = projFlag ? `<span class="ev-flag">${nikoFlagImg(projFlag)}</span>` : '';
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}${safeDesc ? `<span class="event-desc" style="position:absolute;bottom:0;left:5px;right:5px;font-size:10px;opacity:0.8;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${safeDesc}</span>` : ''}`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}`;
                     // v2.10 状态圈长按轮盘
                     if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); item.classList.add('carry-lift'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
@@ -20314,6 +20297,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             plist.push({ id: id, name: m.name, color: m.color });
             return id;
         }
+        // 排期表落库时写进 desc 的备注：只给「右边看板」看（日详情 .task-desc-line / 看板卡 .card-desc）。
+        // 日历视图任务条不再渲染 desc（2026-09-11 用户原话「备注的内容可以显示在右边看板，不要显示在日历视图里面」）。
+        // 地区/项目名不进备注 —— 药丸里已经有了，重复。
+        function tblReqNote(rq) {
+            if (!rq) return '';
+            var p = [];
+            if (rq.cCount) p.push(rq.cCount + ' 条完整制作 C');
+            if (rq.dCount) p.push(rq.dCount + ' 条迭代 D');
+            if (rq.realCount) p.push(rq.realCount + ' 条真人素材');
+            var s = p.join(' + ');
+            if (rq.mtype) s += (s ? '｜' : '') + rq.mtype;
+            return s;
+        }
         function tblCommit() {
             var d = tblDerive();
             var reqs = d.reqs || [];
@@ -20334,8 +20330,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     materialType: rq.mtype, unit: rq.code,
                     qty: (rq.cCount + rq.dCount + rq.realCount) || 1,
                     cCount: rq.cCount, dCount: rq.dCount, realCount: rq.realCount, fromTable: true,
-                    // 别往 desc 里塞「排期表录入 · …」：任务条 .task-desc-line / 看板卡 .card-desc 会把它渲染出来
-                    desc: ''
+                    // 备注 = C/D 条数分解 + 素材类型；只在右边看板显示，日历视图不显示（见 tblReqNote 注释）
+                    desc: tblReqNote(rq)
                 };
                 var pid = tblEnsureRegionProject(rq.region, plist, newProjects);
                 // 更新替换时若这次没解析出地区，别把原来挂好的项目冲掉
@@ -20408,30 +20404,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             window.addEventListener('load', bind);
         })();
 
-        // ---- 一次性清理：把早期导入时误写进 desc 的「排期表录入 · …」抹掉 ----
-        // 本体任务条（.task-desc-line）/ 看板卡（.card-desc）会渲染 ev.desc；那行字是重复信息，还会把卡片撑高
-        function tblPurgeImportedDesc() {
-            try {
-                if (localStorage.getItem('niko_tbl_desc_purged') === '1') return 0;
-                var evs = safeStorage.get('work_calendar_events', []) || [];
-                var n = 0;
-                evs.forEach(function (ev) {
-                    if (ev && typeof ev.desc === 'string' && ev.desc.indexOf('排期表录入') >= 0) { ev.desc = ''; n++; }
-                });
-                localStorage.setItem('niko_tbl_desc_purged', '1');
-                if (!n) return 0;
-                safeStorage.set('work_calendar_events', evs);
-                try { if (typeof events !== 'undefined') events = evs; } catch (x) {}
-                try { if (typeof render === 'function') render(); } catch (x) {}
-                try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (x) {}
-                try { if (typeof showToast === 'function') showToast('🧹 已清掉 ' + n + ' 条任务上的「排期表录入」说明'); } catch (x) {}
-                return n;
-            } catch (x) { return 0; }
-        }
-        (function tblPurgeBind() {
-            function fire() { setTimeout(tblPurgeImportedDesc, 80); }
-            if (document.readyState === 'complete') fire(); else window.addEventListener('load', fire);
-        })();
+        // ---- 已废弃（2026-09-11）：曾加过 tblPurgeImportedDesc()，把导入时写进 desc 的说明抹掉 ----
+        // 用户澄清：「备注的内容可以显示在右边看板，不要显示在日历视图里面」→ 备注要保留，
+        // 改为「日历任务条不渲染 desc」（见 renderPlanPage() 里 event-item 的注释）+ 落库写 tblReqNote()。
+        // 清理函数与那一轮已清的备注不再恢复（历史那批备注已被抹掉，重新粘一次表选「更新替换」即可补回）。
 
         // ---- 自动顺延开关（默认开；关掉后不再自动挪）----
         function toggleAutoRollover(on) {
@@ -32650,7 +32626,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609111348";
+        window.NIKO_VERSION = "202609111359";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
