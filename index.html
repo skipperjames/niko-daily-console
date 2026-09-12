@@ -10736,8 +10736,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   .pick-bp .figs svg{width:96px}
 }
 /* ===== 人体图 v4：医学线框 × 全息 HUD ===== */
-#healthPage{--bp-vol:rgba(34,211,238,.085);--bp-line:rgba(34,211,238,.55);--bp-core:#67e8f9;--bp-detail:rgba(34,211,238,.30);--bp-stroke:rgba(34,211,238,.35);--bp-hud:rgba(34,211,238,.40)}
-html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,html[data-theme="ocean"] #healthPage{--bp-vol:rgba(34,211,238,.12);--bp-line:rgba(34,211,238,.66);--bp-core:#7dd3fc;--bp-detail:rgba(34,211,238,.34);--bp-stroke:rgba(34,211,238,.42);--bp-hud:rgba(34,211,238,.45)}
 .bp-fig svg{display:block;width:100%;height:auto;max-height:340px;margin:0 auto}
 #healthPage[data-bpmode="B"] .bp-fig svg{max-height:640px}
 #healthPage[data-bpmode="C"] .bp-fig svg{max-height:430px}
@@ -10914,6 +10912,59 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
   #healthPage[data-bpmode="A"] .bp-fig svg{max-height:230px}
   #healthPage[data-bpmode="C"] .bp-fig svg{max-height:330px}
   .mxt{min-width:360px}
+}
+
+/* ===================== v6 总览改版 ===================== */
+.ov-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:14px}
+.ov-st{border-radius:13px;border:1px solid var(--card-border);background:var(--card-bg);padding:12px 14px;box-shadow:var(--shadow)}
+.ov-st .k{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.ov-st .v{font-size:21px;font-weight:800;letter-spacing:-.4px;margin-top:3px;line-height:1.2;font-variant-numeric:tabular-nums}
+.ov-st .v small{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:0}
+.ov-st .s{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.ov-st.rx{border-color:rgba(220,63,69,.4);background:linear-gradient(135deg,rgba(220,63,69,.09),var(--card-bg) 62%)}
+.ov-st.rx .v{font-size:14.5px;letter-spacing:0;color:var(--danger);line-height:1.5}
+.ov-bar{height:5px;border-radius:99px;background:var(--card-bg-2);overflow:hidden;margin-top:8px}
+.ov-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#34d399);transition:width .3s}
+/* ===== v7：总览 = 计划视图风格（顶栏 chips + slim 医嘱条 + 场景卡 + 双列卡格） ===== */
+.pv7-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.pv7-top .t h2{font-size:20px;font-weight:700;margin:0 0 3px}
+.pv7-top .t p{font-size:12.5px;color:var(--muted);margin:0}
+.pv7-stats{display:flex;gap:8px;flex-wrap:wrap}
+.pv7-st{background:var(--card-bg);border:1px solid var(--card-border);border-radius:9px;padding:8px 14px;min-width:84px;text-align:center}
+.pv7-st .n{font-size:18px;font-weight:700;line-height:1.25}
+.pv7-st .n small{font-size:11px;color:var(--muted);font-weight:500}
+.pv7-st .l{font-size:10.5px;color:var(--muted);margin-top:2px}
+.pv7-st .bar{height:5px;border-radius:99px;background:var(--card-bg-2);overflow:hidden;margin-top:7px}
+.pv7-st .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),#34d399)}
+.pv7-rx{display:flex;align-items:center;gap:10px;background:var(--card-bg);border:1px solid rgba(220,63,69,.38);border-left:4px solid var(--danger);border-radius:9px;padding:9px 14px;font-size:12.5px;margin-bottom:13px;line-height:1.5}
+.pv7-rx b{color:var(--danger);white-space:nowrap}
+.pv7-rx .who{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
+/* 场景卡：参考图风格 —— 深紫画布 + 剪影 + 虚线引线数据卡（静态） */
+.scn-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:13px 15px 10px;margin-bottom:13px}
+.scn-hd{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
+.scn-hd .bdg{font-size:10.5px;font-weight:600;color:var(--muted);border:1px solid var(--card-border);border-radius:99px;padding:2px 9px}
+.scn-hd .lg{margin-left:auto;display:flex;gap:11px;font-size:11px;color:var(--muted);font-weight:500}
+.scn-hd .lg i{font-style:normal;display:inline-flex;align-items:center;gap:4px}
+.scn-hd .lg i::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+.scn-hd .lg .l-active{color:#f0a35e}
+.scn-hd .lg .l-watch{color:#f6d365}
+.scn-hd .lg .l-old{color:#34d399}
+#scnBox{width:100%}
+#scnBox svg{display:block;width:100%;height:auto;border-radius:10px}
+.scn-ft{margin-top:8px;font-size:11px;color:var(--muted);text-align:center}
+.pv7-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;align-items:start}
+.ov-ck-hd{display:flex;align-items:baseline;gap:9px;margin-bottom:10px}
+.ov-ck-hd b{font-size:13.5px}
+.ov-ck-hd .sub{font-size:11.5px;color:var(--muted);margin-left:auto}
+.ov-sci{margin-top:20px}
+.ov-sci .canlist{margin-bottom:12px}
+@media (max-width:900px){
+  .pv7-grid{grid-template-columns:1fr}
+  .pv7-top .t p{display:none}
+  .pv7-stats{width:100%}
+  .pv7-st{flex:1;min-width:0;padding:7px 8px}
+  .pv7-rx{flex-wrap:wrap}
+  .pv7-rx .who{margin-left:0}
 }
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -13473,11 +13524,6 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
             </div>
         </div>
         <div class="page" id="healthPage">
-</head>
-<body>
-
-
-
 <div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
   <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;">
     <div>
@@ -13489,37 +13535,71 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
       <button class="hp-btn" onclick="hpClearDemo()" style="padding:8px 16px;font-size:13px;" title="只删带「示例」标记的条目，你自己的记录不动">🧹 清除示例数据</button>
     </div>
   </div>
+
   <div class="tabs" id="tabs"></div>
 
   <div class="panel on" id="p-map">
     <div class="sec">
-      <div class="sec-hd"><span>🫀 我的身体地图</span><span class="sub">点一下带颜色的部位，看那里的医生怎么说的</span></div>
-      <div class="bp-mode">
-        <label>人体图形态</label>
-        <span class="hp-chip sm" id="mdA" onclick="pvMode('A')">A 正 + 背 并排</span>
-        <span class="hp-chip sm on" id="mdB" onclick="pvMode('B')">B 单图放大</span>
-        <span class="hp-chip sm" id="mdC" onclick="pvMode('C')">C 只留轮廓 + 数字</span>
-        <span style="margin-left:auto;font-size:11px;color:var(--muted)" id="mdHint">B 单图放大 · 用按钮切正/背</span>
+      <div class="pv7-top">
+        <div class="t"><h2>🫀 健康总览</h2><p>身体地图 · 今日打卡 · 核心医嘱 · 科普 —— 一屏看完</p></div>
+        <div class="pv7-stats" id="ovStats"></div>
       </div>
-      <div class="bp-grid" id="bpGrid">
-        <div class="bp-card">
-          <div class="bp-hd">
-            <span>🧍</span><span class="t">身体全景</span>
-            <span class="badge" id="hpBpCount">0 处记录</span>
-            <span class="rt">点部位可选中</span>
-          </div>
-          <div class="bp-figs" id="bpFigs"></div>
-          <div class="bp-legend">
-            <i class="l-active">治疗中</i><i class="l-watch">需关注</i><i class="l-old">已稳定</i><i class="l-none">无记录</i>
-          </div>
-          <div class="hp-bp-tip">📚 用人体图标部位<b>不是我自己想的</b>：密歇根体表图（Brummett 2016, <b>Pain</b>）填完只要 39–44 秒、标注误差仅 7.2%；斯坦福 CHOIR 体表图（Scherrer 2021, <b>Pain Reports</b>）重测信度 ICC 0.93。→ 见「📚 科普」第 ① 条。</div>
+      <div class="pv7-rx" id="ovRx"></div>
+      <div class="scn-card">
+        <div class="scn-hd"><span>🧍 身体地图</span><span class="bdg" id="hpBpCount">0 处记录</span>
+          <span class="lg"><i class="l-active">治疗中</i><i class="l-watch">需关注</i><i class="l-old">已稳定</i></span></div>
+        <div id="scnBox"></div>
+        <div class="scn-ft">图钉 = 按部位在身体上的大致解剖定位（背面部位镜像到正面）· 与病史库联动：加一条病史，这里就自动长出图钉和数据卡</div>
+      </div>
+      <div class="pv7-grid">
+        <div class="card">
+          <div class="ov-ck-hd"><b>✅ 今日打卡</b><span class="sub" id="ckSub"></span></div>
+          <div id="ckBody"></div>
+          <div id="ckLink" style="margin-top:12px"></div>
         </div>
-        <div id="bpDetail"></div>
+        <div class="card">
+          <div class="ov-ck-hd"><b>⏰ 活动闹钟 · 2 分钟跟练</b><span class="sub">每 30 分钟提醒一次</span></div>
+          <div id="ckSide"></div>
+        </div>
+      </div>
+      <div class="ov-sci">
+        <div class="sec-hd"><span>📚 科普精选</span><span class="sub">每条都标证据等级 + 出处 · 没有一条是自己推的</span></div>
+        <div class="canlist">
+          <div class="yes"><h6>✅ 这个板块能做的</h6>把散在各处的病史收成一份、按部位标在人身上、把医生的叮嘱变成每天能勾的项、把打卡长成趋势给复诊用。</div>
+          <div class="no"><h6>🚫 这个板块不做的</h6>不诊断、不推荐药、不建议自购保健品、不替代面诊、不给你算「治愈率」。任何疗法都会标注证据等级，低就是低。</div>
+        </div>
+        <div class="sci">
+          <div class="sci-card full">
+            <h5>① 为什么用人体图标部位 <span class="ev a">A · 有验证研究</span></h5>
+            <div class="sub">这是本版新增的机制，先把依据摆出来</div>
+            <ul>
+              <li><b>密歇根体表图（Michigan Body Map）</b>——Brummett CM, et al. <b>Pain</b>. 2016。402 名患者、5 项研究验证；填完只要 <b>39–44 秒</b>，标注误差仅 <b>7.2%</b>，且错误基本都是左右侧混淆（所以图上有正面 / 背面两张）。</li>
+              <li><b>斯坦福 CHOIR 体表图</b>——Scherrer KH, et al. <b>Pain Reports</b>. 2021（PMID 33490848）。530 人验证 + 278 人隔 1 周重测：<b>两次填写相关性 ICC 0.93</b>，与问卷法不一致率 &lt;10%。已在全球 CHOIR 网络用了 10 万+ 次。</li>
+              <li><b>专门针对慢性颈痛</b>——希腊一项 2026 年研究（Archives of Hellenic Medicine）用 45 名慢性颈痛患者验证体表图：<b>重测信度 ICC 0.76–0.92</b>、部位一致性 84–100%。结论：纸质和电子体表图都能可靠估计疼痛分布。</li>
+            </ul>
+            <p>👉 所以「你点一下人身上哪里疼」这件事，是<b>被研究验证过的评估方式</b>，不是我拍脑袋做的可视化。它也是唯一能让医生一眼看懂你全身状况的表达方式。</p>
+            <div class="src">出处：Brummett CM, et al. <b>Preliminary validation of the Michigan Body Map</b>. Pain. 2016 ｜ Scherrer KH, et al. <b>Development and validation of the CHOIR body map</b>. Pain Rep. 2021;6(1):e880. doi:10.1097/PR9.0000000000000880 ｜ Arch Hell Med 2026;1:94</div>
+          </div>
+          <div class="sci-card full">
+            <h5>② 为什么每天自评一下就有用 <span class="ev b">B · 临床常用终点</span></h5>
+            <div class="sub">这不是「打卡游戏」，它是疼痛研究里的标准做法</div>
+            <ul>
+              <li>颈部疼痛的随机对照试验，普遍把<b>「每日 0–10 分数字评分（NRS）」</b>当主要或次要终点。例：Petterson S, et al. <b>J Pain Res</b>（n=33，上斜方肌肌筋膜痛）——受试者<b>每天自评疼痛 0–10 分</b>，4 周后比较组间差异。</li>
+              <li>另一项 54 人颈部 RCT（Suvarnnato T, et al. <b>J Pain Res</b> 2019）同时用 <b>NPS 数字疼痛评分 + NDI 颈椎功能障碍指数</b>，在 6 周、1 个月、3 个月三个时间点复测。</li>
+              <li>中文康复资料汇总的指标口径一致：<b>用 VAS/NRS 定期评疼痛、用 NDI 评功能</b>；并指出 NDI 评分与患者日常活动能力呈负相关（r=−0.73, P&lt;0.01）。</li>
+            </ul>
+            <p>👉 一句人话：<b>医生说「这周怎么样」的时候，你答「还行」是 0 信息量；你给出「14 天里 11 天是『差不多』、3 天『更痛』、都在久坐 3 小时以上的那天」——这是能改方案的信息。</b></p>
+            <div class="src">出处：Petterson S, et al. J Pain Res（ClinicalTrials.gov NCT02135094）｜ Suvarnnato T, et al. <b>Effect of specific deep cervical muscle exercises…</b> J Pain Res. 2019（NCT02656030）｜ 中文自我康复资料（NDI r=−0.73, P&lt;0.01）</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.8;padding:13px 16px;border-radius:12px;border:1px dashed var(--card-border);background:var(--card-bg-2)">
+          📌 上一版（v2）的颈椎专项科普——<b>曲度变直不等于要治的病</b>（含 Helliwell 1994 / 21 项研究 meta / ACR 2024）、<b>等长颈后伸训练 A 级</b>（Alpayci 2017, n=65, PMID 28118272）、<b>JOSPT 2017 指南</b>、<b>热敷 Cochrane</b>、<b>游泳 E 级（老实说没有 RCT）</b>、<b>米字操对已确诊颈椎病人不推荐</b>——原样保留，并入本体时整段搬进「颈椎病」这条病史的详情里，<b>每个病症各自挂各自的科普</b>。新病症的科普由我联网查证后逐条填入，每条都带证据等级 + 出处。你把病史发我，我一条条查。
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="panel" id="p-hist">
+    <div class="panel" id="p-hist">
     <div class="sec">
       <div class="sec-hd"><span>📁 我的伤病史（全量）</span><span class="sub" id="histSub"></span></div>
       <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
@@ -13528,14 +13608,6 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
         <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:200px">增 / 改 / 删 全闭环：每条卡下面有「✏️ 编辑」「🗑 删除」（删除二次确认）。</span>
       </div>
       <div id="histList"></div>
-    </div>
-  </div>
-
-  <div class="panel" id="p-check">
-    <div class="sec">
-      <div class="sec-hd"><span>✅ 今日打卡</span><span class="sub" id="ckSub"></span></div>
-      <div id="ckBody"></div>
-      <div id="ckLink" style="margin-top:16px"></div>
     </div>
   </div>
 
@@ -13559,43 +13631,6 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
         ③ 它<b>不诊断</b>。判断病情有没有好转，最终要医生结合查体。这个板块真正的价值是——<b>复诊时你不用凭回忆描述，直接把这张图给医生。</b>
       </div>
       <div class="disclaim">📝 记录型工具，非医疗建议。出现手麻、走路不稳、大小便异常请立即就医。</div>
-    </div>
-  </div>
-
-  <div class="panel" id="p-sci">
-    <div class="sec">
-      <div class="sec-hd"><span>📚 科普</span><span class="sub">每条都标证据等级 + 出处 · 没有一条是我自己推的</span></div>
-      <div class="canlist" style="margin-bottom:14px">
-        <div class="yes"><h6>✅ 这个板块能做的</h6>把散在各处的病史收成一份、按部位标在人身上、把医生的叮嘱变成每天能勾的项、把打卡长成趋势给复诊用。</div>
-        <div class="no"><h6>🚫 这个板块不做的</h6>不诊断、不推荐药、不建议自购保健品、不替代面诊、不给你算「治愈率」。任何疗法都会标注证据等级，低就是低。</div>
-      </div>
-      <div class="sci">
-        <div class="sci-card full">
-          <h5>① 为什么用人体图标部位 <span class="ev a">A · 有验证研究</span></h5>
-          <div class="sub">这是本版新增的机制，先把依据摆出来</div>
-          <ul>
-            <li><b>密歇根体表图（Michigan Body Map）</b>——Brummett CM, et al. <b>Pain</b>. 2016。402 名患者、5 项研究验证；填完只要 <b>39–44 秒</b>，标注误差仅 <b>7.2%</b>，且错误基本都是左右侧混淆（所以图上有正面 / 背面两张）。</li>
-            <li><b>斯坦福 CHOIR 体表图</b>——Scherrer KH, et al. <b>Pain Reports</b>. 2021（PMID 33490848）。530 人验证 + 278 人隔 1 周重测：<b>两次填写相关性 ICC 0.93</b>，与问卷法不一致率 &lt;10%。已在全球 CHOIR 网络用了 10 万+ 次。</li>
-            <li><b>专门针对慢性颈痛</b>——希腊一项 2026 年研究（Archives of Hellenic Medicine）用 45 名慢性颈痛患者验证体表图：<b>重测信度 ICC 0.76–0.92</b>、部位一致性 84–100%。结论：纸质和电子体表图都能可靠估计疼痛分布。</li>
-          </ul>
-          <p>👉 所以「你点一下人身上哪里疼」这件事，是<b>被研究验证过的评估方式</b>，不是我拍脑袋做的可视化。它也是唯一能让医生一眼看懂你全身状况的表达方式。</p>
-          <div class="src">出处：Brummett CM, et al. <b>Preliminary validation of the Michigan Body Map</b>. Pain. 2016 ｜ Scherrer KH, et al. <b>Development and validation of the CHOIR body map</b>. Pain Rep. 2021;6(1):e880. doi:10.1097/PR9.0000000000000880 ｜ Arch Hell Med 2026;1:94</div>
-        </div>
-        <div class="sci-card full">
-          <h5>② 为什么每天自评一下就有用 <span class="ev b">B · 临床常用终点</span></h5>
-          <div class="sub">这不是「打卡游戏」，它是疼痛研究里的标准做法</div>
-          <ul>
-            <li>颈部疼痛的随机对照试验，普遍把<b>「每日 0–10 分数字评分（NRS）」</b>当主要或次要终点。例：Petterson S, et al. <b>J Pain Res</b>（n=33，上斜方肌肌筋膜痛）——受试者<b>每天自评疼痛 0–10 分</b>，4 周后比较组间差异。</li>
-            <li>另一项 54 人颈部 RCT（Suvarnnato T, et al. <b>J Pain Res</b> 2019）同时用 <b>NPS 数字疼痛评分 + NDI 颈椎功能障碍指数</b>，在 6 周、1 个月、3 个月三个时间点复测。</li>
-            <li>中文康复资料汇总的指标口径一致：<b>用 VAS/NRS 定期评疼痛、用 NDI 评功能</b>；并指出 NDI 评分与患者日常活动能力呈负相关（r=−0.73, P&lt;0.01）。</li>
-          </ul>
-          <p>👉 一句人话：<b>医生说「这周怎么样」的时候，你答「还行」是 0 信息量；你给出「14 天里 11 天是『差不多』、3 天『更痛』、都在久坐 3 小时以上的那天」——这是能改方案的信息。</b></p>
-          <div class="src">出处：Petterson S, et al. J Pain Res（ClinicalTrials.gov NCT02135094）｜ Suvarnnato T, et al. <b>Effect of specific deep cervical muscle exercises…</b> J Pain Res. 2019（NCT02656030）｜ 中文自我康复资料（NDI r=−0.73, P&lt;0.01）</div>
-        </div>
-      </div>
-      <div style="margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.8;padding:13px 16px;border-radius:12px;border:1px dashed var(--card-border);background:var(--card-bg-2)">
-        📌 上一版（v2）的颈椎专项科普——<b>曲度变直不等于要治的病</b>（含 Helliwell 1994 / 21 项研究 meta / ACR 2024）、<b>等长颈后伸训练 A 级</b>（Alpayci 2017, n=65, PMID 28118272）、<b>JOSPT 2017 指南</b>、<b>热敷 Cochrane</b>、<b>游泳 E 级（老实说没有 RCT）</b>、<b>米字操对已确诊颈椎病人不推荐</b>——原样保留，并入本体时整段搬进「颈椎病」这条病史的详情里，<b>每个病症各自挂各自的科普</b>。新病症的科普由我联网查证后逐条填入，每条都带证据等级 + 出处。你把病史发我，我一条条查。
-      </div>
     </div>
   </div>
 
@@ -13637,6 +13672,7 @@ html[data-theme="midnight"] #healthPage,html[data-theme="nebula"] #healthPage,ht
     </div>
   </div>
 
+  
 </div>
 
 <div class="mask" id="mask">
@@ -31521,12 +31557,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         renderParentingPage();
 (function(){
 'use strict';
-/* ================================================================
-   NIKO · 健康档案（身体档案）
-   并入本体的方式：整段包进 IIFE 隔离命名（本体所有 part 的 JS 共处同一个
-   <script> 作用域，裸声明会互相覆盖）；只导出被 HTML onclick 引用的函数。
-   数据持久化：safeStorage 'niko_health_v1'；切页入口 renderHealthPage()。
-   ================================================================ */
+/* NIKO · 健康档案（身体档案）· v7 总览改版
+   整段包进 IIFE 做命名隔离：所有 part 的 JS 共处同一个 script 作用域，
+   裸 function/var 会静默互相覆盖；只把 HTML onclick 真正引用到的函数挂到 window。 */
 
 /* ===================== 状态 ===================== */
 var S = { tab:'map', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
@@ -31621,8 +31654,8 @@ var SELF14 = [ 2, 2, 1, 2, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0 ];
 var GOAL = 16;
 var CK_DONE = {};
 
-/* ===================== v6 并入本体：本地持久化（key: niko_health_v1） =====================
-   ⚠️ 铁律 §5：面板渲染前必须重读 localStorage，否则云端/其它页写入的数据不可见，
+/* ===================== v7 并入本体：本地持久化（key: niko_health_v1） =====================
+   铁律 §5：面板渲染前必须重读 localStorage，否则云端/其它页写入的数据不可见，
    而且内存里的旧数据会把新数据覆盖掉。所以 HLOAD() 挂在 renderHealthPage() 最前面。 */
 var HK = 'niko_health_v1';
 function HLOAD(){
@@ -31650,16 +31683,17 @@ function HSAVE(){
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60), x=s%60; return m+':'+(x<10?'0':'')+x; }
 
+/* ===================== 主题 / Tab ===================== */
+/* 预览页的 pvTheme（切整页主题）已删除：并入后主题由本体 html[data-theme] 统一控制 */
+function pvTheme(){ /* no-op：并入本体后主题跟随全站，不再由本板块切换 */ }
 var TABS=[
-  {k:'map',   ic:'🫀', t:'身体地图'},
+  {k:'map',   ic:'🫀', t:'总览'},
   {k:'hist',  ic:'📁', t:'病史库',   cnt:function(){return HIST.length;}},
   {k:'med',   ic:'💊', t:'用药记录', cnt:function(){return MEDS.length;}},
   {k:'minor', ic:'🤒', t:'小病复发', cnt:function(){return MINOR.length;}},
-  {k:'check', ic:'✅', t:'今日打卡', cnt:function(){return ckAll().length;}},
   {k:'watch', ic:'⌚', t:'手表数据'},
   {k:'plan',  ic:'🩺', t:'我的方案'},
-  {k:'trend', ic:'📈', t:'好转推断'},
-  {k:'sci',   ic:'📚', t:'科普'}
+  {k:'trend', ic:'📈', t:'好转推断'}
 ];
 function renderTabs(){
   document.getElementById('tabs').innerHTML=TABS.map(function(x){
@@ -31669,27 +31703,18 @@ function renderTabs(){
 }
 function pvTab(k){
   S.tab=k;
-  ['map','hist','med','minor','check','watch','plan','trend','sci'].forEach(function(x){
+  ['map','hist','med','minor','watch','plan','trend'].forEach(function(x){
     var p=document.getElementById('p-'+x); if(p) p.classList.toggle('on', x===k);
   });
   renderTabs();
+  if(k==='map'){ renderBodyMap(); renderCheck(); }
   if(k==='hist')  renderHist();
   if(k==='med')   renderMed();
   if(k==='minor') renderMinor();
-  if(k==='check'){ renderCheck(); renderCkLink(); }
   if(k==='watch') renderWatch();
   if(k==='plan')  renderPlan();
   if(k==='trend') renderTrend();
 }
-function pvMode(m){
-  S.mode=m;
-  ['A','B','C'].forEach(function(k){ var el=document.getElementById('md'+k); if(el) el.classList.toggle('on', k===m); });
-  document.getElementById('mdHint').textContent = m==='A'?'A 正背并排，一眼看全全身':(m==='B'?'B 单图放大 · 用按钮切正/背，看得最清楚':'C 极简模式 · 只留轮廓和痛点，记录多了也不乱');
-  document.getElementById('bpGrid').className='bp-grid'+(m==='C'?' mode-c':'');
-  var _hp=document.getElementById('healthPage'); if(_hp) _hp.setAttribute('data-bpmode', m);
-  renderBodyMap();
-}
-
 /* ===================== 人体图渲染 v5（解剖剪影 × 肌纤维 × 全息 HUD） ===================== */
 /* 画布 BP_W×BP_H=340×440（由 _v5_geo.py 生成，几何与热区同源，永不脱位）。
    层序：底 → 网格 → HUD → 装饰读数 → 解剖剪影(带体积填充) → 体腔辉光 → 肌纤维(裁在轮廓内) → 骨架 → 热区 → 痛点光斑 → 引线标签 → 扫描线
@@ -31785,9 +31810,6 @@ function bodySvg(side){
   return '<svg viewBox="0 0 '+BP_W+' '+BP_H+'" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">'+
     '<defs>'+BP_DEFS+'</defs>'+
     '<rect class="bp2-bg" x="0" y="0" width="'+BP_W+'" height="'+BP_H+'" fill="url(#bpBgG)"/>'+
-    '<rect class="bp2-gridbg" x="0" y="0" width="'+BP_W+'" height="'+BP_H+'" fill="url(#bpGridP)"/>'+
-    '<g class="bp2-hud">'+g.hud+'</g>'+
-    '<g class="bp2-blk">'+blk+'</g>'+
     '<path class="bp2-sil" d="'+g.sil+'"/>'+
     '<path class="bp2-core" d="'+g.sil+'" fill="url(#bpCoreG)"/>'+
     '<g class="bp2-fib" clip-path="url(#bpClip)">'+g.fib+'</g>'+
@@ -31795,7 +31817,6 @@ function bodySvg(side){
     '<g class="bp2-hits">'+parts+'</g>'+
     '<g class="bp2-hots">'+bpHot(side)+'</g>'+
     '<g class="bp2-labs">'+bpLabels(side)+'</g>'+
-    '<rect class="bp2-scan" x="6" y="0" width="'+(BP_W-12)+'" height="26" fill="url(#bpScanG)"/>'+
     '</svg>';
 }
 function bpBase(sd){
@@ -31810,50 +31831,120 @@ function bindHits(root){
     el.addEventListener('click', function(){ pvSel(el.getAttribute('data-zone')); });
   });
 }
+/* ===================== 身体地图场景 v7（静态设计图：深紫画布 × 剪影 × 虚线引线数据卡） =====================
+   参考用户给的 Keep 风截图：数据卡分列左右，虚线引到身上的光点图钉。
+   不做交互：图钉位置 = ZONES 解剖中心（背面部位镜像到正面大致位置），加病史自动长出。 */
+var SCN_AC={active:'#f0a35e',watch:'#f6d365',old:'#34d399'};
+function scnCut(s,n){ s=String(s==null?'':s); return s.length>n?(s.slice(0,n-1)+'…'):s; }
+function scnDays(d){ var t=new Date(d); if(isNaN(t.getTime())) return null; return Math.max(0,Math.round((Date.now()-t.getTime())/86400000)); }
+function scnName(n){ return scnCut(String(n||'').replace(/（[^）]*）/g,'').replace(/\([^)]*\)/g,'').replace(/ · /g,'·').trim(),14); }
 function renderBodyMap(){
-  var figs=document.getElementById('bpFigs');
-  if(S.mode==='C'){
-    figs.innerHTML='<div class="bp-fig" style="max-width:520px">'+bodySvg('front')+'<div class="bp-cap">正面 · 极简模式（只留轮廓与痛点）</div></div>';
-  } else if(S.mode==='A'){
-    figs.innerHTML='<div class="bp-fig">'+bodySvg('front')+'<div class="bp-cap">正面</div></div>'+
-                   '<div class="bp-fig">'+bodySvg('back')+'<div class="bp-cap">背面</div></div>';
+  var box=document.getElementById('scnBox'); if(!box) return;
+  var zm=zonesOf();
+  var cards=[], olds=[];
+  HIST.forEach(function(h){
+    var z=(h.zones||[])[0]||null;
+    if(h.status==='old') olds.push({h:h,z:z}); else cards.push({h:h,z:z});
+  });
+  var W=box.clientWidth||1100, wide=W>=720;
+  var CW=wide?300:290, CH=wide?112:116, GAP=wide?26:12;
+  var nL=Math.ceil(cards.length/2), nR=cards.length-nL;
+  var vw, vh, silH, silTx, silTy, s;
+  if(wide){
+    vw=1200; vh=620; silH=508; s=silH/BP_H; silTx=vw/2-BP_CX*s; silTy=(vh-silH)/2+6;
   } else {
-    var sd=S.pickSide||'front';
-    figs.innerHTML='<div class="bp-fig" style="max-width:520px">'+bodySvg(sd)+
-      '<div class="bp-cap">'+(sd==='back'?'背面':'正面')+
-      ' <span class="hp-chip sm" style="cursor:pointer" onclick="pvFlip()">⇄ 切到'+(sd==='back'?'正面':'背面')+'</span></div></div>';
+    vw=640; silH=392; s=silH/BP_H; silTx=vw/2-BP_CX*s; silTy=20;
+    vh=(silTy+silH+30)+Math.ceil(Math.max(1,cards.length)/2)*(CH+GAP)+14;
   }
-  bindHits(figs);
-  document.getElementById('hpBpCount').textContent=Object.keys(zonesOf()).length+' 处记录';
-  renderBpDetail();
+  function P(z){ var o=ZMAP[z]; if(!o) return null; var x=o.cc[0]; if(o.s==='back') x=BP_W-x; return [silTx+x*s, silTy+o.cc[1]*s]; }
+  var out=[];
+  out.push('<svg viewBox="0 0 '+vw+' '+vh+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="身体地图">');
+  out.push('<defs>'
+    +'<radialGradient id="scnBg" cx="50%" cy="16%" r="95%">'
+    +'<stop offset="0%" stop-color="#241c42"/><stop offset="52%" stop-color="#181233"/><stop offset="100%" stop-color="#100b22"/></radialGradient>'
+    +'<linearGradient id="scnSil" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0%" stop-color="#a294d1"/><stop offset="42%" stop-color="#71619f"/><stop offset="100%" stop-color="#473c6e"/></linearGradient>'
+    +'<filter id="scnBlur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="14"/></filter>'
+    +'<filter id="scnPin" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="3.2"/></filter>'
+    +'</defs>');
+  out.push('<rect x="0" y="0" width="'+vw+'" height="'+vh+'" rx="12" fill="url(#scnBg)"/>');
+  /* 人形：光晕 + 渐变剪影 + 脚下投影 */
+  out.push('<ellipse cx="'+bpN(silTx+BP_CX*s)+'" cy="'+bpN(silTy+BP_H*s+2)+'" rx="'+bpN(140*s)+'" ry="9" fill="#050310" opacity=".5" filter="url(#scnBlur)"/>');
+  out.push('<g transform="translate('+bpN(silTx)+','+bpN(silTy)+') scale('+bpN(s)+')">'
+    +'<path d="'+BP_GEOSIL+'" fill="#8f7fd0" opacity=".38" filter="url(#scnBlur)"/>'
+    +'<path d="'+BP_GEOSIL+'" fill="url(#scnSil)" stroke="#c3b8e8" stroke-opacity=".5" stroke-width="1" stroke-linejoin="round"/></g>');
+  function cardXY(idx){
+    if(wide){
+      if(idx<nL) return {x:34, y:vh/2-(nL*CH+(nL-1)*GAP)/2+idx*(CH+GAP), side:'L'};
+      var j=idx-nL; return {x:vw-34-CW, y:vh/2-(nR*CH+(nR-1)*GAP)/2+j*(CH+GAP), side:'R'};
+    }
+    var c=idx%2, r=Math.floor(idx/2);
+    return {x:20+c*(CW+20), y:silTy+silH+30+r*(CH+GAP), side:(c===0?'L':'R')};
+  }
+  cards.forEach(function(cd,idx){
+    var h=cd.h, ac=SCN_AC[h.status]||'#f0a35e';
+    var pos=cardXY(idx), cx=pos.x, cy=pos.y;
+    var pin=cd.z?P(cd.z):null;
+    if(wide){
+      var ex=(pos.side==='L')?(cx+CW):cx, ey=cy+CH/2;
+      var tx2=pin?pin[0]:(silTx+BP_CX*s), ty2=pin?pin[1]:(silTy+200*s);
+      var mx=(ex+tx2)/2;
+      out.push('<path d="M'+bpN(ex)+','+bpN(ey)+' C'+bpN(mx)+','+bpN(ey)+' '+bpN(mx)+','+bpN(ty2)+' '+bpN(tx2)+','+bpN(ty2)+'" fill="none" stroke="#8d86b0" stroke-opacity=".55" stroke-width="1.3" stroke-dasharray="1.5 5.5" stroke-linecap="round"/>');
+    }
+    if(pin){
+      var sel=(S.sel===cd.z);
+      out.push('<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="'+(sel?15:12)+'" fill="'+ac+'" opacity=".22"/>'
+        +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="8.5" fill="#ffffff" opacity=".9" filter="url(#scnPin)"/>'
+        +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="'+(sel?6:4.6)+'" fill="#ffffff" stroke="'+ac+'" stroke-width="1.6"/>');
+      if(!wide){
+        out.push('<text x="'+bpN(pin[0])+'" y="'+bpN(pin[1]+3.2)+'" text-anchor="middle" font-size="8.5" font-weight="800" fill="'+ac+'">'+(idx+1)+'</text>');
+      }
+    }
+    var d=scnDays(h.date);
+    var its=[]; (h.checks||[]).forEach(function(c,i){ its.push(h.id+'#'+i); });
+    var dn=its.filter(function(id){ return CK_DONE[id]; }).length;
+    var tx=cx+(wide?20:44);
+    out.push('<g>'
+      +'<rect x="'+cx+'" y="'+cy+'" width="'+CW+'" height="'+CH+'" rx="14" fill="#282048" fill-opacity=".94" stroke="#ffffff" stroke-opacity=".09"/>'
+      +'<rect x="'+cx+'" y="'+cy+'" width="3.5" height="'+CH+'" rx="1.75" fill="'+ac+'"/>'
+      +(wide?'':('<circle cx="'+(cx+25)+'" cy="'+(cy+27)+'" r="11.5" fill="'+ac+'" fill-opacity=".18" stroke="'+ac+'" stroke-width="1.2"/><text x="'+(cx+25)+'" y="'+(cy+31)+'" text-anchor="middle" font-size="11" font-weight="800" fill="'+ac+'">'+(idx+1)+'</text>'))
+      +'<text x="'+tx+'" y="'+(cy+31)+'" font-size="16.5" font-weight="700" fill="#f3eefc">'+esc(scnName(h.name))+'</text>'
+      +'<text x="'+tx+'" y="'+(cy+51)+'" font-size="11" fill="#9c94bd">'+esc(scnCut(ST[h.status].t+' · '+(h.date||'—'),24))+'</text>'
+      +'<text x="'+(cx+20)+'" y="'+(cy+92)+'" font-size="21" font-weight="800" fill="#6ee7b7">'+(d==null?'—':d)+'<tspan font-size="10.5" font-weight="500" fill="#8b84a8"> 天前</tspan></text>'
+      +'<text x="'+(cx+150)+'" y="'+(cy+92)+'" font-size="21" font-weight="800" fill="#c4b5fd">'+dn+'<tspan font-size="10.5" font-weight="500" fill="#8b84a8"> / '+its.length+' 今日打卡</tspan></text>'
+      +'</g>');
+  });
+  var cardPins=cards.map(function(cd){ return cd.z?P(cd.z):null; }).filter(Boolean);
+  olds.forEach(function(od){
+    if(!od.z) return; var pin=P(od.z); if(!pin) return;
+    var ox=pin[0], oy=pin[1], moved=false;
+    for(var ci=0; ci<cardPins.length; ci++){
+      var cp=cardPins[ci], dx=ox-cp[0], dy=oy-cp[1];
+      if(Math.sqrt(dx*dx+dy*dy)<30){ ox=pin[0]+30; oy=pin[1]-22; moved=true; break; }
+    }
+    if(moved) out.push('<line x1="'+bpN(ox)+'" y1="'+bpN(oy)+'" x2="'+bpN(pin[0])+'" y2="'+bpN(pin[1])+'" stroke="#34d399" stroke-opacity=".45" stroke-width="1" stroke-dasharray="2 3"/>');
+    out.push('<circle cx="'+bpN(ox)+'" cy="'+bpN(oy)+'" r="4.2" fill="'+SCN_AC.old+'" opacity=".85"/>'
+      +'<text x="'+bpN(ox+9)+'" y="'+bpN(oy+3.5)+'" font-size="10" fill="#b3add0" style="paint-order:stroke" stroke="#171130" stroke-width="2.5">'+esc(scnCut(shortName(od.h.name),8))+'</text>');
+  });
+  if(!cards.length && !olds.length){
+    out.push('<text x="'+(vw/2)+'" y="'+(vh-26)+'" text-anchor="middle" font-size="12" fill="#8f88ad">还没有记录 —— 去「病史库」加一条，这里就会长出图钉和数据卡</text>');
+  }
+  out.push('</svg>');
+  box.innerHTML=out.join('');
+  var bc=document.getElementById('hpBpCount'); if(bc) bc.textContent=Object.keys(zm).length+' 处记录';
   renderPickFigs();
 }
-function pvFlip(){ S.pickSide=(S.pickSide==='back'?'front':'back'); renderBodyMap(); }
 function pvSel(z){
   S.sel=(S.sel===z?null:z);
   renderBodyMap();
   renderHist();
 }
-function renderBpDetail(){
-  var box=document.getElementById('bpDetail'); if(!box) return;
-  if(!S.sel){
-    box.innerHTML='<div class="card"><div class="hx-empty"><span class="big">👈</span>'+
-      '左边人身上<b>发光的橙色光斑</b>，就是你看过医生的地方（引线标签写着部位和病症）。<br><br>'+
-      '<b style="color:var(--text)">点一下光斑、或它盖住的部位</b>，这里会展开那个部位的完整档案：<br>'+
-      '诊断 · 医生叮嘱 · 开了什么药 · 忌口 · 每天要打卡的事 · 对应的科普。<br><br>'+
-      '<span style="font-size:11.5px">🟠 治疗中 &nbsp; 🟡 需盯着 &nbsp; 🟢 已稳定 &nbsp;·&nbsp; 一个部位有多条记录时，光斑上会标数字</span></div></div>';
-    return;
-  }
-  var idxs=zonesOf()[S.sel];
-  if(!idxs){ box.innerHTML=zoneEmpty(S.sel); return; }
-  box.innerHTML=idxs.map(function(i){ return hxCard(HIST[i], true); }).join('')+
-    '<div style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.65">这里显示的是「同一个部位」的全部记录 —— 一个部位可以有多条病史，按时间排。</div>';
-}
+function renderBpDetail(){ return; }  /* v7：场景是静态图，不再有右侧档案面板 */
 function zoneEmpty(z){
   return '<div class="card"><div class="hx-empty"><span class="big">＋</span>'+
     '<b style="color:var(--text)">'+zLabel(z)+'</b> 目前没有就诊记录。<br>'+
     '如果你这里看过医生、受过伤、或者一直有点不舒服——<br>'+
-    '<button class="hp-btn p" style="margin-top:10px" onclick="pvAdd(\''+z+'\')">＋ 给「'+zLabel(z)+'」加一条</button>'+
+    '<button class="btn p" style="margin-top:10px" onclick="pvAdd(\''+z+'\')">＋ 给「'+zLabel(z)+'」加一条</button>'+
     '</div></div>';
 }
 
@@ -31881,10 +31972,10 @@ function hxCard(h, compact){
       h.checks.map(function(x){ return '<span style="display:inline-block;margin-right:6px;padding:2px 9px;border-radius:99px;background:var(--card-bg-2);border:1px solid var(--card-border)">'+esc(x)+'</span>'; }).join('')+'</div>';
   }
   htm+='<div class="hx-acts">'+
-    '<button class="hp-btn sm" onclick="pvEdit(\''+h.id+'\')">✏️ 编辑</button>'+
-    '<button class="hp-btn sm" onclick="pvAddCheck(\''+h.id+'\')">＋ 加打卡项</button>'+
-    '<button class="hp-btn sm" onclick="pvGoZone(\''+((h.zones||[])[0]||'')+'\')">🫀 在图上定位</button>'+
-    '<button class="hp-btn sm dg" style="margin-left:auto" onclick="pvDel(\''+h.id+'\')">🗑 删除</button>'+
+    '<button class="btn sm" onclick="pvEdit(\''+h.id+'\')">✏️ 编辑</button>'+
+    '<button class="btn sm" onclick="pvAddCheck(\''+h.id+'\')">＋ 加打卡项</button>'+
+    '<button class="btn sm" onclick="pvGoZone(\''+((h.zones||[])[0]||'')+'\')">🫀 在图上定位</button>'+
+    '<button class="btn sm dg" style="margin-left:auto" onclick="pvDel(\''+h.id+'\')">🗑 删除</button>'+
     '</div></div>';
   return htm;
 }
@@ -31908,20 +31999,37 @@ function ckAll(){
   return out;
 }
 var FR={'h1#0':'🔥 连续 5 天','h1#1':'🔥 连续 12 天','h1#2':'🔥 连续 5 天','h1#3':'⚠️ 昨天漏了','h1#4':'🔥 连续 3 天','h1#5':'🔥 连续 5 天'};
+/* v6：总览状态条（数据全部来自 HIST / CK_DONE） */
+/* v7：状态 chips（计划视图 .stat-card 风格）+ 核心医嘱 slim 条 */
+function renderOvStats(){
+  var box=document.getElementById('ovStats'); if(!box) return;
+  var zm=zonesOf(), nA=0, nW=0;
+  HIST.forEach(function(h){ if(h.status==='active') nA++; else if(h.status==='watch') nW++; });
+  var items=ckAll(), done=items.filter(function(x){ return CK_DONE[x.id]; }).length;
+  var pct=items.length?Math.round(done/items.length*100):0;
+  box.innerHTML=
+    '<div class="pv7-st"><div class="n">'+Object.keys(zm).length+'<small> 处</small></div><div class="l">部位记录</div></div>'+
+    '<div class="pv7-st"><div class="n" style="color:var(--accent)">'+nA+'<small> / '+nW+'</small></div><div class="l">治疗中 / 需关注</div></div>'+
+    '<div class="pv7-st"><div class="n">'+done+'<small> / '+items.length+'</small></div><div class="l">今日打卡</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+  var rx=document.getElementById('ovRx');
+  var act=HIST.filter(function(h){ return h.status==='active'; })[0];
+  if(rx){
+    if(act&&act.rx) rx.innerHTML='<b>📌 核心医嘱</b><span>'+esc(act.rx)+'</span><span class="who">来自：'+esc(shortName(act.name))+'</span>';
+    else rx.innerHTML='<b>📌 核心医嘱</b><span style="color:var(--muted)">暂无 —— 在病史里标一条「治疗中」并填上医嘱，就会置顶在这里</span>';
+  }
+}
 function renderCheck(){
+  renderOvStats();
   var items=ckAll();
   var done=items.filter(function(x){ return CK_DONE[x.id]; }).length;
   document.getElementById('ckSub').textContent='今天 '+done+' / '+items.length+' 项 · 连续打卡 5 天';
-  if(!items.length){ document.getElementById('ckBody').innerHTML='<div class="hx-empty">还没有打卡项。在病史里写「每天要打卡的事」，这里就会自动出现。</div>'; return; }
-  var byH={}; items.forEach(function(x){ (byH[x.h.id]=byH[x.h.id]||[]).push(x); });
-  var htm='<div class="card" style="margin-bottom:14px">'+
-    '<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:11px">'+
-      '<span style="font-size:13.5px;font-weight:700">⏰ 30 分钟活动闹钟</span>'+
-      '<span style="font-size:11.5px;color:var(--muted)">今天已活动 <b style="color:var(--ok)">6</b> 次 · 错过 <b style="color:var(--warn)">1</b> 次</span>'+
+  /* 右卡：30 分钟闹钟 + 2 分钟跟练 */
+  var side='<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:11px">'+
+      '<span style="font-size:12px;color:var(--muted)">今天已活动 <b style="color:var(--ok)">6</b> 次 · 错过 <b style="color:var(--warn)">1</b> 次</span>'+
       '<span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">'+
-        '<span class="hp-chip sm on" id="rsA" onclick="pvRS(\'A\')">A 轻量胶囊</span>'+
-        '<span class="hp-chip sm" id="rsB" onclick="pvRS(\'B\')">B 强制整屏</span>'+
-        '<span class="hp-chip sm" id="rsC" onclick="pvRS(\'C\')">C 安静内嵌</span>'+
+        '<span class="chip sm on" id="rsA" onclick="pvRS(\'A\')">A 轻量胶囊</span>'+
+        '<span class="chip sm" id="rsB" onclick="pvRS(\'B\')">B 强制整屏</span>'+
+        '<span class="chip sm" id="rsC" onclick="pvRS(\'C\')">C 安静内嵌</span>'+
       '</span>'+
     '</div><div id="rsBody"></div>'+
     '<div style="margin-top:12px;padding-top:11px;border-top:1px dashed var(--card-border)">'+
@@ -31936,29 +32044,37 @@ function renderCheck(){
           '<div class="ex-nums" id="exNums"></div></div>'+
       '</div>'+
       '<div style="margin-top:11px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'+
-        '<button class="hp-btn p" onclick="pvExStart()">▶ 开始 2 分钟跟练</button>'+
-        '<button class="hp-btn" onclick="pvExReset()">↺ 重置</button>'+
+        '<button class="btn p" onclick="pvExStart()">▶ 开始 2 分钟跟练</button>'+
+        '<button class="btn" onclick="pvExReset()">↺ 重置</button>'+
         '<span style="font-size:11.5px;color:var(--muted)">8 个动作 × 15 秒 · 动作已按「颈椎病人不做米字操」重做</span>'+
       '</div>'+
       '<div class="ban">🚫 全程<b>不要大幅度后仰、不要绕圈甩头、不要用力扳</b>。已确诊颈椎病的人做米字操那类大范围动作，有加重椎间盘 / 脊髓压迫的报告。</div>'+
-    '</div></div>';
-  Object.keys(byH).forEach(function(hid){
-    var h=HIST.filter(function(x){ return x.id===hid; })[0];
-    htm+='<div class="ck-grp">🩺 '+esc(h.name)+'</div><div class="ck-list">'+
-      byH[hid].map(function(x){
-        var on=!!CK_DONE[x.id], fr=FR[x.id]||'';
-        return '<div class="ck'+(on?' done':'')+'" onclick="pvCk(\''+x.id+'\')">'+
-          '<span class="ck-box">✓</span><span class="tx"><span class="nm">'+esc(x.t)+'</span>'+
-          (fr?'<span class="sub">'+fr+'</span>':'')+'</span>'+
-          (x.t.indexOf('活动')>=0?'<button class="hp-btn sm" onclick="event.stopPropagation();pvExStart()">跟练</button>':'')+
-          '</div>';
-      }).join('')+'</div>';
-  });
-  htm+='<div style="margin-top:16px;display:flex;gap:9px;flex-wrap:wrap;align-items:center">'+
-    '<button class="hp-btn p" onclick="pvCkAll()">全部勾上（演示）</button>'+
-    '<button class="hp-btn" onclick="pvTab(\'trend\')">📈 看这些打卡长成什么趋势</button>'+
-    '<span style="font-size:11.5px;color:var(--muted);flex:1;min-width:180px">勾完会写进「好转推断」的统计 —— 那就是它的数据来源。</span></div>';
-  document.getElementById('ckBody').innerHTML=htm;
+    '</div>';
+  document.getElementById('ckSide').innerHTML=side;
+  /* 左卡：打卡项分组 */
+  if(!items.length){
+    document.getElementById('ckBody').innerHTML='<div class="hx-empty">还没有打卡项。在病史里写「每天要打卡的事」，这里就会自动出现。</div>';
+  } else {
+    var byH={}; items.forEach(function(x){ (byH[x.h.id]=byH[x.h.id]||[]).push(x); });
+    var htm='';
+    Object.keys(byH).forEach(function(hid){
+      var h=HIST.filter(function(x){ return x.id===hid; })[0];
+      htm+='<div class="ck-grp">🩺 '+esc(h.name)+'</div><div class="ck-list">'+
+        byH[hid].map(function(x){
+          var on=!!CK_DONE[x.id], fr=FR[x.id]||'';
+          return '<div class="ck'+(on?' done':'')+'" onclick="pvCk(\''+x.id+'\')">'+
+            '<span class="ck-box">✓</span><span class="tx"><span class="nm">'+esc(x.t)+'</span>'+
+            (fr?'<span class="sub">'+fr+'</span>':'')+'</span>'+
+            (x.t.indexOf('活动')>=0?'<button class="btn sm" onclick="event.stopPropagation();pvExStart()">跟练</button>':'')+
+            '</div>';
+        }).join('')+'</div>';
+    });
+    htm+='<div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap;align-items:center">'+
+      '<button class="btn p" onclick="pvCkAll()">全部勾上（演示）</button>'+
+      '<button class="btn" onclick="pvTab(\'trend\')">📈 看这些打卡长成什么趋势</button>'+
+      '<span style="font-size:11.5px;color:var(--muted);flex:1;min-width:160px">勾完会写进「好转推断」的统计 —— 那就是它的数据来源。</span></div>';
+    document.getElementById('ckBody').innerHTML=htm;
+  }
   renderExercise(); renderRS(); renderTabs();
 }
 var RS='A';
@@ -31977,8 +32093,8 @@ function renderRS(){
       '<div style="position:absolute;inset:0;background:rgba(8,10,18,.82);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;color:#fff;padding:12px;text-align:center">'+
       '<div style="font-size:12px;opacity:.9">⏰ 30 分钟到了</div><div style="font-size:30px;font-weight:800">02:00</div>'+
       '<div style="font-size:12.5px;font-weight:700;color:#8ff0c4">起身活动 2 分钟 · 收下巴 → 等长对抗 → 肩胛后缩</div>'+
-      '<div style="display:flex;gap:7px;margin-top:2px"><button class="hp-btn" style="background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff" onclick="pvExStart()">立即开始</button>'+
-      '<button class="hp-btn" style="background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff">延后 5 分钟</button></div>'+
+      '<div style="display:flex;gap:7px;margin-top:2px"><button class="btn" style="background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff" onclick="pvExStart()">立即开始</button>'+
+      '<button class="btn" style="background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3);color:#fff">延后 5 分钟</button></div>'+
       '<div style="font-size:10px;opacity:.5">延后会记一次「逃避」</div></div></div>'+
       '<div style="font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.65">到点压暗整屏，<b style="color:var(--text)">2 分钟不做完关不掉</b>，只留「延后」一条退路。适合吃药这 7–10 天。</div>';
   } else {
@@ -32022,7 +32138,7 @@ function renderExercise(){
   var ck=document.getElementById('exClock'); if(ck) ck.textContent=fmt(EX.left);
   var ar=document.getElementById('ringArc'); if(ar) ar.setAttribute('stroke-dashoffset', 276.5*(EX.left/120));
 }
-function pvExStart(){ S.tab='check'; pvTab('check'); EX.on=true; EX.left=120; EX.act=0; renderExercise(); }
+function pvExStart(){ pvTab('map'); EX.on=true; EX.left=120; EX.act=0; renderExercise(); }
 function pvExReset(){ EX.on=false; EX.left=120; EX.act=0; renderExercise(); }
 setInterval(function(){
   if(!EX.on) return;
@@ -32143,7 +32259,7 @@ function renderPickFigs(){
   box.innerHTML=['front','back'].map(function(sd){
     return '<svg viewBox="0 0 '+BP_W+' '+BP_H+'" xmlns="http://www.w3.org/2000/svg">'+
       '<rect x="0" y="0" width="'+BP_W+'" height="'+BP_H+'" rx="6" fill="#071426"/>'+
-      '<path class="bp2-sil" d="'+BP_GEOSIL+'"/>'+
+      '<path class="bp2-sil" d="'+BP_GEOSIL+'" fill="#0e2a47" stroke="#4d9fd6" stroke-width="1"/>'+
       ZONES.filter(function(o){return o.s===sd;}).map(function(o){ return shapeSvg(o, (S.pick.indexOf(o.z)>=0)?'pick':''); }).join('')+
       '</svg>';
   }).join('');
@@ -32304,8 +32420,8 @@ function visitCard(v){
     '<div class="mx-w"><table class="mxt"><thead><tr><th>药名</th><th>规格</th><th>用法</th><th>时机</th><th>疗程</th></tr></thead><tbody>'+items+'</tbody></table></div>'+
     (v.eff?('<div class="mx-note"><b>吃完什么感觉：</b>'+esc(v.eff)+'</div>'):'')+
     (v.side?('<div class="mx-note"><b>副作用：</b>'+esc(v.side)+'</div>'):'')+
-    '<div class="hx-acts"><button class="hp-btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
-      '<button class="hp-btn sm dg" onclick="medDel(\''+v.id+'\')">🗑 删除</button></div></div>';
+    '<div class="hx-acts"><button class="btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
+      '<button class="btn sm dg" onclick="medDel(\''+v.id+'\')">🗑 删除</button></div></div>';
 }
 function medSafety(){
   return '<div class="sci" style="margin-top:14px"><div class="sci-card full">'+
@@ -32361,12 +32477,12 @@ function medRowHtml(it,i){
     '<td><input value="'+esc(it.f)+'" oninput="medRowSet('+i+',\'f\',this.value)" placeholder="每日几次"></td>'+
     '<td><input value="'+esc(it.t)+'" oninput="medRowSet('+i+',\'t\',this.value)" placeholder="饭前/饭后"></td>'+
     '<td><input value="'+esc(it.d)+'" oninput="medRowSet('+i+',\'d\',this.value)" placeholder="天数" style="max-width:70px"></td>'+
-    '<td style="white-space:nowrap"><button class="hp-btn sm dg" onclick="medRowDel('+i+')">✕</button></td></tr>';
+    '<td style="white-space:nowrap"><button class="btn sm dg" onclick="medRowDel('+i+')">✕</button></td></tr>';
 }
 function medRowsHtml(){
   return '<div class="mx-w"><table class="mxt" style="min-width:0"><thead><tr><th>药名</th><th>规格</th><th>用法</th><th>时机</th><th>疗程</th><th></th></tr></thead><tbody>'+
     GM.v.items.map(medRowHtml).join('')+'</tbody></table></div>'+
-    '<button class="hp-btn sm" style="margin-top:7px" onclick="medRowAdd()">＋ 再加一种药</button>'+
+    '<button class="btn sm" style="margin-top:7px" onclick="medRowAdd()">＋ 再加一种药</button>'+
     '<div class="fld" style="margin-top:12px"><label>服用周期里的备注（可选）</label><input id="gm_note" value="'+esc(GM.v.mnote||'')+'" oninput="GM.v.mnote=this.value" placeholder="例：先吃 7–10 天看反应"></div>';
 }
 function medRowSet(i,k,v){ GM.v.items[i][k]=v; }
@@ -32465,8 +32581,8 @@ function mnEpRow(e, prev, i){
         ((e.trig||[]).length?('⚡ 诱因：'+e.trig.join('、')+'　'):'')+
         ((e.care||[]).length?('🧴 处理：'+e.care.join('、')):'')+
         (e.note?('　📝 '+esc(e.note)):'')+'</div>'+
-      '<div style="margin-top:6px"><button class="hp-btn sm" onclick="mnEdit(\''+e.id+'\')">✏️ 编辑</button> '+
-        '<button class="hp-btn sm dg" onclick="mnDel(\''+e.id+'\')">🗑 删除</button></div>'+
+      '<div style="margin-top:6px"><button class="btn sm" onclick="mnEdit(\''+e.id+'\')">✏️ 编辑</button> '+
+        '<button class="btn sm dg" onclick="mnDel(\''+e.id+'\')">🗑 删除</button></div>'+
     '</div></div>';
 }
 function mnScience(name){
@@ -32504,7 +32620,7 @@ function renderMinor(){
   var st=minorStat(MNSEL);
   if(document.getElementById('minorSub')) document.getElementById('minorSub').textContent=names.length+' 种小病 · 共 '+MINOR.length+' 次发作';
   var h='<div class="bp-mode" style="margin-bottom:12px"><label>看哪个病</label>'+
-    names.map(function(n){ return '<span class="hp-chip sm'+(n===MNSEL?' on':'')+'" onclick="MNSEL=\''+esc(n)+'\';renderMinor()">'+esc(n)+'</span>'; }).join('')+
+    names.map(function(n){ return '<span class="chip sm'+(n===MNSEL?' on':'')+'" onclick="MNSEL=\''+esc(n)+'\';renderMinor()">'+esc(n)+'</span>'; }).join('')+
     '<span style="margin-left:auto;font-size:11px;color:var(--muted)">换一个病看它的独立周期</span></div>';
   if(!st.n){ box.innerHTML=h+'<div class="hx-empty"><span class="big">＋</span>还没有这一种的记录，点上面「＋ 记一次发作」开始攒。</div>'; return; }
   h+='<div class="mx-top">'+
@@ -32650,8 +32766,8 @@ function mdRowsHtml2(){
       '<input style="flex:1;min-width:84px" value="'+esc(it.f)+'" oninput="MDB.items['+i+'].f=this.value" placeholder="每日几次">'+
       '<input style="flex:1;min-width:70px" value="'+esc(it.t)+'" oninput="MDB.items['+i+'].t=this.value" placeholder="饭前/后">'+
       '<input style="flex:0 0 62px" value="'+esc(it.d)+'" oninput="MDB.items['+i+'].d=this.value" placeholder="天数">'+
-      '<button class="hp-btn sm dg" onclick="MDB.items.splice('+i+',1);mdRerow()">✕</button></div>';
-  }).join('')+'<button class="hp-btn sm" onclick="MDB.items.push({n:\'\',s:\'\',f:\'\',t:\'\',d:\'\'});mdRerow()">＋ 加一种药</button>';
+      '<button class="btn sm dg" onclick="MDB.items.splice('+i+',1);mdRerow()">✕</button></div>';
+  }).join('')+'<button class="btn sm" onclick="MDB.items.push({n:\'\',s:\'\',f:\'\',t:\'\',d:\'\'});mdRerow()">＋ 加一种药</button>';
 }
 function mdRerow(){ var el=document.getElementById('mpRows'); if(el) el.innerHTML=mdRowsHtml2(); }
 function mdPreview(){
@@ -32677,7 +32793,7 @@ function mdApply(){
   var g=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
   var items=(MDB.items||[]).filter(function(it){ return String(it.n||'').trim(); });
   if(!items.length){ pvToast('至少要有一个药名'); return; }
-  MEDS.push({ id:'md'+Date.now().toString(36), real:true, date:g('mp_date')||todayStr(), hosp:g('mp_hosp'), diag:g('mp_diag'),
+  MEDS.push({ id:'md'+Date.now().toString(36), date:g('mp_date')||todayStr(), hosp:g('mp_hosp'), diag:g('mp_diag'),
     dr:'', items:items.map(function(it){ return {n:it.n,s:it.s,f:it.f,t:it.t,d:it.d,note:''}; }),
     eff:'', side:'', st:g('mp_st')||'active', real:true });
   HSAVE();
@@ -32759,7 +32875,7 @@ function mnApply(){
   pvPasteClose(); renderMinor(); pvToast('已记下这次发作 ✓');
 }
 
-/* 预览页的「启动」块已删除：改由 renderHealthPage() 首次被调用时按需渲染（默认 B 形态） */
+/* 预览页的「启动」块已删除：改由 renderHealthPage() 首次被调用时按需渲染 */
 /* ============================================================
    v4 新增：手表数据 / 我的方案 / 病史粘贴解析
    ============================================================ */
@@ -32894,7 +33010,7 @@ function wdSave(){
   var rec={d:md, sleep:num(WDF.sleep), deep:num(WDF.deep), rhr:num(WDF.rhr), hrv:num(WDF.hrv),
            steps:num(WDF.steps), ex:num(WDF.ex), spo2:num(WDF.spo2), note:WDF.note||''};
   var i=-1; WATCH.forEach(function(w,k){ if(w.d===md) i=k; });
-  if(i>=0){ WATCH[i]=rec; }
+  if(i>=0){ WATCH[i]=rec; HSAVE(); }
   else { WATCH.push(rec); DAYS.push(md); SELF14.push(SELF14[SELF14.length-1]); HSAVE(); }
   renderWatch(); pvToast('已存进 '+md+' ✓');
 }
@@ -32934,7 +33050,7 @@ function wdParseDo(){
   }).join('');
   box.innerHTML='<div style="font-size:12px;color:var(--muted);margin:12px 0 7px">认出 <b style="color:var(--text)">'+rows.length+'</b> 天，<b>对一下再导入</b>（识别错了就在原文里补清楚「睡眠 / 静息心率」这些字）：</div>'+
     '<div class="tbl-scroll"><table class="wd-tbl">'+head+body+'</table></div>'+
-    '<button class="hp-btn p" style="margin-top:11px" onclick="wdParseApply()">📥 导入这 '+rows.length+' 天</button>';
+    '<button class="btn p" style="margin-top:11px" onclick="wdParseApply()">📥 导入这 '+rows.length+' 天</button>';
 }
 function wdParseApply(){
   var rows=window.__wdRows||[]; if(!rows.length) return;
@@ -32987,7 +33103,7 @@ function renderWatch(){
     '</div>'+
     '<div class="wd-f" style="margin-bottom:11px"><label>当天备注（加班没加班、吃没吃火锅…）</label>'+
       '<input type="text" id="wd_note" value="'+esc(WDF.note||'')+'" placeholder="例：加班到 11 点，睡前刷手机 1 小时" oninput="WDF.note=this.value"></div>'+
-    '<button class="hp-btn p" onclick="wdSave()">💾 存进今天</button>'+
+    '<button class="btn p" onclick="wdSave()">💾 存进今天</button>'+
   '</div>'+
   '<div class="card" style="margin-bottom:13px">'+
     '<div style="font-size:13px;font-weight:700;margin-bottom:3px">📋 一次导一批（华为手表的数据）</div>'+
@@ -32999,8 +33115,8 @@ function renderWatch(){
     '</div>'+
     '<div class="wd-paste"><textarea id="wdPasteText" placeholder="9/12 睡眠 7小时20分 深睡 1小时40分 静息心率 57 HRV 52 步数 9800 中高强度活动 45分 血氧 98&#10;9/13 睡眠 6小时50分 静息心率 59 步数 7600 中高强度活动 28分"></textarea></div>'+
     '<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:10px">'+
-      '<button class="hp-btn p" onclick="wdParseDo()">🔍 解析并预览</button>'+
-      '<button class="hp-btn" onclick="document.getElementById(\'wdPasteText\').value=\'9/12 睡眠 7小时20分 深睡 1小时40分 静息心率 57 HRV 52 步数 9800 中高强度活动 45分 血氧 98\\n9/13 睡眠 6小时50分 静息心率 59 步数 7600 中高强度活动 28分\'">试一段示例</button>'+
+      '<button class="btn p" onclick="wdParseDo()">🔍 解析并预览</button>'+
+      '<button class="btn" onclick="document.getElementById(\'wdPasteText\').value=\'9/12 睡眠 7小时20分 深睡 1小时40分 静息心率 57 HRV 52 步数 9800 中高强度活动 45分 血氧 98\\n9/13 睡眠 6小时50分 静息心率 59 步数 7600 中高强度活动 28分\'">试一段示例</button>'+
     '</div>'+
     '<div id="wdParseOut"></div>'+
   '</div>'+
@@ -33189,33 +33305,30 @@ function pvPasteApplyHist(){
     rx2:g('rx2').split('\n').map(function(s){return s.trim();}).filter(Boolean),
     avoid:g('avoid').split(/[,，\s]+/).map(function(s){return s.trim();}).filter(Boolean),
     checks:g('checks').split('\n').map(function(s){return s.trim();}).filter(Boolean) };
-  h.real=true; HIST.push(h);
+  HIST.push(h);
   pvPasteClose(); renderHist(); renderBodyMap();
   pvToast('已写进档案 ✓');
 }
 
-/* v4 的顶层初始化两行已删除：改由 renderHealthPage() 首次调用时执行（避免污染 <html> 与提前渲染） */
+/* ===================== v4 初始化 ===================== */
+/* 顶层初始化已删：不再给 <html> 挂属性（避免污染全站样式钩子） */
+var __scnRt=null;
+window.addEventListener('resize',function(){ clearTimeout(__scnRt); __scnRt=setTimeout(function(){ if(S.tab==='map') renderBodyMap(); },220); });
 
-/* ===================== v6 切页入口（本体 switchPage 调用） ===================== */
+/* ===================== v7 切页入口（本体 switchPage 调用） ===================== */
 var HP_INIT = false;
 function renderHealthPage(){
-  HLOAD();                                  // 铁律 §5：先重读存储再渲染
-  if (!HP_INIT) {
-    HP_INIT = true;
-    try { pvMode(S.mode || 'B'); } catch (e) {}
-    renderTabs();
-  }
+  HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
+  if (!HP_INIT) { HP_INIT = true; renderTabs(); }
   var k = S.tab || 'map';
   try {
-    if (k === 'map')        renderBodyMap();
+    if (k === 'map')        { renderBodyMap(); renderCheck(); renderCkLink(); }
     else if (k === 'hist')  renderHist();
     else if (k === 'med')   renderMed();
     else if (k === 'minor') renderMinor();
-    else if (k === 'check') { renderCheck(); renderCkLink(); }
     else if (k === 'watch') renderWatch();
     else if (k === 'plan')  renderPlan();
     else if (k === 'trend') renderTrend();
-    else if (k === 'sci')   renderTabs();
   } catch (e) { try { pvToast('渲染出错：' + e.message); } catch (e2) {} }
 }
 
@@ -33235,7 +33348,6 @@ function hpClearDemo(){
   try { renderTabs(); renderBodyMap(); renderHist(); renderMed(); renderMinor(); renderWatch(); } catch (e) {}
   pvToast('已清除 ' + nm + ' 条示例数据 ✅');
 }
-
 
 /* ===================== 导出到全局（HTML onclick 需要） ===================== */
   window.gClose = gClose;
@@ -33261,9 +33373,7 @@ function hpClearDemo(){
   window.pvEdit = pvEdit;
   window.pvExReset = pvExReset;
   window.pvExStart = pvExStart;
-  window.pvFlip = pvFlip;
   window.pvGoZone = pvGoZone;
-  window.pvMode = pvMode;
   window.pvPasteApply = pvPasteApply;
   window.pvPasteClose = pvPasteClose;
   window.pvPasteDemo = pvPasteDemo;
@@ -33278,6 +33388,7 @@ function hpClearDemo(){
   window.wdParseDo = wdParseDo;
   window.wdSave = wdSave;
   window.renderHealthPage = renderHealthPage;
+
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -35051,7 +35162,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609112151";
+        window.NIKO_VERSION = "202609121315";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
