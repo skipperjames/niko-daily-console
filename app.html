@@ -1666,11 +1666,11 @@
         #pomoStreamDots circle:nth-child(2) { animation-delay: -.37s; }
         #pomoStreamDots circle:nth-child(3) { animation-delay: -.74s; }
         @keyframes pomoSandFall { 0% { transform: translateY(-8px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(26px); opacity: 0; } }
-        /* v2.13 非阻塞浮卡：去掉全屏遮罩，右下角常驻小卡，背后页面照常可点 */
-        #pomodoroModal.modal-mask { position: fixed; inset: auto; right: 76px; bottom: 18px; left: auto; top: auto; background: transparent; display: none; align-items: flex-end; justify-content: flex-end; z-index: 900; pointer-events: none; padding: 0; }
-        #pomodoroModal.modal-mask.show { display: flex; }
-        #pomodoroModal .modal { pointer-events: auto; margin: 0; width: 324px; max-width: 92vw; box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35); animation: pomoCardIn .26s ease; }
-        @keyframes pomoCardIn { from { opacity: 0; transform: translateY(14px); } }
+        /* v2.20 居中弹窗（用户 2026-09-12 拍板 C 方案）：深遮罩 + 磨砂，画面正中；保留「收起」成右下小胶囊 */
+        #pomodoroModal.modal-mask { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 960; padding: 16px; }
+        #pomodoroModal.modal-mask.show { display: flex; background: rgba(6, 8, 14, 0.66); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+        #pomodoroModal .modal { margin: 0; width: 360px; max-width: 92vw; box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); animation: pomoCardIn .26s cubic-bezier(.34, 1.3, .4, 1); }
+        @keyframes pomoCardIn { from { opacity: 0; transform: translateY(16px) scale(.94); } }
         .pomo-minibtn { margin-left: auto; font-size: 11px; color: #9ca3af; cursor: pointer; padding: 4px 10px; border-radius: 8px; border: 1px solid #e5e7eb; font-weight: 400; }
         .pomo-minibtn:hover { color: #f97316; border-color: #f97316; }
         body.dark-mode .pomo-minibtn { border-color: #374151; color: #9ca3af; }
@@ -1679,7 +1679,9 @@
         #pomoMini.breaking { border-color: rgba(52, 211, 153, 0.55); color: #6ee7b7; }
         #pomoMini .pm-st { font-size: 10px; font-weight: 400; opacity: .75; }
         @media (max-width: 768px) {
-            #pomodoroModal.modal-mask { right: 12px; bottom: calc(66px + env(safe-area-inset-bottom)); }
+            /* 手机端也居中；弹窗不吃满全宽（否则像底部抽屉），收成居中卡片 */
+            #pomodoroModal.modal-mask { padding: 14px; align-items: center; }
+            #pomodoroModal .modal { width: min(340px, 92vw) !important; max-width: 92vw !important; border-radius: 14px; max-height: 86vh; padding: 16px 14px calc(14px + env(safe-area-inset-bottom, 0)); }
             #pomoMini { right: 12px; bottom: calc(66px + env(safe-area-inset-bottom)); }
         }
         /* v2.12 循环进度点 + 自动衔接开关 */
@@ -10252,6 +10254,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         .gt-fab-pop .gt-fab-row2 { display: flex; gap: 8px; }
         .gt-fab-pop .gt-fab-row2 button { flex: 1; }
         .gt-fab-pop .gt-play-input button#gtPlayBtn { flex: 1; }
+        /* v2.20 记录游玩 A 方案（用户 2026-09-12 拍板）：入口收进卡片头部，浮钮在手机端彻底消失 */
+        .gt-rec-inline { display: none; margin-left: 8px; font-family: inherit; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(16, 185, 129, 0.55); background: rgba(16, 185, 129, 0.12); color: #059669; cursor: pointer; }
+        .gt-rec-inline:hover { background: rgba(16, 185, 129, 0.2); }
+        body.dark-mode .gt-rec-inline { color: #6ee7b7; }
+        .gt-fab-hd { display: none; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+        .gt-fab-hd em { margin-left: auto; font-style: normal; font-size: 15px; color: #999; cursor: pointer; padding: 0 4px; line-height: 1; }
+        @keyframes gtPopIn { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: none; } }
         /* ---- 说明书折页 ---- */
         .gt-manual-head { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
         .gt-manual-head .gt-manual-arrow { margin-left: auto; transition: transform .25s; color: #999; font-size: 12px; }
@@ -10305,6 +10314,12 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             .gt-fab-pop { width: min(300px, calc(100vw - 32px)); }
             .gt-fab-pop .gt-play-input input { min-height: 40px; font-size: 16px !important; }
             .gt-fab-pop .gt-fab-row2 button, .gt-fab-pop .gt-play-input button { min-height: 40px; }
+            /* v2.20 记录游玩 A 方案：浮钮隐藏 → 入口在卡片头部；点开居中弹窗（带轻遮罩） */
+            .gt-fab-btn { display: none; }
+            .gt-rec-inline { display: inline-flex; align-items: center; gap: 3px; }
+            .gt-fab.open { position: fixed; inset: 0; right: 0; bottom: 0; background: rgba(8, 10, 16, 0.5); display: flex; align-items: center; justify-content: center; padding: 18px; z-index: 900; }
+            .gt-fab.open .gt-fab-pop { width: min(300px, calc(100vw - 44px)); animation: gtPopIn .24s cubic-bezier(.34, 1.3, .4, 1); }
+            .gt-fab.open .gt-fab-hd { display: flex; }
         }
         @media (prefers-reduced-motion: reduce) {
             .gt-tank-whale, .gt-fab-pop, .gt-boot.on, .gt-boot-txt { animation: none !important; }
@@ -13313,6 +13328,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <div class="gt-card-title" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                             🎮 游玩日历
                             <span>记录每天实际游玩时长，自动汇总每周进度</span>
+                            <button class="gt-rec-inline" id="gtRecInline" onclick="gtToggleFab()" title="记录一次游玩">🎮＋ 记录</button>
                             <span style="margin-left:auto;font-size:11px;color:#999;">消耗游戏时间会自动计入当天，也可手动补记</span>
                         </div>
                         <div class="gt-play-stats">
@@ -13340,6 +13356,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <!-- ===== FAB：记录游玩（点开小气泡，主区不再被表单占行） ===== -->
             <div class="gt-fab" id="gtFab">
                 <div class="gt-fab-pop">
+                    <div class="gt-fab-hd">🎮 记录游玩 <em onclick="gtToggleFab()" title="关闭">✕</em></div>
                     <div class="gt-play-input">
                         <input type="number" id="gtPlayMin" placeholder="分钟" min="1" step="1">
                         <input type="text" id="gtPlayNote" placeholder="游戏名（可选）" style="flex:1;min-width:0;">
@@ -30262,6 +30279,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         }
         function gtFabLog() { gtLogPlay(); const fab = document.getElementById('gtFab'); if (fab) fab.classList.remove('open'); }
+        // v2.20 A 方案：手机端点浮层空白处关闭
+        document.getElementById('gtFab').addEventListener('click', function (e) {
+            if (e.target === this && window.matchMedia('(max-width: 768px)').matches) this.classList.remove('open');
+        });
 
         // ===== 最近流水弹窗（点 HUD 呼出） =====
         function gtOpenHistory() {
@@ -35163,7 +35184,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609121904";
+        window.NIKO_VERSION = "202609121914";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
