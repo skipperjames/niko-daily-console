@@ -10527,7 +10527,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .hp-chip.on{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
 .hp-chip.sm{font-size:11px;padding:4px 9px}
 
-.tabs{display:flex;gap:6px;margin:18px 0 16px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
+.tabs{display:flex;flex:0 0 auto;gap:6px;margin:18px 0 16px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 15px;border-radius:11px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--muted);cursor:pointer;transition:all .16s;white-space:nowrap;min-height:40px}
 .tab:hover{color:var(--text);border-color:var(--accent)}
@@ -10940,7 +10940,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .pv7-rx b{color:var(--danger);white-space:nowrap}
 .pv7-rx .who{margin-left:auto;font-size:11px;color:var(--muted);white-space:nowrap}
 /* 场景卡：参考图风格 —— 深紫画布 + 剪影 + 虚线引线数据卡（静态） */
-.scn-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:13px 15px 10px;margin-bottom:13px}
+.scn-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:13px 15px 10px;display:flex;flex-direction:column}
 .scn-hd{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
 .scn-hd .bdg{font-size:10.5px;font-weight:600;color:var(--muted);border:1px solid var(--card-border);border-radius:99px;padding:2px 9px}
 .scn-hd .lg{margin-left:auto;display:flex;gap:11px;font-size:11px;color:var(--muted);font-weight:500}
@@ -10949,17 +10949,35 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .scn-hd .lg .l-active{color:#f0a35e}
 .scn-hd .lg .l-watch{color:#f6d365}
 .scn-hd .lg .l-old{color:#34d399}
-#scnBox{width:100%;max-width:960px;margin:0 auto}
+#scnBox{width:100%}
 #scnBox svg{display:block;width:100%;height:auto;border-radius:10px}
 .scn-ft{margin-top:8px;font-size:11px;color:var(--muted);text-align:center}
-.pv7-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;align-items:start}
+.ov-hero{display:grid;grid-template-columns:minmax(0,19fr) minmax(0,37fr) minmax(0,44fr);gap:12px;align-items:stretch}
+.ov-mid{display:flex;flex-direction:column;gap:12px;min-width:0}
+.ov-mid .card{margin:0}
+.ov-mid .card:last-child{flex:1}
+.ov-sci{margin-top:0;min-width:0;display:flex;flex-direction:column;gap:12px}
+.scn-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.scn-mini{border:1px solid var(--card-border);border-left:3px solid var(--accent);border-radius:10px;background:var(--card-bg-2);padding:9px 11px}
+.scn-mini .sm-r1{display:flex;align-items:center;gap:8px}
+.scn-mini .sm-r1 b{font-size:12.5px;color:var(--text);flex:1;min-width:0}
+.scn-mini .sm-tag{font-size:10px;font-weight:700;border:1px solid;border-radius:99px;padding:1px 7px;white-space:nowrap;flex:0 0 auto}
+.scn-mini .sm-r2{display:flex;align-items:baseline;gap:5px;margin-top:4px}
+.scn-mini .sm-big{font-size:17px;font-weight:800}
+.scn-mini .sm-lab{font-size:10.5px;color:var(--muted)}
+.scn-mini .sm-sep{flex:1}
+.scn-mini.old{display:flex;align-items:center;gap:8px;border-left-color:#34d399;padding:7px 11px}
+.scn-mini.old b{font-size:12px;color:var(--muted);flex:1;min-width:0}
+.scn-mini .sm-dot{width:7px;height:7px;border-radius:50%;background:#34d399;flex:0 0 auto}
+.scn-mini .sm-oldlab{font-size:10.5px;color:var(--muted);flex:0 0 auto}
+@media (max-width:1180px){.ov-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ov-sci{grid-column:1/-1}}
 .ov-ck-hd{display:flex;align-items:baseline;gap:9px;margin-bottom:10px}
 .ov-ck-hd b{font-size:13.5px}
 .ov-ck-hd .sub{font-size:11.5px;color:var(--muted);margin-left:auto}
 .ov-sci{margin-top:20px}
-.ov-sci .canlist{margin-bottom:12px}
+.ov-sci .canlist{margin-bottom:0}
 @media (max-width:900px){
-  .pv7-grid{grid-template-columns:1fr}
+  .ov-hero{grid-template-columns:1fr}
   .pv7-top .t p{display:none}
   .pv7-stats{width:100%}
   .pv7-st{flex:1;min-width:0;padding:7px 8px}
@@ -13545,21 +13563,23 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="pv7-stats" id="ovStats"></div>
       </div>
       <div class="pv7-rx" id="ovRx"></div>
+      <div class="ov-hero">
       <div class="scn-card">
         <div class="scn-hd"><span>🧍 身体地图</span><span class="bdg" id="hpBpCount">0 处记录</span>
           <span class="lg"><i class="l-active">治疗中</i><i class="l-watch">需关注</i><i class="l-old">已稳定</i></span></div>
         <div id="scnBox"></div>
-        <div class="scn-ft">图钉 = 按部位在身体上的大致解剖定位（背面部位镜像到正面）· 与病史库联动：加一条病史，这里就自动长出图钉和数据卡</div>
+        <div id="scnList" class="scn-list"></div>
+        <div class="scn-ft">图钉 = 按部位在身体上的大致解剖定位（背面部位镜像到正面）· 与病史库联动：加一条病史，这里就自动长出图钉</div>
       </div>
-      <div class="pv7-grid">
+      <div class="ov-mid">
+        <div class="card">
+          <div class="ov-ck-hd"><b>⏰ 活动闹钟 · 2 分钟跟练</b><span class="sub">每 30 分钟提醒一次</span></div>
+          <div id="ckSide"></div>
+        </div>
         <div class="card">
           <div class="ov-ck-hd"><b>✅ 今日打卡</b><span class="sub" id="ckSub"></span></div>
           <div id="ckBody"></div>
           <div id="ckLink" style="margin-top:12px"></div>
-        </div>
-        <div class="card">
-          <div class="ov-ck-hd"><b>⏰ 活动闹钟 · 2 分钟跟练</b><span class="sub">每 30 分钟提醒一次</span></div>
-          <div id="ckSide"></div>
         </div>
       </div>
       <div class="ov-sci">
@@ -13595,6 +13615,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div style="margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.8;padding:13px 16px;border-radius:12px;border:1px dashed var(--card-border);background:var(--card-bg-2)">
           📌 上一版（v2）的颈椎专项科普——<b>曲度变直不等于要治的病</b>（含 Helliwell 1994 / 21 项研究 meta / ACR 2024）、<b>等长颈后伸训练 A 级</b>（Alpayci 2017, n=65, PMID 28118272）、<b>JOSPT 2017 指南</b>、<b>热敷 Cochrane</b>、<b>游泳 E 级（老实说没有 RCT）</b>、<b>米字操对已确诊颈椎病人不推荐</b>——原样保留，并入本体时整段搬进「颈椎病」这条病史的详情里，<b>每个病症各自挂各自的科普</b>。新病症的科普由我联网查证后逐条填入，每条都带证据等级 + 出处。你把病史发我，我一条条查。
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -31840,22 +31861,15 @@ function scnDays(d){ var t=new Date(d); if(isNaN(t.getTime())) return null; retu
 function scnName(n){ return scnCut(String(n||'').replace(/（[^）]*）/g,'').replace(/\([^)]*\)/g,'').replace(/ · /g,'·').trim(),14); }
 function renderBodyMap(){
   var box=document.getElementById('scnBox'); if(!box) return;
+  var list=document.getElementById('scnList');
   var zm=zonesOf();
   var cards=[], olds=[];
   HIST.forEach(function(h){
     var z=(h.zones||[])[0]||null;
     if(h.status==='old') olds.push({h:h,z:z}); else cards.push({h:h,z:z});
   });
-  var W=box.clientWidth||1100, wide=W>=720;
-  var CW=wide?300:290, CH=wide?112:116, GAP=wide?26:12;
-  var nL=Math.ceil(cards.length/2), nR=cards.length-nL;
-  var vw, vh, silH, silTx, silTy, s;
-  if(wide){
-    vw=1200; vh=620; silH=508; s=silH/BP_H; silTx=vw/2-BP_CX*s; silTy=(vh-silH)/2+6;
-  } else {
-    vw=640; silH=392; s=silH/BP_H; silTx=vw/2-BP_CX*s; silTy=20;
-    vh=(silTy+silH+30)+Math.ceil(Math.max(1,cards.length)/2)*(CH+GAP)+14;
-  }
+  /* v8 总览三栏：左列窄栏 —— 场景图只画剪影+图钉；病症数据卡改 HTML（#scnList）落在图下，字号不随 SVG 缩放失真 */
+  var vw=340, vh=468, s=1, silTx=0, silTy=14;
   function P(z){ var o=ZMAP[z]; if(!o) return null; var x=o.cc[0]; if(o.s==='back') x=BP_W-x; return [silTx+x*s, silTy+o.cc[1]*s]; }
   var out=[];
   out.push('<svg viewBox="0 0 '+vw+' '+vh+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="身体地图">');
@@ -31868,69 +31882,51 @@ function renderBodyMap(){
     +'<filter id="scnPin" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="3.2"/></filter>'
     +'</defs>');
   out.push('<rect x="0" y="0" width="'+vw+'" height="'+vh+'" rx="12" fill="url(#scnBg)"/>');
-  /* 人形：光晕 + 渐变剪影 + 脚下投影 */
-  out.push('<ellipse cx="'+bpN(silTx+BP_CX*s)+'" cy="'+bpN(silTy+BP_H*s+2)+'" rx="'+bpN(140*s)+'" ry="9" fill="#050310" opacity=".5" filter="url(#scnBlur)"/>');
+  out.push('<ellipse cx="'+bpN(silTx+BP_CX*s)+'" cy="'+bpN(silTy+BP_H*s+2)+'" rx="'+bpN(120*s)+'" ry="8" fill="#050310" opacity=".5" filter="url(#scnBlur)"/>');
   out.push('<g transform="translate('+bpN(silTx)+','+bpN(silTy)+') scale('+bpN(s)+')">'
     +'<path d="'+BP_GEOSIL+'" fill="#8f7fd0" opacity=".38" filter="url(#scnBlur)"/>'
     +'<path d="'+BP_GEOSIL+'" fill="url(#scnSil)" stroke="#c3b8e8" stroke-opacity=".5" stroke-width="1" stroke-linejoin="round"/></g>');
-  function cardXY(idx){
-    if(wide){
-      if(idx<nL) return {x:34, y:vh/2-(nL*CH+(nL-1)*GAP)/2+idx*(CH+GAP), side:'L'};
-      var j=idx-nL; return {x:vw-34-CW, y:vh/2-(nR*CH+(nR-1)*GAP)/2+j*(CH+GAP), side:'R'};
-    }
-    var c=idx%2, r=Math.floor(idx/2);
-    return {x:20+c*(CW+20), y:silTy+silH+30+r*(CH+GAP), side:(c===0?'L':'R')};
-  }
+  var cardPins=cards.map(function(cd){ return cd.z?P(cd.z):null; }).filter(Boolean);
   cards.forEach(function(cd,idx){
     var h=cd.h, ac=SCN_AC[h.status]||'#f0a35e';
-    var pos=cardXY(idx), cx=pos.x, cy=pos.y;
-    var pin=cd.z?P(cd.z):null;
-    if(wide){
-      var ex=(pos.side==='L')?(cx+CW):cx, ey=cy+CH/2;
-      var tx2=pin?pin[0]:(silTx+BP_CX*s), ty2=pin?pin[1]:(silTy+200*s);
-      var mx=(ex+tx2)/2;
-      out.push('<path d="M'+bpN(ex)+','+bpN(ey)+' C'+bpN(mx)+','+bpN(ey)+' '+bpN(mx)+','+bpN(ty2)+' '+bpN(tx2)+','+bpN(ty2)+'" fill="none" stroke="#8d86b0" stroke-opacity=".55" stroke-width="1.3" stroke-dasharray="1.5 5.5" stroke-linecap="round"/>');
-    }
-    if(pin){
-      var sel=(S.sel===cd.z);
-      out.push('<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="'+(sel?15:12)+'" fill="'+ac+'" opacity=".22"/>'
-        +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="8.5" fill="#ffffff" opacity=".9" filter="url(#scnPin)"/>'
-        +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="'+(sel?6:4.6)+'" fill="#ffffff" stroke="'+ac+'" stroke-width="1.6"/>');
-      if(!wide){
-        out.push('<text x="'+bpN(pin[0])+'" y="'+bpN(pin[1]+3.2)+'" text-anchor="middle" font-size="8.5" font-weight="800" fill="'+ac+'">'+(idx+1)+'</text>');
-      }
-    }
-    var d=scnDays(h.date);
-    var its=[]; (h.checks||[]).forEach(function(c,i){ its.push(h.id+'#'+i); });
-    var dn=its.filter(function(id){ return CK_DONE[id]; }).length;
-    var tx=cx+(wide?20:44);
-    out.push('<g>'
-      +'<rect x="'+cx+'" y="'+cy+'" width="'+CW+'" height="'+CH+'" rx="14" fill="#282048" fill-opacity=".94" stroke="#ffffff" stroke-opacity=".09"/>'
-      +'<rect x="'+cx+'" y="'+cy+'" width="3.5" height="'+CH+'" rx="1.75" fill="'+ac+'"/>'
-      +(wide?'':('<circle cx="'+(cx+25)+'" cy="'+(cy+27)+'" r="11.5" fill="'+ac+'" fill-opacity=".18" stroke="'+ac+'" stroke-width="1.2"/><text x="'+(cx+25)+'" y="'+(cy+31)+'" text-anchor="middle" font-size="11" font-weight="800" fill="'+ac+'">'+(idx+1)+'</text>'))
-      +'<text x="'+tx+'" y="'+(cy+31)+'" font-size="16.5" font-weight="700" fill="#f3eefc">'+esc(scnName(h.name))+'</text>'
-      +'<text x="'+tx+'" y="'+(cy+51)+'" font-size="11" fill="#9c94bd">'+esc(scnCut(ST[h.status].t+' · '+(h.date||'—'),24))+'</text>'
-      +'<text x="'+(cx+20)+'" y="'+(cy+92)+'" font-size="21" font-weight="800" fill="#6ee7b7">'+(d==null?'—':d)+'<tspan font-size="10.5" font-weight="500" fill="#8b84a8"> 天前</tspan></text>'
-      +'<text x="'+(cx+150)+'" y="'+(cy+92)+'" font-size="21" font-weight="800" fill="#c4b5fd">'+dn+'<tspan font-size="10.5" font-weight="500" fill="#8b84a8"> / '+its.length+' 今日打卡</tspan></text>'
-      +'</g>');
+    var pin=cd.z?P(cd.z):null; if(!pin) return;
+    out.push('<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="12" fill="'+ac+'" opacity=".22"/>'
+      +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="8.5" fill="#ffffff" opacity=".9" filter="url(#scnPin)"/>'
+      +'<circle cx="'+bpN(pin[0])+'" cy="'+bpN(pin[1])+'" r="5.6" fill="#ffffff" stroke="'+ac+'" stroke-width="1.6"/>'
+      +'<text x="'+bpN(pin[0])+'" y="'+bpN(pin[1]+3.2)+'" text-anchor="middle" font-size="7.6" font-weight="800" fill="'+ac+'">'+(idx+1)+'</text>');
   });
-  var cardPins=cards.map(function(cd){ return cd.z?P(cd.z):null; }).filter(Boolean);
   olds.forEach(function(od){
     if(!od.z) return; var pin=P(od.z); if(!pin) return;
     var ox=pin[0], oy=pin[1], moved=false;
     for(var ci=0; ci<cardPins.length; ci++){
       var cp=cardPins[ci], dx=ox-cp[0], dy=oy-cp[1];
-      if(Math.sqrt(dx*dx+dy*dy)<30){ ox=pin[0]+30; oy=pin[1]-22; moved=true; break; }
+      if(Math.sqrt(dx*dx+dy*dy)<30){ ox=pin[0]+26; oy=pin[1]-18; moved=true; break; }
     }
     if(moved) out.push('<line x1="'+bpN(ox)+'" y1="'+bpN(oy)+'" x2="'+bpN(pin[0])+'" y2="'+bpN(pin[1])+'" stroke="#34d399" stroke-opacity=".45" stroke-width="1" stroke-dasharray="2 3"/>');
-    out.push('<circle cx="'+bpN(ox)+'" cy="'+bpN(oy)+'" r="4.2" fill="'+SCN_AC.old+'" opacity=".85"/>'
-      +'<text x="'+bpN(ox+9)+'" y="'+bpN(oy+3.5)+'" font-size="10" fill="#b3add0" style="paint-order:stroke" stroke="#171130" stroke-width="2.5">'+esc(scnCut(shortName(od.h.name),8))+'</text>');
+    out.push('<circle cx="'+bpN(ox)+'" cy="'+bpN(oy)+'" r="4.2" fill="'+SCN_AC.old+'" opacity=".85"/>');
   });
   if(!cards.length && !olds.length){
-    out.push('<text x="'+(vw/2)+'" y="'+(vh-26)+'" text-anchor="middle" font-size="12" fill="#8f88ad">还没有记录 —— 去「病史库」加一条，这里就会长出图钉和数据卡</text>');
+    out.push('<text x="170" y="'+(vh-16)+'" text-anchor="middle" font-size="11" fill="#8f88ad">还没有记录 —— 去「病史库」加一条，这里就会长出图钉</text>');
   }
   out.push('</svg>');
   box.innerHTML=out.join('');
+  if(list){
+    var lh='';
+    cards.forEach(function(cd){
+      var h=cd.h, ac=SCN_AC[h.status]||'#f0a35e', st=ST[h.status]||{t:h.status};
+      var d=scnDays(h.date);
+      var its=[]; (h.checks||[]).forEach(function(c,i){ its.push(h.id+'#'+i); });
+      var dn=its.filter(function(id){ return CK_DONE[id]; }).length;
+      lh+='<div class="scn-mini" style="border-left-color:'+ac+'">'
+        +'<div class="sm-r1"><b>'+esc(scnName(h.name))+'</b><span class="sm-tag" style="color:'+ac+';border-color:'+ac+'">'+esc(st.t)+'</span></div>'
+        +'<div class="sm-r2"><span class="sm-big" style="color:#6ee7b7">'+(d==null?'—':d)+'</span><span class="sm-lab">天前</span><span class="sm-sep"></span><span class="sm-big" style="color:#c4b5fd">'+dn+'/'+its.length+'</span><span class="sm-lab">今日打卡</span></div>'
+        +'</div>';
+    });
+    olds.forEach(function(od){
+      lh+='<div class="scn-mini old"><span class="sm-dot"></span><b>'+esc(scnName(od.h.name))+'</b><span class="sm-oldlab">已稳定 · '+esc(od.h.date||'—')+'</span></div>';
+    });
+    list.innerHTML=lh;
+  }
   var bc=document.getElementById('hpBpCount'); if(bc) bc.textContent=Object.keys(zm).length+' 处记录';
   renderPickFigs();
 }
@@ -35162,7 +35158,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609121326";
+        window.NIKO_VERSION = "202609121508";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
