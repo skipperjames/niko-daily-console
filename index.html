@@ -33672,7 +33672,8 @@ function hpClearDemo(){
     var SLEEP_HOUR = 22;          // 深夜阈值
     var HAPPY_MS = 2800;          // 「刚完成」停留时长
     var HUES = [168, 38, 268, 340, 210];
-    var DEF = { size: 84, op: 100, hue: 168, on: true };
+    var DEF = { size: 84, op: 100, hue: 168, on: false };
+    var CFG_V = 2;   // 配置版本：v2 起「网页桌宠默认关」（桌面版小兽接管），没有 v 标记的老配置一律迁成关
 
     var CFG = { size: DEF.size, op: DEF.op, hue: DEF.hue, on: DEF.on };
     var WIN = null;
@@ -33858,7 +33859,7 @@ function hpClearDemo(){
         }
         placeBubble();
     }
-    function saveCfg() { sset(K_CFG, { size: CFG.size, op: CFG.op, hue: CFG.hue, on: CFG.on }); }
+    function saveCfg() { sset(K_CFG, { size: CFG.size, op: CFG.op, hue: CFG.hue, on: CFG.on, v: CFG_V }); }
 
     /* ---------- 拖拽 + 位置记忆 ---------- */
     function bindDrag() {
@@ -33938,7 +33939,11 @@ function hpClearDemo(){
             CFG.size = Math.max(56, Math.min(132, Number(c.size) || DEF.size));
             CFG.op = Math.max(35, Math.min(100, Number(c.op) || DEF.op));
             CFG.hue = Number(c.hue) || DEF.hue;
-            CFG.on = c.on !== false;
+            // 2026-09-12：桌宠「守灯兽」搬到桌面上住了（桌面小兽接管久坐/深夜/待机）。
+            // 网页这只改成默认关：老配置（没有 v 标记）一次性迁移成「关」，
+            // 之后他在 设置 → 🎨 里点开才算数（v2 起记住他的选择，不再被覆盖）。
+            CFG.on = (c.v === CFG_V) ? (c.on !== false) : false;
+            if (c.v !== CFG_V) { c.v = CFG_V; c.on = false; sset(K_CFG, c); }
         }
         var w = sget(K_WIN, null);
         if (w && typeof w === 'object' && typeof w.l === 'number' && typeof w.t === 'number') WIN = w;
@@ -35755,7 +35760,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609122128";
+        window.NIKO_VERSION = "202609122214";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
