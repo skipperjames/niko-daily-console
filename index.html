@@ -22660,105 +22660,110 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== AI 行业快报 =====
         // 预置数据版本号：AI 更新数据后 bump 此版本，用户打开新文件自动注入新数据（收藏/已读/我的清单不受影响）
-        const AI_SEED_VERSION = 'v2026-08-24b';
+        const AI_SEED_VERSION = 'v2026-09-12';
 
         // 模型动态（真实调研数据，来源见各条 source）
         const NIKO_AI_MODELS = [
-            { id:'m1', name:'DeepSeek V4 Pro', vendor:'深度求索', date:'2026-08-13', cat:'旗舰', tag:'Agent 性价比之王', desc:'Agent 能力逼近 Claude Fable 5，价格仅约 1/60。写脚本、批量处理文案的成本杀手。', tags:['脚本','文案'], source:'官方发布', url:'https://www.deepseek.com', params:'1.6T（激活49B）', arch:'MoE + Hybrid Attention (CSA+HCA)', context:'1M tokens（输出上限 384K）', multimodal:'文本（无 vision）', license:'MIT' },
-            { id:'m2', name:'Claude Fable 5', vendor:'Anthropic', date:'2026-06-09', cat:'旗舰', tag:'当前最强闭源', desc:'闭源旗舰标杆，长上下文与 Agent 编排能力顶级，适合复杂创意脚本。', tags:['脚本','文案'], source:'官方发布', url:'https://claude.ai', params:'未披露（闭源旗舰）', arch:'未披露（Mythos 共享底座 + 安全分类器）', context:'1M tokens（最大输出 128K）', multimodal:'文本 + 图像输入，文本输出', license:'Proprietary（Anthropic API / Claude.ai）' },
-            { id:'m3', name:'Qwen3.8 Max', vendor:'阿里', date:'2026-08-03', cat:'开源', tag:'2.4T 开源之王', desc:'MoE 架构 2.4T 参数，开源阵营最大规模，可本地部署控成本。', tags:['文案','生图'], source:'官方发布', url:'https://tongyi.aliyun.com', params:'2.4T（激活 95B）', arch:'稀疏 MoE', context:'1M tokens（最大输出 131K）', multimodal:'文本 + 图像 + 视频输入，文本输出', license:'Proprietary（API only；开源权重 Qwen3.8-Max License）' },
-            { id:'m4', name:'GPT-5.6', vendor:'OpenAI', date:'2026-07-09', cat:'旗舰', tag:'三档降价', desc:'旗舰全模态，三档定价下调，生态最广（含 GPT Image 生图）。', tags:['脚本','生图'], source:'官方发布', url:'https://openai.com', params:'未披露（OpenAI 不公开）', arch:'未披露（Sol/Terra/Luna 三档同底座）', context:'1.05M tokens（最大输出 128K）', multimodal:'文本 + 图像输入（无音频/视频）', license:'Proprietary（OpenAI API 三档 Sol/Terra/Luna）' },
-            { id:'m5', name:'Claude Opus 4.8', vendor:'Anthropic', date:'2026-05-28', cat:'编程', tag:'SWE-bench 80.9% 第一', desc:'Claude Code 底座模型，真实 GitHub Issue 解决率行业第一。', tags:['脚本'], source:'SWE-bench 2026-07', url:'https://www.anthropic.com', params:'未披露', arch:'未披露（Opus 4.x 系列持续升级）', context:'1M tokens（最大输出 128K）', multimodal:'文本 + 图像 + PDF 输入，文本输出', license:'Proprietary（Anthropic API + Claude Code）' },
-            { id:'m6', name:'GPT-6', vendor:'OpenAI', date:'2026-04-14', cat:'编程', tag:'SWE-bench 76.5%', desc:'OpenAI 旗舰级 Coding 大模型，SWE-bench 76.5%，2M tokens 长上下文代码库分析能力突出。', tags:['脚本'], source:'SWE-bench 2026-07', url:'https://openai.com', params:'5-6T MoE（激活约 500-600B）', arch:'Symphony（统一多模态）+ 双系统推理 System-1/2', context:'2M tokens', multimodal:'原生多模态（文本/图像/音频/视频）', license:'Proprietary（OpenAI API）' },
-            { id:'m7', name:'Gemini 3', vendor:'Google', date:'2025-12', cat:'旗舰', tag:'VS Code AI 内置', desc:'谷歌旗舰，VS Code 内置助手底座，企业 Gemini 生态绑定。', tags:['脚本','视频'], source:'行业榜单 2026-07', url:'https://gemini.google.com', params:'未披露', arch:'Transformer + MoE（TPU 训练）', context:'1M tokens（最大输出 64K）', multimodal:'原生多模态（文本/图像/视频/音频）', license:'Proprietary（Google AI Studio / Vertex AI）' },
-            { id:'m8', name:'Qwen3.6-Plus', vendor:'阿里', date:'2026-04-02', cat:'开源', tag:'Trae 底座', desc:'阿里 2026-04 编程专用旗舰，Trae IDE 友好，1M 上下文，写作截图→代码能力突出。', tags:['脚本'], source:'SWE-bench 2026-07', url:'https://tongyi.aliyun.com', params:'未披露（闭源旗舰）', arch:'线性注意力 + 稀疏 MoE（混合）', context:'1M tokens（最大输出 65,536）', multimodal:'文本 + 图像（UI 截图）+ 视频输入', license:'Proprietary（Alibaba Cloud Model Studio）' },
-            { id:'m9', name:'腾讯混元 Hunyuan3D 3.1', vendor:'腾讯', date:'2026-01-16', cat:'3D', tag:'Crafiq 3D 全球第一', desc:'开源 3D 生成模型，Crafiq 3D Arena 综合榜全球第一，贴图质量强。', tags:['3D'], source:'Crafiq 3D Arena', url:'https://3d.hunyuan.tencent.com', params:'10B', arch:'分层 3D-DiT（Hunyuan3D-DiT + Hunyuan3D-Paint 两阶段）', context:'不适用（3D 生成）', multimodal:'文本 + 图像（8 视角）输入', license:'闭源（Tencent Cloud API；开源版 2.1 是 Tencent Hunyuan Community License）' },
-            { id:'m10', name:'Tripo H3.1', vendor:'VAST', date:'2026-03-11', cat:'3D', tag:'10-30秒高速出模', desc:'生产级 3D 生成，水密高精网格 + PBR 材质，650 万创作者在用。', tags:['3D'], source:'官方发布 2026-03', url:'https://www.tripo3d.ai', params:'20B 级别（亿级 voxel）', arch:'自研 Transformer（亿级 voxel 重建）', context:'不适用', multimodal:'文本 + 图像 + 多视图输入', license:'闭源（Tripo / Alibaba Cloud Model Studio）' },
-            { id:'m11', name:'Meshy 6', vendor:'Meshy', date:'2026-01-18', cat:'3D', tag:'盲测胜率 63.8%', desc:'游戏资产生成管线最全（生成→贴图→绑定→导出），300 万+ 用户。', tags:['3D'], source:'官方发布', url:'https://www.meshy.ai', params:'未披露', arch:'自研（mesh + PBR + 拓扑优化管线）', context:'不适用', multimodal:'文本 + 图像输入（10–60 秒生成）', license:'部分功能免费 + Pro 付费（商业使用须 Pro）' },
-            { id:'m12', name:'Hyper3D Rodin 2.5', vendor:'Hyper3D', date:'2025-08-05', cat:'3D', tag:'高保真可动画', desc:'图生 3D 高保真，四边面拓扑干净、可直接绑定动画，Crafiq 前五。', tags:['3D'], source:'Crafiq 3D Arena', url:'https://hyper3d.ai', params:'4B', arch:'BANG（Deemos Tech 自研，2025-08 升级到 Gen-2.5）', context:'不适用', multimodal:'文本 + 图像（最多 5 张多视图）输入', license:'闭源云服务（Hyper3D 商用付费）' },
-            { id:'m13', name:'字节 Seed3D', vendor:'字节跳动', date:'2025-10-23', cat:'3D', tag:'开源 3D 生成', desc:'开源 3D 生成模型，社区生态活跃，可与混元/Tripo 对比用。', tags:['3D'], source:'Crafiq 3D Arena', url:'https://seed.bytedance.com', params:'1.5B', arch:'多模态 Diffusion Transformer（Seed3D-VAE + Seed3D-DiT + Seed3D-MV/PBR/UV）', context:'不适用（1.5B 已超越业界 3B 模型）', multimodal:'单张图像 → 多视角 3D + PBR 纹理', license:'Apache-2.0（完全开源）' },
-            { id:'m14', name:'Fish Audio S2.1 Pro', vendor:'Fish Audio', date:'2026-07-28', cat:'语音', tag:'企业级配音标配', desc:'首包延迟仅 90ms，批量配音稳定，8 个月 ARR 2100 万美元，全球第二大 AI 语音平台。', tags:['配音'], source:'官方发布 2026-08', url:'https://www.fish.audio', params:'4.4B（Slow AR 4B 基于 Qwen3 + Fast AR 400M）', arch:'Dual-AR 双自回归 + ModifiedDAC 44.1kHz 音频编解码', context:'文本输入无固定上限，输出 44.1 kHz 音频', multimodal:'文本 → 音频（83 语言）+ 零样本声纹克隆', license:'闭源云服务（Fish Audio API）' },
-            { id:'m15', name:'Google Stitch', vendor:'Google', date:'2026-03', cat:'UI', tag:'文生 UI 模型', desc:'一句话描述直接生成完整 UI 界面代码，配合 Gemini 多模态理解，是文生界面赛道的底层模型，前端/买量落地页提效明显。', tags:['UI设计'], source:'Google 发布', url:'https://stitch.withgoogle.com', params:'未披露（基于 Gemini 3 Flash / Pro）', arch:'Gemini 3 多模态（Flash 默认 / Pro 实验）', context:'1M tokens（Gemini 3 底座）', multimodal:'文本 + 图像（草图/截图/URL/语音）输入 → UI 输出 + React/Vue/Flutter/SwiftUI 代码', license:'Proprietary（Google Labs 实验，免费 + 月度配额）' },
-            { id:'m16', name:'Figma Make', vendor:'Figma', date:'2026-01', cat:'UI', tag:'设计稿直接生成', desc:'Figma 原生 AI，设计稿秒级改版/生成组件变体，设计师工作流无缝衔接，UI 团队提效首选。', tags:['UI设计','生图'], source:'官方 2026-05', url:'https://www.figma.com', params:'未披露（基于 Claude 3.7+ 等多模型可选）', arch:'基于 LLM 的 prompt-to-design（Claude 系多模型）', context:'不适用（短文本 prompt + 视觉参考）', multimodal:'文本 + 图像（Figma frame / 草图）+ 语音输入 → UI + 可运行 React 代码', license:'Proprietary（Figma 订阅 + AI Credits）' },
-            { id:'m17', name:'GLM-5V Turbo', vendor:'智谱AI', date:'2026-04', cat:'多模态', tag:'图文视频多模态基座', desc:'多模态 Coding 基座，MoE + 自研 CogViT 视觉编码器，原生支持图片/视频/设计稿理解，长上下文窗口。', tags:['脚本','生图','视频'], source:'用户截图 2026-08-24', url:'https://www.zhipuai.cn', params:'74B（激活40B）', arch:'MoE + CogViT 视觉编码器', context:'200K tokens', multimodal:'原生多模态（图/视频/设计稿）', license:'闭源（仅云端 API）' },
-            { id:'m18', name:'Kimi K2.7 Code', vendor:'月之暗面', date:'2026-06', cat:'编程', tag:'编程专用长上下文', desc:'月之暗面编程专用模型，1.1T 总参数 / 激活 32B，MoonViT 视觉编码器，原生支持图/视频输入，已被多个 IDE 集成。', tags:['脚本'], source:'用户截图 2026-08-24', url:'https://www.moonshot.cn', params:'1.1T（激活32B）', arch:'MoE + MoonViT 视觉编码器', context:'256K tokens', multimodal:'原生多模态（图/视频）', license:'Modified MIT' },
-            { id:'m19', name:'MiniMax M3', vendor:'稀宇科技', date:'2026-06', cat:'旗舰', tag:'长上下文 + 全模态旗舰', desc:'全能旗舰（Coding + 多模态 + 长上下文），自研 MSA 稀疏注意力保障 1M tokens 长窗口下质量不衰减，Apache-2.0 最友好开源协议。', tags:['脚本','文案','视频'], source:'用户截图 2026-08-24', url:'https://api.MiniMax.chat', params:'428B（激活23B）', arch:'MoE + 自研 MSA 稀疏注意力', context:'1M tokens（保障至少 512K）', multimodal:'原生多模态（图/视频）', license:'Apache-2.0' },
-            { id:'m20', name:'豆包 1.5 Pro', vendor:'字节跳动', date:'2026-07', cat:'旗舰', tag:'抖音生态绑定', desc:'字节豆包主力旗舰，抖音/剪映工作流深度绑定，App 助手"豆包"同名上线。基础参数与官方长上下文待补充。', tags:['文案','视频','配音'], source:'行业资讯 2026-08', url:'https://www.volcengine.com/product/doubao', params:'—', arch:'—', context:'—', multimodal:'原生多模态（图/视频/语音）', license:'闭源（云端 API）' }
+            { id:'m1', name:'DeepSeek V4.1 Flash', vendor:'深度求索', date:'2026-09-10', cat:'旗舰', tag:'MIT 开源 · KV 缓存缩到 1/8', desc:'全新 Causal-Encoder-Decoder 架构，输入激活仅 8B、输出 16B，1M 上下文 + 原生视觉。KV Cache 只需上一代 1/4 HBM、1/8 SSD，Agent 长上下文成本大降；9/14 起 V4 Pro 请求全部路由到它。', tags:['脚本','文案'], source:'DeepSeek 官方 2026-09-10', url:'https://www.deepseek.com/news/deepseek-v4-1-flash/', params:'约 748B 总参（552B 主干 + 196B Engram）；激活 8B(输入)/16B(输出)', arch:'MoE · Causal Encoder-Decoder · Compressed Sparse Attention 2', context:'1M tokens（最大输出 384K）', multimodal:'原生多模态（文本 + 图像，DeepSeek-ViT，约 1344×1344）', license:'MIT（开放权重）' },
+            { id:'m2', name:'GPT-6 Astra', vendor:'OpenAI', date:'2026-09-03', cat:'旗舰', tag:'computer-use 最强 · 首个 Critical 安全级', desc:'OpenAI 旗舰，电脑操作/终端/前沿数学最强（OSWorld 2.0 72.6%、Terminal-Bench 4.0 57.7%）。注意计费陷阱：缓存读 $1（比 Fable 5.1 贵 4 倍），单次输入超 272K 后整单 2× 计费。', tags:['脚本'], source:'OpenAI 官方 2026-09-03', url:'https://openai.com', params:'未披露（OpenAI 不公开）', arch:'未披露（reasoning.effort：low→max 五档）', context:'1,050,000 tokens（最大输入 922K / 最大输出 128K）', multimodal:'文本 + 图像输入 → 文本', license:'Proprietary（OpenAI API / Azure / Bedrock）' },
+            { id:'m3', name:'Claude Fable 5.1', vendor:'Anthropic', date:'2026-09-01', cat:'旗舰', tag:'缓存读便宜 4 倍 · AA 指数 66 居首', desc:'Anthropic 当前旗舰，1M 窗口全程平价、无长上下文附加费；缓存读 $0.25/百万（Astra 的 1/4），高 Agent 占比场景官方称最多便宜约 45%，长跑 Agent 更划算。', tags:['脚本','文案'], source:'Anthropic 官方 2026-09-01', url:'https://claude.ai', params:'未披露（闭源旗舰）', arch:'未披露（自适应思考 always-on，effort 可调）', context:'1M tokens（最大输出 128K；知识截止 2026-06）', multimodal:'文本 + 图像输入 → 文本', license:'Proprietary（Claude API / Bedrock / Vertex / Foundry）' },
+            { id:'m4', name:'Qwen3.8 Max (0902)', vendor:'阿里', date:'2026-09-02', cat:'开源', tag:'2.4T 首个开源 Max 级 MoE', desc:'2.4T 参数 MoE（激活 95B），首个开放权重的 Qwen-Max 级模型（Qwen3.8-2.4T-A95B）；Coding 榜单一度超过 Claude Opus 5，可本地部署控成本。', tags:['脚本','文案','生图'], source:'阿里官方 / Pandaily 2026-09', url:'https://tongyi.aliyun.com', params:'2.4T（激活 95B）', arch:'稀疏 MoE', context:'1M tokens', multimodal:'文本 + 图像 + 视频输入 → 文本', license:'开放权重（Qwen3.8-2.4T-A95B）+ 云端 API' },
+            { id:'m5', name:'Gemini 3.8 Flash', vendor:'Google', date:'2026-09-02', cat:'旗舰', tag:'铺到 Windows 桌面', desc:'谷歌最新 Flash，1048K 上下文，Gemini 生态全面接入 Windows 与全家桶；图/视频理解与 Nano Banana 生图同源，性价比一档。', tags:['脚本','视频','生图'], source:'Google 官方 2026-09-02', url:'https://gemini.google.com', params:'未披露', arch:'Transformer + MoE（TPU 训练）', context:'1,048,000 tokens', multimodal:'原生多模态（文本/图像/视频/音频）', license:'Proprietary（AI Studio / Vertex AI）' },
+            { id:'m6', name:'GPT-6（Sol / Terra / Luna）', vendor:'OpenAI', date:'2026-04-14', cat:'编程', tag:'SWE-bench 76.5% · 2M 上下文', desc:'OpenAI 上一代旗舰，SWE-bench 76.5%，2M tokens 长上下文代码库分析突出；三档定价让它仍是生产流量的主力，硬活才上 Astra。', tags:['脚本'], source:'SWE-bench 2026-07', url:'https://openai.com', params:'5-6T MoE（激活约 500-600B）', arch:'Symphony（统一多模态）+ 双系统推理 System-1/2', context:'2M tokens', multimodal:'原生多模态（文本/图像/音频/视频）', license:'Proprietary（OpenAI API）' },
+            { id:'m7', name:'Claude Opus 5', vendor:'Anthropic', date:'2026-06', cat:'编程', tag:'Arena 前端开发榜第 1', desc:'Claude Code / Cursor 的主力底座，Arena 前端开发榜 claude-opus-5-max 位居第一；长程重构、多文件改动与工具调用最稳，是「复杂活」的默认选择。', tags:['脚本'], source:'Arena 前端开发榜 2026-08', url:'https://www.anthropic.com', params:'未披露', arch:'未披露（Opus 5.x 系列）', context:'1M tokens（最大输出 128K）', multimodal:'文本 + 图像 + PDF 输入 → 文本', license:'Proprietary（Claude API + Claude Code）' },
+            { id:'m8', name:'Kimi K3', vendor:'月之暗面', date:'2026-09', cat:'编程', tag:'Arena 前端第 2（1674 分）', desc:'月之暗面的编程 / Agent 旗舰，kimi-k3-max 在 Arena 前端开发榜 1674 分仅次于 Opus 5；Vals Index 开源权重榜曾排第一（现由 V4.1 Flash 接棒），也有「蒸馏」争议。', tags:['脚本'], source:'Arena 前端开发榜 2026-08', url:'https://www.moonshot.cn', params:'未披露', arch:'MoE + 视觉编码器', context:'256K+ tokens', multimodal:'原生多模态（图/视频）', license:'Modified MIT' },
+            { id:'m9', name:'GLM-5.3 / GLM-5.3-Flash', vendor:'智谱AI', date:'2026-09', cat:'旗舰', tag:'AA 指数略高于 V4.1 Flash', desc:'智谱最新一代，GLM-5.3-Flash 在 Artificial Analysis 智能指数上略高于 DeepSeek V4.1 Flash；企业版接口已支持单次读取百万字级 PDF 并做多文件交叉比对。', tags:['脚本','文案'], source:'Artificial Analysis 2026-09', url:'https://www.zhipuai.cn', params:'未披露', arch:'MoE + CogViT 视觉编码器', context:'长上下文（百万字级文档）', multimodal:'原生多模态（图/视频/设计稿）', license:'闭源（云端 API）' },
+            { id:'m10', name:'Google Stitch', vendor:'Google', date:'2026-09-01', cat:'UI', tag:'免费 · 文/图生 UI + 前端代码', desc:'Google Labs 免费文生界面工具，一句话或一张参考图就出多屏高保真 UI 与前端代码，原生 MCP server；是文生界面赛道零成本起点，配合 Gemini 3.1 Flash Image 做参考图输入。', tags:['UI设计','生图'], source:'Google Labs 2026-09', url:'https://stitch.withgoogle.com', params:'未披露（基于 Gemini 3.x Flash / Pro）', arch:'Gemini 3.x 多模态底座', context:'1M tokens（Gemini 3.x 底座）', multimodal:'文本 + 图像（草图/截图/URL）输入 → UI + React/Vue/Flutter/SwiftUI 代码', license:'Proprietary（免费 + 配额）' },
+            { id:'m11', name:'混元 Hunyuan 3D Pro / 3.1', vendor:'腾讯', date:'2026-01-28', cat:'3D', tag:'Crafiq Elo 1508 + 网格质量双第一', desc:'开源 3D 生成家族，硬表面几何 + 高分辨率 PBR 贴图最强，Crafiq 图生 3D Elo 1508、网格质量 63.7（唯一无 ⚑ 的头部模型）。注意开源权重停在 2.1，且社区协议不含欧盟/英国/韩国。', tags:['3D'], source:'Crafiq 3D Arena 2026-09', url:'https://3d.hunyuan.tencent.com', params:'10B', arch:'分层 3D-DiT（Hunyuan3D-DiT + Hunyuan3D-Paint 两阶段）', context:'不适用（3D 生成）', multimodal:'文本 + 图像（8 视角）输入', license:'闭源云服务（开源版 2.1 走 Tencent Hunyuan Community License）' },
+            { id:'m12', name:'Tripo P1.0 / H3.1', vendor:'VAST', date:'2026-03-09', cat:'3D', tag:'10 秒出模 · 2 秒四边面重拓扑', desc:'生产级 3D 生成，Smart Mesh P1.0 约 2 秒完成四边面重拓扑、自动补洞修面；官方称 10M 用户、9 万工作室/开发者客户（含索尼、网易），是游戏与 3D 打印的价值之选。', tags:['3D'], source:'官方 + 行业报道 2026-09', url:'https://www.tripo3d.ai', params:'未披露（亿级 voxel）', arch:'原生 3D Diffusion + 自研重拓扑', context:'不适用', multimodal:'文本 + 图像 + 多视图输入', license:'闭源（Tripo / Alibaba Cloud Model Studio）' },
+            { id:'m13', name:'Meshy 7', vendor:'Meshy', date:'2026-08-12', cat:'3D', tag:'游戏资产管线最全', desc:'新基座主打图生 3D 对齐（比例 81.0% / 空间 79.7% / 表面细节 59.8%）；管线最全（生成→贴图→绑定→导出），12M 用户、1 亿+ 模型，Bambu Studio / Orca / Cura 原生插件。', tags:['3D'], source:'Meshy 官方 2026-08-12', url:'https://www.meshy.ai', params:'未披露', arch:'自研（mesh + PBR + 拓扑优化管线）', context:'不适用', multimodal:'文本 + 图像输入（30–90 秒生成）', license:'部分免费 + Pro 付费（商业使用须 Pro）' },
+            { id:'m14', name:'Hyper3D Rodin Gen-2.5', vendor:'Hyper3D (Deemos)', date:'2026-05-26', cat:'3D', tag:'1000 万面高保真 · 网格需清理', desc:'图生 3D 视觉质量仅次于混元，原始输出可达 1000 万面、4K PBR，4-5 秒出几何；缺点是网格质量垫底（Crafiq mesh 34 ⚑），下载才计费约 $0.5–1.5/个。', tags:['3D'], source:'Crafiq 3D Arena 2026-09', url:'https://hyper3d.ai', params:'4B', arch:'BANG（Deemos 自研，Gen-2.5）', context:'不适用', multimodal:'文本 + 图像（最多 5 张多视图）输入', license:'闭源云服务（下载按个计费）' },
+            { id:'m15', name:'TRELLIS.2', vendor:'微软', date:'2025-12-16', cat:'3D', tag:'MIT · 唯一可下载的准前沿 3D', desc:'4B 参数图生 3D，MIT 协议无地域/营收/用户数限制，原生 PBR + GLB 导出；2026 年 3D 赛道几乎全是闭源托管模型，它是最能落地的开源选择。', tags:['3D'], source:'GitHub / HuggingFace 2026-09', url:'https://github.com/microsoft/TRELLIS', params:'4B', arch:'稀疏体素 + 结构化潜变量（SLAT）', context:'不适用', multimodal:'单张图像 → 多视角 3D + PBR 纹理', license:'MIT（完全开源）' },
+            { id:'m16', name:'Fish Audio S2.1 Pro', vendor:'Fish Audio', date:'2026-06', cat:'语音', tag:'开源可自托管 · $15/百万字符', desc:'800 万用户、ARR 2100 万美元；200 万+ 音色、30+ 语言、10 秒零样本克隆，$15/百万 UTF-8 字符（约 ElevenLabs 的 1/11），另有 MIT 开源自托管版——本类罕见的可私有化选项。', tags:['配音'], source:'官方 + WebMobTech 2026-08', url:'https://www.fish.audio', params:'4.4B（Slow AR 4B + Fast AR 400M）', arch:'Dual-AR 双自回归 + ModifiedDAC 44.1kHz 编解码', context:'文本输入无固定上限，输出 44.1 kHz 音频', multimodal:'文本 → 音频（30+ 语言）+ 零样本声纹克隆', license:'闭源云服务 + 开源自托管版（MIT）' },
+            { id:'m17', name:'ElevenLabs Eleven v3', vendor:'ElevenLabs', date:'2026-02', cat:'语音', tag:'英文拟真天花板 · 最贵', desc:'74 语言、内联情感标签（[whispering] / [laughs] 等随朗读表演），克隆约需 60 秒样音；官方明确 v3 不适合实时，实时场景用 Flash v2.5（约 75ms）。中文多音字是短板。', tags:['配音'], source:'官方 + 2026 TTS 横评', url:'https://elevenlabs.io', params:'未披露', arch:'未披露（v3 表现力档 / Flash 实时档）', context:'不适用（文本 → 音频）', multimodal:'文本 → 音频（74 语言）+ 声音克隆', license:'Proprietary（订阅，约 $60–120+/月）' },
+            { id:'m18', name:'MiniMax Speech 2.8 HD', vendor:'MiniMax', date:'2026-02', cat:'语音', tag:'40+ 语言 · 价格比最高', desc:'HD 表现力 + 音色标签 + 40 语言，$60/百万字符，高并发多语内容的价格比最高；同厂还有 2.8 Turbo 做低延迟档。', tags:['配音'], source:'官方 + Crafiq 语音榜 2026-08', url:'https://www.minimaxi.com', params:'未披露', arch:'自研 TTS（HD / Turbo 双档）', context:'不适用', multimodal:'文本 → 音频（40+ 语言）', license:'Proprietary（开放平台 API）' },
+            { id:'m19', name:'GPT Image 2.5（Flare / Sunburst）', vendor:'OpenAI', date:'2026-09-08', cat:'图像', tag:'生图 + 多步推理编辑', desc:'GPT Image 2 的 9 月迭代（Flare / Sunburst 两条线），对话式多步编辑、文字渲染与指令遵循仍是强项；ChatGPT 内约 2–3 张/天免费，Plus 约 50 张/3 小时。', tags:['生图'], source:'OpenAI 官方 2026-09-08', url:'https://openai.com', params:'未披露', arch:'未披露（图像生成链路）', context:'不适用（文本 + 图 → 图）', multimodal:'文本 + 图像输入 → 图像', license:'Proprietary（ChatGPT / API）' },
+            { id:'m20', name:'豆包 1.5 Pro / 豆包', vendor:'字节跳动', date:'2026-07', cat:'旗舰', tag:'3.14 亿 MAU · 抖音生态', desc:'字节豆包主力，与抖音 / 剪映工作流深度绑定，App 助手「豆包」拿下国内月活第一（3.14 亿 MAU）；视频、配音、图片全家桶一次配齐，是做日韩素材时最顺手的国产入口。', tags:['文案','视频','配音'], source:'AICPB 应用榜 2026-08', url:'https://www.volcengine.com/product/doubao', params:'未披露', arch:'未披露', context:'长上下文（多模态输入）', multimodal:'原生多模态（文本/图/视频/语音）', license:'闭源（云端 API + App）' },
+            { id:'m21', name:'Sakana Fugu Ultra v2.0 / Fugu Max', vendor:'Sakana AI', date:'2026-09-11', cat:'旗舰', tag:'1000K 上下文 · 9 月最新一批', desc:'Sakana AI 9/11 同日发布两条 API（Ultra v2.0 / Max），均 1000K 上下文，是目前「最新发布」的一批长上下文模型；日本本土厂商，做日区内容时可关注合规与语言优势。', tags:['脚本'], source:'LLM Gateway 时间线 2026-09-11', url:'https://sakana.ai', params:'未披露', arch:'未披露', context:'1,000,000 tokens', multimodal:'文本（含视觉待官方确认）', license:'Proprietary（Sakana API）' }
         ];
-
         // 工具热度（月活/用户数，口径见 metricUnit；bar 为条形图相对宽度）
         const NIKO_AI_TOOLS = [
-            { id:'t1', name:'ChatGPT', vendor:'OpenAI', metric:'9.95亿', metricUnit:'MAU', delta:'+4.2%', metricDate:'2026-06', desc:'全球最大 AI 助手，Agent 与生图能力迭代最快。', tags:['脚本','生图'], source:'AICPB', url:'https://chatgpt.com', bar:99.5 },
-            { id:'t2', name:'豆包', vendor:'字节跳动', metric:'3.24亿', metricUnit:'MAU', delta:'+6.1%', metricDate:'2026-06', desc:'国内月活第一，抖音生态联动，视频/图片/配音全家桶。', tags:['文案','视频','配音'], source:'AICPB', url:'https://www.doubao.com', bar:32.6 },
-            { id:'t3', name:'千问', vendor:'阿里', metric:'2.51亿', metricUnit:'MAU', delta:'+3.4%', metricDate:'2026-06', desc:'阿里生态，Qwen 系列模型开源影响力大。', tags:['文案','生图'], source:'AICPB', url:'https://tongyi.aliyun.com', bar:25.2 },
-            { id:'t4', name:'Gemini', vendor:'Google', metric:'1.63亿', metricUnit:'MAU', delta:'+2.8%', metricDate:'2026-06', desc:'谷歌全家桶绑定，多模态视频理解强。', tags:['脚本','视频'], source:'AICPB', url:'https://gemini.google.com', bar:16.4 },
-            { id:'t5', name:'DeepSeek', vendor:'深度求索', metric:'1.39亿', metricUnit:'MAU', delta:'+8.7%', metricDate:'2026-06', desc:'开源性价比之王，V4 Pro 发布后增速最快。', tags:['脚本','文案'], source:'AICPB', url:'https://chat.deepseek.com', bar:14.0 },
-            { id:'t6', name:'即梦', vendor:'字节跳动', metric:'8736万', metricUnit:'MAU', delta:'+12.3%', metricDate:'2026-06', desc:'AI 视频/图片生成第一梯队，抖音素材生态。', tags:['视频','生图'], source:'AICPB', url:'https://jimeng.jianying.com', bar:8.8 },
-            { id:'t7', name:'GitHub Copilot', vendor:'GitHub/微软', metric:'2600万', metricUnit:'累计开发者', delta:'+15%', metricDate:'2026-07', desc:'装机量最大的编程助手，470 万付费订阅。', tags:['脚本'], source:'行业统计 2026-07', url:'https://github.com/features/copilot', bar:2.6 },
-            { id:'t8', name:'Claude', vendor:'Anthropic', metric:'2600万+', metricUnit:'用户', delta:'—', metricDate:'2026-07', desc:'Web+API 用户盘，Claude Code 编程口碑第一。', tags:['脚本'], source:'行业统计 2026-07', url:'https://claude.ai', bar:2.6 },
-            { id:'t9', name:'Fish Audio', vendor:'Fish Audio', metric:'800万', metricUnit:'用户', delta:'ARR 2100万美元', metricDate:'2026-08', desc:'全球第二大 AI 语音平台，出海配音首选之一。', tags:['配音'], source:'官方 2026-08', url:'https://www.fish.audio', bar:0.8 },
-            { id:'t10', name:'可灵', vendor:'快手', metric:'811万', metricUnit:'MAU', delta:'+9.5%', metricDate:'2026-06', desc:'电影级视频生成，国内外口碑双高。', tags:['视频'], source:'AICPB', url:'https://klingai.com', bar:0.81 },
-            { id:'t11', name:'Meshy', vendor:'Meshy', metric:'300万+', metricUnit:'用户', delta:'月访问27.4M', metricDate:'2026-05', desc:'3D 生成双雄之一，游戏资产管线最全。', tags:['3D'], source:'Toolify 2026-05', url:'https://www.meshy.ai', bar:0.3 },
-            { id:'t12', name:'Cursor', vendor:'Anysphere', metric:'100万+', metricUnit:'付费用户', delta:'ARR $2B', metricDate:'2026-07', desc:'AI 原生 IDE，周活超 300 万，增速最快。', tags:['脚本'], source:'行业统计 2026-07', url:'https://cursor.com', bar:0.2 },
-            { id:'t13', name:'v0', vendor:'Vercel', metric:'430万', metricUnit:'月访问', delta:'+8%', metricDate:'2026-06', desc:'文生 UI 标杆，Prompt 直接出 React 界面，落地页/活动页提效神器。', tags:['UI设计'], source:'Toolify 2026-06', url:'https://v0.dev', bar:0.43 },
-            { id:'t14', name:'Lovable', vendor:'Lovable', metric:'60万+', metricUnit:'付费用户', delta:'+25%', metricDate:'2026-07', desc:'全栈 AI 应用生成，一句话做完整产品，界面+逻辑一步到位。', tags:['UI设计'], source:'官方 2026-07', url:'https://lovable.dev', bar:0.06 }
+            { id:'t1', name:'ChatGPT', vendor:'OpenAI', metric:'10.30亿', metricUnit:'MAU', delta:'+2.7%', metricDate:'2026-08', desc:'全球最大 AI 助手，Agent 与生图（GPT Image 2.5）迭代最快，仍是唯一月活破 10 亿的 AI 应用。', tags:['脚本','生图'], source:'AICPB 2026-08', url:'https://chatgpt.com', bar:10.30 },
+            { id:'t2', name:'豆包', vendor:'字节跳动', metric:'3.14亿', metricUnit:'MAU', delta:'-1.1%', metricDate:'2026-08', desc:'国内月活第一，抖音生态联动，视频/图片/配音全家桶；本月环比小跌，是被夸克与千问分流。', tags:['文案','视频','配音'], source:'AICPB 2026-08', url:'https://www.doubao.com', bar:3.14 },
+            { id:'t3', name:'千问', vendor:'阿里', metric:'2.72亿', metricUnit:'MAU', delta:'+4.4%', metricDate:'2026-08', desc:'阿里生态，Qwen 系列开源影响力直接导流，本月仍在增长。', tags:['文案','生图'], source:'AICPB 2026-08', url:'https://tongyi.aliyun.com', bar:2.72 },
+            { id:'t4', name:'Gemini', vendor:'Google', metric:'1.89亿', metricUnit:'MAU', delta:'+8.5%', metricDate:'2026-08', desc:'全球增速最快的头部产品之一，Gemini 3.8 Flash 与 Nano Banana 生图同源，Windows 桌面级铺开。', tags:['脚本','视频','生图'], source:'AICPB 2026-08', url:'https://gemini.google.com', bar:1.89 },
+            { id:'t5', name:'夸克', vendor:'阿里', metric:'1.57亿', metricUnit:'MAU', delta:'-0.2%', metricDate:'2026-08', desc:'AI 搜索 + 浏览器入口，国内工具型流量最大的产品之一。', tags:['脚本'], source:'AICPB 2026-08', url:'https://quark.cn', bar:1.57 },
+            { id:'t6', name:'DeepSeek', vendor:'深度求索', metric:'1.34亿', metricUnit:'MAU', delta:'+1.0%', metricDate:'2026-08', desc:'开源性价比之王，V4.1 Flash 发布后 API 侧增速最快；应用端 8 月小幅回暖。', tags:['脚本','文案'], source:'AICPB 2026-08', url:'https://chat.deepseek.com', bar:1.34 },
+            { id:'t7', name:'百度网盘', vendor:'百度', metric:'1.02亿', metricUnit:'MAU', delta:'-1.9%', metricDate:'2026-08', desc:'靠 AI 总结 / 相册搜索把工具型产品留在榜内，是国内 AI 化改造的典型样本。', tags:['文案'], source:'AICPB 2026-08', url:'https://pan.baidu.com', bar:1.02 },
+            { id:'t8', name:'腾讯元宝', vendor:'腾讯', metric:'9693万', metricUnit:'MAU', delta:'-3.6%', metricDate:'2026-08', desc:'腾讯混元 + DeepSeek 双模型入口，微信生态导流，本月环比回落。', tags:['文案','生图'], source:'AICPB 2026-08', url:'https://yuanbao.tencent.com', bar:0.969 },
+            { id:'t9', name:'即梦 AI', vendor:'字节跳动', metric:'7913万', metricUnit:'MAU', delta:'-4.6%', metricDate:'2026-08', desc:'AI 视频/图片生成第一梯队，Seedance 2.5 与抖音素材生态，是国内视频生成的默认入口。', tags:['视频','生图'], source:'AICPB 2026-08', url:'https://jimeng.jianying.com', bar:0.791 },
+            { id:'t10', name:'Dola', vendor:'字节跳动', metric:'7841万', metricUnit:'MAU', delta:'+3.7%', metricDate:'2026-08', desc:'AI 聊天/陪伴类出海产品，靠海外新兴市场冲到全球前十，是国内团队出海最成功的应用之一。', tags:['文案'], source:'AICPB 2026-08', url:'https://www.dola.ai', bar:0.784 },
+            { id:'t11', name:'Grok', vendor:'xAI', metric:'6752万', metricUnit:'MAU', delta:'+3.0%', metricDate:'2026-08', desc:'社交平台原生分发，Grok Imagine 生图/生视频上线后增长明显，内容尺度比同行更松。', tags:['生图','视频'], source:'AICPB 2026-08', url:'https://grok.com', bar:0.675 },
+            { id:'t12', name:'Claude', vendor:'Anthropic', metric:'4315万', metricUnit:'MAU', delta:'+4.3%', metricDate:'2026-08', desc:'应用端体量远小于 ChatGPT，但 API/Claude Code 侧口碑与付费转化第一，Fable 5.1 后继续走高。', tags:['脚本'], source:'AICPB 2026-08', url:'https://claude.ai', bar:0.432 },
+            { id:'t13', name:'Kimi 智能助手', vendor:'月之暗面', metric:'2642万', metricUnit:'MAU', delta:'+0.8%', metricDate:'2026-08', desc:'Kimi K3 上线后应用端止跌微增，企业侧走「登月计划」FDE 落地模式。', tags:['脚本'], source:'AICPB 2026-08', url:'https://kimi.moonshot.cn', bar:0.264 },
+            { id:'t14', name:'可灵', vendor:'快手', metric:'799万', metricUnit:'MAU', delta:'+2.8%', metricDate:'2026-08', desc:'电影级视频生成（Kling 3.0 原生 4K/60fps），应用端体量不大但创作者付费意愿强，海外口碑尤其好。', tags:['视频'], source:'AICPB 2026-08', url:'https://klingai.com', bar:0.08 },
+            { id:'t15', name:'讯飞听见', vendor:'科大讯飞', metric:'337万', metricUnit:'MAU', delta:'-1.8%', metricDate:'2026-08', desc:'中文语音识别/合成天花板，政企、教育、会议转写场景的稳妥选择。', tags:['配音'], source:'AICPB 2026-08', url:'https://www.iflyrec.com', bar:0.034 }
         ];
-
-        // 细分领域排名（5 域，均为真实调研数据；metric 缺省表示以定位描述为准）
+        // 细分领域排名（6 域，均为 2026-09-12 联网调研数据；metric 缺省表示以定位描述为准）
         const NIKO_AI_RANKS = {
             video: [
-                { name:'即梦', vendor:'字节', metric:'8736万 MAU', desc:'文生视频+图生视频双修，抖音素材生态，国内第一', tags:['视频','生图'], source:'AICPB 2026-06' },
-                { name:'可灵', vendor:'快手', metric:'811万 MAU', desc:'电影级质感，海内外口碑双高', tags:['视频'], source:'AICPB 2026-06' },
-                { name:'Seedance', vendor:'字节', desc:'与即梦同源的视频大模型，长镜头连贯性强', tags:['视频'], source:'行业资讯' },
-                { name:'Sora 2', vendor:'OpenAI', desc:'原生多模态视频生成，电影级画质标杆', tags:['视频'], source:'行业资讯' },
-                { name:'Runway Gen-4', vendor:'Runway', desc:'专业影视工作流，可控性强', tags:['视频'], source:'行业资讯' },
-                { name:'Vidu', vendor:'生数科技', desc:'国产出海选手，图生视频一致性好', tags:['视频'], source:'行业资讯' },
-                { name:'海螺 AI', vendor:'MiniMax', desc:'免费额度多，模板化创作上手快', tags:['视频'], source:'行业资讯' }
+                { name:'即梦 Seedance 2.5', vendor:'字节', metric:'7913万 MAU', desc:'中文原生、可对话式改片，1080P/2K、单次最长 30 秒（超长模式 3 分钟），绿幕直出，国内量产短视频首选', tags:['视频'], source:'AICPB 2026-08 + 横评' },
+                { name:'可灵 Kling 3.0', vendor:'快手', metric:'799万 MAU', desc:'全球唯一原生 4K/60fps 单次 60 秒直出，故事板一次生成 6 个连贯镜头，5 语唇形同步；画质天花板但要付费', tags:['视频'], source:'官方 + 横评 2026-08' },
+                { name:'Sora 2', vendor:'OpenAI', metric:'Sora 3.0 API 可达 20 分钟', desc:'物理运动最准（动量/惯性正确），导演模式可实时调镜头灯光；门槛高（需科学上网 + 外币卡），标准版仅 24 秒', tags:['视频'], source:'行业资讯 2026-08' },
+                { name:'Veo 3.1', vendor:'Google', metric:'API 付费', desc:'音画同步与物理模拟强，适合海外项目与需要口型对齐的成片', tags:['视频'], source:'行业资讯 2026-08' },
+                { name:'Seedance 2.0', vendor:'字节', metric:'2K · 5-10 秒', desc:'与即梦同源，2026 年主流量产档，动作流畅、角色一致性好', tags:['视频'], source:'横评 2026-08' },
+                { name:'商汤 Seko 2.0', vendor:'商汤', metric:'持续生成', desc:'面向工业化产线的持续生成方案（API + 授权），适合短剧/漫剧批量生产', tags:['视频'], source:'横评 2026-08' },
+                { name:'海螺 AI', vendor:'MiniMax', metric:'免费额度多', desc:'模板化创作上手快、多风格，MiniMax 视频模型 9 月更新支持更长时长与更少卡顿', tags:['视频'], source:'官方 2026-09' },
+                { name:'Vidu', vendor:'生数科技', desc:'国产出海选手，图生视频一致性好，参考图控制细腻', tags:['视频'], source:'行业资讯' }
             ],
             image: [
-                { name:'即梦图片', vendor:'字节', metric:'与视频同源 8736万', desc:'图片+视频一体，抖音生态，素材风格多', tags:['生图'], source:'AICPB 2026-06' },
-                { name:'GPT Image', vendor:'OpenAI', desc:'文字渲染能力最强，海报/标题图神器', tags:['生图'], source:'行业资讯' },
-                { name:'可灵图片', vendor:'快手', desc:'与视频同源模型，画质细腻', tags:['生图'], source:'行业资讯' },
-                { name:'通义万相', vendor:'阿里', desc:'阿里生态，电商素材/国风表现好', tags:['生图'], source:'行业资讯' },
-                { name:'Midjourney', vendor:'MJ', desc:'订阅制经典，审美风格社区沉淀最深', tags:['生图'], source:'行业资讯' },
-                { name:'Flux', vendor:'Black Forest Labs', desc:'开源生态活跃，可控性强的专业底模', tags:['生图'], source:'行业资讯' },
-                { name:'Ideogram', vendor:'Ideogram', desc:'文字排版生成最优，Logo/标题图首选', tags:['生图'], source:'行业资讯' }
+                { name:'GPT Image 2', vendor:'OpenAI', metric:'Arena 1382 · 第 1', desc:'Text-to-Image Arena 榜首，综合质量/指令遵循/编辑能力三项最高（编辑榜 GPT Image 2 high 第 2），文字渲染强', tags:['生图'], source:'LMArena Text-to-Image 2026-08-25' },
+                { name:'MAI-Image-2.6', vendor:'微软 AI', metric:'Arena 1331 · 第 2', desc:'多图参考编辑 + 联网 grounding 最强（编辑榜第 1），Bing Image Creator 有免费 MAI-Image-2.6-Flash 档', tags:['生图'], source:'LMArena + Artificial Analysis 2026-09' },
+                { name:'Nano Banana 2（Gemini 3.1 Flash Image）', vendor:'Google', metric:'Arena 1263', desc:'免费可对话改图，速度与一致性均衡，Gemini 内最佳入门生图；Pro 档支持 14 图身份锁定混图', tags:['生图'], source:'LMArena 2026-08-25' },
+                { name:'Grok Imagine 2.0', vendor:'xAI', metric:'Arena 1316 · 第 3', desc:'出图快、风格实验性强；商业安全评分偏低（6.8），正式商用素材要复核', tags:['生图'], source:'LMArena 2026-08-25' },
+                { name:'Seedream 5.0 Pro', vendor:'字节跳动', metric:'Arena 1258 · 第 8', desc:'国产最高位（编辑榜已进前十），高端写实与参考图工作流强，API 侧生态成熟', tags:['生图'], source:'LMArena 2026-08-25' },
+                { name:'Qwen-Image-3.0', vendor:'阿里', metric:'Arena 1255', desc:'多语言排版（含中文标题图）表现突出，开源生态活跃（Qwen-Image-2512 为 Apache 2.0）', tags:['生图'], source:'LMArena 2026-08-25' },
+                { name:'Muse Image', vendor:'Meta', metric:'Arena 1281 · 第 5', desc:'Agentic 编辑能力，Meta AI 内免费使用，社交场景分发广', tags:['生图'], source:'LMArena 2026-08-25' },
+                { name:'HunyuanImage 3.0', vendor:'腾讯', metric:'开源编辑榜最强（~1232）', desc:'开源阵营最强的对话式编辑器，权重走腾讯混元社区协议，可本地部署', tags:['生图','3D'], source:'Artificial Analysis 2026-09' }
             ],
             code: [
-                { name:'Claude Code', vendor:'Anthropic', metric:'SWE-bench 80.9%', desc:'终端 Agent 编程天花板，复杂项目重构首选', tags:['脚本'], source:'SWE-bench 2026-07' },
-                { name:'Cursor', vendor:'Anysphere', metric:'100万+ 付费', desc:'AI 原生 IDE 体验最佳，日常开发主力', tags:['脚本'], source:'行业统计 2026-07' },
-                { name:'GitHub Copilot', vendor:'GitHub/微软', metric:'2600万 开发者', desc:'装机量最大，生态/企业合规最强', tags:['脚本'], source:'行业统计 2026-07' },
-                { name:'Windsurf', vendor:'Cognition/OpenAI', metric:'$15/月 性价比', desc:'被 OpenAI 收购，性价比 IDE', tags:['脚本'], source:'行业资讯' },
-                { name:'Trae', vendor:'字节', metric:'免费/¥79月', desc:'中文理解 98%，Builder 口述做小游戏', tags:['脚本'], source:'行业资讯' },
-                { name:'通义灵码', vendor:'阿里', metric:'¥59/月', desc:'阿里云生态绑定，企业稳妥选择', tags:['脚本'], source:'行业资讯' },
-                { name:'Cline', vendor:'开源', metric:'500万+ 安装', desc:'开源 BYOM，成本可控', tags:['脚本'], source:'行业统计 2026-07' }
+                { name:'Claude Code', vendor:'Anthropic', metric:'Opus 5 / Kimi K3 可切换', desc:'终端 Agent 编程天花板，复杂项目重构与大规模改动首选；成本需设上限（重度约 $100–200/月）', tags:['脚本'], source:'团队横评 2026-08' },
+                { name:'Cursor', vendor:'Anysphere', metric:'三份横评均第 2', desc:'唯一在三份 2026 横评中名次完全一致（都第 2）的工具，AI 原生 IDE 体验最稳，$20/月', tags:['脚本'], source:'ChooseAI 横评汇总 2026' },
+                { name:'TRAE', vendor:'字节', metric:'中文适配 9.6/10 · 基础版免费', desc:'中文理解与性价比第一档（团队横评常年第 1），IDE + Work 双模式，小团队零成本起步', tags:['脚本'], source:'团队横评 2026-08' },
+                { name:'GitHub Copilot', vendor:'GitHub/微软', metric:'网站月访问 3.92亿', desc:'装机量与生态最大，PR / 企业合规流程融合最好，$10/月，迁移成本最低', tags:['脚本'], source:'AICPB 网站榜 2026-08' },
+                { name:'OpenCode', vendor:'开源', metric:'LogRocket 8 月开发工具榜第 1', desc:'开源终端编程 Agent，8 月反超 Claude Code 登顶开发工具榜，BYOM 成本可控', tags:['脚本'], source:'LogRocket 2026-08' },
+                { name:'Kimi Code', vendor:'月之暗面', metric:'Arena 前端 1674 分第 2', desc:'对标 Claude Code 的国产编程 Agent，kimi-k3-max 前端榜第 2，中文注释与业务语境理解好', tags:['脚本'], source:'Arena 前端开发榜 2026-08' },
+                { name:'通义灵码 / Qoder CN', vendor:'阿里', metric:'个人版免费', desc:'阿里云生态绑定，个人版免费、企业版走安全合规，是国内团队稳妥选择', tags:['脚本'], source:'团队横评 2026-08' },
+                { name:'Windsurf', vendor:'Cognition', metric:'$15/月', desc:'多步骤 Flow 体验好，被 Cognition 收归后与 Devin 打通，性价比档', tags:['脚本'], source:'行业资讯 2026-08' }
             ],
             voice: [
-                { name:'ElevenLabs', vendor:'ElevenLabs', desc:'全球拟真天花板，多语种+声音克隆，跨境配音首选', tags:['配音'], source:'行业榜单 2026' },
-                { name:'Fish Audio', vendor:'Fish Audio', metric:'800万 用户', desc:'全球第二大 AI 语音平台，企业级配音标配', tags:['配音'], source:'官方 2026-08' },
-                { name:'剪映 AI 配音', vendor:'字节', desc:'剪辑内直接配，免费可商用，短视频顺手', tags:['配音'], source:'行业榜单 2026' },
-                { name:'豆包配音', vendor:'字节', metric:'免费额度高', desc:'情绪贴合度五星，长文本稳定', tags:['配音'], source:'行业榜单 2026' },
-                { name:'讯飞听见', vendor:'科大讯飞', desc:'中文音色最丰富，政企/教育场景稳', tags:['配音'], source:'行业榜单 2026' },
-                { name:'腾讯智影', vendor:'腾讯', desc:'合规稳定，配音+数字人联动', tags:['配音'], source:'行业榜单 2026' },
-                { name:'ChatTTS / GPT-SoVITS', vendor:'开源', desc:'本地免费，口语感/5秒克隆，隐私友好', tags:['配音'], source:'行业榜单 2026' }
+                { name:'ElevenLabs（Eleven v3）', vendor:'ElevenLabs', metric:'74 语言 · 英文天花板', desc:'情感表达与拟真度全球第一，内联标签 [whispering]/[laughs] 随朗读表演；中国多音字较弱，实时场景改用 Flash v2.5', tags:['配音'], source:'2026 TTS 横评' },
+                { name:'Fish Audio S2.1 Pro', vendor:'Fish Audio', metric:'$15/百万字符 · 800万用户', desc:'200 万+ 音色、30+ 语言、10 秒克隆；价格约 ElevenLabs 的 1/11，且有 MIT 开源自托管版——出海配音性价比首选', tags:['配音'], source:'官方 + WebMobTech 2026-08' },
+                { name:'MiniMax Speech 2.8 HD', vendor:'MiniMax', metric:'40+ 语言 · $60/百万字符', desc:'HD 表现力 + 音色标签，高并发多语内容价格比最高；同厂 2.8 Turbo 打低延迟档', tags:['配音'], source:'Crafiq 语音榜 2026-08' },
+                { name:'Cartesia Sonic 3', vendor:'Cartesia', metric:'90ms 首包', desc:'基于状态空间模型，实时语音 Agent / 游戏 NPC 对话最稳，42 语言、3 秒克隆', tags:['配音'], source:'Crafiq / WebMobTech 2026-08' },
+                { name:'讯飞听见 / 讯飞语音', vendor:'科大讯飞', metric:'中文天花板', desc:'多音字准确率最高、长句语调最自然，数百种播音级音色，政企/教育/有声书场景稳', tags:['配音'], source:'2026 TTS 横评' },
+                { name:'Inworld TTS-1.5 Max', vendor:'Inworld', metric:'P90 <250ms', desc:'为对话而非旁白设计，具备上下文感知韵律，$10–50 档，适合交互式应用', tags:['配音'], source:'Crafiq 语音榜 2026-08' },
+                { name:'剪映 AI 配音 / 豆包配音', vendor:'字节', metric:'免费可商用', desc:'剪辑内直接配、情绪贴合度高、长文本稳定，短视频顺手；免费额度对个人够用', tags:['配音'], source:'2026 TTS 横评' },
+                { name:'CosyVoice', vendor:'阿里（开源）', metric:'流式首字延迟 ~80ms', desc:'真正流式合成，AI 客服 / 语音助手这类实时对话场景的决定性指标', tags:['配音'], source:'2026 TTS 横评' }
             ],
             '3d': [
-                { name:'腾讯混元 Hunyuan3D 3.1', vendor:'腾讯', metric:'Crafiq 全球第一', desc:'开源可控，贴图质量最强，可本地部署', tags:['3D'], source:'Crafiq 3D Arena' },
-                { name:'Tripo H3.1', vendor:'VAST', metric:'28M 月访问', desc:'10-30秒高速出模，水密高精，650万创作者', tags:['3D'], source:'Toolify 2026-05' },
-                { name:'Meshy 6', vendor:'Meshy', metric:'27.4M 月访问', desc:'游戏资产管线最全，a16z 唯一 3D 工具', tags:['3D'], source:'Toolify 2026-05' },
-                { name:'Hyper3D Rodin 2.5', vendor:'Hyper3D', desc:'高保真图生3D，四边面可直接动画', tags:['3D'], source:'Crafiq 3D Arena' },
-                { name:'TRELLIS.2', vendor:'微软', desc:'开源 3DGS+网格，技术标杆', tags:['3D'], source:'Crafiq 3D Arena' },
-                { name:'Seed3D', vendor:'字节', desc:'字节开源 3D 生成，生态活跃', tags:['3D'], source:'Crafiq 3D Arena' },
-                { name:'Luma Genie', vendor:'Luma', desc:'实景捕捉/场景级重建，AR 方向', tags:['3D'], source:'行业资讯' }
+                { name:'混元 Hunyuan 3D Pro / 3.1', vendor:'腾讯', metric:'Crafiq Elo 1508 · 双第一', desc:'视觉质量与网格质量同时第一（唯一无 ⚑ 的头部模型），硬表面 + 高分辨率 PBR 最强；开源权重停在 2.1', tags:['3D'], source:'Crafiq / Pixazo 2026-09' },
+                { name:'Tripo P1.0 / H3.1', vendor:'VAST', metric:'~10 秒出模 · 2 秒四边面重拓扑', desc:'Smart Mesh P1.0 约 2 秒完成四边面重拓扑 + 自动补洞，网格质量第二（60.7）；10M 用户，游戏/3D 打印价值之选', tags:['3D'], source:'官方 + Crafiq 2026-09' },
+                { name:'Meshy 7', vendor:'Meshy', metric:'12M 用户 · 1 亿+ 模型', desc:'管线最全（生成→贴图→绑定→动画→导出），Bambu Studio/Orca/Cura 原生插件，$400M B 轮、估值 $1.5B', tags:['3D'], source:'Meshy 官方 2026-08-12' },
+                { name:'Hyper3D Rodin Gen-2.5', vendor:'Hyper3D (Deemos)', metric:'1000 万面 · 4-5 秒出几何', desc:'高保真图生 3D 第二（Elo 1477），4K PBR、五档质量、prompt 改网格；网格需 15–40 分钟清理', tags:['3D'], source:'Crafiq 3D Arena 2026-09' },
+                { name:'TRELLIS.2', vendor:'微软', metric:'MIT · 4B 参数', desc:'唯一可下载跑的准前沿 3D 模型，原生 PBR + GLB 导出，无地域/营收限制，适合自建管线', tags:['3D'], source:'Cinevva 时间线 2026-09' },
+                { name:'Pixal3D', vendor:'腾讯 ARC', metric:'MIT 开源（2026 唯一新开源）', desc:'2026 年极少数开源的 hosted 级模型，9 月补上多视图推理代码，社区生态在长', tags:['3D'], source:'GitHub README 2026-09' },
+                { name:'Luma Genie', vendor:'Luma', metric:'免费 · 无需 GPU', desc:'文生 3D 最快拿到草模（网页/Discord 免费），适合概念打样与场景级重建，成品仍需大修', tags:['3D'], source:'Fast3DPrinters 2026' }
             ],
             ui: [
-                { name:'v0', vendor:'Vercel', metric:'430万 月访问', desc:'文生 UI 标杆，React/Tailwind 一键出界面，落地页/活动页提效神器', tags:['UI设计'], source:'Toolify 2026-06' },
-                { name:'Lovable', vendor:'Lovable', metric:'60万+ 付费用户', desc:'全栈 AI 应用生成，对话直接出可部署产品，界面+逻辑一步到位', tags:['UI设计'], source:'官方 2026-07' },
-                { name:'Figma Make', vendor:'Figma', metric:'Figma 用户生态', desc:'Figma 原生 AI，设计稿直接生成/改版，设计师工作流无缝衔接', tags:['UI设计'], source:'官方 2026-05' },
-                { name:'Google Stitch', vendor:'Google', metric:'2026 发布', desc:'文生 UI 模型，一句话生成完整界面代码', tags:['UI设计'], source:'Google 2026-03' },
-                { name:'MasterGo AI', vendor:'MasterGo', metric:'国内协作头部', desc:'国内设计协作工具 AI，团队稿秒级改版', tags:['UI设计'], source:'行业资讯' },
-                { name:'Motiff 妙多', vendor:'蓝湖', metric:'AI 设计工具', desc:'蓝湖旗下 AI 设计，生成式 UI 编辑器，中文提示词友好', tags:['UI设计'], source:'行业资讯' },
-                { name:'Uizard', vendor:'Uizard', metric:'草图转 UI', desc:'手绘草图/截图直接转可编辑 UI，原型验证快', tags:['UI设计'], source:'行业资讯' }
+                { name:'v0', vendor:'Vercel', metric:'免费 + $20/月', desc:'文生 UI 标杆，直接出 React + Tailwind + shadcn/ui 组件，落地页/活动页提效神器，原生 MCP 集成', tags:['UI设计'], source:'Musemind 2026 设计工具榜' },
+                { name:'Lovable', vendor:'Lovable', metric:'60万+ 付费 · 免费 + $25/月', desc:'一句话出全栈应用（前端 + 后端 + DB），B 端 PM / 创业者最快验证路径', tags:['UI设计'], source:'官方 + Emergent 2026' },
+                { name:'Figma Make', vendor:'Figma', metric:'Figma 订阅 + AI Credits', desc:'Figma 原生 AI，设计稿直接生成可交互原型与组件变体，设计系统感知好，团队无缝衔接', tags:['UI设计'], source:'官方 2026' },
+                { name:'Google Stitch', vendor:'Google', metric:'完全免费 · 原生 MCP', desc:'文/图生 UI + 前端代码，一句话或一张参考图就出多屏设计稿，设计师零成本起点', tags:['UI设计'], source:'Google Labs 2026' },
+                { name:'Claude Design', vendor:'Anthropic', metric:'Claude Pro $20/月（研究预览）', desc:'对话式设计工作台，能读 GitHub 仓库提取现有设计系统再交付给 Claude Code，原型到生产一条线', tags:['UI设计','脚本'], source:'vibecoding.app 2026' },
+                { name:'Bolt.new', vendor:'StackBlitz', metric:'免费 + $25/月', desc:'浏览器内全栈开发，无需本地环境即可出可部署应用，独立开发者首选', tags:['UI设计','脚本'], source:'Emergent 2026' },
+                { name:'墨刀 AI / Pixso AI', vendor:'国内', metric:'百元级/年 · 约 ¥599/年', desc:'中文理解与本土协作最好，国产化/内网环境首选，墨刀可出可交互原型 + Vue 代码', tags:['UI设计'], source:'塔猴横评 2026' },
+                { name:'Uizard', vendor:'Uizard', metric:'免费 + $12/月', desc:'手绘草图/截图直接转可编辑线框图，非设计师最快出原型', tags:['UI设计'], source:'Musemind 2026 设计工具榜' }
             ]
         };
 
@@ -22971,7 +22976,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             let tools = safeStorage.get('niko_ai_tools', []);
             if (aiTagFilter) tools = tools.filter(t => aiItemMatchesTag(t, aiTagFilter));
             if (!tools.length) { bars.innerHTML = aiTagFilter ? '<div class="comp-empty">没有「' + aiFilterIcon(aiTagFilter) + ' ' + aiTagFilter + '」分类的工具，点 ✕ 清除筛选</div>' : '<div class="comp-empty">暂无工具数据</div>'; grid.innerHTML = ''; return; }
-            if (meta) meta.textContent = '数据口径：MAU/用户数 · 环比/版本见卡片 · 来源见卡片';
+            if (meta) meta.textContent = '数据口径：AI 产品榜（AICPB）2026-08 · 月活 MAU · 环比见卡片 · 来源见卡片';
             const sorted = tools.slice().sort((a, b) => (b.bar || 0) - (a.bar || 0));
             bars.innerHTML = sorted.map((t, i) => {
                 const w = Math.max(4, ((t.bar || 0) / (sorted[0].bar || 1)) * 100);
@@ -35158,7 +35163,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609121508";
+        window.NIKO_VERSION = "202609121904";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
