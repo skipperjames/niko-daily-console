@@ -10949,7 +10949,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .scn-hd .lg .l-active{color:#f0a35e}
 .scn-hd .lg .l-watch{color:#f6d365}
 .scn-hd .lg .l-old{color:#34d399}
-#scnBox{width:100%}
+#scnBox{width:100%;max-width:960px;margin:0 auto}
 #scnBox svg{display:block;width:100%;height:auto;border-radius:10px}
 .scn-ft{margin-top:8px;font-size:11px;color:var(--muted);text-align:center}
 .pv7-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:13px;align-items:start}
@@ -35162,7 +35162,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609121315";
+        window.NIKO_VERSION = "202609121326";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
