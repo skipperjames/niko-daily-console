@@ -11022,6 +11022,66 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .ex-bar .ex-min{font-size:11.5px;color:var(--muted);margin-left:auto;min-width:0}
 .ex-note{margin-top:10px;font-size:11.5px;line-height:1.6;padding:8px 11px;border-radius:10px;background:rgba(220,63,69,.07);border:1px solid rgba(220,63,69,.22)}
 @media (max-width:1400px){.fold>summary .one{display:none}}
+
+/* ===== v10-① 顶栏压缩：标题 + 分类 + 操作 收成一行 ===== */
+.hp-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 0 10px;border-bottom:1px solid var(--card-border)}
+.hp-head h1{font-size:16px;font-weight:700;margin:0;flex:0 0 auto;display:flex;align-items:center;gap:7px;line-height:1.3}
+.hp-head .tabs{margin:0;padding:0;gap:4px;flex:1 1 auto;min-width:0;border:0}
+.hp-head .tab{font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;border-color:transparent;background:transparent;min-height:30px;gap:5px}
+.hp-head .tab:hover{background:var(--card-bg-2);border-color:transparent;color:var(--text)}
+.hp-head .tab.on{background:var(--accent);border-color:transparent;box-shadow:none;color:#fff}
+.hp-head-acts{display:flex;gap:6px;flex:0 0 auto}
+.hp-head-acts .hp-btn{padding:5px 12px;font-size:13px;line-height:1.4}
+.hp-head-hint{flex:0 0 100%;font-size:11px;color:var(--muted);line-height:1.5;margin-top:-1px}
+@media (max-width:900px){.hp-head h1{flex:0 0 100%}}
+
+/* ===== v10-③ 底部动态区（A 活动节拍 + B 档案时间线） ===== */
+.hp-foot{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.hpf-2{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;align-items:start}
+@media (max-width:1080px){.hpf-2{grid-template-columns:1fr}}
+.hpf-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:13px 15px}
+.hpf-hd{display:flex;align-items:baseline;gap:9px;margin-bottom:11px;flex-wrap:wrap}
+.hpf-hd b{font-size:13.5px}
+.hpf-hd .sub{font-size:11.5px;color:var(--muted);margin-left:auto}
+/* A 活动节拍 */
+.beat-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:11px}
+.beat-num{font-size:26px;font-weight:800;line-height:1;color:var(--ok);font-variant-numeric:tabular-nums}
+.beat-num small{font-size:12px;color:var(--muted);font-weight:600;margin-left:3px}
+.beat-bar{flex:1 1 200px;height:8px;border-radius:99px;background:var(--card-bg-2);overflow:hidden;min-width:110px}
+.beat-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--ok));transition:width .3s}
+.beat-next{font-size:11.5px;color:var(--muted)}
+.beat-next b{color:var(--warn);font-size:14px;font-variant-numeric:tabular-nums}
+.beat-axis{display:flex;gap:3px;align-items:flex-end;margin:2px 0 0}
+.beat-axis .cell{flex:1 1 0;min-width:0;height:26px;border-radius:5px;background:#15151c;border:1px solid #26262f;position:relative}
+.beat-axis .cell.past{background:#21212b;border-color:#30303c}
+.beat-axis .cell.on{background:linear-gradient(180deg,#4ade80,#22a06b);border-color:#22a06b}
+.beat-axis .cell.now::after{content:'';position:absolute;left:-2px;top:-5px;bottom:-5px;width:2px;background:var(--danger);border-radius:2px;box-shadow:0 0 7px var(--danger);animation:hpBl 1.4s ease-in-out infinite}
+@keyframes hpBl{0%,100%{opacity:1}50%{opacity:.35}}
+.beat-hour{display:flex;gap:3px;margin-top:4px}
+.beat-hour .h{flex:1 1 0;min-width:0;font-size:10px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+.hpf-hist{display:flex;gap:4px;align-items:flex-end;height:92px;margin-top:4px;position:relative}
+.hpf-hist .hb{flex:1 1 0;background:linear-gradient(180deg,#7c6cf0,#4b3fae);border-radius:4px 4px 2px 2px;min-height:3px;position:relative}
+.hpf-hist .hb.z{background:#22222b;min-height:3px}
+.hpf-hist .tline{position:absolute;left:0;right:0;border-top:1px dashed rgba(255,255,255,.3);pointer-events:none}
+.hpf-lab{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-top:5px;gap:10px;flex-wrap:wrap}
+.hpf-lab b{color:var(--text)}
+.hpf-note{font-size:11px;color:var(--muted);margin-top:9px;line-height:1.7}
+/* B 档案时间线 */
+.tl-chips{display:flex;gap:5px;margin-bottom:11px;flex-wrap:wrap}
+.tl-chip{font-size:11.5px;border:1px solid var(--card-border);border-radius:99px;padding:2px 10px;cursor:pointer;color:var(--muted);background:transparent}
+.tl-chip.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.tl{position:relative;padding-left:22px;max-height:330px;overflow-y:auto}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:1px;background:var(--card-border)}
+.tl .ev{position:relative;padding:0 0 13px}
+.tl .ev::before{content:'';position:absolute;left:-20px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(139,124,248,.18)}
+.tl .ev.g::before{background:var(--ok);box-shadow:0 0 0 3px rgba(52,211,153,.16)}
+.tl .ev.o::before{background:var(--warn);box-shadow:0 0 0 3px rgba(245,165,36,.16)}
+.tl .ev.r::before{background:var(--danger);box-shadow:0 0 0 3px rgba(220,63,69,.16)}
+.tl .ev .dt{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tl .ev .bd{font-size:12.5px;margin-top:1px;color:var(--text)}
+.tl .ev .bd em{font-style:normal;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:6px;padding:0 6px;font-size:10.5px;color:var(--muted);margin-right:6px}
+.tl .ev .sb{font-size:11.5px;color:var(--muted);margin-top:1px}
+.rxbox{background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:9px;padding:11px 12px;font-size:12px;line-height:1.85;white-space:pre-line;color:var(--text)}
 /* ===== NIKO 桌宠「守灯兽」· 2026-09-12 并入（仅桌面端 >768px 显示） ===== */
 #nikoPet {
     --np-hue: 168; --np-size: 84px; --np-op: 1;
@@ -13713,19 +13773,16 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
             </div>
         </div>
         <div class="page" id="healthPage">
-<div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;">
-    <div>
-      <h1 style="font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;">🩺 健康档案</h1>
-      <p style="color:#888;font-size:13px;margin-top:2px;">病史 · 用药 · 小病复发 · 每日打卡 · 手表 · 科普 —— 数据只存在你自己的浏览器里，不上传任何服务器</p>
+<div style="padding:16px 32px 0;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
+  <div class="hp-head">
+    <h1>🩺 健康档案</h1>
+    <div class="tabs" id="tabs"></div>
+    <div class="hp-head-acts">
+      <button class="hp-btn primary" onclick="pvAdd()" title="添加一条病史">＋</button>
+      <button class="hp-btn" onclick="hpClearDemo()" title="清除示例数据（只删带「示例」标记的条目，你自己的记录不动）">🧹</button>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="hp-btn primary" onclick="pvAdd()" style="padding:8px 16px;font-size:13px;">＋ 添加一条病史</button>
-      <button class="hp-btn" onclick="hpClearDemo()" style="padding:8px 16px;font-size:13px;" title="只删带「示例」标记的条目，你自己的记录不动">🧹 清除示例数据</button>
-    </div>
+    <div class="hp-head-hint">病史 · 用药 · 小病复发 · 每日打卡 · 手表 · 科普 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 鼠标停在「＋ / 🧹」上有说明</div>
   </div>
-
-  <div class="tabs" id="tabs"></div>
 
   <div class="panel on" id="p-map">
     <div class="sec">
@@ -13788,6 +13845,7 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
         </details>
       </div>
       </div>
+      <div id="hpFoot" class="hp-foot"></div>
     </div>
   </div>
 
@@ -32203,8 +32261,11 @@ function renderBodyMap(){
   var zm=zonesOf();
   var cards=[], olds=[];
   HIST.forEach(function(h){
-    var z=(h.zones||[])[0]||null;
-    if(h.status==='old') olds.push({h:h,z:z}); else cards.push({h:h,z:z});
+    /* v10 修复：一条病史挂几个部位就长几个锚点（同一条病史共用同一个编号）。
+       原来只取 zones[0] —— 「颈椎病」挂了 颈后 + 上背/肩胛 两处，第二处被吃掉。 */
+    var zs=(h.zones||[]).filter(function(z){ return ZIMG[z]; });
+    var rec={h:h, zs:zs, z:zs[0]||null};
+    if(h.status==='old') olds.push(rec); else cards.push(rec);
   });
   /* v9：位图人体 + SVG 绝对坐标锚点（图只建一次，之后只换锚点，避免 base64 反复解码） */
   var fig=box.querySelector('.scn-fig');
@@ -32224,12 +32285,14 @@ function renderBodyMap(){
   out.push('<ellipse cx="'+(pad+IMG_W/2)+'" cy="'+(IMG_H-7)+'" rx="150" ry="9" fill="#4f8cff" opacity=".14" filter="url(#pinGlow)"/>');
   var items=[], no=0;
   cards.forEach(function(cd){
-    if(!cd.z) return;
-    var p=ZIMG[cd.z]; if(!p) return;
+    if(!cd.zs || !cd.zs.length) return;
+    no++;                                     /* 编号按「病史」走，不按「部位」走 */
     var ac=SCN_AC[cd.h.status]||'#f0a35e';
-    var x=pad+p[0], y=p[1];
-    no++;
-    items.push({x:x,y:y,ly:y,side:(x<pad+IMG_W/2?'l':'r'),no:no,col:ac,label:ZSHORT[cd.z]||cd.z,z:cd.z});
+    cd.zs.forEach(function(z){
+      var p=ZIMG[z]; if(!p) return;
+      var x=pad+p[0], y=p[1];
+      items.push({x:x,y:y,ly:y,side:(x<pad+IMG_W/2?'l':'r'),no:no,col:ac,label:ZSHORT[z]||z,z:z});
+    });
   });
   if(!narrow){
     pinLayout(items.filter(function(i){return i.side==='l';}),78,vh-46,58);
@@ -32253,8 +32316,8 @@ function renderBodyMap(){
     }
   });
   olds.forEach(function(od){
-    if(!od.z) return; var p=ZIMG[od.z]; if(!p) return;
-    out.push('<circle cx="'+(pad+p[0])+'" cy="'+p[1]+'" r="7" fill="#34d399" opacity=".9"/>');
+    (od.zs||[]).forEach(function(z){ var p=ZIMG[z]; if(!p) return;
+      out.push('<circle cx="'+(pad+p[0])+'" cy="'+p[1]+'" r="7" fill="#34d399" opacity=".9"/>'); });
   });
   if(!items.length && !olds.length){
     out.push('<text x="'+(vw/2)+'" y="'+(vh-60)+'" text-anchor="middle" font-size="34" fill="#8f88ad">还没有记录 —— 加一条病史，这里就长出锚点</text>');
@@ -32421,6 +32484,7 @@ function renderCheck(){
     document.getElementById('ckBody').innerHTML=htm;
   }
   renderExercise(); renderTabs();
+  try { renderHpFoot(); } catch (e) {}   /* v10：底部动态区跟随打卡实时更新 */
 }
 var RS='A';
 var RS_TXT={A:'右下角小胶囊 · 不挡内容',B:'到点压暗整屏 · 做完才关得掉',C:'不弹窗不响铃 · 回到本页才看到'};
@@ -32573,6 +32637,139 @@ function renderTrend(){
       '<div class="d">前一天低于中位数的日子，第二天自评均值 '+avg(lo).toFixed(2)+'，「更痛」占 '+Math.round(loW*100)+'%。'+
       (diff>0.15?' <b style="color:var(--ok)">差 '+diff.toFixed(2)+'，方向和你医生的话一致。</b>':(diff<-0.15?' <b style="color:var(--danger)">方向是反的，值得跟医生提一句。</b>':' <b style="color:var(--warn)">两组差不多，说明这个关联还不明显。</b>'))+'</div></div>';
   }
+}
+
+/* ===================== v10 底部动态区：A 活动节拍 + B 档案时间线 =====================
+   参考「今日看板」的分段卡风格。数据全部来自已有档案（HIST / MEDS / MINOR / DAYS / DONE14 /
+   GOAL / CK_DONE），零新增录入；算不出来的地方如实写「还没记录」，不补假数据。 */
+var HPF='全部';
+function hpfLab(t){ var h=Math.floor(t), m=(t%1)?'30':'00'; return (h<10?'0':'')+h+':'+m; }
+function hpfToday(){
+  var items=ckAll();
+  var done=items.filter(function(x){ return CK_DONE[x.id]; }).length;
+  var act=items.filter(function(x){ return String(x.t).indexOf('活动')>=0; });
+  return { done:done, total:items.length,
+           actDone:act.filter(function(x){ return CK_DONE[x.id]; }).length, actTotal:act.length };
+}
+function hpfActive(){
+  var r=HIST.filter(function(h){ return h.status==='active' && h.real; })[0];
+  return r || HIST.filter(function(h){ return h.status==='active'; })[0] || null;
+}
+/* ---- A：活动节拍（今日打卡进度 + 今天的时间轴 + 近 14 天活动次数） ---- */
+function hpfBeat(){
+  var now=new Date(), nh=now.getHours()+now.getMinutes()/60;
+  var from=6, step=.5, n=34;                       /* 06:00 – 23:30 · 每格 30 分钟 */
+  var cells='', hours='';
+  for(var i=0;i<n;i++){
+    var t=from+i*step, isNow=(nh>=t && nh<t+step), isPast=(nh>=t+step);
+    cells+='<div class="cell'+(isNow?' now':(isPast?' past':''))+'" title="'+hpfLab(t)+'"></div>';
+    hours+='<div class="h">'+((i%4===0)?hpfLab(t):'')+'</div>';
+  }
+  var td=hpfToday();
+  var pct=td.total?Math.round(td.done/td.total*100):0;
+  var nx=30-(now.getMinutes()%30);
+  var clock=(now.getHours()<10?'0':'')+now.getHours()+':'+(now.getMinutes()<10?'0':'')+now.getMinutes();
+  var mx=Math.max.apply(null, DONE14.concat([GOAL]));
+  var bars=DONE14.map(function(v,i){
+    return '<div class="hb'+(v?'':' z')+'" style="height:'+Math.max(4,Math.round(v/mx*100))+'" title="'+(DAYS[i]||'')+' · '+v+' 次"></div>';
+  }).join('');
+  var av=Math.round(avg(DONE14));
+  var okN=DONE14.filter(function(v){ return v>=GOAL; }).length;
+  var best=0,cur=0; DONE14.forEach(function(v){ if(v>=GOAL){cur++;best=Math.max(best,cur);}else cur=0; });
+  return '<div class="hpf-2">'
+    +'<div class="hpf-card"><div class="hpf-hd"><b>⏱ 活动节拍 · 每 30 分钟起身活动 2 分钟</b>'
+    +'<span class="sub">6:00 – 23:30 · 每格 30 分钟</span></div>'
+    +'<div class="beat-top"><div class="beat-num">'+td.done+'<small>/ '+td.total+' 项</small></div>'
+    +'<div class="beat-bar"><i style="width:'+pct+'%"></i></div>'
+    +'<div class="beat-next">距下次起身提醒 <b>'+nx+'</b> 分钟 · 现在 <b style="color:var(--text)">'+clock+'</b></div></div>'
+    +'<div class="beat-axis">'+cells+'</div><div class="beat-hour">'+hours+'</div>'
+    +'<div class="hpf-note">↑ 今日打卡完成度（真实数据：来自「今日打卡」的勾选）＋ 今天的时间轴（灰 = 已经过去、红游标 = 此刻）。'
+    +'活动类打卡今天记了 <b style="color:var(--text)">'+td.actDone+' / '+td.actTotal+'</b> 次。'
+    +'轴上的亮绿格要等接上 NIKO 久坐计时后才会按真实时刻点亮 —— 现在的打卡只记「今天做没做」、不记时刻，所以这里不替它画位置。</div></div>'
+    +'<div class="hpf-card"><div class="hpf-hd"><b>📊 近 14 天</b><span class="sub">每天实际活动次数</span></div>'
+    +'<div class="hpf-hist">'+bars+'<div class="tline" style="bottom:'+Math.round(GOAL/mx*100)+'%"></div></div>'
+    +'<div class="hpf-lab"><span>虚线 = 目标 '+GOAL+' 次</span><span>平均 <b>'+av+'</b> 次 / 天</span></div>'
+    +'<div class="hpf-lab"><span>达标 <b>'+okN+'</b> / 14 天</span><span>最长连续达标 <b>'+best+'</b> 天</span></div>'
+    +'<div class="hpf-note">数据来源：健康档案里的 14 天活动记录（'+DAYS[0]+' – '+DAYS[DAYS.length-1]+'）。'
+    +'没记录的那天就是矮柱 —— 不补假数据。</div></div></div>';
+}
+/* ---- B：档案时间线 + 复诊摘要 ---- */
+function hpfEvents(){
+  var evs=[];
+  HIST.forEach(function(h){
+    evs.push({d:h.date||'', k:'就诊', t:h.name,
+      s:[h.hosp, h.sym].filter(Boolean).join(' · '), c:(h.status==='active'?'r':''), ex:!h.real});
+    if(h.rx) evs.push({d:h.date||'', k:'医嘱', t:h.rx, s:(h.rx2||[]).join(' · '), c:'o', ex:!h.real});
+  });
+  MEDS.forEach(function(m){
+    var ns=(m.items||[]).map(function(x){ return x.n; });
+    evs.push({d:m.date||'', k:'用药', t:ns.length?ns.join(' + '):(m.diag||'用药记录'),
+      s:[m.diag, m.hosp, (m.st==='active'?'治疗中':'')].filter(Boolean).join(' · '), c:'', ex:!m.real});
+  });
+  MINOR.forEach(function(e){
+    evs.push({d:e.start||'', k:'发作', t:e.name,
+      s:[(e.sites||[]).join(' / '), e.end?('持续到 '+e.end):'',
+         (e.trig&&e.trig.length)?('诱因：'+e.trig.join(' / ')):''].filter(Boolean).join(' · '),
+      c:'o', ex:!e.real});
+  });
+  return evs.sort(function(a,b){ return String(b.d).localeCompare(String(a.d)); });
+}
+function hpfSummary(){
+  var h=hpfActive();
+  if(!h) return '还没有「治疗中」的病史。\n在病史库里把一条标成「治疗中」并填上医嘱，这里就会自动生成一段可复制的复诊摘要。';
+  var d=scnDays(h.date), L=[];
+  L.push((h.dx||h.name)+(h.date?('；'+h.date+' 就诊'+(d!=null?('（已 '+d+' 天）'):'')):''));
+  if(h.sym) L.push('症状：'+h.sym);
+  if(h.rx) L.push('核心医嘱：'+h.rx);
+  if((h.rx2||[]).length) L.push('医嘱细则：'+h.rx2.join('；'));
+  var av=Math.round(avg(DONE14)), okN=DONE14.filter(function(v){ return v>=GOAL; }).length;
+  L.push('近 14 天「每 30 分钟起身活动」平均 '+av+' 次 / 天（目标 '+GOAL+'），达标 '+okN+' / 14 天，日均依从度约 '+Math.round(av/GOAL*100)+'%。');
+  var acts=MEDS.filter(function(m){ return m.st==='active'&&m.real; });
+  L.push('在服药物：'+(acts.length? acts.map(function(m){ return (m.items||[]).map(function(x){ return x.n+(x.f?(' '+x.f):''); }).join('、'); }).join('；') : '暂无记录'));
+  if((h.avoid||[]).length) L.push('忌口：'+h.avoid.join('、')+'。');
+  L.push('每日自评：还没有记录（连续记 7 天以上，「好转推断」里会出趋势）。');
+  return L.join('\n');
+}
+function hpfTL(){
+  var evs=hpfEvents(), list=(HPF==='全部')?evs:evs.filter(function(e){ return e.k===HPF; });
+  var body=list.length? list.map(function(e){
+    return '<div class="ev '+e.c+'"><div class="dt">'+(e.d||'—')+(e.ex?' · <span style="color:var(--warn)">示例</span>':'')+'</div>'
+      +'<div class="bd"><em>'+e.k+'</em>'+esc(e.t)+'</div>'
+      +(e.s?('<div class="sb">'+esc(e.s)+'</div>'):'')+'</div>';
+  }).join('') : '<div class="hx-empty" style="padding:14px 0">这一类还没有记录。</div>';
+  var chips=['全部','就诊','医嘱','用药','发作'].map(function(k){
+    return '<span class="tl-chip'+(HPF===k?' on':'')+'" data-k="'+k+'" onclick="hpfChip(\''+k+'\')">'+k+'</span>';
+  }).join('');
+  return '<div class="hpf-2">'
+    +'<div class="hpf-card"><div class="hpf-hd"><b>🧭 档案时间线 · 全部事件按时间倒序</b>'
+    +'<span class="sub">复诊时不用凭回忆 —— 把这一列给医生看</span></div>'
+    +'<div class="tl-chips">'+chips+'</div><div class="tl">'+body+'</div>'
+    +'<div class="hpf-note">数据来源：病史库('+HIST.length+') + 用药记录('+MEDS.length+') + 小病复发('+MINOR.length+')。'
+    +'任意一边新增，这条线自动生长 —— 不需要你手工维护。带「示例」标记的是占位数据，清掉后这条线只剩你自己的记录。</div></div>'
+    +'<div class="hpf-card"><div class="hpf-hd"><b>🩺 复诊摘要</b><span class="sub">自动生成 · 不用手写</span></div>'
+    +'<div class="rxbox">'+esc(hpfSummary())+'</div>'
+    +'<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'
+    +'<button class="hp-btn primary" style="flex:1" onclick="hpfCopy(this)">📋 复制给医生</button></div>'
+    +'<div class="hpf-note">这一块的价值：医生说「这周怎么样」时，你答「还行」是 0 信息量；'
+    +'给出一段「14 天里平均 N 次、达标 M 天」才算能改方案的信息。摘要内容全部来自你自己的档案，一字未编。</div></div></div>';
+}
+function hpfChip(k){ HPF=k; renderHpFoot(); }
+function hpfCopy(btn){
+  var go=function(ok){
+    if(btn) btn.textContent=ok?'✅ 已复制':'⚠ 复制失败';
+    try{ pvToast(ok?'复诊摘要已复制到剪贴板 ✅':'复制失败，请手动选中文本'); }catch(e){}
+    setTimeout(function(){ if(btn) btn.textContent='📋 复制给医生'; },1800);
+  };
+  try{
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(hpfSummary()).then(function(){go(true);},function(){go(false);}); return;
+    }
+  }catch(e){}
+  go(false);
+}
+function renderHpFoot(){
+  var box=document.getElementById('hpFoot'); if(!box) return;
+  box.innerHTML=hpfBeat()+hpfTL();
 }
 
 /* ===================== 弹窗：增 / 改 ===================== */
@@ -33674,7 +33871,7 @@ function hpClearDemo(){
   MINOR = MINOR.filter(function(x){ return x.real; });
   WATCH = [];
   HSAVE();
-  try { renderTabs(); renderBodyMap(); renderHist(); renderMed(); renderMinor(); renderWatch(); } catch (e) {}
+  try { renderTabs(); renderBodyMap(); renderHist(); renderMed(); renderMinor(); renderWatch(); renderHpFoot(); } catch (e) {}
   pvToast('已清除 ' + nm + ' 条示例数据 ✅');
 }
 
@@ -33716,6 +33913,8 @@ function hpClearDemo(){
   window.wdParseApply = wdParseApply;
   window.wdParseDo = wdParseDo;
   window.wdSave = wdSave;
+  window.hpfChip = hpfChip;
+  window.hpfCopy = hpfCopy;
   window.renderHealthPage = renderHealthPage;
 
 })();
@@ -35820,7 +36019,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609132250";
+        window.NIKO_VERSION = "202609140005";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
