@@ -4851,6 +4851,12 @@
         body.dark-mode .cal-fest-chip-inline { background: #451a03; color: #fbbf24; border-color: #78350f; }
         .cal-fest-chip-inline.holiday { background: #fee2e2; color: #dc2626; border-color: #fecaca; }
         body.dark-mode .cal-fest-chip-inline.holiday { background: #450a0a; color: #f87171; border-color: #7f1d1d; }
+        /* 2026-09-14 法定节假日（休）/ 调休补班（班）角标：数据复用排期表的 TBL_CN_HOLIDAYS / TBL_CN_MAKEUP（国办发明电〔2025〕7 号），2027 换年只改那一处 */
+        .cal-worktag { display:inline-block; font-size:9px; line-height:13px; padding:0 3px; border-radius:3px; vertical-align:1px; font-weight:700; margin-left:2px; }
+        .cal-worktag.xiu { background:#fee2e2; color:#dc2626; }
+        .cal-worktag.ban { background:#dbeafe; color:#1d4ed8; }
+        body.dark-mode .cal-worktag.xiu { background:#450a0a; color:#f87171; }
+        body.dark-mode .cal-worktag.ban { background:#1e3a8a; color:#93c5fd; }
         .cal-mem-chip-inline {
             display: inline-flex; align-items: center; gap: 1px; font-size: 8.5px;
             background: #fce7f3; color: #db2777; border: 1px solid #fbcfe8;
@@ -19052,6 +19058,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const festChips = cnFestivalShow ? getFestivalsForDate(dateStr) : [];
                 const memChips = memorialShow ? getMemorialsForDate(dateStr) : [];
                 const dayNodes = marketNodesShow ? getNodesForDate(dateStr) : [];
+                // 2026-09-14 法定节假日/调休补班角标（数据复用排期表：国办发明电〔2025〕7 号）
+                const hName = tblIsHoliday(dateStr);
+                const workTag = (tblIsMakeup(dateStr) ? '<span class="cal-worktag ban" title="调休补班 · 这天要上班">班</span>' : '')
+                    + (hName ? `<span class="cal-worktag xiu" title="${escapeHtml(hName)} · 法定节假日">休</span>` : '');
                 let inlineTags = '';
                 if (festChips.length || memChips.length || dayNodes.length) {
                     const allTags = [
@@ -19065,7 +19075,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const MAX_TAGS = 3;
                     inlineTags = `<span class="day-fest-inline">${allTags.slice(0, MAX_TAGS).join('')}${allTags.length > MAX_TAGS ? `<span class="cal-extra-chip-inline" title="打开纪念日管理 / 查看节日">+${allTags.length - MAX_TAGS}</span>` : ''}</span>`;
                 }
-                dateHeader.innerHTML = `<span class="day-head-left"><span class="day-weekday">${wdLabel}</span><span class="day-num">${date.getDate()}</span>${moodByDate[dateStr] ? `<span class="cal-mood-wx" title="心情气候：${moodNameMap[moodByDate[dateStr]] || moodByDate[dateStr]}">${moodWxMap[moodByDate[dateStr]] || ''}</span>` : ''}${inlineTags}</span><span class="day-head-right">${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}${dayClearMap[dateStr] ? `<span class="day-clear-badge" title="当日任务全清 · 小怪清剿完成">🗡️</span>` : ''}</span>`;
+                dateHeader.innerHTML = `<span class="day-head-left"><span class="day-weekday">${wdLabel}</span><span class="day-num">${date.getDate()}</span>${moodByDate[dateStr] ? `<span class="cal-mood-wx" title="心情气候：${moodNameMap[moodByDate[dateStr]] || moodByDate[dateStr]}">${moodWxMap[moodByDate[dateStr]] || ''}</span>` : ''}${workTag}${inlineTags}</span><span class="day-head-right">${dayEvents.length ? `<span class="day-count">${dayEvents.length}</span>` : ''}${dayClearMap[dateStr] ? `<span class="day-clear-badge" title="当日任务全清 · 小怪清剿完成">🗡️</span>` : ''}</span>`;
                 cell.appendChild(dateHeader);
                 const eventsContainer = document.createElement('div');
                 eventsContainer.className = 'events-container';
@@ -35993,7 +36003,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609140054";
+        window.NIKO_VERSION = "202609140921";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
