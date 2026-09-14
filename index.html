@@ -32041,13 +32041,14 @@ function HLOAD(){
   if (Array.isArray(d.days))  DAYS  = d.days;
   if (Array.isArray(d.self14))SELF14= d.self14;
   if (d.ck && typeof d.ck === 'object') CK_DONE = d.ck;
+  if (d.dose && typeof d.dose === 'object') DOSE = d.dose;
   return true;
 }
 function HSAVE(){
   try {
     safeStorage.set(HK, { v:1, t:Date.now(),
       hist:HIST, meds:MEDS, minor:MINOR, watch:WATCH,
-      days:DAYS, self14:SELF14, ck:CK_DONE });
+      days:DAYS, self14:SELF14, ck:CK_DONE, dose:DOSE });
   } catch (e) {}
 }
 
@@ -32925,7 +32926,9 @@ function renderMed(){
   var box=document.getElementById('medBody'); if(!box) return;
   var st=medStat();
   if(document.getElementById('medSub')) document.getElementById('medSub').textContent=st.visits+' 次开药 · '+st.list.length+' 种药';
-  var h='<div class="mx-top">'+kpi(st.visits,'次就诊开药')+kpi(st.list.length,'种不同的药')+kpi(st.active,'次还在吃')+'</div>';
+  var tdDose=doseToday();
+  var h='<div class="mx-top">'+kpi(st.visits,'次就诊开药')+kpi(st.list.length,'种不同的药')+kpi(st.active,'次还在吃')+kpi(tdDose.total?(tdDose.done+' / '+tdDose.total):'—','今日服药')+'</div>';
+  h+=doseStrip();
   h+=medAiCard();
   h+='<div class="card" style="margin-bottom:14px">'+
     '<div style="font-size:13px;font-weight:700;margin-bottom:8px">💊 药物汇总比对 <span style="font-size:11px;color:var(--muted);font-weight:400">同一种药开过几次、一共吃多少天 —— 点一行看它出现在哪几次</span></div>'+
@@ -33045,6 +33048,157 @@ function medAiCard(){
     '</div>'+
     (n?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">还没有「还在吃」的真实记录 —— 现在点会按最近一次开药生成；把新处方记进来会自动更新</div>')+
     '</div>';
+}
+
+/* ===================== 用药提醒 · 到点弹窗 + 一键已吃（2026-09-14） ===================== */
+/* 按每种药「一天 N 次」自动排时间表（第一顿固定 8:50 · 用户习惯，见铁律 §十一.5），
+   到点弹窗提醒，点「已吃」写进 niko_health_v1 的 dose 字段（跟云同步走），自动累计今日次数 */
+var DOSE={};
+var DOSE_INIT=false;
+var DOSE_OPEN='';
+var DOSE_NOTIFIED={};
+var DOSE_TIMES={1:['08:50'],2:['08:50','20:30'],3:['08:50','13:00','19:30'],4:['08:50','12:00','16:00','20:00']};
+function dosePerDay(f){
+  var m=String(f||'').match(/([一二两三四五六\d])\s*次/);
+  if(!m) return 1;
+  var map={'一':1,'两':2,'二':2,'三':3,'四':4,'五':5,'六':6};
+  var n=map[m[1]]||(+m[1]||1);
+  return n>4?4:n;
+}
+function dosePlan(){
+  var o=medAiActiveItems();                 /* 复用：还在吃（或最近一次）的真实用药，已去重 */
+  var slots={}, seen={};
+  o.forEach(function(x){
+    var it=x.it, v=x.v;
+    var k=String(it.n||'').replace(/\s+/g,''); if(!k||seen[k]) return; seen[k]=1;
+    if(v.date && it.d){ var day=dDiff(v.date,todayStr())+1; if(day>it.d) return; }   /* 疗程吃完不再提醒 */
+    var per=dosePerDay(it.f);
+    DOSE_TIMES[per].forEach(function(t){ (slots[t]=slots[t]||[]).push({n:it.n, tm:it.t||''}); });
+  });
+  return Object.keys(slots).sort().map(function(t){ return {t:t, meds:slots[t]}; });
+}
+function doseToday(){
+  var today=todayStr(), plan=dosePlan(), done=0;
+  var d=(DOSE||{})[today]||{};
+  plan.forEach(function(s){ if(d[s.t]&&d[s.t].names) done++; });
+  return {done:done, total:plan.length, plan:plan, log:d};
+}
+function doseStrip(){
+  var td=doseToday();
+  if(!td.total) return '';
+  return '<div class="card" style="margin-bottom:14px">'+
+    '<div style="font-size:13px;font-weight:700;margin-bottom:2px">⏰ 今日服药 <span style="color:var(--accent)">'+td.done+' / '+td.total+' 次</span></div>'+
+    '<div style="font-size:11px;color:var(--muted);margin-bottom:9px">第一顿按你 8:50 的习惯排；到点弹窗提醒，点「已吃」自动记次数；漏了的点时间补记</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      td.plan.map(function(s){
+        var dn=td.log[s.t]&&td.log[s.t].names;
+        return dn
+          ? '<span class="chip sm" style="cursor:default" title="'+esc((dn||[]).join('、'))+'">✅ '+s.t+' 已吃</span>'
+          : '<span class="chip sm" onclick="doseTakeSlot(\''+s.t+'\')">＋ '+s.t+' 补记</span>';
+      }).join('')+
+    '</div></div>';
+}
+function doseSlot(t){
+  var p=dosePlan();
+  for(var i=0;i<p.length;i++){ if(p[i].t===t) return p[i]; }
+  return null;
+}
+function doseMark(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  var s=doseSlot(t);
+  DOSE[today][t]={ts:Date.now(), names:(s?s.meds:[]).map(function(x){ return x.n; })};
+  if(DOSE[today]._snooze) delete DOSE[today]._snooze[t];
+  var keys=Object.keys(DOSE).sort();
+  while(keys.length>90){ delete DOSE[keys.shift()]; }
+  HSAVE();
+  doseClose();
+  if(S.tab==='med') renderMed();
+  pvToast('✅ 已记录 '+t+' 这一次（'+(DOSE[today][t].names||[]).length+' 种药）');
+}
+function doseTakeSlot(t){
+  var s=doseSlot(t);
+  if(!s){ pvToast('这个时间点当前没有排药'); return; }
+  if(!confirm('补记 '+t+' 这一次已吃？\n（'+s.meds.map(function(x){ return x.n; }).join('、')+'）')) return;
+  doseMark(t);
+}
+function doseSnooze(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  DOSE[today]._snooze=DOSE[today]._snooze||{};
+  DOSE[today]._snooze[t]=Date.now()+10*60*1000;
+  HSAVE(); doseClose();
+  pvToast('好，10 分钟后再提醒你');
+}
+function doseDismiss(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  DOSE[today]._dismiss=DOSE[today]._dismiss||{};
+  DOSE[today]._dismiss[t]=1;
+  HSAVE(); doseClose();
+}
+function doseClose(){
+  var m=document.getElementById('doseMask');
+  if(m) m.style.display='none';
+  DOSE_OPEN='';
+}
+function doseShow(s){
+  var m=document.getElementById('doseMask'); if(!m) return;
+  document.getElementById('doseBody').innerHTML=
+    '<div style="font-size:21px;font-weight:700;margin-bottom:2px">💊 到点了，该吃药啦</div>'+
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:12px">今天 '+s.t+' · '+s.meds.length+' 种药</div>'+
+    '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">'+
+      s.meds.map(function(x){
+        return '<div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:8px 12px;font-size:13px">💊 '+esc(x.n)+(x.tm?(' · '+esc(x.tm)):'')+'</div>';
+      }).join('')+'</div>'+
+    '<button class="btn" style="width:100%;padding:11px;font-size:14px" onclick="doseMark(\''+s.t+'\')">✅ 已吃，记上</button>'+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+      '<button class="btn sm" style="flex:1;min-height:40px" onclick="doseSnooze(\''+s.t+'\')">⏰ 10分钟后再提醒</button>'+
+      '<button class="btn sm" style="flex:1;min-height:40px" onclick="doseDismiss(\''+s.t+'\')">今天这个先不记</button>'+
+    '</div>';
+  m.style.display='flex';
+  DOSE_OPEN=s.t;
+}
+function doseTick(){
+  try{
+    HLOAD();
+    var td=doseToday();
+    if(!td.total) return;
+    var now=new Date();
+    var cur=pad2(now.getHours())+':'+pad2(now.getMinutes());
+    var sn=td.log._snooze||{}, dis=td.log._dismiss||{};
+    var hit=null;
+    td.plan.forEach(function(s){
+      if(td.log[s.t]&&td.log[s.t].names) return;      /* 已吃 */
+      if(dis[s.t]) return;                             /* 今天这个不提醒 */
+      if(s.t>cur) return;                              /* 还没到点 */
+      if(sn[s.t]&&Date.now()<sn[s.t]) return;          /* 贪睡中 */
+      if(!hit||s.t>hit.t) hit=s;                       /* 最晚的已到点未吃 = 最该提醒的 */
+    });
+    if(!hit) return;
+    var nkey=todayStr()+'_'+hit.t;
+    if(document.hidden){
+      try{
+        if(window.Notification && Notification.permission==='granted' && !DOSE_NOTIFIED[nkey]){
+          new Notification('NIKO · 该吃药了', { body:hit.t+' · '+hit.meds.map(function(x){ return x.n; }).join('、') });
+          DOSE_NOTIFIED[nkey]=1;
+        }
+      }catch(e){}
+      return;                                          /* 页面看不见就先不弹 */
+    }
+    if(DOSE_OPEN===hit.t) return;                      /* 已经在弹同一个 */
+    doseShow(hit);
+  }catch(e){}
+}
+function doseInit(){
+  if(document.getElementById('doseMask')) return;
+  var m=document.createElement('div');
+  m.id='doseMask';
+  m.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99999;align-items:center;justify-content:center;padding:16px';
+  m.innerHTML='<div style="background:var(--card-bg,#23232a);border:1px solid var(--card-border);border-radius:14px;padding:18px;max-width:340px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.45);max-height:82vh;overflow:auto"><div id="doseBody"></div></div>';
+  document.body.appendChild(m);
+  setInterval(doseTick, 30000);
+  setTimeout(doseTick, 3000);
 }
 
 /* 用药弹窗：一次就诊 + 若干药品行 */
@@ -33905,6 +34059,7 @@ var HP_INIT = false;
 function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
+  if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
   var k = S.tab || 'map';
   try {
     if (k === 'map')        { renderBodyMap(); renderCheck(); renderCkLink(); }
@@ -33941,6 +34096,11 @@ function hpClearDemo(){
   window.medAdd = medAdd;
   window.medDel = medDel;
   window.medEdit = medEdit;
+  window.doseDebug = { perDay:dosePerDay, plan:dosePlan, slot:doseSlot, show:doseShow, tick:doseTick, load:HLOAD, get DOSE(){ return DOSE; } };
+  window.doseDismiss = doseDismiss;
+  window.doseMark = doseMark;
+  window.doseSnooze = doseSnooze;
+  window.doseTakeSlot = doseTakeSlot;
   window.medAiCard = medAiCard;
   window.medAiCopy = medAiCopy;
   window.medAiVisit = medAiVisit;
@@ -36120,7 +36280,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609141311";
+        window.NIKO_VERSION = "202609141328";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
