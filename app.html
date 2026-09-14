@@ -32903,7 +32903,8 @@ function visitCard(v){
     '<div class="mx-w"><table class="mxt"><thead><tr><th>药名</th><th>规格</th><th>用法</th><th>时机</th><th>疗程</th></tr></thead><tbody>'+items+'</tbody></table></div>'+
     (v.eff?('<div class="mx-note"><b>吃完什么感觉：</b>'+esc(v.eff)+'</div>'):'')+
     (v.side?('<div class="mx-note"><b>副作用：</b>'+esc(v.side)+'</div>'):'')+
-    '<div class="hx-acts"><button class="btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
+    '<div class="hx-acts"><button class="btn sm" onclick="medAiVisit(\''+v.id+'\')">🤖 问 AI</button>'+
+      '<button class="btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
       '<button class="btn sm dg" onclick="medDel(\''+v.id+'\')">🗑 删除</button></div></div>';
 }
 function medSafety(){
@@ -32925,6 +32926,7 @@ function renderMed(){
   var st=medStat();
   if(document.getElementById('medSub')) document.getElementById('medSub').textContent=st.visits+' 次开药 · '+st.list.length+' 种药';
   var h='<div class="mx-top">'+kpi(st.visits,'次就诊开药')+kpi(st.list.length,'种不同的药')+kpi(st.active,'次还在吃')+'</div>';
+  h+=medAiCard();
   h+='<div class="card" style="margin-bottom:14px">'+
     '<div style="font-size:13px;font-weight:700;margin-bottom:8px">💊 药物汇总比对 <span style="font-size:11px;color:var(--muted);font-weight:400">同一种药开过几次、一共吃多少天 —— 点一行看它出现在哪几次</span></div>'+
     '<div class="mx-w"><table class="mxt"><thead><tr><th>药名</th><th>开过</th><th>累计天数</th><th>最近一次</th><th>用于什么</th></tr></thead><tbody>'+
@@ -32943,6 +32945,108 @@ function renderMed(){
   h+= medSafety();
   box.innerHTML=h;
 }
+/* ===================== 用药 · 一键问 AI（2026-09-14） ===================== */
+/* 把用药记录里「还在吃」的药 + 用户固定情况（含 8:50 公司吃第一顿）拼成提示词，一键复制去问任意 AI */
+function medAiActiveItems(){
+  var act=MEDS.filter(function(v){ return v.st==='active'&&v.real; }).sort(function(a,b){ return a.date<b.date?1:-1; });
+  var src=act.length?act:MEDS.slice().sort(function(a,b){ return a.date<b.date?1:-1; }).slice(0,1);
+  var out=[], seen={};
+  src.forEach(function(v){ (v.items||[]).forEach(function(it){
+    var k=String(it.n||'').replace(/\s+/g,''); if(!k||seen[k]) return; seen[k]=1; out.push({v:v,it:it});
+  }); });
+  return out;
+}
+function medAiCtx(){
+  return '我的情况：男性，29 岁。颈椎病 · 颈椎曲度变直（目前还不严重，肩胛骨偶尔疼），长期伏案做视频、久坐。\n'+
+    '医生核心医嘱：不能长时间保持一个动作。饮食忌口：牛肉、羊肉、发物。不喝酒。\n'+
+    '吃药习惯：每天早上 8:50 在公司吃第一顿（白天在公司上班，晚上回家）。\n';
+}
+function medAiMedLines(){
+  var arr=medAiActiveItems();
+  if(!arr.length) return '（用药记录里还没有药，请先在用药记录里录入）\n';
+  return arr.map(function(o,i){
+    var it=o.it, extra='';
+    if(o.v.date && it.d){ var day=dDiff(o.v.date,todayStr())+1; if(day>=1) extra=' · 今天是第 '+day+' 天（疗程 '+it.d+' 天）'; }
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'频次见处方')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+extra+'\n';
+  }).join('');
+}
+function medAiPrompt(kind){
+  var meds=medAiMedLines();
+  if(kind==='time'){
+    return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+      '\n请结合我「早上 8:50 在公司吃第一顿」的习惯，帮我排一张具体的服药时间表：\n'+
+      '① 每种药一天吃几次、两次之间至少隔几小时；\n'+
+      '② 每一顿具体几点吃、在公司吃还是在家吃（我白天在公司、晚上回家）；\n'+
+      '③ 饭前还是饭后、和三餐怎么错开；\n'+
+      '④ 哪一顿忘了吃怎么办。\n'+
+      '用大白话、条目式，直接给时间表，别写套话。\n';
+  }
+  if(kind==='food'){
+    return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+      '\n请帮我整理：\n'+
+      '① 这几种药之间有没有相互作用、能不能一起吃；\n'+
+      '② 服药期间的饮食禁忌（我本来就忌口牛肉、羊肉、发物，告诉我还要额外注意什么）；\n'+
+      '③ 有没有要避开的饮料、保健品；\n'+
+      '④ 出现哪些情况要停药立即就医。\n'+
+      '用大白话、条目式，别写免责声明套话。\n';
+  }
+  return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+    '\n请帮我整理一份用药注意事项：\n'+
+    '① 每种药是治什么的、饭前还是饭后吃；\n'+
+    '② 这几种药能不能一起吃；\n'+
+    '③ 服药期间要注意什么（我长期久坐伏案做视频）；\n'+
+    '④ 饮食禁忌；\n'+
+    '⑤ 出现哪些情况要停药就医。\n'+
+    '用大白话、条目式，别写免责声明套话。\n';
+}
+function medAiVisitPrompt(id){
+  var v=null; MEDS.forEach(function(x){ if(x.id===id) v=x; }); if(!v) return '';
+  var meds=(v.items||[]).filter(function(it){ return String(it.n||'').trim(); }).map(function(it,i){
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+'\n';
+  }).join('')||'（未录药品）\n';
+  return medAiCtx()+'我在 '+(v.date||'（日期未记）')+' 因为「'+(v.diag||'未记诊断')+'」去看了 '+(v.hosp||'医生')+'，医生开了这些药：\n'+meds+
+    '\n请帮我整理这次开药的注意事项：\n'+
+    '① 每种药是治什么的、怎么吃；\n'+
+    '② 这几种药能不能一起吃；\n'+
+    '③ 服药期间要注意什么（我长期久坐伏案做视频）；\n'+
+    '④ 饮食禁忌（我忌口牛肉、羊肉、发物）；\n'+
+    '⑤ 出现哪些情况要停药就医。\n'+
+    '用大白话、条目式，别写免责声明套话。\n';
+}
+function medAiToClip(text, okMsg){
+  function ok(){ pvToast(okMsg); }
+  function fallback(){
+    try{
+      var ta=document.createElement('textarea'); ta.value=text;
+      ta.style.cssText='position:fixed;opacity:0;left:-999px;top:0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var done=document.execCommand('copy'); document.body.removeChild(ta);
+      if(done) ok(); else pvToast('复制失败，请手动复制');
+    }catch(e){ pvToast('复制失败，请手动复制'); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok, fallback);
+  } else fallback();
+}
+function medAiCopy(kind){ medAiToClip(medAiPrompt(kind), '提示词已复制 · 去粘贴给 AI 吧 ✓'); }
+function medAiVisit(id){
+  var t=medAiVisitPrompt(id); if(!t) return;
+  medAiToClip(t, '这次开药的提示词已复制 ✓');
+}
+function medAiCard(){
+  var n=medAiActiveItems().length;
+  return '<div class="card" style="margin-bottom:14px">'+
+    '<div style="font-size:13px;font-weight:700;margin-bottom:2px">🤖 一键问 AI · 用药叮嘱</div>'+
+    '<div style="font-size:11px;color:var(--muted);margin-bottom:9px">点一条 → 提示词自动带上你「还在吃」的药、忌口和 8:50 吃第一顿的习惯 → 直接去粘贴给任意 AI</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      '<span class="chip sm" onclick="medAiCopy(\'all\')">📋 整体注意事项</span>'+
+      '<span class="chip sm" onclick="medAiCopy(\'time\')">⏰ 一天怎么吃</span>'+
+      '<span class="chip sm" onclick="medAiCopy(\'food\')">🥗 忌口 · 相互作用</span>'+
+    '</div>'+
+    (n?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">还没有「还在吃」的真实记录 —— 现在点会按最近一次开药生成；把新处方记进来会自动更新</div>')+
+    '</div>';
+}
+
 /* 用药弹窗：一次就诊 + 若干药品行 */
 var GM={ v:null };
 function gClose(){ document.getElementById('mask3').classList.remove('on'); }
@@ -33837,6 +33941,9 @@ function hpClearDemo(){
   window.medAdd = medAdd;
   window.medDel = medDel;
   window.medEdit = medEdit;
+  window.medAiCard = medAiCard;
+  window.medAiCopy = medAiCopy;
+  window.medAiVisit = medAiVisit;
   window.medFocus = medFocus;
   window.medRowAdd = medRowAdd;
   window.medRowDel = medRowDel;
@@ -36013,7 +36120,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609141234";
+        window.NIKO_VERSION = "202609141311";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
