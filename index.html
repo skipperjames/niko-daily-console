@@ -13961,9 +13961,9 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
     <div class="sec">
       <div class="sec-hd"><span>🤒 小病复发记录</span><span class="sub" id="minorSub"></span></div>
       <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
-        <button class="hp-btn p" onclick="mnAdd()">＋ 记一次发作</button>
+        <button class="hp-btn p" onclick="mnAdd()">⚡ 现在不舒服</button>
         <button class="hp-btn p" onclick="pasteOpen('minor')">📋 粘贴一句话</button>
-        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">口腔溃疡、落枕、偏头痛这类「反复来、每次几天」的小病，<b>记一次看不出什么，记十次就能看出周期</b>：多久来一次、一次几天、什么条件会触发。</span>
+        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">记一次看不出什么，记十次就能看出周期 —— 下面自动帮你总结成<b>主诉摘要</b>，复诊直接给医生。</span>
       </div>
       <div id="minorBody"></div>
     </div>
@@ -32794,6 +32794,7 @@ function renderPickChips(){
     : '<b style="color:var(--muted)">还没选部位</b>';
 }
 function pvPickToggle(z){ var i=S.pick.indexOf(z); if(i>=0) S.pick.splice(i,1); renderPickFigs(); }
+function pvNoZone(){ S.pick=[]; renderPickFigs(); }
 
 function pvAdd(zone){
   S.editing=null; S.pick = zone?[zone]:[];
@@ -33475,6 +33476,47 @@ function mnScience(name){
     '<li><b>红旗信号照旧</b>：症状快速加重、持续不缓解、伴发热/消瘦/关节痛，别等记录完整，直接就医。</li>'+
     '</ul><div class="src">口径：记录工具，不诊断。具体病种的循证科普由我查证后逐条挂上（口腔溃疡已挂好）。</div></div></div>';
 }
+/* —— 患者视角：主诉摘要（给医生看的）+ 复发节奏提醒 —— */
+function mnTopOf(f, st, n){
+  var c={}; st.eps.forEach(function(e){ (e[f]||[]).forEach(function(x){ x=String(x).trim(); if(x) c[x]=(c[x]||0)+1; }); });
+  return Object.keys(c).sort(function(p,q){ return c[q]-c[p]; }).slice(0,n||3);
+}
+function mnDocText(name, st){
+  var trigs=mnTopOf('trig',st,3), cares=mnTopOf('care',st,3), sites=mnTopOf('sites',st,2);
+  var durs=st.eps.map(function(e){ return dDiff(e.start,e.end)+1; });
+  var dmin=Math.min.apply(null,durs), dmax=Math.max.apply(null,durs);
+  var last=st.eps[st.eps.length-1];
+  var s=name+'，近 '+st.mo.length+' 个月里发作 '+st.n+' 次';
+  if(!isNaN(st.avgGap)) s+='，平均约 '+Math.round(st.avgGap)+' 天复发一次';
+  s+='，每次持续 '+dmin+(dmax>dmin?(' 到 '+dmax):'')+' 天';
+  if(sites.length) s+='；多长在 '+sites.join('、');
+  if(trigs.length) s+='；发作前的常见诱因：'+trigs.join('、');
+  if(cares.length) s+='；试过 '+cares.join('、');
+  if(last) s+='。最近一次：'+last.start+' 到 '+last.end+((last.sites&&last.sites.length)?('（'+last.sites.join('、')+'）'):'')+((last.care&&last.care.length)?('，用了'+last.care.join('、')):'');
+  return s+'。';
+}
+function mnCopyDoc(){
+  var st=minorStat(MNSEL);
+  medAiToClip(mnDocText(MNSEL,st),'主诉摘要已复制 · 复诊时直接给医生看 ✓');
+}
+function mnRemind(name, st){
+  var last=st.eps[st.eps.length-1]; if(!last) return '';
+  var trigs=mnTopOf('trig',st,2);
+  var inner, tone;
+  if(isNaN(st.avgGap)){
+    inner='已经记了 <b>'+st.n+'</b> 次。再记 1 次就能看出你的复发间隔 —— 每次顺手记下<b>诱因</b>（熬夜/吃辣/受凉），攒到 8~10 次触发条件就浮出来了。'; tone='var(--muted)';
+  } else {
+    var avg=Math.round(st.avgGap), left=avg-st.sinceLast;
+    if(left<=0){
+      inner='<b style="color:var(--danger)">已距上次 '+st.sinceLast+' 天，超过你的平均间隔 '+avg+' 天</b> —— 按你自己的节奏，随时可能复发。留意上次发作前的信号'+(trigs.length?('（你常见诱因：'+trigs.join('、')+'）'):'')+'。'; tone='var(--warn)';
+    } else {
+      inner='距上次 <b>'+st.sinceLast+' 天</b>；按平均节奏，约 <b style="color:var(--text)">'+left+' 天后</b>进入复发窗口。'+(trigs.length?('近几次多是 <b>'+trigs.join('、')+'</b> 之后发作 —— 这几天有这些行为就多留意。'):'');
+      tone='var(--muted)';
+    }
+  }
+  return '<div class="card" style="margin-bottom:12px;display:flex;gap:9px;align-items:flex-start;border-left:3px solid '+tone+'">'+
+    '<span style="font-size:16px">⏰</span><div style="font-size:12.5px;line-height:1.7;color:var(--muted)"><b style="color:var(--text)">'+esc(name)+' · 复发节奏</b>　'+inner+'</div></div>';
+}
 function renderMinor(){
   var box=document.getElementById('minorBody'); if(!box) return;
   var names=mnNames(); if(names.indexOf(MNSEL)<0) MNSEL=names[0]||'';
@@ -33482,28 +33524,35 @@ function renderMinor(){
   if(document.getElementById('minorSub')) document.getElementById('minorSub').textContent=names.length+' 种小病 · 共 '+MINOR.length+' 次发作';
   var h='<div class="bp-mode" style="margin-bottom:12px"><label>看哪个病</label>'+
     names.map(function(n){ return '<span class="chip sm'+(n===MNSEL?' on':'')+'" onclick="MNSEL=\''+esc(n)+'\';renderMinor()">'+esc(n)+'</span>'; }).join('')+
-    '<span style="margin-left:auto;font-size:11px;color:var(--muted)">换一个病看它的独立周期</span></div>';
-  if(!st.n){ box.innerHTML=h+'<div class="hx-empty"><span class="big">＋</span>还没有这一种的记录，点上面「＋ 记一次发作」开始攒。</div>'; return; }
-  h+='<div class="mx-top">'+
-    kpi(st.n+' 次','总共发作')+
-    kpi(isNaN(st.avgGap)?'—':Math.round(st.avgGap)+' 天','平均间隔')+
-    kpi(isNaN(st.sinceLast)?'—':st.sinceLast+' 天','距上次发作')+
     '</div>';
-  h+='<div class="mx-top" style="grid-template-columns:repeat(3,minmax(0,1fr))">'+
-    kpi(isNaN(st.avgDur)?'—':st.avgDur.toFixed(1)+' 天','平均持续')+
-    kpi(isNaN(st.minGap)?'—':st.minGap+' 天','最短间隔')+
-    kpi(isNaN(st.maxGap)?'—':st.maxGap+' 天','最长间隔')+
-    '</div>';
-  h+='<div class="card" style="margin-bottom:14px">'+
-    '<div style="font-size:13px;font-weight:700">📅 发作频率分布</div>'+
-    mnBars(st)+
-    (isNaN(st.avgGap)?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">按你自己的记录算：平均 <b style="color:var(--text)">'+Math.round(st.avgGap)+' 天</b>一次（约 '+(st.avgGap/30.4).toFixed(1)+' 个月），最快 '+st.minGap+' 天、最慢 '+st.maxGap+' 天。<b>这只是观察值，不是预测</b>。</div>')+
-    '</div>';
-  h+='<div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:2px">🧭 发作时间轴 <span style="font-size:11px;color:var(--muted);font-weight:400">最近的排最上面 · 左边是「距上次多少天」</span></div><div class="mn-tl">';
+  if(!st.n){ box.innerHTML=h+'<div class="hx-empty"><span class="big">⚡</span>还没有「'+esc(MNSEL)+'」的记录，点上面「⚡ 现在不舒服」开始攒。</div>'; return; }
+  /* ① 主诉摘要卡：一句话总结这个病的全部关键信息，复制给医生 */
+  h+='<div class="card" style="margin-bottom:12px">'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+      '<span style="font-size:13px;font-weight:700">🩺 带给医生看 · 主诉摘要</span>'+
+      '<button class="btn sm" style="margin-left:auto" onclick="mnCopyDoc()">📋 复制这段话</button></div>'+
+    '<div style="font-size:12.5px;line-height:1.75">'+esc(mnDocText(MNSEL,st))+'</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">'+
+      '<span class="chip sm" style="cursor:default">共 '+st.n+' 次</span>'+
+      (isNaN(st.avgGap)?'':'<span class="chip sm" style="cursor:default">平均 '+Math.round(st.avgGap)+' 天一次</span>')+
+      '<span class="chip sm" style="cursor:default">每次约 '+(isNaN(st.avgDur)?'—':st.avgDur.toFixed(1))+' 天</span>'+
+      (isNaN(st.sinceLast)?'':'<span class="chip sm" style="cursor:default">距上次 '+st.sinceLast+' 天</span>')+
+    '</div></div>';
+  /* ② 节奏提醒 */
+  h+=mnRemind(MNSEL,st);
+  /* ③ 最近 3 次（紧凑，一眼看到最近发生了什么） */
+  h+='<div style="font-size:13px;font-weight:700;margin:14px 0 8px">🕘 最近发作 <span style="font-size:11px;color:var(--muted);font-weight:400">下面可展开全部 '+st.n+' 次</span></div>';
   var asc=st.eps;
-  for(var i=asc.length-1;i>=0;i--){ h+=mnEpRow(asc[i], i>0?asc[i-1]:null, i); }
-  h+='</div></div>';
-  h+= mnScience(MNSEL);
+  for(var i=asc.length-1;i>=0 && i>asc.length-4;i--){ h+=mnEpRow(asc[i], i>0?asc[i-1]:null, i); }
+  /* ④ 全量时间轴 + 月度分布（折叠） */
+  h+='<details class="mx-fold" style="margin-top:10px"><summary>📅 全部 '+st.n+' 次时间轴 + 月度分布 <span class="cv">▸</span></summary><div class="mx-fbody">'+
+    '<div class="card" style="margin-bottom:12px"><div style="font-size:13px;font-weight:700">📈 发作频率分布</div>'+mnBars(st)+
+    (isNaN(st.avgGap)?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">按你自己的记录算：平均 <b style="color:var(--text)">'+Math.round(st.avgGap)+' 天</b>一次（约 '+(st.avgGap/30.4).toFixed(1)+' 个月），最快 '+st.minGap+' 天、最慢 '+st.maxGap+' 天。<b>这只是观察值，不是预测</b>。</div>')+'</div>'+
+    '<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:2px">🧭 完整时间轴 <span style="font-size:11px;color:var(--muted);font-weight:400">左边是「距上次多少天」</span></div><div class="mn-tl">';
+  for(var j=asc.length-1;j>=0;j--){ h+=mnEpRow(asc[j], j>0?asc[j-1]:null, j); }
+  h+='</div></div></div></details>';
+  /* ⑤ 循证科普（折叠） */
+  h+='<details class="mx-fold" style="margin-top:10px"><summary>📚 这个病怎么少发作 · 循证科普 <span class="cv">▸</span></summary><div class="mx-fbody">'+mnScience(MNSEL)+'</div></details>';
   box.innerHTML=h;
 }
 function mnFormHtml(){
@@ -33513,7 +33562,7 @@ function mnFormHtml(){
      '<div class="fld"><label>② 哪天开始</label><input type="date" id="gn_start" value="'+esc(v.start)+'" oninput="GM.v.start=this.value"></div>'+
      '<div class="fld"><label>③ 哪天结束（还在就填今天）</label><input type="date" id="gn_end" value="'+esc(v.end)+'" oninput="GM.v.end=this.value"></div></div>'+
    '<div class="fld2">'+
-     '<div class="fld"><label>④ 长在哪儿 / 什么部位</label><input id="gn_sites" value="'+esc((v.sites||[]).join('、'))+'" oninput="GM.v.sites=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：舌尖、下唇"></div>'+
+     '<div class="fld"><label>④ 长在哪儿 / 什么部位（没有固定部位可留空，如鼻涕带血）</label><input id="gn_sites" value="'+esc((v.sites||[]).join('、'))+'" oninput="GM.v.sites=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：舌尖、下唇 · 可留空"></div>'+
      '<div class="fld"><label>⑤ 有几处</label><input id="gn_count" value="'+esc(v.count)+'" oninput="GM.v.count=+this.value||1" placeholder="1"></div></div>'+
    '<div class="fld2">'+
      '<div class="fld"><label>⑥ 严重度</label><select onchange="GM.v.sev=+this.value">'+
@@ -33751,8 +33800,8 @@ function rxPreview(){
 
 /* —— 小病粘贴 —— */
 var MNB=null;
-var MN_NAMES=['口腔溃疡','嘴溃疡','落枕','偏头痛','荨麻疹','过敏性鼻炎','麦粒肿','牙龈肿痛','肠胃炎','腰扭伤','口角炎','肩胛骨痛','颈肩痛','脖子疼'];
-var MN_SITES=['舌尖','舌边','舌下','舌根','上唇','下唇','嘴角','颊黏膜','牙龈','上颚','咽喉','肩胛骨','颈部','腰'];
+var MN_NAMES=['口腔溃疡','嘴溃疡','落枕','偏头痛','荨麻疹','过敏性鼻炎','麦粒肿','牙龈肿痛','肠胃炎','腰扭伤','口角炎','肩胛骨痛','颈肩痛','脖子疼','鼻涕带血','流鼻血','鼻塞','喉咙痛','咳嗽','结膜炎'];
+var MN_SITES=['舌尖','舌边','舌下','舌根','上唇','下唇','嘴角','颊黏膜','牙龈','上颚','咽喉','肩胛骨','颈部','腰','鼻','鼻腔','眼睛','耳朵','皮肤','全身'];
 var MN_TRIG=['熬夜','没睡好','睡不够','失眠','吃辣','上火','压力','紧张','焦虑','加班','月经','咬到','硬东西','烫','感冒','受凉','睡姿','开车','驾驶','久坐','长时间一个姿势'];
 function mnParse(txt){
   var raw=String(txt||''), o={name:'', start:'', end:'', sites:[], count:1, sev:2, trig:[], care:[], dr:false, note:'', dur:0, raw:raw};
@@ -34321,6 +34370,11 @@ function hpClearDemo(){
   window.mnAdd = mnAdd;
   window.mnQuick = mnQuick;
   window.mnSave = mnSave;
+  window.mnDocText = mnDocText;
+  window.mnRemind = mnRemind;
+  window.mnCopyDoc = mnCopyDoc;
+  window.pvNoZone = pvNoZone;
+  window.mnParse = mnParse;
   window.GM = GM;
   window.mnDel = mnDel;
   window.mnEdit = mnEdit;
@@ -36560,7 +36614,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609151234";
+        window.NIKO_VERSION = "202609151327";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
