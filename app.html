@@ -11104,6 +11104,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 }
 #nikoPet.dragging { cursor: grabbing; }
 #nikoPet.np-off { display: none !important; }
+/* ⏳ 时间胶囊：桌宠脚下的「连续在电脑前」时长，超 2 分钟不动自动归零（2026-09-14） */
+#nikoPet #npPill {
+    position: absolute; top: calc(100% + 5px); left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(26, 26, 30, .94); color: #fdba74;
+    font-size: 11px; font-weight: 700; letter-spacing: .02em;
+    border: 1px solid rgba(249, 115, 22, .45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .32);
+    pointer-events: none; z-index: 5; -webkit-user-select: none; user-select: none;
+}
+#nikoPet #npPill.idle { opacity: .55; border-color: rgba(148, 163, 184, .35); color: #cbd5e1; }
 #nikoPet:hover { filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .5)) brightness(1.06); }
 /* 本体：四段动作位图（112×121 · 72:78 · 与桌面版同一 box 裁切，切状态零跳动）
    2026-09-14 换血：原来那只手搓 SVG 小兽退役，改成即梦 + AE 出的四段动作帧 */
@@ -14059,6 +14071,7 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
     <div class="np-ring"></div>
     <div class="np-veil"></div>
     <div class="np-zzz">z z</div>
+    <div id="npPill" title="时间胶囊">⏳ 00:00 在电脑前</div>
 </div>
 <div id="nikoPetBubble"></div>
 <div id="nikoPetCfg" onclick="event.stopPropagation()">
@@ -33887,12 +33900,15 @@ function hpClearDemo(){
     var K_WIN = 'niko_pet_win';   // 位置记忆 {l,t}
     var K_CFG = 'niko_pet_cfg';   // 外观 {size,op,hue,on}
     var K_ACT = 'niko_pet_act';   // 最近一次操作时间戳（久坐判定，自动记录）
+    var K_CAP = 'niko_pet_cap';   // 时间胶囊：{d,total,sess,lastMove} 今日累计活跃 + 连续时长（2026-09-14）
+    var CAP_IDLE_MS = 2 * 60 * 1000;  // 超 2 分钟没操作 = 不在电脑前，连续时长归零
+    var CAP = { d: '', total: 0, sess: 0, lastMove: 0, lastTick: 0, tid: null, saveAt: 0, el: null };
     var K_HELLO = 'niko_pet_hello';
     var SIT_MS = 30 * 60 * 1000;  // 连续 30 分钟没起身
     var PLAY_MIN = 60;            // 可玩余额阈值（分钟）
     var SLEEP_HOUR = 22;          // 深夜阈值
     var LIKE_MS = 4600;           // 「刚完成」停留时长（≈ 点赞动作跑满一轮 4.62s）
-    var JOY_MS = 4800;            // 「起来动了」停留时长（≈ 开心动作跑满一轮 4.75s）
+    var JOY_MS = 14400;           // 「起来动了」停留时长（2026-09-14 用户要求：开心动作重复 3 轮 ≈ 4.75s × 3 = 14.25s，再回待机）
     var HUES = [168, 38, 268, 340, 210];
     var DEF = { size: 84, op: 100, hue: 168, on: false };
     var CFG_V = 2;   // 配置版本：v2 起「网页桌宠默认关」（桌面版小兽接管），没有 v 标记的老配置一律迁成关
@@ -34096,6 +34112,9 @@ function hpClearDemo(){
     function syncSetBtn() {
         var b = $('npSetBtn');
         if (b) { b.classList.toggle('on', !!CFG.on); b.textContent = CFG.on ? '🪔 显示桌宠（已开）' : '🪔 显示桌宠（已关）'; }
+        /* 2026-09-14：右上角快捷开关（总框架菜单簇），开/关状态实时跟手 */
+        var t = $('petToggleLabel');
+        if (t) t.textContent = CFG.on ? '收起 NIKO' : '唤出 NIKO';
     }
     function applyWin() {
         if (!PET) return;
@@ -34213,6 +34232,9 @@ function hpClearDemo(){
         }
         document.addEventListener('pointerdown', markAct, true);
         document.addEventListener('keydown', markAct, true);
+        document.addEventListener('pointermove', markAct, { passive: true });
+        document.addEventListener('wheel', markAct, { passive: true });
+        capStart();
         window.addEventListener('visibilitychange', function () { markAct(); tick(); });
         window.addEventListener('niko:storage-set', function (e) {
             var k = e && e.detail && e.detail.key;
@@ -34225,10 +34247,71 @@ function hpClearDemo(){
     function markAct() {
         var now = Date.now();
         ACT = now;
+        CAP.lastMove = now;
         if (now - NP.actAt < 30000) return;
         NP.actAt = now;
         sset(K_ACT, now);
     }
+
+    /* ---------- 时间胶囊：连续在电脑前时长（2026-09-14） ----------
+       页面里能看到的操作（鼠标/键盘/滚轮）都算「在电脑前」；
+       超 2 分钟没动静 → 连续时长归零；今日累计单独攒，跨刷新不断。 */
+    function capPad(n) { return (n < 10 ? '0' : '') + n; }
+    function capFmt(s) {
+        s = Math.floor(s);
+        var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+        return h ? (h + ':' + capPad(m) + ':' + capPad(x)) : (capPad(m) + ':' + capPad(x));
+    }
+    function capLoad() {
+        var c = sget(K_CAP, null), t = today();
+        if (c && typeof c === 'object' && c.d === t) {
+            CAP.d = t; CAP.total = Number(c.total) || 0; CAP.sess = Number(c.sess) || 0; CAP.lastMove = Number(c.lastMove) || 0;
+        } else { CAP.d = t; CAP.total = 0; CAP.sess = 0; CAP.lastMove = 0; }
+        if (Date.now() - CAP.lastMove > CAP_IDLE_MS) CAP.sess = 0;   // 上次离开超 2 分钟 → 开局归零
+        CAP.lastTick = Date.now();
+    }
+    function capSave(force) {
+        var now = Date.now();
+        if (!force && now - CAP.saveAt < 15000) return;
+        CAP.saveAt = now;
+        sset(K_CAP, { d: CAP.d, total: Math.round(CAP.total), sess: Math.round(CAP.sess), lastMove: CAP.lastMove });
+    }
+    function capTick() {
+        if (!CAP.el) return;
+        var now = Date.now();
+        var off = (window.innerWidth <= 768) || !CFG.on;             // 桌宠收起 / 手机端：不计时
+        if (off) { CAP.lastTick = now; return; }
+        if (now - CAP.lastMove > CAP_IDLE_MS) { CAP.sess = 0; }      // 2 分钟没动 → 归零
+        else if (!document.hidden) {
+            var dt = Math.min(now - CAP.lastTick, 5000) / 1000;      // 后台节流回来不狂加
+            if (dt > 0) { CAP.sess += dt; CAP.total += dt; }
+        }
+        CAP.lastTick = now;
+        var idle = now - CAP.lastMove > CAP_IDLE_MS;
+        CAP.el.innerHTML = idle ? '💤 休息中' : '🖱 ' + capFmt(CAP.sess) + ' 在电脑前';
+        CAP.el.classList.toggle('idle', idle);
+        CAP.el.title = '时间胶囊 · 今日累计活跃 ' + capFmt(CAP.total) + ' · 超 2 分钟不碰电脑自动归零';
+        capSave(false);
+    }
+    function capStart() {
+        capLoad();
+        CAP.el = $('npPill');
+        clearInterval(CAP.tid);
+        CAP.tid = setInterval(capTick, 1000);
+        capTick();
+    }
+    /* 门禁/排查用：nikoPetCap() 看当前状态，.feed() 喂一次活动，.tick() 手动走一秒 */
+    window.nikoPetCap = function () {
+        return {
+            sess: Math.round(CAP.sess), total: Math.round(CAP.total),
+            idleMs: Date.now() - CAP.lastMove, idleMsMax: CAP_IDLE_MS,
+            feed: function () { CAP.lastMove = Date.now(); CAP.lastTick = Date.now(); },
+            tick: capTick,
+            rewind: function (ms) { CAP.lastMove = Date.now() - ms; },
+            save: function () { capSave(true); },
+            zero: function () { CAP.sess = 0; CAP.total = 0; CAP.lastMove = Date.now(); CAP.lastTick = Date.now(); }
+        };
+    };
 
     window.nikoPetInit = nikoPetInit;
     window.nikoPetTick = tick;
@@ -36017,7 +36100,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609151451";
+        window.NIKO_VERSION = "202609160900";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
