@@ -11115,7 +11115,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 }
 #nikoPet.dragging { cursor: grabbing; }
 #nikoPet.np-off { display: none !important; }
-/* ⏳ 时间胶囊：桌宠脚下的「连续在电脑前」时长，离开超 5 分钟自动归零（2026-09-16 与桌面版连坐口径对齐） */
+/* ⏳ 时间胶囊：桌宠脚下的「连续在电脑前」时长，离开超 2 分钟自动归零（2026-09-16 用户定稿：2 分钟，与桌面版连坐口径对齐） */
 #nikoPet #npPill {
     position: absolute; top: calc(100% + 5px); left: 50%; transform: translateX(-50%);
     display: flex; align-items: center; gap: 5px; white-space: nowrap;
@@ -34449,7 +34449,7 @@ function hpClearDemo(){
     var K_CFG = 'niko_pet_cfg';   // 外观 {size,op,hue,on}
     var K_ACT = 'niko_pet_act';   // 最近一次操作时间戳（久坐判定，自动记录）
     var K_CAP = 'niko_pet_cap';   // 时间胶囊：{d,total,sess,lastMove} 今日累计活跃 + 连续时长（2026-09-14）
-    var CAP_IDLE_MS = 5 * 60 * 1000;  // 离开超 5 分钟 = 不在电脑前，连续时长归零（2026-09-16 用户拍板：跟桌面版连坐口径对齐）
+    var CAP_IDLE_MS = 2 * 60 * 1000;  // 离开超 2 分钟 = 不在电脑前，连续时长归零（2026-09-16 用户定稿：2 分钟，与桌面版连坐口径对齐）
     var CAP = { d: '', total: 0, sess: 0, lastMove: 0, lastTick: 0, tid: null, saveAt: 0, el: null };
     var K_HELLO = 'niko_pet_hello';
     var SIT_MS = 30 * 60 * 1000;  // 连续 30 分钟没起身
@@ -34809,7 +34809,7 @@ function hpClearDemo(){
 
     /* ---------- 时间胶囊：连续在电脑前时长（2026-09-14） ----------
        页面里能看到的操作（鼠标/键盘/滚轮）都算「在电脑前」；
-       离开超 5 分钟 → 连续时长归零；今日累计单独攒，跨刷新不断。 */
+       离开超 2 分钟 → 连续时长归零；今日累计单独攒，跨刷新不断。 */
     function capPad(n) { return (n < 10 ? '0' : '') + n; }
     function capFmt(s) {
         s = Math.floor(s);
@@ -34821,7 +34821,7 @@ function hpClearDemo(){
         if (c && typeof c === 'object' && c.d === t) {
             CAP.d = t; CAP.total = Number(c.total) || 0; CAP.sess = Number(c.sess) || 0; CAP.lastMove = Number(c.lastMove) || 0;
         } else { CAP.d = t; CAP.total = 0; CAP.sess = 0; CAP.lastMove = 0; }
-        if (Date.now() - CAP.lastMove > CAP_IDLE_MS) CAP.sess = 0;   // 上次离开超 5 分钟 → 开局归零
+        if (Date.now() - CAP.lastMove > CAP_IDLE_MS) CAP.sess = 0;   // 上次离开超 2 分钟 → 开局归零
         CAP.lastTick = Date.now();
     }
     function capSave(force) {
@@ -34835,7 +34835,7 @@ function hpClearDemo(){
         var now = Date.now();
         var off = (window.innerWidth <= 768) || !CFG.on;             // 桌宠收起 / 手机端：不计时
         if (off) { CAP.lastTick = now; return; }
-        if (now - CAP.lastMove > CAP_IDLE_MS) { CAP.sess = 0; }      // 离开超 5 分钟 → 归零
+        if (now - CAP.lastMove > CAP_IDLE_MS) { CAP.sess = 0; }      // 离开超 2 分钟 → 归零
         else if (!document.hidden) {
             var dt = Math.min(now - CAP.lastTick, 5000) / 1000;      // 后台节流回来不狂加
             if (dt > 0) { CAP.sess += dt; CAP.total += dt; }
@@ -34844,7 +34844,7 @@ function hpClearDemo(){
         var idle = now - CAP.lastMove > CAP_IDLE_MS;
         CAP.el.innerHTML = idle ? '💤 休息中' : '🖱 ' + capFmt(CAP.sess) + ' 在电脑前';
         CAP.el.classList.toggle('idle', idle);
-        CAP.el.title = '时间胶囊 · 今日累计活跃 ' + capFmt(CAP.total) + ' · 离开超 5 分钟自动归零';
+        CAP.el.title = '时间胶囊 · 今日累计活跃 ' + capFmt(CAP.total) + ' · 离开超 2 分钟自动归零';
         capSave(false);
     }
     function capStart() {
@@ -36654,7 +36654,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609161228";
+        window.NIKO_VERSION = "202609161306";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
