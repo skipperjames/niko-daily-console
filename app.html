@@ -10908,6 +10908,17 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .mx-vh .h{font-size:11.5px;color:var(--muted)}
 .mx-note{font-size:11.5px;color:var(--muted);margin-top:8px;line-height:1.65}
 .mx-note b{color:var(--text)}
+/* 2026-09-15 用药 tab 重排：就诊历史 / 汇总 / 安全卡全部折叠收纳，首屏只留「今天怎么吃 + 还在吃的药」 */
+.mx-fold{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden}
+.mx-fold>summary{cursor:pointer;list-style:none;padding:10px 13px;font-size:12.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;user-select:none}
+.mx-fold>summary::-webkit-details-marker{display:none}
+.mx-fold>summary::before{content:'▸';color:var(--muted);font-size:11px;flex:0 0 auto;transition:transform .16s}
+.mx-fold[open]>summary::before{transform:rotate(90deg)}
+.mx-fold[open]>summary{border-bottom:1px dashed var(--card-border)}
+.mx-fbody{padding:11px 13px}
+.mx-now-row{display:flex;gap:9px;align-items:baseline;padding:8px 0;border-bottom:1px dashed var(--card-border);flex-wrap:wrap}
+.mx-now-row:last-child{border-bottom:0}
+.mx-prog{font-variant-numeric:tabular-nums;font-size:11.5px;white-space:nowrap}
 /* ===================== v5 小病复发 ===================== */
 .mn-bars{display:flex;align-items:flex-end;gap:5px;height:96px;margin:12px 0 2px;padding-top:4px}
 .mn-bars i{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;font-style:normal;min-width:0}
@@ -11104,6 +11115,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 }
 #nikoPet.dragging { cursor: grabbing; }
 #nikoPet.np-off { display: none !important; }
+/* ⏳ 时间胶囊：桌宠脚下的「连续在电脑前」时长，离开超 5 分钟自动归零（2026-09-16 与桌面版连坐口径对齐） */
+#nikoPet #npPill {
+    position: absolute; top: calc(100% + 5px); left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 5px; white-space: nowrap;
+    padding: 3px 10px; border-radius: 999px;
+    background: rgba(26, 26, 30, .94); color: #fdba74;
+    font-size: 11px; font-weight: 700; letter-spacing: .02em;
+    border: 1px solid rgba(249, 115, 22, .45);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .32);
+    pointer-events: none; z-index: 5; -webkit-user-select: none; user-select: none;
+}
+#nikoPet #npPill.idle { opacity: .55; border-color: rgba(148, 163, 184, .35); color: #cbd5e1; }
 #nikoPet:hover { filter: drop-shadow(0 12px 24px rgba(0, 0, 0, .5)) brightness(1.06); }
 /* 本体：四段动作位图（112×121 · 72:78 · 与桌面版同一 box 裁切，切状态零跳动）
    2026-09-14 换血：原来那只手搓 SVG 小兽退役，改成即梦 + AE 出的四段动作帧 */
@@ -11762,6 +11785,11 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
         <button class="dark-mode-toggle" onclick="toggleNikoFullscreen()" id="fullscreenToggleBtn" title="全屏模式：隐藏浏览器地址栏，屏幕全是 NIKO">
             <span class="toggle-icon">⛶</span>
             <span>全屏模式</span>
+        </button>
+        <!-- NIKO 桌宠快捷开关（2026-09-14 用户要求：自己随手隐藏/显示；手机端无桌宠，不加进「更多」菜单） -->
+        <button class="dark-mode-toggle" onclick="nikoPetToggleFromSetting()" id="petToggleBtn" title="显示/隐藏右下角的 NIKO 桌宠">
+            <span class="toggle-icon">🪔</span>
+            <span id="petToggleLabel">唤出 NIKO</span>
         </button>
     </div>
 
@@ -13807,6 +13835,14 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
         <div class="pv7-stats" id="ovStats"></div>
       </div>
       <div class="pv7-rx" id="ovRx"></div>
+      <div class="card" style="margin:0 0 14px;border:1px solid rgba(255,138,76,.5);background:linear-gradient(135deg,rgba(255,138,76,.12),rgba(255,138,76,.02));display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px">
+        <div style="font-size:13.5px;font-weight:700">⚠️ 现在发作了？<span style="font-weight:400;font-size:11.5px;color:var(--muted)">点一下预填好，确认就进档案时间线 —— 发作周期越记越准，复诊时给医生看</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto">
+          <button class="hp-btn p" onclick="mnQuick('肩胛骨痛',['肩胛骨'],['开车','久坐'])">⚡ 肩胛骨痛</button>
+          <button class="hp-btn" onclick="mnQuick('落枕',['颈部'],['睡姿'])">😴 落枕</button>
+          <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
+        </div>
+      </div>
       <div class="ov-hero">
       <div class="scn-card">
         <div class="scn-hd"><span>🧍 身体地图</span><span class="bdg" id="hpBpCount">0 处记录</span>
@@ -13929,11 +13965,6 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
 <div class="panel" id="p-med">
     <div class="sec">
       <div class="sec-hd"><span>💊 用药记录 · 医生给我开过什么药</span><span class="sub" id="medSub"></span></div>
-      <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
-        <button class="hp-btn p" onclick="medAdd()">＋ 记一次开药</button>
-        <button class="hp-btn p" onclick="pasteOpen('med')">📋 粘贴处方 / 药盒文字</button>
-        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">每次看病开了什么药、吃几天、吃完什么感觉都记在这儿。复诊时直接把「药物汇总」给医生看 —— 能防重复开药、能看出哪种药对你真有效。</span>
-      </div>
       <div id="medBody"></div>
     </div>
   </div>
@@ -13942,9 +13973,9 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
     <div class="sec">
       <div class="sec-hd"><span>🤒 小病复发记录</span><span class="sub" id="minorSub"></span></div>
       <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
-        <button class="hp-btn p" onclick="mnAdd()">＋ 记一次发作</button>
+        <button class="hp-btn p" onclick="mnAdd()">⚡ 现在不舒服</button>
         <button class="hp-btn p" onclick="pasteOpen('minor')">📋 粘贴一句话</button>
-        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">口腔溃疡、落枕、偏头痛这类「反复来、每次几天」的小病，<b>记一次看不出什么，记十次就能看出周期</b>：多久来一次、一次几天、什么条件会触发。</span>
+        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">记一次看不出什么，记十次就能看出周期 —— 下面自动帮你总结成<b>主诉摘要</b>，复诊直接给医生。</span>
       </div>
       <div id="minorBody"></div>
     </div>
@@ -14059,6 +14090,7 @@ body.dark-mode .np-set-btn.on { border-color: #34d399; color: #6ee7b7; }
     <div class="np-ring"></div>
     <div class="np-veil"></div>
     <div class="np-zzz">z z</div>
+    <div id="npPill" title="时间胶囊">⏳ 00:00 在电脑前</div>
 </div>
 <div id="nikoPetBubble"></div>
 <div id="nikoPetCfg" onclick="event.stopPropagation()">
@@ -32048,13 +32080,15 @@ function HLOAD(){
   if (Array.isArray(d.days))  DAYS  = d.days;
   if (Array.isArray(d.self14))SELF14= d.self14;
   if (d.ck && typeof d.ck === 'object') CK_DONE = d.ck;
+  if (d.dose && typeof d.dose === 'object') DOSE = d.dose;
+  if (d.doseCfg && typeof d.doseCfg === 'object') DOSE_CFG = d.doseCfg;
   return true;
 }
 function HSAVE(){
   try {
     safeStorage.set(HK, { v:1, t:Date.now(),
       hist:HIST, meds:MEDS, minor:MINOR, watch:WATCH,
-      days:DAYS, self14:SELF14, ck:CK_DONE });
+      days:DAYS, self14:SELF14, ck:CK_DONE, dose:DOSE, doseCfg:DOSE_CFG });
   } catch (e) {}
 }
 
@@ -32772,6 +32806,7 @@ function renderPickChips(){
     : '<b style="color:var(--muted)">还没选部位</b>';
 }
 function pvPickToggle(z){ var i=S.pick.indexOf(z); if(i>=0) S.pick.splice(i,1); renderPickFigs(); }
+function pvNoZone(){ S.pick=[]; renderPickFigs(); }
 
 function pvAdd(zone){
   S.editing=null; S.pick = zone?[zone]:[];
@@ -32901,21 +32936,30 @@ function visitCard(v){
     return '<tr><td class="nm">'+esc(it.n)+(it.note?('<div style="font-weight:400;color:var(--muted);font-size:11px">'+esc(it.note)+'</div>'):'')+'</td>'+
       '<td class="num">'+esc(it.s||'—')+'</td><td>'+esc(it.f||'—')+'</td><td>'+esc(it.t||'—')+'</td><td class="num">'+(it.d?it.d+' 天':'—')+'</td></tr>';
   }).join('');
-  return '<div class="mx-visit">'+
-    '<div class="mx-vh"><span class="d">'+esc(v.date||'—')+'</span>'+
-      '<span class="hx-tag '+(v.st==='active'?'t-active':'t-old')+'">'+(v.st==='active'?'还在吃':'已经停了')+'</span>'+
-      (v.real?'<span class="hx-tag t-demo" style="border-style:solid">你的真实记录</span>':'<span class="hx-tag t-demo">示例占位 · 等你填</span>')+
-      '<span class="h" style="margin-left:auto">🏥 '+esc(v.hosp||'—')+'</span></div>'+
-    (v.diag?('<div style="font-size:12.5px;margin:2px 0 6px"><b>诊断：</b>'+esc(v.diag)+'</div>'):'')+
+  var n=(v.items||[]).filter(function(it){ return String(it.n||'').trim(); }).length;
+  return '<details class="mx-fold">'+
+    '<summary>'+
+      '<span style="font-size:13px;font-weight:800;font-variant-numeric:tabular-nums">'+esc(v.date||'—')+'</span>'+
+      '<span class="hx-tag '+(v.st==='active'?'t-active':'t-old')+'">'+(v.st==='active'?'还在吃':'已停')+'</span>'+
+      (v.real?'':'<span class="hx-tag t-demo">示例</span>')+
+      '<span style="font-size:11.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(v.hosp||'—')+(v.diag?(' · '+esc(v.diag)):'')+'</span>'+
+      '<span style="margin-left:auto;font-size:11px;color:var(--muted);flex:0 0 auto">'+n+' 种药</span>'+
+    '</summary><div class="mx-fbody">'+
+    (((v.avoid&&v.avoid.length)||(v.cavoid&&v.cavoid.length))?('<div style="font-size:11.5px;margin:0 0 8px">'+
+      ((v.avoid&&v.avoid.length)?('<span class="hx-tag t-demo" style="border-style:solid">💊 用药忌口：'+esc([].concat(v.avoid).join('、'))+'</span> '):'')+
+      ((v.cavoid&&v.cavoid.length)?('<span class="hx-tag t-demo" style="border-style:solid">🍲 病情忌口：'+esc([].concat(v.cavoid).join('、'))+'</span>'):'')+
+      '</div>'):'')+
     '<div class="mx-w"><table class="mxt"><thead><tr><th>药名</th><th>规格</th><th>用法</th><th>时机</th><th>疗程</th></tr></thead><tbody>'+items+'</tbody></table></div>'+
     (v.eff?('<div class="mx-note"><b>吃完什么感觉：</b>'+esc(v.eff)+'</div>'):'')+
     (v.side?('<div class="mx-note"><b>副作用：</b>'+esc(v.side)+'</div>'):'')+
-    '<div class="hx-acts"><button class="btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
-      '<button class="btn sm dg" onclick="medDel(\''+v.id+'\')">🗑 删除</button></div></div>';
+    '<div class="hx-acts"><button class="btn sm" onclick="medAiVisit(\''+v.id+'\')">🤖 这次开药问 AI</button>'+
+      '<button class="btn sm" onclick="medEdit(\''+v.id+'\')">✏️ 编辑</button>'+
+      '<button class="btn sm dg" onclick="medDel(\''+v.id+'\')">🗑 删除</button></div></div></details>';
 }
 function medSafety(){
-  return '<div class="sci" style="margin-top:14px"><div class="sci-card full">'+
-    '<h5>💊 记药是为了给医生看，不是为了自己改药 <span class="ev e">E · 用药安全常识</span></h5>'+
+  return '<details class="mx-fold" style="margin-top:12px"><summary>'+
+    '<span style="font-size:12.5px;font-weight:700">🛟 记药安全常识</span>'+
+    '<span style="font-size:11px;color:var(--muted)">疗程吃完 · 别自行加量 · 酒 · 这些信号要立即就医</span></summary><div class="mx-fbody"><div class="sci-card full">'+
     '<div class="sub">下面几条是「记录时顺手能做到」的事，不涉及任何具体用药建议</div>'+
     '<ul>'+
       '<li><b>把「药名 + 规格 + 用法 + 疗程」记全</b>：复诊时医生一眼知道你吃过什么、吃了多久，能避免重复开药和相互作用。</li>'+
@@ -32925,15 +32969,54 @@ function medSafety(){
       '<li><b>吃药期间别喝酒</b>；出现<b>皮疹、呼吸困难、黑便、剧烈腹痛、眼黄</b>→ 立即停药就医。</li>'+
     '</ul>'+
     '<div class="src">口径：本板块只做「记录 + 汇总」，<b>不推荐药、不建议自行加减</b>。用药安全条目属临床共识级常识（E），不针对你的具体病情。</div>'+
-    '</div></div>';
+    '</div></div></details>';
+}
+function medNowCard(){
+  var arr=medAiActiveItems();
+  var rows=arr.map(function(o){
+    var it=o.it, v=o.v, prog='';
+    if(v.date && it.d){
+      var day=dDiff(v.date,todayStr())+1;
+      prog = (day>=1 && day<=it.d)
+        ? '<span class="mx-prog" style="color:var(--accent)">第 '+day+' / '+it.d+' 天</span>'
+        : '<span class="mx-prog" style="color:var(--muted)">疗程 '+it.d+' 天已满</span>';
+    } else if(v.date){ prog='<span class="mx-prog" style="color:var(--muted)">'+esc(v.date)+' 开的</span>'; }
+    return '<div class="mx-now-row">'+
+      '<span style="font-weight:700;font-size:12.5px">'+esc(it.n)+(it.s?('<span style="font-weight:400;color:var(--muted);font-size:11px"> '+esc(it.s)+'</span>'):'')+'</span>'+
+      '<span style="font-size:11.5px;color:var(--muted)">'+esc(it.f||'频次见处方')+(it.t?(' · '+esc(it.t)):'')+'</span>'+
+      '<span style="margin-left:auto">'+prog+'</span></div>';
+  }).join('');
+  return '<div class="card" style="margin-bottom:14px">'+
+    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:'+(rows?'9px':'2px')+'">'+
+      '<span style="font-size:13px;font-weight:700">💊 现在还在吃'+(arr.length?(' <span style="color:var(--accent)">'+arr.length+' 种</span>'):'')+'</span>'+
+      '<span style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap">'+
+        '<span class="chip sm" title="整份用药注意事项：自动带上还在吃的药、忌口和 8:50 吃第一顿的习惯，复制去问任意 AI" onclick="medAiCopy(\'all\')">🤖 整体注意</span>'+
+        '<span class="chip sm" title="帮我排一张具体到几点吃的服药时间表" onclick="medAiCopy(\'time\')">⏰ 一天怎么吃</span>'+
+        '<span class="chip sm" title="相互作用 + 饮食禁忌 + 什么情况要停药就医" onclick="medAiCopy(\'food\')">🥗 忌口相冲</span>'+
+      '</span></div>'+
+    (rows?rows:'<div style="font-size:11.5px;color:var(--muted);line-height:1.7">还没有「还在吃」的药 —— 用上面三个按钮把处方记进来，<b style="color:var(--text)">服药提醒、时间表、问 AI</b> 都会自动生成，全程不用手打</div>')+
+    '</div>';
 }
 function renderMed(){
   var box=document.getElementById('medBody'); if(!box) return;
   var st=medStat();
   if(document.getElementById('medSub')) document.getElementById('medSub').textContent=st.visits+' 次开药 · '+st.list.length+' 种药';
-  var h='<div class="mx-top">'+kpi(st.visits,'次就诊开药')+kpi(st.list.length,'种不同的药')+kpi(st.active,'次还在吃')+'</div>';
-  h+='<div class="card" style="margin-bottom:14px">'+
-    '<div style="font-size:13px;font-weight:700;margin-bottom:8px">💊 药物汇总比对 <span style="font-size:11px;color:var(--muted);font-weight:400">同一种药开过几次、一共吃多少天 —— 点一行看它出现在哪几次</span></div>'+
+  /* 2026-09-15 重排（用户反馈：信息堆叠没有重点）—— 动线从上到下 =
+     ① 记药入口（三种方式一行）→ ② 今天怎么吃 → ③ 现在还在吃（含问 AI）
+     → ④ 就诊历史（折叠）→ ⑤ 药物汇总（折叠）→ ⑥ 安全常识（折叠） */
+  var h='<div class="card" style="margin-bottom:13px;display:flex;gap:9px;align-items:center;flex-wrap:wrap">'+
+    '<button class="hp-btn p" onclick="medAdd()">＋ 记一次开药</button>'+
+    '<button class="hp-btn" onclick="pasteOpen(\'rx\')">📷 处方照片提取</button>'+
+    '<button class="hp-btn" onclick="pasteOpen(\'med\')">📋 粘贴文字</button>'+
+    '<span style="font-size:11.5px;color:var(--muted);flex:1;min-width:200px">拍照 → AI 自动提取药名/用法/忌口 → 核对落库，不用手打</span></div>';
+  h+=doseStrip();
+  h+=medNowCard();
+  h+='<div style="font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 8px">🗂 每次就诊开了什么 <span style="font-weight:400">· 点一行展开，最近的在最上</span></div>';
+  h+= MEDS.slice().sort(function(a,b){ return (a.date<b.date)?1:-1; }).map(visitCard).join('');
+  h+='<details class="mx-fold" style="margin-top:13px"><summary>'+
+    '<span style="font-size:13px;font-weight:700">💊 药物汇总比对</span>'+
+    '<span style="font-size:11px;color:var(--muted)">'+st.list.length+' 种药 · 加起来 '+st.days+' 天 · 复诊时给医生看，防重复开药</span></summary>'+
+    '<div class="mx-fbody">'+
     '<div class="mx-w"><table class="mxt"><thead><tr><th>药名</th><th>开过</th><th>累计天数</th><th>最近一次</th><th>用于什么</th></tr></thead><tbody>'+
     (st.list.length ? st.list.map(function(o){
       return '<tr class="'+(MEDF===o.k?'hi':'')+'" onclick="medFocus(\''+esc(o.k)+'\')">'+
@@ -32943,13 +33026,314 @@ function renderMed(){
     }).join('') : '<tr><td colspan="5" style="color:var(--muted)">还没有记录</td></tr>')+
     '</tbody></table></div>'+
     (MEDF?('<div style="font-size:11.5px;color:var(--muted);margin-top:8px">已高亮 <b style="color:var(--accent)">'+esc(MEDF)+'</b> 的用药记录 · 再点一次取消</div>'):'')+
-    (st.days?('<div style="font-size:11.5px;color:var(--muted);margin-top:6px">全部记录加起来 <b>'+st.days+' 天</b>的服药量</div>'):'')+
-    '</div>';
-  h+='<div style="font-size:13px;font-weight:700;margin:16px 0 9px">📋 每次就诊开了什么 <span style="font-size:11px;color:var(--muted);font-weight:400">最近的排最上面</span></div>';
-  h+= MEDS.slice().sort(function(a,b){ return (a.date<b.date)?1:-1; }).map(visitCard).join('');
+    '</div></details>';
   h+= medSafety();
   box.innerHTML=h;
 }
+/* ===================== 用药 · 一键问 AI（2026-09-14） ===================== */
+/* 把用药记录里「还在吃」的药 + 用户固定情况（含 8:50 公司吃第一顿）拼成提示词，一键复制去问任意 AI */
+function medAiActiveItems(){
+  var act=MEDS.filter(function(v){ return v.st==='active'&&v.real; }).sort(function(a,b){ return a.date<b.date?1:-1; });
+  var src=act.length?act:MEDS.slice().sort(function(a,b){ return a.date<b.date?1:-1; }).slice(0,1);
+  var out=[], seen={};
+  src.forEach(function(v){ (v.items||[]).forEach(function(it){
+    var k=String(it.n||'').replace(/\s+/g,''); if(!k||seen[k]) return; seen[k]=1; out.push({v:v,it:it});
+  }); });
+  return out;
+}
+function medAiAvoidLine(){
+  var a={}, c={};
+  medAiActiveItems().forEach(function(o){
+    [].concat(o.v.avoid||[]).forEach(function(x){ x=String(x).trim(); if(x) a[x]=1; });
+    [].concat(o.v.cavoid||[]).forEach(function(x){ x=String(x).trim(); if(x) c[x]=1; });
+  });
+  var ak=Object.keys(a), ck=Object.keys(c);
+  if(!ak.length&&!ck.length) return '';
+  return '本次用药忌口：'+(ak.length?ak.join('、'):'—')+'；病情忌口：'+(ck.length?ck.join('、'):'—')+'。\n';
+}
+function medAiCtx(){
+  return '我的情况：男性，29 岁。颈椎病 · 颈椎曲度变直（目前还不严重，肩胛骨偶尔疼），长期伏案做视频、久坐。\n'+
+    '医生核心医嘱：不能长时间保持一个动作。饮食忌口：牛肉、羊肉、发物。不喝酒。\n'+
+    '吃药习惯：每天早上 8:50 在公司吃第一顿（白天在公司上班，晚上回家）。\n'+
+    medAiAvoidLine();
+}
+function medAiMedLines(){
+  var arr=medAiActiveItems();
+  if(!arr.length) return '（用药记录里还没有药，请先在用药记录里录入）\n';
+  return arr.map(function(o,i){
+    var it=o.it, extra='';
+    if(o.v.date && it.d){ var day=dDiff(o.v.date,todayStr())+1; if(day>=1) extra=' · 今天是第 '+day+' 天（疗程 '+it.d+' 天）'; }
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'频次见处方')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+extra+'\n';
+  }).join('');
+}
+function medAiPrompt(kind){
+  var meds=medAiMedLines();
+  if(kind==='time'){
+    return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+      '\n请结合我「早上 8:50 在公司吃第一顿」的习惯，帮我排一张具体的服药时间表：\n'+
+      '① 每种药一天吃几次、两次之间至少隔几小时；\n'+
+      '② 每一顿具体几点吃、在公司吃还是在家吃（我白天在公司、晚上回家）；\n'+
+      '③ 饭前还是饭后、和三餐怎么错开；\n'+
+      '④ 哪一顿忘了吃怎么办。\n'+
+      '用大白话、条目式，直接给时间表，别写套话。\n';
+  }
+  if(kind==='food'){
+    return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+      '\n请帮我整理：\n'+
+      '① 这几种药之间有没有相互作用、能不能一起吃；\n'+
+      '② 服药期间的饮食禁忌（我本来就忌口牛肉、羊肉、发物，告诉我还要额外注意什么）；\n'+
+      '③ 有没有要避开的饮料、保健品；\n'+
+      '④ 出现哪些情况要停药立即就医。\n'+
+      '用大白话、条目式，别写免责声明套话。\n';
+  }
+  return medAiCtx()+'现在正在吃医生开的这些药：\n'+meds+
+    '\n请帮我整理一份用药注意事项：\n'+
+    '① 每种药是治什么的、饭前还是饭后吃；\n'+
+    '② 这几种药能不能一起吃；\n'+
+    '③ 服药期间要注意什么（我长期久坐伏案做视频）；\n'+
+    '④ 饮食禁忌；\n'+
+    '⑤ 出现哪些情况要停药就医。\n'+
+    '用大白话、条目式，别写免责声明套话。\n';
+}
+function medAiVisitPrompt(id){
+  var v=null; MEDS.forEach(function(x){ if(x.id===id) v=x; }); if(!v) return '';
+  var meds=(v.items||[]).filter(function(it){ return String(it.n||'').trim(); }).map(function(it,i){
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+'\n';
+  }).join('')||'（未录药品）\n';
+  return medAiCtx()+'我在 '+(v.date||'（日期未记）')+' 因为「'+(v.diag||'未记诊断')+'」去看了 '+(v.hosp||'医生')+'，医生开了这些药：\n'+meds+
+    '\n请帮我整理这次开药的注意事项：\n'+
+    '① 每种药是治什么的、怎么吃；\n'+
+    '② 这几种药能不能一起吃；\n'+
+    '③ 服药期间要注意什么（我长期久坐伏案做视频）；\n'+
+    '④ 饮食禁忌（我忌口牛肉、羊肉、发物）；\n'+
+    '⑤ 出现哪些情况要停药就医。\n'+
+    '用大白话、条目式，别写免责声明套话。\n';
+}
+function medAiToClip(text, okMsg){
+  function ok(){ pvToast(okMsg); }
+  function fallback(){
+    try{
+      var ta=document.createElement('textarea'); ta.value=text;
+      ta.style.cssText='position:fixed;opacity:0;left:-999px;top:0';
+      document.body.appendChild(ta); ta.focus(); ta.select();
+      var done=document.execCommand('copy'); document.body.removeChild(ta);
+      if(done) ok(); else pvToast('复制失败，请手动复制');
+    }catch(e){ pvToast('复制失败，请手动复制'); }
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok, fallback);
+  } else fallback();
+}
+function medAiCopy(kind){ medAiToClip(medAiPrompt(kind), '提示词已复制 · 去粘贴给 AI 吧 ✓'); }
+function medAiVisit(id){
+  var t=medAiVisitPrompt(id); if(!t) return;
+  medAiToClip(t, '这次开药的提示词已复制 ✓');
+}
+/* medAiCard 已于 2026-09-15 并进 medNowCard 卡头（用户反馈：AI 入口太占地）—— 三个问题变成当前用药卡右上角的紧凑 chips */
+
+/* ===================== 用药提醒 · 到点弹窗 + 一键已吃（2026-09-14） ===================== */
+/* 按每种药「一天 N 次」自动排时间表（第一顿固定 8:50 · 用户习惯，见铁律 §十一.5），
+   到点弹窗提醒，点「已吃」写进 niko_health_v1 的 dose 字段（跟云同步走），自动累计今日次数 */
+var DOSE={};
+var DOSE_INIT=false;
+var DOSE_OPEN='';
+var DOSE_NOTIFIED={};
+var DOSE_CFG={first:'08:50', mode:'meal'};   /* first=第一顿时间（跟 8:50 习惯）· mode=meal 跟饭点 / gap 均匀间隔 */
+function hm2min(t){ var p=String(t||'').split(':'); return (+p[0]||0)*60+(+p[1]||0); }
+function min2hm(m){ m=Math.round(m); m=(m+1440)%1440; return pad2(Math.floor(m/60))+':'+pad2(m%60); }
+var MEAL_BASE={l:720, d:1140, s:1350};       /* 午 12:00 · 晚 19:00 · 睡前 22:30（早 = 第一顿时间） */
+var MEAL_SETS={1:['b'], 2:['b','d'], 3:['b','l','d'], 4:['b','l','d','s']};
+function doseTimesFor(per,tm){
+  per=Math.min(4,Math.max(1,per|0));
+  var first=hm2min(DOSE_CFG.first||'08:50');
+  if(DOSE_CFG.mode==='gap'){
+    if(per===1) return [min2hm(first)];
+    var step=(1380-first)/(per-1);            /* 第一顿到 23:00 之间均分 */
+    var out=[]; for(var i=0;i<per;i++) out.push(min2hm(first+step*i));
+    return out;
+  }
+  var off=0;                                  /* 跟饭点：饭前 -30 分钟，饭后/随餐 +30 分钟 */
+  if(/饭前|餐前/.test(tm||'')) off=-30;
+  else if(/饭后|餐后|随餐/.test(tm||'')) off=30;
+  return MEAL_SETS[per].map(function(k){ return min2hm(k==='s'?MEAL_BASE.s:(k==='b'?first:MEAL_BASE[k])+off); });
+}
+function dosePerDay(f){
+  var m=String(f||'').match(/([一二两三四五六\d])\s*次/);
+  if(!m) return 1;
+  var map={'一':1,'两':2,'二':2,'三':3,'四':4,'五':5,'六':6};
+  var n=map[m[1]]||(+m[1]||1);
+  return n>4?4:n;
+}
+function dosePlan(){
+  var o=medAiActiveItems();                 /* 复用：还在吃（或最近一次）的真实用药，已去重 */
+  var slots={}, seen={};
+  o.forEach(function(x){
+    var it=x.it, v=x.v;
+    var k=String(it.n||'').replace(/\s+/g,''); if(!k||seen[k]) return; seen[k]=1;
+    if(v.date && it.d){ var day=dDiff(v.date,todayStr())+1; if(day>it.d) return; }   /* 疗程吃完不再提醒 */
+    var per=dosePerDay(it.f);
+    doseTimesFor(per,it.t).forEach(function(t){ (slots[t]=slots[t]||[]).push({n:it.n, tm:it.t||''}); });
+  });
+  return Object.keys(slots).sort().map(function(t){ return {t:t, meds:slots[t]}; });
+}
+function doseToday(){
+  var today=todayStr(), plan=dosePlan(), done=0;
+  var d=(DOSE||{})[today]||{};
+  plan.forEach(function(s){ if(d[s.t]&&d[s.t].names) done++; });
+  return {done:done, total:plan.length, plan:plan, log:d};
+}
+function doseNextHint(){
+  var td=doseToday(); if(!td.total) return '';
+  var now=new Date(), cur=now.getHours()*60+now.getMinutes();
+  for(var i=0;i<td.plan.length;i++){
+    var s=td.plan[i];
+    if(!(td.log[s.t]&&td.log[s.t].names) && hm2min(s.t)>=cur-15) return '下一顿建议 '+s.t+' · '+s.meds.length+' 种药';
+  }
+  return '今天都吃完了 · 明天 '+td.plan[0].t+' 开始';
+}
+function doseStrip(){
+  var td=doseToday();
+  if(!td.total) return '';
+  var modeTxt=(DOSE_CFG.mode==='gap')?'均匀间隔':'跟饭点（饭前饭后自动错 30 分钟）';
+  return '<div class="card" style="margin-bottom:14px">'+
+    '<div style="font-size:13px;font-weight:700;margin-bottom:2px">⏰ 今日服药 <span style="color:var(--accent)">'+td.done+' / '+td.total+' 次</span>'+
+      ' <span class="chip sm" style="cursor:pointer" onclick="doseCfgOpen()">⚙️ 提醒设置</span></div>'+
+    '<div style="font-size:11px;color:var(--muted);margin-bottom:3px">第一顿 '+esc(DOSE_CFG.first||'08:50')+' · '+modeTxt+'；到点弹窗提醒，点「已吃」自动记次数；漏了的点时间补记</div>'+
+    '<div style="font-size:11.5px;color:var(--text);margin-bottom:9px">👉 '+doseNextHint()+'</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      td.plan.map(function(s){
+        var dn=td.log[s.t]&&td.log[s.t].names;
+        return dn
+          ? '<span class="chip sm" style="cursor:default" title="'+esc((dn||[]).join('、'))+'">✅ '+s.t+' 已吃</span>'
+          : '<span class="chip sm" onclick="doseTakeSlot(\''+s.t+'\')">＋ '+s.t+' 补记</span>';
+      }).join('')+
+    '</div></div>';
+}
+function doseCfgOpen(){
+  var html='<div class="fld"><label>① 第一顿几点吃（跟着你的习惯）</label>'+
+    '<input type="time" id="dc_first" value="'+esc(DOSE_CFG.first||'08:50')+'"></div>'+
+    '<div class="fld"><label>② 后面几顿怎么排</label>'+
+    '<select id="dc_mode" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);font-size:13px">'+
+    '<option value="meal"'+(DOSE_CFG.mode!=='gap'?' selected':'')+'>跟饭点 · 早/午/晚/睡前，饭前饭后自动 ±30 分钟</option>'+
+    '<option value="gap"'+(DOSE_CFG.mode==='gap'?' selected':'')+'>均匀间隔 · 第一顿到 23:00 之间均分（看药物间隔要求）</option></select></div>'+
+    '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">饭点基准：早 <b>'+esc(DOSE_CFG.first||'08:50')+'</b>（= 第一顿）· 午 12:00 · 晚 19:00 · 睡前 22:30。处方标了「饭前 / 饭后」的药会自动错开 30 分钟。</div>';
+  gOpen('⏰ 服药提醒设置', html, '✅ 保存', doseCfgSave);
+}
+function doseCfgSave(){
+  DOSE_CFG.first=document.getElementById('dc_first').value||'08:50';
+  DOSE_CFG.mode=document.getElementById('dc_mode').value||'meal';
+  HSAVE(); gClose(); renderMed(); pvToast('服药时间表已更新 ✓');
+}
+function doseSlot(t){
+  var p=dosePlan();
+  for(var i=0;i<p.length;i++){ if(p[i].t===t) return p[i]; }
+  return null;
+}
+function doseMark(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  var s=doseSlot(t);
+  DOSE[today][t]={ts:Date.now(), names:(s?s.meds:[]).map(function(x){ return x.n; })};
+  if(DOSE[today]._snooze) delete DOSE[today]._snooze[t];
+  var keys=Object.keys(DOSE).sort();
+  while(keys.length>90){ delete DOSE[keys.shift()]; }
+  HSAVE();
+  doseClose();
+  if(S.tab==='med') renderMed();
+  pvToast('✅ 已记录 '+t+' 这一次（'+(DOSE[today][t].names||[]).length+' 种药）');
+}
+function doseTakeSlot(t){
+  var s=doseSlot(t);
+  if(!s){ pvToast('这个时间点当前没有排药'); return; }
+  if(!confirm('补记 '+t+' 这一次已吃？\n（'+s.meds.map(function(x){ return x.n; }).join('、')+'）')) return;
+  doseMark(t);
+}
+function doseSnooze(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  DOSE[today]._snooze=DOSE[today]._snooze||{};
+  DOSE[today]._snooze[t]=Date.now()+10*60*1000;
+  HSAVE(); doseClose();
+  pvToast('好，10 分钟后再提醒你');
+}
+function doseDismiss(t){
+  var today=todayStr();
+  DOSE[today]=DOSE[today]||{};
+  DOSE[today]._dismiss=DOSE[today]._dismiss||{};
+  DOSE[today]._dismiss[t]=1;
+  HSAVE(); doseClose();
+}
+function doseClose(){
+  var m=document.getElementById('doseMask');
+  if(m) m.style.display='none';
+  DOSE_OPEN='';
+}
+function doseNextAfter(t){
+  var p=dosePlan(), i=0;
+  for(;i<p.length;i++){ if(p[i].t===t) break; }
+  for(i=i+1;i<p.length;i++){ return '下一顿建议 '+p[i].t+'（间隔约 '+Math.max(1,Math.round((hm2min(p[i].t)-hm2min(t))/60))+' 小时）'; }
+  return '今天没有下一顿了 · 明天按时间表继续';
+}
+function doseShow(s){
+  var m=document.getElementById('doseMask'); if(!m) return;
+  document.getElementById('doseBody').innerHTML=
+    '<div style="font-size:21px;font-weight:700;margin-bottom:2px">💊 到点了，该吃药啦</div>'+
+    '<div style="font-size:12.5px;color:var(--muted);margin-bottom:2px">今天 '+s.t+' · '+s.meds.length+' 种药</div>'+
+    '<div style="font-size:11.5px;color:var(--accent);margin-bottom:12px">⏭ '+doseNextAfter(s.t)+'</div>'+
+    '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">'+
+      s.meds.map(function(x){
+        return '<div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:8px 12px;font-size:13px">💊 '+esc(x.n)+(x.tm?(' · '+esc(x.tm)):'')+'</div>';
+      }).join('')+'</div>'+
+    '<button class="btn" style="width:100%;padding:11px;font-size:14px" onclick="doseMark(\''+s.t+'\')">✅ 已吃，记上</button>'+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+      '<button class="btn sm" style="flex:1;min-height:40px" onclick="doseSnooze(\''+s.t+'\')">⏰ 10分钟后再提醒</button>'+
+      '<button class="btn sm" style="flex:1;min-height:40px" onclick="doseDismiss(\''+s.t+'\')">今天这个先不记</button>'+
+    '</div>';
+  m.style.display='flex';
+  DOSE_OPEN=s.t;
+}
+function doseTick(){
+  try{
+    HLOAD();
+    var td=doseToday();
+    if(!td.total) return;
+    var now=new Date();
+    var cur=pad2(now.getHours())+':'+pad2(now.getMinutes());
+    var sn=td.log._snooze||{}, dis=td.log._dismiss||{};
+    var hit=null;
+    td.plan.forEach(function(s){
+      if(td.log[s.t]&&td.log[s.t].names) return;      /* 已吃 */
+      if(dis[s.t]) return;                             /* 今天这个不提醒 */
+      if(s.t>cur) return;                              /* 还没到点 */
+      if(sn[s.t]&&Date.now()<sn[s.t]) return;          /* 贪睡中 */
+      if(!hit||s.t>hit.t) hit=s;                       /* 最晚的已到点未吃 = 最该提醒的 */
+    });
+    if(!hit) return;
+    var nkey=todayStr()+'_'+hit.t;
+    if(document.hidden){
+      try{
+        if(window.Notification && Notification.permission==='granted' && !DOSE_NOTIFIED[nkey]){
+          new Notification('NIKO · 该吃药了', { body:hit.t+' · '+hit.meds.map(function(x){ return x.n; }).join('、') });
+          DOSE_NOTIFIED[nkey]=1;
+        }
+      }catch(e){}
+      return;                                          /* 页面看不见就先不弹 */
+    }
+    if(DOSE_OPEN===hit.t) return;                      /* 已经在弹同一个 */
+    doseShow(hit);
+  }catch(e){}
+}
+function doseInit(){
+  if(document.getElementById('doseMask')) return;
+  var m=document.createElement('div');
+  m.id='doseMask';
+  m.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99999;align-items:center;justify-content:center;padding:16px';
+  m.innerHTML='<div style="background:var(--card-bg,#23232a);border:1px solid var(--card-border);border-radius:14px;padding:18px;max-width:340px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.45);max-height:82vh;overflow:auto"><div id="doseBody"></div></div>';
+  document.body.appendChild(m);
+  setInterval(doseTick, 30000);
+  setTimeout(doseTick, 3000);
+}
+
 /* 用药弹窗：一次就诊 + 若干药品行 */
 var GM={ v:null };
 function gClose(){ document.getElementById('mask3').classList.remove('on'); }
@@ -33104,6 +33488,47 @@ function mnScience(name){
     '<li><b>红旗信号照旧</b>：症状快速加重、持续不缓解、伴发热/消瘦/关节痛，别等记录完整，直接就医。</li>'+
     '</ul><div class="src">口径：记录工具，不诊断。具体病种的循证科普由我查证后逐条挂上（口腔溃疡已挂好）。</div></div></div>';
 }
+/* —— 患者视角：主诉摘要（给医生看的）+ 复发节奏提醒 —— */
+function mnTopOf(f, st, n){
+  var c={}; st.eps.forEach(function(e){ (e[f]||[]).forEach(function(x){ x=String(x).trim(); if(x) c[x]=(c[x]||0)+1; }); });
+  return Object.keys(c).sort(function(p,q){ return c[q]-c[p]; }).slice(0,n||3);
+}
+function mnDocText(name, st){
+  var trigs=mnTopOf('trig',st,3), cares=mnTopOf('care',st,3), sites=mnTopOf('sites',st,2);
+  var durs=st.eps.map(function(e){ return dDiff(e.start,e.end)+1; });
+  var dmin=Math.min.apply(null,durs), dmax=Math.max.apply(null,durs);
+  var last=st.eps[st.eps.length-1];
+  var s=name+'，近 '+st.mo.length+' 个月里发作 '+st.n+' 次';
+  if(!isNaN(st.avgGap)) s+='，平均约 '+Math.round(st.avgGap)+' 天复发一次';
+  s+='，每次持续 '+dmin+(dmax>dmin?(' 到 '+dmax):'')+' 天';
+  if(sites.length) s+='；多长在 '+sites.join('、');
+  if(trigs.length) s+='；发作前的常见诱因：'+trigs.join('、');
+  if(cares.length) s+='；试过 '+cares.join('、');
+  if(last) s+='。最近一次：'+last.start+' 到 '+last.end+((last.sites&&last.sites.length)?('（'+last.sites.join('、')+'）'):'')+((last.care&&last.care.length)?('，用了'+last.care.join('、')):'');
+  return s+'。';
+}
+function mnCopyDoc(){
+  var st=minorStat(MNSEL);
+  medAiToClip(mnDocText(MNSEL,st),'主诉摘要已复制 · 复诊时直接给医生看 ✓');
+}
+function mnRemind(name, st){
+  var last=st.eps[st.eps.length-1]; if(!last) return '';
+  var trigs=mnTopOf('trig',st,2);
+  var inner, tone;
+  if(isNaN(st.avgGap)){
+    inner='已经记了 <b>'+st.n+'</b> 次。再记 1 次就能看出你的复发间隔 —— 每次顺手记下<b>诱因</b>（熬夜/吃辣/受凉），攒到 8~10 次触发条件就浮出来了。'; tone='var(--muted)';
+  } else {
+    var avg=Math.round(st.avgGap), left=avg-st.sinceLast;
+    if(left<=0){
+      inner='<b style="color:var(--danger)">已距上次 '+st.sinceLast+' 天，超过你的平均间隔 '+avg+' 天</b> —— 按你自己的节奏，随时可能复发。留意上次发作前的信号'+(trigs.length?('（你常见诱因：'+trigs.join('、')+'）'):'')+'。'; tone='var(--warn)';
+    } else {
+      inner='距上次 <b>'+st.sinceLast+' 天</b>；按平均节奏，约 <b style="color:var(--text)">'+left+' 天后</b>进入复发窗口。'+(trigs.length?('近几次多是 <b>'+trigs.join('、')+'</b> 之后发作 —— 这几天有这些行为就多留意。'):'');
+      tone='var(--muted)';
+    }
+  }
+  return '<div class="card" style="margin-bottom:12px;display:flex;gap:9px;align-items:flex-start;border-left:3px solid '+tone+'">'+
+    '<span style="font-size:16px">⏰</span><div style="font-size:12.5px;line-height:1.7;color:var(--muted)"><b style="color:var(--text)">'+esc(name)+' · 复发节奏</b>　'+inner+'</div></div>';
+}
 function renderMinor(){
   var box=document.getElementById('minorBody'); if(!box) return;
   var names=mnNames(); if(names.indexOf(MNSEL)<0) MNSEL=names[0]||'';
@@ -33111,28 +33536,35 @@ function renderMinor(){
   if(document.getElementById('minorSub')) document.getElementById('minorSub').textContent=names.length+' 种小病 · 共 '+MINOR.length+' 次发作';
   var h='<div class="bp-mode" style="margin-bottom:12px"><label>看哪个病</label>'+
     names.map(function(n){ return '<span class="chip sm'+(n===MNSEL?' on':'')+'" onclick="MNSEL=\''+esc(n)+'\';renderMinor()">'+esc(n)+'</span>'; }).join('')+
-    '<span style="margin-left:auto;font-size:11px;color:var(--muted)">换一个病看它的独立周期</span></div>';
-  if(!st.n){ box.innerHTML=h+'<div class="hx-empty"><span class="big">＋</span>还没有这一种的记录，点上面「＋ 记一次发作」开始攒。</div>'; return; }
-  h+='<div class="mx-top">'+
-    kpi(st.n+' 次','总共发作')+
-    kpi(isNaN(st.avgGap)?'—':Math.round(st.avgGap)+' 天','平均间隔')+
-    kpi(isNaN(st.sinceLast)?'—':st.sinceLast+' 天','距上次发作')+
     '</div>';
-  h+='<div class="mx-top" style="grid-template-columns:repeat(3,minmax(0,1fr))">'+
-    kpi(isNaN(st.avgDur)?'—':st.avgDur.toFixed(1)+' 天','平均持续')+
-    kpi(isNaN(st.minGap)?'—':st.minGap+' 天','最短间隔')+
-    kpi(isNaN(st.maxGap)?'—':st.maxGap+' 天','最长间隔')+
-    '</div>';
-  h+='<div class="card" style="margin-bottom:14px">'+
-    '<div style="font-size:13px;font-weight:700">📅 发作频率分布</div>'+
-    mnBars(st)+
-    (isNaN(st.avgGap)?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">按你自己的记录算：平均 <b style="color:var(--text)">'+Math.round(st.avgGap)+' 天</b>一次（约 '+(st.avgGap/30.4).toFixed(1)+' 个月），最快 '+st.minGap+' 天、最慢 '+st.maxGap+' 天。<b>这只是观察值，不是预测</b>。</div>')+
-    '</div>';
-  h+='<div class="card" style="margin-bottom:14px"><div style="font-size:13px;font-weight:700;margin-bottom:2px">🧭 发作时间轴 <span style="font-size:11px;color:var(--muted);font-weight:400">最近的排最上面 · 左边是「距上次多少天」</span></div><div class="mn-tl">';
+  if(!st.n){ box.innerHTML=h+'<div class="hx-empty"><span class="big">⚡</span>还没有「'+esc(MNSEL)+'」的记录，点上面「⚡ 现在不舒服」开始攒。</div>'; return; }
+  /* ① 主诉摘要卡：一句话总结这个病的全部关键信息，复制给医生 */
+  h+='<div class="card" style="margin-bottom:12px">'+
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">'+
+      '<span style="font-size:13px;font-weight:700">🩺 带给医生看 · 主诉摘要</span>'+
+      '<button class="btn sm" style="margin-left:auto" onclick="mnCopyDoc()">📋 复制这段话</button></div>'+
+    '<div style="font-size:12.5px;line-height:1.75">'+esc(mnDocText(MNSEL,st))+'</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:9px">'+
+      '<span class="chip sm" style="cursor:default">共 '+st.n+' 次</span>'+
+      (isNaN(st.avgGap)?'':'<span class="chip sm" style="cursor:default">平均 '+Math.round(st.avgGap)+' 天一次</span>')+
+      '<span class="chip sm" style="cursor:default">每次约 '+(isNaN(st.avgDur)?'—':st.avgDur.toFixed(1))+' 天</span>'+
+      (isNaN(st.sinceLast)?'':'<span class="chip sm" style="cursor:default">距上次 '+st.sinceLast+' 天</span>')+
+    '</div></div>';
+  /* ② 节奏提醒 */
+  h+=mnRemind(MNSEL,st);
+  /* ③ 最近 3 次（紧凑，一眼看到最近发生了什么） */
+  h+='<div style="font-size:13px;font-weight:700;margin:14px 0 8px">🕘 最近发作 <span style="font-size:11px;color:var(--muted);font-weight:400">下面可展开全部 '+st.n+' 次</span></div>';
   var asc=st.eps;
-  for(var i=asc.length-1;i>=0;i--){ h+=mnEpRow(asc[i], i>0?asc[i-1]:null, i); }
-  h+='</div></div>';
-  h+= mnScience(MNSEL);
+  for(var i=asc.length-1;i>=0 && i>asc.length-4;i--){ h+=mnEpRow(asc[i], i>0?asc[i-1]:null, i); }
+  /* ④ 全量时间轴 + 月度分布（折叠） */
+  h+='<details class="mx-fold" style="margin-top:10px"><summary>📅 全部 '+st.n+' 次时间轴 + 月度分布 <span class="cv">▸</span></summary><div class="mx-fbody">'+
+    '<div class="card" style="margin-bottom:12px"><div style="font-size:13px;font-weight:700">📈 发作频率分布</div>'+mnBars(st)+
+    (isNaN(st.avgGap)?'':'<div style="font-size:11.5px;color:var(--muted);margin-top:8px">按你自己的记录算：平均 <b style="color:var(--text)">'+Math.round(st.avgGap)+' 天</b>一次（约 '+(st.avgGap/30.4).toFixed(1)+' 个月），最快 '+st.minGap+' 天、最慢 '+st.maxGap+' 天。<b>这只是观察值，不是预测</b>。</div>')+'</div>'+
+    '<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:2px">🧭 完整时间轴 <span style="font-size:11px;color:var(--muted);font-weight:400">左边是「距上次多少天」</span></div><div class="mn-tl">';
+  for(var j=asc.length-1;j>=0;j--){ h+=mnEpRow(asc[j], j>0?asc[j-1]:null, j); }
+  h+='</div></div></div></details>';
+  /* ⑤ 循证科普（折叠） */
+  h+='<details class="mx-fold" style="margin-top:10px"><summary>📚 这个病怎么少发作 · 循证科普 <span class="cv">▸</span></summary><div class="mx-fbody">'+mnScience(MNSEL)+'</div></details>';
   box.innerHTML=h;
 }
 function mnFormHtml(){
@@ -33142,7 +33574,7 @@ function mnFormHtml(){
      '<div class="fld"><label>② 哪天开始</label><input type="date" id="gn_start" value="'+esc(v.start)+'" oninput="GM.v.start=this.value"></div>'+
      '<div class="fld"><label>③ 哪天结束（还在就填今天）</label><input type="date" id="gn_end" value="'+esc(v.end)+'" oninput="GM.v.end=this.value"></div></div>'+
    '<div class="fld2">'+
-     '<div class="fld"><label>④ 长在哪儿 / 什么部位</label><input id="gn_sites" value="'+esc((v.sites||[]).join('、'))+'" oninput="GM.v.sites=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：舌尖、下唇"></div>'+
+     '<div class="fld"><label>④ 长在哪儿 / 什么部位（没有固定部位可留空，如鼻涕带血）</label><input id="gn_sites" value="'+esc((v.sites||[]).join('、'))+'" oninput="GM.v.sites=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：舌尖、下唇 · 可留空"></div>'+
      '<div class="fld"><label>⑤ 有几处</label><input id="gn_count" value="'+esc(v.count)+'" oninput="GM.v.count=+this.value||1" placeholder="1"></div></div>'+
    '<div class="fld2">'+
      '<div class="fld"><label>⑥ 严重度</label><select onchange="GM.v.sev=+this.value">'+
@@ -33155,6 +33587,12 @@ function mnFormHtml(){
 }
 function mnAdd(){ GM.v={id:'', name:MNSEL||'', start:todayStr(), end:todayStr(), sites:[], count:1, sev:2, trig:[], care:[], dr:false, note:'', real:true};
   gOpen('记一次小病发作', mnFormHtml(), '✅ 存进记录', mnSave); }
+/* 总览「⚠️ 现在发作了」速记入口：预填名称/部位/诱因，弹窗里可改，一键确认落库 */
+function mnQuick(name, sites, trig){
+  GM.v={id:'', name:String(name||MNSEL||''), start:todayStr(), end:todayStr(),
+    sites:(sites||[]).slice(), count:1, sev:2, trig:(trig||[]).slice(), care:[], dr:false, note:'', real:true};
+  gOpen('⚡ 马上记这次发作', mnFormHtml(), '✅ 记好了', mnSave);
+}
 function mnEdit(id){
   var e=null; MINOR.forEach(function(x){ if(x.id===id) e=x; }); if(!e) return;
   GM.v=JSON.parse(JSON.stringify(e)); GM.v.id=id;
@@ -33168,7 +33606,9 @@ function mnSave(){
   v.real=true;
   if(v.id){ MINOR.forEach(function(x,i){ if(x.id===v.id){ var keep=x.id; MINOR[i]=v; MINOR[i].id=keep; } }); HSAVE(); }
   else { v.id='mn'+Date.now().toString(36); v.real=true; MINOR.push(v); HSAVE(); }
-  MNSEL=v.name; gClose(); renderMinor(); pvToast('已记下这次发作 ✓');
+  MNSEL=v.name; gClose();
+  try { renderMinor(); renderHpFoot(); renderTabs(); } catch (e) {}   /* 时间线在总览，落库后立刻刷新 */
+  pvToast('已记下这次发作 ✓ 档案时间线已更新');
 }
 function mnDel(id){
   var e=null; MINOR.forEach(function(x){ if(x.id===id) e=x; }); if(!e) return;
@@ -33186,6 +33626,7 @@ function pasteOpen(m){
   var T={
     hist:['📋 粘贴一段话，自动填进档案','想到什么就整段粘进来 —— 不用整理、不用排版。我会拆成 <b>部位 / 时间 / 医院 / 诊断 / 核心医嘱 / 其他医嘱 / 忌口 / 每日打卡</b>，拆完先给你过一遍，点「确认」才落库。','例：2026 年 9 月 11 日去的市一院骨科门诊，说是颈椎病、曲度变直了……'],
     med:['💊 粘贴处方 / 药盒文字，自动填','把处方单、病历、药盒上的字整段粘进来（或随手打一句也行）。我会拆成 <b>日期 / 医院 / 诊断 / 药名 / 规格 / 用法 / 疗程</b>，拆完先给你核对。','例：2026年9月11日 市一院骨科 诊断颈椎病 塞来昔布胶囊 0.2g 每日1次 饭后 7天'],
+    rx:['📷 处方照片 → AI 提取 → 自动填','<b>三步，全程不用手打：</b><br>① 点下面「复制提取提示词」；<br>② 把处方拍照（或截图），连提示词一起发给任意 AI（也可以直接发给 NIKO 对话）；<br>③ 把 AI 回复里的 JSON 原样粘进下面的框，点「拆开看看」核对后确认落库。<br><b>药名 / 规格 / 用法 / 时机 / 疗程 / 用药忌口 / 病情忌口</b> 全自动填，落库后今日服药提醒自动更新。 <button class="hp-btn p" style="margin-top:8px" onclick="rxCopyPrompt()">🤖 复制提取提示词</button>','例：{"date":"2026-09-11","hosp":"湖南航天医院 · 门诊","diag":"颈椎病","items":[{"n":"艾瑞昔布片","s":"0.1g*10片","f":"一天两次","perDay":2,"t":"饭后","d":7,"each":"每次1片"}],"avoid":["酒","浓茶"],"conditionAvoid":["牛肉","羊肉","发物"]}'],
     minor:['🤒 粘贴一句话，自动填','像聊天一样写就行：哪天开始、持续几天、长在哪里、之前有没有熬夜/吃辣。我会拆成 <b>病名 / 起止日期 / 部位 / 严重度 / 诱因 / 处理</b>。','例：8月30号开始舌尖长了个溃疡，疼了6天，前两天熬夜加吃辣']}[PV2.mode]||[];
   document.getElementById('pbTitle').textContent=T[0];
   document.getElementById('pbDesc').innerHTML=T[1];
@@ -33199,11 +33640,12 @@ function pvPasteOpen(){ pasteOpen('hist'); }
 function pvPasteClose(){ document.getElementById('mask2').classList.remove('on'); }
 function pvPasteDemo(){
   if(PV2.mode==='hist') return pvPasteDemoHist();
+  if(PV2.mode==='rx'){ document.getElementById('pbText').value=RX_DEMO; return rxPreview(); }
   document.getElementById('pbText').value = (PV2.mode==='med'? MD_DEMO : MN_DEMO);
   pvPasteParse();
 }
-function pvPasteParse(){ if(PV2.mode==='hist') return pvPasteParseHist(); if(PV2.mode==='med') return mdPreview(); return mnPreview(); }
-function pvPasteApply(){ if(PV2.mode==='hist') return pvPasteApplyHist(); if(PV2.mode==='med') return mdApply(); return mnApply(); }
+function pvPasteParse(){ if(PV2.mode==='hist') return pvPasteParseHist(); if(PV2.mode==='med') return mdPreview(); if(PV2.mode==='rx') return rxPreview(); return mnPreview(); }
+function pvPasteApply(){ if(PV2.mode==='hist') return pvPasteApplyHist(); if(PV2.mode==='med') return mdApply(); if(PV2.mode==='rx') return mdApply(); return mnApply(); }
 function prow(k,v){ return '<div class="row"><span class="kk">'+k+'</span><span class="vv">'+v+'</span></div>'; }
 function pinput(id,v,ph){ return '<input id="'+id+'" value="'+esc(v)+'" placeholder="'+(ph||'')+'">'; }
 
@@ -33283,18 +33725,96 @@ function mdApply(){
   var g=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
   var items=(MDB.items||[]).filter(function(it){ return String(it.n||'').trim(); });
   if(!items.length){ pvToast('至少要有一个药名'); return; }
+  var av=(g('mp_avoid')||(MDB.avoid||[]).join('、'));
+  var cv=(g('mp_cavoid')||(MDB.cavoid||[]).join('、'));
+  var spl=function(s){ return String(s||'').split(/[、,，;；\s]+/).filter(function(x){ return x; }); };
   MEDS.push({ id:'md'+Date.now().toString(36), date:g('mp_date')||todayStr(), hosp:g('mp_hosp'), diag:g('mp_diag'),
-    dr:'', items:items.map(function(it){ return {n:it.n,s:it.s,f:it.f,t:it.t,d:it.d,note:''}; }),
-    eff:'', side:'', st:g('mp_st')||'active', real:true });
+    dr:'', items:items.map(function(it){ return {n:it.n,s:it.s,f:it.f,t:it.t,d:it.d,note:it.note||''}; }),
+    eff:'', side:'', st:g('mp_st')||'active', real:true,
+    avoid:spl(av), cavoid:spl(cv), mnote:(g('mp_note')||MDB.mnote||'') });
   HSAVE();
-  pvPasteClose(); renderMed(); pvToast('已写进用药记录 ✓');
+  pvPasteClose(); renderMed(); pvToast('已写进用药记录 ✓ 今日服药提醒已同步更新');
+}
+
+/* —— 处方照片 AI 提取（2026-09-15）——
+   拍照发给任意 AI + 复制提取提示词 → AI 回 JSON → 粘回来自动拆成可核对表单 → 确认落库。
+   落库后今日服药提醒（dosePlan）自动跟着 MEDS 更新，不用手动排。 */
+var RX_DEMO='{"date":"2026-09-11","hosp":"湖南航天医院 · 门诊西药房","diag":"颈椎病 · 颈椎曲度变直","items":['+
+  '{"n":"正胃紫金丸","s":"4.5g*1920丸/袋","f":"一天三次","perDay":3,"t":"","d":"","each":"每次1袋"},'+
+  '{"n":"艾瑞昔布片","s":"0.1g*10片","f":"一天两次","perDay":2,"t":"","d":"","each":"每次1片"},'+
+  '{"n":"甲钴胺片","s":"0.5mg*60片","f":"一天三次","perDay":3,"t":"","d":"","each":"每次1片"}],'+
+  '"avoid":["酒","浓茶","咖啡"],"conditionAvoid":["牛肉","羊肉","发物"],"note":""}';
+function rxPrompt(){
+  return '我发了一张处方 / 门诊发药清单的照片。请仔细看图，把信息提取成下面这个 JSON（只输出这一个 JSON，用 ```json 代码块包起来，不要输出其他解释文字）：\n'+
+    '{"date":"YYYY-MM-DD 收款/开方日期","hosp":"医院·科室","diag":"诊断（图上没有就留空）",'+
+    '"items":[{"n":"药品名称","s":"规格（如 0.1g*10片）","f":"频次原文（如 一天三次/每日2次）","perDay":每日次数数字,"t":"饭前/饭后/睡前/空腹（图上没有就留空）","d":疗程天数（没有就留空）,"each":"每次用量（如 每次1片）"}],'+
+    '"avoid":["服药期间的用药忌口，如 酒、浓茶、咖啡、西柚"],"conditionAvoid":["针对我病情的忌口：牛肉、羊肉、发物"],"note":"其他注意事项"}\n'+
+    '要求：\n'+
+    '① 药品名称用处方上的全名，别缩写；数量单位照抄；看不清的字段填空字符串，不要编；\n'+
+    '② 我的情况：29 岁男性，颈椎病（曲度变直，不严重），长期伏案。avoid 里给我这类消炎止痛药 + 甲钴胺常见的用药忌口；\n'+
+    '③ 输出纯 JSON，别加「以下是」「希望对你有帮助」这类话。\n';
+}
+function rxCopyPrompt(){
+  medAiToClip(rxPrompt(), '提取提示词已复制 · 去和处方照片一起发给 AI 吧 ✓');
+}
+function rxExtractJson(txt){
+  var raw=String(txt||'');
+  var m=raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+  var cand=m?m[1]:null;
+  if(!cand){
+    var a=raw.indexOf('{'), b=raw.lastIndexOf('}');
+    if(a>=0&&b>a) cand=raw.slice(a,b+1);
+  }
+  if(!cand) return null;
+  try{ var j=JSON.parse(cand); return (j&&typeof j==='object')?j:null; }catch(e){ return null; }
+}
+function rxNormalize(j,raw){
+  var o={date:String(j.date||''), hosp:String(j.hosp||''), diag:String(j.diag||''),
+    items:[], eff:'', st:'active', raw:String(raw||''), fromRx:true,
+    avoid:[].concat(j.avoid||[]), cavoid:[].concat(j.conditionAvoid||j.condition_avoid||[]),
+    mnote:String(j.note||'')};
+  (Array.isArray(j.items)?j.items:[]).forEach(function(it){
+    if(!it||!String(it.n||'').trim()) return;
+    var note=[];
+    if(it.each) note.push(String(it.each));
+    if(it.note) note.push(String(it.note));
+    o.items.push({n:String(it.n), s:String(it.s||''), f:String(it.f||''),
+      t:String(it.t||''), d:(it.d==null||it.d==='')?'':it.d, note:note.join(' · ')});
+  });
+  return o;
+}
+function rxPreview(){
+  var txt=document.getElementById('pbText').value;
+  if(txt.trim().length<4){ document.getElementById('pbMsg').textContent='先把 AI 回复的 JSON 粘进上面的框里'; return; }
+  var j=rxExtractJson(txt);
+  if(j){ MDB=rxNormalize(j,txt); }
+  else { MDB=mdParse(txt); MDB.fromRx=false; }   /* 没贴 JSON 就按普通文字拆，兜底不白跑 */
+  if(!MDB.items.length) MDB.items=[{n:'',s:'',f:'',t:'',d:'',note:''}];
+  var srcNote=j
+    ? '从 AI 回复的 JSON 拆出 <b style="color:var(--text)">'+MDB.items.length+'</b> 种药'
+    : '没认出 JSON，按普通文字拆出 '+MDB.items.length+' 种药（也可以重新粘 AI 的回复）';
+  document.getElementById('pbPre').innerHTML=
+    '<div style="font-size:12px;color:var(--muted);margin-top:12px">'+srcNote+' —— 每一项都能改，改完点确认：</div>'+
+    '<div class="pb-pre">'+
+      prow('① 日期', pinput('mp_date', MDB.date||todayStr(), 'YYYY-MM-DD'))+
+      prow('② 在哪看的', pinput('mp_hosp', MDB.hosp, '例：湖南航天医院 · 门诊'))+
+      prow('③ 诊断', pinput('mp_diag', MDB.diag, '例：颈椎病 · 曲度变直'))+
+      prow('④ 药品明细', '<div id="mpRows">'+mdRowsHtml2()+'</div>')+
+      prow('⑤ 用药忌口', pinput('mp_avoid', (MDB.avoid||[]).join('、'), '例：酒、浓茶、咖啡'))+
+      prow('⑥ 病情忌口', pinput('mp_cavoid', (MDB.cavoid||[]).join('、'), '例：牛肉、羊肉、发物'))+
+      prow('⑦ 注意事项', pinput('mp_note', MDB.mnote||'', '图上 / AI 补充的注意事项'))+
+      prow('⑧ 状态', '<select id="mp_st" style="width:100%;padding:6px 9px;border-radius:8px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);font-size:12.5px">'+
+        '<option value="active"'+(MDB.st==='active'?' selected':'')+'>还在吃</option><option value="old"'+(MDB.st==='old'?' selected':'')+'>已经停了</option></select>')+
+    '</div>';
+  document.getElementById('pbMsg').textContent='拆好了，往上翻着改 →';
+  document.getElementById('pbApply').style.display='';
 }
 
 /* —— 小病粘贴 —— */
 var MNB=null;
-var MN_NAMES=['口腔溃疡','嘴溃疡','落枕','偏头痛','荨麻疹','过敏性鼻炎','麦粒肿','牙龈肿痛','肠胃炎','腰扭伤','口角炎'];
-var MN_SITES=['舌尖','舌边','舌下','舌根','上唇','下唇','嘴角','颊黏膜','牙龈','上颚','咽喉'];
-var MN_TRIG=['熬夜','没睡好','睡不够','失眠','吃辣','上火','压力','紧张','焦虑','加班','月经','咬到','硬东西','烫','感冒','受凉','睡姿'];
+var MN_NAMES=['口腔溃疡','嘴溃疡','落枕','偏头痛','荨麻疹','过敏性鼻炎','麦粒肿','牙龈肿痛','肠胃炎','腰扭伤','口角炎','肩胛骨痛','颈肩痛','脖子疼','鼻涕带血','流鼻血','鼻塞','喉咙痛','咳嗽','结膜炎'];
+var MN_SITES=['舌尖','舌边','舌下','舌根','上唇','下唇','嘴角','颊黏膜','牙龈','上颚','咽喉','肩胛骨','颈部','腰','鼻','鼻腔','眼睛','耳朵','皮肤','全身'];
+var MN_TRIG=['熬夜','没睡好','睡不够','失眠','吃辣','上火','压力','紧张','焦虑','加班','月经','咬到','硬东西','烫','感冒','受凉','睡姿','开车','驾驶','久坐','长时间一个姿势'];
 function mnParse(txt){
   var raw=String(txt||''), o={name:'', start:'', end:'', sites:[], count:1, sev:2, trig:[], care:[], dr:false, note:'', dur:0, raw:raw};
   MN_NAMES.forEach(function(f){ if(!o.name && raw.indexOf(f)>=0) o.name=(f==='嘴溃疡'?'口腔溃疡':f); });
@@ -33808,6 +34328,7 @@ var HP_INIT = false;
 function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
+  if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
   var k = S.tab || 'map';
   try {
     if (k === 'map')        { renderBodyMap(); renderCheck(); renderCkLink(); }
@@ -33844,11 +34365,29 @@ function hpClearDemo(){
   window.medAdd = medAdd;
   window.medDel = medDel;
   window.medEdit = medEdit;
+  window.doseDebug = { perDay:dosePerDay, plan:dosePlan, slot:doseSlot, show:doseShow, tick:doseTick, load:HLOAD, get DOSE(){ return DOSE; }, times:doseTimesFor, cfg:DOSE_CFG, rxJson:rxExtractJson, rxNorm:rxNormalize, prompt:rxPrompt };
+  window.doseDismiss = doseDismiss;
+  window.doseMark = doseMark;
+  window.doseSnooze = doseSnooze;
+  window.doseTakeSlot = doseTakeSlot;
+  window.doseCfgOpen = doseCfgOpen;
+  window.doseCfgSave = doseCfgSave;
+  window.rxCopyPrompt = rxCopyPrompt;
+  window.medAiCopy = medAiCopy;
+  window.medAiVisit = medAiVisit;
   window.medFocus = medFocus;
   window.medRowAdd = medRowAdd;
   window.medRowDel = medRowDel;
   window.medRowSet = medRowSet;
   window.mnAdd = mnAdd;
+  window.mnQuick = mnQuick;
+  window.mnSave = mnSave;
+  window.mnDocText = mnDocText;
+  window.mnRemind = mnRemind;
+  window.mnCopyDoc = mnCopyDoc;
+  window.pvNoZone = pvNoZone;
+  window.mnParse = mnParse;
+  window.GM = GM;
   window.mnDel = mnDel;
   window.mnEdit = mnEdit;
   window.pasteOpen = pasteOpen;
@@ -33887,6 +34426,9 @@ function hpClearDemo(){
     var K_WIN = 'niko_pet_win';   // 位置记忆 {l,t}
     var K_CFG = 'niko_pet_cfg';   // 外观 {size,op,hue,on}
     var K_ACT = 'niko_pet_act';   // 最近一次操作时间戳（久坐判定，自动记录）
+    var K_CAP = 'niko_pet_cap';   // 时间胶囊：{d,total,sess,lastMove} 今日累计活跃 + 连续时长（2026-09-14）
+    var CAP_IDLE_MS = 5 * 60 * 1000;  // 离开超 5 分钟 = 不在电脑前，连续时长归零（2026-09-16 用户拍板：跟桌面版连坐口径对齐）
+    var CAP = { d: '', total: 0, sess: 0, lastMove: 0, lastTick: 0, tid: null, saveAt: 0, el: null };
     var K_HELLO = 'niko_pet_hello';
     var SIT_MS = 30 * 60 * 1000;  // 连续 30 分钟没起身
     var PLAY_MIN = 60;            // 可玩余额阈值（分钟）
@@ -34097,6 +34639,9 @@ function hpClearDemo(){
     function syncSetBtn() {
         var b = $('npSetBtn');
         if (b) { b.classList.toggle('on', !!CFG.on); b.textContent = CFG.on ? '🪔 显示桌宠（已开）' : '🪔 显示桌宠（已关）'; }
+        /* 2026-09-14：右上角快捷开关（总框架菜单簇），开/关状态实时跟手 */
+        var t = $('petToggleLabel');
+        if (t) t.textContent = CFG.on ? '收起 NIKO' : '唤出 NIKO';
     }
     function applyWin() {
         if (!PET) return;
@@ -34214,6 +34759,9 @@ function hpClearDemo(){
         }
         document.addEventListener('pointerdown', markAct, true);
         document.addEventListener('keydown', markAct, true);
+        document.addEventListener('pointermove', markAct, { passive: true });
+        document.addEventListener('wheel', markAct, { passive: true });
+        capStart();
         window.addEventListener('visibilitychange', function () { markAct(); tick(); });
         window.addEventListener('niko:storage-set', function (e) {
             var k = e && e.detail && e.detail.key;
@@ -34226,10 +34774,71 @@ function hpClearDemo(){
     function markAct() {
         var now = Date.now();
         ACT = now;
+        CAP.lastMove = now;
         if (now - NP.actAt < 30000) return;
         NP.actAt = now;
         sset(K_ACT, now);
     }
+
+    /* ---------- 时间胶囊：连续在电脑前时长（2026-09-14） ----------
+       页面里能看到的操作（鼠标/键盘/滚轮）都算「在电脑前」；
+       离开超 5 分钟 → 连续时长归零；今日累计单独攒，跨刷新不断。 */
+    function capPad(n) { return (n < 10 ? '0' : '') + n; }
+    function capFmt(s) {
+        s = Math.floor(s);
+        var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+        return h ? (h + ':' + capPad(m) + ':' + capPad(x)) : (capPad(m) + ':' + capPad(x));
+    }
+    function capLoad() {
+        var c = sget(K_CAP, null), t = today();
+        if (c && typeof c === 'object' && c.d === t) {
+            CAP.d = t; CAP.total = Number(c.total) || 0; CAP.sess = Number(c.sess) || 0; CAP.lastMove = Number(c.lastMove) || 0;
+        } else { CAP.d = t; CAP.total = 0; CAP.sess = 0; CAP.lastMove = 0; }
+        if (Date.now() - CAP.lastMove > CAP_IDLE_MS) CAP.sess = 0;   // 上次离开超 5 分钟 → 开局归零
+        CAP.lastTick = Date.now();
+    }
+    function capSave(force) {
+        var now = Date.now();
+        if (!force && now - CAP.saveAt < 15000) return;
+        CAP.saveAt = now;
+        sset(K_CAP, { d: CAP.d, total: Math.round(CAP.total), sess: Math.round(CAP.sess), lastMove: CAP.lastMove });
+    }
+    function capTick() {
+        if (!CAP.el) return;
+        var now = Date.now();
+        var off = (window.innerWidth <= 768) || !CFG.on;             // 桌宠收起 / 手机端：不计时
+        if (off) { CAP.lastTick = now; return; }
+        if (now - CAP.lastMove > CAP_IDLE_MS) { CAP.sess = 0; }      // 离开超 5 分钟 → 归零
+        else if (!document.hidden) {
+            var dt = Math.min(now - CAP.lastTick, 5000) / 1000;      // 后台节流回来不狂加
+            if (dt > 0) { CAP.sess += dt; CAP.total += dt; }
+        }
+        CAP.lastTick = now;
+        var idle = now - CAP.lastMove > CAP_IDLE_MS;
+        CAP.el.innerHTML = idle ? '💤 休息中' : '🖱 ' + capFmt(CAP.sess) + ' 在电脑前';
+        CAP.el.classList.toggle('idle', idle);
+        CAP.el.title = '时间胶囊 · 今日累计活跃 ' + capFmt(CAP.total) + ' · 离开超 5 分钟自动归零';
+        capSave(false);
+    }
+    function capStart() {
+        capLoad();
+        CAP.el = $('npPill');
+        clearInterval(CAP.tid);
+        CAP.tid = setInterval(capTick, 1000);
+        capTick();
+    }
+    /* 门禁/排查用：nikoPetCap() 看当前状态，.feed() 喂一次活动，.tick() 手动走一秒 */
+    window.nikoPetCap = function () {
+        return {
+            sess: Math.round(CAP.sess), total: Math.round(CAP.total),
+            idleMs: Date.now() - CAP.lastMove, idleMsMax: CAP_IDLE_MS,
+            feed: function () { CAP.lastMove = Date.now(); CAP.lastTick = Date.now(); },
+            tick: capTick,
+            rewind: function (ms) { CAP.lastMove = Date.now() - ms; },
+            save: function () { capSave(true); },
+            zero: function () { CAP.sess = 0; CAP.total = 0; CAP.lastMove = Date.now(); CAP.lastTick = Date.now(); }
+        };
+    };
 
     window.nikoPetInit = nikoPetInit;
     window.nikoPetTick = tick;
@@ -36018,7 +36627,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609161020";
+        window.NIKO_VERSION = "202609161210";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
