@@ -32931,10 +32931,18 @@ function medStat(){
 }
 function medFocus(k){ MEDF=(MEDF===k?'':k); renderMed(); }
 function kpi(v,l){ return '<div class="mx-k"><b>'+v+'</b><span>'+l+'</span></div>'; }
+/* 用法原文 → 给人读的写法：老记录里用法只填了数字（2 / 3），统一显示成「每日 N 次」，
+   避免出现「用法：3」这种看了不知道是几顿的写法（2026-09-16） */
+function fTxt(it){
+  var t=(it&&it.f!=null)?String(it.f).trim():'';
+  if(!t) return '';
+  if(/^\d{1,2}$/.test(t)) return '每日 '+t+' 次';
+  return t;
+}
 function visitCard(v){
   var items=(v.items||[]).map(function(it){
     return '<tr><td class="nm">'+esc(it.n)+(it.note?('<div style="font-weight:400;color:var(--muted);font-size:11px">'+esc(it.note)+'</div>'):'')+'</td>'+
-      '<td class="num">'+esc(it.s||'—')+'</td><td>'+esc(it.f||'—')+'</td><td>'+esc(it.t||'—')+'</td><td class="num">'+(it.d?it.d+' 天':'—')+'</td></tr>';
+      '<td class="num">'+esc(it.s||'—')+'</td><td>'+esc(fTxt(it)||'—')+'</td><td>'+esc(it.t||'—')+'</td><td class="num">'+(it.d?it.d+' 天':'—')+'</td></tr>';
   }).join('');
   var n=(v.items||[]).filter(function(it){ return String(it.n||'').trim(); }).length;
   return '<details class="mx-fold">'+
@@ -32983,7 +32991,7 @@ function medNowCard(){
     } else if(v.date){ prog='<span class="mx-prog" style="color:var(--muted)">'+esc(v.date)+' 开的</span>'; }
     return '<div class="mx-now-row">'+
       '<span style="font-weight:700;font-size:12.5px">'+esc(it.n)+(it.s?('<span style="font-weight:400;color:var(--muted);font-size:11px"> '+esc(it.s)+'</span>'):'')+'</span>'+
-      '<span style="font-size:11.5px;color:var(--muted)">'+esc(it.f||'频次见处方')+(it.t?(' · '+esc(it.t)):'')+'</span>'+
+      '<span style="font-size:11.5px;color:var(--muted)">'+esc(fTxt(it)||'频次见处方')+(it.t?(' · '+esc(it.t)):'')+'</span>'+
       '<span style="margin-left:auto">'+prog+'</span></div>';
   }).join('');
   return '<div class="card" style="margin-bottom:14px">'+
@@ -33063,7 +33071,7 @@ function medAiMedLines(){
   return arr.map(function(o,i){
     var it=o.it, extra='';
     if(o.v.date && it.d){ var day=dDiff(o.v.date,todayStr())+1; if(day>=1) extra=' · 今天是第 '+day+' 天（疗程 '+it.d+' 天）'; }
-    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'频次见处方')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+extra+'\n';
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(fTxt(it)||'频次见处方')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+extra+'\n';
   }).join('');
 }
 function medAiPrompt(kind){
@@ -33098,7 +33106,7 @@ function medAiPrompt(kind){
 function medAiVisitPrompt(id){
   var v=null; MEDS.forEach(function(x){ if(x.id===id) v=x; }); if(!v) return '';
   var meds=(v.items||[]).filter(function(it){ return String(it.n||'').trim(); }).map(function(it,i){
-    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(it.f||'')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+'\n';
+    return (i+1)+'. '+it.n+(it.s?('（'+it.s+'）'):'')+' · '+(fTxt(it)||'')+(it.t?(' · '+it.t):'')+(it.note?(' · 备注：'+it.note):'')+'\n';
   }).join('')||'（未录药品）\n';
   return medAiCtx()+'我在 '+(v.date||'（日期未记）')+' 因为「'+(v.diag||'未记诊断')+'」去看了 '+(v.hosp||'医生')+'，医生开了这些药：\n'+meds+
     '\n请帮我整理这次开药的注意事项：\n'+
@@ -33158,10 +33166,24 @@ function doseTimesFor(per,tm){
   return MEAL_SETS[per].map(function(k){ return min2hm(k==='s'?MEAL_BASE.s:(k==='b'?first:MEAL_BASE[k])+off); });
 }
 function dosePerDay(f){
-  var m=String(f||'').match(/([一二两三四五六\d])\s*次/);
-  if(!m) return 1;
-  var map={'一':1,'两':2,'二':2,'三':3,'四':4,'五':5,'六':6};
-  var n=map[m[1]]||(+m[1]||1);
+  /* 用法原文 → 每日次数。
+     2026-09-16 修：老记录里「用法」只填了数字（2 / 2 / 3），旧实现只认「N次」，
+     全被当成 1 次/天 → 卡片显示「今日服药 1/1 次 · 今天都吃完了」。
+     现在按顺序认：每N小时 → 数字/中文 + 次 → tid/bid/qid → 纯数字（按每日次数算） */
+  var s=String(f==null?'':f).replace(/[０-９]/g,function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); }).trim();
+  if(!s) return 1;
+  var CN={'一':1,'两':2,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8};
+  var n=0, m;
+  m=s.match(/每\s*(\d{1,2})\s*(?:小时|h|hr)/i);
+  if(m){ var g=+m[1]; if(g>0) n=Math.round(24/g); }
+  if(!n){ m=s.match(/([一二两三四五六七八]|\d{1,2})\s*次/); if(m) n=CN[m[1]]||(+m[1]||0); }
+  if(!n){ var low=s.toLowerCase();
+    if(/\bqid\b/.test(low)) n=4;
+    else if(/\btid\b/.test(low)) n=3;
+    else if(/\bbid\b/.test(low)) n=2;
+    else if(/\bqd\b/.test(low)) n=1; }
+  if(!n){ m=s.match(/^(\d{1,2})\s*(?:片|粒|袋|丸|支|ml|毫升|g|mg)?$/i); if(m) n=+m[1]; }
+  if(!n) n=1;
   return n>4?4:n;
 }
 function dosePlan(){
@@ -33171,7 +33193,7 @@ function dosePlan(){
     var it=x.it, v=x.v;
     var k=String(it.n||'').replace(/\s+/g,''); if(!k||seen[k]) return; seen[k]=1;
     if(v.date && it.d){ var day=dDiff(v.date,todayStr())+1; if(day>it.d) return; }   /* 疗程吃完不再提醒 */
-    var per=dosePerDay(it.f);
+    var per=(+it.perDay>0?Math.min(4,+it.perDay):dosePerDay(it.f));   /* perDay 显式优先，其次解析「用法」原文 */
     doseTimesFor(per,it.t).forEach(function(t){ (slots[t]=slots[t]||[]).push({n:it.n, tm:it.t||''}); });
   });
   return Object.keys(slots).sort().map(function(t){ return {t:t, meds:slots[t]}; });
@@ -34507,6 +34529,11 @@ function hpClearDemo(){
         return s;
     }
 
+    /* 已经连着坐了多久（分钟）—— 气泡显示真实时长，别写死阈值（2026-09-16 修） */
+    function sitMin() {
+        return Math.max(1, Math.round((Date.now() - Math.max(sitStart(), NP.sitAck || 0)) / 60000));
+    }
+
     function resolve() {
         var now = Date.now();
         // 优先级：开心 > 点赞 > 专注 > 深夜 > 久坐 > 想玩 > 待机
@@ -34526,7 +34553,7 @@ function hpClearDemo(){
             return (br ? '⏳ 休息一下，我替你守着灯' : '⏳ 灯亮着，我在旁边守着')
                 + '<br><b>今天第 ' + (cntPomo() + 1) + ' 个番茄 · ' + (br ? '休息' : '专注') + '</b>';
         }
-        if (s === 'break') return '🧘 已经连着坐了 ' + Math.round(SIT_MS / 60000) + ' 分钟啦<br><b>起来动 2 分钟 · 收下巴 ×10</b>'
+        if (s === 'break') return '🧘 已经连着坐了 ' + sitMin() + ' 分钟啦<br><b>起来动 2 分钟 · 收下巴 ×10</b>'
             + '<div class="np-act">'
             + '<button onclick="nikoPetCheer(\'move\')">我起来活动 2 分钟</button>'
             + '<button onclick="nikoPetCheer(\'rest\')">我要休息了</button>'
@@ -36627,7 +36654,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609161210";
+        window.NIKO_VERSION = "202609161228";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
