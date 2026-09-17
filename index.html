@@ -11263,6 +11263,38 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   #twPage .twMtabs{padding-right:96px;}
   #twPage .twMtabs button{font-size:12.5px;padding:8px 4px;}
 }
+
+/* ---------- 视图模式（2026-09-17 定版：写作优先）----------
+   write = 素材箱 + 编辑器（预览收起，正文行宽放宽到 720，眼睛不用分心）
+   both  = 三栏全开（默认；比例沿用「预览优先」236 / 1fr / 468）
+   pvw   = 编辑器 + 排版预览（素材箱收起，正文行宽同样 720）
+   切换器固定挂在中栏标题行 —— 它是唯一在任何模式下都不会被隐藏的栏，
+   所以放这里才不会「一切到某模式就再也点不回来」。 */
+#twPage{--twEdW:720px;}
+#twPage .twViewSw{display:flex;gap:4px;flex:0 0 auto;padding-bottom:6px;}
+#twPage .twViewSw button{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:6px;padding:3px 8px;font-size:11.5px;cursor:pointer;font-family:inherit;
+  line-height:1.6;white-space:nowrap;}
+#twPage .twViewSw button:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twViewSw button.on{background:var(--twAccentBg);border-color:var(--twAccent);
+  color:var(--twAccent);font-weight:500;}
+#twPage[data-twview="write"] .twShop{grid-template-columns:var(--twC1) minmax(0,1fr);}
+#twPage[data-twview="write"] .twColPvw{display:none;}
+#twPage[data-twview="write"] .twEdInner{max-width:var(--twEdW);}
+#twPage[data-twview="pvw"] .twShop{grid-template-columns:minmax(0,1fr) var(--twC2);}
+#twPage[data-twview="pvw"] .twColInbox{display:none;}
+#twPage[data-twview="pvw"] .twEdInner{max-width:var(--twEdW);}
+
+/* 窄屏（≤900）用 twMtabs 三页签，视图模式钩子在这里整体让位：
+   ⚠️ 必须用 [data-twview] 把特异性抬到 (1,2,0)/(1,3,0)，
+   否则压不住上面同样特异性的桌面规则 —— 手机上点「排版预览」会点不出来。 */
+@media (max-width:900px){
+  #twPage .twViewSw{display:none;}
+  #twPage[data-twview] .twColInbox,
+  #twPage[data-twview] .twColPvw{display:none;}
+  #twPage[data-twview] .twColInbox.show,
+  #twPage[data-twview] .twColPvw.show{display:flex;}
+}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -14125,6 +14157,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <div class="twCard twColEdit">
       <div class="twEdInner">
         <div class="twEdTitleRow">
+          <div class="twViewSw" id="twViewSw">
+            <button id="twVwWrite" onclick="twSetView('write')" title="只留素材箱和编辑器，预览收起 —— 专心写">写作</button>
+            <button id="twVwBoth" onclick="twSetView('both')" title="素材箱 + 编辑器 + 排版预览（默认）">双栏</button>
+            <button id="twVwPvw" onclick="twSetView('pvw')" title="收起素材箱，编辑器配排版预览 —— 调排版时用">预览</button>
+          </div>
           <input class="twEdTitle" id="twTitle" placeholder="给这篇推文起个标题…" oninput="twEdRender()">
           <div class="twHostTop" id="twHostTop"></div>
         </div>
@@ -34489,6 +34526,7 @@ function hpClearDemo(){
      数据：一个 key 存整个板块（niko_tw_v1），经 safeStorage；渲染前必须重读（铁律 §5） */
   var TW_STORE = 'niko_tw_v1';
   var TW_MAX = 200;                 // 素材/草稿条数上限，防止把 localStorage 撑爆
+  var TW_VIEWS = ['write', 'both', 'pvw'];   // 视图模式：写作优先 / 三栏 / 预览优先
   var T = { drafts: [], inbox: [], cur: null };
   var saveTimer = null;
 
@@ -34507,6 +34545,7 @@ function hpClearDemo(){
     if (!Array.isArray(T.drafts)) T.drafts = [];
     if (!Array.isArray(T.inbox)) T.inbox = [];
     if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
+    if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
       T.cur = T.drafts.length ? T.drafts[0].id : null;
     }
@@ -34798,6 +34837,26 @@ function hpClearDemo(){
     twEdAutoH();
   }
 
+  /* ---------- 视图模式（写作 / 双栏 / 预览）----------
+     钩子 = #twPage[data-twview]，样式全在 css 段末尾；这里只负责挂属性 + 亮按钮。
+     模式是「UI 偏好」不是「内容」，但一起存进 niko_tw_v1，省一个 key。 */
+  function twApplyView(v){
+    if (TW_VIEWS.indexOf(v) < 0) v = 'both';
+    var pg = $('twPage');
+    if (pg) pg.setAttribute('data-twview', v);
+    var ids = { write: 'twVwWrite', both: 'twVwBoth', pvw: 'twVwPvw' };
+    TW_VIEWS.forEach(function(k){
+      var b = $(ids[k]);
+      if (b) b.classList.toggle('on', k === v);
+    });
+    return v;
+  }
+  function twSetView(v){
+    T.view = twApplyView(v);
+    twSave();
+    twEdAutoH();          // 列宽/行宽变了，正文框高度要跟着重算（窄屏才生效）
+  }
+
   /* ---------- 动作按钮：就近放置（定版，不再提供其它落点）---------- */
   function twMkBtn(id, label, pri, tip, fn){
     var b = document.createElement('button');
@@ -34876,6 +34935,7 @@ function hpClearDemo(){
       twSave();
     }
     twPlaceBtns();
+    twApplyView(T.view || 'both');   // 每次进页面都按存储的模式摆好栏位
     twDfRender();
     twIbRender();
     twEdLoadInto();
@@ -34899,6 +34959,7 @@ function hpClearDemo(){
   window.twExportGzh = twExportGzh;
   window.twToKb = twToKb;
   window.twMobileTab = twMobileTab;
+  window.twSetView = twSetView;
   window.twDemoLoad = twDemoLoad;
   window.twDemoClear = twDemoClear;
   window.twDemoToggle = twDemoToggle;
@@ -36675,7 +36736,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609172309";
+        window.NIKO_VERSION = "202609172333";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
