@@ -10332,215 +10332,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         @media (prefers-reduced-motion: reduce) {
             .gt-tank-whale, .gt-fab-pop, .gt-boot.on, .gt-boot-txt { animation: none !important; }
         }
-/* ===== 复利面板专属CSS ===== */
-        @keyframes cpOvernightRise { 0%{opacity:0; transform:translateY(8px);} 18%{opacity:1; transform:translateY(0);} 82%{opacity:1;} 100%{opacity:0; transform:translateY(-10px);} }
-        .cp-wrap { display:flex; flex-direction:column; gap:14px; }
-        .cp-hero {
-            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
-            border-radius: 16px; padding: 18px 24px; color: #fff; flex-shrink: 0;
-            display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
-        }
-        .cp-hero h2 { font-size: 20px; font-weight: 700; }
-        .cp-hero p { font-size: 12.5px; color: rgba(255,255,255,.75); margin-top: 4px; }
-        .cp-hero-score { text-align:center; }
-        .cp-hero-score .num { font-size: 34px; font-weight: 800; line-height: 1.1; }
-        .cp-hero-score .lbl { font-size: 11px; color: rgba(255,255,255,.7); }
-        /* Tab 切换 */
-        .cp-tabs { display:flex; gap:8px; flex-shrink:0; flex-wrap:wrap; }
-        .cp-tab {
-            padding: 7px 16px; border-radius: 18px; cursor: pointer; font-size: 13px;
-            background: #f1f3f5; color: #555; border: 1px solid transparent; transition: all .2s;
-            user-select: none;
-        }
-        body.dark-mode .cp-tab { background: #232335; color: #aaa; }
-        .cp-tab:hover { border-color: #8b5cf6; }
-        .cp-tab.active { background: #8b5cf6; color: #fff; }
-        .cp-view { display: none; }
-        .cp-view.active { display: block; }
-        .cp-grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; align-items:start; }
-        @media (max-width: 900px) { .cp-grid { grid-template-columns: 1fr; } }
-        .cp-card {
-            background: #fff; border: 1px solid #eee; border-radius: 14px; padding: 16px 18px;
-        }
-        body.dark-mode .cp-card { background: #1f1f2e; border-color: #333345; }
-        .cp-card-title { font-size: 14px; font-weight: 600; color: #444; margin-bottom: 12px; display:flex; align-items:center; gap:8px; }
-        body.dark-mode .cp-card-title { color: #ddd; }
-        .cp-card-title span { font-size: 11px; font-weight: 400; color: #999; }
-        /* 雷达图 */
-        .cp-radar-wrap { position: relative; }
-        .cp-radar { width: 100%; max-width: 400px; margin: 0 auto; display: block; }
-        /* 八维格子 */
-        .cp-dims { display:grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap:8px; }
-        .cp-dim {
-            background: #faf9f7; border: 1px solid #efebe4; border-radius: 10px; padding: 10px 12px;
-            cursor: pointer; transition: all .15s;
-        }
-        body.dark-mode .cp-dim { background: #232335; border-color: #2e2e42; }
-        .cp-dim:hover { border-color: #8b5cf6; box-shadow: 0 0 0 1px #8b5cf6 inset; }
-        .cp-dim-head { display:flex; align-items:center; gap:6px; font-size: 12px; font-weight: 600; color: #555; }
-        body.dark-mode .cp-dim-head { color: #ccc; }
-        .cp-dim-val { font-size: 22px; font-weight: 800; margin: 4px 0 2px; }
-        .cp-dim-bar { height: 5px; background: #e8e6e1; border-radius: 4px; overflow: hidden; }
-        body.dark-mode .cp-dim-bar { background: #2e2e42; }
-        .cp-dim-bar-fill { height: 100%; border-radius: 4px; }
-        .cp-dim-tip { font-size: 10.5px; color: #999; margin-top: 4px; line-height: 1.4; }
-        /* 飞轮（链式布局） */
-        .cp-wheel { display:flex; flex-direction:column; gap:8px; }
-        .cp-wheel-row {
-            display:flex; align-items:center; gap:8px; background:#faf9f7; border:1px solid #efebe4;
-            border-radius: 10px; padding: 8px 12px;
-        }
-        body.dark-mode .cp-wheel-row { background: #232335; border-color: #2e2e42; }
-        .cp-wheel-node { display:flex; flex-direction:column; align-items:center; min-width: 68px; }
-        .cp-wheel-node .icon { font-size: 20px; }
-        .cp-wheel-node .nm { font-size: 12px; font-weight: 600; color: #555; }
-        body.dark-mode .cp-wheel-node .nm { color: #ccc; }
-        .cp-wheel-link { flex: 1; text-align:center; }
-        .cp-wheel-link .rel { font-size: 13px; font-weight: 700; }
-        .cp-wheel-link .desc { font-size: 10px; color: #999; }
-        /* 一年预测 */
-        .cp-pred-list { display:flex; flex-direction:column; gap:10px; }
-        .cp-pred-item { display:flex; align-items:flex-start; gap:10px; padding: 10px 12px; background:#faf9f7; border-radius: 10px; }
-        body.dark-mode .cp-pred-item { background: #232335; }
-        .cp-pred-icon { font-size: 20px; width: 32px; text-align: center; flex-shrink: 0; }
-        .cp-pred-main { flex: 1; min-width: 0; }
-        .cp-pred-label { font-size: 12px; color: #888; }
-        .cp-pred-val { font-size: 15px; font-weight: 700; color: #444; }
-        body.dark-mode .cp-pred-val { color: #ddd; }
-        .cp-pred-now { font-size: 11px; color: #999; }
-        .cp-pred-arrow { color: #8b5cf6; font-weight: 700; }
-        .cp-pred-sug { font-size: 11.5px; color: #6d28d9; margin-top: 3px; line-height: 1.5; }
-        body.dark-mode .cp-pred-sug { color: #c4b5fd; }
-        .cp-insight { margin-top: 12px; background: #f6f4ff; border-left: 3px solid #8b5cf6; border-radius: 0 10px 10px 0; padding: 10px 14px; font-size: 12.5px; color: #4c3d8a; line-height: 1.7; }
-        body.dark-mode .cp-insight { background: #2a2340; color: #c4b5fd; }
-        .cp-empty { text-align:center; color:#aaa; font-size: 13px; padding: 20px; }
-        /* 成就 */
-        .cp-ach-sum { display:flex; align-items:center; gap:14px; margin-bottom: 14px; flex-wrap: wrap; }
-        .cp-ach-big { font-size: 30px; font-weight: 800; color: #8b5cf6; }
-        .cp-ach-progress { flex:1; min-width: 180px; height: 10px; background:#e8e6e1; border-radius: 6px; overflow: hidden; }
-        body.dark-mode .cp-ach-progress { background:#2e2e42; }
-        .cp-ach-progress-fill { height:100%; background: linear-gradient(90deg,#8b5cf6,#a78bfa); border-radius:6px; transition: width .4s; }
-        .cp-ach-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap:10px; }
-        .cp-ach {
-            background:#faf9f7; border:1px solid #efebe4; border-radius:12px; padding:12px 10px; text-align:center;
-            transition: all .15s;
-        }
-        body.dark-mode .cp-ach { background:#232335; border-color:#2e2e42; }
-        .cp-ach.locked { opacity:.38; filter: grayscale(1); }
-        .cp-ach .ic { font-size: 28px; line-height: 1.2; }
-        .cp-ach .nm { font-size: 12px; font-weight: 600; color:#555; margin-top: 6px; }
-        body.dark-mode .cp-ach .nm { color:#ccc; }
-        .cp-ach .dc { font-size: 10px; color:#999; margin-top: 3px; line-height:1.4; }
-        .cp-ach .st { font-size: 10px; margin-top: 6px; padding: 2px 8px; border-radius: 10px; display:inline-block; }
-        .cp-ach .st.got { background:#e9f9f0; color:#10b981; }
-        .cp-ach .st.no { background:#f1f3f5; color:#999; }
-        body.dark-mode .cp-ach .st.got { background:#0f3d2e; color:#34d399; }
-        body.dark-mode .cp-ach .st.no { background:#2e2e42; color:#777; }
-        /* 第二人格复盘 */
-        .cp-ai-toolbar { display:flex; align-items:center; gap:10px; margin-bottom: 14px; flex-wrap: wrap; }
-        .cp-ai-persona {
-            display:flex; align-items:center; gap:8px; padding: 7px 14px; border-radius: 18px; cursor:pointer;
-            font-size: 12.5px; border: 1px solid #e5e0d8; background:#faf9f7; color:#555;
-        }
-        body.dark-mode .cp-ai-persona { background:#232335; border-color:#2e2e42; color:#ccc; }
-        .cp-ai-persona.active { border-color:#8b5cf6; background:#ede9fe; color:#5b21b6; }
-        body.dark-mode .cp-ai-persona.active { background:#2a2340; color:#c4b5fd; }
-        .cp-ai-card {
-            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 70%, #7c3aed 100%);
-            border-radius: 14px; padding: 18px 20px; color:#fff; line-height: 1.85; font-size: 13.5px;
-        }
-        .cp-ai-card .title { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #fff; }
-        .cp-ai-card .msg { color: rgba(255,255,255,.9); white-space: pre-wrap; }
-        .cp-ai-card .sec { margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,.25); font-size: 12.5px; color: rgba(255,255,255,.82); white-space: pre-wrap; }
-        .cp-ai-regenerate { margin-top: 12px; font-size: 12px; color:#8b5cf6; cursor:pointer; padding: 6px 14px; border:1px solid #c4b5fd; border-radius: 14px; display:inline-block; }
-        .cp-ai-regenerate:hover { background:#ede9fe; }
-        body.dark-mode .cp-ai-regenerate:hover { background:#2a2340; }
-        .cp-refresh { font-size: 11px; color: #8b5cf6; cursor: pointer; margin-left:auto; padding: 3px 10px; border: 1px solid #c4b5fd; border-radius: 12px; }
-        .cp-refresh:hover { background: #ede9fe; }
-        body.dark-mode .cp-refresh:hover { background: #2a2340; }
-        .cp-invest-row { display:flex; align-items:center; gap:8px; padding:6px 10px; background:#faf9f7; border-radius:8px; margin-bottom:4px; font-size:12px; }
-        body.dark-mode .cp-invest-row { background:#232335; }
-        .cp-invest-input { padding:6px 8px; border:1px solid #ddd; border-radius:8px; font-size:12px; }
-        body.dark-mode .cp-invest-input { background:#232335; border-color:#2e2e42; color:#ddd; }
-        .cp-invest-btn { padding:6px 14px; background:#8b5cf6; color:#fff; border:none; border-radius:8px; font-size:12px; cursor:pointer; white-space:nowrap; }
-        .cp-invest-btn:hover { background:#7c3aed; }
-/* ===== 育儿手册专属CSS ===== */
-        .parenting-page { display: flex; flex-direction: column; gap: 14px; }
-        .parenting-stats {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;
-        }
-        .parenting-stat {
-            background: #f0f9ff; border: 1px solid #e0f2fe; border-radius: 12px; padding: 10px 14px;
-        }
-        body.dark-mode .parenting-stat { background: #182835; border-color: #1e3a5f; }
-        .parenting-stat-label { font-size: 12px; color: #888; }
-        .parenting-stat-value { font-size: 22px; font-weight: 600; color: #0ea5e9; margin-top: 2px; }
-        body.dark-mode .parenting-stat-value { color: #7dd3fc; }
-        .parenting-tabs {
-            display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px;
-        }
-        body.dark-mode .parenting-tabs { border-bottom-color: #333; }
-        .parenting-tab {
-            padding: 7px 16px; border-radius: 20px; cursor: pointer; font-size: 13px;
-            background: #f1f3f5; color: #555; border: 1px solid transparent; transition: all .2s; white-space: nowrap;
-        }
-        body.dark-mode .parenting-tab { background: #222; color: #aaa; }
-        .parenting-tab.active { background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
-        .parenting-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .parenting-card {
-            background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px 16px;
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        body.dark-mode .parenting-card { background: #1f2937; border-color: #333; }
-        .parenting-card-title { font-size: 14px; font-weight: 600; line-height: 1.4; }
-        .parenting-card-meta { font-size: 12px; color: #888; }
-        .parenting-card-body { font-size: 13px; color: #555; line-height: 1.6; }
-        body.dark-mode .parenting-card-body { color: #bbb; }
-        .parenting-tag {
-            font-size: 11px; padding: 1px 8px; border-radius: 999px; background: #e0f2fe; color: #0369a1;
-            align-self: flex-start;
-        }
-        body.dark-mode .parenting-tag { background: #1e3a5f; color: #7dd3fc; }
-        .parenting-empty {
-            text-align: center; color: #999; font-size: 13px; padding: 40px 0;
-            border: 1px dashed #ddd; border-radius: 12px;
-        }
-        body.dark-mode .parenting-empty { border-color: #333; color: #777; }
-        .parenting-form {
-            background: #f8fafc; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
-        }
-        body.dark-mode .parenting-form { background: #1f2937; }
-        .parenting-form-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .parenting-form-row > * { flex: 1; min-width: 120px; }
-        .parenting-form label { font-size: 12px; color: #888; display: block; margin-bottom: 4px; }
-        .parenting-form input, .parenting-form select, .parenting-form textarea {
-            width: 100%; padding: 8px 10px; border-radius: 8px; font-size: 13px;
-            border: 1px solid #e5e7eb; background: #fff; box-sizing: border-box;
-        }
-        body.dark-mode .parenting-form input, body.dark-mode .parenting-form select, body.dark-mode .parenting-form textarea {
-            background: #111827; border-color: #444; color: #eee;
-        }
-        .parenting-form textarea { resize: vertical; min-height: 60px; }
-        .parenting-checklist-item {
-            display: flex; align-items: flex-start; gap: 10px; background: #fff; border: 1px solid #eee;
-            border-radius: 10px; padding: 10px 12px;
-        }
-        body.dark-mode .parenting-checklist-item { background: #1f2937; border-color: #333; }
-        .parenting-checklist-item.done { opacity: .65; }
-        .parenting-checklist-item input[type="checkbox"] { margin-top: 3px; accent-color: #0ea5e9; }
-        .parenting-checklist-item .text { flex: 1; font-size: 13px; }
-        .parenting-checklist-item.done .text { text-decoration: line-through; color: #888; }
-        .parenting-advice-box {
-            background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 14px 16px;
-            font-size: 13px; line-height: 1.7; color: #0c4a6e; white-space: pre-wrap;
-        }
-        body.dark-mode .parenting-advice-box { background: #182835; border-color: #1e3a5f; color: #bae6fd; }
-        .parenting-principle-item {
-            background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 10px 12px;
-            display: flex; justify-content: space-between; align-items: center; gap: 8px;
-        }
-        body.dark-mode .parenting-principle-item { background: #1f2937; border-color: #333; }
-        .parenting-principle-text { flex: 1; font-size: 13px; line-height: 1.5; }
 #healthPage{--bp:#dfe2ea;--bp-stroke:#c3c8d4}
 
 .hp-wrap{max-width:1140px;margin:0 auto;padding:0 20px}
@@ -11101,7 +10892,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .tl .ev .bd em{font-style:normal;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:6px;padding:0 6px;font-size:10.5px;color:var(--muted);margin-right:6px}
 .tl .ev .sb{font-size:11.5px;color:var(--muted);margin-top:1px}
 .rxbox{background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:9px;padding:11px 12px;font-size:12px;line-height:1.85;white-space:pre-line;color:var(--text)}
-/* ================= NIKO · 推文工坊（三栏工作台） =================
+/* ================= NIKO · 笔记长文（三栏工作台；原名推文工坊） =================
    作用域全部锁在 #twPage；配色映射本体主题令牌 → 5 套主题自动适配 */
 #twPage{
   --twBg:var(--card-bg-2,#f5f2ed);
@@ -11435,11 +11226,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     .book-view-tab, .book-status-tab { flex-shrink: 0; white-space: nowrap; }
     .book-checkin-today { flex-direction: column; align-items: stretch; }
 
-    /* 育儿手册：单列 */
-    .parenting-stats { grid-template-columns: repeat(2, 1fr); }
-    .parenting-tabs { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .parenting-tab { flex-shrink: 0; }
-
     /* 便签：单列瀑布流 */
     .nb-wall { columns: 1; column-gap: 0; }
     .nb-wall .nb-card { margin-bottom: 12px; }
@@ -11448,7 +11234,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
     /* 页面内边距紧凑化 + 今日主区纵向 */
     /* 2026-09-08 用户点名：手机端所有看板吃满左右，零侧距（参考知识看板/便签满幅卡片） */
-    #todayPage, #planPage, #hotPage, #memePage, #copyPage, #notesPage, #bookPage, #diaryPage, #parentingPage, #memberPage, #gamePage, #compoundPage, #knowledgePage { padding: 10px 0 !important; }
+    #todayPage, #planPage, #hotPage, #memePage, #copyPage, #notesPage, #bookPage, #diaryPage, #memberPage, #gamePage, #knowledgePage { padding: 10px 0 !important; }
     #todayPage .today-main { flex-direction: column; overflow: visible; }
     #todayPage .today-main .flight-plan,
     #todayPage .today-main .today-panel,
@@ -11802,10 +11588,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-item" data-nav="diary" onclick="switchPage('diary')">📔 日记</div>
             <div class="nav-item" data-nav="member" onclick="switchPage('member')">💰 会员</div>
             <div class="nav-item" data-nav="game" onclick="switchPage('game')">🎮 游戏时间</div>
-            <div class="nav-item" data-nav="compound" onclick="switchPage('compound')">📈 复利面板</div>
-            <div class="nav-item" data-nav="parenting" onclick="switchPage('parenting')">👶 育儿手册</div>
             <div class="nav-item" data-nav="health" onclick="switchPage('health')">🩺 健康档案</div>
-            <div class="nav-item" data-nav="tw" onclick="switchPage('tw')">✍️ 推文工坊</div>
+            <div class="nav-item" data-nav="tw" onclick="switchPage('tw')">📝 笔记长文</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
             <div class="nav-title">Settings</div>
@@ -11853,15 +11637,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-more-item" data-navpage="knowledge" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
             <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
             <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
-            <div class="nav-more-item" data-navpage="compound" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
             <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
-            <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
             <div class="nav-more-item" data-navpage="health" onclick="switchPage('health');hideNavMore()">🩺 健康档案</div>
-            <div class="nav-more-item" data-navpage="tw" onclick="switchPage('tw');hideNavMore()">✍️ 推文工坊</div>
+            <div class="nav-more-item" data-navpage="tw" onclick="switchPage('tw');hideNavMore()">📝 笔记长文</div>
         </div>
     </div>
 
-    <!-- 手机端底部 Tab 栏：一键直达最常用 5 个板块（2026-08-20 调整：便签→复利面板，因复利需高频查看） -->
+    <!-- 手机端底部 Tab 栏：一键直达最常用 6 个板块（2026-09-17：复利面板/育儿手册已从上线版本摘除，底部栏本就不含它们） -->
     <div class="niko-mobile-tabbar" id="nikoMobileTabbar">
         <div class="niko-mobile-tab active" data-page="today" onclick="switchPage('today')"><span class="tab-icon">📌</span><span>今日</span></div>
         <div class="niko-mobile-tab" data-page="plan" onclick="switchPage('plan')"><span class="tab-icon">📋</span><span>计划</span></div>
@@ -13686,178 +13468,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 </div>
             </div>
         </div>
-        <div class="page" id="compoundPage">
-<div class="cp-wrap">
-                <div class="cp-hero">
-                    <div>
-                        <h2>📈 复利面板</h2>
-                        <p>八维复利指数 · 成就徽章 · 第二人格复盘 · 深度预测 —— 把成长变成看得见的复利</p>
-                    </div>
-                    <div class="cp-hero-score">
-                        <div class="num" id="cpTotalScore">—</div>
-                        <div class="lbl">综合复利指数</div>
-                    </div>
-                </div>
-
-                <div class="cp-tabs">
-                    <span class="cp-tab active" data-cp="radar" onclick="cpSwitchView('radar')">🕸 复利雷达</span>
-                    <span class="cp-tab" data-cp="ach" onclick="cpSwitchView('ach')">🏅 成就徽章</span>
-                    <span class="cp-tab" data-cp="ai" onclick="cpSwitchView('ai')">🧠 第二人格</span>
-                    <span class="cp-tab" data-cp="pred" onclick="cpSwitchView('pred')">⏳ 深度预测</span>
-                </div>
-
-                <!-- 视图：复利雷达 -->
-                <div class="cp-view active" id="cpViewRadar">
-                    <div class="cp-grid">
-                        <div class="cp-card">
-                            <div class="cp-card-title">🕸 八维复利雷达 <span>基于你的真实数据实时计算</span></div>
-                            <div class="cp-radar-wrap">
-                                <svg class="cp-radar" id="cpRadar" viewBox="0 0 400 360" role="img" aria-label="八维复利雷达图"></svg>
-                            </div>
-                        </div>
-                        <div class="cp-card">
-                            <div class="cp-card-title">🎯 八维复利指数 <span>点击格子看说明</span></div>
-                            <div class="cp-dims" id="cpDims"></div>
-                            <div style="margin-top:14px;">
-                                <div class="cp-card-title" style="margin-bottom:8px;">💰 投资资产 <span>录入本金和收益，计算财务复利</span></div>
-                                <div id="cpInvestBox" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;"></div>
-                                <div id="cpInvestList" style="margin-top:10px;"></div>
-                            </div>
-                            <div style="margin-top:14px;">
-                                <div class="cp-card-title" style="margin-bottom:8px;">🧭 复利飞轮 <span>四链循环</span></div>
-                                <div class="cp-wheel" id="cpWheel"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 视图：成就徽章 -->
-                <div class="cp-view" id="cpViewAch">
-                    <div class="cp-card">
-                        <div class="cp-card-title">🏅 成就徽章 <span>用真实数据解锁称号</span></div>
-                        <div class="cp-ach-sum">
-                            <div class="cp-ach-big" id="cpAchCount">0/0</div>
-                            <div style="font-size:12px;color:#888;">已解锁 <b id="cpAchGot">0</b> / <span id="cpAchTotal">20</span> 枚徽章</div>
-                            <div class="cp-ach-progress"><div class="cp-ach-progress-fill" id="cpAchBar" style="width:0%"></div></div>
-                        </div>
-                        <div class="cp-ach-grid" id="cpAchGrid"></div>
-                    </div>
-                </div>
-
-                <!-- 视图：第二人格 -->
-                <div class="cp-view" id="cpViewAi">
-                    <div class="cp-card">
-                        <div class="cp-card-title">🧠 AI 分身复盘官 <span>第二人格 · 用你的数据说你</span></div>
-                        <div class="cp-ai-toolbar">
-                            <span class="cp-ai-persona active" id="cpPersonaStrict" onclick="cpSetPersona('strict')">😈 毒舌模式</span>
-                            <span class="cp-ai-persona" id="cpPersonaWarm" onclick="cpSetPersona('warm')">😇 温柔模式</span>
-                            <span style="font-size:11px;color:#999;">切换人格，看同一个数据被怎么解读</span>
-                        </div>
-                        <div class="cp-ai-card" id="cpAiCard">
-                            <div class="title">🧠 第二人格加载中...</div>
-                        </div>
-                        <div class="cp-ai-regenerate" onclick="cpRenderAI()">🔄 换一种说法</div>
-                    </div>
-                </div>
-
-                <!-- 视图：深度预测 -->
-                <div class="cp-view" id="cpViewPred">
-                    <div class="cp-card">
-                        <div class="cp-card-title">⏳ 一年复利预测 <span>外推 365 天，并给出可执行的建议</span></div>
-                        <div class="cp-pred-list" id="cpPredictions"></div>
-                        <div class="cp-insight" id="cpInsight"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="page" id="parentingPage">
-<div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;" class="parenting-page">
-                <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;">
-                    <div>
-                        <h1 style="font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;">👶 育儿手册</h1>
-                        <p style="color:#888;font-size:13px;margin-top:2px;">关注婴儿用品安全、记录育儿理念、生成今日建议</p>
-                    </div>
-                    <span style="font-size:11px;color:#888;" id="parentingUpdatedAt"></span>
-                </div>
-
-                <div class="parenting-stats" id="parentingStats"></div>
-
-                <div class="parenting-tabs" id="parentingTabs"></div>
-
-                <!-- 安全快讯 -->
-                <div id="parentingNewsView">
-                    <div class="parenting-toolbar" style="margin-bottom:10px;">
-                        <span style="font-size:13px;color:#888;">婴儿用品安全、召回、风险提示</span>
-                        <button class="book-btn primary" onclick="openParentingNewsModal()">＋ 添加资讯</button>
-                    </div>
-                    <div id="parentingNewsList"></div>
-                </div>
-
-                <!-- 我的理念 -->
-                <div id="parentingPrinciplesView" style="display:none;">
-                    <div class="parenting-form" style="margin-bottom:12px;">
-                        <div><label>我的育儿理念 / 原则</label><textarea id="parentingPrincipleInput" placeholder="例如：优先选择成分简单的洗护用品；不盲目追新，新产品观望 3 个月再入手；关注国家市场监管总局召回公告..."></textarea></div>
-                        <div style="display:flex;justify-content:flex-end;"><button class="book-btn primary" onclick="addParentingPrinciple()">保存理念</button></div>
-                    </div>
-                    <div id="parentingPrinciplesList"></div>
-                </div>
-
-                <!-- 今日建议 -->
-                <div id="parentingAdviceView" style="display:none;">
-                    <div class="parenting-toolbar" style="margin-bottom:10px;">
-                        <span style="font-size:13px;color:#888;">结合安全资讯和你的理念，生成 actionable 建议</span>
-                        <button class="book-btn primary" onclick="generateParentingAdvice()">✨ 生成今日建议</button>
-                    </div>
-                    <div id="parentingAdviceBox" class="parenting-advice-box" style="display:none;"></div>
-                    <div id="parentingAdviceEmpty" class="parenting-empty" style="border:none;padding:20px 0;">点击上方按钮，基于当前资讯和理念生成建议</div>
-                </div>
-
-                <!-- 育儿清单 -->
-                <div id="parentingChecklistView" style="display:none;">
-                    <div class="parenting-form" style="margin-bottom:12px;">
-                        <div class="parenting-form-row">
-                            <div style="flex:2;"><label>清单项</label><input type="text" id="parentingCheckInput" placeholder="例如：检查奶粉批次是否在召回名单" onkeydown="if(event.key==='Enter')addParentingCheckItem()"></div>
-                            <div><label>分类</label><select id="parentingCheckCategory"><option value="日常">日常</option><option value="安全">安全</option><option value="健康">健康</option><option value="用品">用品</option></select></div>
-                        </div>
-                        <div style="display:flex;justify-content:flex-end;"><button class="book-btn primary" onclick="addParentingCheckItem()">＋ 添加清单</button></div>
-                    </div>
-                    <div id="parentingChecklist"></div>
-                </div>
-            </div>
-
-            <!-- 资讯详情弹窗 -->
-            <div class="modal-mask" id="parentingNewsDetailModal" onclick="if(event.target===this)closeParentingNewsDetail()">
-                <div class="modal" style="width:520px;">
-                    <h3>📰 安全资讯详情</h3>
-                    <div id="parentingNewsDetailBody"></div>
-                    <div class="modal-footer">
-                        <button class="btn" onclick="closeParentingNewsDetail()">关闭</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 添加安全资讯弹窗 -->
-            <div class="modal-mask" id="parentingNewsModal" onclick="if(event.target===this)closeParentingNewsModal()">
-                <div class="modal" style="width:520px;">
-                    <h3>📰 添加安全资讯</h3>
-                    <div class="book-form-grid">
-                        <div class="book-form-row">
-                            <div><label>标题 *</label><input id="parentingNewsTitle" placeholder="如：某品牌婴儿米粉重金属超标"></div>
-                            <div><label>分类</label><select id="parentingNewsCategory"><option value="食品安全">食品安全</option><option value="用品召回">用品召回</option><option value="疾病预警">疾病预警</option><option value="养育误区">养育误区</option><option value="其他">其他</option></select></div>
-                        </div>
-                        <div class="book-form-row">
-                            <div><label>来源</label><input id="parentingNewsSource" placeholder="如：央视新闻 / 市场监管总局"></div>
-                            <div><label>日期</label><input type="date" id="parentingNewsDate"></div>
-                        </div>
-                        <div><label>内容摘要 / 关键信息</label><textarea id="parentingNewsContent" placeholder="发生了什么问题？影响哪些产品？家长应该怎么做？"></textarea></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" onclick="closeParentingNewsModal()">取消</button>
-                        <button class="btn primary" onclick="saveParentingNews()">保存</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="page" id="healthPage">
 <div style="padding:16px 32px 0;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
   <div class="hp-head">
@@ -14162,7 +13772,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <button id="twVwBoth" onclick="twSetView('both')" title="素材箱 + 编辑器 + 排版预览（默认）">双栏</button>
             <button id="twVwPvw" onclick="twSetView('pvw')" title="收起素材箱，编辑器配排版预览 —— 调排版时用">预览</button>
           </div>
-          <input class="twEdTitle" id="twTitle" placeholder="给这篇推文起个标题…" oninput="twEdRender()">
+          <input class="twEdTitle" id="twTitle" placeholder="给这篇长文起个标题…" oninput="twEdRender()">
           <div class="twHostTop" id="twHostTop"></div>
         </div>
 
@@ -14418,7 +14028,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <span class="data-meta-tag">已读记录 <span class="count" id="exportReadCount">0</span></span>
                     <span class="data-meta-tag">会员 <span class="count" id="exportMemberCount">0</span></span>
                     <span class="data-meta-tag">游戏时间 <span class="count" id="exportGameTimeCount">0</span></span>
-                    <span class="data-meta-tag">育儿手册 <span class="count" id="exportParentingCount">0</span></span>
                     <span class="data-meta-tag">标签</span>
                     <span class="data-meta-tag">颜色配置</span>
                     <span class="data-meta-tag">深色模式</span>
@@ -15787,10 +15396,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 renderMemberPage();
             } else if (page === 'game') {
                 renderGameTimePage();
-            } else if (page === 'compound') {
-                renderCompoundPage();
-            } else if (page === 'parenting') {
-                renderParentingPage();
             } else if (page === 'health') {
                 try { if (typeof renderHealthPage === 'function') renderHealthPage(); } catch (e) {}
             } else if (page === 'tw') {
@@ -25714,7 +25319,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { key: '计划看板', label: '📋 计划', page: 'plan' },
             { key: '热点收藏', label: '🔥 热点', page: 'hot' },
             { key: '梗文化', label: '🈯 梗文化', page: 'meme' },
-            { key: '育儿手册', label: '👶 育儿', page: 'parenting' }
+            { key: '笔记长文', label: '📝 笔记长文', page: 'tw' }
         ];
         let knowledge = [];
         let currentKbPara = 'all', currentKbCat = '全部', currentKbFrom = 'all', kbSearchText = '';
@@ -31128,878 +30733,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         if (typeof window.__NIKO_GAME_TEST__ !== 'undefined' && window.__NIKO_GAME_TEST__) {
             renderGameTimePage();
         }
-// ===== 复利面板 =====
-        const CP_DIM_DEFS = [
-            { key: 'health',  name: '健康复利', icon: '💪', color: '#14b8a6', desc: '身体是复利的地基。基于近 30 天习惯打卡率。' },
-            { key: 'cognition', name: '认知复利', icon: '🧠', color: '#34d399', desc: '输入沉淀。基于读书本数、打卡频率与笔记数。' },
-            { key: 'time',    name: '时间复利', icon: '⏰', color: '#38bdf8', desc: '时间投入产出。基于本周时间块覆盖与完成度。' },
-            { key: 'product', name: '产品复利', icon: '📦', color: '#818cf8', desc: '产出积累。基于便签/脚本类内容的新增数量。' },
-            { key: 'finance', name: '财务复利', icon: '💰', color: '#fbbf24', desc: '可复利资产积累。基于投资本金与累计收益（非日常支出）。' },
-            { key: 'network', name: '人脉复利', icon: '🤝', color: '#fb923c', desc: '关系连接。基于关系轨道任务与合作线索。' },
-            { key: 'content', name: '内容复利', icon: '📝', color: '#f472b6', desc: '内容资产沉淀。基于便签/文案/梗/热点的产出量。' },
-            { key: 'identity', name: '身份复利', icon: '🏆', color: '#a78bfa', desc: '个人品牌。内容+产品+人脉的综合体现。' }
-        ];
-
-        function cpClamp(v) { return Math.max(0, Math.min(100, Math.round(v))); }
-        function cp30days() { const d = new Date(); d.setDate(d.getDate() - 30); return formatDate(d); }
-        function cpWeekRange() {
-            const mon = getMonday(new Date());
-            return [formatDate(mon), formatDate(addDays(mon, 6))];
-        }
-        function cpCount(list, fn) { return (list || []).filter(fn).length; }
-        function cpSum(list, fn) { return (list || []).reduce((s, x) => s + (fn(x) || 0), 0); }
-
-        function cpCompute() {
-            const dims = {};
-            const cut30 = cp30days();
-            const [ws, we] = cpWeekRange();
-
-            const habits = safeStorage.get('niko_habits', []);
-            const habitLogs = safeStorage.get('niko_habit_logs', []);
-            if (habits.length) {
-                const recent = habitLogs.filter(l => l.date >= cut30);
-                const perHabit = habits.map(h => cpCount(recent, l => l.habitId === h.id));
-                const avgRate = (cpSum(perHabit, v => v) / habits.length) / 30 * 100;
-                dims.health = cpClamp(avgRate * 2.2);
-            } else dims.health = 0;
-
-            const books = safeStorage.get('niko_books', []);
-            const bookLogs = safeStorage.get('niko_book_logs', []);
-            const bookNotes = safeStorage.get('niko_book_notes', []);
-            let cog = 0;
-            if (books.length) {
-                const reading = cpCount(books, b => b.status === 'reading' || b.status === 'done');
-                cog += (reading / books.length) * 30;
-            }
-            cog += cpClamp((cpCount(bookLogs, l => l.date >= cut30) / 20) * 40);
-            cog += cpClamp((bookNotes.length / 20) * 30);
-            dims.cognition = cpClamp(cog);
-
-            const events = safeStorage.get('work_calendar_events', []);
-            const weekEvents = events.filter(e => (e.startDate || '') <= we && (e.endDate || e.startDate || '') >= ws);
-            const withTime = weekEvents.filter(e => e.startTime);
-            let timeScore = 0;
-            if (withTime.length) {
-                timeScore += Math.min(60, withTime.length * 6);
-                const done = cpCount(withTime, e => e.status === 'done');
-                timeScore += (done / withTime.length) * 40;
-            }
-            dims.time = cpClamp(timeScore);
-
-            const notes = safeStorage.get('niko_inspiration_notes', []);
-            const active = notes.filter(n => !n.deleted && (!n.archived || n.updatedAt >= cut30));
-            const recentNotes = notes.filter(n => !n.deleted && n.createdAt && n.createdAt.slice(0, 10) >= cut30);
-            dims.product = cpClamp(Math.min(50, active.length * 3) + Math.min(50, recentNotes.length * 8));
-
-            const investments = safeStorage.get('niko_investments', []);
-            const invPrincipal = cpSum(investments, inv => Number(inv.principal) || 0);
-            const invProfit = cpSum(investments, inv => Number(inv.profit) || Number(inv.return) || 0);
-            dims.finance = cpClamp(Math.min(50, invPrincipal / 10000 * 50) + Math.min(50, Math.max(0, invProfit) / 5000 * 50));
-
-            const relEvents = events.filter(e => e.track === 'relationship' && e.startDate >= cut30);
-            dims.network = cpClamp(Math.min(100, relEvents.length * 12));
-
-            const copies = safeStorage.get('niko_copy_library', []);
-            const memes = safeStorage.get('niko_memes', []);
-            const contentActive = (notes.filter(n => !n.deleted).length) + copies.length + memes.length;
-            const recentContent = recentNotes.length + cpCount(copies, c => c.updatedAt && c.updatedAt.slice(0, 10) >= cut30);
-            dims.content = cpClamp(Math.min(50, contentActive * 1.2) + Math.min(50, recentContent * 6));
-
-            dims.identity = cpClamp((dims.content * 0.4) + (dims.product * 0.35) + (dims.network * 0.25));
-
-            const total = cpClamp(cpSum(Object.values(dims), v => v) / 8);
-            return { dims, total };
-        }
-
-        // ===== 视图切换 =====
-        function cpSwitchView(v) {
-            document.querySelectorAll('.cp-tab').forEach(t => t.classList.toggle('active', t.getAttribute('data-cp') === v));
-            document.querySelectorAll('.cp-view').forEach(p => p.classList.remove('active'));
-            const el = document.getElementById('cpView' + v.charAt(0).toUpperCase() + v.slice(1));
-            if (el) el.classList.add('active');
-        }
-
-        // ===== 雷达图 =====
-        function cpRenderRadar(scores) {
-            const svg = document.getElementById('cpRadar');
-            if (!svg) return;
-            const cx = 200, cy = 165, R = 108;
-            const n = CP_DIM_DEFS.length;
-            const pt = (i, r) => {
-                const ang = (Math.PI * 2 * i) / n - Math.PI / 2;
-                return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
-            };
-            let html = '';
-            [0.25, 0.5, 0.75, 1].forEach(f => {
-                const pts = CP_DIM_DEFS.map((_, i) => pt(i, R * f).join(',')).join(' ');
-                html += `<polygon points="${pts}" fill="none" stroke="rgba(139,92,246,.25)" stroke-width="0.5"/>`;
-            });
-            CP_DIM_DEFS.forEach((d, i) => {
-                const [x, y] = pt(i, R);
-                html += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(139,92,246,.18)" stroke-width="0.5"/>`;
-            });
-            const dataPts = CP_DIM_DEFS.map((d, i) => pt(i, R * (scores[d.key] / 100)).join(',')).join(' ');
-            html += `<polygon points="${dataPts}" fill="rgba(139,92,246,.22)" stroke="#8b5cf6" stroke-width="1.5"/>`;
-            // 标签：名称+分值合为一行放在 R+38（远离多边形避免遮挡），不加白色描边（之前描边在深色主题下显灰、且字小看不清）
-            CP_DIM_DEFS.forEach((d, i) => {
-                const [x, y] = pt(i, R * (scores[d.key] / 100));
-                html += `<circle cx="${x}" cy="${y}" r="3" fill="${d.color}"/>`;
-                const [lx, ly] = pt(i, R + 38);
-                html += `<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="600" fill="${d.color}">${d.icon}${d.name}<tspan dx="3" font-size="12" font-weight="800">${scores[d.key]}</tspan></text>`;
-            });
-            html += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="13" font-weight="bold" fill="#8b5cf6">复利</text>`;
-            svg.innerHTML = html;
-        }
-
-        function cpRenderDims(scores) {
-            const box = document.getElementById('cpDims');
-            if (!box) return;
-            box.innerHTML = CP_DIM_DEFS.map(d => `
-                <div class="cp-dim" title="${d.desc}" onclick="cpShowDimTip('${d.key}')">
-                    <div class="cp-dim-head">${d.icon} ${d.name}</div>
-                    <div class="cp-dim-val" style="color:${d.color};">${scores[d.key]}</div>
-                    <div class="cp-dim-bar"><div class="cp-dim-bar-fill" style="width:${scores[d.key]}%;background:${d.color};"></div></div>
-                    <div class="cp-dim-tip" id="cpTip_${d.key}" style="display:none;">${d.desc}</div>
-                </div>`).join('');
-        }
-        function cpShowDimTip(key) {
-            const el = document.getElementById('cpTip_' + key);
-            if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // ===== 复利飞轮（链式，关系明确） =====
-        function cpRenderWheel() {
-            const box = document.getElementById('cpWheel');
-            if (!box) return;
-            const chains = [
-                { from: '💪', name1: '健康', rel: '支撑', to: '🧠', name2: '认知', color: '#14b8a6', desc: '身体是认知的硬件' },
-                { from: '⏰', name1: '时间', rel: '催化', to: '📦', name2: '产品', color: '#38bdf8', desc: '投入催生产出' },
-                { from: '💰', name1: '财务', rel: '放大', to: '🤝', name2: '人脉', color: '#fbbf24', desc: '选择权换来连接' },
-                { from: '📝', name1: '内容', rel: '反哺', to: '🏆', name2: '身份', color: '#a78bfa', desc: '输出沉淀为品牌' }
-            ];
-            box.innerHTML = chains.map(c => `
-                <div class="cp-wheel-row">
-                    <div class="cp-wheel-node"><span class="icon">${c.from}</span><span class="nm">${c.name1}</span></div>
-                    <div class="cp-wheel-link">
-                        <div class="rel" style="color:${c.color};">${c.rel}</div>
-                        <div class="desc">${c.desc}</div>
-                    </div>
-                    <div class="cp-wheel-node"><span class="icon">${c.to}</span><span class="nm">${c.name2}</span></div>
-                </div>`).join('');
-        }
-
-        // ===== 成就徽章（71 个，全部由真实数据判定） =====
-        const CP_ACHIEVEMENTS = [
-            // --- 习惯打卡 (12) ---
-            { id: 'a01', icon: '🐣', name: '初入江湖', desc: '完成第1次习惯打卡', check: d => d.habitTotal >= 1 },
-            { id: 'a02', icon: '🔥', name: '七日连击', desc: '连续打卡7天', check: d => d.habitStreak >= 7 },
-            { id: 'a03', icon: '⚡', name: '三十铁人', desc: '近30天打卡≥20天', check: d => d.habit30 >= 20 },
-            { id: 'a04', icon: '🌅', name: '早鸟认证', desc: '累计30次打卡', check: d => d.habitTotal >= 30 },
-            { id: 'a21', icon: '💎', name: '百日筑基', desc: '累计打卡100次', check: d => d.habitTotal >= 100 },
-            { id: 'a22', icon: '🏆', name: '习惯千锤', desc: '累计打卡500次', check: d => d.habitTotal >= 500 },
-            { id: 'a23', icon: '📅', name: '半月不断', desc: '连续打卡15天', check: d => d.habitStreak >= 15 },
-            { id: 'a24', icon: '🎯', name: '月度全勤', desc: '近30天打卡≥25天', check: d => d.habit30 >= 25 },
-            { id: 'a25', icon: '🌱', name: '习惯播种', desc: '创建5个习惯', check: d => d.habitCount >= 5 },
-            { id: 'a26', icon: '🌳', name: '习惯森林', desc: '创建10个习惯', check: d => d.habitCount >= 10 },
-            { id: 'a27', icon: '🏔', name: '三十日不辍', desc: '连续打卡30天', check: d => d.habitStreak >= 30 },
-            { id: 'a28', icon: '⭐', name: '千日之功', desc: '累计打卡1000次', check: d => d.habitTotal >= 1000 },
-            // --- 读书 (10) ---
-            { id: 'a05', icon: '📚', name: '翻开第一页', desc: '书架添加第1本书', check: d => d.books >= 1 },
-            { id: 'a06', icon: '🏛', name: '书山有路', desc: '读完1本书', check: d => d.booksDone >= 1 },
-            { id: 'a07', icon: '📖', name: '深耕细读', desc: '累计读完5本', check: d => d.booksDone >= 5 },
-            { id: 'a08', icon: '📝', name: '笔记匠人', desc: '写下10条读书笔记', check: d => d.bookNotes >= 10 },
-            { id: 'a29', icon: '📚', name: '藏书家', desc: '书架达到10本', check: d => d.books >= 10 },
-            { id: 'a30', icon: '🏛', name: '私人图书馆', desc: '书架达到30本', check: d => d.books >= 30 },
-            { id: 'a31', icon: '🏃', name: '阅读马拉松', desc: '累计读完10本', check: d => d.booksDone >= 10 },
-            { id: 'a32', icon: '🎓', name: '读书百卷', desc: '累计读完20本', check: d => d.booksDone >= 20 },
-            { id: 'a33', icon: '✍️', name: '笔记百条', desc: '读书笔记50条', check: d => d.bookNotes >= 50 },
-            { id: 'a34', icon: '📆', name: '读书达人', desc: '近30天打卡15次', check: d => d.bookLogs30 >= 15 },
-            // --- 便签/灵感 (8) ---
-            { id: 'a09', icon: '💡', name: '灵感火花', desc: '创建第1张便签', check: d => d.notes >= 1 },
-            { id: 'a10', icon: '🌊', name: '灵感泉涌', desc: '便签达到50张', check: d => d.notes >= 50 },
-            { id: 'a35', icon: '🌾', name: '灵感丰收', desc: '便签达到100张', check: d => d.notes >= 100 },
-            { id: 'a36', icon: '💎', name: '灵感富翁', desc: '便签达到200张', check: d => d.notes >= 200 },
-            { id: 'a37', icon: '🏰', name: '灵感帝国', desc: '便签达到500张', check: d => d.notes >= 500 },
-            { id: 'a38', icon: '⚡', name: '日产灵感', desc: '近30天新增10条', check: d => d.notes30 >= 10 },
-            { id: 'a39', icon: '🚀', name: '灵感机器', desc: '近30天新增20条', check: d => d.notes30 >= 20 },
-            { id: 'a40', icon: '🌟', name: '灵感星河', desc: '近30天新增50条', check: d => d.notes30 >= 50 },
-            // --- 时间/任务 (10) ---
-            { id: 'a11', icon: '⏰', name: '时间主宰', desc: '创建20个时间块', check: d => d.timeBlocks >= 20 },
-            { id: 'a12', icon: '✅', name: '任务终结者', desc: '完成50个任务', check: d => d.doneEvents >= 50 },
-            { id: 'a41', icon: '🗺️', name: '时间规划师', desc: '创建50个时间块', check: d => d.timeBlocks >= 50 },
-            { id: 'a42', icon: '📊', name: '时间管家', desc: '创建100个时间块', check: d => d.timeBlocks >= 100 },
-            { id: 'a43', icon: '🎖️', name: '效率专家', desc: '完成100个任务', check: d => d.doneEvents >= 100 },
-            { id: 'a44', icon: '🌾', name: '任务收割机', desc: '完成200个任务', check: d => d.doneEvents >= 200 },
-            { id: 'a45', icon: '⚔️', name: '任务千杀', desc: '完成500个任务', check: d => d.doneEvents >= 500 },
-            { id: 'a16', icon: '🎯', name: '本周全勤', desc: '本周完成率≥80%', check: d => d.weekDoneRate >= 0.8 },
-            { id: 'a46', icon: '💯', name: '本周满分', desc: '本周完成率100%', check: d => d.weekDoneRate >= 1 },
-            { id: 'a47', icon: '🔥', name: '效率狂魔', desc: '本周完成率≥90%', check: d => d.weekDoneRate >= 0.9 },
-            // --- 游戏时间 (5) ---
-            { id: 'a13', icon: '🎮', name: '游戏人生', desc: '游戏时间累计10小时', check: d => d.gameMin >= 600 },
-            { id: 'a48', icon: '🕹️', name: '赚时达人', desc: '游戏累计赚取30小时', check: d => d.gameMin >= 1800 },
-            { id: 'a49', icon: '💰', name: '时间富翁', desc: '游戏累计赚取60小时', check: d => d.gameMin >= 3600 },
-            { id: 'a50', icon: '👑', name: '游戏老炮', desc: '游戏累计100小时', check: d => d.gameMin >= 6000 },
-            { id: 'a51', icon: '⚖️', name: '收支平衡', desc: '游戏消耗≥20小时', check: d => d.gameSpentMin >= 1200 },
-            // --- 投资财务 (8) ---
-            { id: 'a52', icon: '🏦', name: '投资入门', desc: '记录第1笔投资', check: d => d.invCount >= 1 },
-            { id: 'a53', icon: '💵', name: '万元资产', desc: '投资本金≥¥1万', check: d => d.invPrincipal >= 10000 },
-            { id: 'a54', icon: '💴', name: '五万元户', desc: '投资本金≥¥5万', check: d => d.invPrincipal >= 50000 },
-            { id: 'a55', icon: '💶', name: '十万元户', desc: '投资本金≥¥10万', check: d => d.invPrincipal >= 100000 },
-            { id: 'a56', icon: '💰', name: '百万资产', desc: '投资本金≥¥100万', check: d => d.invPrincipal >= 1000000 },
-            { id: 'a57', icon: '📈', name: '收益破千', desc: '累计收益≥¥1千', check: d => d.invProfit >= 1000 },
-            { id: 'a58', icon: '📊', name: '收益过万', desc: '累计收益≥¥1万', check: d => d.invProfit >= 10000 },
-            { id: 'a59', icon: '🎯', name: '收益率10%', desc: '投资收益率≥10%', check: d => d.invProfitRate >= 10 },
-            // --- 内容/文案/梗 (6) ---
-            { id: 'a60', icon: '✍️', name: '文案新手', desc: '文案库达到10条', check: d => d.copies >= 10 },
-            { id: 'a61', icon: '📖', name: '文案库50', desc: '文案库达到50条', check: d => d.copies >= 50 },
-            { id: 'a62', icon: '📚', name: '文案大师', desc: '文案库达到100条', check: d => d.copies >= 100 },
-            { id: 'a63', icon: '😂', name: '梗王', desc: '梗文化达到30条', check: d => d.memes >= 30 },
-            { id: 'a64', icon: '🤣', name: '梗帝', desc: '梗文化达到50条', check: d => d.memes >= 50 },
-            { id: 'a65', icon: '🔍', name: '热点猎人', desc: '热点条目达到20条', check: d => d.hotItems >= 20 },
-            // --- 人脉 (3) ---
-            { id: 'a66', icon: '🤝', name: '社交新手', desc: '关系任务5个', check: d => d.relEvents >= 5 },
-            { id: 'a67', icon: '🌐', name: '社交达人', desc: '关系任务15个', check: d => d.relEvents >= 15 },
-            { id: 'a68', icon: '🔗', name: '人脉广博', desc: '关系任务30个', check: d => d.relEvents >= 30 },
-            // --- 日记 (3) ---
-            { id: 'a69', icon: '📓', name: '日记新手', desc: '写5篇日记', check: d => d.diaryCount >= 5 },
-            { id: 'a70', icon: '📔', name: '日记达人', desc: '写20篇日记', check: d => d.diaryCount >= 20 },
-            { id: 'a71', icon: '📜', name: '日记大师', desc: '写50篇日记', check: d => d.diaryCount >= 50 },
-            // --- 综合/复利 (6) ---
-            { id: 'a17', icon: '🧭', name: '复利入门', desc: '综合指数≥30', check: d => d.total >= 30 },
-            { id: 'a18', icon: '🚀', name: '复利进阶', desc: '综合指数≥60', check: d => d.total >= 60 },
-            { id: 'a19', icon: '👑', name: '复利大师', desc: '综合指数≥90', check: d => d.total >= 90 },
-            { id: 'a20', icon: '🌀', name: '飞轮运转', desc: '八维全部≥40', check: d => d.allDims40 },
-            { id: 'a72', icon: '⬡', name: '六边形战士', desc: '八维全部≥50', check: d => d.allDims50 },
-            { id: 'a73', icon: '⬢', name: '八边形战士', desc: '八维全部≥60', check: d => d.allDims60 }
-        ];
-
-        // 收集成就判定所需的数据快照
-        function cpAchData() {
-            const habits = safeStorage.get('niko_habits', []);
-            const habitLogs = safeStorage.get('niko_habit_logs', []);
-            const books = safeStorage.get('niko_books', []);
-            const bookNotes = safeStorage.get('niko_book_notes', []);
-            const notes = safeStorage.get('niko_inspiration_notes', []);
-            const events = safeStorage.get('work_calendar_events', []);
-            const game = safeStorage.get('niko_game_time', {});
-            const gamePlayLogs = safeStorage.get('niko_game_play_logs', []);
-            const investments = safeStorage.get('niko_investments', []);
-            const copies = safeStorage.get('niko_copy_library', []);
-            const memes = safeStorage.get('niko_memes', []);
-            const diary = safeStorage.get('niko_diary_entries', []);
-            const bookLogs = safeStorage.get('niko_book_logs', []);
-            const hotItems = safeStorage.get('niko_hot_items', []);
-            const cut30 = cp30days();
-            const [ws, we] = cpWeekRange();
-            const habitDates = new Set(habitLogs.map(l => l.date));
-            // 最长连续天数
-            let streak = 0, cur = 0;
-            const d0 = new Date(); d0.setDate(d0.getDate() - 60);
-            for (let i = 0; i <= 60; i++) {
-                const dd = new Date(d0); dd.setDate(d0.getDate() + i);
-                const ds = formatDate(dd);
-                if (habitDates.has(ds)) { cur++; streak = Math.max(streak, cur); }
-                else cur = 0;
-            }
-            const weekEvents = events.filter(e => (e.startDate || '') <= we && (e.endDate || e.startDate || '') >= ws);
-            const withTime = weekEvents.filter(e => e.startTime);
-            const weekDoneRate = withTime.length ? cpCount(withTime, e => e.status === 'done') / withTime.length : 0;
-            const { dims, total } = cpCompute();
-            const invPrincipal = cpSum(investments, inv => Number(inv.principal) || 0);
-            const invProfit = cpSum(investments, inv => Number(inv.profit) || Number(inv.return) || 0);
-            const gameSpentMin = cpSum(gamePlayLogs, l => l.type === 'spend' ? (l.minutes || 0) : 0);
-            return {
-                habitTotal: habitLogs.length,
-                habitStreak: streak,
-                habit30: cpCount(habitLogs, l => l.date >= cut30),
-                habitCount: habits.length,
-                books: books.length,
-                booksDone: cpCount(books, b => b.status === 'done'),
-                bookNotes: bookNotes.length,
-                bookLogs30: cpCount(bookLogs, l => l.date >= cut30),
-                notes: notes.filter(n => !n.deleted).length,
-                notes30: cpCount(notes, n => !n.deleted && n.createdAt && n.createdAt.slice(0, 10) >= cut30),
-                timeBlocks: cpCount(events, e => e.startTime),
-                doneEvents: cpCount(events, e => e.status === 'done'),
-                gameMin: (game.totalEarned || 0) + (game.balance || 0),
-                gameSpentMin: gameSpentMin,
-                invCount: investments.length,
-                invPrincipal,
-                invProfit,
-                invProfitRate: invPrincipal > 0 ? (invProfit / invPrincipal * 100) : 0,
-                copies: copies.length,
-                memes: memes.length,
-                hotItems: hotItems.length,
-                diaryCount: diary.filter(d => !d.deleted).length,
-                relEvents: cpCount(events, e => e.track === 'relationship'),
-                weekDoneRate,
-                total,
-                dims,
-                allDims40: Object.values(dims).every(v => v >= 40),
-                allDims50: Object.values(dims).every(v => v >= 50),
-                allDims60: Object.values(dims).every(v => v >= 60)
-            };
-        }
-
-        function cpRenderAch() {
-            const grid = document.getElementById('cpAchGrid');
-            if (!grid) return;
-            const data = cpAchData();
-            const results = CP_ACHIEVEMENTS.map(a => ({ ...a, got: a.check(data) }));
-            const got = results.filter(r => r.got).length;
-            const total = CP_ACHIEVEMENTS.length;
-            document.getElementById('cpAchCount').textContent = `${got}/${total}`;
-            document.getElementById('cpAchGot').textContent = got;
-            document.getElementById('cpAchTotal').textContent = total;
-            document.getElementById('cpAchBar').style.width = Math.round(got / total * 100) + '%';
-            grid.innerHTML = results.map(r => `
-                <div class="cp-ach ${r.got ? '' : 'locked'}" title="${r.desc}">
-                    <div class="ic">${r.got ? r.icon : '🔒'}</div>
-                    <div class="nm">${r.name}</div>
-                    <div class="dc">${r.desc}</div>
-                    <span class="st ${r.got ? 'got' : 'no'}">${r.got ? '✓ 已解锁' : '未解锁'}</span>
-                </div>`).join('');
-        }
-
-        // ===== 第二人格复盘 =====
-        let cpPersona = 'strict';
-        function cpSetPersona(p) {
-            cpPersona = p;
-            document.getElementById('cpPersonaStrict').classList.toggle('active', p === 'strict');
-            document.getElementById('cpPersonaWarm').classList.toggle('active', p === 'warm');
-            cpRenderAI();
-        }
-        function cpRenderAI() {
-            const card = document.getElementById('cpAiCard');
-            if (!card) return;
-            const { dims, total } = cpCompute();
-            const data = cpAchData();
-            const top = CP_DIM_DEFS.slice().sort((a, b) => dims[b.key] - dims[a.key])[0];
-            const low = CP_DIM_DEFS.slice().sort((a, b) => dims[a.key] - dims[b.key])[0];
-            const [ws, we] = cpWeekRange();
-            const weekEvents = safeStorage.get('work_calendar_events', []).filter(e => (e.startDate || '') <= we && (e.endDate || e.startDate || '') >= ws);
-            const weekDone = cpCount(weekEvents, e => e.status === 'done');
-            const weekTotal = weekEvents.length;
-            const cut30 = cp30days();
-            const notes30 = cpCount(safeStorage.get('niko_inspiration_notes', []), n => !n.deleted && n.createdAt && n.createdAt.slice(0, 10) >= cut30);
-            const bookLogs30 = cpCount(safeStorage.get('niko_book_logs', []), l => l.date >= cut30);
-            const gameLogs = safeStorage.get('niko_game_play_logs', []);
-            const game30 = cpSum(gameLogs.filter(l => l.date >= cut30), l => l.minutes);
-
-            const strictMsgs = [
-                '你这周嘴上说着要自律，数据可都记着呢。',
-                '别急着找借口，先看看自己这周到底干了什么。',
-                '复利这东西，骗得了别人，骗不了数据。',
-                '你对自己承诺了多少次"明天开始"？数据说你还没开始。'
-            ];
-            const warmMsgs = [
-                '这周辛苦了，先别急着否定自己，我们一起看看数据。',
-                '每一个开始都值得被看见，包括这周的你。',
-                '别怕慢，复利本来就是慢慢滚起来的。',
-                '这周已经很棒了，下一周可以更好一点。'
-            ];
-            const strict = cpPersona === 'strict';
-            const openers = strict ? strictMsgs : warmMsgs;
-            const seed = new Date().getDate() + Math.floor(new Date().getHours() / 6);
-            const opener = openers[seed % openers.length];
-
-            const doneRate = weekTotal ? Math.round(weekDone / weekTotal * 100) : 0;
-            const verdict = strict
-                ? (doneRate >= 80 ? '完成率不错，但别得意，保持住才算数。' : doneRate >= 50 ? '过半了，但离"全力以赴"还差得远。' : '不到一半？你该问问自己时间都去哪了。')
-                : (doneRate >= 80 ? '完成率很棒，这周的你值得一个大大的肯定！' : doneRate >= 50 ? '过半了，已经在路上了，慢慢来。' : '这周节奏有点慢，没关系，下周重新出发。');
-
-            const lines = [];
-            lines.push(`⏱ 本周计划 ${weekTotal} 项，完成 ${weekDone} 项（${doneRate}%）——${verdict}`);
-            lines.push(`📚 近 30 天读书打卡 ${bookLogs30} 次${bookLogs30 < 10 ? '，输入太少了，认知复利滚不起来' : '，输入节奏不错'}`);
-            lines.push(`💡 近 30 天新增灵感 ${notes30} 条${notes30 < 5 ? '，想法太少了，多记多写' : '，产出活跃'}`);
-            lines.push(`🎮 近 30 天实际游玩 ${Math.round(game30 / 60)} 小时${game30 > 1800 ? '，游戏时间有点多了，注意控制' : '，娱乐节奏健康'}`);
-            const strongLine = strict ? `你最强的复利是「${top.name}」（${dims[top.key]} 分），但最强不代表可以躺着。` : `你最强的复利是「${top.name}」（${dims[top.key]} 分），这是你的优势，继续深耕。`;
-            const weakLine = strict ? `最弱的是「${low.name}」（${dims[low.key]} 分）——别假装看不见，它就是你的漏洞。` : `最需要关注的是「${low.name}」（${dims[low.key]} 分），从这里开始补，会很有成就感。`;
-            lines.push(`🧭 ${strongLine}`);
-            lines.push(`🧭 ${weakLine}`);
-
-            const advice = [];
-            if (dims.health < 40) advice.push(strict ? '先补健康：身体垮了，复利直接归零。' : '建议先照顾身体：早睡和运动，是其他一切复利的底座。');
-            if (dims.cognition < 40) advice.push(strict ? '读书打卡太少，输入不够，别指望输出。' : '每天留 20 分钟读书，输入会慢慢积累成你的底气。');
-            if (dims.time < 40) advice.push(strict ? '时间块都没几个，你的时间在裸奔。' : '试着给明天排 3 个时间块，把时间抓回自己手里。');
-            if (dims.product < 40) advice.push(strict ? '想法一堆不落地 = 零产出。挑一个做出来。' : '选一条最近的灵感把它做成成品，你会感受到"完成"的力量。');
-            if (dims.finance < 40) advice.push(strict ? '投资资产太少了，复利引擎没启动。' : '可以考虑开始小额投资，哪怕每月 500 也比纯消费强。');
-            if (dims.network < 40) advice.push(strict ? '人脉账户几乎是空的，别做孤岛。' : '主动联系一位老朋友吧，人脉也是需要维护的复利。');
-            if (dims.content < 40) advice.push(strict ? '内容产出太少，你的作品没人看见。' : '把最近的一个灵感发出去，内容复利从第一篇开始。');
-            if (advice.length === 0) advice.push(strict ? '看起来都在线，但别让"看起来不错"骗了你——加大剂量。' : '各方面都不错！下一步是挑一条链加倍投入，让它变成你的王牌。');
-
-            card.innerHTML = `
-                <div class="title">${strict ? '😈 毒舌版 · 第二人格' : '😇 温柔版 · 第二人格'}</div>
-                <div class="msg">${opener}</div>
-                <div class="sec">${lines.map(l => '· ' + l).join('\n')}</div>
-                <div class="sec">💡 <b>给你的建议：</b>\n${advice.map(a => '· ' + a).join('\n')}</div>
-                <div class="sec" style="font-size:11.5px;color:rgba(255,255,255,.6);">综合复利指数 ${total} · 数据截至 ${new Date().toLocaleDateString('zh-CN')}</div>`;
-        }
-
-        // ===== 深度预测（数量 + 可执行建议） =====
-        function cpPredict(dims) {
-            const cut30 = cp30days();
-            const notes = safeStorage.get('niko_inspiration_notes', []);
-            const books = safeStorage.get('niko_books', []);
-            const bookLogs = safeStorage.get('niko_book_logs', []);
-            const gameLogs = safeStorage.get('niko_game_play_logs', []);
-            const events = safeStorage.get('work_calendar_events', []);
-            const investments = safeStorage.get('niko_investments', []);
-
-            const monthBookLogs = cpCount(bookLogs, l => l.date >= cut30);
-            const yearBooks = Math.round(monthBookLogs / 30 * 365) || books.length;
-            const note30 = cpCount(notes, n => !n.deleted && n.createdAt && n.createdAt.slice(0, 10) >= cut30);
-            const yearNotes = Math.round(note30 / 30 * 365);
-            const gameToday = gameLogs.reduce((s, l) => s + (l.minutes || 0), 0);
-            const avgGamePerDay = gameToday / Math.max(1, Math.min(30, gameLogs.length || 30));
-            const yearGameMin = Math.round(avgGamePerDay * 365);
-            const weekEvents = events.filter(e => e.startTime);
-            const yearDeep = Math.round(weekEvents.length / 4 * 52);
-            const invPrincipal = cpSum(investments, inv => Number(inv.principal) || 0);
-            const invProfit = cpSum(investments, inv => Number(inv.profit) || Number(inv.return) || 0);
-            const yearAssets = Math.round((invPrincipal + invProfit) * 1.07);
-
-            // 每一项都带"这意味着什么 + 该怎么做"
-            const preds = [
-                {
-                    icon: '📚', label: '一年后累计读书',
-                    val: `${yearBooks} 本`, now: `现有 ${books.length} 本 · 近30天打卡 ${monthBookLogs} 次`,
-                    sug: monthBookLogs < 10
-                        ? '⚠️ 按现在的节奏一年读不完几本。建议：每天固定 20 分钟阅读（睡前/通勤），把"读书打卡"设成每日习惯拿到游戏时间奖励。'
-                        : '✅ 输入节奏健康。建议：每读完一本就写 3 条笔记并沉淀为灵感便签，让"读"变成"产出"。'
-                },
-                {
-                    icon: '💡', label: '一年后灵感资产',
-                    val: `${yearNotes + notes.filter(n => !n.deleted).length} 条`, now: `现有 ${notes.filter(n => !n.deleted).length} 条`,
-                    sug: note30 < 5
-                        ? '⚠️ 想法产出太慢。建议：热点转灵感 + 读书笔记沉淀两条管道都用起来，每天至少记 1 条。'
-                        : '✅ 灵感产出了，建议：每周挑 1 条灵感转成脚本/素材，别让它们躺在便签里。'
-                },
-                {
-                    icon: '🎮', label: '一年后游戏时长',
-                    val: `${Math.round(yearGameMin / 60)} 小时`, now: `日均 ${Math.round(avgGamePerDay)} 分钟`,
-                    sug: avgGamePerDay > 90
-                        ? '⚠️ 日均游戏超过 1.5 小时，一年就是 500+ 小时。建议：用"消耗制"管住自己，只花打卡赚来的时间。'
-                        : '✅ 娱乐节奏可控。游戏时间本来就是奖励，保持就好。'
-                },
-                {
-                    icon: '⏳', label: '一年后时间块',
-                    val: `${yearDeep} 个`, now: `现有 ${weekEvents.length} 个`,
-                    sug: weekEvents.length < 10
-                        ? '⚠️ 时间块太少，时间在裸奔。建议：每天睡前排好明天的 3 个时间块（含开始/结束时间），周末复盘完成率。'
-                        : '✅ 规划习惯已建立。建议：关注完成率而非数量，把每个时间块的产出写进备注。'
-                },
-                {
-                    icon: '💰', label: '一年后可投资资产',
-                    val: `¥${yearAssets.toLocaleString()}`, now: `本金 ¥${invPrincipal.toLocaleString()} · 收益 ¥${invProfit.toLocaleString()}`,
-                    sug: invPrincipal < 10000
-                        ? '⚠️ 投资本金还很少。建议：每月定投 500-1000 到指数基金，让复利引擎先转起来。'
-                        : '✅ 已有投资基础。建议：持续定投 + 定期止盈，把复利面板的财务指数盯到 80+。'
-                }
-            ];
-            const box = document.getElementById('cpPredictions');
-            if (!box) return;
-            box.innerHTML = preds.map(p => `
-                <div class="cp-pred-item">
-                    <span class="cp-pred-icon">${p.icon}</span>
-                    <span class="cp-pred-main">
-                        <div class="cp-pred-label">${p.label}</div>
-                        <div class="cp-pred-val">${p.val} <span class="cp-pred-arrow">→</span> <span class="cp-pred-now">${p.now}</span></div>
-                        <div class="cp-pred-sug">${p.sug}</div>
-                    </span>
-                </div>`).join('');
-            // 综合洞察：不只报最强最弱，给"下一步动作"
-            const top = CP_DIM_DEFS.slice().sort((a, b) => (dims[b.key] || 0) - (dims[a.key] || 0))[0];
-            const low = CP_DIM_DEFS.slice().sort((a, b) => (dims[a.key] || 0) - (dims[b.key] || 0))[0];
-            const insight = document.getElementById('cpInsight');
-            if (insight) {
-                let chainSug = '';
-                if (low.key === 'health') chainSug = '先把早睡/运动设成习惯并开启游戏时间奖励，让身体为你"充电"——健康是认知的底层硬件。';
-                else if (low.key === 'cognition') chainSug = '打开读书看板挑一本概要库里的书，每天打卡 20 分钟——输入会在 90 天后显现。';
-                else if (low.key === 'time') chainSug = '明天就给最重要的 3 件事排上时间块（含起止时间），一周后回来看看时间指数涨了多少。';
-                else if (low.key === 'product') chainSug = '从灵感库里挑一条，今天就用"灵感→脚本"把它做成一版脚本草稿——产品复利从落地开始。';
-                else if (low.key === 'finance') chainSug = '在复利面板录入你的投资资产（基金/股票本金和收益），让财务复利看得见——财务放大一切。';
-                else if (low.key === 'network') chainSug = '本周主动联系一位合作方/老朋友，把关系任务加进日历——人脉复利靠"记得"积累。';
-                else if (low.key === 'content') chainSug = '把最近一条灵感写成内容发出去（图文/短视频皆可）——内容会反哺身份。';
-                else chainSug = '把一条近期完成的灵感/作品归档进"内容资产库"，让产出自带复利。';
-                insight.innerHTML = `🧠 <b>复利洞察：</b>你的最强复利是「${top.name}」（${dims[top.key] || 0} 分），最需要补的是「${low.name}」（${dims[low.key] || 0} 分）。<br>🎯 <b>下一步动作：</b>${chainSug}`;
-            }
-        }
-
-        // ===== 投资资产管理 =====
-        function cpRenderInvest() {
-            const box = document.getElementById('cpInvestBox');
-            const list = document.getElementById('cpInvestList');
-            if (!box || !list) return;
-            const investments = safeStorage.get('niko_investments', []);
-            const totalP = cpSum(investments, inv => Number(inv.principal) || 0);
-            const totalR = cpSum(investments, inv => Number(inv.profit) || Number(inv.return) || 0);
-            box.innerHTML = `
-                <div style="flex:1;min-width:120px;">
-                    <label style="font-size:11px;color:#888;">名称</label>
-                    <input id="cpInvName" type="text" placeholder="如：沪深300定投" class="cp-invest-input" style="width:100%;margin-top:2px;">
-                </div>
-                <div style="min-width:90px;">
-                    <label style="font-size:11px;color:#888;">本金¥</label>
-                    <input id="cpInvPrincipal" type="number" placeholder="0" class="cp-invest-input" style="width:100%;margin-top:2px;">
-                </div>
-                <div style="min-width:90px;">
-                    <label style="font-size:11px;color:#888;">收益¥</label>
-                    <input id="cpInvProfit" type="number" placeholder="0" class="cp-invest-input" style="width:100%;margin-top:2px;">
-                </div>
-                <button onclick="cpAddInvest()" class="cp-invest-btn">添加</button>
-            `;
-            if (!investments.length) {
-                list.innerHTML = '<div style="font-size:12px;color:#aaa;padding:8px;">暂无投资记录，添加第一笔开始追踪财务复利</div>';
-                return;
-            }
-            list.innerHTML = investments.map((inv, i) => {
-                const p = Number(inv.principal) || 0;
-                const r = Number(inv.profit) || Number(inv.return) || 0;
-                return `<div class="cp-invest-row">
-                    <span style="flex:1;font-weight:600;">${escapeHtml(inv.name || '未命名')}</span>
-                    <span style="color:#888;">本金 ¥${p.toLocaleString()}</span>
-                    <span style="color:${r >= 0 ? '#10b981' : '#ef4444'};font-weight:600;">${r >= 0 ? '+' : ''}¥${r.toLocaleString()}</span>
-                    <span onclick="cpDelInvest(${i})" style="cursor:pointer;color:#ef4444;font-size:16px;padding:0 4px;">×</span>
-                </div>`;
-            }).join('') + `<div style="margin-top:6px;font-size:12px;color:#555;font-weight:600;">合计：本金 ¥${totalP.toLocaleString()} · 收益 ¥${totalR.toLocaleString()} · 总资产 ¥${(totalP + totalR).toLocaleString()}</div>`;
-        }
-        function cpAddInvest() {
-            const name = document.getElementById('cpInvName').value.trim();
-            const principal = Number(document.getElementById('cpInvPrincipal').value) || 0;
-            const profit = Number(document.getElementById('cpInvProfit').value) || 0;
-            if (!name && !principal) return;
-            const investments = safeStorage.get('niko_investments', []);
-            investments.push({ name: name || '投资' + (investments.length + 1), principal, profit, createdAt: new Date().toISOString() });
-            safeStorage.set('niko_investments', investments);
-            document.getElementById('cpInvName').value = '';
-            document.getElementById('cpInvPrincipal').value = '';
-            document.getElementById('cpInvProfit').value = '';
-            cpRenderInvest();
-            renderCompoundPage();
-        }
-        function cpDelInvest(i) {
-            const investments = safeStorage.get('niko_investments', []);
-            investments.splice(i, 1);
-            safeStorage.set('niko_investments', investments);
-            cpRenderInvest();
-            renderCompoundPage();
-        }
-
-        // ===== 主渲染 =====
-        function renderCompoundPage() {
-            const { dims, total } = cpCompute();
-            const totalEl = document.getElementById('cpTotalScore');
-            if (totalEl) totalEl.textContent = total;
-            cpRenderRadar(dims);
-            cpRenderDims(dims);
-            cpRenderWheel();
-            cpRenderInvest();
-            cpRenderAch();
-            cpRenderAI();
-            cpPredict(dims);
-            cpOvernight();
-        }
-        // 💰 复利过夜（仪式 #3）：跨夜首次打开，金色铭牌升起「昨夜 +¥X」——睡一觉，资产自己生长
-        function cpOvernight() {
-            try {
-                const inv = safeStorage.get('niko_investments', []);
-                const sum = inv.reduce((s, i) => s + (Number(i.principal) || 0) + (Number(i.profit) || Number(i.return) || 0), 0);
-                const today = new Date().toISOString().slice(0, 10);
-                const snap = safeStorage.get('niko_cp_overnight', null);
-                safeStorage.set('niko_cp_overnight', { date: today, total: sum });
-                if (!snap || snap.date === today || sum <= snap.total) return;
-                const diff = Math.round(sum - snap.total);
-                const anchor = document.getElementById('cpTotalScore');
-                let card = null;
-                if (anchor) { card = anchor.closest('.cp-hero') || anchor.closest('.cp-card') || anchor.closest('section') || anchor.parentElement; }
-                if (!card) return;
-                const badge = document.createElement('div');
-                badge.style.cssText = 'position:absolute;right:14px;top:12px;z-index:30;font-size:12px;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.45);border-radius:10px;padding:4px 12px;letter-spacing:1px;box-shadow:0 0 18px rgba(251,191,36,.15);animation:cpOvernightRise 3.6s ease forwards;pointer-events:none;';
-                badge.textContent = '昨夜 +¥' + diff.toLocaleString();
-                const cs = getComputedStyle(card);
-                if (cs && cs.position === 'static') card.style.position = 'relative';
-                card.appendChild(badge);
-                setTimeout(() => badge.remove(), 3800);
-            } catch (e) {}
-        }
-        if (typeof window.__NIKO_GAME_TEST__ !== 'undefined') renderCompoundPage();
-// ===== 育儿手册 =====
-        const PARENTING_CATEGORIES = ['食品安全', '用品召回', '疾病预警', '养育误区', '出行安全', '其他'];
-        const PARENTING_SEED_VERSION = 'v2026-08-17';
-        const PARENTING_SEED_NEWS = [
-            { id: 'pn_seed_1', title: '婴儿米粉 / 辅食注意重金属风险', category: '食品安全', source: '综合安全提示', date: '2026-08-01', content: '大米基辅食可能含无机砷，建议轮换食材（燕麦、小麦、蔬果等），不要长期只吃单一米糊。关注产品检测报告。' },
-            { id: 'pn_seed_2', title: '婴儿睡眠安全：仰卧、硬床垫、无杂物', category: '养育误区', source: 'AAP 安全指南', date: '2026-08-01', content: '1 岁前建议仰卧入睡；床垫要硬实；床上避免枕头、毛绒玩具、防撞垫；同室不同床可降低 SIDS 风险。' },
-            { id: 'pn_seed_3', title: '婴儿护肤品避免香精、酒精、激素', category: '用品召回', source: '皮肤科建议', date: '2026-08-01', content: '选择成分简单、无香精、无酒精的产品；湿疹膏慎用非医嘱的「消字号」产品；新护肤品先做小面积测试。' },
-            { id: 'pn_seed_4', title: '婴儿安全座椅：反向安装、正确固定', category: '出行安全', source: '交通安全提示', date: '2026-08-10', content: '2 岁前尽量反向安装；肩带松紧以「捏不起褶皱」为准；避免穿厚外套坐安全座椅（先脱外套再系带）；确认 ISOFIX 或安全带固定牢靠。' },
-            { id: 'pn_seed_5', title: '儿童玩具警惕小零件窒息风险', category: '用品召回', source: '玩具安全标准', date: '2026-08-10', content: '3 岁以下避免直径小于 3.2cm 的小零件；磁力珠、纽扣电池尤其危险（误吞后果严重）；购买认准 3C 认证，警惕无标签劣质玩具。' },
-            { id: 'pn_seed_6', title: '配方奶冲泡温度与储存时限', category: '食品安全', source: 'WHO 喂养指南', date: '2026-08-10', content: '冲泡水温建议 70℃ 左右（杀灭可能存在的阪崎肠杆菌）；冲好后 2 小时内喂完，室温存放不超过 2 小时；喝剩的奶不要反复冷藏加热。' },
-            { id: 'pn_seed_7', title: '婴儿衣物警惕甲醛与荧光剂', category: '用品召回', source: '纺织安全建议', date: '2026-08-10', content: '新衣先下水洗再穿（可去除部分甲醛与浮色）；认准 A 类婴幼儿纺织品标准；深色印花过多、异味明显的衣物谨慎购买；荧光剂争议尚无定论但可选无添加品牌。' },
-            { id: 'pn_seed_8', title: '婴儿洗护用品关注 pH 值与成分表', category: '用品召回', source: '皮肤科建议', date: '2026-08-10', content: '婴儿皮肤偏弱酸性，选 pH 5.5-7 的温和配方；避开月桂醇硫酸酯钠（SLS）、甲基异噻唑啉酮等刺激成分；洗澡水温 37-38℃，时长 5-10 分钟。' },
-            { id: 'pn_seed_9', title: '婴儿推车：刹车、五点式安全带、防侧翻', category: '出行安全', source: '产品安全提示', date: '2026-08-10', content: '停车必踩刹车；推行时扣好五点式安全带；挂重物易导致推车后翻，勿在把手挂重包；过台阶、扶梯务必抱起或抬车（扶梯有卷入风险）。' },
-            { id: 'pn_seed_10', title: '疫苗接种：按时接种与常见反应', category: '疾病预警', source: '疾控接种指南', date: '2026-08-10', content: '按接种本时间表按时接种；接种后 24-48 小时可能有发热、局部红肿，多喝水、物理降温；持续高热或精神差及时就医；接种前告知医生过敏史与近期用药。' },
-            { id: 'pn_seed_11', title: '辅食添加：过敏原与性状过渡', category: '食品安全', source: '儿保喂养建议', date: '2026-08-10', content: '满 6 个月左右开始添加辅食；高铁米粉起步，新食物单种引入观察 3 天；蛋黄、鱼虾等易致敏食物不必过度推迟，少量尝试；从泥糊状逐步过渡到碎末、软饭。' },
-            { id: 'pn_seed_12', title: '婴儿烫伤预防：热水、奶瓶温度、取暖器', category: '养育误区', source: '家庭安全提示', date: '2026-08-10', content: '冲奶水温勿高于 40-50℃ 直接入口前先滴手腕试温；热水壶、电饭煲放高处；桌布易被宝宝拽翻打翻热汤；取暖器、暖宝宝保持安全距离，避免低温烫伤。' },
-            { id: 'pn_seed_13', title: '婴儿防坠床与围栏安全', category: '养育误区', source: '家庭安全提示', date: '2026-08-10', content: '会翻身起就加床围或铺地垫；围栏间隙 6-10cm 防止卡头；床边不放可垫脚的箱子；婴儿床围（床中软垫）1 岁后避免使用防窒息。' },
-            { id: 'pn_seed_14', title: '奶瓶材质：BPA、玻璃与 PPSU', category: '用品召回', source: '用品选购指南', date: '2026-08-10', content: '选购标明「不含 BPA」的塑料奶瓶；玻璃奶瓶耐热好但易碎，PPSU 轻便耐摔耐高温；奶嘴按月龄更换（S/M/L 流速）；每 3-6 个月更换奶瓶。' }
-        ];
-        const PARENTING_SEED_CHECKLIST = [
-            { id: 'pc_seed_1', text: '检查宝宝用品是否在最新召回名单', category: '安全', done: false },
-            { id: 'pc_seed_2', text: '确认奶粉/辅食批次与储存条件', category: '日常', done: false },
-            { id: 'pc_seed_3', text: '新护肤品先在耳后/手腕小面积试用', category: '健康', done: false },
-            { id: 'pc_seed_4', text: '确认安全座椅安装是否牢靠、是否反向', category: '出行', done: false },
-            { id: 'pc_seed_5', text: '排查家里低于 1.2 米的小零件/纽扣电池/磁力珠', category: '安全', done: false },
-            { id: 'pc_seed_6', text: '核对疫苗接种本，确认近期接种计划', category: '健康', done: false }
-        ];
-
-        let parentingNews = [];
-        let parentingPrinciples = [];
-        let parentingChecklist = [];
-        let parentingView = 'news';
-
-        function parentingTodayStr() {
-            const d = new Date();
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-        }
-        function parentingSave() {
-            safeStorage.set('niko_parenting_news', parentingNews);
-            safeStorage.set('niko_parenting_principles', parentingPrinciples);
-            safeStorage.set('niko_parenting_checklist', parentingChecklist);
-            safeStorage.set('niko_parenting_updated_at', new Date().toISOString());
-        }
-        function parentingSeed() {
-            const version = safeStorage.get('niko_parenting_seed_version', null);
-            if (version === PARENTING_SEED_VERSION) return;
-            // 按 id 去重合并：已有数据保留（含用户手动添加），仅追加缺失的种子
-            const existingIds = new Set(parentingNews.map(n => n.id));
-            let added = 0;
-            PARENTING_SEED_NEWS.forEach(seed => {
-                if (!existingIds.has(seed.id)) { parentingNews.push({ ...seed }); added++; }
-            });
-            const existingCheckIds = new Set(parentingChecklist.map(c => c.id));
-            PARENTING_SEED_CHECKLIST.forEach(seed => {
-                if (!existingCheckIds.has(seed.id)) parentingChecklist.push({ ...seed });
-            });
-            parentingSave();
-            safeStorage.set('niko_parenting_seed_version', PARENTING_SEED_VERSION);
-        }
-
-        function renderParentingPage() {
-            parentingNews = safeStorage.get('niko_parenting_news', []);
-            parentingPrinciples = safeStorage.get('niko_parenting_principles', []);
-            parentingChecklist = safeStorage.get('niko_parenting_checklist', []);
-            parentingSeed();
-            renderParentingStats();
-            renderParentingTabs();
-            renderParentingNews();
-            renderParentingPrinciples();
-            renderParentingAdvice();
-            renderParentingChecklist();
-            showParentingView();
-            const upd = safeStorage.get('niko_parenting_updated_at', null);
-            document.getElementById('parentingUpdatedAt').textContent = upd ? '数据更新于 ' + upd.slice(0, 10) : '';
-        }
-        function showParentingView() {
-            document.getElementById('parentingNewsView').style.display = parentingView === 'news' ? '' : 'none';
-            document.getElementById('parentingPrinciplesView').style.display = parentingView === 'principles' ? '' : 'none';
-            document.getElementById('parentingAdviceView').style.display = parentingView === 'advice' ? '' : 'none';
-            document.getElementById('parentingChecklistView').style.display = parentingView === 'checklist' ? '' : 'none';
-        }
-        function switchParentingView(v) { parentingView = v; renderParentingTabs(); showParentingView(); if (v === 'advice') renderParentingAdvice(); }
-        function renderParentingTabs() {
-            const el = document.getElementById('parentingTabs');
-            if (!el) return;
-            const defs = [['news', '安全快讯'], ['principles', '我的理念'], ['advice', '今日建议'], ['checklist', '育儿清单']];
-            el.innerHTML = defs.map(([k, label]) =>
-                `<span class="parenting-tab${parentingView === k ? ' active' : ''}" onclick="switchParentingView('${k}')">${label}</span>`
-            ).join('');
-        }
-        function renderParentingStats() {
-            const el = document.getElementById('parentingStats');
-            if (!el) return;
-            const done = parentingChecklist.filter(c => c.done).length;
-            el.innerHTML = `
-                <div class="parenting-stat"><div class="parenting-stat-label">安全资讯</div><div class="parenting-stat-value">${parentingNews.length}</div></div>
-                <div class="parenting-stat"><div class="parenting-stat-label">育儿理念</div><div class="parenting-stat-value">${parentingPrinciples.length}</div></div>
-                <div class="parenting-stat"><div class="parenting-stat-label">清单完成</div><div class="parenting-stat-value">${done}/${parentingChecklist.length}</div></div>
-            `;
-        }
-
-        // 安全快讯
-        function renderParentingNews() {
-            const el = document.getElementById('parentingNewsList');
-            if (!el) return;
-            const sorted = parentingNews.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-            if (!sorted.length) { el.innerHTML = '<div class="parenting-empty">暂无安全资讯，点击右上角添加</div>'; return; }
-            el.innerHTML = sorted.map(n => `
-                <div class="parenting-card" onclick="openParentingNewsDetail('${n.id}')" style="cursor:pointer;" title="点击查看详情">
-                    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-                        <div class="parenting-card-title">${escapeHtml(n.title)}</div>
-                        <span class="parenting-tag">${escapeHtml(n.category || '其他')}</span>
-                    </div>
-                    <div class="parenting-card-meta">${escapeHtml(n.source || '未知来源')} · ${escapeHtml(n.date || '')}</div>
-                    <div class="parenting-card-body">${escapeHtml(n.content)}</div>
-                    <div style="display:flex;justify-content:flex-end;gap:6px;">
-                        <button class="book-btn danger" onclick="event.stopPropagation();deleteParentingNews('${n.id}')">🗑 删除</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // 资讯详情弹窗
-        function openParentingNewsDetail(id) {
-            const n = parentingNews.find(x => x.id === id);
-            if (!n) return;
-            const catNames = { '食品安全': '🍚', '用品召回': '🧸', '疾病预警': '💉', '养育误区': '🏠', '出行安全': '🚗', '其他': '📝' };
-            const esc = escapeHtml;
-            document.getElementById('parentingNewsDetailBody').innerHTML = `
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-                    <span style="font-size:18px;font-weight:600;color:#1f2937;">${esc(n.title)}</span>
-                    <span class="parenting-tag">${catNames[n.category] || ''} ${esc(n.category || '其他')}</span>
-                </div>
-                <div class="book-detail-grid">
-                    <div class="book-detail-row"><span class="book-detail-label">📰 来源</span><span class="book-detail-val">${esc(n.source || '未知来源')}</span></div>
-                    <div class="book-detail-row"><span class="book-detail-label">📅 日期</span><span class="book-detail-val">${esc(n.date || '')}</span></div>
-                </div>
-                <div class="book-detail-sec">
-                    <div class="book-detail-sec-title">📋 内容</div>
-                    <div class="book-detail-reason" style="white-space:pre-wrap;">${esc(n.content)}</div>
-                </div>
-                <div style="display:flex;gap:8px;margin-top:14px;">
-                    <button class="book-btn danger" onclick="deleteParentingNews('${n.id}');closeParentingNewsDetail()">🗑 删除</button>
-                </div>
-            `;
-            document.getElementById('parentingNewsDetailModal').classList.add('show');
-        }
-        function closeParentingNewsDetail() { document.getElementById('parentingNewsDetailModal').classList.remove('show'); }
-        function openParentingNewsModal() {
-            document.getElementById('parentingNewsModal').classList.add('show');
-            document.getElementById('parentingNewsTitle').value = '';
-            document.getElementById('parentingNewsSource').value = '';
-            document.getElementById('parentingNewsDate').value = parentingTodayStr();
-            document.getElementById('parentingNewsContent').value = '';
-        }
-        function closeParentingNewsModal() { document.getElementById('parentingNewsModal').classList.remove('show'); }
-        function saveParentingNews() {
-            const title = document.getElementById('parentingNewsTitle').value.trim();
-            if (!title) { showToast('⚠️ 标题不能为空'); return; }
-            parentingNews.unshift({
-                id: 'pn_' + Date.now(), title,
-                category: document.getElementById('parentingNewsCategory').value,
-                source: document.getElementById('parentingNewsSource').value.trim(),
-                date: document.getElementById('parentingNewsDate').value || parentingTodayStr(),
-                content: document.getElementById('parentingNewsContent').value.trim()
-            });
-            parentingSave();
-            closeParentingNewsModal();
-            renderParentingPage();
-            showToast('📰 安全资讯已保存');
-        }
-        function deleteParentingNews(id) {
-            if (!confirm('确定删除这条资讯吗？')) return;
-            parentingNews = parentingNews.filter(n => n.id !== id);
-            parentingSave();
-            renderParentingPage();
-        }
-
-        // 我的理念
-        function renderParentingPrinciples() {
-            const el = document.getElementById('parentingPrinciplesList');
-            if (!el) return;
-            if (!parentingPrinciples.length) { el.innerHTML = '<div class="parenting-empty">还没有记录育儿理念，先写几条你的原则吧</div>'; return; }
-            el.innerHTML = parentingPrinciples.map(p => `
-                <div class="parenting-principle-item">
-                    <div class="parenting-principle-text">${escapeHtml(p.text)}</div>
-                    <button class="book-btn danger" onclick="deleteParentingPrinciple('${p.id}')">🗑</button>
-                </div>
-            `).join('');
-        }
-        function addParentingPrinciple() {
-            const input = document.getElementById('parentingPrincipleInput');
-            const text = (input && input.value || '').trim();
-            if (!text) { showToast('请输入理念内容'); return; }
-            parentingPrinciples.unshift({ id: 'pp_' + Date.now(), text, addedAt: new Date().toISOString() });
-            parentingSave();
-            // 阶段二：育儿理念同步存入知识库（02-Areas 经验复利）
-            addToKnowledge({
-                title: '育儿理念 · ' + text.replace(/\s+/g, ' ').slice(0, 20),
-                body: text,
-                para: '02-Areas',
-                category: '生活',
-                tags: ['育儿', '理念'],
-                from: '育儿手册',
-                dedup: true
-            });
-            input.value = '';
-            renderParentingPage();
-            showToast('💡 理念已保存');
-        }
-        function deleteParentingPrinciple(id) {
-            parentingPrinciples = parentingPrinciples.filter(p => p.id !== id);
-            parentingSave();
-            renderParentingPage();
-        }
-
-        // 今日建议
-        function renderParentingAdvice() {
-            const box = document.getElementById('parentingAdviceBox');
-            const empty = document.getElementById('parentingAdviceEmpty');
-            const saved = safeStorage.get('niko_parenting_advice', '');
-            if (!saved) { if (box) box.style.display = 'none'; if (empty) empty.style.display = ''; return; }
-            if (box) { box.textContent = saved; box.style.display = ''; }
-            if (empty) empty.style.display = 'none';
-        }
-        function generateParentingAdvice() {
-            const recentNews = parentingNews.slice(0, 5);
-            const principles = parentingPrinciples.slice(0, 5);
-            if (!recentNews.length && !principles.length) { showToast('请先添加一些安全资讯或育儿理念'); return; }
-            const newsText = recentNews.length ? recentNews.map(n => `- ${n.title}（${n.category}）：${n.content}`).join('\n') : '（暂无安全资讯）';
-            const principleText = principles.length ? principles.map(p => `- ${p.text}`).join('\n') : '（暂无育儿理念）';
-            const prompt = `你是一位关注婴儿安全的育儿顾问。请结合以下最新安全资讯和我的育儿理念，给出 3-5 条今天就可以执行的具体建议或检查方案。\n\n【安全资讯】\n${newsText}\n\n【我的育儿理念】\n${principleText}\n\n请用中文输出，每条建议包含：做法 + 原因 + 简单步骤。`;
-            safeStorage.set('niko_parenting_advice', '[已生成 AI 提问词，请复制后到 AI 对话框获取建议]\n\n' + prompt);
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(prompt).then(() => showToast('📋 已复制提问词，去问问 AI 吧')).catch(() => showToast('提问词已保存，可复制失败'));
-            } else {
-                showToast('✨ 建议已生成，已保存到今日建议页面');
-            }
-            renderParentingAdvice();
-        }
-
-        // 育儿清单
-        function renderParentingChecklist() {
-            const el = document.getElementById('parentingChecklist');
-            if (!el) return;
-            if (!parentingChecklist.length) { el.innerHTML = '<div class="parenting-empty">还没有清单项，先添加几个日常/安全检查吧</div>'; return; }
-            el.innerHTML = parentingChecklist.map(c => `
-                <div class="parenting-checklist-item ${c.done ? 'done' : ''}">
-                    <input type="checkbox" ${c.done ? 'checked' : ''} onchange="toggleParentingCheck('${c.id}')">
-                    <div class="text"><span class="parenting-tag" style="margin-right:6px;">${escapeHtml(c.category)}</span>${escapeHtml(c.text)}</div>
-                    <button class="book-btn danger" onclick="deleteParentingCheck('${c.id}')">🗑</button>
-                </div>
-            `).join('');
-        }
-        function addParentingCheckItem() {
-            const input = document.getElementById('parentingCheckInput');
-            const text = (input && input.value || '').trim();
-            if (!text) { showToast('请输入清单项'); return; }
-            const category = document.getElementById('parentingCheckCategory').value;
-            parentingChecklist.unshift({ id: 'pc_' + Date.now(), text, category, done: false });
-            parentingSave();
-            input.value = '';
-            renderParentingPage();
-            showToast('✅ 清单项已添加');
-        }
-        function toggleParentingCheck(id) {
-            const c = parentingChecklist.find(x => x.id === id);
-            if (c) { c.done = !c.done; parentingSave(); renderParentingPage(); }
-        }
-        function deleteParentingCheck(id) {
-            parentingChecklist = parentingChecklist.filter(c => c.id !== id);
-            parentingSave();
-            renderParentingPage();
-        }
-
-        renderParentingPage();
 (function(){
 'use strict';
 /* NIKO · 健康档案（身体档案）· v7 总览改版
@@ -34519,7 +33252,7 @@ function hpClearDemo(){
 })();
 (function(){
   'use strict';
-  /* ================= NIKO · 推文工坊 v1（2026-09-17 并入）=================
+  /* ================= NIKO · 笔记长文 v1（2026-09-17 并入；原名推文工坊）=================
      三栏工作台：素材箱+草稿 / 编辑器 / 公众号纸宽预览
      定版：三栏比例「预览优先」（左236 / 中1fr / 右468，正文行宽 660）
            按钮「就近放置」（AI 贴工具条尾 · 存入知识库贴标题行 · 复制到公众号贴预览底）
@@ -34560,7 +33293,7 @@ function hpClearDemo(){
     return d;
   }
 
-  /* ---------- Markdown → 公众号 HTML（轻量，只覆盖写推文常用的几种）---------- */
+  /* ---------- Markdown → 公众号 HTML（轻量，只覆盖写长文常用的几种）---------- */
   function twRenderMd(md){
     var lines = String(md || '').split('\n'), out = [], i = 0;
     function inline(s){
@@ -34766,7 +33499,7 @@ function hpClearDemo(){
     var title = $('twTitle') ? $('twTitle').value : '';
     var body = twPlain($('twBody') ? $('twBody').value : '');
     var ib = T.inbox.slice(0, 5).map(function(x, i){ return (i + 1) + '. ' + x.t; }).join('\n');
-    var p = '我在写一篇公众号推文，请你帮我润色和补全。\n\n'
+    var p = '我在写一篇公众号长文，请你帮我润色和补全。\n\n'
       + '【标题】' + title + '\n\n'
       + '【我的正文草稿】\n' + body + '\n\n'
       + (ib ? '【我收集的素材参考】\n' + ib + '\n\n' : '')
@@ -34795,12 +33528,12 @@ function hpClearDemo(){
     if (!title && !body.trim()){ twToast('先写点内容再存'); return; }
     if (typeof addToKnowledge !== 'function'){ twToast('知识库模块没加载，稍后再试'); return; }
     var ok = addToKnowledge({
-      title: title || ('推文草稿 ' + twToday()),
+      title: title || ('长文草稿 ' + twToday()),
       body: body,
       para: '03-Resources',
       category: '副业',
-      tags: ['推文'],
-      from: '推文工坊',
+      tags: ['长文'],
+      from: '笔记长文',
       dedup: true
     });
     if (ok) { d.title = title; twSaveSoon(); }
@@ -34871,7 +33604,7 @@ function hpClearDemo(){
     var top = $('twHostTop'), ai = $('twHostAi'), pv = $('twHostPvw');
     if (!top || !ai || !pv) return;
     if (!document.getElementById('twBtnKb')){
-      top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 推文）', twToKb));
+      top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 长文）', twToKb));
       ai.appendChild(twMkBtn('twBtnAi', '复制提示词问 AI', false, '把标题 + 正文 + 素材整理成提示词复制走', twAiPrompt));
       pv.appendChild(twMkBtn('twBtnPub', '复制到公众号', true, '按公众号样式复制 HTML，直接粘进公众号编辑器', twExportGzh));
     }
@@ -35244,8 +33977,6 @@ function hpClearDemo(){
             document.getElementById('exportReadCount').textContent = dataItemCount('niko_hot_read', {});
             document.getElementById('exportMemberCount').textContent = dataItemCount('niko_memberships', []);
             document.getElementById('exportGameTimeCount').textContent = dataItemCount('niko_game_time', {});
-            document.getElementById('exportParentingCount').textContent =
-                dataItemCount('niko_parenting_news', []) + dataItemCount('niko_parenting_principles', []) + dataItemCount('niko_parenting_checklist', []);
             document.getElementById('importPreviewArea').innerHTML = '';
             pendingImportData = null;
         }
@@ -35476,9 +34207,6 @@ function hpClearDemo(){
             });
             safeStorage.get('niko_book_recommend', []).forEach(r => push('🤖', '《' + r.title + '》', '推荐书单 · ' + (r.category || ''), 'book'));
             safeStorage.get('niko_book_notes', []).forEach(n => push('📝', n.quote, '读书笔记' + (n.page ? ' · P' + n.page : ''), 'book'));
-            safeStorage.get('niko_parenting_news', []).forEach(n => push('👶', n.title, '育儿安全 · ' + (n.category || ''), 'parenting'));
-            safeStorage.get('niko_parenting_principles', []).forEach(p => push('💡', p.text, '育儿理念', 'parenting'));
-            safeStorage.get('niko_parenting_checklist', []).forEach(c => push('✅', c.text, '育儿清单 · ' + (c.category || ''), 'parenting'));
             safeStorage.get('niko_memes', []).forEach(m => push('🈯', m.term || m.name || '', '我的梗 · ' + (m.region || ''), 'meme'));
             safeStorage.get('niko_meme_recommend', []).forEach(m => push('🈯', m.term || '', '推荐梗 · ' + (m.region || ''), 'meme'));
             safeStorage.get('niko_copy_library', []).forEach(c => push('✍️', c.title || c.name || '', '我的文案 · ' + (c.region || ''), 'copy'));
@@ -35531,7 +34259,7 @@ function hpClearDemo(){
             }
             const actions = gsResults.filter(it => it.type === 'action');
             const data = gsResults.filter(it => it.type !== 'action');
-            const gsPageName = (it) => it.type === 'action' ? '⚡ 执行' : (it.page === 'hot' ? '热点' : it.page === 'book' ? '读书' : it.page === 'meme' ? '梗文化' : it.page === 'copy' ? '文案库' : it.page === 'notes' ? '便签' : it.page === 'parenting' ? '育儿' : '计划');
+            const gsPageName = (it) => it.type === 'action' ? '⚡ 执行' : (it.page === 'hot' ? '热点' : it.page === 'book' ? '读书' : it.page === 'meme' ? '梗文化' : it.page === 'copy' ? '文案库' : it.page === 'notes' ? '便签' : '计划');
             const itemHtml = (it, i) => `
                 <div class="global-search-item${i === gsActiveIdx ? ' active' : ''}" onclick="gsPick(${i})" onmouseenter="gsHover(${i})">
                     <span class="gs-icon">${it.icon}</span>
@@ -36736,7 +35464,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609172333";
+        window.NIKO_VERSION = "202609172346";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
