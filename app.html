@@ -11643,7 +11643,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         </div>
     </div>
 
-    <!-- 手机端底部 Tab 栏：一键直达最常用 6 个板块（2026-09-17：复利面板/育儿手册已从上线版本摘除，底部栏本就不含它们） -->
+    <!-- 手机端底部 Tab 栏：一键直达最常用 6 个板块（2026-08-20 定版） -->
     <div class="niko-mobile-tabbar" id="nikoMobileTabbar">
         <div class="niko-mobile-tab active" data-page="today" onclick="switchPage('today')"><span class="tab-icon">📌</span><span>今日</span></div>
         <div class="niko-mobile-tab" data-page="plan" onclick="switchPage('plan')"><span class="tab-icon">📋</span><span>计划</span></div>
@@ -35464,7 +35464,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609172346";
+        window.NIKO_VERSION = "202609172350";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
