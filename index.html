@@ -32959,9 +32959,9 @@ function doseTimesFor(per,tm){
     var out=[]; for(var i=0;i<per;i++) out.push(min2hm(first+step*i));
     return out;
   }
-  var off=0;                                  /* 跟饭点：饭前 -30 分钟，饭后/随餐 +30 分钟 */
+  var off=0;                                  /* 跟饭点：饭前 -30 分钟 · 饭后/随餐 +15 分钟（2026-09-17 用户拍板：饭后 15 分钟就吃） */
   if(/饭前|餐前/.test(tm||'')) off=-30;
-  else if(/饭后|餐后|随餐/.test(tm||'')) off=30;
+  else if(/饭后|餐后|随餐/.test(tm||'')) off=15;
   return MEAL_SETS[per].map(function(k){ return min2hm(k==='s'?MEAL_BASE.s:(k==='b'?first:MEAL_BASE[k])+off); });
 }
 function dosePerDay(f){
@@ -33015,7 +33015,7 @@ function doseNextHint(){
 function doseStrip(){
   var td=doseToday();
   if(!td.total) return '';
-  var modeTxt=(DOSE_CFG.mode==='gap')?'均匀间隔':'跟饭点（饭前饭后自动错 30 分钟）';
+  var modeTxt=(DOSE_CFG.mode==='gap')?'均匀间隔':'跟饭点（饭后自动 +15 分钟）';
   return '<div class="card" style="margin-bottom:14px">'+
     '<div style="font-size:13px;font-weight:700;margin-bottom:2px">⏰ 今日服药 <span style="color:var(--accent)">'+td.done+' / '+td.total+' 次</span>'+
       ' <span class="chip sm" style="cursor:pointer" onclick="doseCfgOpen()">⚙️ 提醒设置</span></div>'+
@@ -33035,9 +33035,9 @@ function doseCfgOpen(){
     '<input type="time" id="dc_first" value="'+esc(DOSE_CFG.first||'08:50')+'"></div>'+
     '<div class="fld"><label>② 后面几顿怎么排</label>'+
     '<select id="dc_mode" style="width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);font-size:13px">'+
-    '<option value="meal"'+(DOSE_CFG.mode!=='gap'?' selected':'')+'>跟饭点 · 早/午/晚/睡前，饭前饭后自动 ±30 分钟</option>'+
+    '<option value="meal"'+(DOSE_CFG.mode!=='gap'?' selected':'')+'>跟饭点 · 早/午/晚/睡前，饭后自动 +15 分钟</option>'+
     '<option value="gap"'+(DOSE_CFG.mode==='gap'?' selected':'')+'>均匀间隔 · 第一顿到 23:00 之间均分（看药物间隔要求）</option></select></div>'+
-    '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">饭点基准：早 <b>'+esc(DOSE_CFG.first||'08:50')+'</b>（= 第一顿）· 午 12:00 · 晚 19:00 · 睡前 22:30。处方标了「饭前 / 饭后」的药会自动错开 30 分钟。</div>';
+    '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">饭点基准：早 <b>'+esc(DOSE_CFG.first||'08:50')+'</b>（= 第一顿）· 午 12:00 · 晚 19:00 · 睡前 22:30。处方标了「饭后」的药自动推迟 15 分钟吃（饭前的药仍提前 30 分钟）。</div>';
   gOpen('⏰ 服药提醒设置', html, '✅ 保存', doseCfgSave);
 }
 function doseCfgSave(){
@@ -36012,7 +36012,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609161424";
+        window.NIKO_VERSION = "202609170937";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
