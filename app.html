@@ -11261,6 +11261,34 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   #twPage .twRhy{height:auto;flex-wrap:wrap;gap:6px;}
   #twPage .twRhyBar{flex:1 1 100%;}
 }
+/* ----- 第三批（2026-09-18）：C8 朗读时长区间标 / D7 发布记录 / D9 健康专项 ----- */
+#twPage .twBand{display:inline-block;margin-left:5px;border-radius:999px;padding:0 6px;font-size:10px;
+  font-style:normal;border:1px solid var(--twLine);color:var(--twTx2);line-height:1.6;}
+#twPage .twBand.ok{color:var(--twOk,#12a150);border-color:var(--twOk,#12a150);}
+#twPage .twBand.warn{color:#c07a1e;border-color:#e0b070;}
+#twPage .twPubSum{font-size:11.5px;color:var(--twTx);padding:8px 0 4px;line-height:1.65;}
+#twPage .twPubSum b{color:var(--twAccent);}
+#twPage .twPubRow{display:flex;gap:8px;align-items:center;padding:7px 6px;border-bottom:1px solid var(--twLine);}
+#twPage .twPubRow:last-child{border-bottom:none;}
+#twPage .twPubD{flex:0 0 46px;font-size:10.5px;color:var(--twTx2);}
+#twPage .twPubC{flex:0 0 52px;font-size:10.5px;color:var(--twTx2);}
+#twPage .twPubT{flex:1;min-width:0;font-size:12.5px;color:var(--twTx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#twPage .twPubR{flex:0 0 52px;text-align:right;font-size:12.5px;font-weight:600;color:var(--twAccent);font-variant-numeric:tabular-nums;}
+#twPage .twPubDel{flex:0 0 auto;font-size:11px;color:var(--twTx2);cursor:pointer;padding:0 3px;}
+#twPage .twPubDel:hover{color:#e05252;}
+#twPage .twPubForm{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px dashed var(--twLine);}
+#twPage .twPubForm input,#twPage .twPubForm select{background:var(--twPanel2);border:1px solid var(--twLine);color:var(--twTx);
+  border-radius:7px;padding:5px 8px;font-size:12px;font-family:inherit;min-width:0;}
+#twPage .twPubForm input[type=date]{flex:0 0 122px;}
+#twPage .twPubForm select{flex:0 0 84px;}
+#twPage .twPubForm input.twPiT{flex:1 1 140px;}
+#twPage .twPubForm input.twPiR{flex:0 0 74px;}
+#twPage .twPubForm button{flex:0 0 auto;}
+@media (max-width:900px){
+  #twPage .twStat{flex-wrap:wrap;gap:8px;}
+  #twPage .twPubT{white-space:normal;}
+  #twPage .twPubForm input,#twPage .twPubForm select{font-size:16px;}   /* 铁律 §9：窄屏输入 >=16px 防缩放 */
+}
 /* ---------- 划词工具条 ---------- */
 #twPage .twSelBar{position:absolute;z-index:60;display:none;gap:2px;background:var(--twPanel);
   border:1px solid var(--twLine);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.2);padding:3px;}
@@ -14012,7 +14040,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="twStat">
           <span>字数 <b id="twStWc">0</b></span>
           <span>段落 <b id="twStPs">0</b></span>
-          <span>预计阅读 <b id="twStRd">0</b> 分钟</span>
+          <span>读 <b id="twStRd">0 分 0 秒</b><i class="twBand" id="twStBand"></i></span>
         </div>
       </div>
 
@@ -14072,6 +14100,22 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
       <div class="twPop" id="twPopCheck">
         <div class="twPopHd">🩺 发布前体检 <button class="twX" onclick="twPopClose('twPopCheck')" title="关闭">×</button></div>
         <div id="twChkBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopPub">
+        <div class="twPopHd">📈 发布记录 <button class="twX" onclick="twPopClose('twPopPub')" title="关闭">×</button></div>
+        <div class="twPopTip">发完记一笔（渠道 + 阅读数）。攒够几篇才看得出哪类题材真有人点。只存本机，不上传。</div>
+        <div class="twPubSum" id="twPubSum"></div>
+        <div id="twPubBox"></div>
+        <div class="twPubForm">
+          <input type="date" id="twPiDate" title="发布/记录日期">
+          <select id="twPiCh" title="发在哪">
+            <option>公众号</option><option>朋友圈</option><option>小红书</option><option>知乎</option><option>其它</option>
+          </select>
+          <input class="twPiT" id="twPiT" placeholder="标题（留空会取当前草稿标题）">
+          <input class="twPiR" id="twPiR" type="number" min="0" placeholder="阅读">
+          <button class="twMini" onclick="twPubAdd()">记一笔</button>
+        </div>
       </div>
 
       <div class="twPvwWrap twScroll">
@@ -33620,7 +33664,7 @@ function hpClearDemo(){
   var TW_STORE = 'niko_tw_v1';
   var TW_MAX = 200;                 // 素材/草稿条数上限，防止把 localStorage 撑爆
   var TW_VIEWS = ['write', 'both', 'pvw'];   // 视图模式：写作优先 / 三栏 / 预览优先
-  var T = { drafts: [], inbox: [], cur: null };
+  var T = { drafts: [], inbox: [], pub: [], cur: null };   // pub = D7 发布记录（2026-09-18）
   var saveTimer = null;
 
   function $(id){ return document.getElementById(id); }
@@ -33630,6 +33674,19 @@ function hpClearDemo(){
     var d = new Date();
     return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
   }
+  /* C8 · 朗读时长预估（2026-09-18）：400 字/分钟（默读，沿用原来「预计阅读」的口径），
+     只是把「几分钟」换成「分 秒」，再补一个舒服区间判断 —— 比字数直观。 */
+  function twReadTime(wc){
+    var n = Number(wc) || 0;
+    var sec = Math.round(n / 400 * 60);
+    var mm = Math.floor(sec / 60), ss = sec % 60;
+    var text = mm ? (mm + ' 分' + (ss ? ' ' + ss + ' 秒' : '')) : (ss + ' 秒');
+    if (!n) text = '0 分 0 秒';
+    var band = '舒服区间', cls = 'ok';
+    if (sec < 120) { band = '偏短'; cls = 'warn'; }
+    else if (sec > 300) { band = '偏长，建议拆篇'; cls = 'warn'; }
+    return { sec: sec, text: text, band: band, cls: cls };
+  }
   function twToast(msg){ try { if (typeof showToast === 'function') showToast(msg); } catch (e) {} }
 
   function twLoad(){
@@ -33638,6 +33695,8 @@ function hpClearDemo(){
     if (!Array.isArray(T.drafts)) T.drafts = [];
     if (!Array.isArray(T.inbox)) T.inbox = [];
     if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
+    if (!Array.isArray(T.pub)) T.pub = [];               // D7 发布记录（2026-09-18）
+    if (T.pub.length > TW_MAX) T.pub = T.pub.slice(0, TW_MAX);
     if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
     if (!T.style || typeof T.style !== 'object') T.style = twDefStyle();  // 排版参数（皮肤/主色/零件/字号行距）一并落盘
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
@@ -33754,7 +33813,9 @@ function hpClearDemo(){
     var ps = twBlocks(body).filter(function(b){ return b.len > 0; }).length;
     if ($('twStWc')) $('twStWc').textContent = wc;
     if ($('twStPs')) $('twStPs').textContent = ps;
-    if ($('twStRd')) $('twStRd').textContent = Math.max(1, Math.round(wc / 400));
+    var rdT = twReadTime(wc);                                     // C8 朗读时长（2026-09-18）
+    if ($('twStRd')) $('twStRd').textContent = rdT.text;
+    if ($('twStBand')){ var bdEl = $('twStBand'); bdEl.textContent = rdT.band; bdEl.className = 'twBand ' + rdT.cls; }
     if ($('twPvW')) $('twPvW').textContent = isMd ? '源码' : ('公众号 · ' + cfg.pw + 'px');
     // 草稿列表里那一行的「N 字」跟着真实字数走
     if ($('twDfCnt')) $('twDfCnt').textContent = T.drafts.length + ' 篇';
@@ -33996,6 +34057,8 @@ function hpClearDemo(){
     if (!document.getElementById('twBtnKb')){
       top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 推文）', twToKb));
       ai.appendChild(twMkBtn('twBtnAi', '🤖 AI 指令', false, '5 条精准指令：整篇润色 / 改写开头 / 拆短段落 / 提炼小标题 / 去 AI 味', twAiMenu));
+      // ⚠️ id 别叫 twBtnPub —— 预览底那个「复制到公众号」已经占了这个名字（2026-09-18 撞过）
+      ai.appendChild(twMkBtn('twBtnLog', '📈 发布记录', false, '记下每篇发在哪、阅读多少；攒几篇才看得出哪类题材真有人点', twPubOpen));
       var chk = pv.appendChild(twMkBtn('twBtnChk', '🩺 发布体检', false, '标题字数 / 长段落 / 长句 / 配图 / 极限词 / 高亮，一次扫完', twCheckOpen));
       chk.style.flex = '0 0 auto';
       var pub = pv.appendChild(twMkBtn('twBtnPub', '复制到公众号', true, '按当前排版一键复制 HTML，直接粘进公众号编辑器', twExportGzh));
@@ -34061,9 +34124,10 @@ function hpClearDemo(){
      ============================================================ */
 
   var TW_SKIN_LIST = [
-    { k:'a8', n:'原生绿',   t:'最「公众号」的基准样式，读者最熟悉' },
-    { k:'a2', n:'杂志衬线', t:'衬线大标题 + 首字下沉 + 居中双细线小标题' },
-    { k:'a7', n:'纸张手账', t:'米色纸底 + 楷体 + 虚线分割 + 便签引用' }
+    { k:'a8',  n:'原生绿',     t:'最「公众号」的基准样式，读者最熟悉' },
+    { k:'a2',  n:'杂志衬线',   t:'衬线大标题 + 首字下沉 + 居中双细线小标题' },
+    { k:'a7',  n:'手写便签风', t:'米黄纸 + 楷体 + 虚线下划小标题 + 便签引用块（2026-09-18 由「纸张手账」升级）' },
+    { k:'a11', n:'对话问答',   t:'灰底 + 一问一答气泡，适合「读者常问我的几个问题」这种结构' }
   ];
   var TW_ACCENTS = [
     { k:'#07c160', n:'原生绿' }, { k:'#576b95', n:'微信蓝' }, { k:'#e06c30', n:'珊瑚橙' },
@@ -34071,7 +34135,8 @@ function hpClearDemo(){
   ];
   var TW_H2_LIST = [
     { k:'bar',   n:'左条' }, { k:'num', n:'序号' }, { k:'block', n:'底纹块' },
-    { k:'line',  n:'居中线' }, { k:'tag', n:'胶囊' }
+    { k:'line',  n:'居中线' }, { k:'tag', n:'胶囊' },
+    { k:'dash',  n:'虚线下划' }, { k:'bub', n:'气泡问句' }   // 2026-09-18 A7 / A11 配套
   ];
   var TW_EM_LIST = [
     { k:'mark',  n:'荧光笔' }, { k:'wave',  n:'波浪线' }, { k:'pill', n:'胶囊' },
@@ -34110,7 +34175,7 @@ function hpClearDemo(){
       bqPre:'<span style="display:block;font-size:28px;line-height:.5;color:#c9c9c9;font-style:normal;margin-bottom:6px;">\u201c</span>',
       ph:'height:70px;background:#f5f5f5;border-radius:6px;color:#aaa;'
     },
-    a7: { h2:'line', hr:'dashed', em:'mark',
+    a7: { h2:'dash', hr:'dashed', em:'mark',
       wrap:'color:#54483a;background:#fdf9f0;font-family:\'Kaiti SC\',\'STKaiti\',\'KaiTi\',\'PingFang SC\',serif;',
       h1:'font-size:19px;font-weight:600;line-height:1.45;color:#4a3f33;margin:0 0 6px;',
       meta:'font-size:11px;color:#b3a795;margin:0 0 16px;',
@@ -34119,9 +34184,22 @@ function hpClearDemo(){
       a:'color:#a5743f;text-decoration:none;',
       code:'background:#f4ecdc;border-radius:3px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace;color:#8a6a3a;',
       ul:'margin:0 0 12px;padding-left:22px;',
-      bq:'padding:10px 12px;background:#fbf0d4;border-radius:4px;color:#7a6440;',
+      bq:'padding:9px 12px;background:#f6eeda;border-left:3px solid #d9c9a8;border-radius:0 6px 6px 0;color:#5a4c3c;',
       bqPre:'',
       ph:'height:70px;background:#f4ecdc;border-radius:6px;color:#b3a795;'
+    },
+    a11: { h2:'bub', hr:'solid', em:'mark',
+      wrap:'color:#252a33;background:#f7f8fa;',
+      h1:'font-size:18px;font-weight:600;line-height:1.45;color:#1f2733;margin:0 0 5px;',
+      meta:'font-size:11px;color:#98a0ad;margin:0 0 16px;',
+      h3:'font-size:15px;font-weight:600;line-height:1.5;color:#2c3742;margin:20px 0 8px;',
+      strong:'font-weight:600;color:#1f2733;',
+      a:'color:#576b95;text-decoration:none;',
+      code:'background:#eceff4;border-radius:3px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace;color:#4a5462;',
+      ul:'margin:0 0 12px;padding-left:22px;',
+      bq:'padding:9px 12px;background:#eef1f6;border-radius:3px 10px 10px 10px;color:#4a5462;',
+      bqPre:'',
+      ph:'height:70px;background:#eceff4;border-radius:8px;color:#98a0ad;'
     }
   };
 
@@ -34147,7 +34225,7 @@ function hpClearDemo(){
       lh: (lh >= 1.3 && lh <= 2.6) ? lh : d.lh,
       ps: (ps >= 4 && ps <= 32) ? ps : d.ps,
       pw: (pw >= 300 && pw <= 460) ? pw : d.pw,
-      h2: (s.h2 && /^(bar|num|block|line|tag)$/.test(s.h2)) ? s.h2 : sd.h2,
+      h2: (s.h2 && /^(bar|num|block|line|tag|dash|bub)$/.test(s.h2)) ? s.h2 : sd.h2,
       em: (s.em && /^(mark|wave|pill|color|gray)$/.test(s.em)) ? s.em : sd.em,
       hr: (s.hr && /^(solid|dashed|dots|short|double)$/.test(s.hr)) ? s.hr : sd.hr
     };
@@ -34179,6 +34257,14 @@ function hpClearDemo(){
       case 'tag':
         return '<h2 style="font-size:' + cfg.fs + 'px;font-weight:600;line-height:1.6;margin:22px 0 10px;color:' + ink + ';">'
           + '<span style="display:inline-block;padding:3px 12px;border-radius:999px;background:' + ac + ';color:#fff;">' + t + '</span></h2>';
+    }
+    if (cfg.h2 === 'dash'){
+      return '<h2 style="font-size:' + cfg.fs + 'px;font-weight:600;line-height:1.5;margin:22px 0 11px;padding-bottom:5px;'
+        + 'border-bottom:2px dashed ' + twRGBA(ink, .25) + ';color:' + ink + ';">' + t + '</h2>';
+    }
+    if (cfg.h2 === 'bub'){
+      return '<h2 style="font-size:' + cfg.fs + 'px;font-weight:600;line-height:1.6;margin:22px 0 10px;padding:7px 13px;'
+        + 'background:' + twRGBA('#000', .06) + ';border-radius:14px 14px 14px 4px;color:' + ink + ';">' + t + '</h2>';
     }
     return '<h2 style="font-size:' + (cfg.fs + 1) + 'px;font-weight:600;margin:22px 0 10px;color:' + ink + ';">' + t + '</h2>';
   }
@@ -34516,8 +34602,11 @@ function hpClearDemo(){
       }
       if (/^-\s+/.test(ln)){
         var li = [], st2 = i;
-        while (i < lines.length && /^-\s+/.test(lines[i])){ li.push(lines[i].replace(/^-\s+/,'')); i++; }
-        var lt = li.join(' ');
+        /* ⚠️ 列表项必须**原样保留** `- ` 前缀、并用 \n 拼接（2026-09-18 修）：
+           剥掉前缀再 join(' ') 会让块内偏移整体错位 2 字符/项 → 点自查条目会选中前两个字。
+           保留前缀 + \n 拼接后块内偏移与正文行完全对齐；多出来的 `-` 由 twPlainLen 排除。 */
+        while (i < lines.length && /^-\s+/.test(lines[i])){ li.push(lines[i]); i++; }
+        var lt = li.join('\n');
         out.push({ t:'list', text:lt, len:twPlainLen(lt), n:li.length, start:st2 });
         continue;
       }
@@ -34530,7 +34619,7 @@ function hpClearDemo(){
     }
     return out;
   }
-  function twPlainLen(s){ return String(s || '').replace(/[*=\[\]]/g, '').replace(/\s/g,'').length; }
+  function twPlainLen(s){ return String(s || '').replace(/[*=\[\]-]/g, '').replace(/\s/g,'').length; }   // 去掉 - 前缀（列表项），与渲染长度口径一致
   /* 段号 → 正文字符偏移（\n 计数） */
   function twLineOff(md, lineIdx){
     var lines = String(md || '').split('\n'), n = 0;
@@ -34695,6 +34784,33 @@ function hpClearDemo(){
   var TX_ADJ = ['好','快','慢','多','少','对','错','差','高','低','远','近','早','晚','难','容易','清楚',
     '明白','干净','认真','仔细','漂亮','糟糕','彻底','到位','准确','充分','流畅','自然','别扭'];
 
+  /* C6 长句拆分（2026-09-18）：逐句切 + 找最顺的断点。
+     切句保留每句在原串里的偏移（i），这样点一条能直接选中原文那句。 */
+  function txSeg(s){
+    var out = [], buf = '', start = 0, i;
+    for (i = 0; i < s.length; i++){
+      var c = s.charAt(i); buf += c;
+      if ('。！？；!?;'.indexOf(c) >= 0 || c === '\n'){
+        if (buf.replace(/\s/g, '')) out.push({ t: buf, i: start });
+        start = i + 1; buf = '';
+      }
+    }
+    if (buf.replace(/\s/g, '')) out.push({ t: buf, i: start });
+    return out;
+  }
+  /* 断点候选 = 句中的「，、：；」，挑离句子中点最近的一个（离头尾太近的没意义） */
+  function txBreak(s){
+    var body = s.replace(/[。！？；!?;\s]+$/g, ''), cands = [], re = /[，、：；]/g, m;
+    while ((m = re.exec(body))){
+      var pre = twPlainLen(body.slice(0, m.index));
+      var post = twPlainLen(body.slice(m.index + 1));
+      if (pre < 10 || post < 8) continue;
+      cands.push({ ch: m[0], at: pre, bal: Math.abs(pre - post) });
+    }
+    if (!cands.length) return null;
+    cands.sort(function(a, b){ return a.bal - b.bal; });
+    return cands[0];
+  }
   function txScan(md){
     var out = [];
     var text = String(md || '');
@@ -34792,6 +34908,25 @@ function hpClearDemo(){
       }
     });
 
+    /* ---- 5) 长句（C6，2026-09-18）----
+       口径 30 字：手机上一行约 15–17 字，超过 30 字就要换三行。 */
+    var TX_LONG = 30;
+    bs.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var s = b.text, base = twLineOff(text, b.start);
+      txSeg(s).forEach(function(sg){
+        var cn = twPlainLen(sg.t);
+        if (cn <= TX_LONG) return;
+        var bp = txBreak(sg.t);
+        var rawT = twClip(sg.t, 26) + (sg.t.length > 26 ? '…' : '');
+        out.push({ cat:'long', line:b.start, off:base + sg.i, len:sg.t.length,
+          raw:rawT,
+          bad:(bp && rawT.indexOf(bp.ch) >= 0) ? bp.ch : '',
+          fix:'拆成 ' + Math.max(2, Math.ceil(cn / 22)) + ' 句',
+          why:bp ? ('最顺的断点在「' + bp.ch + '」（第 ' + bp.at + ' 字）') : '句中没标点，只能按语义断开' });
+      });
+    });
+
     // 同一个位置只留一条；按位置排序
     var seen = {}, uniq = [];
     out.forEach(function(x){ var k = x.cat + '@' + x.off; if (!seen[k]){ seen[k] = 1; uniq.push(x); } });
@@ -34802,7 +34937,8 @@ function hpClearDemo(){
     { k:'dede',  n:'的地得',   full:'「的 / 地 / 得」用错' },
     { k:'dup',   n:'重复字',   full:'重复打了两遍的虚词（手滑）' },
     { k:'punc',  n:'中英标点', full:'中文里混用了半角标点' },
-    { k:'space', n:'中英空格', full:'中文和英文/数字之间缺空格' }
+    { k:'space', n:'中英空格', full:'中文和英文/数字之间缺空格' },
+    { k:'long',  n:'长句',     full:'单句超过 30 字，手机上要换三行（C6 · 可一键跳到那句）' }
   ];
   var TX = { list: [], cat: 'all' };
   function twTextOpen(){
@@ -34853,7 +34989,7 @@ function hpClearDemo(){
     twLocate(x.off, x.off + x.len);
   }
   /* ---------- 浮层开关 ---------- */
-  var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText'];  // 2026-09-18 加后两个
+  var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText', 'twPopPub'];  // 2026-09-18 加后三个
   function twPopOpen(id){
     TW_POPS.forEach(function(x){
       var el = $(x);
@@ -34988,6 +35124,40 @@ function hpClearDemo(){
     });
     return hit;
   }
+  /* ---------- D9 · 公众号合规体检（医疗健康专项，2026-09-18）----------
+     ⚠️ 医疗健康在公众号是**单独一套**限制，不是通用极限词那套。四类：
+        ① 疗效宣称 —— 根治 / 治好 / 药到病除 …            必改
+        ② 患者案例 —— 拿具体病例或照片说效果，需资质      必改
+        ③ 诱导分享 —— 转发到 N 个群 / 集赞 / 点赞才能看   建议改
+        ④ 来源标注 —— 健康类内容建议标出处                建议补
+     只在正文命中「健康类词」时才跑，非健康稿不报一堆无关项。 */
+  var TW_HLTH_HIT = ['颈椎','腰椎','脊柱','关节','肌肉','神经','康复','疗愈','治疗','医生','医嘱',
+    '门诊','医院','手术','服药','症状','体检','诊断','血压','血糖','血脂','睡眠','过敏','炎症',
+    '慢性病','锻炼','养生','护颈','护腰','理疗','针灸','推拿','曲度','骨折','结节'];
+  var TW_HLTH_CURE = ['根治','治愈','治好','除根','断根','痊愈','药到病除','立竿见影','一次见效',
+    '三天见效','包好','完全康复','无副作用','没有任何副作用','没有副作用','绝对安全','保证有效','立刻见效'];
+  var TW_HLTH_CASE = ['我的患者','一位病人','临床案例','康复案例','病例照片','治疗前后',
+    '效果对比图','患者反馈','病人的效果','我治好了','吃了就好了'];
+  var TW_HLTH_SHARE = ['转发到','分享到','集赞','点赞才能','关注才能','转发才能','分享才能','不转不是'];
+  function twHealScan(body, title){
+    var all = String(body || '') + '\n' + String(title || ''), health = false;
+    TW_HLTH_HIT.forEach(function(w){ if (all.indexOf(w) >= 0) health = true; });
+    if (!health) return { health:false, rows:[], cure:[], cs:[], sh:[], src:false };
+    var pick = function(list){ var o = []; list.forEach(function(w){ if (all.indexOf(w) >= 0) o.push(w); }); return o; };
+    var cure = pick(TW_HLTH_CURE), cs = pick(TW_HLTH_CASE), sh = pick(TW_HLTH_SHARE);
+    var src = /(来源|出处|参考文献|依据|文献|指南|发布[会布]|卫健委|医学会)/.test(all);
+    var rows = [];
+    if (cure.length) rows.push({ o:3, n:'疗效宣称（' + cure.length + ' 处）',
+      d:'「' + cure.join('、') + '」—— 医疗健康类写这类词会被判违规，换成「有帮助 / 建议遵医嘱」这类表述' });
+    if (cs.length) rows.push({ o:3, n:'患者案例（' + cs.length + ' 处）',
+      d:'「' + cs.join('、') + '」—— 拿具体病例或照片说效果需资质；个人号建议改成自己的亲历，别写「患者」' });
+    if (sh.length) rows.push({ o:2, n:'诱导分享（' + sh.length + ' 处）',
+      d:'「' + sh.join('、') + '」—— 属违规诱导，删掉' });
+    rows.push(src
+      ? { o:1, n:'来源标注：已标', d:'扫到「来源 / 出处 / 文献 / 指南」类字样，符合健康类内容规范' }
+      : { o:2, n:'来源标注：没有', d:'健康类内容建议标出处（写「来源：××指南 2026」就够），读者和你自己都更放心' });
+    return { health:true, rows:rows, cure:cure, cs:cs, sh:sh, src:src };
+  }
   function twCheckRun(){
     var title = ($('twTitle') ? $('twTitle').value : '').trim();
     var body = ($('twBody') ? $('twBody').value : '') || '';
@@ -35027,8 +35197,15 @@ function hpClearDemo(){
     else out.push({ o:2, n:'正文里没有配图', d:'纯文字读着累，建议至少插 1–2 张图' });
 
     var hit = twBanScan(body, title);
+    var hl = twHealScan(body, title);   // D9 医疗健康专项（2026-09-18）
+    if (hl.health){                     // 同一个词不报两遍：健康类词从通用极限词里摘出去
+      hit = hit.filter(function(w){ return TW_HLTH_CURE.indexOf(w) < 0; });
+    }
     if (hit.length) out.push({ o:3, n:'发现 ' + hit.length + ' 个极限词', d:'「' + hit.join('、') + '」属广告法违禁表述，建议换掉' });
-    else out.push({ o:1, n:'没有极限词', d:'没扫到广告法常见违禁表述' });
+    else out.push({ o:1, n:'没有极限词', d:hl.health ? '通用极限词没扫到（健康类词另见下方专项）' : '没扫到广告法常见违禁表述' });
+
+    if (hl.health) hl.rows.forEach(function(r){ out.push(r); });
+    else out.push({ o:1, n:'非健康类内容', d:'没扫到健康类词，未跑医疗健康专项' });
 
     var emN = (body.match(/==[^=]+==/g) || []).length;
     if (emN) out.push({ o:1, n:'有 ' + emN + ' 处强调高亮', d:'当前高亮样式：' + (cfg.em === 'color' ? '变色加粗' : cfg.em === 'mark' ? '荧光笔' : cfg.em) });
@@ -35049,6 +35226,86 @@ function hpClearDemo(){
         + twEsc(x.n) + (x.d ? '<i>' + twEsc(x.d) + '</i>' : '') + '</span></div>';
     }).join('');
     twPopOpen('twPopCheck');
+  }
+
+  /* ============================================================
+     D7 · 发布记录复盘（2026-09-18 第三批）
+     只为回答一件事：写久了，哪类题材真的有人点。
+     数据跟草稿/素材/排版同存一个 key（T.pub），只在浏览器本地，不上传任何地方。
+     排序口径 = 日期倒序；同一天按录入时间倒序（刚记的在最上面）。
+     ============================================================ */
+  var TW_CHS = ['公众号', '朋友圈', '小红书', '知乎', '其它'];
+  function twPubSort(){
+    return (T.pub || []).slice().sort(function(a, b){
+      var c = String(b.date || '').localeCompare(String(a.date || ''));
+      if (c) return c;
+      return String(b.at || '').localeCompare(String(a.at || ''));
+    });
+  }
+  function twPubOpen(){
+    var d = $('twPiDate'), t = $('twPiT');
+    if (d && !d.value) d.value = twToday();
+    if (t && !t.value) twPubFromDraft();
+    twPubPaint();
+    twPopOpen('twPopPub');
+  }
+  function twPubFromDraft(){
+    var cu = twCur(), t = $('twPiT');
+    if (cu && t) t.value = cu.title || '';
+  }
+  function twPubPaint(){
+    var box = $('twPubBox'), sum = $('twPubSum');
+    if (!box) return;
+    var list = twPubSort();
+    if (sum){
+      var withR = list.filter(function(x){ return Number(x.read) > 0; });
+      if (!withR.length){
+        sum.innerHTML = '还没有记录。发完一篇就记一笔，三篇之后就能看出哪类题材真有人点。';
+      } else {
+        var tot = 0, best = withR[0];
+        withR.forEach(function(x){
+          var v = Number(x.read) || 0; tot += v;
+          if (v > (Number(best.read) || 0)) best = x;
+        });
+        sum.innerHTML = '近 <b>' + withR.length + '</b> 篇平均阅读 <b>' + Math.round(tot / withR.length)
+          + '</b> · 最好的一篇 <b>' + twEsc(twClip(best.date || '', 10)) + '</b>'
+          + '「' + twEsc(twClip(best.title || '（无题）', 12)) + '」';
+      }
+    }
+    if (!list.length){ box.innerHTML = ''; return; }
+    box.innerHTML = list.map(function(x, i){
+      var rd = Number(x.read);
+      return '<div class="twPubRow">'
+        + '<span class="twPubD">' + twEsc(twClip(x.date || '', 10)) + '</span>'
+        + '<span class="twPubC">' + twEsc(x.ch || '') + '</span>'
+        + '<span class="twPubT" title="' + twEsc(x.title || '') + '">' + twEsc(x.title || '（无题）') + '</span>'
+        + '<span class="twPubR">' + (rd > 0 ? twEsc(rd) : '—') + '</span>'
+        + '<span class="twPubDel" onclick="twPubDel(' + i + ')" title="删掉这条">×</span>'
+        + '</div>';
+    }).join('');
+  }
+  function twPubAdd(){
+    var d = $('twPiDate'), ch = $('twPiCh'), t = $('twPiT'), r = $('twPiR');
+    var date = ((d && d.value) || '').trim() || twToday();
+    var title = ((t && t.value) || '').trim();
+    if (!title){ twToast('标题填一下（留空会自动取当前草稿标题）'); return; }
+    var rd = Number((r && r.value) || 0);
+    if (!Array.isArray(T.pub)) T.pub = [];
+    T.pub.unshift({ id: twUid(), date: date, at: new Date().toISOString(),
+      ch: (ch && ch.value) || '公众号', title: title, read: isNaN(rd) ? 0 : rd });
+    if (T.pub.length > TW_MAX) T.pub = T.pub.slice(0, TW_MAX);
+    twSave();
+    if (t) t.value = '';
+    if (r) r.value = '';
+    twPubPaint();
+    twToast('记下了：' + date + ' · ' + title);
+  }
+  function twPubDel(i){
+    var x = twPubSort()[i];
+    if (!x) return;
+    T.pub = (T.pub || []).filter(function(y){ return y.id !== x.id; });
+    twSave(); twPubPaint();
+    twToast('已删掉 ' + twClip(x.date || '', 10) + ' 那条');
   }
 
   /* ---------- 页面入口（由 switchPage 派发）---------- */
@@ -35093,7 +35350,7 @@ function hpClearDemo(){
         var cn = t.className ? String(t.className) : '';
         if (cn.indexOf('twPop') >= 0) return;                       // 点在浮层里
         if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea'
-            || t.id === 'twBtnOutline' || t.id === 'twBtnText') return;  // 点在开启按钮上
+            || t.id === 'twBtnOutline' || t.id === 'twBtnText' || t.id === 'twBtnLog') return;  // 点在开启按钮上
         t = t.parentNode;
       }
       twPopCloseAll();
@@ -35149,8 +35406,18 @@ function hpClearDemo(){
   window.twTextPaint = twTextPaint;
   window.twTextCat = twTextCat;
   window.twTextGo = twTextGo;
+  /* 2026-09-18 第三批：A7 手写便签风 / A11 对话问答 / C6 长句 / C8 时长 / D7 发布记录 / D9 健康专项 */
+  window.twPubOpen = twPubOpen;
+  window.twPubAdd = twPubAdd;
+  window.twPubDel = twPubDel;
+  window.twPubFromDraft = twPubFromDraft;
   window.__twC = { blocks: twBlocks, txScan: txScan, outline: twOutlineData,
-                   TX: TX, RHY: RHY, locate: twLocate, grade: twBlockGrade };   // 给门禁用的探针
+                   TX: TX, RHY: RHY, locate: twLocate, grade: twBlockGrade,
+                   // 2026-09-18 第三批
+                   readTime: twReadTime, healScan: twHealScan, pubSort: twPubSort,
+                   ban: twBanScan, check: twCheckRun, h2: twH2Html, paper: twRenderPaper,
+                   skindef: TW_SKINDEF, skinlist: TW_SKIN_LIST, h2list: TW_H2_LIST,
+                   cats: TX_CATS, chs: TW_CHS };   // 给门禁用的探针
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -36922,7 +37189,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609182309";
+        window.NIKO_VERSION = "202609182336";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
