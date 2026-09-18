@@ -20944,19 +20944,24 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function tblNormGame(g) { return tblReserveOf(String(g || '')).name.replace(/\s+/g, ''); }
         function tblTitle(rq) { return (rq.game || '（未识别）') + '-' + (rq.pfx || '') + rq.code; }
 
-        // ---- 合并成「需求」：一个 地区 × 项目 × 素材类型 = 一条需求 ----
+        // ---- 合并成「需求」：一个 地区 × 项目 × 素材类型 × 工种 = 一条需求 ----
+        // 2026-09-18 用户定版（截图）：同一素材类型下 D=5 / C=1 / 改工程=2 →
+        //   拆成两条：`蜜蜂-1C5D` + `蜜蜂-改工程2D`。
+        //   即：C 后面的 D 只数它左边那一格的 D；「改工程」单独成条，不并进同一个 D 里。
         function tblGroupReqs(leaves) {
             var order = [], map = {};
             leaves.forEach(function (L) {
-                var key = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '');
+                var u0 = String(L.unit || '').trim();
+                var isWl = /改工程/.test(u0) || /改工程/.test(String(L.mtype || ''));   // 改工程 → 独立一条需求（不混进主 D）
+                var u = u0.replace(/改工程/g, '').trim();   // 剥掉工种词后看剩下什么：C / D / 真人（空 = 照 D 计）
+                var key = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '') + '||' + (isWl ? '改工程' : '');
                 if (!map[key]) {
-                    map[key] = { key: key, project: L.project || '', mtype: L.mtype || '', region: L.region || '', cCount: 0, dCount: 0, realCount: 0, wl: '' };
+                    map[key] = { key: key, project: L.project || '', mtype: L.mtype || '', region: L.region || '', cCount: 0, dCount: 0, realCount: 0, wl: isWl ? '改工程' : '' };
                     order.push(key);
                 }
-                var g = map[key], u = String(L.unit || '').trim();
-                if (/改工程/.test(u)) g.wl = '改工程';   // 单位行直接写「改工程」→ 照 D 计，但条数码带「改工程」前缀
-                if (/^C$/i.test(u)) g.cCount += L.qty;
-                else if (/真人/.test(u)) g.realCount += L.qty;
+                var g = map[key];
+                if (/真人/.test(u)) g.realCount += L.qty;
+                else if (/^C$/i.test(u)) g.cCount += L.qty;
                 else g.dCount += L.qty;   // D 或认不出的单位一律按迭代计
             });
             var out = [];
@@ -20964,19 +20969,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 var g = map[k], rv = tblReserveOf(g.project);
                 var base = tblStripMarker(rv.name) || '（未识别）';
                 var pfx = rv.label || '';   // 节日储备标签（国庆 / 中秋…）
-                var wl = g.wl || (/改工程/.test(tblStripMarker(g.mtype)) ? '改工程' : '');   // 工种标签（改工程）
+                var wl = g.wl || '';
                 if (g.cCount > 0 || g.dCount > 0) {
                     out.push({
                         game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
-                        cCount: g.cCount, dCount: g.dCount, realCount: 0, pfx: pfx,
+                        cCount: g.cCount, dCount: g.dCount, realCount: 0, pfx: pfx, wl: wl,
                         code: wl + tblReqCode(g.cCount, g.dCount, 0), kind: 'main'
                     });
                 }
                 if (g.realCount > 0) {
                     out.push({
                         game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
-                        cCount: 0, dCount: 0, realCount: g.realCount, pfx: pfx,
-                        code: '真人' + g.realCount + 'D', kind: 'real'
+                        cCount: 0, dCount: 0, realCount: g.realCount, pfx: pfx, wl: wl,
+                        code: wl + '真人' + g.realCount + 'D', kind: 'real'
                     });
                 }
             });
@@ -21077,7 +21082,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 var dt = e.startDate || '';
                 if (!(dt >= w.start && dt < w.end)) return false;
                 if (tblNormTitle(e.title) === my) return true;
-                if (rq.game && (e.region || '') === (rq.region || '') && tblNormGame(e.game) === tblNormGame(rq.game) && (e.materialType || '') === (rq.mtype || '')) return true;
+                // 同一素材类型下现在会拆出「主条 + 改工程条」（2026-09-18），比对时必须区分工种，否则两条会互相误判成重复
+                if (rq.game && (e.region || '') === (rq.region || '') && tblNormGame(e.game) === tblNormGame(rq.game) && (e.materialType || '') === (rq.mtype || '')
+                    && (/改工程/.test(e.title || '') === /改工程/.test(rq.title || ''))) return true;
                 return false;
             });
             if (!hits.length) return { state: 'new', hits: [] };
@@ -36748,7 +36755,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609181047";
+        window.NIKO_VERSION = "202609181130";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
