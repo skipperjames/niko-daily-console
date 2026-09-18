@@ -11194,6 +11194,73 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 #twPage .twChkT i{font-style:normal;display:block;color:var(--twTx2);font-size:11px;margin-top:1px;}
 #twPage .twChkSum{font-size:11.5px;color:var(--twTx);padding:7px 0 3px;font-weight:500;}
 
+/* ---------- 2026-09-18 并入：C4 段落节奏条 · C1 结构大纲 · C3 文字自查 ----------
+   源 = _预览_推文工坊C1C3C4.html；颜色沿用预览页定版，未改一处 */
+#twPage .twSeam{width:1px;height:15px;background:var(--twLine);margin:0 2px;flex:0 0 auto;}
+#twPage .twToolRow button.twNew{border-color:var(--twAccent);background:var(--twAccentBg);
+  color:var(--twAccent);font-weight:600;}
+
+/* C4 · 段落节奏条：正文框下常驻一条 22px 细条，每段一块、宽度 ∝ 段字数 */
+#twPage .twRhy{flex:0 0 auto;display:flex;align-items:center;gap:8px;margin-top:8px;height:22px;}
+#twPage .twRhyBar{flex:1;min-width:0;display:flex;gap:2px;height:14px;align-items:stretch;}
+#twPage .twRhySeg{border-radius:2px;cursor:pointer;min-width:4px;transition:transform .12s,box-shadow .12s;
+  position:relative;}
+#twPage .twRhySeg:hover{transform:scaleY(1.35);box-shadow:0 0 0 1.5px rgba(45,77,138,.45);}
+#twPage .twRhySeg.h2{background:#7f9bd3;}
+#twPage .twRhySeg.s{background:#c3d5f2;}      /* 短 */
+#twPage .twRhySeg.m{background:#8fb0e6;}      /* 合适 */
+#twPage .twRhySeg.l{background:#e8b96b;}      /* 偏长 */
+#twPage .twRhySeg.x{background:#ef4444;}      /* 太长 */
+#twPage .twRhySeg.oth{background:#d3d8e2;}    /* 分割线 / 图片占位 */
+#twPage .twRhyVal{flex:0 0 auto;font-size:11px;color:var(--twTx2);font-variant-numeric:tabular-nums;
+  white-space:nowrap;}
+#twPage .twRhyVal b{color:var(--twTx);font-weight:600;}
+#twPage .twRhyNote{flex:0 0 auto;font-size:11px;padding:1px 7px;border-radius:5px;white-space:nowrap;}
+#twPage .twRhyNote.ok{background:#eaf6ee;color:#227a45;}
+#twPage .twRhyNote.warn{background:#fdf3e3;color:#8a6420;}
+#twPage .twRhyNote.bad{background:#fdeceb;color:#a8332c;}
+
+/* C1 · 结构大纲 */
+#twPage .twOtSum{font-size:11px;color:var(--twTx2);padding:2px 0 8px;}
+#twPage .twOtRow{display:flex;align-items:flex-start;gap:8px;padding:6px 7px;border-radius:7px;
+  cursor:pointer;border:1px solid transparent;}
+#twPage .twOtRow:hover{background:var(--twPanel2);border-color:var(--twLine);}
+#twPage .twOtRow.cur{background:var(--twAccentBg);border-color:var(--twAccent);}
+#twPage .twOtNo{flex:0 0 22px;font-size:11px;font-family:Georgia,serif;color:var(--twAccent);
+  font-weight:600;padding-top:1px;text-align:right;}
+#twPage .twOtMain{flex:1;min-width:0;}
+#twPage .twOtT{font-size:12.5px;font-weight:500;color:var(--twTx);line-height:1.45;word-break:break-all;}
+#twPage .twOtS{font-size:11px;color:var(--twTx2);line-height:1.5;margin-top:2px;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;}
+#twPage .twOtMet{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding-top:1px;}
+#twPage .twOtN{font-size:10.5px;color:var(--twTx2);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#twPage .twOtProg{width:40px;height:4px;border-radius:2px;background:var(--twLine);overflow:hidden;}
+#twPage .twOtProg i{display:block;height:100%;background:var(--twAccent);}
+#twPage .twOtRow.twOtLead .twOtNo{color:var(--twTx2);}
+
+/* C3 · 文字自查 */
+#twPage .twTxTabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px;}
+#twPage .twTxTab{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:999px;padding:2px 9px;font-size:11px;cursor:pointer;font-family:inherit;line-height:1.7;}
+#twPage .twTxTab:hover{color:var(--twTx);}
+#twPage .twTxTab.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:600;}
+#twPage .twTxTab.zero{opacity:.5;}
+#twPage .twTxItem{display:flex;gap:8px;padding:7px 8px;border-radius:7px;cursor:pointer;
+  border:1px solid transparent;margin-bottom:3px;}
+#twPage .twTxItem:hover{background:var(--twPanel2);border-color:var(--twLine);}
+#twPage .twTxIco{flex:0 0 15px;font-size:11.5px;line-height:1.55;text-align:center;}
+#twPage .twTxMain{flex:1;min-width:0;}
+#twPage .twTxCat{font-size:10px;color:var(--twTx2);margin-bottom:2px;}
+#twPage .twTxTxt{font-size:12.5px;line-height:1.6;color:var(--twTx);word-break:break-all;}
+#twPage .twTxTxt em{font-style:normal;background:#ffe08a;border-radius:2px;padding:0 1px;}
+#twPage .twTxFix{font-size:11px;color:var(--twOk,#12a150);margin-top:2px;}
+#twPage .twTxLoc{flex:0 0 auto;font-size:10.5px;color:var(--twTx2);padding-top:1px;white-space:nowrap;}
+#twPage .twTxEmpty{font-size:12px;color:var(--twOk,#12a150);padding:10px 4px;line-height:1.6;}
+
+@media (max-width:900px){
+  #twPage .twRhy{height:auto;flex-wrap:wrap;gap:6px;}
+  #twPage .twRhyBar{flex:1 1 100%;}
+}
 /* ---------- 划词工具条 ---------- */
 #twPage .twSelBar{position:absolute;z-index:60;display:none;gap:2px;background:var(--twPanel);
   border:1px solid var(--twLine);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.2);padding:3px;}
@@ -13928,11 +13995,20 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <button onclick="twEdIns('\n---\n')" title="分割线">分割线</button>
           <button onclick="twEdIns('- 列表项\n')" title="列表">列表</button>
           <button onclick="twTitleShop()" id="twBtnTitleIdea" title="按正文自动出 5 个候选标题（含字数评分）">✨ 标题</button>
+          <span class="twSeam"></span>
+          <button class="twNew" id="twBtnOutline" onclick="twOutlineOpen()" title="C1 · 按小标题列出全篇结构，点一行跳到那一段">☰ 大纲</button>
+          <button class="twNew" id="twBtnText" onclick="twTextOpen()" title="C3 · 查「的地得 / 重复字 / 中英标点 / 中英空格」四类硬伤">🔍 文字自查</button>
           <div class="twHostAi" id="twHostAi"></div>
         </div>
 
         <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()"></textarea>
 
+        <!-- C4 · 段落节奏条：每段一块、宽度 ∝ 段字数，超 150 字转红（与 twCheckRun 同口径） -->
+        <div class="twRhy" id="twRhy">
+          <div class="twRhyBar" id="twRhyBar"></div>
+          <div class="twRhyVal" id="twRhyVal"></div>
+          <div class="twRhyNote" id="twRhyNote"></div>
+        </div>
         <div class="twStat">
           <span>字数 <b id="twStWc">0</b></span>
           <span>段落 <b id="twStPs">0</b></span>
@@ -13952,6 +14028,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div id="twCmdBox"></div>
       </div>
 
+      <div class="twPop" id="twPopOutline">
+        <div class="twPopHd">☰ 结构大纲 <button class="twX" onclick="twPopClose('twPopOutline')" title="关闭">×</button></div>
+        <div class="twPopTip">点一行，光标直接跳到那一段的开头。右边是这一节占全文的比例条。</div>
+        <div id="twOtBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopText">
+        <div class="twPopHd">🔍 文字自查 <button class="twX" onclick="twPopClose('twPopText')" title="关闭">×</button></div>
+        <div class="twPopTip">只查四类机器查得出的硬伤（不碰文风）。点一条跳到原文那处，选中好让你直接改。</div>
+        <div class="twTxTabs" id="twTxTabs"></div>
+        <div id="twTxBox"></div>
+      </div>
       <div class="twSelBar" id="twSelBar"></div>
     </div>
 
@@ -33662,7 +33750,8 @@ function hpClearDemo(){
     bodyEl.style.lineHeight = cfg.lh;
     var plain = body.replace(/[#>*`\-\[\]=~]/g, '');
     var wc = plain.replace(/\s/g, '').length;
-    var ps = body.split('\n').filter(function(l){ return l.trim() && !/^#/.test(l); }).length;
+    // 段落数改用 twBlocks 口径（与 C4 节奏条同源，两处显示的数字不再打架）
+    var ps = twBlocks(body).filter(function(b){ return b.len > 0; }).length;
     if ($('twStWc')) $('twStWc').textContent = wc;
     if ($('twStPs')) $('twStPs').textContent = ps;
     if ($('twStRd')) $('twStRd').textContent = Math.max(1, Math.round(wc / 400));
@@ -33673,6 +33762,10 @@ function hpClearDemo(){
     if (curMeta) curMeta.textContent = '编辑中 · ' + wc + ' 字';
     // 同步内存 → 落盘（防抖）
     if (d){ d.title = title; d.body = body; d.updatedAt = new Date().toISOString(); twSaveSoon(); }
+    twRhyRender();                                                              // C4 段落节奏条
+    // 浮层开着就跟着刷新（C1 大纲 / C3 自查）
+    if ($('twPopOutline') && $('twPopOutline').classList.contains('on')) twOutlinePaint();
+    if ($('twPopText') && $('twPopText').classList.contains('on')){ TX.list = txScan(body); twTextPaint(); }
     twEdAutoH();
   }
 
@@ -34397,9 +34490,372 @@ function hpClearDemo(){
     twPopClose('twPopAi');
   }
 
+  /* ================================================================
+     2026-09-18 并入：C4 段落节奏条 · C1 结构大纲 · C3 文字自查
+     源 = _预览_推文工坊C1C3C4.html（已过 43 项无头门禁）。
+     三段各自独立、互不依赖；命名一律 tw 或 tx 前缀，已核零撞名。
+     ================================================================ */
+
+  /* ---------- 段落解析（C4 / C1 / C3 共用）—— 口径与 twRenderMd 一致 ---------- */
+  function twBlocks(md){
+    var lines = String(md || '').split('\n'), out = [], i = 0;
+    while (i < lines.length){
+      var ln = lines[i];
+      if (/^\s*$/.test(ln)){ i++; continue; }
+      if (/^\[图片占位\]\s*$/.test(ln)){ out.push({ t:'ph', text:'[图片占位]', len:0, start:i }); i++; continue; }
+      if (/^###\s+/.test(ln)){ out.push({ t:'h3', text:ln.replace(/^###\s+/,''), len:0, start:i }); i++; continue; }
+      if (/^##\s+/.test(ln)){ out.push({ t:'h2', text:ln.replace(/^##\s+/,''), len:0, start:i }); i++; continue; }
+      if (/^#\s+/.test(ln)){ out.push({ t:'h1', text:ln.replace(/^#\s+/,''), len:0, start:i }); i++; continue; }
+      if (/^---+\s*$/.test(ln)){ out.push({ t:'hr', text:'—', len:0, start:i }); i++; continue; }
+      if (/^>\s?/.test(ln)){
+        var bq = [], st = i;
+        while (i < lines.length && /^>\s?/.test(lines[i])){ bq.push(lines[i].replace(/^>\s?/,'')); i++; }
+        var bt = bq.join(' ');
+        out.push({ t:'quote', text:bt, len:twPlainLen(bt), start:st });
+        continue;
+      }
+      if (/^-\s+/.test(ln)){
+        var li = [], st2 = i;
+        while (i < lines.length && /^-\s+/.test(lines[i])){ li.push(lines[i].replace(/^-\s+/,'')); i++; }
+        var lt = li.join(' ');
+        out.push({ t:'list', text:lt, len:twPlainLen(lt), n:li.length, start:st2 });
+        continue;
+      }
+      var ps = [], st3 = i;
+      while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#|>|-\s|---|\[图片占位\])/.test(lines[i])){
+        ps.push(lines[i]); i++;
+      }
+      var pt = ps.join('');
+      out.push({ t:'p', text:pt, len:twPlainLen(pt), start:st3 });
+    }
+    return out;
+  }
+  function twPlainLen(s){ return String(s || '').replace(/[*=\[\]]/g, '').replace(/\s/g,'').length; }
+  /* 段号 → 正文字符偏移（\n 计数） */
+  function twLineOff(md, lineIdx){
+    var lines = String(md || '').split('\n'), n = 0;
+    for (var i = 0; i < lineIdx && i < lines.length; i++) n += lines[i].length + 1;
+    return n;
+  }
+  function twBlockGrade(b){
+    if (b.t === 'h2' || b.t === 'h3' || b.t === 'h1') return 'h2';
+    if (b.t === 'hr' || b.t === 'ph') return 'oth';
+    var L = b.len;
+    if (L < 40) return 's';
+    if (L < 100) return 'm';
+    if (L <= 150) return 'l';   // 150 字 = twCheckRun 判「段落太长」的同一条口径
+    return 'x';
+  }
+
+  /* ---------- 光标定位：把 textarea 滚到指定字符处并选中（复用本体 twCaretXY 镜像测量） ---------- */
+  function twLocate(start, end, center){
+    var ta = $('twBody'); if (!ta) return;
+    var v = ta.value;
+    if (start < 0 || start > v.length) return;
+    ta.focus();
+    try { ta.setSelectionRange(start, (end == null ? start : end)); } catch (e) {}
+    if (center !== false){
+      var p = twCaretXY(ta, start);
+      var lh = parseFloat(window.getComputedStyle(ta).lineHeight) || 26;
+      ta.scrollTop = Math.max(0, Math.round(p.y - ta.clientHeight / 2 + lh));
+    }
+  }
+
+  /* ================================================================
+     C4 · 段落节奏条
+     ================================================================ */
+  var RHY = { blocks: [] };
+  function twRhyRender(){
+    var bar = $('twRhyBar'), val = $('twRhyVal'), note = $('twRhyNote');
+    if (!bar) return;
+    var md = $('twBody') ? $('twBody').value : '';
+    var bs = twBlocks(md);
+    RHY.blocks = bs;
+    var widths = bs.map(function(b){ return b.len > 0 ? b.len : (b.t === 'h2' ? 26 : 10); });
+    var total = widths.reduce(function(a, b){ return a + b; }, 0) || 1;
+    bar.innerHTML = bs.map(function(b, i){
+      var w = Math.max(0.9, widths[i] / total * 100);
+      var g = twBlockGrade(b);
+      var lb;
+      if (b.t === 'h2') lb = '小标题 · ' + b.text;
+      else if (b.t === 'quote') lb = '引用 · ' + b.len + ' 字';
+      else if (b.t === 'list') lb = '列表 ' + b.n + ' 项 · ' + b.len + ' 字';
+      else if (b.t === 'hr') lb = '分割线';
+      else if (b.t === 'ph') lb = '图片占位';
+      else lb = '第 ' + b.len + ' 字段';
+      return '<div class="twRhySeg ' + g + '" style="flex:' + w.toFixed(3) + ' 1 0%" title="'
+        + twEsc(lb) + '（点一下跳过去）" onclick="twJumpBlock(' + i + ')"></div>';
+    }).join('');
+    var ps = bs.filter(function(b){ return b.len > 0; });
+    var lens = ps.map(function(b){ return b.len; });
+    var sum = lens.reduce(function(a, b){ return a + b; }, 0);
+    var avg = lens.length ? Math.round(sum / lens.length) : 0;
+    var mx = lens.length ? Math.max.apply(null, lens) : 0;   // ⚠️ 第二个参数必须是数组，别写 lens.length
+    var mn = lens.length ? Math.min.apply(null, lens) : 0;
+    if (val) val.innerHTML = lens.length
+      ? ('<b>' + ps.length + '</b> 段 · 均 <b>' + avg + '</b> · 最长 <b>' + mx + '</b>')
+      : '还没有正文';
+    // 节奏点评：好文章长短交替；全挤在同一档 = 节奏平
+    if (note){
+      var cv = avg ? (mx - mn) / avg : 0;              // 变异系数（粗略）
+      var longN = lens.filter(function(x){ return x > 150; }).length;
+      if (!lens.length){ note.className = 'twRhyNote ok'; note.textContent = '—'; }
+      else if (longN){ note.className = 'twRhyNote bad'; note.textContent = longN + ' 段太长，手机像一堵墙'; }
+      else if (cv > 0.75){ note.className = 'twRhyNote ok'; note.textContent = '长短有交替，节奏好'; }
+      else { note.className = 'twRhyNote warn'; note.textContent = '段落差不多长，节奏偏平'; }
+    }
+  }
+  function twJumpBlock(i){
+    var b = RHY.blocks[i]; if (!b) return;
+    var md = $('twBody').value;
+    var off = twLineOff(md, b.start);
+    twLocate(off, off + (md.split('\n')[b.start] || '').length);
+  }
+
+  /* ================================================================
+     C1 · 结构大纲
+     ================================================================ */
+  function twOutlineData(){
+    var md = $('twBody') ? $('twBody').value : '';
+    var bs = twBlocks(md);
+    var secs = [], i, cur = null;
+    for (i = 0; i < bs.length; i++){
+      if (bs[i].t === 'h2'){
+        cur = { no: (secs.length + 1), title: bs[i].text, line: bs[i].start, chars: 0, lead: '', items: 0 };
+        secs.push(cur);
+      } else if (cur){
+        cur.chars += bs[i].len;
+        cur.items++;
+        if (!cur.lead && bs[i].len >= 4) cur.lead = bs[i].text;
+      }
+    }
+    if (!secs.length) return { secs: [], lead: null, total: 0 };
+    // H2 之前的内容 = 开场
+    var head = null;
+    if (bs.length && bs[0].t !== 'h2'){
+      var hc = 0, hl = '';
+      for (i = 0; i < bs.length; i++){
+        if (bs[i].t === 'h2') break;
+        hc += bs[i].len;
+        if (!hl && bs[i].len >= 4) hl = bs[i].text;
+      }
+      if (hc) head = { no: '00', title: '开场（还没有小标题）', line: bs[0].start, chars: hc, lead: hl, items: 0 };
+    }
+    var total = bs.reduce(function(a, b){ return a + b.len; }, 0);
+    return { secs: secs, lead: head, total: total };
+  }
+  function twOutlineOpen(){
+    twOutlinePaint();
+    twPopOpen('twPopOutline');
+  }
+  function twOutlinePaint(){
+    var box = $('twOtBox'); if (!box) return;
+    var d = twOutlineData();
+    var list = (d.lead ? [d.lead] : []).concat(d.secs);
+    if (!list.length){
+      box.innerHTML = '<div class="twPopTip" style="margin:0;">正文里还没有 ## 小标题。加两个小标题，大纲才有内容。</div>';
+      return;
+    }
+    var curOff = $('twBody') ? $('twBody').selectionStart : 0;
+    var curLine = 0, lines = ($('twBody') ? $('twBody').value : '').split('\n'), acc = 0;
+    for (var k = 0; k < lines.length; k++){ if (acc <= curOff) curLine = k; acc += lines[k].length + 1; }
+    var sum = list.reduce(function(a, b){ return a + b.chars; }, 0) || 1;
+    box.innerHTML = '<div class="twOtSum">全文 <b>' + d.secs.length + '</b> 节'
+      + (d.lead ? ' + 开场' : '') + ' · 合计 ' + sum + ' 字</div>'
+      + list.map(function(s, i){
+        var pct = Math.round(s.chars / sum * 100);
+        var next = list[i + 1];
+        var on = (s.line <= curLine) && (!next || curLine < next.line);   // 光标所在章节高亮
+        return '<div class="twOtRow' + (on ? ' cur' : '') + (String(s.no) === '00' ? ' twOtLead' : '')
+          + '" onclick="twJumpLine(' + s.line + ')">'
+          + '<span class="twOtNo">' + (String(s.no) === '00' ? '—' : ('0' + s.no).slice(-2)) + '</span>'
+          + '<span class="twOtMain"><span class="twOtT">' + twEsc(s.title) + '</span>'
+          + (s.lead ? '<span class="twOtS">' + twEsc(twClip(s.lead, 30)) + '</span>' : '') + '</span>'
+          + '<span class="twOtMet"><span class="twOtN">' + s.chars + ' 字 · ' + pct + '%</span>'
+          + '<span class="twOtProg"><i style="width:' + pct + '%"></i></span></span></div>';
+      }).join('');
+  }
+  function twJumpLine(line){
+    var md = $('twBody').value;
+    twLocate(twLineOff(md, line));
+    twOutlinePaint();
+  }
+
+  /* ================================================================
+     C3 · 文字自查
+     ================================================================ */
+  /* 规则 A：副词 + 的 + 动词 → 应为「地」 */
+  var TX_ADV = ['慢慢','渐渐','悄悄','默默','轻轻','紧紧','认真','仔细','快速','迅速','不断','反复',
+    '偷偷','赶紧','急忙','努力','用力','大胆','低声','小声','高声','大声','清楚','明确','简单',
+    '随便','随意','自由','主动','积极','及时','顺手','顺便','正式','临时','单独','专门','统一'];
+  var TX_VERB = ['说','说服','写','跑','走','想','看','听','读','记','讲','念','唱','跳','睡','吃','喝',
+    '拿','放','站','坐','变','长','干','打','画','数','算','背','翻','穿','开','关','买','卖','洗',
+    '修','问','答','笑','哭','喊','叫','做','用','找','学','玩','思考','观察','整理','检查','处理',
+    '推动','解决','判断','决定','理解','解释','完成','实现','表达','感受到','意识到'];
+  var TX_ADJ = ['好','快','慢','多','少','对','错','差','高','低','远','近','早','晚','难','容易','清楚',
+    '明白','干净','认真','仔细','漂亮','糟糕','彻底','到位','准确','充分','流畅','自然','别扭'];
+
+  function txScan(md){
+    var out = [];
+    var text = String(md || '');
+    var bs = twBlocks(text);   // 逐段扫描，便于给「第 N 段」定位
+
+    /* ---- 1) 的地得 ---- */
+    var reA = new RegExp('(' + TX_ADV.join('|') + ')的(' + TX_VERB.join('|') + ')', 'g');
+    var reB = new RegExp('(.)的(' + TX_ADJ.join('|') + ')(?![\\u4e00-\\u9fa5])', 'g');
+    var reC = new RegExp('(.)的(很|非常|太|特别)', 'g');
+    bs.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var s = b.text, m, base = twLineOff(text, b.start);
+      while ((m = reA.exec(s))){
+        out.push({ cat:'dede', line:b.start, off:base + m.index, len:m[0].length,
+          raw:m[0], bad:m[1] + '的', fix:m[1] + '地', why:'「' + m[1] + '」是副词，修饰动词要用「地」' });
+      }
+      reA.lastIndex = 0;
+      while ((m = reB.exec(s))){
+        var pre = m[1];
+        // 只报「动词 + 的 + 形容词」（前字必须是动词），其余当名词短语不报
+        if (TX_VERB.indexOf(pre) >= 0){
+          out.push({ cat:'dede', line:b.start, off:base + m.index, len:m[0].length,
+            raw:m[0], bad:pre + '的', fix:pre + '得', why:'「' + pre + '」后面接程度/结果，应该用「得」' });
+        }
+      }
+      reB.lastIndex = 0;
+      while ((m = reC.exec(s))){
+        if (TX_VERB.indexOf(m[1]) >= 0){
+          out.push({ cat:'dede', line:b.start, off:base + m.index, len:m[0].length,
+            raw:m[0], bad:m[1] + '的', fix:m[1] + '得', why:'「' + m[1] + '」后面是「' + m[2] + '」，应该用「得」' });
+        }
+      }
+      reC.lastIndex = 0;
+    });
+
+    /* ---- 2) 重复字（只报「重复了就是打错」的虚词 / 代词）----
+       ⚠️ 别见叠字就报：中文里「慢慢 / 悄悄 / 渐渐 / 常常」是合法叠词。
+       第一版就是这么写的 → 「慢慢的说服」被同时报成「的地得」和「重复词」两条（2026-09-18 修）。 */
+    var TX_DUP_HIT = '的了是我你他她它这那和就都很也有在与及而或把被让使对从到向为以之其此个们着不没还又再太更最只';
+    bs.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var s = b.text, base = twLineOff(text, b.start), m;
+      var re = /([\u4e00-\u9fa5])\1/g;
+      while ((m = re.exec(s))){
+        if (TX_DUP_HIT.indexOf(m[1]) < 0) continue;   // 不在虚词表里 → 当合法叠词，不报
+        out.push({ cat:'dup', line:b.start, off:base + m.index, len:2,
+          raw:m[0], bad:m[0], fix:m[1], why:'连着打了两个「' + m[1] + '」，多半是手滑' });
+      }
+      // 同句用词过密：一句话里同一个 2–4 字词出现 ≥3 次
+      s.split(/[。！？；!?;]/).forEach(function(sn){
+        if (!sn) return;
+        var words = {};
+        for (var n = 2; n <= 4; n++){
+          for (var i = 0; i + n <= sn.length; i++){
+            var w = sn.substr(i, n);
+            if (!/^[\u4e00-\u9fa5]{2,4}$/.test(w)) continue;
+            words[w] = (words[w] || 0) + 1;
+          }
+        }
+        Object.keys(words).forEach(function(w){
+          if (words[w] < 3) return;
+          var k = s.indexOf(w);
+          if (k < 0) return;
+          out.push({ cat:'dup', line:b.start, off:base + k, len:w.length,
+            raw:w, bad:w, fix:'（换一个说法）', why:'同一句里「' + w + '」出现了 ' + words[w] + ' 次' });
+        });
+      });
+    });
+
+    /* ---- 3) 中英标点混用：半角标点，且前一字是中文 ---- */
+    bs.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var s = b.text, base = twLineOff(text, b.start), m;
+      var re = /([\u4e00-\u9fa5])\s*([,;:!?])\s*/g;
+      while ((m = re.exec(s))){
+        out.push({ cat:'punc', line:b.start, off:base + m.index + m[1].length, len:m[2].length,
+          raw:m[1] + m[2], bad:m[2], fix:({',':'，',';':'；',':':'：','!':'！','?':'？'})[m[2]],
+          why:'中文句子里用了半角「' + m[2] + '」，换成全角' });
+      }
+    });
+
+    /* ---- 4) 中英之间缺空格 ---- */
+    bs.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var s = b.text, base = twLineOff(text, b.start), m;
+      var re = /([\u4e00-\u9fa5])([A-Za-z0-9]+)/g;
+      while ((m = re.exec(s))){
+        out.push({ cat:'space', line:b.start, off:base + m.index, len:m[0].length,
+          raw:m[0], bad:m[0], fix:m[1] + ' ' + m[2], why:'中文和「' + m[2] + '」之间加一个空格，读起来更顺' });
+      }
+      var re2 = /([A-Za-z0-9]+)([\u4e00-\u9fa5])/g;
+      while ((m = re2.exec(s))){
+        out.push({ cat:'space', line:b.start, off:base + m.index, len:m[0].length,
+          raw:m[0], bad:m[0], fix:m[1] + ' ' + m[2], why:'「' + m[1] + '」和中文之间加一个空格' });
+      }
+    });
+
+    // 同一个位置只留一条；按位置排序
+    var seen = {}, uniq = [];
+    out.forEach(function(x){ var k = x.cat + '@' + x.off; if (!seen[k]){ seen[k] = 1; uniq.push(x); } });
+    uniq.sort(function(a, b){ return a.off - b.off; });
+    return uniq;
+  }
+  var TX_CATS = [
+    { k:'dede',  n:'的地得',   full:'「的 / 地 / 得」用错' },
+    { k:'dup',   n:'重复字',   full:'重复打了两遍的虚词（手滑）' },
+    { k:'punc',  n:'中英标点', full:'中文里混用了半角标点' },
+    { k:'space', n:'中英空格', full:'中文和英文/数字之间缺空格' }
+  ];
+  var TX = { list: [], cat: 'all' };
+  function twTextOpen(){
+    TX.list = txScan($('twBody') ? $('twBody').value : '');
+    TX.cat = 'all';
+    twTextPaint();
+    twPopOpen('twPopText');
+  }
+  function twTextPaint(){
+    var tabs = $('twTxTabs'), box = $('twTxBox');
+    if (!tabs || !box) return;
+    var cnt = function(k){ return TX.list.filter(function(x){ return x.cat === k; }).length; };
+    tabs.innerHTML = '<button class="twTxTab' + (TX.cat === 'all' ? ' on' : '') + '" onclick="twTextCat(\'all\')">'
+        + '全部 ' + TX.list.length + '</button>'
+      + TX_CATS.map(function(c){
+        var n = cnt(c.k);
+        return '<button class="twTxTab' + (TX.cat === c.k ? ' on' : '') + (n ? '' : ' zero')
+          + '" onclick="twTextCat(\'' + c.k + '\')" title="' + twEsc(c.full) + '">'
+          + twEsc(c.n) + ' ' + n + '</button>';
+      }).join('');
+    var show = TX.list.filter(function(x){ return TX.cat === 'all' || x.cat === TX.cat; });
+    if (!show.length){
+      box.innerHTML = '<div class="twTxEmpty">✅ 这一类没查出问题。</div>';
+      return;
+    }
+    var nameOf = {};
+    TX_CATS.forEach(function(c){ nameOf[c.k] = c.full; });
+    box.innerHTML = show.map(function(x){
+      var raw = x.raw, bad = x.bad, pos = raw.indexOf(bad);
+      var disp = pos < 0 ? twEsc(raw)
+        : (twEsc(raw.slice(0, pos)) + '<em>' + twEsc(bad) + '</em>' + twEsc(raw.slice(pos + bad.length)));
+      return '<div class="twTxItem" onclick="twTextGo(' + TX.list.indexOf(x) + ')">'
+        + '<span class="twTxIco">•</span>'
+        + '<span class="twTxMain"><span class="twTxCat">' + twEsc(nameOf[x.cat]) + '</span>'
+        + '<span class="twTxTxt">' + disp + '</span>'
+        + '<span class="twTxFix">→ ' + twEsc(x.fix) + '　' + twEsc(x.why) + '</span></span>'
+        + '<span class="twTxLoc">第 ' + (twBlockIdxOfLine(x.line) + 1) + ' 段</span></div>';
+    }).join('');
+  }
+  function twBlockIdxOfLine(line){
+    var bs = twBlocks($('twBody').value), n = 0;
+    for (var i = 0; i < bs.length; i++){ if (bs[i].start <= line) n = i; }
+    return n;
+  }
+  function twTextCat(k){ TX.cat = k; twTextPaint(); }
+  function twTextGo(i){
+    var x = TX.list[i]; if (!x) return;
+    twLocate(x.off, x.off + x.len);
+  }
   /* ---------- 浮层开关 ---------- */
+  var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText'];  // 2026-09-18 加后两个
   function twPopOpen(id){
-    ['twPopTitle', 'twPopAi', 'twPopCheck'].forEach(function(x){
+    TW_POPS.forEach(function(x){
       var el = $(x);
       if (el && x !== id) el.classList.remove('on');
     });
@@ -34410,7 +34866,7 @@ function hpClearDemo(){
     var e = $(id);
     if (e) e.classList.remove('on');
   }
-  function twPopCloseAll(){ ['twPopTitle', 'twPopAi', 'twPopCheck'].forEach(twPopClose); }
+  function twPopCloseAll(){ TW_POPS.forEach(twPopClose); }
 
   /* ---------- C4 划词工具条 ---------- */
   function twMirrorMake(ta){
@@ -34636,7 +35092,8 @@ function hpClearDemo(){
       while (t && t !== document.body){
         var cn = t.className ? String(t.className) : '';
         if (cn.indexOf('twPop') >= 0) return;                       // 点在浮层里
-        if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea') return;  // 点在开启按钮上
+        if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea'
+            || t.id === 'twBtnOutline' || t.id === 'twBtnText') return;  // 点在开启按钮上
         t = t.parentNode;
       }
       twPopCloseAll();
@@ -34683,6 +35140,17 @@ function hpClearDemo(){
   window.twSelPrefix = twSelPrefix;
   window.twSelHide = twSelHide;
   window.twCheckOpen = twCheckOpen;
+  /* 2026-09-18 新增：C1 结构大纲 / C3 文字自查 / C4 段落节奏条 */
+  window.twOutlineOpen = twOutlineOpen;
+  window.twOutlinePaint = twOutlinePaint;
+  window.twJumpLine = twJumpLine;
+  window.twJumpBlock = twJumpBlock;
+  window.twTextOpen = twTextOpen;
+  window.twTextPaint = twTextPaint;
+  window.twTextCat = twTextCat;
+  window.twTextGo = twTextGo;
+  window.__twC = { blocks: twBlocks, txScan: txScan, outline: twOutlineData,
+                   TX: TX, RHY: RHY, locate: twLocate, grade: twBlockGrade };   // 给门禁用的探针
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -36454,7 +36922,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609181403";
+        window.NIKO_VERSION = "202609182309";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
