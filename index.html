@@ -11043,27 +11043,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   border-radius:6px;padding:4px;font-size:11.5px;cursor:pointer;font-family:inherit;}
 #twPage .twModeRow button.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);}
 #twPage .twPvwWrap{flex:1;min-height:0;}
-/* 预览永远按公众号阅读纸宽排版（所见即所得），不跟随主题深浅 */
-#twPage .twPvw{background:#fff;color:#2b2b2b;border-radius:8px;padding:16px 15px;font-size:15px;line-height:1.8;
-  border:1px solid var(--twLine);max-width:376px;margin:0 auto;width:100%;}
-#twPage .twPvw h1{font-size:19px;font-weight:500;line-height:1.45;margin:0 0 6px;color:#111;}
-#twPage .twPvw .twMeta{font-size:11px;color:#999;margin-bottom:14px;}
-#twPage .twPvw h2{font-size:16px;font-weight:500;margin:18px 0 8px;padding-left:9px;
-  border-left:3px solid #07c160;line-height:1.4;color:#111;}
-#twPage .twPvw h3{font-size:15px;font-weight:500;margin:16px 0 8px;color:#111;}
-#twPage .twPvw p{margin:0 0 12px;}
-#twPage .twPvw blockquote{margin:0 0 12px;padding:8px 12px;background:#f7f7f7;border-left:3px solid #ddd;
-  color:#666;font-size:14px;}
-#twPage .twPvw ul{margin:0 0 12px;padding-left:20px;}
-#twPage .twPvw li{margin-bottom:5px;}
-#twPage .twPvw hr{border:none;border-top:1px solid #eee;margin:16px 0;}
-#twPage .twPvw code{background:#f2f2f2;border-radius:3px;padding:1px 5px;font-size:13px;
-  font-family:ui-monospace,Consolas,monospace;}
-#twPage .twPvw .twPh{height:70px;background:#f2f2f2;border-radius:6px;margin:0 0 12px;
-  display:flex;align-items:center;justify-content:center;color:#aaa;font-size:12px;}
-#twPage .twPvw a{color:#576b95;text-decoration:none;}
-#twPage .twPvw strong{font-weight:500;color:#111;}
-#twPage .twPvw pre{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;margin:0;}
+/* 预览纸面（2026-09-18 改造）：元素级样式一律由 JS 生成**内联样式**（twRenderPaper），
+   ⚠️ 这里**禁止**再留 h1/h2/h3/p/blockquote/ul/li/hr/code/strong/a 的 CSS 规则 ——
+   内联样式只覆盖它自己声明过的属性，没声明的会被这些规则接管，
+   于是「预览里多一条边框、导出到公众号却没有」，所见非所得。
+   实测：A7 手账皮肤的引用块曾在预览里多出 #ddd 左边框，就是这么来的。
+   容器只负责宽度，纸面观感全部来自内联样式。 */
+#twPage .twPvw{max-width:376px;margin:0 auto;width:100%;padding:0;background:transparent;border:none;}
 #twPage .twPvwFoot{flex:0 0 auto;padding-top:9px;display:flex;gap:8px;}
 
 /* 动作按钮（就近放置：AI 贴工具条尾 / 存入知识库贴标题行 / 复制到公众号贴预览底）*/
@@ -11137,6 +11123,94 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   #twPage[data-twview] .twColPvw{display:none;}
   #twPage[data-twview] .twColInbox.show,
   #twPage[data-twview] .twColPvw.show{display:flex;}
+}
+
+/* ================= 排版系统（2026-09-18 新增）=================
+   纸面样式全部由 JS 生成**内联样式**（见 twRenderMd / twRenderPaper），
+   预览与「复制到公众号」共用同一份 HTML —— 所见即所得。
+   下面这些 CSS 只管工具栏 / 浮层的皮，不参与纸面渲染。 */
+/* 覆盖旧规则：纸面自带背景与内距，容器只负责宽度 */
+#twPage .twPvw{max-width:376px;margin:0 auto;width:100%;padding:0;background:transparent;border:none;border-radius:0;}
+
+/* ---------- 排版工具栏 ---------- */
+#twPage .twStyBtn{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:6px;padding:1px 7px;font-size:11px;cursor:pointer;font-family:inherit;line-height:1.7;flex:0 0 auto;}
+#twPage .twStyBtn:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twStyBtn.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:500;}
+#twPage .twStyPanel{display:none;flex:0 0 auto;margin:0 0 9px;padding:9px 10px 5px;
+  border:1px solid var(--twLine);border-radius:9px;background:var(--twPanel2);}
+#twPage .twStyPanel.on{display:block;}
+#twPage .twStyLine{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+#twPage .twStyLb{flex:0 0 44px;font-size:11px;color:var(--twTx2);}
+#twPage .twChips{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0;}
+#twPage .twChip{border:1px solid var(--twLine);background:var(--twPanel);color:var(--twTx2);
+  border-radius:6px;padding:2px 7px;font-size:11px;cursor:pointer;font-family:inherit;line-height:1.7;white-space:nowrap;}
+#twPage .twChip:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twChip.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:500;}
+#twPage .twDot{width:17px;height:17px;border-radius:50%;cursor:pointer;padding:0;flex:0 0 auto;
+  border:2px solid transparent;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);}
+#twPage .twDot.on{border-color:var(--twTx);}
+#twPage .twRng{display:flex;align-items:center;gap:7px;flex:1;min-width:0;}
+#twPage .twRng input[type=range]{flex:1;min-width:0;height:14px;accent-color:var(--twAccent);cursor:pointer;}
+#twPage .twRngVal{flex:0 0 42px;text-align:right;font-size:11px;color:var(--twTx);
+  font-variant-numeric:tabular-nums;font-weight:500;}
+#twPage .twStyFoot{display:flex;gap:6px;padding:2px 0 3px;}
+
+/* ---------- 浮层（标题工坊 / AI 指令 / 发布体检）---------- */
+#twPage .twColPvw,#twPage .twColEdit{position:relative;}
+#twPage .twPop{position:absolute;z-index:40;left:10px;right:10px;top:40px;display:none;
+  background:var(--twPanel);border:1px solid var(--twLine);border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.18);padding:10px 11px 8px;
+  max-height:60vh;overflow-y:auto;scrollbar-width:thin;}
+#twPage .twPop.on{display:block;}
+#twPage .twPop::-webkit-scrollbar{width:7px;}
+#twPage .twPop::-webkit-scrollbar-thumb{background:var(--twLine);border-radius:7px;}
+#twPage .twPopHd{display:flex;align-items:center;justify-content:space-between;gap:8px;
+  font-size:12.5px;font-weight:500;color:var(--twTx);margin-bottom:7px;}
+#twPage .twPopHd .twX{border:none;background:transparent;color:var(--twTx2);font-size:15px;
+  cursor:pointer;line-height:1;padding:1px 4px;font-family:inherit;}
+#twPage .twPopHd .twX:hover{color:var(--twTx);}
+#twPage .twPopTip{font-size:10.5px;color:var(--twTx2);margin-bottom:8px;line-height:1.55;}
+
+#twPage .twTtItem{border:1px solid var(--twLine);border-radius:8px;padding:7px 9px;margin-bottom:6px;cursor:pointer;}
+#twPage .twTtItem:hover{border-color:var(--twAccent);background:var(--twPanel2);}
+#twPage .twTtTxt{font-size:12.5px;line-height:1.5;margin-bottom:4px;color:var(--twTx);word-break:break-all;}
+#twPage .twTtMet{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--twTx2);}
+#twPage .twTtMet .twBar{flex:0 0 52px;height:5px;border-radius:3px;background:var(--twLine);overflow:hidden;}
+#twPage .twTtMet .twBar i{display:block;height:100%;background:var(--twAccent);}
+
+#twPage .twCmd{display:block;width:100%;text-align:left;border:1px solid var(--twLine);
+  background:transparent;color:var(--twTx);border-radius:8px;padding:6px 9px;font-size:12px;
+  cursor:pointer;font-family:inherit;margin-bottom:6px;line-height:1.5;}
+#twPage .twCmd:hover{border-color:var(--twAccent);background:var(--twPanel2);}
+#twPage .twCmd b{display:block;font-size:12.5px;font-weight:500;margin-bottom:1px;}
+#twPage .twCmd i{font-style:normal;color:var(--twTx2);font-size:11px;}
+
+#twPage .twChk{display:flex;gap:7px;padding:6px 0;border-bottom:1px dashed var(--twLine);
+  font-size:11.5px;line-height:1.55;}
+#twPage .twChk:last-child{border-bottom:none;}
+#twPage .twChkI{flex:0 0 auto;font-size:12px;line-height:1.45;}
+#twPage .twChkT{flex:1;min-width:0;color:var(--twTx);}
+#twPage .twChkT i{font-style:normal;display:block;color:var(--twTx2);font-size:11px;margin-top:1px;}
+#twPage .twChkSum{font-size:11.5px;color:var(--twTx);padding:7px 0 3px;font-weight:500;}
+
+/* ---------- 划词工具条 ---------- */
+#twPage .twSelBar{position:absolute;z-index:60;display:none;gap:2px;background:var(--twPanel);
+  border:1px solid var(--twLine);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.2);padding:3px;}
+#twPage .twSelBar.on{display:flex;}
+#twPage .twSelBar button{border:none;background:transparent;color:var(--twTx);border-radius:6px;
+  padding:3px 7px;font-size:11.5px;cursor:pointer;font-family:inherit;line-height:1.7;white-space:nowrap;}
+#twPage .twSelBar button:hover{background:var(--twAccentBg);color:var(--twAccent);}
+
+@media (max-width:900px){
+  #twPage .twStyLb{flex:0 0 40px;}
+  #twPage .twWrap{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px));}  /* 给底部 Tab 让位，最后一张卡片不被压住 */
+  #twPage .twPop{left:6px;right:6px;top:auto;bottom:10px;max-height:66vh;}
+  #twPage .twSelBar{position:fixed;left:50%!important;transform:translateX(-50%);
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));top:auto!important;}
+  #twPage .twSelBar button{padding:7px 10px;font-size:12.5px;min-height:40px;}
+  #twPage .twChip{padding:5px 9px;}
+  #twPage .twStyBtn{padding:4px 9px;}
 }
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
@@ -13848,10 +13922,12 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="twToolRow">
           <button onclick="twEdIns('## ')" title="插入二级标题">H2</button>
           <button onclick="twEdIns('**加粗文字**')" title="加粗">加粗</button>
+          <button onclick="twEdIns('==高亮文字==')" title="强调高亮（样式由右侧「排版 · 高亮」决定）">高亮</button>
           <button onclick="twEdIns('> 引用内容')" title="引用">引用</button>
           <button onclick="twEdIns('[图片占位]')" title="图片占位">图片</button>
           <button onclick="twEdIns('\n---\n')" title="分割线">分割线</button>
           <button onclick="twEdIns('- 列表项\n')" title="列表">列表</button>
+          <button onclick="twTitleShop()" id="twBtnTitleIdea" title="按正文自动出 5 个候选标题（含字数评分）">✨ 标题</button>
           <div class="twHostAi" id="twHostAi"></div>
         </div>
 
@@ -13863,15 +13939,53 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <span>预计阅读 <b id="twStRd">0</b> 分钟</span>
         </div>
       </div>
+
+      <div class="twPop" id="twPopTitle">
+        <div class="twPopHd">✨ 标题工坊 <button class="twX" onclick="twPopClose('twPopTitle')" title="关闭">×</button></div>
+        <div class="twPopTip" id="twTtTip"></div>
+        <div id="twTtBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopAi">
+        <div class="twPopHd">🤖 AI 指令 <button class="twX" onclick="twPopClose('twPopAi')" title="关闭">×</button></div>
+        <div class="twPopTip">点一条 → 自动把「标题 + 正文 + 素材」拼成提示词复制走，粘给任意 AI 就能用。</div>
+        <div id="twCmdBox"></div>
+      </div>
+
+      <div class="twSelBar" id="twSelBar"></div>
     </div>
 
     <!-- ========== 右：排版预览 ========== -->
     <div class="twCard twColPvw">
-      <div class="twCardHd">排版预览 <span class="twCnt" id="twPvW"></span></div>
+      <div class="twCardHd">
+        <span>排版预览 <span class="twCnt" id="twPvW"></span></span>
+        <button class="twStyBtn" id="twStyBtn" onclick="twStyPanelToggle()" title="排版设置：皮肤 / 主色 / 小标题 / 高亮 / 分割线 / 字号行距">🎨 排版</button>
+      </div>
       <div class="twModeRow">
         <button class="on" onclick="twPvMode(this,'gzh')">公众号样式</button>
         <button onclick="twPvMode(this,'md')">原始 Markdown</button>
       </div>
+
+      <div class="twStyPanel" id="twStyPanel">
+        <div class="twStyLine"><span class="twStyLb">皮肤</span><span class="twChips" id="twSkinRow"></span></div>
+        <div class="twStyLine"><span class="twStyLb">主色</span><span class="twChips" id="twAccRow"></span></div>
+        <div class="twStyLine"><span class="twStyLb">小标题</span><span class="twChips" id="twH2Row"></span></div>
+        <div class="twStyLine"><span class="twStyLb">高亮</span><span class="twChips" id="twEmRow"></span></div>
+        <div class="twStyLine"><span class="twStyLb">分割线</span><span class="twChips" id="twHrRow"></span></div>
+        <div class="twStyLine"><span class="twStyLb">字号</span><span class="twRng"><input type="range" id="twFsRng" min="13" max="19" step="1" oninput="twStyRng('fs',this.value)"><b class="twRngVal" id="twFsVal"></b></span></div>
+        <div class="twStyLine"><span class="twStyLb">行距</span><span class="twRng"><input type="range" id="twLhRng" min="1.5" max="2.2" step="0.05" oninput="twStyRng('lh',this.value)"><b class="twRngVal" id="twLhVal"></b></span></div>
+        <div class="twStyLine"><span class="twStyLb">段距</span><span class="twRng"><input type="range" id="twPsRng" min="6" max="24" step="1" oninput="twStyRng('ps',this.value)"><b class="twRngVal" id="twPsVal"></b></span></div>
+        <div class="twStyLine"><span class="twStyLb">纸宽</span><span class="twRng"><input type="range" id="twPwRng" min="320" max="420" step="2" oninput="twStyRng('pw',this.value)"><b class="twRngVal" id="twPwVal"></b></span></div>
+        <div class="twStyFoot">
+          <button class="twMini" onclick="twStyReset()" title="回到「公众号原生绿」的出厂排版">恢复默认</button>
+        </div>
+      </div>
+
+      <div class="twPop" id="twPopCheck">
+        <div class="twPopHd">🩺 发布前体检 <button class="twX" onclick="twPopClose('twPopCheck')" title="关闭">×</button></div>
+        <div id="twChkBox"></div>
+      </div>
+
       <div class="twPvwWrap twScroll">
         <div class="twPvw" id="twPvwBox"></div>
       </div>
@@ -33437,6 +33551,7 @@ function hpClearDemo(){
     if (!Array.isArray(T.inbox)) T.inbox = [];
     if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
     if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
+    if (!T.style || typeof T.style !== 'object') T.style = twDefStyle();  // 排版参数（皮肤/主色/零件/字号行距）一并落盘
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
       T.cur = T.drafts.length ? T.drafts[0].id : null;
     }
@@ -33451,39 +33566,60 @@ function hpClearDemo(){
     return d;
   }
 
-  /* ---------- Markdown → 公众号 HTML（轻量，只覆盖写推文常用的几种）---------- */
-  function twRenderMd(md){
+  /* ---------- Markdown → 公众号 HTML（内联样式，预览与导出共用）----------
+     cfg 来自 twStyleCfg()；输出**全内联样式**，粘进公众号不会掉格式。
+     排版零件（小标题 B3 / 高亮 B5 / 分割线 B6）在这一层套用。 */
+  function twRenderMd(md, cfg){
+    cfg = cfg || twStyleCfg();
+    var SK = TW_SKINDEF[cfg.skin] || TW_SKINDEF.a8;
     var lines = String(md || '').split('\n'), out = [], i = 0;
+    var h2n = 0, firstP = true;
+    var pSt = 'margin:0 0 ' + cfg.ps + 'px;';
+
     function inline(s){
       s = twEsc(s);
-      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      s = s.replace(/\*\*([^*]+)\*\*/g, function(_, t){ return '<strong style="' + SK.strong + '">' + t + '</strong>'; });
+      s = s.replace(/==([^=]+)==/g, function(_, t){ return twEmHtml(t, cfg); });
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(_, t, u){ return '<a href="' + u + '" target="_blank" style="' + SK.a + '">' + t + '</a>'; });
+      s = s.replace(/`([^`]+)`/g, function(_, t){ return '<code style="' + SK.code + '">' + t + '</code>'; });
       return s;
+    }
+    /* A2 杂志风的首字下沉（内联实现，公众号也能保留） */
+    function dropCap(html){
+      if (!firstP) return html;
+      firstP = false;
+      if (cfg.skin !== 'a2' || !html.length || html.charAt(0) === '<') return html;
+      return '<span style="float:left;font-size:44px;line-height:.86;padding:4px 8px 0 0;font-weight:600;color:'
+        + twInk(cfg) + ';">' + html.charAt(0) + '</span>' + html.slice(1);
     }
     while (i < lines.length){
       var ln = lines[i];
-      if (/^\[图片占位\]\s*$/.test(ln)) { out.push('<div class="twPh">图片占位</div>'); i++; continue; }
-      if (/^###\s+/.test(ln)) { out.push('<h3>' + inline(ln.replace(/^###\s+/, '')) + '</h3>'); i++; continue; }
-      if (/^##\s+/.test(ln)) { out.push('<h2>' + inline(ln.replace(/^##\s+/, '')) + '</h2>'); i++; continue; }
-      if (/^#\s+/.test(ln)) { out.push('<h1>' + inline(ln.replace(/^#\s+/, '')) + '</h1>'); i++; continue; }
-      if (/^---+\s*$/.test(ln)) { out.push('<hr>'); i++; continue; }
+      if (/^\[图片占位\]\s*$/.test(ln)) {
+        out.push('<div style="' + SK.ph + 'display:flex;align-items:center;justify-content:center;margin:0 0 ' + cfg.ps + 'px;">图片占位</div>');
+        i++; continue;
+      }
+      if (/^###\s+/.test(ln)) { out.push('<h3 style="' + SK.h3 + '">' + inline(ln.replace(/^###\s+/, '')) + '</h3>'); i++; continue; }
+      if (/^##\s+/.test(ln)) { h2n++; out.push(twH2Html(ln.replace(/^##\s+/, ''), cfg, h2n)); i++; continue; }
+      if (/^#\s+/.test(ln)) { out.push('<h1 style="' + SK.h1 + '">' + inline(ln.replace(/^#\s+/, '')) + '</h1>'); i++; continue; }
+      if (/^---+\s*$/.test(ln)) { out.push(twHrHtml(cfg)); i++; continue; }
       if (/^>\s?/.test(ln)) {
         var bq = [];
         while (i < lines.length && /^>\s?/.test(lines[i])) { bq.push(inline(lines[i].replace(/^>\s?/, ''))); i++; }
-        out.push('<blockquote>' + bq.join('<br>') + '</blockquote>'); continue;
+        out.push('<blockquote style="' + SK.bq + 'margin:0 0 ' + cfg.ps + 'px;">' + SK.bqPre + bq.join('<br>') + '</blockquote>');
+        continue;
       }
       if (/^-\s+/.test(ln)) {
         var li = [];
-        while (i < lines.length && /^-\s+/.test(lines[i])) { li.push('<li>' + inline(lines[i].replace(/^-\s+/, '')) + '</li>'); i++; }
-        out.push('<ul>' + li.join('') + '</ul>'); continue;
+        while (i < lines.length && /^-\s+/.test(lines[i])) { li.push('<li style="margin-bottom:6px;">' + inline(lines[i].replace(/^-\s+/, '')) + '</li>'); i++; }
+        out.push('<ul style="' + SK.ul + '">' + li.join('') + '</ul>');
+        continue;
       }
       if (/^\s*$/.test(ln)) { i++; continue; }
       var ps = [];
       while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#|>|-\s|---|\[图片占位\])/.test(lines[i])) {
         ps.push(inline(lines[i])); i++;
       }
-      if (ps.length) out.push('<p>' + ps.join('<br>') + '</p>');
+      if (ps.length) out.push('<p style="' + pSt + '">' + dropCap(ps.join('<br>')) + '</p>');
     }
     return out.join('\n');
   }
@@ -33500,27 +33636,37 @@ function hpClearDemo(){
     }
   }
 
-  /* ---------- 中栏渲染 ---------- */
+  /* ---------- 中栏渲染（纸面 = 内联样式，预览所见即导出所得）---------- */
   function twEdRender(){
     var d = twCur();
     var titleEl = $('twTitle'), bodyEl = $('twBody');
     if (!titleEl || !bodyEl) return;
     var title = titleEl.value || '';
     var body = bodyEl.value;
+    var cfg = twStyleCfg();
     var modeBtn = document.querySelector('#twPage .twModeRow button.on');
     var isMd = modeBtn && modeBtn.textContent.indexOf('Markdown') >= 0;
     var box = $('twPvwBox');
     if (box){
-      if (isMd) box.innerHTML = '<pre>' + twEsc(body) + '</pre>';
-      else box.innerHTML = '<h1>' + twEsc(title || '未命名') + '</h1><div class="twMeta">' + twToday() + ' · NIKO</div>' + twRenderMd(body);
+      box.style.maxWidth = cfg.pw + 'px';
+      if (isMd){
+        box.innerHTML = '<pre style="white-space:pre-wrap;word-break:break-all;font-family:ui-monospace,Consolas,monospace;'
+          + 'font-size:12.5px;line-height:1.7;margin:0;padding:12px;background:#fff;border-radius:8px;color:#333;">'
+          + twEsc(body) + '</pre>';
+      } else {
+        box.innerHTML = twRenderPaper(title, body, cfg);
+      }
     }
-    var plain = body.replace(/[#>*`\-\[\]]/g, '');
+    // 写作手感跟排版同步：编辑器字号 / 行距跟随设置，改一次到处一致
+    bodyEl.style.fontSize = cfg.fs + 'px';
+    bodyEl.style.lineHeight = cfg.lh;
+    var plain = body.replace(/[#>*`\-\[\]=~]/g, '');
     var wc = plain.replace(/\s/g, '').length;
     var ps = body.split('\n').filter(function(l){ return l.trim() && !/^#/.test(l); }).length;
     if ($('twStWc')) $('twStWc').textContent = wc;
     if ($('twStPs')) $('twStPs').textContent = ps;
     if ($('twStRd')) $('twStRd').textContent = Math.max(1, Math.round(wc / 400));
-    if ($('twPvW')) $('twPvW').textContent = isMd ? '源码' : '公众号 · 376px';
+    if ($('twPvW')) $('twPvW').textContent = isMd ? '源码' : ('公众号 · ' + cfg.pw + 'px');
     // 草稿列表里那一行的「N 字」跟着真实字数走
     if ($('twDfCnt')) $('twDfCnt').textContent = T.drafts.length + ' 篇';
     var curMeta = document.querySelector('#twDfList .twDraftItem.on .twM');
@@ -33668,16 +33814,9 @@ function hpClearDemo(){
     var d = twCur(); if (!d) return;
     var title = ($('twTitle') ? $('twTitle').value : '') || '未命名';
     var body = $('twBody') ? $('twBody').value : '';
-    var html = '<section style="font-size:15px;line-height:1.8;color:#333;">'
-      + '<h1 style="font-size:20px;font-weight:bold;line-height:1.4;">' + twEsc(title) + '</h1>'
-      + twRenderMd(body)
-        .replace(/<h2>/g, '<h2 style="font-size:17px;font-weight:bold;margin:22px 0 10px;padding-left:10px;border-left:4px solid #07c160;">')
-        .replace(/<h3>/g, '<h3 style="font-size:16px;font-weight:bold;margin:18px 0 8px;">')
-        .replace(/<p>/g, '<p style="margin:0 0 14px;">')
-        .replace(/<blockquote>/g, '<blockquote style="margin:0 0 14px;padding:10px 14px;background:#f7f7f7;border-left:3px solid #ddd;color:#666;font-size:14px;">')
-        .replace(/<hr>/g, '<hr style="border:none;border-top:1px solid #eee;margin:20px 0;">')
-      + '</section>';
-    twCopy(html, '公众号样式 HTML 已复制，去公众号编辑器直接粘贴');
+    // 与预览用的是同一份 HTML（全内联样式）—— 所见即所得，粘过去不会掉格式
+    twCopy(twRenderPaper(title, body, twStyleCfg()),
+      '已按「' + twSkinName() + '」样式复制，去公众号编辑器直接粘贴');
   }
   function twToKb(){
     var d = twCur(); if (!d) return;
@@ -33763,8 +33902,11 @@ function hpClearDemo(){
     if (!top || !ai || !pv) return;
     if (!document.getElementById('twBtnKb')){
       top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 推文）', twToKb));
-      ai.appendChild(twMkBtn('twBtnAi', '复制提示词问 AI', false, '把标题 + 正文 + 素材整理成提示词复制走', twAiPrompt));
-      pv.appendChild(twMkBtn('twBtnPub', '复制到公众号', true, '按公众号样式复制 HTML，直接粘进公众号编辑器', twExportGzh));
+      ai.appendChild(twMkBtn('twBtnAi', '🤖 AI 指令', false, '5 条精准指令：整篇润色 / 改写开头 / 拆短段落 / 提炼小标题 / 去 AI 味', twAiMenu));
+      var chk = pv.appendChild(twMkBtn('twBtnChk', '🩺 发布体检', false, '标题字数 / 长段落 / 长句 / 配图 / 极限词 / 高亮，一次扫完', twCheckOpen));
+      chk.style.flex = '0 0 auto';
+      var pub = pv.appendChild(twMkBtn('twBtnPub', '复制到公众号', true, '按当前排版一键复制 HTML，直接粘进公众号编辑器', twExportGzh));
+      pub.style.flex = '2';
     }
   }
 
@@ -33816,6 +33958,643 @@ function hpClearDemo(){
     if (has) twDemoClear(); else twDemoLoad();
   }
 
+  /* ============================================================
+     排版系统（2026-09-18 新增）
+     皮肤 A2 杂志衬线 / A7 纸张手账 / A8 公众号原生绿（现状）
+     零件 B1 主色 · B2 字号行距 · B3 小标题 · B5 高亮 · B6 分割线
+     核心约定：纸面 HTML 由 twRenderPaper() 生成，**样式全部内联**，
+     预览（#twPvwBox）与「复制到公众号」用的是同一份字符串 —— 所见即所得。
+     改样式只改这一处，两边同时生效，不会「预览好看、导出变形」。
+     ============================================================ */
+
+  var TW_SKIN_LIST = [
+    { k:'a8', n:'原生绿',   t:'最「公众号」的基准样式，读者最熟悉' },
+    { k:'a2', n:'杂志衬线', t:'衬线大标题 + 首字下沉 + 居中双细线小标题' },
+    { k:'a7', n:'纸张手账', t:'米色纸底 + 楷体 + 虚线分割 + 便签引用' }
+  ];
+  var TW_ACCENTS = [
+    { k:'#07c160', n:'原生绿' }, { k:'#576b95', n:'微信蓝' }, { k:'#e06c30', n:'珊瑚橙' },
+    { k:'#7c5cff', n:'品牌紫' }, { k:'#c9a227', n:'墨黑金' }
+  ];
+  var TW_H2_LIST = [
+    { k:'bar',   n:'左条' }, { k:'num', n:'序号' }, { k:'block', n:'底纹块' },
+    { k:'line',  n:'居中线' }, { k:'tag', n:'胶囊' }
+  ];
+  var TW_EM_LIST = [
+    { k:'mark',  n:'荧光笔' }, { k:'wave',  n:'波浪线' }, { k:'pill', n:'胶囊' },
+    { k:'color', n:'变色加粗' }, { k:'gray', n:'灰底加粗' }
+  ];
+  var TW_HR_LIST = [
+    { k:'solid', n:'实线' }, { k:'dashed', n:'虚线' }, { k:'dots', n:'三点' },
+    { k:'short', n:'短横线' }, { k:'double', n:'双线' }
+  ];
+
+  /* 三套皮肤：h2/hr/em 是该皮肤的默认零件（切皮肤时自动套上，之后可单独改） */
+  var TW_SKINDEF = {
+    a8: { h2:'bar', hr:'solid', em:'mark',
+      wrap:'color:#333;background:#fff;',
+      h1:'font-size:20px;font-weight:500;line-height:1.4;color:#111;margin:0 0 6px;',
+      meta:'font-size:11px;color:#9aa0a6;margin:0 0 16px;letter-spacing:.5px;',
+      h3:'font-size:15px;font-weight:500;line-height:1.5;color:#111;margin:20px 0 8px;',
+      strong:'font-weight:600;color:#111;',
+      a:'color:#576b95;text-decoration:none;',
+      code:'background:#f2f3f5;border-radius:3px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace;color:#c7254e;',
+      ul:'margin:0 0 12px;padding-left:22px;',
+      bq:'padding:10px 14px;background:#f7f7f7;border-left:3px solid #ddd;color:#666;',
+      bqPre:'',
+      ph:'height:70px;background:#f2f2f2;border-radius:6px;color:#aaa;'
+    },
+    a2: { h2:'line', hr:'dots', em:'color',
+      wrap:'color:#2b2b2b;background:#fff;font-family:Georgia,\'Songti SC\',\'Songti TC\',serif;',
+      h1:'font-size:22px;font-weight:600;line-height:1.38;color:#111;margin:0 0 8px;letter-spacing:.2px;',
+      meta:'font-size:10px;color:#b0b0b0;margin:0 0 18px;letter-spacing:1.5px;text-transform:uppercase;font-family:-apple-system,\'PingFang SC\',sans-serif;',
+      h3:'font-size:16px;font-weight:600;line-height:1.5;color:#111;margin:20px 0 8px;',
+      strong:'font-weight:600;color:#111;',
+      a:'color:#576b95;text-decoration:none;',
+      code:'background:#f5f5f5;border-radius:3px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace;',
+      ul:'margin:0 0 12px;padding-left:22px;',
+      bq:'padding:4px 4px 12px;color:#444;text-align:center;font-style:italic;',
+      bqPre:'<span style="display:block;font-size:28px;line-height:.5;color:#c9c9c9;font-style:normal;margin-bottom:6px;">\u201c</span>',
+      ph:'height:70px;background:#f5f5f5;border-radius:6px;color:#aaa;'
+    },
+    a7: { h2:'line', hr:'dashed', em:'mark',
+      wrap:'color:#54483a;background:#fdf9f0;font-family:\'Kaiti SC\',\'STKaiti\',\'KaiTi\',\'PingFang SC\',serif;',
+      h1:'font-size:19px;font-weight:600;line-height:1.45;color:#4a3f33;margin:0 0 6px;',
+      meta:'font-size:11px;color:#b3a795;margin:0 0 16px;',
+      h3:'font-size:15.5px;font-weight:600;line-height:1.5;color:#4a3f33;margin:20px 0 8px;',
+      strong:'font-weight:600;color:#a5743f;',
+      a:'color:#a5743f;text-decoration:none;',
+      code:'background:#f4ecdc;border-radius:3px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Consolas,monospace;color:#8a6a3a;',
+      ul:'margin:0 0 12px;padding-left:22px;',
+      bq:'padding:10px 12px;background:#fbf0d4;border-radius:4px;color:#7a6440;',
+      bqPre:'',
+      ph:'height:70px;background:#f4ecdc;border-radius:6px;color:#b3a795;'
+    }
+  };
+
+  function twDefStyle(){
+    return { skin:'a8', accent:'#07c160', fs:15, lh:1.8, ps:12, pw:376,
+             h2:'bar', em:'mark', hr:'solid' };
+  }
+  function twSkinName(k){
+    var s = k || (T.style && T.style.skin) || 'a8';
+    for (var i = 0; i < TW_SKIN_LIST.length; i++) if (TW_SKIN_LIST[i].k === s) return TW_SKIN_LIST[i].n;
+    return '原生绿';
+  }
+  /* 把落盘里的排版参数补齐成一份完整可用的配置（缺失一律回退默认） */
+  function twStyleCfg(){
+    var d = twDefStyle(), s = (T.style && typeof T.style === 'object') ? T.style : {};
+    var skin = TW_SKINDEF[s.skin] ? s.skin : d.skin;
+    var sd = TW_SKINDEF[skin];
+    var fs = Number(s.fs), lh = Number(s.lh), ps = Number(s.ps), pw = Number(s.pw);
+    return {
+      skin: skin,
+      accent: /^#[0-9a-fA-F]{6}$/.test(s.accent || '') ? s.accent : d.accent,
+      fs: (fs >= 12 && fs <= 22) ? fs : d.fs,
+      lh: (lh >= 1.3 && lh <= 2.6) ? lh : d.lh,
+      ps: (ps >= 4 && ps <= 32) ? ps : d.ps,
+      pw: (pw >= 300 && pw <= 460) ? pw : d.pw,
+      h2: (s.h2 && /^(bar|num|block|line|tag)$/.test(s.h2)) ? s.h2 : sd.h2,
+      em: (s.em && /^(mark|wave|pill|color|gray)$/.test(s.em)) ? s.em : sd.em,
+      hr: (s.hr && /^(solid|dashed|dots|short|double)$/.test(s.hr)) ? s.hr : sd.hr
+    };
+  }
+  function twInk(cfg){ return cfg.skin === 'a7' ? '#4a3f33' : '#111'; }
+  function twRGBA(hex, a){
+    var h = String(hex || '#000').replace('#', '');
+    if (h.length === 3) h = h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2);
+    var n = parseInt(h, 16);
+    if (isNaN(n)) return 'rgba(0,0,0,' + a + ')';
+    return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+  }
+  function twPad2(n){ return (n < 10 ? '0' : '') + n; }
+
+  /* ---------- B3 小标题样式库（5 种）---------- */
+  function twH2Html(text, cfg, idx){
+    var ac = cfg.accent, ink = twInk(cfg);
+    var t = twEsc(text);
+    switch (cfg.h2){
+      case 'bar':
+        return '<h2 style="font-size:' + (cfg.fs + 1) + 'px;font-weight:600;line-height:1.45;margin:22px 0 10px;padding-left:10px;border-left:4px solid ' + ac + ';color:' + ink + ';">' + t + '</h2>';
+      case 'num':
+        return '<h2 style="font-size:' + (cfg.fs + 1) + 'px;font-weight:600;line-height:1.45;margin:24px 0 10px;color:' + ink + ';">'
+          + '<span style="display:inline-block;min-width:24px;color:' + ac + ';font-family:Georgia,serif;margin-right:4px;">' + twPad2(idx) + '</span>' + t + '</h2>';
+      case 'block':
+        return '<h2 style="font-size:' + (cfg.fs + 1) + 'px;font-weight:600;line-height:1.45;margin:20px 0 10px;padding:7px 12px;background:' + twRGBA(ac, .14) + ';border-radius:6px;color:' + ink + ';">' + t + '</h2>';
+      case 'line':
+        return '<h2 style="font-size:' + cfg.fs + 'px;font-weight:600;line-height:1.5;margin:24px 0 12px;padding:6px 0;text-align:center;border-top:1px solid ' + twRGBA('#000', .13) + ';border-bottom:1px solid ' + twRGBA('#000', .13) + ';letter-spacing:1.5px;color:' + ink + ';">' + t + '</h2>';
+      case 'tag':
+        return '<h2 style="font-size:' + cfg.fs + 'px;font-weight:600;line-height:1.6;margin:22px 0 10px;color:' + ink + ';">'
+          + '<span style="display:inline-block;padding:3px 12px;border-radius:999px;background:' + ac + ';color:#fff;">' + t + '</span></h2>';
+    }
+    return '<h2 style="font-size:' + (cfg.fs + 1) + 'px;font-weight:600;margin:22px 0 10px;color:' + ink + ';">' + t + '</h2>';
+  }
+
+  /* ---------- B5 强调·高亮样式库（5 种，作用于 ==文字== ）---------- */
+  function twEmHtml(text, cfg){
+    var ac = cfg.accent;
+    switch (cfg.em){
+      case 'mark':  return '<span style="background:' + twRGBA(ac, .22) + ';padding:1px 2px;border-radius:2px;">' + text + '</span>';
+      case 'wave':  return '<span style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:' + ac + ';text-decoration-thickness:1.5px;text-underline-offset:3px;">' + text + '</span>';
+      case 'pill':  return '<span style="display:inline-block;padding:1px 8px;border-radius:999px;background:' + twRGBA(ac, .14) + ';color:' + ac + ';">' + text + '</span>';
+      case 'color': return '<span style="color:' + ac + ';font-weight:600;">' + text + '</span>';
+      case 'gray':  return '<span style="background:#eef0f2;padding:1px 3px;border-radius:2px;font-weight:600;">' + text + '</span>';
+    }
+    return text;
+  }
+
+  /* ---------- B6 分割线样式库（5 种）---------- */
+  function twHrHtml(cfg){
+    var ac = cfg.accent;
+    switch (cfg.hr){
+      case 'solid':  return '<hr style="border:none;border-top:1px solid ' + twRGBA('#000', .12) + ';margin:22px 0;">';
+      case 'dashed': return '<hr style="border:none;border-top:1px dashed ' + twRGBA('#000', .2) + ';margin:22px 0;">';
+      case 'dots':   return '<p style="text-align:center;letter-spacing:7px;color:' + twRGBA('#000', .28) + ';margin:22px 0;font-size:14px;">\u00b7 \u00b7 \u00b7</p>';
+      case 'short':  return '<p style="text-align:center;margin:22px 0;line-height:1;"><span style="display:inline-block;width:38px;height:2px;background:' + ac + ';border-radius:2px;"></span></p>';
+      case 'double': return '<hr style="border:none;border-top:3px double ' + twRGBA('#000', .2) + ';margin:22px 0;">';
+    }
+    return '';
+  }
+
+  /* ---------- 纸面渲染：预览与导出共用 ---------- */
+  function twRenderPaper(title, body, cfg){
+    cfg = cfg || twStyleCfg();
+    var SK = TW_SKINDEF[cfg.skin] || TW_SKINDEF.a8;
+    var inner = twRenderMd(body, cfg);
+    return '<section style="' + SK.wrap + 'font-size:' + cfg.fs + 'px;line-height:' + cfg.lh
+      + ';padding:14px 16px 6px;border-radius:8px;">'
+      + '<h1 style="' + SK.h1 + '">' + twEsc(title || '未命名') + '</h1>'
+      + '<p style="' + SK.meta + '">' + twToday() + ' · NIKO</p>'
+      + inner + '</section>';
+  }
+
+  /* ---------- 排版工具栏 ---------- */
+  function twStyPanelToggle(){
+    var p = $('twStyPanel'), b = $('twStyBtn');
+    if (!p) return;
+    var on = p.classList.toggle('on');
+    if (b) b.classList.toggle('on', on);
+    if (on) twStyPaint();
+  }
+  function twChips(elId, list, cur, fn){
+    var box = $(elId);
+    if (!box) return;
+    box.innerHTML = list.map(function(x){
+      return '<button class="twChip' + (x.k === cur ? ' on' : '') + '" onclick="' + fn + '(\'' + x.k + '\')" title="' + twEsc(x.t || x.n) + '">' + twEsc(x.n) + '</button>';
+    }).join('');
+  }
+  function twStyPaint(){
+    var c = twStyleCfg();
+    twChips('twSkinRow', TW_SKIN_LIST, c.skin, 'twSetSkin');
+    var ab = $('twAccRow');
+    if (ab){
+      ab.innerHTML = TW_ACCENTS.map(function(x){
+        return '<button class="twDot' + (x.k === c.accent ? ' on' : '') + '" style="background:' + x.k + ';" onclick="twSetAccent(\'' + x.k + '\')" title="' + twEsc(x.n) + '"></button>';
+      }).join('');
+    }
+    twChips('twH2Row', TW_H2_LIST, c.h2, 'twSetH2');
+    twChips('twEmRow', TW_EM_LIST, c.em, 'twSetEm');
+    twChips('twHrRow', TW_HR_LIST, c.hr, 'twSetHr');
+    if ($('twFsRng')) $('twFsRng').value = c.fs;
+    if ($('twLhRng')) $('twLhRng').value = c.lh;
+    if ($('twPsRng')) $('twPsRng').value = c.ps;
+    if ($('twPwRng')) $('twPwRng').value = c.pw;
+    if ($('twFsVal')) $('twFsVal').textContent = c.fs + 'px';
+    if ($('twLhVal')) $('twLhVal').textContent = c.lh.toFixed(2);
+    if ($('twPsVal')) $('twPsVal').textContent = c.ps + 'px';
+    if ($('twPwVal')) $('twPwVal').textContent = c.pw + 'px';
+  }
+  function twStyNeed(){
+    if (!T.style || typeof T.style !== 'object') T.style = twDefStyle();
+  }
+  function twSetSkin(k){
+    if (!TW_SKINDEF[k]) return;
+    twStyNeed();
+    T.style.skin = k;
+    // 换皮肤时把三个零件一并重置成该皮肤的默认手感（之后仍可单独改）
+    T.style.h2 = TW_SKINDEF[k].h2;
+    T.style.hr = TW_SKINDEF[k].hr;
+    T.style.em = TW_SKINDEF[k].em;
+    twSave(); twStyPaint(); twEdRender();
+    twToast('排版皮肤：' + twSkinName(k));
+  }
+  function twSetAccent(v){ twStyNeed(); T.style.accent = v; twSave(); twStyPaint(); twEdRender(); }
+  function twSetH2(v){ twStyNeed(); T.style.h2 = v; twSave(); twStyPaint(); twEdRender(); }
+  function twSetEm(v){ twStyNeed(); T.style.em = v; twSave(); twStyPaint(); twEdRender(); }
+  function twSetHr(v){ twStyNeed(); T.style.hr = v; twSave(); twStyPaint(); twEdRender(); }
+  function twStyRng(key, v){
+    twStyNeed();
+    v = Number(v);
+    if (isNaN(v)) return;
+    T.style[key] = v;
+    twSave(); twStyPaint(); twEdRender();
+    if (key === 'fs' || key === 'lh') twEdAutoH();
+  }
+  function twStyReset(){
+    T.style = twDefStyle();
+    twSave(); twStyPaint(); twEdRender();
+    twToast('排版已恢复默认（公众号原生绿）');
+  }
+
+  /* ============================================================
+     C 组：写作能力（C2 标题工坊 / C3 AI 指令面板 / C4 划词工具条）
+     ============================================================ */
+  var TW_STOP = ('的 了 是 我 你 他 她 它 我们 你们 他们 这个 那个 这些 那些 自己 时候 现在 可以 什么 怎么 ' +
+    '为什么 如果 因为 所以 但是 而且 然后 就是 还有 没有 不是 这样 那样 一些 一直 其实 真的 还是 只能 ' +
+    '已经 一个 问题 东西 觉得 知道 看到 开始 最后 结果 办法 方法 地方 事情 一样 非常 特别 可能 应该 ' +
+    '需要 能够 进行 通过 关于 对于 只是 于是 因此 当然 反正 大概 一点 有点 比较 之前 之后 里面 外面 ' +
+    '上面 下面 大家 别人 其他 另外 一定 必须 左右 多少 几个 好多 很多 很少 不过 虽然 即使 无论 不管 ' +
+    '只要 只有 而是 就是 让他 给我 对你 对我 不 在 和 就 都 很 与 及 也 有 个 这 那 他 她 它 你 我 ' +
+    '是 的 了 得 地 着 过 而 或 把 被 让 使 对 从 到 向 为 以 之 其 此').split(' ');
+
+  /* 从正文里捞候选关键词：优先加粗词 / 小标题词，其次跨句高频中文串 */
+  function twKeywords(text){
+    var src = String(text || ''), pri = [];
+    src.replace(/\*\*([^*\n]+)\*\*/g, function(_, t){ pri.push(String(t).trim()); return ' '; });
+    src.replace(/^#{1,3}\s+(.+)$/gm, function(_, t){
+      pri.push(String(t).replace(/^[一二三四五六七八九十0-9]+[、.．)）]\s*/, '').trim()); return ' ';
+    });
+    var clean = src.replace(/[#>*`\[\]=~\-\r]/g, ' ')
+      .replace(/[，。！？；：、“”‘’（）()《》〈〉【】,.!?;:]/g, ' ');
+    var segs = clean.split(/\s+/).filter(Boolean);
+    var freq = {}, i, n, w, si, k;
+    for (si = 0; si < segs.length; si++){
+      var s = segs[si];
+      for (n = 5; n >= 2; n--){
+        for (i = 0; i + n <= s.length; i++){
+          w = s.substr(i, n);
+          if (!/^[\u4e00-\u9fa5]+$/.test(w)) continue;
+          if (TW_STOP.indexOf(w) >= 0) continue;
+          var bad = false;
+          for (k = 0; k < TW_STOP.length; k++){
+            var st = TW_STOP[k];
+            if (st.length === 1 && w.indexOf(st) >= 0){ bad = true; break; }
+          }
+          if (bad) continue;
+          freq[w] = (freq[w] || 0) + 1;
+        }
+      }
+    }
+    var cand = Object.keys(freq).map(function(x){ return { w: x, s: freq[x] * x.length }; })
+      .sort(function(a, b){ return b.s - a.s; });
+    var picked = [];
+    function dup(w2){
+      for (var j = 0; j < picked.length; j++){
+        if (picked[j].indexOf(w2) >= 0 || w2.indexOf(picked[j]) >= 0) return true;
+      }
+      return false;
+    }
+    pri.forEach(function(t){
+      t = String(t).replace(/[，。！？、\s]/g, '');
+      if (t.length >= 2 && t.length <= 14 && !dup(t)) picked.push(t);
+    });
+    for (var c = 0; c < cand.length && picked.length < 8; c++){
+      if (!dup(cand[c].w)) picked.push(cand[c].w);
+    }
+    return picked;
+  }
+
+  /* 把正文拆成一句一句（去 Markdown 记号，便于取材） */
+  function twSents(text){
+    var clean = String(text || '')
+      .replace(/^#{1,3}\s+/gm, '').replace(/\*\*/g, '').replace(/==/g, '')
+      .replace(/^>\s?/gm, '').replace(/^\s*[-*]\s+/gm, '').replace(/\[图片占位\]/g, '');
+    return clean.split(/[\n。！？!?；;]+/).map(function(s){ return s.replace(/\s+/g, '').trim(); })
+      .filter(function(s){ return s.length >= 4; });
+  }
+  function twClip(s, n){ s = String(s || ''); return s.length > n ? s.slice(0, n) : s; }
+  /* 公众号列表页最佳 14–22 字：越接近 18 分越高 */
+  function twScoreTitle(t){
+    var n = String(t).replace(/\s/g, '').length;
+    var s = 100 - Math.abs(n - 18) * 5;
+    if (n < 8) s -= 18;
+    if (n > 30) s -= 18;
+    return Math.max(20, Math.min(100, Math.round(s)));
+  }
+
+  function twTitleIdeas(){
+    var title = ($('twTitle') ? $('twTitle').value : '').trim();
+    var body = ($('twBody') ? $('twBody').value : '') || '';
+    if (!body.trim()) return { err: '正文还是空的。先写几句，我才有材料给你起标题。' };
+    var sents = twSents(body);
+    var kws = twKeywords(body);
+    var kw = kws[0] || '';
+    var kw2 = kws[1] || '';
+    var bold = '';
+    String(body).replace(/\*\*([^*\n]+)\*\*/g, function(_, t){ if (!bold && String(t).length >= 4) bold = String(t).trim(); return ''; });
+    var listN = (String(body).match(/^\s*[-*]\s+/gm) || []).length;
+    var raw = [];
+    if (bold) raw.push({ t: twClip(bold, 24), why: '取材：正文里你加粗的那句（这是你的结论）' });
+    if (sents.length) raw.push({ t: twClip(sents[0], 14) + '，后来我想明白了', why: '取材：正文首句（场景 + 悬念）' });
+    if (listN >= 2) raw.push({ t: listN + ' 件事，让我' + (kw ? ('搞懂了' + kw) : '换了想法'), why: '取材：正文里的 ' + listN + ' 条列表' });
+    if (kw) raw.push({ t: kw + '这件事，问题不在' + (kw2 || '它本身'), why: '取材：正文高频词「' + kw + '」' });
+    if (sents.length >= 3) raw.push({ t: twClip(sents[sents.length - 1], 20), why: '取材：正文最后一句（收口）' });
+    if (title) raw.push({ t: title, why: '对照：你现在的标题' });
+    // 去重 + 补足 5 条（补位句式也只用你正文里出现过的词，不编造）
+    var seen = {}, out = [];
+    function pushOne(x){
+      var k = String(x.t).replace(/\s/g, '');
+      if (k.length < 4 || seen[k]) return;
+      seen[k] = 1;
+      out.push({ t: x.t, why: x.why });
+    }
+    raw.forEach(pushOne);
+    if (out.length < 5){
+      var kwT = kw || (sents[0] ? twClip(sents[0], 8) : '这件事');
+      pushOne({ t: kwT + '，我到底做对了什么', why: '取材：关键词 + 反问句式（补位）' });
+      pushOne({ t: '关于' + kwT + '，说点实话', why: '取材：关键词 + 直给句式（补位）' });
+      if (kw2) pushOne({ t: kw2 + '之后，我的三个变化', why: '取材：次关键词 + 变化句式（补位）' });
+      if (sents.length >= 2) pushOne({ t: twClip(sents[1], 16) + '，后来变了', why: '取材：正文第二句（补位）' });
+      pushOne({ t: kwT + '，我用了一个笨办法', why: '取材：关键词 + 笨办法句式（补位）' });
+      if (title) pushOne({ t: twClip(title.replace(/[，。！？、\s]/g, ''), 20) + '？', why: '取材：你的原句改问句（补位）' });
+    }
+    if (!out.length) return { err: '正文太短，至少写一两句再试。' };
+    out = out.slice(0, 5);
+    out.forEach(function(x){ x.n = x.t.replace(/\s/g, '').length; x.s = twScoreTitle(x.t); });
+    return { list: out };
+  }
+
+  function twTitleShop(){
+    var box = $('twTtBox'), tip = $('twTtTip');
+    if (!box) return;
+    var r = twTitleIdeas();
+    if (r.err){
+      box.innerHTML = '<div class="twPopTip" style="margin:0;">' + twEsc(r.err) + '</div>';
+      if (tip) tip.textContent = '标题工坊 · 从你自己的正文里取材，不编造';
+      twPopOpen('twPopTitle');
+      return;
+    }
+    if (tip) tip.textContent = '点一条即换上（14–22 字在公众号列表页最完整）。候选全部来自你的正文，不是凭空造的。';
+    box.innerHTML = r.list.map(function(x, i){
+      return '<div class="twTtItem" onclick="twTitleUse(' + i + ')">'
+        + '<div class="twTtTxt">' + twEsc(x.t) + '</div>'
+        + '<div class="twTtMet"><span class="twBar"><i style="width:' + x.s + '%"></i></span>'
+        + '<span>' + x.n + ' 字 · ' + x.s + ' 分</span><span>' + twEsc(x.why) + '</span></div></div>';
+    }).join('');
+    TW_TT_CACHE = r.list;
+    twPopOpen('twPopTitle');
+  }
+  var TW_TT_CACHE = [];
+  function twTitleUse(i){
+    var x = TW_TT_CACHE[i];
+    if (!x) return;
+    var el = $('twTitle');
+    if (el){ el.value = x.t; twEdRender(); }
+    twPopClose('twPopTitle');
+    twToast('标题已换上');
+  }
+
+  /* ---------- C3 AI 指令面板：把原来那一条粗放提示词拆成精准指令 ---------- */
+  function twCmdCtx(){
+    var title = ($('twTitle') ? $('twTitle').value : '').trim();
+    var body = twPlain($('twBody') ? $('twBody').value : '');
+    var ib = T.inbox.slice(0, 5).map(function(x, i){ return (i + 1) + '. ' + x.t; }).join('\n');
+    return { title: title, body: body, ib: ib, head: '我在写一篇公众号推文。\n\n【标题】' + (title || '（还没定）') + '\n\n' };
+  }
+  var TW_CMDS = [
+    { k:'polish', n:'整篇润色', d:'保留原意与个人语气，补齐通顺度（原来的那条，保留）',
+      mk: function(c){
+        return c.head + '【我的正文草稿】\n' + c.body + '\n\n'
+          + (c.ib ? '【我收集的素材参考】\n' + c.ib + '\n\n' : '')
+          + '【要求】\n1. 保留我的原意和个人语气，不要写成营销号\n2. 段落短一些，适合手机阅读\n3. 不要编造我没提供的事实和数据\n4. 给出修改后的全文';
+      } },
+    { k:'hook', n:'改写开头', d:'前三行重写得更抓人，其余一个字不动',
+      mk: function(c){
+        return c.head + '【全文】\n' + c.body + '\n\n'
+          + '【只做一件事】\n我现在开头太平，读者容易划走。把开头前三行重写一遍：用一个具体场景或一个反常识的说法切入，让人想往下看。正文其余部分一个字都别动。写完把「改后的前三行」单独列出来给我。';
+      } },
+    { k:'split', n:'拆短段落', d:'超过两句的段落拆成一两句一段',
+      mk: function(c){
+        return c.head + '【全文】\n' + c.body + '\n\n'
+          + '【只做一件事】\n把每一段超过两句的内容拆开，做到「一段只说一件事」。不要增删任何信息，不要改我的用词，只调整换行位置。输出拆好的全文。';
+      } },
+    { k:'heads', n:'提炼小标题', d:'用我文里的原话给每段加 ## 小标题',
+      mk: function(c){
+        return c.head + '【全文】\n' + c.body + '\n\n'
+          + '【只做一件事】\n给每个逻辑段落加一个 Markdown 二级小标题（## 开头）。要求：标题必须用我正文里已经出现过的词，不要另造说法；每个标题不超过 12 字。输出加好小标题的全文。';
+      } },
+    { k:'deai', n:'去 AI 味', d:'删套话和书面腔，保留我的语气',
+      mk: function(c){
+        return c.head + '【全文】\n' + c.body + '\n\n'
+          + '【只做一件事】\n删掉套话（如「值得注意的是」「综上所述」「不难发现」）、书面腔和排比堆砌，把长句改短，保留我原本的口语和个人语气。不要添加任何我没写过的事实、数据或例子。输出改后的全文。';
+      } }
+  ];
+  function twAiMenu(){
+    var box = $('twCmdBox');
+    if (!box) return;
+    box.innerHTML = TW_CMDS.map(function(x){
+      return '<button class="twCmd" onclick="twCmdCopy(\'' + x.k + '\')"><b>' + twEsc(x.n) + '</b><i>' + twEsc(x.d) + '</i></button>';
+    }).join('');
+    twPopOpen('twPopAi');
+  }
+  function twCmdCopy(k){
+    var x = null;
+    for (var i = 0; i < TW_CMDS.length; i++) if (TW_CMDS[i].k === k) x = TW_CMDS[i];
+    if (!x) return;
+    var c = twCmdCtx();
+    if (!c.body.trim()){ twToast('正文还是空的，先写点内容'); return; }
+    twCopy(x.mk(c), '「' + x.n + '」提示词已复制 → 粘给任意 AI');
+    twPopClose('twPopAi');
+  }
+
+  /* ---------- 浮层开关 ---------- */
+  function twPopOpen(id){
+    ['twPopTitle', 'twPopAi', 'twPopCheck'].forEach(function(x){
+      var el = $(x);
+      if (el && x !== id) el.classList.remove('on');
+    });
+    var e = $(id);
+    if (e) e.classList.add('on');
+  }
+  function twPopClose(id){
+    var e = $(id);
+    if (e) e.classList.remove('on');
+  }
+  function twPopCloseAll(){ ['twPopTitle', 'twPopAi', 'twPopCheck'].forEach(twPopClose); }
+
+  /* ---------- C4 划词工具条 ---------- */
+  function twMirrorMake(ta){
+    var cs = window.getComputedStyle(ta);
+    var m = document.createElement('div');
+    ['fontFamily','fontSize','fontWeight','fontStyle','letterSpacing','lineHeight','textTransform','wordSpacing',
+     'paddingTop','paddingRight','paddingBottom','paddingLeft','borderTopWidth','borderRightWidth',
+     'borderBottomWidth','borderLeftWidth'].forEach(function(p){
+      try { m.style[p] = cs[p]; } catch (e) {}
+    });
+    m.style.position = 'absolute';
+    m.style.left = '-9999px';
+    m.style.top = '0';
+    m.style.visibility = 'hidden';
+    m.style.whiteSpace = 'pre-wrap';
+    m.style.wordWrap = 'break-word';
+    m.style.overflowWrap = 'break-word';
+    m.style.boxSizing = 'border-box';
+    m.style.width = ta.offsetWidth + 'px';
+    document.body.appendChild(m);
+    return m;
+  }
+  function twCaretXY(ta, idx){
+    var m = twMirrorMake(ta);
+    m.textContent = ta.value.slice(0, idx);
+    var sp = document.createElement('span');
+    sp.textContent = '\u200b';
+    m.appendChild(sp);
+    var y = sp.offsetTop, x = sp.offsetLeft;
+    document.body.removeChild(m);
+    return { x: x, y: y };
+  }
+  function twSelHide(){
+    var b = $('twSelBar');
+    if (b) b.classList.remove('on');
+  }
+  function twSelUpdate(){
+    var ta = $('twBody'), bar = $('twSelBar');
+    if (!ta || !bar) return;
+    if (document.activeElement !== ta){ return; }
+    var s = ta.selectionStart, e = ta.selectionEnd;
+    if (s == null || s === e || !String(ta.value.slice(s, e)).trim()){ twSelHide(); return; }
+    var pos, taR, host, hR;
+    try { pos = twCaretXY(ta, e); } catch (err) { return; }
+    taR = ta.getBoundingClientRect();
+    host = ta.parentNode;
+    while (host && host !== document.body && !(host.className && String(host.className).indexOf('twColEdit') >= 0)) host = host.parentNode;
+    if (!host || host === document.body) return;
+    hR = host.getBoundingClientRect();
+    bar.classList.add('on');
+    var lh = parseFloat(window.getComputedStyle(ta).lineHeight) || 26;
+    var bw = bar.offsetWidth || 280, bh = bar.offsetHeight || 32;
+    var left = taR.left - hR.left + 8;
+    var top = taR.top - hR.top + pos.y - ta.scrollTop + lh + 4;
+    if (left + bw > hR.width - 8) left = Math.max(6, hR.width - bw - 8);
+    if (top + bh > hR.height - 6) top = Math.max(6, taR.top - hR.top + pos.y - ta.scrollTop - bh - 6);
+    bar.style.left = Math.round(left) + 'px';
+    bar.style.top = Math.round(top) + 'px';
+  }
+  /* 用成对记号包住选中文字（加粗 / 高亮） */
+  function twSelWrap(pre, post){
+    var ta = $('twBody');
+    if (!ta) return;
+    var s = ta.selectionStart, e = ta.selectionEnd;
+    if (s == null || s === e) return;
+    var sel = ta.value.slice(s, e);
+    ta.value = ta.value.slice(0, s) + pre + sel + post + ta.value.slice(e);
+    try { ta.focus(); ta.selectionStart = s + pre.length; ta.selectionEnd = s + pre.length + sel.length; } catch (err) {}
+    twSelHide(); twEdRender();
+  }
+  /* 按行加前缀（引用 / 小标题 / 列表） */
+  function twSelPrefix(pfx){
+    var ta = $('twBody');
+    if (!ta) return;
+    var s = ta.selectionStart, e = ta.selectionEnd;
+    if (s == null || s === e) return;
+    var ls = ta.value.lastIndexOf('\n', s - 1) + 1;
+    var le = ta.value.indexOf('\n', e);
+    if (le < 0) le = ta.value.length;
+    var block = ta.value.slice(ls, le);
+    var fixed = block.split('\n').map(function(l){ return pfx + l.replace(/^(#{1,4}\s+|>\s?|[-*]\s+)/, ''); }).join('\n');
+    ta.value = ta.value.slice(0, ls) + fixed + ta.value.slice(le);
+    try { ta.focus(); ta.selectionStart = ls; ta.selectionEnd = ls + fixed.length; } catch (err) {}
+    twSelHide(); twEdRender();
+  }
+  function twSelBarBuild(){
+    var bar = $('twSelBar');
+    if (!bar) return;
+    var sp = 'onmousedown="event.preventDefault();';
+    bar.innerHTML =
+      '<button ' + sp + 'twSelWrap(\'**\',\'**\')" title="加粗">加粗</button>'
+      + '<button ' + sp + 'twSelWrap(\'==\',\'==\')" title="强调高亮（样式由右侧「排版 · 高亮」决定）">高亮</button>'
+      + '<button ' + sp + 'twSelPrefix(\'> \')" title="引用">引用</button>'
+      + '<button ' + sp + 'twSelPrefix(\'## \')" title="二级标题">H2</button>'
+      + '<button ' + sp + 'twSelPrefix(\'- \')" title="列表">列表</button>'
+      + '<button onmousedown="event.preventDefault();twSelHide()" title="收起">✕</button>';
+  }
+
+  /* ============================================================
+     D1 发布前体检清单
+     ============================================================ */
+  var TW_BAN = ['最好', '最佳', '最强', '唯一', '全球首', '国家级', '世界级', '顶级',
+    '绝对', '100%', '百分百', '永久', '彻底', '根治', '治愈', '药到病除', '立竿见影', '包治',
+    '无副作用', '永不', '史上最', '全网最'];
+  /* 「第一 / 首个」要看上下文：后面紧跟「节章步条…」时是序号（第一节 / 第一步），不该报（2026-09-18 实测误报） */
+  var TW_BAN_NUM = ['第一', '首个'];
+  var TW_QTY = '节章步条点件次天周月年个种层块段句篇部轮期课项批款版手时名位';
+  function twBanScan(body, title){
+    var all = String(body || '') + '\n' + String(title || ''), hit = [];
+    TW_BAN.forEach(function(w){ if (all.indexOf(w) >= 0) hit.push(w); });
+    TW_BAN_NUM.forEach(function(w){
+      var i = 0;
+      while (true){
+        var k = all.indexOf(w, i);
+        if (k < 0) break;
+        if (TW_QTY.indexOf(all.charAt(k + w.length)) < 0){ hit.push(w); break; }
+        i = k + w.length;
+      }
+    });
+    return hit;
+  }
+  function twCheckRun(){
+    var title = ($('twTitle') ? $('twTitle').value : '').trim();
+    var body = ($('twBody') ? $('twBody').value : '') || '';
+    var cfg = twStyleCfg(), out = [];
+    var tl = title.replace(/\s/g, '').length;
+    var wc = body.replace(/[#>*`\[\]=~\-\s]/g, '').length;
+
+    if (!tl) out.push({ o:3, n:'还没有标题', d:'预览会显示「未命名」，发出去列表页也是空的' });
+    else if (tl < 10) out.push({ o:2, n:'标题偏短（' + tl + ' 字）', d:'公众号列表页 14–22 字显示最完整' });
+    else if (tl > 30) out.push({ o:2, n:'标题偏长（' + tl + ' 字）', d:'列表页会被截断，建议压到 22 字内' });
+    else out.push({ o:1, n:'标题长度合适（' + tl + ' 字）', d:'' });
+
+    if (wc < 300) out.push({ o:2, n:'正文偏短（' + wc + ' 字）', d:'推文 300–3000 字读起来最舒服' });
+    else if (wc > 5000) out.push({ o:2, n:'正文偏长（' + wc + ' 字）', d:'建议拆上下篇，或砍掉铺垫' });
+    else out.push({ o:1, n:'正文长度合适（' + wc + ' 字）', d:'' });
+
+    var paras = body.split('\n').map(function(l){ return l.replace(/[#>*`\[\]=~\-]/g, '').trim(); })
+      .filter(function(l){ return l.length > 0; });
+    var longP = [], i;
+    for (i = 0; i < paras.length; i++) if (paras[i].length > 150) longP.push(i + 1);
+    if (longP.length) out.push({ o:2, n:longP.length + ' 个段落太长', d:'第 ' + longP.slice(0, 6).join('、') + ' 段超过 150 字，手机上像一堵墙' });
+    else if (paras.length) out.push({ o:1, n:'段落长度合适', d:'没有超过 150 字的段落' });
+
+    var longS = [];
+    for (i = 0; i < paras.length; i++){
+      paras[i].split(/[。！？；!?;]/).forEach(function(x){ if (x.length > 60) longS.push(twClip(x, 18) + '…'); });
+    }
+    if (longS.length) out.push({ o:2, n:longS.length + ' 处长句', d:'例：「' + longS[0] + '」建议断句' });
+    else if (paras.length) out.push({ o:1, n:'句子长度合适', d:'' });
+
+    var h2n = (body.match(/^##\s+/gm) || []).length;
+    if (h2n >= 2) out.push({ o:1, n:'有 ' + h2n + ' 个小标题', d:'结构清楚，读者可以跳读' });
+    else out.push({ o:2, n:'小标题不足（' + h2n + ' 个）', d:'长文建议每 3–4 段加一个 ## 小标题' });
+
+    var phN = (body.match(/\[图片占位\]/g) || []).length;
+    if (phN) out.push({ o:2, n:phN + ' 处图片占位没换成真图', d:'发布前记得插图，否则正文里会写着「图片占位」' });
+    else out.push({ o:2, n:'正文里没有配图', d:'纯文字读着累，建议至少插 1–2 张图' });
+
+    var hit = twBanScan(body, title);
+    if (hit.length) out.push({ o:3, n:'发现 ' + hit.length + ' 个极限词', d:'「' + hit.join('、') + '」属广告法违禁表述，建议换掉' });
+    else out.push({ o:1, n:'没有极限词', d:'没扫到广告法常见违禁表述' });
+
+    var emN = (body.match(/==[^=]+==/g) || []).length;
+    if (emN) out.push({ o:1, n:'有 ' + emN + ' 处强调高亮', d:'当前高亮样式：' + (cfg.em === 'color' ? '变色加粗' : cfg.em === 'mark' ? '荧光笔' : cfg.em) });
+    else out.push({ o:2, n:'还没用 ==高亮==', d:'关键句加一处高亮，手机阅读更抓眼' });
+
+    return out;
+  }
+  function twCheckOpen(){
+    var box = $('twChkBox');
+    if (!box) return;
+    var list = twCheckRun(), bad = 0, warn = 0;
+    list.forEach(function(x){ if (x.o === 3) bad++; else if (x.o === 2) warn++; });
+    var ico = { 1:'✅', 2:'⚠️', 3:'❌' };
+    var head = bad ? ('❌ 有 ' + bad + ' 项必须改' + (warn ? '，另有 ' + warn + ' 条建议' : ''))
+             : (warn ? ('⚠️ 没有硬伤，' + warn + ' 条建议可以看看') : '✅ 全部通过，可以发了');
+    box.innerHTML = '<div class="twChkSum">' + head + '</div>' + list.map(function(x){
+      return '<div class="twChk"><span class="twChkI">' + ico[x.o] + '</span><span class="twChkT">'
+        + twEsc(x.n) + (x.d ? '<i>' + twEsc(x.d) + '</i>' : '') + '</span></div>';
+    }).join('');
+    twPopOpen('twPopCheck');
+  }
+
   /* ---------- 页面入口（由 switchPage 派发）---------- */
   function renderTwPage(){
     twLoad();                       // 铁律 §5：渲染前必须重读 localStorage
@@ -33827,6 +34606,9 @@ function hpClearDemo(){
     }
     twPlaceBtns();
     twApplyView(T.view || 'both');   // 每次进页面都按存储的模式摆好栏位
+    twStyPaint();                    // 排版工具栏：皮肤 / 主色 / 零件 / 滑块
+    twSelBarBuild();                 // 划词工具条按钮
+    twPopCloseAll();                 // 进页面时浮层一律收起，不遮内容
     twDfRender();
     twIbRender();
     twEdLoadInto();
@@ -33834,6 +34616,32 @@ function hpClearDemo(){
   }
 
   window.addEventListener('resize', twEdAutoH);
+  window.addEventListener('resize', twSelHide);
+
+  /* ---------- 划词工具条 + 浮层点外部收起（只绑一次）---------- */
+  (function twBindOnce(){
+    function bindTa(){
+      var ta = $('twBody');
+      if (!ta || ta.__twSelBound) return;
+      ta.__twSelBound = 1;
+      ['mouseup', 'keyup', 'select', 'input'].forEach(function(ev){
+        ta.addEventListener(ev, function(){ setTimeout(twSelUpdate, 0); });
+      });
+      ta.addEventListener('blur', function(){ setTimeout(twSelHide, 200); });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindTa);
+    else bindTa();
+    document.addEventListener('click', function(e){
+      var t = e.target;
+      while (t && t !== document.body){
+        var cn = t.className ? String(t.className) : '';
+        if (cn.indexOf('twPop') >= 0) return;                       // 点在浮层里
+        if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea') return;  // 点在开启按钮上
+        t = t.parentNode;
+      }
+      twPopCloseAll();
+    });
+  })();
 
   /* ---------- 导出（只导出 HTML onclick 真正用到的）---------- */
   window.renderTwPage = renderTwPage;
@@ -33854,6 +34662,27 @@ function hpClearDemo(){
   window.twDemoLoad = twDemoLoad;
   window.twDemoClear = twDemoClear;
   window.twDemoToggle = twDemoToggle;
+  /* 2026-09-18 新增：排版皮肤/零件（A2 A7 A8 · B1 B2 B3 B5 B6）+ C2 C3 C4 + D1 */
+  window.twStyleCfg = twStyleCfg;       // 当前排版参数（皮肤/主色/零件/字号行距）
+  window.twRenderPaper = twRenderPaper; // 纸面渲染（内联样式，预览与导出同一份）
+  window.twStyPanelToggle = twStyPanelToggle;
+  window.twSetSkin = twSetSkin;
+  window.twSetAccent = twSetAccent;
+  window.twSetH2 = twSetH2;
+  window.twSetEm = twSetEm;
+  window.twSetHr = twSetHr;
+  window.twStyRng = twStyRng;
+  window.twStyReset = twStyReset;
+  window.twTitleShop = twTitleShop;
+  window.twTitleUse = twTitleUse;
+  window.twPopOpen = twPopOpen;
+  window.twPopClose = twPopClose;
+  window.twAiMenu = twAiMenu;
+  window.twCmdCopy = twCmdCopy;
+  window.twSelWrap = twSelWrap;
+  window.twSelPrefix = twSelPrefix;
+  window.twSelHide = twSelHide;
+  window.twCheckOpen = twCheckOpen;
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -35625,7 +36454,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609181321";
+        window.NIKO_VERSION = "202609181403";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
