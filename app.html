@@ -11101,7 +11101,201 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .tl .ev .bd em{font-style:normal;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:6px;padding:0 6px;font-size:10.5px;color:var(--muted);margin-right:6px}
 .tl .ev .sb{font-size:11.5px;color:var(--muted);margin-top:1px}
 .rxbox{background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:9px;padding:11px 12px;font-size:12px;line-height:1.85;white-space:pre-line;color:var(--text)}
-<!-- 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） -->
+/* ================= NIKO · 推文工坊（三栏工作台） =================
+   作用域全部锁在 #twPage；配色映射本体主题令牌 → 5 套主题自动适配 */
+#twPage{
+  --twBg:var(--card-bg-2,#f5f2ed);
+  --twPanel:var(--card-bg,#fff);
+  --twPanel2:var(--card-bg-2,#f1f2f4);
+  --twLine:var(--card-border,#e3e5e9);
+  --twTx:var(--text,#333);
+  --twTx2:var(--muted,#888);
+  --twAccent:#667eea;
+  --twAccentBg:rgba(102,126,234,.13);
+  --twDanger:#ef4444;
+  --twC1:236px; --twC2:468px; --twEd:660px;
+}
+/* 外壳：三栏等高 · 吃满视口 · 各自滚动 */
+#twPage .twWrap{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;
+  padding:12px 18px 14px;max-width:1620px;width:100%;margin:0 auto;}
+#twPage .twShop{flex:1;min-height:0;display:grid;
+  grid-template-columns:var(--twC1) minmax(0,1fr) var(--twC2);gap:12px;align-items:stretch;}
+
+#twPage .twCard{background:var(--twPanel);border:1px solid var(--twLine);border-radius:12px;
+  padding:12px 13px;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+#twPage .twCardHd{font-size:12.5px;font-weight:500;color:var(--twTx);display:flex;align-items:center;
+  justify-content:space-between;gap:6px;flex:0 0 auto;margin-bottom:8px;}
+#twPage .twCnt{font-size:11px;color:var(--twTx2);font-weight:400;}
+
+#twPage .twScroll{overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;}
+#twPage .twScroll::-webkit-scrollbar{width:8px;height:8px;}
+#twPage .twScroll::-webkit-scrollbar-thumb{background:var(--twLine);border-radius:8px;}
+#twPage .twScroll::-webkit-scrollbar-track{background:transparent;}
+
+/* ---------- 左栏 · 素材箱 + 我的草稿 ---------- */
+#twPage .twIbAdd{display:flex;gap:6px;flex:0 0 auto;margin-bottom:9px;}
+#twPage .twIbAdd input{flex:1;min-width:0;background:var(--twPanel2);border:1px solid var(--twLine);
+  color:var(--twTx);border-radius:6px;padding:5px 8px;font-size:12.5px;font-family:inherit;outline:none;}
+#twPage .twIbAdd input:focus{border-color:var(--twAccent);}
+#twPage .twIbAdd button{border:1px solid var(--twAccent);background:var(--twAccentBg);color:var(--twAccent);
+  border-radius:6px;padding:5px 10px;font-size:12.5px;cursor:pointer;font-family:inherit;flex:0 0 auto;}
+
+#twPage .twSubHd{font-size:11.5px;font-weight:500;color:var(--twTx2);margin:12px 0 7px;
+  display:flex;justify-content:space-between;align-items:center;gap:6px;}
+#twPage .twSubHd .twMini{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:5px;padding:1px 7px;font-size:11px;cursor:pointer;font-family:inherit;}
+#twPage .twSubHd .twMini:hover{color:var(--twTx);}
+
+#twPage .twIbItem{background:var(--twPanel2);border:1px solid var(--twLine);border-radius:8px;
+  padding:7px 9px 8px;margin-bottom:6px;cursor:pointer;position:relative;}
+#twPage .twIbItem:hover{border-color:var(--twAccent);}
+#twPage .twIbItem .twT{font-size:12.5px;font-weight:500;line-height:1.45;margin-bottom:2px;padding-right:15px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#twPage .twIbItem .twM{font-size:10.5px;color:var(--twTx2);}
+#twPage .twIbItem .twDel{position:absolute;top:5px;right:5px;font-size:13px;color:var(--twTx2);
+  cursor:pointer;line-height:1;padding:2px;}
+#twPage .twIbItem .twDel:hover{color:var(--twDanger);}
+
+#twPage .twDraftItem{border-radius:8px;padding:7px 9px;margin-bottom:6px;cursor:pointer;
+  border:1px solid transparent;position:relative;}
+#twPage .twDraftItem:hover{background:var(--twPanel2);}
+#twPage .twDraftItem.on{background:var(--twAccentBg);border-color:var(--twAccent);}
+#twPage .twDraftItem .twT{font-size:12.5px;font-weight:500;line-height:1.45;margin-bottom:2px;padding-right:15px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+#twPage .twDraftItem .twM{font-size:10.5px;color:var(--twTx2);}
+#twPage .twDraftItem .twDel{position:absolute;top:5px;right:5px;font-size:13px;color:var(--twTx2);
+  cursor:pointer;line-height:1;padding:2px;opacity:0;transition:.15s;}
+#twPage .twDraftItem:hover .twDel{opacity:1;}
+#twPage .twDraftItem .twDel:hover{color:var(--twDanger);}
+#twPage .twEmpty{font-size:11.5px;color:var(--twTx2);padding:6px 0;line-height:1.6;}
+
+/* ---------- 中栏 · 编辑器 ---------- */
+#twPage .twColEdit{padding:0;}
+#twPage .twEdInner{width:100%;max-width:var(--twEd);margin:0 auto;display:flex;flex-direction:column;
+  flex:1;min-height:0;padding:13px 14px 6px;}
+#twPage .twEdTitleRow{display:flex;align-items:flex-end;gap:8px;flex:0 0 auto;}
+#twPage .twEdTitle{width:100%;min-width:0;background:transparent;border:none;border-bottom:1px solid var(--twLine);
+  color:var(--twTx);font-size:16.5px;font-weight:500;padding:2px 0 8px;font-family:inherit;outline:none;}
+#twPage .twEdTitle:focus{border-bottom-color:var(--twAccent);}
+#twPage .twEdTitleRow .twHostTop{display:flex;gap:5px;flex:0 0 auto;padding-bottom:6px;}
+
+#twPage .twToolRow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;flex:0 0 auto;margin:9px 0 8px;}
+#twPage .twToolRow button{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:5px;padding:2px 9px;font-size:11.5px;cursor:pointer;font-family:inherit;line-height:1.7;}
+#twPage .twToolRow button:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twToolRow .twHostAi{display:flex;gap:5px;margin-left:auto;}
+
+#twBody{flex:1;min-height:120px;width:100%;background:var(--twPanel2);border:1px solid var(--twLine);
+  border-radius:8px;padding:11px 13px;color:var(--twTx);font-size:15px;line-height:1.85;
+  font-family:inherit;resize:none;outline:none;overflow-y:auto;scrollbar-width:thin;}
+#twBody:focus{border-color:var(--twAccent);}
+
+#twPage .twStat{flex:0 0 auto;font-size:11.5px;color:var(--twTx2);margin-top:7px;display:flex;gap:12px;}
+#twPage .twStat b{color:var(--twTx);font-weight:500;}
+
+/* ---------- 右栏 · 排版预览 ---------- */
+#twPage .twColPvw{padding:12px 13px;}
+#twPage .twModeRow{display:flex;gap:6px;margin-bottom:9px;flex:0 0 auto;}
+#twPage .twModeRow button{flex:1;border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:6px;padding:4px;font-size:11.5px;cursor:pointer;font-family:inherit;}
+#twPage .twModeRow button.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);}
+#twPage .twPvwWrap{flex:1;min-height:0;}
+/* 预览永远按公众号阅读纸宽排版（所见即所得），不跟随主题深浅 */
+#twPage .twPvw{background:#fff;color:#2b2b2b;border-radius:8px;padding:16px 15px;font-size:15px;line-height:1.8;
+  border:1px solid var(--twLine);max-width:376px;margin:0 auto;width:100%;}
+#twPage .twPvw h1{font-size:19px;font-weight:500;line-height:1.45;margin:0 0 6px;color:#111;}
+#twPage .twPvw .twMeta{font-size:11px;color:#999;margin-bottom:14px;}
+#twPage .twPvw h2{font-size:16px;font-weight:500;margin:18px 0 8px;padding-left:9px;
+  border-left:3px solid #07c160;line-height:1.4;color:#111;}
+#twPage .twPvw h3{font-size:15px;font-weight:500;margin:16px 0 8px;color:#111;}
+#twPage .twPvw p{margin:0 0 12px;}
+#twPage .twPvw blockquote{margin:0 0 12px;padding:8px 12px;background:#f7f7f7;border-left:3px solid #ddd;
+  color:#666;font-size:14px;}
+#twPage .twPvw ul{margin:0 0 12px;padding-left:20px;}
+#twPage .twPvw li{margin-bottom:5px;}
+#twPage .twPvw hr{border:none;border-top:1px solid #eee;margin:16px 0;}
+#twPage .twPvw code{background:#f2f2f2;border-radius:3px;padding:1px 5px;font-size:13px;
+  font-family:ui-monospace,Consolas,monospace;}
+#twPage .twPvw .twPh{height:70px;background:#f2f2f2;border-radius:6px;margin:0 0 12px;
+  display:flex;align-items:center;justify-content:center;color:#aaa;font-size:12px;}
+#twPage .twPvw a{color:#576b95;text-decoration:none;}
+#twPage .twPvw strong{font-weight:500;color:#111;}
+#twPage .twPvw pre{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;margin:0;}
+#twPage .twPvwFoot{flex:0 0 auto;padding-top:9px;display:flex;gap:8px;}
+
+/* 动作按钮（就近放置：AI 贴工具条尾 / 存入知识库贴标题行 / 复制到公众号贴预览底）*/
+#twPage .twActBtn{border:1px solid var(--twLine);background:transparent;color:var(--twTx);border-radius:8px;
+  padding:6px 10px;font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap;line-height:1.6;}
+#twPage .twActBtn:hover{background:var(--twPanel2);border-color:var(--twAccent);}
+#twPage .twActBtn.twPri{border-color:var(--twAccent);background:var(--twAccentBg);color:var(--twAccent);font-weight:500;}
+#twPage .twActBtn.twSm{padding:4px 9px;font-size:12px;border-radius:6px;}
+#twPage .twPvwFoot .twActBtn{flex:1;}
+
+/* 手机页签（仅窄屏显示）*/
+#twPage .twMtabs{display:none;}
+
+/* ---------- 窄屏 ≤900px：三栏 → 单栏 + 页签 ---------- */
+@media (max-width:900px){
+  /* ⚠️ 769~900px 之间本体 .page 仍是 overflow:hidden，这里必须补上滚动，否则内容被裁 */
+  #twPage{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+  #twPage .twWrap{max-width:none;padding:0;gap:0;}
+  #twPage .twShop{display:block;}
+  #twPage .twCard{min-height:0;overflow:visible;margin-bottom:10px;}
+  #twPage .twColInbox,#twPage .twColPvw{display:none;}
+  #twPage .twColInbox.show,#twPage .twColPvw.show{display:flex;}
+  #twPage .twScroll{overflow:visible;}
+  #twPage .twMtabs{display:flex;gap:6px;margin-bottom:10px;position:sticky;top:0;z-index:5;
+    background:var(--twBg);padding:8px 0;}
+  #twPage .twEdInner{max-width:none;padding:12px 12px 4px;}
+  /* 单滚架构：正文框交给 JS 自动撑高，禁止 flex 压缩（flex:1 = basis 0% 会压过 height）*/
+  #twBody{flex:0 0 auto;min-height:300px;height:auto;overflow-y:hidden;}
+  #twPage .twModeRow button{padding:8px;}
+  #twPage .twPvw{max-width:none;}
+  #twPage .twActBtn{padding:9px 12px;}
+  #twPage .twPvwFoot .twActBtn{min-height:44px;}
+  #twPage .twIbAdd input,#twPage .twEdTitle{font-size:16px;}
+}
+#twPage .twMtabs button{flex:1;border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:8px;padding:8px;font-size:13px;cursor:pointer;font-family:inherit;}
+#twPage .twMtabs button.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);}
+/* 手机端给本体右上角浮动 dock（同步圆点 + ⋮ 更多）让位，否则第三个页签被压住 */
+@media (max-width:768px){
+  #twPage .twMtabs{padding-right:96px;}
+  #twPage .twMtabs button{font-size:12.5px;padding:8px 4px;}
+}
+
+/* ---------- 视图模式（2026-09-17 定版：写作优先）----------
+   write = 素材箱 + 编辑器（预览收起，正文行宽放宽到 720，眼睛不用分心）
+   both  = 三栏全开（默认；比例沿用「预览优先」236 / 1fr / 468）
+   pvw   = 编辑器 + 排版预览（素材箱收起，正文行宽同样 720）
+   切换器固定挂在中栏标题行 —— 它是唯一在任何模式下都不会被隐藏的栏，
+   所以放这里才不会「一切到某模式就再也点不回来」。 */
+#twPage{--twEdW:720px;}
+#twPage .twViewSw{display:flex;gap:4px;flex:0 0 auto;padding-bottom:6px;}
+#twPage .twViewSw button{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:6px;padding:3px 8px;font-size:11.5px;cursor:pointer;font-family:inherit;
+  line-height:1.6;white-space:nowrap;}
+#twPage .twViewSw button:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twViewSw button.on{background:var(--twAccentBg);border-color:var(--twAccent);
+  color:var(--twAccent);font-weight:500;}
+#twPage[data-twview="write"] .twShop{grid-template-columns:var(--twC1) minmax(0,1fr);}
+#twPage[data-twview="write"] .twColPvw{display:none;}
+#twPage[data-twview="write"] .twEdInner{max-width:var(--twEdW);}
+#twPage[data-twview="pvw"] .twShop{grid-template-columns:minmax(0,1fr) var(--twC2);}
+#twPage[data-twview="pvw"] .twColInbox{display:none;}
+#twPage[data-twview="pvw"] .twEdInner{max-width:var(--twEdW);}
+
+/* 窄屏（≤900）用 twMtabs 三页签，视图模式钩子在这里整体让位：
+   ⚠️ 必须用 [data-twview] 把特异性抬到 (1,2,0)/(1,3,0)，
+   否则压不住上面同样特异性的桌面规则 —— 手机上点「排版预览」会点不出来。 */
+@media (max-width:900px){
+  #twPage .twViewSw{display:none;}
+  #twPage[data-twview] .twColInbox,
+  #twPage[data-twview] .twColPvw{display:none;}
+  #twPage[data-twview] .twColInbox.show,
+  #twPage[data-twview] .twColPvw.show{display:flex;}
+}
+/* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
 @media (max-width: 768px) {
@@ -11611,6 +11805,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-item" data-nav="compound" onclick="switchPage('compound')">📈 复利面板</div>
             <div class="nav-item" data-nav="parenting" onclick="switchPage('parenting')">👶 育儿手册</div>
             <div class="nav-item" data-nav="health" onclick="switchPage('health')">🩺 健康档案</div>
+            <div class="nav-item" data-nav="tw" onclick="switchPage('tw')">✍️ 推文工坊</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
             <div class="nav-title">Settings</div>
@@ -11662,6 +11857,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
             <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
             <div class="nav-more-item" data-navpage="health" onclick="switchPage('health');hideNavMore()">🩺 健康档案</div>
+            <div class="nav-more-item" data-navpage="tw" onclick="switchPage('tw');hideNavMore()">✍️ 推文工坊</div>
         </div>
     </div>
 
@@ -13927,6 +14123,85 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   </div>
 </div>
         </div>
+        <div class="page" id="twPage">
+<div class="twWrap">
+
+  <div class="twMtabs">
+    <button onclick="twMobileTab('edit')" id="twMtEdit" class="on">写稿</button>
+    <button onclick="twMobileTab('inbox')" id="twMtInbox">素材箱</button>
+    <button onclick="twMobileTab('pvw')" id="twMtPvw">排版预览</button>
+  </div>
+
+  <div class="twShop">
+
+    <!-- ========== 左：素材箱 + 我的草稿 ========== -->
+    <div class="twCard twColInbox">
+      <div class="twCardHd">素材箱 <span class="twCnt" id="twIbCnt"></span></div>
+      <div class="twIbAdd">
+        <input id="twIbInput" placeholder="粘链接或文字…" onkeydown="if(event.key==='Enter')twIbAdd()">
+        <button onclick="twIbAdd()">存</button>
+      </div>
+      <div class="twScroll" style="flex:1;">
+        <div id="twIbList"></div>
+        <div class="twSubHd">我的草稿 <span id="twDfCnt"></span>
+          <span style="display:flex;gap:5px;">
+            <button class="twMini" id="twDemoBtn" onclick="twDemoToggle()" title="载入一篇示例草稿 + 三条示例素材">示例</button>
+            <button class="twMini" onclick="twDfNew()" title="新建一篇草稿">＋ 新建</button>
+          </span>
+        </div>
+        <div id="twDfList"></div>
+      </div>
+    </div>
+
+    <!-- ========== 中：编辑器 ========== -->
+    <div class="twCard twColEdit">
+      <div class="twEdInner">
+        <div class="twEdTitleRow">
+          <div class="twViewSw" id="twViewSw">
+            <button id="twVwWrite" onclick="twSetView('write')" title="只留素材箱和编辑器，预览收起 —— 专心写">写作</button>
+            <button id="twVwBoth" onclick="twSetView('both')" title="素材箱 + 编辑器 + 排版预览（默认）">双栏</button>
+            <button id="twVwPvw" onclick="twSetView('pvw')" title="收起素材箱，编辑器配排版预览 —— 调排版时用">预览</button>
+          </div>
+          <input class="twEdTitle" id="twTitle" placeholder="给这篇推文起个标题…" oninput="twEdRender()">
+          <div class="twHostTop" id="twHostTop"></div>
+        </div>
+
+        <div class="twToolRow">
+          <button onclick="twEdIns('## ')" title="插入二级标题">H2</button>
+          <button onclick="twEdIns('**加粗文字**')" title="加粗">加粗</button>
+          <button onclick="twEdIns('> 引用内容')" title="引用">引用</button>
+          <button onclick="twEdIns('[图片占位]')" title="图片占位">图片</button>
+          <button onclick="twEdIns('\n---\n')" title="分割线">分割线</button>
+          <button onclick="twEdIns('- 列表项\n')" title="列表">列表</button>
+          <div class="twHostAi" id="twHostAi"></div>
+        </div>
+
+        <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()"></textarea>
+
+        <div class="twStat">
+          <span>字数 <b id="twStWc">0</b></span>
+          <span>段落 <b id="twStPs">0</b></span>
+          <span>预计阅读 <b id="twStRd">0</b> 分钟</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 右：排版预览 ========== -->
+    <div class="twCard twColPvw">
+      <div class="twCardHd">排版预览 <span class="twCnt" id="twPvW"></span></div>
+      <div class="twModeRow">
+        <button class="on" onclick="twPvMode(this,'gzh')">公众号样式</button>
+        <button onclick="twPvMode(this,'md')">原始 Markdown</button>
+      </div>
+      <div class="twPvwWrap twScroll">
+        <div class="twPvw" id="twPvwBox"></div>
+      </div>
+      <div class="twPvwFoot" id="twHostPvw"></div>
+    </div>
+
+  </div>
+</div>
+        </div>
     </div>
 
     <!-- 手机端右上角浮动 dock：同步状态小圆点 + ⋮ 更多入口 -->
@@ -15518,6 +15793,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 renderParentingPage();
             } else if (page === 'health') {
                 try { if (typeof renderHealthPage === 'function') renderHealthPage(); } catch (e) {}
+            } else if (page === 'tw') {
+                try { if (typeof renderTwPage === 'function') renderTwPage(); } catch (e) {}
             } else {
                 render();
             }
@@ -34252,6 +34529,453 @@ function hpClearDemo(){
   window.renderHealthPage = renderHealthPage;
 
 })();
+(function(){
+  'use strict';
+  /* ================= NIKO · 推文工坊 v1（2026-09-17 并入）=================
+     三栏工作台：素材箱+草稿 / 编辑器 / 公众号纸宽预览
+     定版：三栏比例「预览优先」（左236 / 中1fr / 右468，正文行宽 660）
+           按钮「就近放置」（AI 贴工具条尾 · 存入知识库贴标题行 · 复制到公众号贴预览底）
+     数据：一个 key 存整个板块（niko_tw_v1），经 safeStorage；渲染前必须重读（铁律 §5） */
+  var TW_STORE = 'niko_tw_v1';
+  var TW_MAX = 200;                 // 素材/草稿条数上限，防止把 localStorage 撑爆
+  var TW_VIEWS = ['write', 'both', 'pvw'];   // 视图模式：写作优先 / 三栏 / 预览优先
+  var T = { drafts: [], inbox: [], cur: null };
+  var saveTimer = null;
+
+  function $(id){ return document.getElementById(id); }
+  function twEsc(s){ return escapeHtml(s == null ? '' : s); }   // 用本体的 escapeHtml
+  function twUid(){ return 'tw' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function twToday(){
+    var d = new Date();
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function twToast(msg){ try { if (typeof showToast === 'function') showToast(msg); } catch (e) {} }
+
+  function twLoad(){
+    var raw = safeStorage.get(TW_STORE, null);
+    T = (raw && typeof raw === 'object') ? raw : { drafts: [], inbox: [], cur: null };
+    if (!Array.isArray(T.drafts)) T.drafts = [];
+    if (!Array.isArray(T.inbox)) T.inbox = [];
+    if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
+    if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
+    if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
+      T.cur = T.drafts.length ? T.drafts[0].id : null;
+    }
+  }
+  function twSave(){ safeStorage.set(TW_STORE, T); }
+  function twSaveSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(twSave, 700); }
+
+  function twBlank(){ return { id: twUid(), title: '', body: '', updatedAt: new Date().toISOString() }; }
+  function twCur(){
+    var d = null;
+    for (var i = 0; i < T.drafts.length; i++) if (T.drafts[i].id === T.cur) d = T.drafts[i];
+    return d;
+  }
+
+  /* ---------- Markdown → 公众号 HTML（轻量，只覆盖写推文常用的几种）---------- */
+  function twRenderMd(md){
+    var lines = String(md || '').split('\n'), out = [], i = 0;
+    function inline(s){
+      s = twEsc(s);
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      return s;
+    }
+    while (i < lines.length){
+      var ln = lines[i];
+      if (/^\[图片占位\]\s*$/.test(ln)) { out.push('<div class="twPh">图片占位</div>'); i++; continue; }
+      if (/^###\s+/.test(ln)) { out.push('<h3>' + inline(ln.replace(/^###\s+/, '')) + '</h3>'); i++; continue; }
+      if (/^##\s+/.test(ln)) { out.push('<h2>' + inline(ln.replace(/^##\s+/, '')) + '</h2>'); i++; continue; }
+      if (/^#\s+/.test(ln)) { out.push('<h1>' + inline(ln.replace(/^#\s+/, '')) + '</h1>'); i++; continue; }
+      if (/^---+\s*$/.test(ln)) { out.push('<hr>'); i++; continue; }
+      if (/^>\s?/.test(ln)) {
+        var bq = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) { bq.push(inline(lines[i].replace(/^>\s?/, ''))); i++; }
+        out.push('<blockquote>' + bq.join('<br>') + '</blockquote>'); continue;
+      }
+      if (/^-\s+/.test(ln)) {
+        var li = [];
+        while (i < lines.length && /^-\s+/.test(lines[i])) { li.push('<li>' + inline(lines[i].replace(/^-\s+/, '')) + '</li>'); i++; }
+        out.push('<ul>' + li.join('') + '</ul>'); continue;
+      }
+      if (/^\s*$/.test(ln)) { i++; continue; }
+      var ps = [];
+      while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#|>|-\s|---|\[图片占位\])/.test(lines[i])) {
+        ps.push(inline(lines[i])); i++;
+      }
+      if (ps.length) out.push('<p>' + ps.join('<br>') + '</p>');
+    }
+    return out.join('\n');
+  }
+
+  /* ---------- 手机端遵守单滚架构：正文框自动撑高，不做内滚 ---------- */
+  function twEdAutoH(){
+    var ta = $('twBody');
+    if (!ta) return;
+    if (window.matchMedia('(max-width:900px)').matches){
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(300, ta.scrollHeight + 2) + 'px';
+    } else {
+      ta.style.height = '';
+    }
+  }
+
+  /* ---------- 中栏渲染 ---------- */
+  function twEdRender(){
+    var d = twCur();
+    var titleEl = $('twTitle'), bodyEl = $('twBody');
+    if (!titleEl || !bodyEl) return;
+    var title = titleEl.value || '';
+    var body = bodyEl.value;
+    var modeBtn = document.querySelector('#twPage .twModeRow button.on');
+    var isMd = modeBtn && modeBtn.textContent.indexOf('Markdown') >= 0;
+    var box = $('twPvwBox');
+    if (box){
+      if (isMd) box.innerHTML = '<pre>' + twEsc(body) + '</pre>';
+      else box.innerHTML = '<h1>' + twEsc(title || '未命名') + '</h1><div class="twMeta">' + twToday() + ' · NIKO</div>' + twRenderMd(body);
+    }
+    var plain = body.replace(/[#>*`\-\[\]]/g, '');
+    var wc = plain.replace(/\s/g, '').length;
+    var ps = body.split('\n').filter(function(l){ return l.trim() && !/^#/.test(l); }).length;
+    if ($('twStWc')) $('twStWc').textContent = wc;
+    if ($('twStPs')) $('twStPs').textContent = ps;
+    if ($('twStRd')) $('twStRd').textContent = Math.max(1, Math.round(wc / 400));
+    if ($('twPvW')) $('twPvW').textContent = isMd ? '源码' : '公众号 · 376px';
+    // 草稿列表里那一行的「N 字」跟着真实字数走
+    if ($('twDfCnt')) $('twDfCnt').textContent = T.drafts.length + ' 篇';
+    var curMeta = document.querySelector('#twDfList .twDraftItem.on .twM');
+    if (curMeta) curMeta.textContent = '编辑中 · ' + wc + ' 字';
+    // 同步内存 → 落盘（防抖）
+    if (d){ d.title = title; d.body = body; d.updatedAt = new Date().toISOString(); twSaveSoon(); }
+    twEdAutoH();
+  }
+
+  /* ---------- 左栏：素材箱 ---------- */
+  function twIbRender(){
+    var box = $('twIbList');
+    if (!box) return;
+    box.innerHTML = T.inbox.length ? T.inbox.map(function(it, idx){
+      return '<div class="twIbItem" onclick="twIbUse(' + idx + ')">' +
+        '<span class="twDel" onclick="event.stopPropagation();twIbDel(' + idx + ')" title="删除">×</span>' +
+        '<div class="twT">' + twEsc(it.t) + '</div><div class="twM">' + twEsc(it.m || '手动') + '</div></div>';
+    }).join('') : '<div class="twEmpty">素材箱是空的。看到好句子、好链接，粘在下面一行里点「存」，写稿时点一下就能插进正文。</div>';
+    if ($('twIbCnt')) $('twIbCnt').textContent = T.inbox.length ? (T.inbox.length + ' 条') : '';
+    twSyncDemoBtn();
+  }
+  function twIbAdd(){
+    var el = $('twIbInput');
+    if (!el) return;
+    var v = (el.value || '').trim();
+    if (!v) { twToast('先写点东西'); return; }
+    T.inbox.unshift({ id: twUid(), t: v, m: '手动', date: twToday() });
+    if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
+    el.value = '';
+    twSave(); twIbRender();
+    twToast('已存入素材箱');
+  }
+  function twIbUse(i){
+    var it = T.inbox[i], ta = $('twBody');
+    if (!it || !ta) return;
+    ta.value = ta.value.replace(/\s*$/, '') + '\n\n> 素材：' + it.t + '\n';
+    twEdRender();
+    twToast('素材已插到正文末尾');
+  }
+  function twIbDel(i){
+    if (!T.inbox[i]) return;
+    T.inbox.splice(i, 1);
+    twSave(); twIbRender();
+  }
+
+  /* ---------- 左栏：我的草稿 ---------- */
+  function twSyncDemoBtn(){
+    var b = $('twDemoBtn');
+    if (!b) return;
+    var has = T.drafts.some(function(x){ return x.demo; }) || T.inbox.some(function(x){ return x.demo; });
+    b.textContent = has ? '清示例' : '示例';
+    b.title = has ? '清掉所有带「示例」标记的草稿和素材（真实内容不受影响）'
+                  : '载入一篇示例草稿 + 三条示例素材';
+  }
+  function twDfRender(){
+    var box = $('twDfList');
+    if (!box) return;
+    var onlyBlank = T.drafts.length === 1
+      && !String(T.drafts[0].title || '').trim()
+      && !String(T.drafts[0].body || '').trim();
+    if (onlyBlank){
+      box.innerHTML = '<div class="twEmpty">这里是空的。直接在中栏写标题和正文就行，'
+        + '写完点「复制到公众号」再粘进公众号编辑器。<br>想先看看长什么样，点上面的「示例」。</div>';
+    } else {
+      box.innerHTML = T.drafts.map(function(d, idx){
+        var t = (d.title || '').trim() || '（未命名草稿）';
+        var meta = (d.id === T.cur) ? ('编辑中 · ' + (d.body || '').replace(/\s/g, '').length + ' 字')
+                                   : ((d.updatedAt || '').slice(0, 10) + ' 更新');
+        return '<div class="twDraftItem' + (d.id === T.cur ? ' on' : '') + '" onclick="twDfPick(' + idx + ')">' +
+          '<span class="twDel" onclick="event.stopPropagation();twDfDel(' + idx + ')" title="删除这篇草稿">×</span>' +
+          '<div class="twT">' + twEsc(t) + '</div><div class="twM">' + meta + '</div></div>';
+      }).join('');
+    }
+    if ($('twDfCnt')) $('twDfCnt').textContent = T.drafts.length + ' 篇';
+    twSyncDemoBtn();
+  }
+  function twDfPick(i){
+    var d = T.drafts[i];
+    if (!d) return;
+    T.cur = d.id;
+    twSave();
+    twDfRender(); twEdLoadInto(); twEdRender();
+    twToast('已切到《' + ((d.title || '').trim() || '未命名草稿') + '》');
+  }
+  function twDfNew(){
+    var d = twBlank();
+    T.drafts.unshift(d);
+    if (T.drafts.length > TW_MAX) T.drafts = T.drafts.slice(0, TW_MAX);
+    T.cur = d.id;
+    twSave(); twDfRender(); twEdLoadInto(); twEdRender();
+    var t = $('twTitle'); if (t) t.focus();
+    twToast('新建了一篇草稿');
+  }
+  function twDfDel(i){
+    var d = T.drafts[i];
+    if (!d) return;
+    var name = (d.title || '').trim() || '（未命名草稿）';
+    if (!window.confirm('删除草稿《' + name + '》？删了就找不回来了。')) return;
+    T.drafts.splice(i, 1);
+    if (T.cur === d.id) T.cur = T.drafts.length ? T.drafts[0].id : null;
+    if (!T.drafts.length){ var nb = twBlank(); T.drafts.push(nb); T.cur = nb.id; }
+    twSave(); twDfRender(); twEdLoadInto(); twEdRender();
+    twToast('已删除');
+  }
+  function twEdLoadInto(){
+    var d = twCur();
+    if ($('twTitle')) $('twTitle').value = d ? (d.title || '') : '';
+    if ($('twBody')) $('twBody').value = d ? (d.body || '') : '';
+  }
+
+  /* ---------- 编辑器工具条 ---------- */
+  function twEdIns(s){
+    var ta = $('twBody');
+    if (!ta) return;
+    var p = (typeof ta.selectionStart === 'number') ? ta.selectionStart : ta.value.length;
+    ta.value = ta.value.slice(0, p) + s + ta.value.slice(p);
+    ta.focus();
+    ta.selectionStart = ta.selectionEnd = p + s.length;
+    twEdRender();
+  }
+  function twPvMode(btn, m){
+    var bs = document.querySelectorAll('#twPage .twModeRow button');
+    for (var i = 0; i < bs.length; i++) bs[i].classList.remove('on');
+    if (btn) btn.classList.add('on');
+    twEdRender();
+  }
+
+  /* ---------- 三个动作（就近放置）---------- */
+  function twPlain(md){
+    return String(md || '').replace(/^#{1,3}\s*/gm, '').replace(/\*\*/g, '').replace(/^>\s?/gm, '').replace(/^-\s+/gm, '· ');
+  }
+  function twAiPrompt(){
+    var d = twCur(); if (!d) return;
+    var title = $('twTitle') ? $('twTitle').value : '';
+    var body = twPlain($('twBody') ? $('twBody').value : '');
+    var ib = T.inbox.slice(0, 5).map(function(x, i){ return (i + 1) + '. ' + x.t; }).join('\n');
+    var p = '我在写一篇公众号推文，请你帮我润色和补全。\n\n'
+      + '【标题】' + title + '\n\n'
+      + '【我的正文草稿】\n' + body + '\n\n'
+      + (ib ? '【我收集的素材参考】\n' + ib + '\n\n' : '')
+      + '【要求】\n1. 保留我的原意和个人语气，不要写成营销号\n2. 段落短一些，适合手机阅读\n3. 不要编造我没提供的事实和数据\n4. 给出修改后的全文';
+    twCopy(p, '提示词已复制，去问任意 AI 就行');
+  }
+  function twExportGzh(){
+    var d = twCur(); if (!d) return;
+    var title = ($('twTitle') ? $('twTitle').value : '') || '未命名';
+    var body = $('twBody') ? $('twBody').value : '';
+    var html = '<section style="font-size:15px;line-height:1.8;color:#333;">'
+      + '<h1 style="font-size:20px;font-weight:bold;line-height:1.4;">' + twEsc(title) + '</h1>'
+      + twRenderMd(body)
+        .replace(/<h2>/g, '<h2 style="font-size:17px;font-weight:bold;margin:22px 0 10px;padding-left:10px;border-left:4px solid #07c160;">')
+        .replace(/<h3>/g, '<h3 style="font-size:16px;font-weight:bold;margin:18px 0 8px;">')
+        .replace(/<p>/g, '<p style="margin:0 0 14px;">')
+        .replace(/<blockquote>/g, '<blockquote style="margin:0 0 14px;padding:10px 14px;background:#f7f7f7;border-left:3px solid #ddd;color:#666;font-size:14px;">')
+        .replace(/<hr>/g, '<hr style="border:none;border-top:1px solid #eee;margin:20px 0;">')
+      + '</section>';
+    twCopy(html, '公众号样式 HTML 已复制，去公众号编辑器直接粘贴');
+  }
+  function twToKb(){
+    var d = twCur(); if (!d) return;
+    var title = (($('twTitle') ? $('twTitle').value : '') || '').trim();
+    var body = ($('twBody') ? $('twBody').value : '') || '';
+    if (!title && !body.trim()){ twToast('先写点内容再存'); return; }
+    if (typeof addToKnowledge !== 'function'){ twToast('知识库模块没加载，稍后再试'); return; }
+    var ok = addToKnowledge({
+      title: title || ('推文草稿 ' + twToday()),
+      body: body,
+      para: '03-Resources',
+      category: '副业',
+      tags: ['推文'],
+      from: '推文工坊',
+      dedup: true
+    });
+    if (ok) { d.title = title; twSaveSoon(); }
+  }
+  function twCopy(text, okMsg){
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;left:-9999px;';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); twToast(okMsg); }
+      catch (e) { twToast('复制失败，请手动选中'); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ twToast(okMsg); }, fallback);
+    } else fallback();
+  }
+
+  /* ---------- 手机页签 ---------- */
+  function twMobileTab(k){
+    ['inbox', 'pvw'].forEach(function(x){
+      var c = document.querySelector('#twPage .twCol' + x.charAt(0).toUpperCase() + x.slice(1));
+      if (c) c.classList.remove('show');
+    });
+    if ($('twMtEdit')) $('twMtEdit').classList.toggle('on', k === 'edit');
+    if ($('twMtInbox')) $('twMtInbox').classList.toggle('on', k === 'inbox');
+    if ($('twMtPvw')) $('twMtPvw').classList.toggle('on', k === 'pvw');
+    if (k !== 'edit'){
+      var c = document.querySelector('#twPage .twCol' + k.charAt(0).toUpperCase() + k.slice(1));
+      if (c) c.classList.add('show');
+    }
+    twEdAutoH();
+  }
+
+  /* ---------- 视图模式（写作 / 双栏 / 预览）----------
+     钩子 = #twPage[data-twview]，样式全在 css 段末尾；这里只负责挂属性 + 亮按钮。
+     模式是「UI 偏好」不是「内容」，但一起存进 niko_tw_v1，省一个 key。 */
+  function twApplyView(v){
+    if (TW_VIEWS.indexOf(v) < 0) v = 'both';
+    var pg = $('twPage');
+    if (pg) pg.setAttribute('data-twview', v);
+    var ids = { write: 'twVwWrite', both: 'twVwBoth', pvw: 'twVwPvw' };
+    TW_VIEWS.forEach(function(k){
+      var b = $(ids[k]);
+      if (b) b.classList.toggle('on', k === v);
+    });
+    return v;
+  }
+  function twSetView(v){
+    T.view = twApplyView(v);
+    twSave();
+    twEdAutoH();          // 列宽/行宽变了，正文框高度要跟着重算（窄屏才生效）
+  }
+
+  /* ---------- 动作按钮：就近放置（定版，不再提供其它落点）---------- */
+  function twMkBtn(id, label, pri, tip, fn){
+    var b = document.createElement('button');
+    b.id = id;
+    b.className = 'twActBtn' + (pri ? ' twPri' : '');
+    b.textContent = label;
+    b.title = tip;
+    b.onclick = fn;
+    return b;
+  }
+  function twPlaceBtns(){
+    var top = $('twHostTop'), ai = $('twHostAi'), pv = $('twHostPvw');
+    if (!top || !ai || !pv) return;
+    if (!document.getElementById('twBtnKb')){
+      top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 推文）', twToKb));
+      ai.appendChild(twMkBtn('twBtnAi', '复制提示词问 AI', false, '把标题 + 正文 + 素材整理成提示词复制走', twAiPrompt));
+      pv.appendChild(twMkBtn('twBtnPub', '复制到公众号', true, '按公众号样式复制 HTML，直接粘进公众号编辑器', twExportGzh));
+    }
+  }
+
+  /* ---------- 示例数据（带 demo 标记，可一键清掉，不影响真实草稿）---------- */
+  function twDemoLoad(){
+    var dm = [
+      { id: twUid(), demo: true, title: '久坐三年，我的颈椎是怎么救回来的', body: [
+        '## 一、先说我踩的坑', '',
+        '去年体检，医生说我颈椎曲度变直了。当时我没当回事，直到肩胛骨开始时不时地疼。', '',
+        '去看医生，他给的话很短：**不能长时间保持一个动作**。开了药，让我先吃 7 到 10 天。', '',
+        '> 我当时以为问题在颈椎本身。后来才明白，问题在「不动」。', '',
+        '## 二、我做的三件事', '',
+        '- 每 30 分钟强制起身 2 分钟，用工具提醒，不靠自觉',
+        '- 换了显示器的位置，屏幕顶部和视线齐平',
+        '- 每周游泳两次，医生说这只能算辅助，不能替代打断久坐', '',
+        '[图片占位]', '',
+        '## 三、写给你的一句话', '',
+        '如果你也是长期伏案，别等疼了再管。先做的不是买护颈仪，是**站起来**。', '',
+        '---', '',
+        '参考文献：国家卫健委 2026-09-07 发布会相关表述。'
+      ].join('\n'), updatedAt: new Date().toISOString() }
+    ];
+    var di = [
+      { id: twUid(), demo: true, t: '颈椎曲度变直的康复训练有哪些', m: '示例 · 链接', date: twToday() },
+      { id: twUid(), demo: true, t: 'AI 辅助视频制作的真实工作流', m: '示例 · 文字', date: twToday() },
+      { id: twUid(), demo: true, t: '独立游戏立项要考虑的三件事', m: '示例 · 灵感', date: twToday() }
+    ];
+    T.drafts = dm.concat(T.drafts.filter(function(x){ return !x.demo; }));
+    T.inbox = di.concat(T.inbox.filter(function(x){ return !x.demo; }));
+    T.cur = T.drafts[0].id;
+    twSave(); twDfRender(); twIbRender(); twEdLoadInto(); twEdRender();
+    twToast('已载入一篇示例（点「清空示例」可一键去掉）');
+  }
+  function twDemoClear(){
+    var n = 0;
+    ['drafts', 'inbox'].forEach(function(k){
+      var keep = [];
+      T[k].forEach(function(x){ if (x.demo) n++; else keep.push(x); });
+      T[k] = keep;
+    });
+    if (!T.drafts.length){ var nb = twBlank(); T.drafts.push(nb); T.cur = nb.id; }
+    if (!T.drafts.some(function(d){ return d.id === T.cur; })) T.cur = T.drafts[0].id;
+    twSave(); twDfRender(); twIbRender(); twEdLoadInto(); twEdRender();
+    twToast(n ? ('已清掉 ' + n + ' 条示例') : '没有示例数据');
+  }
+
+  function twDemoToggle(){
+    var has = T.drafts.some(function(x){ return x.demo; }) || T.inbox.some(function(x){ return x.demo; });
+    if (has) twDemoClear(); else twDemoLoad();
+  }
+
+  /* ---------- 页面入口（由 switchPage 派发）---------- */
+  function renderTwPage(){
+    twLoad();                       // 铁律 §5：渲染前必须重读 localStorage
+    if (!T.drafts.length){          // 首次进入直接给一张空白稿纸，不塞假数据
+      var d = twBlank();
+      T.drafts.push(d);
+      T.cur = d.id;
+      twSave();
+    }
+    twPlaceBtns();
+    twApplyView(T.view || 'both');   // 每次进页面都按存储的模式摆好栏位
+    twDfRender();
+    twIbRender();
+    twEdLoadInto();
+    twEdRender();
+  }
+
+  window.addEventListener('resize', twEdAutoH);
+
+  /* ---------- 导出（只导出 HTML onclick 真正用到的）---------- */
+  window.renderTwPage = renderTwPage;
+  window.twIbAdd = twIbAdd;
+  window.twIbUse = twIbUse;
+  window.twIbDel = twIbDel;
+  window.twDfPick = twDfPick;
+  window.twDfNew = twDfNew;
+  window.twDfDel = twDfDel;
+  window.twEdRender = twEdRender;
+  window.twEdIns = twEdIns;
+  window.twPvMode = twPvMode;
+  window.twAiPrompt = twAiPrompt;
+  window.twExportGzh = twExportGzh;
+  window.twToKb = twToKb;
+  window.twMobileTab = twMobileTab;
+  window.twSetView = twSetView;
+  window.twDemoLoad = twDemoLoad;
+  window.twDemoClear = twDemoClear;
+  window.twDemoToggle = twDemoToggle;
+})();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
         // 当云同步模块拉取数据写入 localStorage 后，派发 niko:datachanged 事件
@@ -36024,7 +36748,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609180941";
+        window.NIKO_VERSION = "202609181047";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
