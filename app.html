@@ -4138,8 +4138,20 @@
         }
         /* 项目旗帜（2026-09-07）：任务条标题前的地区旗 */
         .ev-flag { flex-shrink: 0; font-size: 11px; line-height: 1; }
-        /* 标题主体：桌面单行截断（悬停有全名），手机端两行折行 */
-        .ev-title-main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+        /* 标题主体（2026-09-18 用户要求「优先保障需求全名能显示完整」）：
+           桌面也折两行——短名字仍占一行（line-clamp 自动），只有长名字才多占一行；
+           悬停 item.title 仍给「项目·全名·状态」完整信息 */
+        .ev-title-main {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.25;
+            word-break: break-word;
+        }
         .more-events {
             font-size: 10px;
             color: #999;
@@ -4173,6 +4185,44 @@
             flex-direction: column;
             overflow: hidden;
             transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        /* ===== 右侧「当天任务」栏 收起/展开（2026-09-18 用户要求：核心只看日历，右栏可关）=====
+           收起后日历多出 320px + 12px 间距 → 格子变宽，长任务名更容易整条放下 */
+        .detail-panel-handle {
+            display: none;                 /* 默认隐藏，仅收起态由 applyDayDetailPanel() 打开 */
+            width: 26px;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #e8e6e1;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #667eea;
+            font-size: 12px;
+            letter-spacing: 2px;
+            writing-mode: vertical-rl;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+        }
+        .detail-panel-handle:hover { background: #f5f4f1; border-color: #667eea; }
+        body.dark-mode .detail-panel-handle { background: #1e1e2c; border-color: #333345; color: #8ea8ff; }
+        body.dark-mode .detail-panel-handle:hover { background: #252535; border-color: #8ea8ff; }
+        #detailPanelToggle.active { background: #eef2ff; border-color: #a5b4fc; color: #4f46e5; }
+        body.dark-mode #detailPanelToggle.active { background: rgba(102,126,234,.18); border-color: rgba(102,126,234,.5); color: #a9b8ff; }
+        @media (max-width: 768px) {
+            /* 手机端 #planContentArea 是纵向排列，拉手改成整条横向块落在日历下方，不挤布局、好点按 */
+            .detail-panel-handle {
+                width: 100%;
+                flex: none;
+                writing-mode: horizontal-tb;
+                letter-spacing: normal;
+                padding: 9px 0;
+                font-size: 13px;
+                min-height: 40px;
+                border-radius: 9px;
+            }
         }
         .panel-header {
             padding: 14px 18px;
@@ -12032,6 +12082,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button id="viewBoardBtn" onclick="setView('board')">📋 看板</button>
                         <button id="viewGanttBtn" onclick="setView('gantt')">📊 甘特图</button>
                     </div>
+                    <button class="btn-small" id="detailPanelToggle" onclick="toggleDayDetailPanel()" title="收起/展开右侧「当天任务」栏，给日历腾出宽度。收起后日历右缘留一个竖条拉手，随时点开">▤ 详情</button>
                     <span class="dg-coin-chip" id="planCoinChip" title="游戏时间余额 · 水位 = 距 4 小时（和今日看板同一本账）"><span class="dg-coin-fill"></span><span class="dg-coin-txt">🪙 0分</span></span>
                     <div class="view-toggle" id="scopeModeGroup" title="工作 / 生活模式：上班专注工作项目，下班只看生活任务（看书、接孩子…）。自动 = 到点自动切换">
                         <button data-mode="auto" onclick="setScopeMode('auto')">⏰ 自动</button>
@@ -12145,6 +12196,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                     <div class="day-task-list" id="dayTaskList"></div>
                 </div>
+                <div id="detailPanelHandle" class="detail-panel-handle" onclick="toggleDayDetailPanel()" title="展开右侧「当天任务」栏">详情</div>
                 <div id="boardWrapper" style="display:none;flex:1;overflow:hidden;">
                     <div class="board-view" id="boardContainer"></div>
                 </div>
@@ -16100,7 +16152,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('viewGanttBtn').classList.toggle('active', view === 'gantt');
             document.getElementById('calendarNavBar').style.display = view === 'calendar' ? 'flex' : 'none';
             document.getElementById('calendarWrapper').style.display = view === 'calendar' ? 'block' : 'none';
-            document.getElementById('dayDetailPanel').style.display = view === 'calendar' ? 'flex' : 'none';
+            // 右侧「当天任务」栏：收起态由 计划看板 的 applyDayDetailPanel() 统一决定（顶栏开关 + 右缘拉手）
+            if (typeof applyDayDetailPanel === 'function') applyDayDetailPanel(view === 'calendar');
+            else document.getElementById('dayDetailPanel').style.display = view === 'calendar' ? 'flex' : 'none';
             document.getElementById('boardWrapper').style.display = view === 'board' ? 'flex' : 'none';
             document.getElementById('ganttWrapper').style.display = view === 'gantt' ? 'flex' : 'none';
             if (view === 'calendar') renderPlanPage();
@@ -18080,6 +18134,41 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
         })();
 // ===== 计划看板专属JS =====
+
+        // ===== 右侧「当天任务」栏 收起/展开（2026-09-18 用户要求：核心只看日历，右栏可关）=====
+        // ⚠️ 必须放在 @@SECTION:js@@ 内才会被 verify_merge 注入到本体；文件顶部那个 <script> 只是独立测试脚手架，不注入。
+        // 状态存 localStorage（niko_detail_panel_collapsed）跨会话记住；开关在顶栏，收起后日历右缘留竖条拉手。setView 那边的挂钩在 总框架.html。
+        function isDetailPanelCollapsed() {
+            try { return localStorage.getItem('niko_detail_panel_collapsed') === '1'; } catch (e) { return false; }
+        }
+        function applyDayDetailPanel(isCalendar) {
+            var panel = document.getElementById('dayDetailPanel');
+            var handle = document.getElementById('detailPanelHandle');
+            var btn = document.getElementById('detailPanelToggle');
+            if (!panel) return;
+            var collapsed = isDetailPanelCollapsed();
+            if (!isCalendar) {              // 看板 / 甘特图：右栏不适用，面板与拉手一起收起
+                panel.style.display = 'none';
+                if (handle) handle.style.display = 'none';
+            } else if (collapsed) {
+                panel.style.display = 'none';
+                if (handle) handle.style.display = 'flex';
+            } else {
+                panel.style.display = 'flex';
+                if (handle) handle.style.display = 'none';
+            }
+            if (btn) btn.classList.toggle('active', !collapsed);
+        }
+        function toggleDayDetailPanel() {
+            var next = !isDetailPanelCollapsed();
+            try { localStorage.setItem('niko_detail_panel_collapsed', next ? '1' : '0'); } catch (e) {}
+            applyDayDetailPanel(typeof currentView === 'undefined' ? true : currentView === 'calendar');
+            if (typeof showToast === 'function') showToast(next ? '已收起右栏 · 日历变宽' : '已展开右栏 · 当天任务');
+        }
+        (function initDayDetailPanelState() {
+            function apply() { applyDayDetailPanel(typeof currentView === 'undefined' ? true : currentView === 'calendar'); }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply); else apply();
+        })();
 
         // ===== 每周起始日（2026-09-06 v2）：日历网格固定周一→周日排列（周末置尾）；统计口径（本周副本/任务量/底片）仍按 nikoWeekStartDay（周四周期） =====
         // calMonday（显示用自然周周一）定义在总框架 getMonday 旁，全站唯一
@@ -36755,7 +36844,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609181130";
+        window.NIKO_VERSION = "202609181141";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
