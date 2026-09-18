@@ -15479,8 +15479,29 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         }
 
-        // ===== 每周起始日（2026-09-06）：用户流程周期 = 周四开始。niko_week_start: 0=周日..6=周六，全局周计算统一走这里 =====
-        function nikoWeekStartDay() { const v = Number(safeStorage.get('niko_week_start', 4)); return (v >= 0 && v <= 6) ? v : 4; }
+        // ===== 每周起始日（2026-09-06 立 · 2026-09-18 用户更正）：用户流程周期 = **周五开始 → 下周四结束** =====
+        // 原口径写的是「周四→下周三」，用户 09-18 原话「本周副本的周期算错了，应该是周五开始、下周四结束」；
+        // 新口径与排期表摊派口径（铁律 §8.7「就是周五开始，到下周四」）完全一致。
+        // niko_week_start: 0=周日..6=周六；全局周计算（计划表头/本周任务量/本周副本/底片/日记周/游戏周/读书周/周复盘/便签收巡）统一走这里
+        const NIKO_WEEK_START_DEFAULT = 5;
+        function nikoWeekStartDay() {
+            const raw = safeStorage.get('niko_week_start', null);
+            if (raw === null || raw === undefined || raw === '') return NIKO_WEEK_START_DEFAULT;
+            const v = Number(raw);
+            return (isFinite(v) && v >= 0 && v <= 6) ? Math.round(v) : NIKO_WEEK_START_DEFAULT;
+        }
+        // 一次性迁移（2026-09-18）：本地已落过老默认 4（周四）的 → 改成新周期 5（周五）。
+        // 只跑一次（写标记）；之后用户仍可在计划看板工具条「周起始」下拉里自己改成任意一天，迁移不会再覆盖。
+        function nikoWeekStartMigrate0918() {
+            try {
+                if (safeStorage.get('niko_week_start_fix_0918', 0) == 1) return false;
+                if (Number(safeStorage.get('niko_week_start', NIKO_WEEK_START_DEFAULT)) === 4) safeStorage.set('niko_week_start', 5);
+                safeStorage.set('niko_week_start_fix_0918', 1);
+                return true;
+            } catch (e) { return false; }
+        }
+        window.nikoWeekStartMigrate0918 = nikoWeekStartMigrate0918;
+        nikoWeekStartMigrate0918();
 
         // ===== 侧边栏花园（2026-09-06）：门牌上的使用痕迹。≥2 次冒芽，≥8 双叶，≥20 三叶+小花；21 天不去叶枯 =====
         function navGardenState() { return safeStorage.get('niko_nav_garden', {}); }
@@ -17786,18 +17807,23 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
             if (btn) btn.classList.toggle('active', !collapsed);
         }
+        // 视图判定容错：单独双击本零件时，currentView 的 let 声明可能在另一个（不被注入的）脚本里没跑到，
+        // 直接 typeof 会抛 TDZ ReferenceError 并把整个 SECTION 脚本打断 —— 用 try/catch 兜住，按「日历视图」处理。
+        function planIsCalendarView() {
+            try { return currentView === 'calendar'; } catch (e) { return true; }
+        }
         function toggleDayDetailPanel() {
             var next = !isDetailPanelCollapsed();
             try { localStorage.setItem('niko_detail_panel_collapsed', next ? '1' : '0'); } catch (e) {}
-            applyDayDetailPanel(typeof currentView === 'undefined' ? true : currentView === 'calendar');
+            applyDayDetailPanel(planIsCalendarView());
             if (typeof showToast === 'function') showToast(next ? '已收起右栏 · 日历变宽' : '已展开右栏 · 当天任务');
         }
         (function initDayDetailPanelState() {
-            function apply() { applyDayDetailPanel(typeof currentView === 'undefined' ? true : currentView === 'calendar'); }
+            function apply() { applyDayDetailPanel(planIsCalendarView()); }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply); else apply();
         })();
 
-        // ===== 每周起始日（2026-09-06 v2）：日历网格固定周一→周日排列（周末置尾）；统计口径（本周副本/任务量/底片）仍按 nikoWeekStartDay（周四周期） =====
+        // ===== 每周起始日（2026-09-06 v2）：日历网格固定周一→周日排列（周末置尾）；统计口径（本周副本/任务量/底片）按 nikoWeekStartDay（当前流程周期 = 周五 → 下周四） =====
         // calMonday（显示用自然周周一）定义在总框架 getMonday 旁，全站唯一
         function renderWeekHeader() {
             const row = document.getElementById('weekHeaderRow');
@@ -20776,10 +20802,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             tblRender();
         }
 
-        // ---- 本周期查重（周四 → 下周四，跟随「每周起始日」设置）----
+        // ---- 本周期查重（周五 → 下周四，跟随「每周起始日」设置）----
         function tblWeekRange() {
             var start = (typeof getMonday === 'function') ? getMonday(new Date()) : (function () {
-                var d = new Date(), ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 4;
+                var d = new Date(), ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 5;
                 return new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() - ws + 7) % 7));
             })();
             var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 7);
@@ -35599,7 +35625,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609181155";
+        window.NIKO_VERSION = "202609181321";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
