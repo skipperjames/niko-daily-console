@@ -1144,6 +1144,12 @@
         #mainNavSection .nav-item.dragging { opacity: .4; }
         #mainNavSection .nav-item.drag-over { box-shadow: inset 0 2px 0 #8b5cf6; background: rgba(139,92,246,.10); }
         .nav-item#navSortToggle.active { background: rgba(139,92,246,.16); color: #a78bfa; }
+        /* ===== 板块显隐（2026-09-19）：排序模式里点眼睛切换；「今日」锁定不可隐 ===== */
+        .nav-eye { display: none; margin-left: 6px; cursor: pointer; font-size: 12px; opacity: .8; line-height: 1; }
+        .sidebar-left.sorting .nav-eye { display: inline-block; }
+        #mainNavSection .nav-item.nav-hidden { display: none; }
+        .sidebar-left.sorting #mainNavSection .nav-item.nav-hidden { display: flex; opacity: .45; }
+        .nav-more-item.nmp-hidden { opacity: .38; }
         body.dark-mode .dark-mode-toggle {
             background: #1a1a2a;
             border-color: #444;
@@ -16343,8 +16349,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     it.addEventListener('drop', onNavDrop);
                 }
             });
-            if (navSortMode) showToast('拖动板块调整顺序，再点「⇅ 调整板块顺序」完成');
-            else showToast('板块顺序已保存');
+            if (navSortMode) {
+                ensureNavEyes();
+                applyNavHidden();
+                showToast('拖动板块调顺序，点 👁 隐藏不常用板块；再点「⇅ 调整板块顺序」完成');
+            }
+            else showToast('板块设置已保存');
             if (typeof nikoSpark === 'function' && btn) nikoSpark(btn, '⇅', '#8b5cf6');
         }
         function onNavDragStart(e) {
@@ -16373,7 +16383,52 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (typeof nikoSpark === 'function') nikoSpark(dragged, '✓', '#8b5cf6');
             }
         }
-        document.addEventListener('DOMContentLoaded', applyNavOrder);
+        document.addEventListener('DOMContentLoaded', function () { applyNavOrder(); applyNavHidden(); });
+        // ===== 板块显隐（2026-09-19）：排序模式里点眼睛切换；「今日」锁定；手机「⋯」面板同步（隐藏项变暗，点击即恢复并跳转） =====
+        const NAV_HIDDEN_KEY = 'niko_nav_hidden';
+        function navHiddenList() { try { const a = JSON.parse(safeStorage.get(NAV_HIDDEN_KEY, '[]')); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+        function ensureNavEyes() {
+            navItems().forEach(it => {
+                if (it.getAttribute('data-nav') === 'today') return;
+                if (it.querySelector('.nav-eye')) return;
+                const eye = document.createElement('span');
+                eye.className = 'nav-eye';
+                eye.title = '隐藏 / 显示该板块';
+                eye.textContent = '👁';
+                eye.onclick = function (e) { e.stopPropagation(); toggleNavHidden(it.getAttribute('data-nav'), eye); };
+                it.appendChild(eye);
+            });
+        }
+        function applyNavHidden() {
+            const hid = navHiddenList();
+            navItems().forEach(it => {
+                const k = it.getAttribute('data-nav');
+                if (!k) return;
+                const off = hid.indexOf(k) >= 0;
+                it.classList.toggle('nav-hidden', off);
+                const eye = it.querySelector('.nav-eye');
+                if (eye) eye.textContent = off ? '🙈' : '👁';
+                const pi = document.querySelector('#navMorePanel .nav-more-item[data-navpage="' + k + '"]');
+                if (pi) {
+                    pi.classList.toggle('nmp-hidden', off);
+                    pi.onclick = function () { if (hid.indexOf(k) >= 0) toggleNavHidden(k); switchPage(k); hideNavMore(); };
+                }
+            });
+        }
+        function toggleNavHidden(key, el) {
+            if (!key || key === 'today') return;
+            let hid = navHiddenList();
+            const i = hid.indexOf(key);
+            if (i >= 0) hid.splice(i, 1); else hid.push(key);
+            safeStorage.set(NAV_HIDDEN_KEY, JSON.stringify(hid));
+            applyNavHidden();
+            // 隐藏的正好是当前页 → 回「今日」，避免停在看不见的入口上
+            try {
+                const act = document.querySelector('.page.active');
+                if (i < 0 && act && act.id === key + 'Page') switchPage('today');
+            } catch (e) {}
+            if (typeof nikoSpark === 'function' && el) nikoSpark(el, hid.indexOf(key) >= 0 ? '🙈' : '👁', '#8b5cf6');
+        }
         // 悬浮工具坞：手机端折叠态切换
         function toggleDock(e) {
             if (e) { e.stopPropagation(); e.preventDefault(); }
@@ -39625,7 +39680,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191626";
+        window.NIKO_VERSION = "202609191836";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
