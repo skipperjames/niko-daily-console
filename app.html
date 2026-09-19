@@ -417,6 +417,12 @@
         body.dark-mode .niko-update-tip b { color: #34d399; }
         .niko-update-tip.show { display: flex; }
         .niko-update-tip:active { transform: scale(0.97); }
+        /* v2.27：两态 —— 默认「后台下载中」，SW 写盘完成后切「已就绪」（点一下 0.1 秒生效） */
+        .niko-update-tip .tip-ok { display: none; }
+        .niko-update-tip.ready .tip-ok { display: inline; }
+        .niko-update-tip.ready .tip-dl { display: none; }
+        .niko-update-tip.ready { border-color: #10b981; }
+        body.dark-mode .niko-update-tip.ready { border-color: #34d399; }
         /* 手机端底部快捷 Tab 栏（替代繁琐的侧边栏滚动） */
         .niko-mobile-tabbar {
             display: none;
@@ -14540,10 +14546,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         </button>
         <button class="niko-float-more" onclick="toggleNavMore(event)" aria-label="更多">⋮</button>
     </div>
-    <!-- 新版本提示气泡（发现新版本时显示，点击立即更新） -->
+    <!-- 新版本提示气泡：两态。默认「正在后台下载」→ SW 写盘完成后切「已就绪，点一下立即切换」 -->
     <div class="niko-update-tip" id="nikoUpdateTip" onclick="nikoApplyUpdate()">
         <span class="dot"></span>
-        <span>发现新版本 <b id="nikoUpdateVer">v</b>，点此更新</span>
+        <span class="tip-dl">发现新版本 <b id="nikoUpdateVer">v</b>，正在后台下载…</span>
+        <span class="tip-ok">新版本 <b id="nikoUpdateVer2">v</b> 已就绪 · 点一下立即切换</span>
     </div>
     <!-- 同步详情 popover（点击小圆点展开） -->
     <div class="niko-sync-popover" id="nikoSyncPopover" onclick="event.stopPropagation()">
@@ -39618,7 +39625,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191548";
+        window.NIKO_VERSION = "202609191626";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
@@ -39626,13 +39633,38 @@ function hpClearDemo(){
         }
         window.nikoFmtBuildVer = nikoFmtBuildVer;
         function nikoApplyUpdate() {
-            var v = document.getElementById('nikoUpdateTip').getAttribute('data-ver') || '';
+            var tip = document.getElementById('nikoUpdateTip');
+            if (!tip) return;
+            var v = tip.getAttribute('data-ver') || '';
+            // ① 已就绪：SW 已把新版写进缓存 → 直接重载即命中缓存，0.1 秒切过去
+            if (tip.getAttribute('data-ready') === '1') {
+                try { location.reload(); } catch (e) {}
+                return;
+            }
+            // ② 还在后台下载中：受 SW 控制的页面 reload 只会拿到旧版，别让用户白等十几秒
+            if (typeof navigator !== 'undefined' && navigator.serviceWorker && navigator.serviceWorker.controller) {
+                var dl = tip.querySelector('.tip-dl');
+                if (dl && !dl.getAttribute('data-busy')) {
+                    var keep = dl.innerHTML;
+                    dl.setAttribute('data-busy', '1');
+                    dl.textContent = '新版本正在后台下载，稍等几秒就绪…';
+                    setTimeout(function () {
+                        dl.removeAttribute('data-busy');
+                        dl.innerHTML = keep;
+                        if (tip.getAttribute('data-ready') === '1') { tip.classList.add('ready', 'show'); }
+                    }, 4000);
+                }
+                return;
+            }
+            // ③ 兜底：没有 SW（浏览器不支持 / 注册失败）→ 退回带参数跳转强制拿新版
             if (v && location.pathname) {
-                // 带参数跳转绕过浏览器缓存加载最新版；页面加载后会自动用 history.replaceState 还原根地址
                 try { sessionStorage.setItem('niko_tip_ver', v); } catch (e) {}
                 location.href = location.pathname + '?v=' + v;
             }
         }
+        // ★ 修既有 bug：这个函数原来定义在 IIFE 里却没挂到 window，
+        //   而提示气泡是 onclick="nikoApplyUpdate()" → 点了直接 ReferenceError，等于按钮是坏的。
+        window.nikoApplyUpdate = nikoApplyUpdate;
         // 加载完成后若地址带 ?v= 或 ?_t= 参数，悄悄还原为根地址（仅改地址栏显示，不重新加载）
         try {
             if (location.search && /[?&](v|_t)=/.test(location.search) && history.replaceState) {
@@ -39645,34 +39677,74 @@ function hpClearDemo(){
             var cur = window.NIKO_VERSION || '';
             // 未注入版本号（直接打开 parts 开发文件）跳过检测
             if (!cur || cur.indexOf('__NIKO') === 0) return;
-            try {
-                var last = Number(localStorage.getItem('niko_ver_check_at') || 0);
-                if (Date.now() - last < 60 * 1000) return; // 1 分钟内已检测过，避免重复打扰（缩短可让部署更快触达）
-                localStorage.setItem('niko_ver_check_at', String(Date.now()));
-                setTimeout(function () {
-                    // v2.26 性能：先问几十字节的 niko_ver.json（此前直接 fetch 整页 ≈ 又下 800KB，一次刷新等于下两遍）
-                    var dir = location.pathname.replace(/[^/]*$/, '');
-                    fetch(dir + 'niko_ver.json?t=' + Date.now(), { cache: 'no-store' })
-                        .then(function (r) { if (!r.ok) throw new Error('no ver json'); return r.json(); })
-                        .then(function (j) { return (j && j.v) ? String(j.v) : ''; })
-                        .catch(function () {
-                            // 兜底：线上还没有 niko_ver.json（老部署）时退回整页比对
-                            return fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
-                                .then(function (r) { return r.text(); })
-                                .then(function (txt) { var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/); return m ? m[1] : ''; });
-                        })
-                        .then(function (online) {
-                            if (!online || !/^\d+$/.test(online)) return;
-                            if (Number(online) <= Number(cur)) return; // 已是最新
-                            var tip = document.getElementById('nikoUpdateTip');
-                            if (!tip) return;
-                            document.getElementById('nikoUpdateVer').textContent = 'v' + online;
-                            tip.setAttribute('data-ver', online);
-                            tip.classList.add('show');
-                        })
-                        .catch(function () {});
-                }, 2500); // 等首屏渲染完再检测，不抢加载带宽
-            } catch (e) {}
+
+            function fetchOnlineVer() {
+                // v2.26 性能：先问几十字节的 niko_ver.json（此前直接 fetch 整页 ≈ 又下 800KB，一次刷新等于下两遍）
+                var dir = location.pathname.replace(/[^/]*$/, '');
+                return fetch(dir + 'niko_ver.json?t=' + Date.now(), { cache: 'no-store' })
+                    .then(function (r) { if (!r.ok) throw new Error('no ver json'); return r.json(); })
+                    .then(function (j) { return (j && j.v) ? String(j.v) : ''; })
+                    .catch(function () {
+                        // 兜底：线上还没有 niko_ver.json（老部署）时退回整页比对
+                        return fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
+                            .then(function (r) { return r.text(); })
+                            .then(function (txt) { var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/); return m ? m[1] : ''; });
+                    });
+            }
+
+            // 态①「正在后台下载」：发现新版但 SW 还没下完，先如实告知，不要让用户傻等
+            function tipDownloading(online) {
+                var tip = document.getElementById('nikoUpdateTip');
+                if (!tip) return;
+                if (tip.getAttribute('data-ready') === '1') return; // 已就绪态不许被例行检查打回「下载中」
+                var v1 = document.getElementById('nikoUpdateVer');
+                if (v1) v1.textContent = 'v' + online;
+                tip.setAttribute('data-ver', online);
+                tip.removeAttribute('data-ready');
+                tip.classList.remove('ready');
+                tip.classList.add('show');
+            }
+            // 态②「已就绪」：SW 已把新版写进缓存 → 点一下 reload 就是新版（0.1 秒）
+            function tipReady(online) {
+                var tip = document.getElementById('nikoUpdateTip');
+                if (!tip) return;
+                var v2 = document.getElementById('nikoUpdateVer2');
+                if (v2 && online) v2.textContent = 'v' + online;
+                if (online) tip.setAttribute('data-ver', online);
+                tip.setAttribute('data-ready', '1');
+                tip.classList.add('ready', 'show');
+            }
+            window.nikoMarkUpdateReady = tipReady;
+
+            function checkNow(fromSW) {
+                try {
+                    var last = Number(localStorage.getItem('niko_ver_check_at') || 0);
+                    // 例行检查 1 分钟内做过就跳过；但 SW 通知触发的检查必须放行
+                    if (!fromSW && Date.now() - last < 60 * 1000) return;
+                    localStorage.setItem('niko_ver_check_at', String(Date.now()));
+                } catch (e) {}
+                fetchOnlineVer().then(function (online) {
+                    if (!online || !/^\d+$/.test(online)) return;
+                    if (Number(online) <= Number(cur)) return; // 已是最新
+                    // ★ 收到 SW 通知 = 新版已经写进缓存了 → 直接切「已就绪」（点一下 0.1 秒生效）
+                    //   这里绝不能再落到 tipDownloading，否则会永远停在「下载中」
+                    if (fromSW) { tipReady(online); return; }
+                    // 只是例行检查发现新版：SW 可能还在后台下载 → 先如实显示「下载中」
+                    tipDownloading(online);
+                }).catch(function () {});
+            }
+
+            // 等首屏渲染完再检测，不抢加载带宽
+            setTimeout(function () { checkNow(false); }, 2500);
+
+            // ★ v2.27 关键改造：SW 在后台把新版写进缓存后会 postMessage 通知我们，
+            //   收到才把提示切成「已就绪」——点一下 reload 命中缓存，0.1 秒切到新版。
+            //   在此之前用户只能 Ctrl+F5 硬刷（绕过 SW 与 HTTP 缓存，要完整重下 790KB，国内 15 秒起）。
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.addEventListener('message', function (ev) {
+                    if (ev && ev.data && ev.data.type === 'niko-sw-updated') checkNow(true);
+                });
+            }
         })();
 
         // ===== Service Worker 注册：接管缓存策略，确保每次加载最新版本 =====
