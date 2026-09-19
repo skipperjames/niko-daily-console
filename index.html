@@ -11199,6 +11199,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 #twPage .twSeam{width:1px;height:15px;background:var(--twLine);margin:0 2px;flex:0 0 auto;}
 #twPage .twToolRow button.twNew{border-color:var(--twAccent);background:var(--twAccentBg);
   color:var(--twAccent);font-weight:600;}
+/* 光标同步开关：关掉时退成普通按钮、不吃强调色 —— 一眼看得出开/关（2026-09-19） */
+#twPage .twToolRow button.twNew.off{border-color:var(--twLine);background:transparent;
+  color:var(--twTx2);font-weight:400;}
 
 /* C4 · 段落节奏条：正文框下常驻一条 22px 细条，每段一块、宽度 ∝ 段字数 */
 #twPage .twRhy{flex:0 0 auto;display:flex;align-items:center;gap:8px;margin-top:8px;height:22px;}
@@ -14026,10 +14029,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <span class="twSeam"></span>
           <button class="twNew" id="twBtnOutline" onclick="twOutlineOpen()" title="C1 · 按小标题列出全篇结构，点一行跳到那一段">☰ 大纲</button>
           <button class="twNew" id="twBtnText" onclick="twTextOpen()" title="C3 · 查「的地得 / 重复字 / 中英标点 / 中英空格」四类硬伤">🔍 文字自查</button>
+          <button class="twNew" id="twBtnSync" onclick="twSyncToggle()" title="光标同步 · 沉浸式写作：正文里点到哪一行，右侧排版预览就滚到那一段；再点一下关掉">⇄ 光标同步</button>
           <div class="twHostAi" id="twHostAi"></div>
         </div>
 
-        <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()"></textarea>
+        <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()" onclick="twSyncToCaret()" onkeyup="twSyncToCaret()" onselect="twSyncToCaret()"></textarea>
 
         <!-- C4 · 段落节奏条：每段一块、宽度 ∝ 段字数，超 150 字转红（与 twCheckRun 同口径） -->
         <div class="twRhy" id="twRhy">
@@ -33698,6 +33702,7 @@ function hpClearDemo(){
     if (!Array.isArray(T.pub)) T.pub = [];               // D7 发布记录（2026-09-18）
     if (T.pub.length > TW_MAX) T.pub = T.pub.slice(0, TW_MAX);
     if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
+    if (typeof T.sync !== 'boolean') T.sync = true;      // 光标同步默认开；用户关过就记住关（2026-09-19）
     if (!T.style || typeof T.style !== 'object') T.style = twDefStyle();  // 排版参数（皮肤/主色/零件/字号行距）一并落盘
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
       T.cur = T.drafts.length ? T.drafts[0].id : null;
@@ -33716,6 +33721,19 @@ function hpClearDemo(){
   /* ---------- Markdown → 公众号 HTML（内联样式，预览与导出共用）----------
      cfg 来自 twStyleCfg()；输出**全内联样式**，粘进公众号不会掉格式。
      排版零件（小标题 B3 / 高亮 B5 / 分割线 B6）在这一层套用。 */
+  /* ---------- 行首「块级标记」判定（★ 唯一口径：twRenderMd 与 twBlocks 共用）----------
+     2026-09-19 修 bug 时抽出来的。它必须是**各分支正则的严格并集**：
+     段落吞并循环的终止条件 =「空行 || twLsBlockStart 为真」，
+     这样「进得了段落循环的行」必然是「谁都不认的正文行」→ i 必然递增 → 不可能空转。
+     ⚠️ 以后加新块级语法（表格 / 代码块 / 有序列表…）**必须同时**改这里和对应分支；
+     只加分支不加这里，会重演 2026-09-19 那个死循环（页面直接卡死，只能强杀标签页）。 */
+  function twLsBlockStart(ln){
+    return /^\[图片占位\]\s*$/.test(ln) || /^#{1,3}\s+/.test(ln) || /^---+\s*$/.test(ln)
+        || /^>\s?/.test(ln) || /^-\s+/.test(ln);
+  }
+  function twLsParaStop(ln){
+    return /^\s*$/.test(ln) || twLsBlockStart(ln);
+  }
   function twRenderMd(md, cfg){
     cfg = cfg || twStyleCfg();
     var SK = TW_SKINDEF[cfg.skin] || TW_SKINDEF.a8;
@@ -33740,6 +33758,7 @@ function hpClearDemo(){
         + twInk(cfg) + ';">' + html.charAt(0) + '</span>' + html.slice(1);
     }
     while (i < lines.length){
+      var _g = i;                    // ★ 本行起始下标：循环末尾用它兜底（i 没动过就强推一格）
       var ln = lines[i];
       if (/^\[图片占位\]\s*$/.test(ln)) {
         out.push('<div style="' + SK.ph + 'display:flex;align-items:center;justify-content:center;margin:0 0 ' + cfg.ps + 'px;">图片占位</div>');
@@ -33763,10 +33782,16 @@ function hpClearDemo(){
       }
       if (/^\s*$/.test(ln)) { i++; continue; }
       var ps = [];
-      while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#|>|-\s|---|\[图片占位\])/.test(lines[i])) {
+      /* ★ 段落吞并的终止判据必须与上面各分支**严格互补**（2026-09-19 修死循环）：
+         原来把「行首是 #」一律当块级，可只有「#{1,3} + 空格」才是标题分支认的形态，
+         于是 ##推文工坊（井号后没打空格）、光一个井号、四个井号的行
+         **谁都不消费** → i 不递增 → while 空转 → 整页卡死（只能强杀标签页）。
+         改用 twLsParaStop()：能进段落循环的行，必然是谁都不认的正文行。 */
+      while (i < lines.length && !twLsParaStop(lines[i])) {
         ps.push(inline(lines[i])); i++;
       }
       if (ps.length) out.push('<p style="' + pSt + '">' + dropCap(ps.join('<br>')) + '</p>');
+      if (i === _g) i++;             // ★ 兜底：将来再加「谁都不认」的行首形态也不许空转
     }
     return out.join('\n');
   }
@@ -33828,6 +33853,7 @@ function hpClearDemo(){
     if ($('twPopOutline') && $('twPopOutline').classList.contains('on')) twOutlinePaint();
     if ($('twPopText') && $('twPopText').classList.contains('on')){ TX.list = txScan(body); twTextPaint(); }
     twEdAutoH();
+    twSyncToCaret();   // 沉浸式写作：正文光标一动，右侧排版预览跟着滚（2026-09-19）
   }
 
   /* ---------- 左栏：素材箱 ---------- */
@@ -34586,6 +34612,7 @@ function hpClearDemo(){
   function twBlocks(md){
     var lines = String(md || '').split('\n'), out = [], i = 0;
     while (i < lines.length){
+      var _g = i;                    // ★ 本行起始下标：循环末尾用它兜底（i 没动过就强推一格）
       var ln = lines[i];
       if (/^\s*$/.test(ln)){ i++; continue; }
       if (/^\[图片占位\]\s*$/.test(ln)){ out.push({ t:'ph', text:'[图片占位]', len:0, start:i }); i++; continue; }
@@ -34611,11 +34638,12 @@ function hpClearDemo(){
         continue;
       }
       var ps = [], st3 = i;
-      while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#|>|-\s|---|\[图片占位\])/.test(lines[i])){
+      while (i < lines.length && !twLsParaStop(lines[i])){
         ps.push(lines[i]); i++;
       }
       var pt = ps.join('');
-      out.push({ t:'p', text:pt, len:twPlainLen(pt), start:st3 });
+      if (ps.length) out.push({ t:'p', text:pt, len:twPlainLen(pt), start:st3 });
+      if (i === _g) i++;             // ★ 兜底：同 twRenderMd，绝不空转
     }
     return out;
   }
@@ -35308,6 +35336,78 @@ function hpClearDemo(){
     twToast('已删掉 ' + twClip(x.date || '', 10) + ' 那条');
   }
 
+  /* ================================================================
+     沉浸式写作 · 光标同步（2026-09-19 用户点名新增）
+     「鼠标点到哪里，排版预览就应该看到哪里」+ 一个开关按钮。
+     映射口径：twBlocks() 与 twRenderMd() 对同一份正文**逐块 1:1**
+     （两者都跳过空行，每个非空行块恰好产出一个块 / 一个元素），
+     所以直接拿 twBlocks 的块序去索引 #twPvwBox > section 的子元素即可。
+     section 的前两个子元素是「h1 标题 + p 日期」，正文块从第 3 个起 → 偏移 +2。
+     ⚠️ 别改成「按行号比例」估算：标题 1 行、引用 3 行、长段 12 行的实际高度差极大，
+     比例法在小节多的文章里会明显跑偏。
+     ================================================================ */
+  var TW_SYNC_PAD = 2;        // section 内正文块之前的固定子元素数（h1 标题 + 日期 p）
+  var TW_SYNC_GAP = 8;        // 顶对齐时留的呼吸，别贴着容器边
+
+  function twSyncPaint(){
+    var b = $('twBtnSync'); if (!b) return;
+    b.classList.toggle('off', !T.sync);
+    b.setAttribute('aria-pressed', T.sync ? 'true' : 'false');
+  }
+  function twSyncToggle(){
+    T.sync = !T.sync;
+    twSave();
+    twSyncPaint();
+    if (T.sync) twSyncToCaret();          // 刚打开就立刻对一次位，省得再点一下
+    twToast(T.sync ? '光标同步：开' : '光标同步：关');
+  }
+  function twSyncToCaret(){
+    if (!T.sync) return;
+    var ta = $('twBody'), box = $('twPvwBox');
+    if (!ta || !box) return;
+    var wrap = box.parentNode;                                  // .twPvwWrap.twScroll
+    if (!wrap || !wrap.clientHeight) return;                    // 预览栏被收起 / 不在屏上 → 不同步
+    var sec = box.firstElementChild;
+    if (!sec || !sec.children || sec.children.length <= TW_SYNC_PAD) return;
+    // 1) 光标在第几行
+    var off = ta.selectionStart, lines = ta.value.split('\n');
+    if (!lines.length) return;
+    var line = 0, acc = 0;
+    for (var i = 0; i < lines.length; i++){ if (acc <= off) line = i; else break; acc += lines[i].length + 1; }
+    // 2) 这一行属于第几个块（复用 C4 节奏条刚算好的块，省一遍解析）
+    var bs = (RHY && RHY.blocks && RHY.blocks.length) ? RHY.blocks : twBlocks(ta.value);
+    if (!bs.length) return;
+    var k = 0, found = false;
+    for (var j = 0; j < bs.length; j++){
+      if (bs[j].start <= line){ k = j; found = true; } else break;
+    }
+    if (!found) return;
+    var els = sec.children;
+    var el = els[Math.min(TW_SYNC_PAD + k, els.length - 1)];
+    if (!el || !el.getBoundingClientRect) return;
+    /* 3) 首块特例：光标在第 1 个内容块时，优先回到文档最开头（标题 + 开篇都在眼前）。
+          不做这层特例，「块顶对齐」会把 h1 标题和日期顶出视野 —— 实测 scrollTop 停在一个
+          非 0 值（82），也就是写作的人点到开头，预览反而看不见标题，正好和本功能的目的相反。
+          只在「回到最开头也仍能完整看见首块」时这么做；超长开篇退回下面的通用逻辑。 */
+    if (k === 0){
+      var rE0 = el.getBoundingClientRect(), rW0 = wrap.getBoundingClientRect();
+      var off0 = wrap.scrollTop + (rE0.top - rW0.top);     // 首块在内容里的绝对位置
+      if (off0 + rE0.height <= wrap.clientHeight){ wrap.scrollTop = 0; return; }
+    }
+    // 4) 已经完整可见就不动 —— 否则在同一个段落里打字会一直上下抖
+    var rEl = el.getBoundingClientRect(), rW = wrap.getBoundingClientRect();
+    var top = rEl.top - rW.top;
+    if (top >= 0 && (rEl.bottom - rW.top) <= wrap.clientHeight) return;
+    var shift = top - TW_SYNC_GAP;
+    // 5) 块比可视区还高（长段）：再按「光标在块内的行占比」往里推一点，别永远停在块首
+    if (rEl.height > wrap.clientHeight){
+      var s = bs[k].start, e = (k + 1 < bs.length) ? bs[k + 1].start : lines.length;
+      var f = (e > s) ? Math.min(1, Math.max(0, (line - s) / (e - s))) : 0;
+      shift = top - TW_SYNC_GAP + (rEl.height - wrap.clientHeight) * f;
+    }
+    wrap.scrollTop = Math.max(0, wrap.scrollTop + Math.round(shift));
+  }
+
   /* ---------- 页面入口（由 switchPage 派发）---------- */
   function renderTwPage(){
     twLoad();                       // 铁律 §5：渲染前必须重读 localStorage
@@ -35319,6 +35419,7 @@ function hpClearDemo(){
     }
     twPlaceBtns();
     twApplyView(T.view || 'both');   // 每次进页面都按存储的模式摆好栏位
+    twSyncPaint();                   // 光标同步开关的开关态（默认开）
     twStyPaint();                    // 排版工具栏：皮肤 / 主色 / 零件 / 滑块
     twSelBarBuild();                 // 划词工具条按钮
     twPopCloseAll();                 // 进页面时浮层一律收起，不遮内容
@@ -35411,13 +35512,21 @@ function hpClearDemo(){
   window.twPubAdd = twPubAdd;
   window.twPubDel = twPubDel;
   window.twPubFromDraft = twPubFromDraft;
+  /* 2026-09-19：光标同步（沉浸式写作）+ 行首块级判定（## 死循环修复）*/
+  window.twSyncToCaret = twSyncToCaret;
+  window.twSyncToggle = twSyncToggle;
+  window.twSyncPaint = twSyncPaint;
+  window.twLsBlockStart = twLsBlockStart;      // 门禁直接断「行首块级判定」的边界
   window.__twC = { blocks: twBlocks, txScan: txScan, outline: twOutlineData,
                    TX: TX, RHY: RHY, locate: twLocate, grade: twBlockGrade,
                    // 2026-09-18 第三批
                    readTime: twReadTime, healScan: twHealScan, pubSort: twPubSort,
                    ban: twBanScan, check: twCheckRun, h2: twH2Html, paper: twRenderPaper,
                    skindef: TW_SKINDEF, skinlist: TW_SKIN_LIST, h2list: TW_H2_LIST,
-                   cats: TX_CATS, chs: TW_CHS };   // 给门禁用的探针
+                   cats: TX_CATS, chs: TW_CHS,   // 给门禁用的探针
+                   // 2026-09-19
+                   lsBlock: twLsBlockStart, sync: twSyncToCaret,
+                   syncOn: function(){ return !!T.sync; } };
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -37189,7 +37298,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609182336";
+        window.NIKO_VERSION = "202609190930";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
