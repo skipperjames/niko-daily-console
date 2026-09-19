@@ -552,6 +552,10 @@
             background: #fef2f2;
         }
 
+        /* 滚动条：颜色必须跟随主题令牌（2026-09-19 修）
+           ⚠️ 别退回硬编码色值 —— 深色主题下会有一条浅灰白滑条一直亮在深色卡片上。
+           令牌由 NIKO_THEMES[].vars 注入到 html[data-theme]，fallback = 简约白那一套。
+           ⚠️ 也别只依赖 body.dark-mode 那条兜底规则：它只覆盖 thumb、且是单一灰色，跟 5 套深色主题都不搭。 */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -560,11 +564,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #d0cdc8;
+            background: var(--scroll-thumb, #d0cdc8);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #b8b5b0;
+            background: var(--scroll-thumb-hover, #b8b5b0);
         }
 
         /* ===== 状态颜色系统（整体变色） ===== */
@@ -1382,8 +1386,11 @@
             color: #ef4444;
             border-color: #5a2020;
         }
+        /* 兜底：万一某套深色主题漏配 --scroll-thumb，至少不会退回浅色滑条。
+           正常路径是全局那条规则走主题令牌；本条的优先级更高（多一层 body.dark-mode 限定），
+           所以它也必须读同一个令牌，否则会把主题色一直盖成灰色。 */
         body.dark-mode ::-webkit-scrollbar-thumb {
-            background: #444;
+            background: var(--scroll-thumb, #444);
         }
 
 
@@ -7096,6 +7103,9 @@
             background: #fef2f2;
         }
 
+        /* 滚动条：颜色必须走主题令牌（2026-09-19 修）
+           ⚠️ 本片段的规则在合并产物里排在总框架之后，会**盖掉**总框架的同名规则 →
+           口径必须和总框架一致（都用 var(--scroll-thumb)），否则深色下这里退回浅灰白。 */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -7104,11 +7114,11 @@
             background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: #d0cdc8;
+            background: var(--scroll-thumb, #d0cdc8);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #b8b5b0;
+            background: var(--scroll-thumb-hover, #b8b5b0);
         }
 
         /* ===== 状态颜色系统（整体变色） ===== */
@@ -7808,8 +7818,9 @@
             color: #ef4444;
             border-color: #5a2020;
         }
+        /* 兜底：本规则特异性比全局那条高，必须读同一个令牌，否则会把主题色一直盖成灰 */
         body.dark-mode ::-webkit-scrollbar-thumb {
-            background: #444;
+            background: var(--scroll-thumb, #444);
         }
 
         /* Toast 轻提示 */
@@ -10972,7 +10983,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
 #twPage .twScroll{overflow-y:auto;overflow-x:hidden;min-height:0;scrollbar-width:thin;}
 #twPage .twScroll::-webkit-scrollbar{width:8px;height:8px;}
-#twPage .twScroll::-webkit-scrollbar-thumb{background:var(--twLine);border-radius:8px;}
+/* 滑条颜色走本体主题令牌 --scroll-thumb（2026-09-19 修）：
+   原先用 var(--twLine)=--card-border —— 深色主题下几乎与卡片底同色（约 1.3:1）像没画出来，
+   浅色主题下又太淡。改用本体每套主题都配好的「比边框亮一档」专用色。 */
+#twPage .twScroll::-webkit-scrollbar-thumb{background:var(--scroll-thumb,var(--twLine));border-radius:8px;}
+#twPage .twScroll::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-hover,var(--twLine));}
 #twPage .twScroll::-webkit-scrollbar-track{background:transparent;}
 
 /* ---------- 左栏 · 素材箱 + 我的草稿 ---------- */
@@ -10985,9 +11000,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
 #twPage .twSubHd{font-size:11.5px;font-weight:500;color:var(--twTx2);margin:12px 0 7px;
   display:flex;justify-content:space-between;align-items:center;gap:6px;}
-#twPage .twSubHd .twMini{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+/* .twMini 提升为板块通用样式（2026-09-19 修）
+   原先只写在 .twSubHd 里，于是标题行「🖼 图片位 / 📱 手机」和浮层里的 .twMini
+   全靠浏览器默认外观 —— 深色主题下就是两块浅灰实底方块，跟主题完全不搭。 */
+#twPage .twMini{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
   border-radius:5px;padding:1px 7px;font-size:11px;cursor:pointer;font-family:inherit;}
-#twPage .twSubHd .twMini:hover{color:var(--twTx);}
+#twPage .twMini:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twMini.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:500;}
 
 #twPage .twIbItem{background:var(--twPanel2);border:1px solid var(--twLine);border-radius:8px;
   padding:7px 9px 8px;margin-bottom:6px;cursor:pointer;position:relative;}
@@ -11051,6 +11070,33 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
    容器只负责宽度，纸面观感全部来自内联样式。 */
 #twPage .twPvw{max-width:376px;margin:0 auto;width:100%;padding:0;background:transparent;border:none;}
 #twPage .twPvwFoot{flex:0 0 auto;padding-top:9px;display:flex;gap:8px;}
+
+/* ---------- 深色预览（2026-09-19 新增：独立开关，与全站主题解耦）----------
+   为什么必须 !important：纸面每个元素（h1/h2/p/blockquote/hr/code…）的颜色都写在
+   twRenderPaper() 生成的**内联 style** 里，内联优先级最高，普通选择器压不住。
+   ⚠️ 这里只覆盖「颜色 / 背景 / 边框色」，绝不碰字号 / 行距 / 段距 / 对齐 / 宽度 ——
+      深色预览的用途是「夜里看版式不刺眼」，版式必须与纸面原色逐像素一致。
+   ⚠️「复制到公众号」走的是 twRenderPaper() **重新生成的字符串**，与本处 CSS 无关，
+      所以「预览 = 导出」的底线不受影响。但开着深色预览调色时看到的不是最终色 →
+      故默认跟随主题、按钮高亮、并挂一行提示条写明。 */
+#twPage .twPvw.twDk section{background:#1b1d23 !important;color:#c7ccd6 !important;
+  outline:1px solid rgba(255,255,255,.07) !important;outline-offset:-1px;}
+#twPage .twPvw.twDk section *{color:#c7ccd6 !important;}
+#twPage .twPvw.twDk h1,#twPage .twPvw.twDk h2,#twPage .twPvw.twDk h3{color:#f1f4f9 !important;}
+#twPage .twPvw.twDk strong,#twPage .twPvw.twDk b{color:#eef1f7 !important;}
+#twPage .twPvw.twDk a{color:#8fb6ff !important;}
+#twPage .twPvw.twDk blockquote{background:#24272f !important;border-left-color:#4b5468 !important;}
+#twPage .twPvw.twDk code,#twPage .twPvw.twDk pre{background:#24272f !important;color:#d9dde5 !important;}
+#twPage .twPvw.twDk hr{background:#3b414c !important;border-color:#3b414c !important;}
+#twPage .twPvw.twDk section > p:first-child{color:#8c93a1 !important;}
+/*「原始 Markdown」模式下预览直接是一块 <pre>（内联白底），同样跟着深色走 */
+#twPage .twPvw.twDk > pre{background:#1b1d23 !important;color:#c7ccd6 !important;}
+#twPage .twPvw.twDk img{opacity:.94;}
+/* 开启深色预览时的提示条（只提示，不挡内容） */
+#twPage .twDkTip{display:none;font-size:11px;color:var(--twTx2);padding:6px 0 0;line-height:1.5;}
+#twPage .twDkTip.on{display:block;}
+/* 开关按钮：标题行在 468px 栏宽里已经排了 4 个按钮，别让它换行把标题行顶高 */
+#twPage .twDkBtn{white-space:nowrap;flex:0 0 auto;}
 
 /* 动作按钮（就近放置：AI 贴工具条尾 / 存入知识库贴标题行 / 复制到公众号贴预览底）*/
 #twPage .twActBtn{border:1px solid var(--twLine);background:transparent;color:var(--twTx);border-radius:8px;
@@ -11164,7 +11210,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   max-height:60vh;overflow-y:auto;scrollbar-width:thin;}
 #twPage .twPop.on{display:block;}
 #twPage .twPop::-webkit-scrollbar{width:7px;}
-#twPage .twPop::-webkit-scrollbar-thumb{background:var(--twLine);border-radius:7px;}
+#twPage .twPop::-webkit-scrollbar-thumb{background:var(--scroll-thumb,var(--twLine));border-radius:7px;}
+#twPage .twPop::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-hover,var(--twLine));}
 #twPage .twPopHd{display:flex;align-items:center;justify-content:space-between;gap:8px;
   font-size:12.5px;font-weight:500;color:var(--twTx);margin-bottom:7px;}
 #twPage .twPopHd .twX{border:none;background:transparent;color:var(--twTx2);font-size:15px;
@@ -14239,6 +14286,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <button class="twMini" id="twBtnImg" style="margin-left:auto;" onclick="twImgOpen()" title="G4 · 图片位：正文里每处 [图片占位] 都读一遍尺寸、查比例（只提示不阻止，不动你的正文）">🖼 图片位</button>
         <button class="twMini" id="twBtnPhone" onclick="twPhoneOpen()" title="G5 · 手机真机模拟：在 390×844 手机壳里完整滚一遍，并逐项检查字号 / 行高 / 长段 / 屏数">📱 手机</button>
         <button class="twStyBtn" id="twStyBtn" onclick="twStyPanelToggle()" title="排版设置：皮肤 / 主色 / 小标题 / 高亮 / 分割线 / 字号行距">🎨 排版</button>
+        <button class="twMini twDkBtn" id="twBtnDk" onclick="twPvDarkToggle()" title="深色预览：只把纸面换成深色，版式（字号 / 行距 / 段距 / 对齐）一字不动。写稿时眼睛舒服；发布前切回纸面原色，复制到公众号的始终是原始纸面">🌙 深色</button>
       </div>
       <div class="twModeRow">
         <button class="on" onclick="twPvMode(this,'gzh')">公众号样式</button>
@@ -14345,6 +14393,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         </div>
       </div>
 
+      <div class="twDkTip" id="twDkTip">🌙 深色预览 · 只换纸面配色，版式一字未动；复制到公众号仍是原始纸面</div>
       <div class="twPvwWrap twScroll">
         <div class="twPvw" id="twPvwBox"></div>
       </div>
@@ -15219,6 +15268,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
         // ========== 主题风格（多主题，深色为主） ==========
         const NIKO_THEMES = {
+            // ⚠️ 每套主题都必须给 --scroll-thumb / --scroll-thumb-hover（2026-09-19 新增）：
+            //    滚动条 thumb 原先在全局 CSS 里硬编码 #d0cdc8，深色覆盖又挂在废弃的 body.dark-mode 上
+            //    → 5 套深色主题下滚动条要么一条亮灰白、要么比卡片底还亮，跟主题完全不搭。
+            //    取值口径 = 比 --card-border 亮一档、比 --card-bg 明显可见（对比度 ~1.6:1，看得见但不抢眼）。
             default: {
                 name: '☀️ 简约白', dark: false,
                 swatch: 'linear-gradient(135deg,#f5f2ed 55%,#1a1a1a 55%)',
@@ -15226,7 +15279,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--app-bg': '#f5f2ed', '--sidebar-bg': '#1a1a1a', '--sidebar-text': '#ffffff',
                     '--sidebar-hover': '#2a2a2a', '--sidebar-active': '#667eea',
                     '--accent': '#667eea', '--accent2': '#764ba2',
-                    '--card-bg': '#ffffff', '--card-border': '#e8e6e1', '--text': '#333333', '--muted': '#888888'
+                    '--card-bg': '#ffffff', '--card-border': '#e8e6e1', '--text': '#333333', '--muted': '#888888',
+                    '--scroll-thumb': '#d0cdc8', '--scroll-thumb-hover': '#b8b5b0'
                 }
             },
             midnight: {
@@ -15237,7 +15291,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--sidebar-bg': '#0d0d16', '--sidebar-text': '#cbd5e1',
                     '--sidebar-hover': '#1a1a2a', '--sidebar-active': '#667eea',
                     '--accent': '#818cf8', '--accent2': '#a78bfa',
-                    '--card-bg': '#1f1f2e', '--card-bg-2': '#181824', '--card-border': '#333345', '--text': '#d0d0d8', '--muted': '#888899'
+                    '--card-bg': '#1f1f2e', '--card-bg-2': '#181824', '--card-border': '#333345', '--text': '#d0d0d8', '--muted': '#888899',
+                    '--scroll-thumb': '#3d3d55', '--scroll-thumb-hover': '#4e4e6b'
                 }
             },
             forest: {
@@ -15248,7 +15303,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--sidebar-bg': '#0a120c', '--sidebar-text': '#cfe8d8',
                     '--sidebar-hover': '#16271c', '--sidebar-active': '#34d399',
                     '--accent': '#34d399', '--accent2': '#10b981',
-                    '--card-bg': '#16251b', '--card-bg-2': '#101c14', '--card-border': '#2a4235', '--text': '#d1e8da', '--muted': '#7fb39a'
+                    '--card-bg': '#16251b', '--card-bg-2': '#101c14', '--card-border': '#2a4235', '--text': '#d1e8da', '--muted': '#7fb39a',
+                    '--scroll-thumb': '#335240', '--scroll-thumb-hover': '#40684f'
                 }
             },
             mocha: {
@@ -15259,7 +15315,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--sidebar-bg': '#120c08', '--sidebar-text': '#efdcc4',
                     '--sidebar-hover': '#2a1e14', '--sidebar-active': '#f59e0b',
                     '--accent': '#f5a524', '--accent2': '#d97706',
-                    '--card-bg': '#251b12', '--card-bg-2': '#1c140d', '--card-border': '#3d2e1f', '--text': '#ece0d2', '--muted': '#a08a72'
+                    '--card-bg': '#251b12', '--card-bg-2': '#1c140d', '--card-border': '#3d2e1f', '--text': '#ece0d2', '--muted': '#a08a72',
+                    '--scroll-thumb': '#4a3722', '--scroll-thumb-hover': '#5f472c'
                 }
             },
             ocean: {
@@ -15270,7 +15327,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--sidebar-bg': '#080e1a', '--sidebar-text': '#d3e6f8',
                     '--sidebar-hover': '#142a44', '--sidebar-active': '#38bdf8',
                     '--accent': '#38bdf8', '--accent2': '#2563eb',
-                    '--card-bg': '#12203a', '--card-bg-2': '#0d1829', '--card-border': '#24406a', '--text': '#d6e6f7', '--muted': '#7ea2c8'
+                    '--card-bg': '#12203a', '--card-bg-2': '#0d1829', '--card-border': '#24406a', '--text': '#d6e6f7', '--muted': '#7ea2c8',
+                    '--scroll-thumb': '#2c4f80', '--scroll-thumb-hover': '#38629c'
                 }
             },
             lavender: {
@@ -15281,7 +15339,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     '--sidebar-bg': '#0d0a18', '--sidebar-text': '#e0d9f5',
                     '--sidebar-hover': '#241b40', '--sidebar-active': '#a78bfa',
                     '--accent': '#a78bfa', '--accent2': '#7c3aed',
-                    '--card-bg': '#1d1535', '--card-bg-2': '#151027', '--card-border': '#3a2d63', '--text': '#e0d9f5', '--muted': '#9a8fc0'
+                    '--card-bg': '#1d1535', '--card-bg-2': '#151027', '--card-border': '#3a2d63', '--text': '#e0d9f5', '--muted': '#9a8fc0',
+                    '--scroll-thumb': '#443573', '--scroll-thumb-hover': '#55448c'
                 }
             }
         };
@@ -33927,6 +33986,8 @@ function hpClearDemo(){
     if (TW_VIEWS.indexOf(T.view) < 0) T.view = 'both';   // 视图偏好跟着数据一起落盘
     if (typeof T.sync !== 'boolean') T.sync = true;      // 光标同步默认开；用户关过就记住关（2026-09-19）
     if (!T.style || typeof T.style !== 'object') T.style = twDefStyle();  // 排版参数（皮肤/主色/零件/字号行距）一并落盘
+    // 深色预览偏好（2026-09-19）：只有 true / false 有意义；缺省或脏值一律「跟随全站主题」
+    if (T.pvDark !== true && T.pvDark !== false) delete T.pvDark;
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
       T.cur = T.drafts.length ? T.drafts[0].id : null;
     }
@@ -34354,6 +34415,56 @@ function hpClearDemo(){
     twSave();
     twEdAutoH();          // 列宽/行宽变了，正文框高度要跟着重算（窄屏才生效）
   }
+
+  /* ---------- 深色预览（2026-09-19 新增：独立开关，与全站主题解耦）----------
+     为什么要有它：纸面是白底黑字（= 公众号真实效果），深色主题下写稿时那一大块白很刺眼。
+     开关只把「纸面配色」换成深色，**版式一字不动** —— 平时用深色看版式，发布前切回原色核色。
+     状态 T.pvDark：缺省 = 跟随全站主题 / true = 强制深色 / false = 强制原色（手动设过就记住）。
+     ⚠️「复制到公众号」走的是 twRenderPaper() **重新生成的字符串**，与本开关完全无关，
+        所以「预览 = 导出」的底线永远不被污染 —— 这也是这里敢用 !important 覆盖内联样式的前提。 */
+  function twSysDark(){
+    try {
+      var bg = String(window.getComputedStyle(document.documentElement).getPropertyValue('--card-bg') || '').trim();
+      var m = bg.match(/^#([0-9a-fA-F]{6})$/);      // 主题令牌一律是 6 位 hex
+      if (m){
+        var n = parseInt(m[1], 16);
+        var r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+        // 加权亮度（BT.601）：卡片底色偏暗就认成深色主题 —— 不写死主题名单，将来加主题也不用改这里
+        return (0.299 * r + 0.587 * g + 0.114 * b) < 128;
+      }
+    } catch (e) {}
+    return !!(document.body && document.body.classList.contains('dark-mode'));   // 令牌还没注入时的兜底
+  }
+  function twPvDark(){
+    if (T.pvDark === true || T.pvDark === false) return T.pvDark;
+    return twSysDark();
+  }
+  function twPvDarkPaint(){
+    var on = twPvDark();
+    var box = $('twPvwBox'), btn = $('twBtnDk'), tip = $('twDkTip');
+    if (box) box.classList.toggle('twDk', on);
+    if (btn){
+      btn.classList.toggle('on', on);
+      btn.textContent = on ? '🌙 深色' : '☀️ 原色';
+    }
+    if (tip) tip.classList.toggle('on', on);
+    return on;
+  }
+  function twPvDarkToggle(){
+    T.pvDark = !twPvDark();     // 一按就变「手动」，之后不再跟随全站主题
+    twSave();
+    twPvDarkPaint();
+    twToast(T.pvDark ? '深色预览：只换纸面配色，复制到公众号仍是原始纸面'
+                     : '已切回纸面原色（= 公众号真实效果）');
+  }
+  // 全站切主题时，没手动设过的预览要跟着变；手动设过就以手动为准
+  (function twBindThemeWatch(){
+    try {
+      new MutationObserver(function(){
+        if (T.pvDark !== true && T.pvDark !== false) twPvDarkPaint();
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    } catch (e) {}
+  })();
 
   /* ---------- 动作按钮：就近放置（定版，不再提供其它落点）---------- */
   function twMkBtn(id, label, pri, tip, fn){
@@ -36409,6 +36520,7 @@ function hpClearDemo(){
     twFocusPaint();
     twTrashBadge();
     twBindSaveGuard();
+    twPvDarkPaint();                 // 深色预览：按存储偏好 / 当前主题摆好（2026-09-19）
     var pend = safeStorage.get('niko_tw_pending', null);
     if (pend && pend.at > 0 && (Date.now() - pend.at) < 7 * 864e5){
       twToast('上次离开前有一次未保存的改动，已按本地缓存恢复');
@@ -37114,6 +37226,8 @@ function hpClearDemo(){
   window.twCiteToggle = twCiteToggle;
   window.twCiteAll = twCiteAll;
   window.twCiteGo = twCiteGo;
+  /* 2026-09-19 新增：预览独立深色开关（标题行 onclick 必须能从 window 找到） */
+  window.twPvDarkToggle = twPvDarkToggle;
   window.__tw6 = {
     pref: twEdPref, prefPaint: twEdPrefPaint, typerTick: twTyperTick, focusMask: twFocusMask,
     focusTouch: twFocusTouch, focusPaint: twFocusPaint, focusActive: twFocusActive,
@@ -37126,7 +37240,19 @@ function hpClearDemo(){
     blk: function(){ var t = $('twBody'); return t ? twFocusBlock(t) : null; },
     caretY: function(){ var t = $('twBody'); if (!t) return null; return twCaretXY(t, (typeof t.selectionStart === 'number') ? t.selectionStart : 0); },
     sel: function(){ return TW_IBSEL; }, rk: function(){ return TW_RKOPEN; },
-    focus: function(){ return TW_FOCUS; }
+    focus: function(){ return TW_FOCUS; },
+    pvDark: twPvDark, pvDarkPaint: twPvDarkPaint, sysDark: twSysDark,
+    // 深色预览开关态（门禁直接读，别去猜 class）
+    dkOn: function(){ var b = $('twPvwBox'); return !!(b && b.classList.contains('twDk')); },
+    // 纸面几何 + 配色快照：门禁用它证「深色预览只换颜色，字号/行距/内边距/宽度一字不动」
+    paperGeom: function(){
+      var sec = document.querySelector('#twPvwBox section');
+      if (!sec) return null;
+      var cs = window.getComputedStyle(sec);
+      return { bg: cs.backgroundColor, color: cs.color, fs: cs.fontSize, lh: cs.lineHeight,
+               pad: cs.paddingTop + '/' + cs.paddingRight + '/' + cs.paddingBottom + '/' + cs.paddingLeft,
+               w: Math.round(sec.getBoundingClientRect().width) };
+    }
   };
   /* 2026-09-18 新增：排版皮肤/零件（A2 A7 A8 · B1 B2 B3 B5 B6）+ C2 C3 C4 + D1 */
   window.twStyleCfg = twStyleCfg;       // 当前排版参数（皮肤/主色/零件/字号行距）
@@ -38971,7 +39097,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191138";
+        window.NIKO_VERSION = "202609191157";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
