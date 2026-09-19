@@ -29,6 +29,17 @@ function canonicalUrl(url) {
     return url.origin + url.pathname;
 }
 
+// 通知所有已打开的页面：SW 缓存刚刚刷新过。
+// 页面收到后自己去拉 52 字节的 niko_ver.json 比对版本号 —— 只有真·新版才会把
+// 右下角提示从「正在后台下载」切成「已就绪，点一下立即切换」（0.1 秒生效）。
+function notifyClients(message) {
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+        for (var i = 0; i < list.length; i++) {
+            try { list[i].postMessage(message); } catch (err) {}
+        }
+    }).catch(function () {});
+}
+
 self.addEventListener('fetch', function (e) {
     var req = e.request;
     if (req.method !== 'GET') return;
@@ -49,29 +60,41 @@ self.addEventListener('fetch', function (e) {
     var forceFresh = /[?&](v|_t)=/.test(url.search);   // 「有新版本，点一下更新」的跳转
     var key = isNav ? canonicalUrl(url) : req.url;
 
+    // ★★★ 后台更新这条链必须在「同步阶段」就建好并挂进 waitUntil。
+    //   否则 respondWith 返回缓存后事件立刻结束、SW 被回收，
+    //   后台的 fetch / 写盘 / 通知全部白做 —— 实测症状：提示永远停在
+    //   「正在后台下载」，永远切不到「已就绪」，用户只能 Ctrl+F5 硬刷。
+    var net = caches.open(CACHE_NAME).then(function (cache) {
+        return fetch(req, { cache: 'no-cache' }).then(function (res) {
+            if (res && res.ok && res.type !== 'opaque') {
+                var put = null;
+                try { put = cache.put(key, res.clone()); } catch (err) {}
+                // 等写盘真正完成后才通知，保证页面这时 reload 一定命中新版
+                (put && put.then ? put : Promise.resolve()).then(
+                    function () { notifyClients({ type: 'niko-sw-updated' }); },
+                    function () {}
+                );
+            }
+            return res;
+        });
+    });
+    try { e.waitUntil(net.then(function () {}, function () {})); } catch (err) {}
+
     e.respondWith((async function () {
         var cache = await caches.open(CACHE_NAME);
         var cached = null;
         try { cached = await cache.match(key); } catch (err) {}
 
-        var network = fetch(req, { cache: 'no-cache' }).then(function (res) {
-            if (res && res.ok && res.type !== 'opaque') {
-                try { cache.put(key, res.clone()); } catch (err) {}
-            }
-            return res;
-        });
-
         // 强制刷新 / 首次访问（无缓存）：必须等网络
         if (forceFresh || !cached) {
             try {
-                return await network;
+                return await net;
             } catch (err) {
                 return cached || (await cache.match('./app.html')) || Response.error();
             }
         }
 
-        // 有缓存：先给缓存（秒开），后台静默更新，下次打开就是新版
-        network.catch(function () {});
+        // 有缓存：先给缓存（秒开）。后台更新已挂在 waitUntil 上，会自己跑完并通知页面
         return cached;
     })());
 });
