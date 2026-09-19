@@ -11335,7 +11335,114 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 #twPage .twMini5:hover{color:var(--twTx);border-color:var(--twAccent);}
 #twPage .twG5inp{background:var(--twPanel2);border:1px solid var(--twLine);color:var(--twTx);border-radius:6px;
   padding:3px 7px;font-size:12px;font-family:inherit;width:74px;outline:none;}
-#twPage .twG5inp:focus{border-color:var(--twAccent);}
+/* ===== 第四批并入（2026-09-19）：E 沉浸写作 / F 编辑手感 / G 纸面细节 / H 素材变资本 ===== */
+/* E1/E2 开关（挂在视图切换器右边，中栏标题行 —— 任何形态下都不会被隐藏） */
+#twPage .twEdToggles{display:flex;gap:5px;flex:0 0 auto;margin-left:3px;}
+#twPage .twEdToggles button{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:6px;padding:3px 8px;font-size:11.5px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+#twPage .twEdToggles button:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twEdToggles button.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:600;}
+
+/* E1 打字机模式：当前行钉在中线 + 上下渐隐（只作用于正文框；预览纸是「预览=导出」全内联，不能动） */
+#twPage[data-twtyper="on"] #twBody{
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%);
+          mask-image:linear-gradient(to bottom,transparent 0,#000 16%,#000 84%,transparent 100%);}
+
+/* E2 段落聚焦：正文框里非当前段整体压暗（上下两块遮罩，位置由 twFocusMask 现算） */
+#twPage .twTaWrap{position:relative;flex:1;min-height:120px;display:flex;}
+#twPage .twFocusM{position:absolute;left:1px;right:1px;background:var(--twPanel2);
+  pointer-events:none;display:none;border-radius:6px;}
+#twPage[data-twfocus="on"] .twFocusM{display:block;}
+
+/* E5 本次专注：顶部常驻一条（专注 / 净增 / 今日 / 近 15 天） */
+#twPage .twFocusBar{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:6px 10px;margin:0 0 8px;
+  border:1px solid var(--twLine);border-radius:8px;background:var(--twPanel2);font-size:11.5px;color:var(--twTx2);}
+#twPage .twFocusBar b{font-size:15px;font-weight:700;color:var(--twAccent);font-family:Georgia,serif;line-height:1.3;}
+#twPage .twFocusBar .twFbW b{color:#12a150;}
+#twPage .twFocusBar.off{opacity:.62;}
+#twPage .twFocusBar .twFbSp{margin-left:auto;display:flex;align-items:flex-end;gap:2px;height:26px;flex:0 0 auto;}
+#twPage .twFocusBar .twFbSp i{display:block;width:6px;min-height:2px;background:var(--twAccent);opacity:.5;border-radius:2px;}
+#twPage .twFocusBar .twFbSp i.td{opacity:1;}
+
+/* F4 草稿保存状态 */
+#twPage .twDraftItem .twM b.unsaved{color:#d9534f;font-weight:600;}
+
+/* H1 素材箱分组 / 来源 / 只读引用 */
+#twPage .twIbGrp{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 7px;}
+#twPage .twIbGrp button{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);
+  border-radius:999px;padding:1px 8px;font-size:10.5px;cursor:pointer;font-family:inherit;line-height:1.85;}
+#twPage .twIbGrp button.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:600;}
+#twPage .twIbItem .twSrc{position:absolute;bottom:5px;right:26px;font-size:9.5px;color:var(--twTx2);opacity:.9;}
+#twPage .twIbItem.ro{border-style:dashed;}
+#twPage .twIbItem .twUseN{font-size:9.5px;color:var(--twAccent);}
+
+/* H3 该复习了 */
+#twPage .twIbRev{border:1px solid #f0d9a8;background:#fffaf0;color:#8a6420;border-radius:8px;
+  padding:7px 9px;font-size:11px;line-height:1.65;margin:0 0 8px;}
+#twPage .twIbRev b{display:block;margin-bottom:2px;}
+#twPage .twIbRev i{font-style:normal;opacity:.85;}
+
+/* H4 复用排行 */
+#twPage .twRk{margin:10px 0 2px;border-top:1px dashed var(--twLine);padding-top:8px;}
+#twPage .twRkHd{font-size:11px;color:var(--twTx2);cursor:pointer;display:flex;align-items:center;gap:5px;}
+#twPage .twRkHd:hover{color:var(--twTx);}
+#twPage .twRkBody{margin-top:6px;}
+#twPage .twRkRow{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--twTx2);padding:2px 0;}
+#twPage .twRkRow .g{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#twPage .twRkBar{flex:0 0 52px;height:5px;border-radius:3px;background:var(--twPanel);overflow:hidden;}
+#twPage .twRkBar>i{display:block;height:100%;background:var(--twAccent);}
+#twPage .twRkEmpty{margin-top:4px;}
+
+/* G4 图片位 */
+#twPage .twImgRow{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--twLine);}
+#twPage .twImgRow:last-child{border-bottom:0;}
+#twPage .twImgDrop{flex:0 0 96px;height:64px;border:1px dashed var(--twLine);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--twTx2);cursor:pointer;
+  background:var(--twPanel2);overflow:hidden;text-align:center;line-height:1.4;}
+#twPage .twImgDrop img{max-width:100%;max-height:100%;display:block;}
+#twPage .twImgDrop.over{border-color:var(--twAccent);}
+#twPage .twImgMeta{flex:1;min-width:0;font-size:11px;color:var(--twTx2);line-height:1.75;}
+#twPage .twOk2{display:inline-block;border:1px solid #cfe3d6;background:#f4fbf6;color:#2f6b52;border-radius:5px;padding:1px 6px;font-size:10.5px;}
+#twPage .twWarn2{display:inline-block;border:1px solid #f0d9a8;background:#fffaf0;color:#8a6420;border-radius:5px;padding:1px 6px;font-size:10.5px;line-height:1.6;}
+
+/* G5 手机真机模拟 */
+#twPage .twPhoneWrap{display:flex;gap:14px;align-items:flex-start;}
+#twPage .twPhone{flex:0 0 262px;border:8px solid #2c3742;border-radius:26px;background:#fff;overflow:hidden;}
+#twPage .twPhone .ntch{width:54px;height:5px;background:#2c3742;border-radius:3px;margin:5px auto 0;}
+#twPage .twPhone .scr{height:420px;overflow-y:auto;padding:2px 0 8px;background:#fff;}
+#twPage .twPhChk{flex:1;min-width:0;font-size:11.5px;color:var(--twTx2);line-height:1.5;}
+#twPage .twPhR{display:flex;gap:8px;padding:5px 0;border-bottom:1px dashed var(--twLine);}
+#twPage .twPhR .g{flex:1;min-width:0;}
+#twPage .twPhR .v{flex:0 0 auto;text-align:right;}
+
+/* H2 取材抽屉 */
+#twPage .twDrwIn{flex:1;min-width:0;background:var(--twPanel2);border:1px solid var(--twLine);border-radius:6px;
+  padding:5px 8px;font-size:12px;color:var(--twTx);outline:none;font-family:inherit;box-sizing:border-box;}
+#twPage .twDrwIn:focus{border-color:var(--twAccent);}
+#twPage .twDrwRow{display:flex;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px dashed var(--twLine);font-size:11.5px;color:var(--twTx2);}
+#twPage .twDrwRow:last-child{border-bottom:0;}
+#twPage .twDrwRow .g{flex:1;min-width:0;line-height:1.65;color:var(--twTx);}
+#twPage .twDrwRow .s{flex:0 0 auto;font-size:10px;color:var(--twTx2);opacity:.85;max-width:130px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* H5 引用块归档 */
+#twPage .twCiteRow{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--twLine);font-size:11.5px;}
+#twPage .twCiteRow:last-child{border-bottom:0;}
+#twPage .twCiteRow .g{flex:1;min-width:0;line-height:1.7;color:var(--twTx);}
+#twPage .twCiteRow .s{flex:0 0 auto;font-size:10px;color:var(--twTx2);}
+#twPage .twCk{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);border-radius:5px;
+  width:20px;height:20px;line-height:1;cursor:pointer;font-size:12px;flex:0 0 auto;font-family:inherit;padding:0;}
+#twPage .twCk.on{background:var(--twAccentBg);border-color:var(--twAccent);color:var(--twAccent);font-weight:700;}
+#twPage .twColAct{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap;}
+
+@media (max-width:900px){
+  #twPage .twTaWrap{flex:0 0 auto;}
+  #twPage .twFocusBar{flex-wrap:wrap;gap:8px;}
+  #twPage .twFocusBar .twFbSp{width:100%;margin-left:0;}
+  #twPage .twPhoneWrap{flex-direction:column;}
+  #twPage .twPhone{flex:0 0 auto;width:100%;max-width:280px;margin:0 auto;}
+  #twPage .twEdToggles{margin-left:auto;}
+}#twPage .twG5inp:focus{border-color:var(--twAccent);}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -14013,15 +14120,21 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
     <!-- ========== 左：素材箱 + 我的草稿 ========== -->
     <div class="twCard twColInbox">
-      <div class="twCardHd">素材箱 <span class="twCnt" id="twIbCnt"></span></div>
+      <div class="twCardHd">素材箱 <span class="twCnt" id="twIbCnt"></span>
+        <button class="twMini" id="twBtnDrawer" onclick="twDrawerOpen()" title="H2 · 取材抽屉：直接搜你读过的书摘和知识库，命中的句子一键插成引用块">📥 取材</button>
+      </div>
       <div class="twIbAdd">
         <input id="twIbInput" placeholder="粘链接或文字…" onkeydown="if(event.key==='Enter')twIbAdd()">
         <button onclick="twIbAdd()">存</button>
       </div>
       <div class="twScroll" style="flex:1;">
+        <div class="twIbGrp" id="twIbGrp"></div>
+        <div id="twIbRev"></div>
         <div id="twIbList"></div>
+        <div class="twRk" id="twIbRank"></div>
         <div class="twSubHd">我的草稿 <span id="twDfCnt"></span>
           <span style="display:flex;gap:5px;">
+            <button class="twMini" id="twTrashBtn" onclick="twTrashOpen()" title="F5 · 草稿回收站：删掉的草稿留 7 天，误删能找回">🗑 回收站<span id="twTrashN"></span></button>
             <button class="twMini" id="twDemoBtn" onclick="twDemoToggle()" title="载入一篇示例草稿 + 三条示例素材">示例</button>
             <button class="twMini" onclick="twDfNew()" title="新建一篇草稿">＋ 新建</button>
           </span>
@@ -14038,6 +14151,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <button id="twVwWrite" onclick="twSetView('write')" title="只留素材箱和编辑器，预览收起 —— 专心写">写作</button>
             <button id="twVwBoth" onclick="twSetView('both')" title="素材箱 + 编辑器 + 排版预览（默认）">双栏</button>
             <button id="twVwPvw" onclick="twSetView('pvw')" title="收起素材箱，编辑器配排版预览 —— 调排版时用">预览</button>
+          </div>
+          <div class="twEdToggles" id="twEdToggles">
+            <button id="twBtnTyper" onclick="twTyperToggle()" title="E1 · 打字机模式：正文里你正在写的那一行固定在中线，写完自动上推；上下渐隐（只作用于正文框）">⌨ 打字机</button>
+            <button id="twBtnFocus" onclick="twFocusToggle()" title="E2 · 段落聚焦：只留你正在写的那一段清晰，其余整体压暗">🎯 段落聚焦</button>
           </div>
           <input class="twEdTitle" id="twTitle" placeholder="给这篇推文起个标题…" oninput="twEdRender()">
           <div class="twHostTop" id="twHostTop"></div>
@@ -14063,7 +14180,17 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <div class="twHostAi" id="twHostAi"></div>
         </div>
 
-        <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()" onclick="twSyncToCaret()" onkeyup="twSyncToCaret()" onselect="twSyncToCaret()"></textarea>
+        <div class="twFocusBar" id="twFocusBar">
+          <span>本次专注 <b id="twFbMin">—</b> 分</span>
+          <span class="twFbW">净增 <b id="twFbAdd">+0</b> 字</span>
+          <span id="twFbToday">今日 0 字</span>
+          <span class="twFbSp" id="twFbSp"></span>
+        </div>
+        <div class="twTaWrap" id="twTaWrap">
+          <textarea id="twBody" placeholder="在这里写正文。支持 Markdown：## 二级标题 / **加粗** / &gt; 引用 / - 列表 / [图片占位] / ---" oninput="twEdRender()" onclick="twSyncToCaret()" onkeyup="twSyncToCaret()" onselect="twSyncToCaret()"></textarea>
+          <div class="twFocusM" id="twFocusTop"></div>
+          <div class="twFocusM" id="twFocusBot"></div>
+        </div>
 
         <!-- C4 · 段落节奏条：每段一块、宽度 ∝ 段字数，超 150 字转红（与 twCheckRun 同口径） -->
         <div class="twRhy" id="twRhy">
@@ -14109,6 +14236,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <div class="twCard twColPvw">
       <div class="twCardHd">
         <span>排版预览 <span class="twCnt" id="twPvW"></span></span>
+        <button class="twMini" id="twBtnImg" style="margin-left:auto;" onclick="twImgOpen()" title="G4 · 图片位：正文里每处 [图片占位] 都读一遍尺寸、查比例（只提示不阻止，不动你的正文）">🖼 图片位</button>
+        <button class="twMini" id="twBtnPhone" onclick="twPhoneOpen()" title="G5 · 手机真机模拟：在 390×844 手机壳里完整滚一遍，并逐项检查字号 / 行高 / 长段 / 屏数">📱 手机</button>
         <button class="twStyBtn" id="twStyBtn" onclick="twStyPanelToggle()" title="排版设置：皮肤 / 主色 / 小标题 / 高亮 / 分割线 / 字号行距">🎨 排版</button>
       </div>
       <div class="twModeRow">
@@ -14175,6 +14304,45 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="twPopHd">📓 日记 → 选题 <button class="twX" onclick="twPopClose('twPopDiary')" title="关闭">×</button></div>
         <div class="twPopTip">只从你自己写下的日记里挑「有场景、有情绪」的句子（最近 60 条）。不读全文、不生成观点，把句子递给你。</div>
         <div id="twDiaryBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopTrash">
+        <div class="twPopHd">🗑 草稿回收站 <button class="twX" onclick="twPopClose('twPopTrash')" title="关闭">×</button></div>
+        <div class="twPopTip">删掉的草稿在这里留 7 天，误删一键找回。纯本地兜底，不进云同步、不占同步体积。</div>
+        <div id="twTrashBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopImg">
+        <div class="twPopHd">🖼 图片位 <button class="twX" onclick="twPopClose('twPopImg')" title="关闭">×</button></div>
+        <div class="twPopTip">正文里每处 [图片占位] 一个位。把图拖进来（或点一下选图）即时读尺寸，并提示公众号里会不会被裁 —— <b>只提示，不阻止，也不动你的正文</b>。公众号正文图片要上传到素材库，所以这里不做内联替换。</div>
+        <div id="twImgBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopPhone">
+        <div class="twPopHd">📱 手机真机模拟 <button class="twX" onclick="twPopClose('twPopPhone')" title="关闭">×</button></div>
+        <div class="twPopTip">左边 390×844 手机壳里就是你的成品，可以滚；右边逐项报数。发出去之前先看见，而不是发完再改。</div>
+        <div id="twPhoneBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopDrawer">
+        <div class="twPopHd">📥 取材抽屉 <button class="twX" onclick="twPopClose('twPopDrawer')" title="关闭">×</button></div>
+        <div class="twPopTip">打关键词，同时搜你读过的书摘（读书看板）和知识库。命中一条点「插为引用」，直接落到正文末尾，顺手把来源记进素材箱。</div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <input class="twDrwIn" id="twDrwQ" placeholder="比如：颈椎 / 久坐 / 复利…" oninput="twDrawerPaint()">
+          <button class="twMini" onclick="twDrawerPaint()">搜</button>
+        </div>
+        <div id="twDrwBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopCite">
+        <div class="twPopHd">⤴ 引用块归档 <button class="twX" onclick="twPopClose('twPopCite')" title="关闭">×</button></div>
+        <div class="twPopTip">扫出本文所有引用块，勾选后批量回存知识库（03-Resources · 推文）。同来源同标题自动去重，不会重复入库。</div>
+        <div id="twCiteBox"></div>
+        <div class="twColAct">
+          <button class="twMini" onclick="twCiteAll(1)">全选</button>
+          <button class="twMini" onclick="twCiteAll(0)">全不选</button>
+          <button class="twMini" onclick="twCiteGo()">归档所选</button>
+        </div>
       </div>
 
       <div class="twPvwWrap twScroll">
@@ -33762,9 +33930,31 @@ function hpClearDemo(){
     if (!T.drafts.length || !T.drafts.some(function(d){ return d.id === T.cur; })) {
       T.cur = T.drafts.length ? T.drafts[0].id : null;
     }
+    /* 第四批（2026-09-19）：回收站 / 引用记录 / 复用记录 / 图片位 / 落盘时间戳 */
+    twTrashPurge();
+    if (!Array.isArray(T.trash)) T.trash = [];
+    if (!T.cites || typeof T.cites !== 'object') T.cites = {};
+    if (!T.use || typeof T.use !== 'object') T.use = {};
+    if (!T.imgs || typeof T.imgs !== 'object') T.imgs = {};
+    if (!T.savedAt || typeof T.savedAt !== 'object') T.savedAt = {};
+    twEdPref();
   }
-  function twSave(){ safeStorage.set(TW_STORE, T); }
-  function twSaveSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(twSave, 700); }
+  function twSave(){
+    var d = twCur();
+    if (d){
+      if (!T.savedAt || typeof T.savedAt !== 'object') T.savedAt = {};
+      T.savedAt[d.id] = Date.now();
+    }
+    safeStorage.set(TW_STORE, T);
+    safeStorage.set('niko_tw_pending', { at: 0 });   // F4：已落盘 → 清掉「未保存」标记
+  }
+  function twSaveSoon(){
+    clearTimeout(saveTimer);
+    // F4：落盘完顺手把那条草稿的 meta 刷一下 —— 否则「未保存 ●」会一直挂着，
+    //     要等下一次 twDfRender 才翻成「已保存 HH:MM」
+    saveTimer = setTimeout(function(){ twSave(); twSaveFresh(); }, 700);
+    safeStorage.set('niko_tw_pending', { at: Date.now() });   // F4 兜底：防抖里还没落盘
+  }
 
   function twBlank(){ return { id: twUid(), title: '', body: '', updatedAt: new Date().toISOString() }; }
   function twCur(){
@@ -33897,12 +34087,19 @@ function hpClearDemo(){
     if ($('twStRd')) $('twStRd').textContent = rdT.text;
     if ($('twStBand')){ var bdEl = $('twStBand'); bdEl.textContent = rdT.band; bdEl.className = 'twBand ' + rdT.cls; }
     if ($('twPvW')) $('twPvW').textContent = isMd ? '源码' : ('公众号 · ' + cfg.pw + 'px');
+    // 同步内存 → 落盘（防抖）
+    if (d){ d.title = title; d.body = body; d.updatedAt = new Date().toISOString(); twSaveSoon(); }
+    // F4：空白草稿一写进内容，左栏要立刻从「这里是空的」变成真实草稿。
+    //     正文框 oninput 只调 twEdRender → 不补这一下，写完一整篇左栏还是空的，
+    //     连「未保存 ●」都没地方显示（它挂在 .twDraftItem 上）。
+    if (d && $('twDfList') && !document.querySelector('#twDfList .twDraftItem')
+        && (String(title || '').trim() || String(body || '').trim())) twDfRender();
+    // ★ 画 meta 必须排在上面 twSaveSoon 之后：F4 的「未保存 ●」读的是 twSaveSoon 留下的
+    //   niko_tw_pending 标记，顺序反了的话第一次改动会被算成「已保存」。
     // 草稿列表里那一行的「N 字」跟着真实字数走
     if ($('twDfCnt')) $('twDfCnt').textContent = T.drafts.length + ' 篇';
     var curMeta = document.querySelector('#twDfList .twDraftItem.on .twM');
-    if (curMeta) curMeta.textContent = '编辑中 · ' + wc + ' 字';
-    // 同步内存 → 落盘（防抖）
-    if (d){ d.title = title; d.body = body; d.updatedAt = new Date().toISOString(); twSaveSoon(); }
+    if (curMeta) curMeta.innerHTML = '编辑中 · ' + wc + ' 字 · ' + twSavedAtStr(d);
     twWlogCount(d, wc);          // J2/J3：写作量记账（只记新增的字，删改/粘贴不算）
     twRhyRender();                                                              // C4 段落节奏条
     // 浮层开着就跟着刷新（C1 大纲 / C3 自查）
@@ -33914,17 +34111,35 @@ function hpClearDemo(){
     if ($('twPopArch') && $('twPopArch').classList.contains('on')) twArchPaint();
     twEdAutoH();
     twSyncToCaret();   // 沉浸式写作：正文光标一动，右侧排版预览跟着滚（2026-09-19）
+    /* 第四批钩子（2026-09-19）：E5 专注计时 / E1 打字机 / E2 段落聚焦 / 开着的浮层跟着刷新 */
+    twFocusTouch(d, wc);
+    twFocusPaint();
+    twTyperTick();
+    twFocusMask();
+    if ($('twPopImg') && $('twPopImg').classList.contains('on')) twImgPaint();
+    if ($('twPopPhone') && $('twPopPhone').classList.contains('on')) twPhonePaint();
+    if ($('twPopCite') && $('twPopCite').classList.contains('on')) twCitePaint();
+    if ($('twPopDrawer') && $('twPopDrawer').classList.contains('on')) twDrawerPaint();
   }
 
   /* ---------- 左栏：素材箱 ---------- */
   function twIbRender(){
     var box = $('twIbList');
+    twIbGrpPaint(); twReviewPaint(); twRankPaint();      // H1 分组 / H3 该复习了 / H4 复用排行
     if (!box) return;
-    box.innerHTML = T.inbox.length ? T.inbox.map(function(it, idx){
-      return '<div class="twIbItem" onclick="twIbUse(' + idx + ')">' +
-        '<span class="twDel" onclick="event.stopPropagation();twIbDel(' + idx + ')" title="删除">×</span>' +
-        '<div class="twT">' + twEsc(it.t) + '</div><div class="twM">' + twEsc(it.m || '手动') + '</div></div>';
-    }).join('') : '<div class="twEmpty">素材箱是空的。看到好句子、好链接，粘在下面一行里点「存」，写稿时点一下就能插进正文。</div>';
+    var use = (T.use && typeof T.use === 'object') ? T.use : {};
+    var list = T.inbox.map(function(it, idx){ return { it: it, n: idx }; })
+      .filter(function(x){ return TW_IBSEL === 'all' || twIbSrcOf(x.it) === TW_IBSEL; });
+    box.innerHTML = list.length ? list.map(function(x){
+      var it = x.it, src = twIbSrcOf(it), u = use[it.id] || {};
+      var n = (u.d && u.d.length) ? u.d.length : (u.n || 0);
+      var ro = (src === '读书摘抄' || src === '知识库') ? ' ro' : '';
+      return '<div class="twIbItem' + ro + '" onclick="twIbUse(' + x.n + ')" title="点一下插到正文末尾">'
+        + '<span class="twDel" onclick="event.stopPropagation();twIbDel(' + x.n + ')" title="删除">×</span>'
+        + '<div class="twT">' + twEsc(it.t) + '</div>'
+        + '<div class="twM">' + twEsc(it.m || src) + (n ? (' · <b class="twUseN">用 ' + n + ' 次</b>') : '') + '</div>'
+        + '<span class="twSrc">' + twEsc(src) + '</span></div>';
+    }).join('') : '<div class="twEmpty">这个分组是空的。切回「全部」，或者把看到的好句子粘进来。</div>';
     if ($('twIbCnt')) $('twIbCnt').textContent = T.inbox.length ? (T.inbox.length + ' 条') : '';
     twSyncDemoBtn();
   }
@@ -33933,7 +34148,7 @@ function hpClearDemo(){
     if (!el) return;
     var v = (el.value || '').trim();
     if (!v) { twToast('先写点东西'); return; }
-    T.inbox.unshift({ id: twUid(), t: v, m: '手动', date: twToday() });
+    T.inbox.unshift({ id: twUid(), t: v, m: '手动', src: '手动', date: twToday() });
     if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
     el.value = '';
     twSave(); twIbRender();
@@ -33943,7 +34158,15 @@ function hpClearDemo(){
     var it = T.inbox[i], ta = $('twBody');
     if (!it || !ta) return;
     ta.value = ta.value.replace(/\s*$/, '') + '\n\n> 素材：' + it.t + '\n';
-    twEdRender();
+    // H4：记一次「被插进哪几篇稿」（排行按去重后的草稿数算）
+    if (it.id){
+      if (!T.use || typeof T.use !== 'object') T.use = {};
+      var u = T.use[it.id] || (T.use[it.id] = { n: 0, d: [] });
+      u.n = (u.n || 0) + 1;
+      if (T.cur && u.d.indexOf(T.cur) < 0) u.d.push(T.cur);
+    }
+    twSave();
+    twEdRender(); twIbRender();
     twToast('素材已插到正文末尾');
   }
   function twIbDel(i){
@@ -33973,8 +34196,8 @@ function hpClearDemo(){
     } else {
       box.innerHTML = T.drafts.map(function(d, idx){
         var t = (d.title || '').trim() || '（未命名草稿）';
-        var meta = (d.id === T.cur) ? ('编辑中 · ' + (d.body || '').replace(/\s/g, '').length + ' 字')
-                                   : ((d.updatedAt || '').slice(0, 10) + ' 更新');
+        var meta = (d.id === T.cur) ? ('编辑中 · ' + twWc(d.body || '') + ' 字 · ' + twSavedAtStr(d))
+                                   : ((d.updatedAt || '').slice(0, 10) + ' 更新 · ' + twSavedAtStr(d));
         return '<div class="twDraftItem' + (d.id === T.cur ? ' on' : '') + '" onclick="twDfPick(' + idx + ')">' +
           '<span class="twDel" onclick="event.stopPropagation();twDfDel(' + idx + ')" title="删除这篇草稿">×</span>' +
           '<div class="twT">' + twEsc(t) + '</div><div class="twM">' + meta + '</div></div>';
@@ -34004,12 +34227,17 @@ function hpClearDemo(){
     var d = T.drafts[i];
     if (!d) return;
     var name = (d.title || '').trim() || '（未命名草稿）';
-    if (!window.confirm('删除草稿《' + name + '》？删了就找不回来了。')) return;
+    if (!window.confirm('把《' + name + '》放进回收站？在里面留 7 天，随时能找回。')) return;
+    if (!Array.isArray(T.trash)) T.trash = [];
+    var x = { id: d.id, title: d.title || '', body: d.body || '', updatedAt: d.updatedAt || '', delAt: Date.now() };
+    if (d.demo) x.demo = true;
+    T.trash.unshift(x);
+    if (T.trash.length > TW_MAX) T.trash = T.trash.slice(0, TW_MAX);
     T.drafts.splice(i, 1);
     if (T.cur === d.id) T.cur = T.drafts.length ? T.drafts[0].id : null;
     if (!T.drafts.length){ var nb = twBlank(); T.drafts.push(nb); T.cur = nb.id; }
-    twSave(); twDfRender(); twEdLoadInto(); twEdRender();
-    twToast('已删除');
+    twSave(); twDfRender(); twTrashBadge(); twEdLoadInto(); twEdRender();
+    twToast('已移入回收站（留 7 天）');
   }
   function twEdLoadInto(){
     var d = twCur();
@@ -34142,6 +34370,7 @@ function hpClearDemo(){
     if (!top || !ai || !pv) return;
     if (!document.getElementById('twBtnKb')){
       top.appendChild(twMkBtn('twBtnKb', '存入知识库', false, '存成一条可检索的知识卡（03-Resources · 推文）', twToKb));
+      top.appendChild(twMkBtn('twBtnCite', '⤴ 引用归档', false, 'H5 · 把本文的引用块批量回存知识库（同来源同标题自动去重）', twCiteOpen));
       ai.appendChild(twMkBtn('twBtnAi', '🤖 AI 指令', false, '5 条精准指令：整篇润色 / 改写开头 / 拆短段落 / 提炼小标题 / 去 AI 味', twAiMenu));
       // ⚠️ id 别叫 twBtnPub —— 预览底那个「复制到公众号」已经占了这个名字（2026-09-18 撞过）
       ai.appendChild(twMkBtn('twBtnLog', '📈 发布记录', false, '记下每篇发在哪、阅读多少；攒几篇才看得出哪类题材真有人点', twPubOpen));
@@ -35078,7 +35307,8 @@ function hpClearDemo(){
   }
   /* ---------- 浮层开关 ---------- */
   var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText', 'twPopPub',
-                 'twPopGate', 'twPopArch', 'twPopRead', 'twPopDiary'];   // 2026-09-19 第五批补后四个
+                 'twPopGate', 'twPopArch', 'twPopRead', 'twPopDiary',
+                 'twPopTrash', 'twPopImg', 'twPopPhone', 'twPopDrawer', 'twPopCite'];   // 2026-09-19 第四批补后五个
   function twPopOpen(id){
     TW_POPS.forEach(function(x){
       var el = $(x);
@@ -35109,8 +35339,16 @@ function hpClearDemo(){
     m.style.whiteSpace = 'pre-wrap';
     m.style.wordWrap = 'break-word';
     m.style.overflowWrap = 'break-word';
-    m.style.boxSizing = 'border-box';
-    m.style.width = ta.offsetWidth + 'px';
+    m.style.boxSizing = 'content-box';
+    m.style.borderLeftWidth = '0';
+    m.style.borderRightWidth = '0';
+    // ★ 宽度必须用「内容宽」= clientWidth − 左右内边距（clientWidth 已扣掉滚动条）。
+    //   2026-09-19 修：以前写成「clientWidth + 左右边框宽」配 border-box，但**没设 border-style** →
+    //   边框根本没渲染，内容区凭空多出 2px（实测 600px vs 正文 598px）→ 把「只超 2px 才折行」的
+    //   临界长行判成不折行：LONG_BODY 每节少 1 视觉行、10 节少 11 行（镜像整篇 2965px vs 正文框
+    //   真实 3262px）→ 凡「按字符位置算 y」的地方（打字机钉中线 / 段落聚焦边界 / 划词条 / 光标
+    //   同步）在长文里全偏十几行。改用 content-box + 显式内容宽后实测 3235px（仅差末尾空行）。
+    m.style.width = (ta.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0)) + 'px';
     document.body.appendChild(m);
     return m;
   }
@@ -36166,6 +36404,16 @@ function hpClearDemo(){
     twIbRender();
     twEdLoadInto();
     twEdRender();
+    /* 第四批（2026-09-19）初始化 */
+    twEdPrefPaint();
+    twFocusPaint();
+    twTrashBadge();
+    twBindSaveGuard();
+    var pend = safeStorage.get('niko_tw_pending', null);
+    if (pend && pend.at > 0 && (Date.now() - pend.at) < 7 * 864e5){
+      twToast('上次离开前有一次未保存的改动，已按本地缓存恢复');
+      safeStorage.set('niko_tw_pending', { at: 0 });
+    }
   }
 
   window.addEventListener('resize', twEdAutoH);
@@ -36181,9 +36429,11 @@ function hpClearDemo(){
         ta.addEventListener(ev, function(){ setTimeout(twSelUpdate, 0); });
       });
       ta.addEventListener('blur', function(){ setTimeout(twSelHide, 200); });
+      ta.addEventListener('scroll', function(){ twFocusMask(); });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindTa);
     else bindTa();
+    setInterval(twFocusPaint, 20000);   // E5：专注状态条每 20 秒对一次表（停笔 3 分钟自动停）
     document.addEventListener('click', function(e){
       var t = e.target;
       while (t && t !== document.body){
@@ -36192,14 +36442,640 @@ function hpClearDemo(){
         if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea'
             || t.id === 'twBtnOutline' || t.id === 'twBtnText' || t.id === 'twBtnLog'
             || t.id === 'twBtnGate' || t.id === 'twBtnArch' || t.id === 'twBtnRead'
-            || t.id === 'twBtnDiary') return;  // 点在开启按钮上
+            || t.id === 'twBtnDiary' || t.id === 'twBtnTyper' || t.id === 'twBtnFocus'
+            || t.id === 'twBtnImg' || t.id === 'twBtnPhone' || t.id === 'twTrashBtn'
+            || t.id === 'twBtnDrawer' || t.id === 'twBtnCite') return;  // 点在开启按钮上
         t = t.parentNode;
       }
       twPopCloseAll();
     });
   })();
 
-  /* ---------- 导出（只导出 HTML onclick 真正用到的）---------- */
+  /* ============================================================
+     第四批并入（2026-09-19）：E 沉浸写作 / F 编辑手感 / G 纸面细节 / H 素材变资本
+     E1 打字机 · E2 段落聚焦 · E5 本次专注 | F4 保存状态 · F5 回收站
+     G2 行高段距（本体已有，见下方 tw6G2Note）· G4 图片位 · G5 手机真机模拟
+     H1 素材箱来源分组 · H2 取材抽屉 · H3 该复习了 · H4 复用排行 · H5 引用块归档
+     ⚠️ G2 说明：本体在 2026-09-18 就已有「行距 / 段距 / 纸宽」三条滑杆（twLhRng /
+        twPsRng / twPwRng）且经 twStyleCfg → twRenderPaper 写进导出内联样式。
+        本轮**不重复造**，只补防回潮断言（verify_merge 的 tw6G2Note）。
+     ============================================================ */
+  var TW_IBG = [{ k:'all', n:'全部' }, { k:'手动', n:'手动' },
+                { k:'读书摘抄', n:'📖 读书摘抄' }, { k:'知识库', n:'🧠 知识库' },
+                { k:'推文工坊', n:'✎ 推文工坊' }];
+  var TW_IBSEL = 'all';                 // 素材箱分组筛选（UI 偏好，不落盘）
+  var TW_DRW = { hits: [] };            // 取材抽屉当次命中
+  var TW_CITE = { list: [], sel: {} };  // 引用块归档
+  var TW_IMGURL = {};                   // 图片位缩略图（当次会话的 objectURL，不落盘）
+  var twImg = { _rows: [] };            // G4 图片位：本次扫到的占位行号
+                                        // ⚠️ 2026-09-19 补声明：原先漏了这一行 → twImgPaint 一调用就
+                                        //    ReferenceError（浮层打不开），异步回调里再炸一次还会把门禁卡死
+  var TW_FM = { k:'', y1:0, y2:0 };     // E2 遮罩：当前块上下边的实测 y（mirror 量，认自动换行）
+  var TW_RKOPEN = false;                // 复用排行展开态
+  var TW_FOCUS = { id:null, t0:0, last:0, w0:0, wc:0 };
+
+  /* ---------- E1/E2 偏好（跟着数据一起存 niko_tw_v1） ---------- */
+  function twEdPref(){
+    if (!T.ed || typeof T.ed !== 'object') T.ed = { typer:false, focus:false };
+    if (typeof T.ed.typer !== 'boolean') T.ed.typer = false;
+    if (typeof T.ed.focus !== 'boolean') T.ed.focus = false;
+    return T.ed;
+  }
+  function twEdPrefPaint(){
+    var p = twEdPref(), pg = $('twPage');
+    if (pg){
+      pg.setAttribute('data-twtyper', p.typer ? 'on' : 'off');
+      pg.setAttribute('data-twfocus', p.focus ? 'on' : 'off');
+    }
+    if ($('twBtnTyper')) $('twBtnTyper').classList.toggle('on', !!p.typer);
+    if ($('twBtnFocus')) $('twBtnFocus').classList.toggle('on', !!p.focus);
+  }
+
+  /* ---------- E1 打字机模式：把光标所在行钉到中线 ---------- */
+  function twTyperToggle(){
+    var p = twEdPref();
+    p.typer = !p.typer;
+    twSave(); twEdPrefPaint(); twTyperTick();
+    twToast(p.typer ? '打字机模式：当前行钉在中线' : '打字机模式已关');
+  }
+  function twTyperTick(){
+    var ta = $('twBody');
+    if (!ta) return;
+    if (!twEdPref().typer) return;
+    // 窄屏正文框是 auto 高度（不滚动），钉中线没有意义 —— 直接跳过
+    if (window.matchMedia('(max-width:900px)').matches) return;
+    var cs = window.getComputedStyle(ta);
+    var lh = parseFloat(cs.lineHeight) || 24;
+    var idx = (typeof ta.selectionStart === 'number') ? ta.selectionStart : 0;
+    var y;
+    try { y = twCaretXY(ta, idx).y; } catch (e) { return; }
+    var target = y - ta.clientHeight / 2 + lh / 2;
+    if (target < 0) target = 0;
+    var mx = ta.scrollHeight - ta.clientHeight;
+    if (mx < 0) mx = 0;
+    if (target > mx) target = mx;
+    if (Math.abs(ta.scrollTop - target) > 1) ta.scrollTop = Math.round(target);
+  }
+
+  /* ---------- E2 段落聚焦：正文框里非当前段整体压暗 ---------- */
+  function twFocusToggle(){
+    var p = twEdPref();
+    p.focus = !p.focus;
+    twSave(); twEdPrefPaint(); twFocusMask();
+    twToast(p.focus ? '段落聚焦：只留当前段清晰' : '段落聚焦已关');
+  }
+  /* 光标落在哪个块（块只有 start 没有 end → 本块末行 = 下一块首行 - 1，最后一块到文末） */
+  function twFocusBlock(ta){
+    var body = String(ta.value || '');
+    var lines = body.split('\n');
+    var idx = (typeof ta.selectionStart === 'number') ? ta.selectionStart : 0;
+    var curLine = body.slice(0, idx).split('\n').length - 1;
+    var bs = twBlocks(body), i, s = curLine, e = curLine;
+    for (i = 0; i < bs.length; i++){
+      if (bs[i].start <= curLine) s = bs[i].start;
+      if (bs[i].start > curLine) break;
+    }
+    e = ((i < bs.length) ? bs[i].start : lines.length) - 1;
+    if (e < s) e = s;
+    return { body: body, s: s, e: e, n: lines.length };
+  }
+  /* 块上下边的**实测** y（镜像量，坐标系与遮罩一致）。
+     ⚠️ 不能用「行号 × 行高」估：正文里一行自动换行成两行视觉行之后，行号与真实 y 就错开，
+        长文里能差出十几行（压暗边界跑到别的段落上）。一次镜像量两个偏移；
+        只在正文/宽度/块边界变了才重量，滚动直接复用（y 与 scrollTop 无关）。 */
+  function twFocusMeas(ta, g){
+    var offs = [0], i;
+    for (i = 0; i < g.body.length; i++){ if (g.body.charCodeAt(i) === 10) offs.push(i + 1); }
+    var o1 = offs[Math.min(g.s, offs.length - 1)] || 0;
+    var o2 = (g.e + 1 < offs.length) ? offs[g.e + 1] : g.body.length;
+    var lh = parseFloat(window.getComputedStyle(ta).lineHeight) || 24;
+    var m = twMirrorMake(ta), r1 = 0, r2 = 0;
+    // ★ 量的是「行盒顶」，不是「行内 span 顶」：普通 inline span 的 offsetTop 落在行盒里面、
+    //   比行盒顶低半个行距（15px 字 / 1.8 行距实测约 3px）→ 遮罩边界会扎进字里。
+    //   0×0 的 inline-block 配 vertical-align:top，顶边正好贴在行盒顶，量出来才是真边界。
+    function lineTop(off){
+      m.textContent = g.body.slice(0, off);
+      var sp = document.createElement('span');
+      sp.textContent = '\u200b';
+      sp.style.display = 'inline-block';
+      sp.style.width = '0'; sp.style.height = '0';
+      sp.style.verticalAlign = 'top'; sp.style.overflow = 'hidden';
+      m.appendChild(sp);
+      return sp.offsetTop;
+    }
+    try {
+      r1 = lineTop(o1);
+      r2 = lineTop(o2);
+      // 块末取「那一行的底边」：o2 落在文末时，探针停在最后一行（或末尾换行产生的幽灵空行）
+      // 的**顶**上，而正文框的 scrollHeight 把那一行整行都算进去了 → 必须补一整行高才是块末；
+      // o2 落在「下一块首行」时不能补，补了下一块的第一行就不被压暗（会留一条亮行）。
+      if (o2 >= g.body.length) r2 += lh;
+    } catch (err) {}
+    try { document.body.removeChild(m); } catch (err) {}
+    // 镜像的 padding-box 顶 ↔ 正文框 padding-box 顶，中间隔 1px 上边框 → 换到遮罩坐标要 +1
+    return { y1: Math.round(1 + r1), y2: Math.round(1 + r2) };
+  }
+  function twFocusMask(){
+    var ta = $('twBody'), top = $('twFocusTop'), bot = $('twFocusBot');
+    if (!ta || !top || !bot) return;
+    if (!twEdPref().focus){ top.style.display = 'none'; bot.style.display = 'none'; TW_FM.k = ''; return; }
+    var cs = window.getComputedStyle(ta);
+    // 正文框是 padding:11px 13px。阈值必须相对**内容区上下沿**（而不是 0 / clientHeight），
+    // 否则贴顶 / 贴底时也会挂一条只压内边距的空条（12px 恒大于 3 这种）。
+    // 2026-09-19 再收紧：留一条行高的余量 —— 压暗条本身不足一行高时（贴顶 / 贴底 + 末尾
+    // 幽灵空行），画出来只是一条脏侧边，不如不画。判定的是「有没有整整一行以上要压暗」。
+    var topC = 1 + (parseFloat(cs.paddingTop) || 0);                       // 内容区顶（遮罩坐标；1 = 上边框）
+    var botC = 1 + ta.clientHeight - (parseFloat(cs.paddingBottom) || 0);  // 内容区底（遮罩坐标）
+    var lhM = parseFloat(cs.lineHeight) || 24;
+    var g = twFocusBlock(ta);
+    var key = g.body.length + '|' + g.n + '|' + ta.offsetWidth + '|' + g.s + '|' + g.e;
+    if (key !== TW_FM.k){
+      var y = twFocusMeas(ta, g);
+      TW_FM.k = key; TW_FM.y1 = y.y1; TW_FM.y2 = y.y2;
+    }
+    var h = ta.clientHeight, st = ta.scrollTop;
+    var y1 = TW_FM.y1 - st, y2 = TW_FM.y2 - st;
+    var A = Math.max(0, Math.min(h, y1));
+    var B = Math.max(0, Math.min(h, y2));
+    // 当前块贴顶 / 贴底时，上方 / 下方根本没有内容可压暗 → 不挂条
+    if (y1 > topC + lhM - 2){ top.style.display = 'block'; top.style.top = '1px'; top.style.height = Math.round(A) + 'px'; }
+    else top.style.display = 'none';
+    if (y2 < botC - lhM + 2){ bot.style.display = 'block'; bot.style.top = Math.round(B) + 'px'; bot.style.bottom = '1px'; }
+    else bot.style.display = 'none';
+  }
+
+  /* ---------- E5 本次专注：计时 + 净增字数 + 近 15 天 ---------- */
+  function twFocusTouch(d, wc){
+    var now = Date.now();
+    var switched = (!d || TW_FOCUS.id !== d.id);
+    if (switched || !TW_FOCUS.t0){
+      TW_FOCUS.id = d ? d.id : null; TW_FOCUS.w0 = wc; TW_FOCUS.t0 = now; TW_FOCUS.last = now;
+    } else if (now - TW_FOCUS.last > 180000){          // 停笔 3 分钟 → 重新起表，不把挂机算成写作
+      TW_FOCUS.t0 = now; TW_FOCUS.w0 = wc; TW_FOCUS.last = now;
+    } else {
+      TW_FOCUS.last = now;
+    }
+    TW_FOCUS.wc = wc;
+  }
+  function twFocusActive(){ return !!TW_FOCUS.t0 && (Date.now() - TW_FOCUS.last < 180000); }
+  function twFocusSp(){
+    var days = twDays(), out = [], arr = [], i, mx = 0;
+    for (i = 14; i >= 0; i--){
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var k = twYmd(d);
+      var w = (days[k] && days[k].w) || 0;
+      arr.push(w); if (w > mx) mx = w;
+    }
+    for (i = 0; i < arr.length; i++){
+      var h = mx ? Math.max(2, Math.round(arr[i] / mx * 24)) : 2;
+      out.push('<i class="' + (i === 14 ? 'td' : '') + '" style="height:' + h + 'px" title="' + arr[i] + ' 字"></i>');
+    }
+    return out.join('');
+  }
+  function twFocusPaint(){
+    var bar = $('twFocusBar');
+    if (!bar) return;
+    var on = twFocusActive();
+    bar.className = 'twFocusBar' + (on ? '' : ' off');
+    var mins = on ? Math.floor((Date.now() - TW_FOCUS.t0) / 60000) : 0;
+    var wc = (typeof TW_FOCUS.wc === 'number') ? TW_FOCUS.wc : 0;
+    var add = Math.max(0, wc - (TW_FOCUS.w0 || 0));
+    if ($('twFbMin')) $('twFbMin').textContent = on ? mins : '—';
+    if ($('twFbAdd')) $('twFbAdd').textContent = '+' + add;
+    var days = twDays(), one = days[twToday()];
+    if ($('twFbToday')) $('twFbToday').textContent = '今日 ' + ((one && one.w) || 0) + ' 字';
+    if ($('twFbSp')) $('twFbSp').innerHTML = twFocusSp();
+  }
+
+  /* ---------- F4 草稿保存状态 + 未保存兜底 ---------- */
+  // 「有没有还没落盘的改动」以 niko_tw_pending 为准（twSaveSoon 写、twSave 清）。
+  // 别用「updatedAt 比 savedAt 晚 1.5 秒」这种时间差去猜：连续打字时 savedAt 刚被刷过，
+  // 会一路判成「已保存」，等于这个提示没用了。
+  function twTwPending(){
+    try { var v = JSON.parse(localStorage.getItem('niko_tw_pending') || 'null'); return !!(v && v.at > 0); }
+    catch (e) { return false; }
+  }
+  function twSavedAtStr(d){
+    if (!d) return '';
+    if (twTwPending()) return '<b class="unsaved" title="还没落盘（防抖 700ms）">● 未保存</b>';
+    var ts = (T.savedAt && T.savedAt[d.id]) || 0;
+    if (!ts) return '<b class="unsaved" title="还没落盘">● 未保存</b>';
+    var x = new Date(ts);
+    return '已保存 ' + twPad2(x.getHours()) + ':' + twPad2(x.getMinutes());
+  }
+  function twSaveFresh(){          // 只刷新当前那条草稿的 meta（不整块重画，避免打断打字）
+    var d = twCur(); if (!d) return;
+    var el = document.querySelector('#twDfList .twDraftItem.on .twM');
+    if (el) el.innerHTML = '编辑中 · ' + twWc(d.body || '') + ' 字 · ' + twSavedAtStr(d);
+  }
+  function twSaveNow(){ clearTimeout(saveTimer); saveTimer = null; twSave(); }
+  // 断网 / 关页面前先把防抖里的改动落盘，并留一个「未正常落盘」的标记
+  function twBindSaveGuard(){
+    if (twBindSaveGuard._b) return; twBindSaveGuard._b = 1;
+    window.addEventListener('beforeunload', function(){ try { twSaveNow(); } catch (e) {} });
+    document.addEventListener('visibilitychange', function(){
+      if (document.visibilityState === 'hidden'){ try { twSaveNow(); } catch (e) {} }
+    });
+  }
+
+  /* ---------- F5 草稿回收站（留 7 天） ---------- */
+  function twTrashPurge(){
+    if (!Array.isArray(T.trash)) T.trash = [];
+    var cut = Date.now() - 7 * 864e5;
+    T.trash = T.trash.filter(function(x){ return x && (x.delAt || 0) >= cut; });
+  }
+  function twTrashBadge(){
+    var n = (T.trash || []).length;
+    if ($('twTrashN')) $('twTrashN').textContent = n ? (' ' + n) : '';
+  }
+  function twTrashOpen(){ twTrashPaint(); twPopOpen('twPopTrash'); }
+  function twTrashPaint(){
+    var box = $('twTrashBox');
+    if (!box) return;
+    twTrashPurge(); twTrashBadge();
+    var list = T.trash || [];
+    if (!list.length){
+      box.innerHTML = '<div class="twEmpty">回收站是空的。删掉的草稿会在这里留 7 天，7 天后自动清空。</div>';
+      return;
+    }
+    box.innerHTML = list.map(function(x, i){
+      var t = (x.title || '').trim() || '（未命名草稿）';
+      var d = x.delAt ? new Date(x.delAt) : null;
+      var ds = d ? (('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2)) : '';
+      var left = d ? Math.max(0, 7 - Math.floor((Date.now() - x.delAt) / 864e5)) : 0;
+      return '<div class="twCiteRow">'
+        + '<span class="g" style="opacity:.6;text-decoration:line-through;">' + twEsc(t) + '</span>'
+        + '<span class="s">删于 ' + ds + ' · 还剩 ' + left + ' 天</span>'
+        + '<button class="twMini" onclick="twTrashRestore(' + i + ')">找回</button></div>';
+    }).join('')
+      + '<div class="twColAct"><button class="twMini" onclick="twTrashEmpty()">清空回收站</button>'
+      + '<span style="font-size:10.5px;color:var(--twTx2);align-self:center;">共 ' + list.length + ' 篇</span></div>';
+  }
+  function twTrashRestore(i){
+    var x = (T.trash || [])[i];
+    if (!x) return;
+    var d = { id: x.id || twUid(), title: x.title || '', body: x.body || '',
+              updatedAt: x.updatedAt || new Date().toISOString() };
+    if (x.demo) d.demo = true;
+    T.trash.splice(i, 1);
+    T.drafts.unshift(d);
+    T.cur = d.id;
+    twSave(); twTrashPaint(); twDfRender(); twEdLoadInto(); twEdRender();
+    twToast('已找回《' + ((d.title || '').trim() || '未命名草稿') + '》');
+  }
+  function twTrashEmpty(){
+    if (!(T.trash || []).length) return;
+    if (!window.confirm('清空回收站？这 ' + T.trash.length + ' 篇就真的找不回来了。')) return;
+    T.trash = [];
+    twSave(); twTrashPaint(); twTrashBadge();
+    twToast('回收站已清空');
+  }
+
+  /* ---------- G4 图片位：占位处读尺寸 + 比例提示（只提示，不动正文） ---------- */
+  function twImgRatioTip(w, h){
+    var r = w / h;
+    if (r >= 1.6 && r <= 1.95) return '<span class="twOk2">比例合适（' + r.toFixed(2) + ':1），公众号不会裁</span>';
+    if (r > 1.95) return '<span class="twWarn2">太宽（' + r.toFixed(2) + ':1），公众号按宽度铺满，画面会被压扁</span>';
+    if (r > 0.92 && r < 1.12) return '<span class="twWarn2">方图（' + r.toFixed(2) + ':1）在公众号正文里会被裁成横图，建议先裁成 16:9</span>';
+    return '<span class="twWarn2">竖图（' + r.toFixed(2) + ':1），手机上会占掉一屏以上</span>';
+  }
+  function twImgOpen(){ twImgPaint(); twPopOpen('twPopImg'); }
+  function twImgPaint(){
+    var box = $('twImgBox');
+    if (!box) return;
+    var body = $('twBody') ? $('twBody').value : '';
+    var lines = String(body).split('\n'), rows = [], i;
+    for (i = 0; i < lines.length; i++){ if (/^\[图片占位\]\s*$/.test(lines[i])) rows.push(i); }
+    twImg._rows = rows;
+    if (!rows.length){
+      box.innerHTML = '<div class="twEmpty">正文里还没有 [图片占位]。在正文里插一处占位，这里就会给那一处读尺寸、查比例。</div>';
+      return;
+    }
+    var imgs = (T.imgs && typeof T.imgs === 'object') ? T.imgs : {};
+    box.innerHTML = rows.map(function(li, k){
+      var im = imgs[li];
+      var url = TW_IMGURL[li];
+      var thumb = url ? ('<img src="' + url + '" alt="">') : '拖图进来<br>或点一下';
+      var meta = im
+        ? ('<b>' + im.w + '×' + im.h + '</b> · ' + twEsc(im.name || '图片') + '<br>' + twImgRatioTip(im.w, im.h))
+        : '还没选图。把图拖进来，或点左边那个框选一张 —— 这里只读尺寸，<b>不会改你的正文</b>。';
+      return '<div class="twImgRow">'
+        + '<div class="twImgDrop" onclick="twImgPick(' + k + ')"'
+        + ' ondragover="event.preventDefault();this.classList.add(\'over\')"'
+        + ' ondragleave="this.classList.remove(\'over\')"'
+        + ' ondrop="twImgDrop(event,' + k + ')">' + thumb + '</div>'
+        + '<div class="twImgMeta"><b>第 ' + (li + 1) + ' 行 · 第 ' + (k + 1) + ' 处占位</b><br>' + meta + '</div>'
+        + '<input type="file" accept="image/*" id="twImgF' + k + '" style="display:none" onchange="twImgFile(' + k + ',this)">'
+        + '</div>';
+    }).join('');
+  }
+  function twImgPick(k){ var el = $('twImgF' + k); if (el) el.click(); }
+  function twImgDrop(ev, k){
+    ev.preventDefault();
+    var el = ev.currentTarget;
+    if (el) el.classList.remove('over');
+    var f = ev.dataTransfer && ev.dataTransfer.files && ev.dataTransfer.files[0];
+    if (f) twImgRead(k, f);
+  }
+  function twImgFile(k, input){
+    var f = input && input.files && input.files[0];
+    if (f) twImgRead(k, f);
+    if (input) input.value = '';
+  }
+  function twImgRead(k, file){
+    if (!file || !/^image\//.test(String(file.type || ''))){ twToast('只认图片文件'); return; }
+    var rows = twImg._rows || [], li = rows[k];
+    if (li == null) return;
+    var url = URL.createObjectURL(file);
+    var im = new Image();
+    im.onload = function(){
+      if (!T.imgs || typeof T.imgs !== 'object') T.imgs = {};
+      T.imgs[li] = { w: im.naturalWidth, h: im.naturalHeight, name: file.name || '图片' };
+      TW_IMGURL[li] = url;
+      twSave(); twImgPaint();
+      twToast('已读尺寸 ' + im.naturalWidth + '×' + im.naturalHeight);
+    };
+    im.onerror = function(){ twToast('这张图读不出来，换一张试试'); };
+    im.src = url;
+  }
+
+  /* ---------- G5 手机真机模拟（390×844） ---------- */
+  function twPhoneOpen(){ twPhonePaint(); twPopOpen('twPopPhone'); }
+  function twPhonePaint(){
+    var box = $('twPhoneBox');
+    if (!box) return;
+    var title = ($('twTitle') ? $('twTitle').value : '') || '未命名';
+    var body = $('twBody') ? $('twBody').value : '';
+    var cfg = twStyleCfg();
+    var html = twRenderPaper(title, body, cfg);
+    var bs = twBlocks(body), maxLen = 0, maxI = -1;
+    bs.forEach(function(b, i){ if (b.len > maxLen){ maxLen = b.len; maxI = i; } });
+    var wc = twWc(body);
+    var phN = (String(body).match(/\[图片占位\]/g) || []).length;
+    var fsOk = cfg.fs >= 15;
+    var lhOk = cfg.lh >= 1.7;
+    var rows = [
+      ['正文字号', cfg.fs + 'px ' + (fsOk ? '✓' : '· 手机偏小'), fsOk],
+      ['手机端行高', cfg.lh.toFixed(2) + ' ' + (lhOk ? '✓' : '· 偏紧'), lhOk],
+      ['单段最长', maxLen ? (maxLen + ' 字 · 第 ' + (maxI + 1) + ' 段') : '—', !(maxLen > 150)],
+      ['配图', phN ? (phN + ' 处占位（宽度 100%）') : '没有图', phN > 0],
+      ['正文字数', wc + ' 字', true],
+      ['全文手机屏数', '<span id="twPhScreens">…</span>', true]
+    ];
+    box.innerHTML = '<div class="twPhoneWrap">'
+      + '<div class="twPhone"><div class="ntch"></div><div class="scr" id="twPhScr">'
+      + '<div style="margin:0 auto;padding:2px 10px 8px;">' + html + '</div></div></div>'
+      + '<div class="twPhChk">' + rows.map(function(r){
+          return '<div class="twPhR"><span class="g">' + r[0] + '</span><span class="v">'
+            + (r[2] ? r[1] : '<span class="twWarn2">' + r[1] + '</span>') + '</span></div>';
+        }).join('')
+      + (maxLen > 150 ? '<div class="twWarn2" style="margin-top:8px;">第 ' + (maxI + 1) + ' 段 ' + maxLen
+          + ' 字，手机上是一整屏的长段。建议按句拆成 2–3 段。</div>' : '')
+      + '</div></div>';
+    requestAnimationFrame(function(){
+      var scr = $('twPhScr'), el = $('twPhScreens');
+      if (!scr || !el) return;
+      el.textContent = '约 ' + Math.max(1, Math.ceil(scr.scrollHeight / 420)) + ' 屏';
+    });
+  }
+
+  /* ---------- H1 素材箱：按来源分组 ---------- */
+  function twIbSrcOf(it){
+    if (!it) return '手动';
+    if (it.src && TW_IBG.some(function(g){ return g.k === it.src; })) return it.src;
+    var m = String(it.m || '');
+    if (m.indexOf('读书') >= 0 || m.indexOf('摘抄') >= 0 || m.indexOf('📖') >= 0) return '读书摘抄';
+    if (m.indexOf('知识库') >= 0 || m.indexOf('🧠') >= 0) return '知识库';
+    if (m.indexOf('推文') >= 0 || m.indexOf('✎') >= 0) return '推文工坊';
+    return '手动';
+  }
+  function twIbGrpSet(k){ TW_IBSEL = k; twIbRender(); }
+  function twIbGrpPaint(){
+    var box = $('twIbGrp');
+    if (!box) return;
+    var box2 = '';
+    TW_IBG.forEach(function(g){
+      var n = g.k === 'all' ? T.inbox.length
+        : T.inbox.filter(function(it){ return twIbSrcOf(it) === g.k; }).length;
+      box2 += '<button class="' + (TW_IBSEL === g.k ? 'on' : '') + '" onclick="twIbGrpSet(\'' + g.k + '\')">'
+        + twEsc(g.n) + ' ' + n + '</button>';
+    });
+    box.innerHTML = box2;
+  }
+
+  /* ---------- H3 「该复习了」 ---------- */
+  function twReviewPaint(){
+    var box = $('twIbRev');
+    if (!box) return;
+    var books = [], kb = [];
+    try {
+      var bs = safeStorage.get('niko_books', []) || [];
+      var ns = safeStorage.get('niko_book_notes', []) || [];
+      var has = {};
+      ns.forEach(function(n){ if (n && n.bookId) has[n.bookId] = 1; });
+      bs.forEach(function(b){
+        if (!b || b.status !== 'done') return;
+        if (has[b.id]) return;
+        var t = b.finishedAt || b.updatedAt || b.date || '';
+        var days = t ? Math.floor((Date.now() - new Date(t).getTime()) / 864e5) : -1;
+        books.push({ t: b.title || '未命名', d: days });
+      });
+    } catch (e) {}
+    try {
+      var ks = safeStorage.get('niko_knowledge', []) || [];
+      var cite = (T.cites && typeof T.cites === 'object') ? T.cites : {};
+      ks.forEach(function(k){
+        if (!k) return;
+        var c = cite[k.id];
+        var t = (c && c.last) || k.updatedAt || k.createdAt || '';
+        var days = t ? Math.floor((Date.now() - new Date(t).getTime()) / 864e5) : -1;
+        if (days >= 90) kb.push({ t: k.title || '未命名', d: days });
+      });
+    } catch (e) {}
+    if (!books.length && !kb.length){ box.innerHTML = ''; return; }
+    var h = '';
+    if (books.length){
+      h += '<b>📚 ' + books.length + ' 本读完的书还没有一条摘抄</b>';
+      h += books.slice(0, 3).map(function(b){
+        return '<i>' + twEsc(b.t) + (b.d >= 0 ? (' · 读完 ' + b.d + ' 天') : '') + '</i>';
+      }).join(' · ');
+      h += '<br>写稿时正好用得上 → 去补一句你记得的。';
+    }
+    if (kb.length){
+      if (h) h += '<br>';
+      h += '<b>🧠 ' + kb.length + ' 条知识库素材 90 天没动过</b>';
+      h += kb.slice(0, 3).map(function(x){
+        return '<i>' + twEsc(x.t) + '（' + x.d + ' 天）</i>';
+      }).join(' · ');
+      if (kb.length > 3) h += ' <i>等</i>';
+      h += '<br>按「最近一次编辑 / 被引用」算。写稿时想不起来它们，说明该清理或该用起来了。';
+    }
+    box.innerHTML = '<div class="twIbRev">' + h + '</div>';
+  }
+
+  /* ---------- H4 素材复用排行 ---------- */
+  function twRankData(){
+    var use = (T.use && typeof T.use === 'object') ? T.use : {};
+    var rows = (T.inbox || []).map(function(it){
+      var u = use[it.id] || {};
+      var n = (u.d && u.d.length) ? u.d.length : (u.n || 0);
+      return { it: it, n: n };
+    });
+    rows.sort(function(a, b){ return b.n - a.n; });
+    return rows;
+  }
+  function twRankToggle(){ TW_RKOPEN = !TW_RKOPEN; twRankPaint(); }
+  function twRankPaint(){
+    var box = $('twIbRank');
+    if (!box) return;
+    var rows = twRankData();
+    var used = rows.filter(function(r){ return r.n > 0; });
+    var never = rows.filter(function(r){ return r.n === 0; });
+    if (!rows.length){ box.innerHTML = ''; return; }
+    var mx = used.length ? used[0].n : 1;
+    var h = '<div class="twRkHd" onclick="twRankToggle()">'
+      + (TW_RKOPEN ? '▾' : '▸') + ' 📊 素材复用排行 <span style="opacity:.8;">（'
+      + used.length + ' 条用过 · ' + never.length + ' 条一直没用上）</span></div>';
+    if (TW_RKOPEN){
+      h += '<div class="twRkBody">';
+      if (used.length){
+        h += used.slice(0, 6).map(function(r){
+          return '<div class="twRkRow"><span class="g">' + twEsc(String(r.it.t).slice(0, 46)) + '</span>'
+            + '<span class="twRkBar"><i style="width:' + Math.round(r.n / mx * 100) + '%"></i></span>'
+            + '<span style="flex:0 0 34px;text-align:right;">' + r.n + ' 篇</span></div>';
+        }).join('');
+      } else {
+        h += '<div class="twEmpty">还没有素材被插进过正文。插一次，这里就有数了。</div>';
+      }
+      if (never.length){
+        h += '<div class="twRkHd" style="margin-top:7px;cursor:default;">一直没用上 ' + never.length + ' 条</div>';
+        h += never.slice(0, 4).map(function(r){
+          return '<div class="twRkRow"><span class="g" style="opacity:.7;">' + twEsc(String(r.it.t).slice(0, 40)) + '</span>'
+            + '<span style="flex:0 0 26px;text-align:right;opacity:.6;">0</span></div>';
+        }).join('');
+        if (never.length > 4) h += '<div class="twRkEmpty twEmpty">…还有 ' + (never.length - 4) + ' 条。攒着不如用一次，或者删掉。</div>';
+      }
+      h += '</div>';
+    }
+    box.innerHTML = h;
+  }
+
+  /* ---------- H2 取材抽屉：搜书摘 + 知识库 ---------- */
+  function twDrawerOpen(){ twDrawerPaint(); twPopOpen('twPopDrawer'); }
+  function twDrawerPaint(){
+    var box = $('twDrwBox');
+    if (!box) return;
+    var q = ($('twDrwQ') ? $('twDrwQ').value : '').trim();
+    var hits = [];
+    try {
+      var books = safeStorage.get('niko_books', []) || [];
+      var bmap = {};
+      books.forEach(function(b){ bmap[b.id] = b.title || ''; });
+      (safeStorage.get('niko_book_notes', []) || []).forEach(function(n){
+        if (!n) return;
+        var txt = String(n.quote || '');
+        var th = String(n.thought || '');
+        if (!txt && !th) return;
+        var probe = txt + ' ' + th;
+        if (q && probe.indexOf(q) < 0) return;
+        hits.push({ text: txt || th, src: '📖 ' + (bmap[n.bookId] || '读书笔记'), kind: 'book', page: n.page });
+      });
+    } catch (e) {}
+    try {
+      (safeStorage.get('niko_knowledge', []) || []).forEach(function(k){
+        if (!k) return;
+        var t = String(k.title || '');
+        var b = String(k.body || '');
+        if (q && (t + ' ' + b).indexOf(q) < 0) return;
+        hits.push({ text: t || b, body: b, src: '🧠 ' + String(k.para || '知识库'), kind: 'kb', id: k.id });
+      });
+    } catch (e) {}
+    // 书摘优先（更接近「金句」），再知识库
+    hits.sort(function(a, b){ return (a.kind === 'book' ? 0 : 1) - (b.kind === 'book' ? 0 : 1); });
+    if (!q) hits = hits.slice(0, 8);
+    TW_DRW.hits = hits;
+    if (!hits.length){
+      box.innerHTML = '<div class="twEmpty">' + (q ? '没搜到「' + twEsc(q) + '」。' : '')
+        + '换个词试试，或者先去读书看板记一条摘抄 / 往知识库存一条素材。</div>';
+      return;
+    }
+    box.innerHTML = hits.slice(0, 40).map(function(h, i){
+      return '<div class="twDrwRow"><span class="g">' + twEsc(String(h.text).slice(0, 120)) + '</span>'
+        + '<span class="s">' + twEsc(h.src) + (h.page ? (' P' + h.page) : '') + '</span>'
+        + '<button class="twMini" onclick="twDrawerIns(' + i + ')">插为引用</button></div>';
+    }).join('');
+  }
+  function twDrawerIns(i){
+    var h = TW_DRW.hits[i];
+    if (!h) return;
+    var ta = $('twBody');
+    if (!ta) return;
+    var quote = (h.kind === 'book') ? String(h.text)
+      : (h.body ? String(h.body).slice(0, 120) : String(h.text));
+    quote = quote.replace(/\s+/g, ' ').trim();
+    if (!quote){ twToast('这条是空的'); return; }
+    ta.value = ta.value.replace(/\s*$/, '') + '\n\n> ' + quote + '\n';
+    // 顺手存进素材箱并标来源（H1 的分组靠它）
+    T.inbox.unshift({ id: twUid(), t: quote.slice(0, 200), m: h.src,
+      src: (h.kind === 'book' ? '读书摘抄' : '知识库'), date: twToday(), ref: 1 });
+    if (T.inbox.length > TW_MAX) T.inbox = T.inbox.slice(0, TW_MAX);
+    // 知识库命中 → 记一次引用（H3 的「90 天没动过」用这个）
+    if (h.kind === 'kb' && h.id) twCiteMark(h.id);
+    twSave(); twEdRender(); twIbRender();
+    twToast('已插为引用，并存入素材箱（来源已标）');
+  }
+  function twCiteMark(key){
+    if (!T.cites || typeof T.cites !== 'object') T.cites = {};
+    var c = T.cites[key] || (T.cites[key] = { n: 0, last: 0 });
+    c.n = (c.n || 0) + 1; c.last = Date.now();
+  }
+
+  /* ---------- H5 引用块归档回知识库 ---------- */
+  function twCiteOpen(){ twCitePaint(); twPopOpen('twPopCite'); }
+  function twCitePaint(){
+    var box = $('twCiteBox');
+    if (!box) return;
+    var body = $('twBody') ? $('twBody').value : '';
+    var list = twBlocks(body).filter(function(b){ return b.t === 'quote' && String(b.text || '').trim(); });
+    TW_CITE.list = list;
+    if (!list.length){
+      box.innerHTML = '<div class="twEmpty">本文还没有引用块（正文里以 &gt; 开头的行）。先写几处引用，再来归档。</div>';
+      return;
+    }
+    list.forEach(function(c, i){ if (TW_CITE.sel[i] === undefined) TW_CITE.sel[i] = 1; });
+    box.innerHTML = list.map(function(c, i){
+      var on = !!TW_CITE.sel[i];
+      return '<div class="twCiteRow"><button class="twCk' + (on ? ' on' : '') + '" onclick="twCiteToggle(' + i + ')">'
+        + (on ? '✓' : '○') + '</button>'
+        + '<span class="g">' + twEsc(String(c.text).slice(0, 140)) + '</span>'
+        + '<span class="s">第 ' + (c.start + 1) + ' 行</span></div>';
+    }).join('');
+  }
+  function twCiteToggle(i){
+    TW_CITE.sel[i] = TW_CITE.sel[i] ? 0 : 1;
+    twCitePaint();
+  }
+  function twCiteAll(v){
+    TW_CITE.list.forEach(function(c, i){ TW_CITE.sel[i] = v ? 1 : 0; });
+    twCitePaint();
+  }
+  function twCiteGo(){
+    if (typeof addToKnowledge !== 'function'){ twToast('知识库模块没加载，稍后再试'); return; }
+    var n = 0;
+    TW_CITE.list.forEach(function(c, i){
+      if (!TW_CITE.sel[i]) return;
+      var txt = String(c.text || '').replace(/\s+/g, ' ').trim();
+      if (!txt) return;
+      var ok = addToKnowledge({
+        title: twClip(txt, 40), body: '> ' + txt,
+        para: '03-Resources', category: '副业', tags: ['推文', '引用'],
+        from: '推文工坊·引用', dedup: true
+      });
+      if (ok) n++;
+    });
+    twSave(); twCitePaint();
+    twToast(n ? ('已归档 ' + n + ' 条到知识库（03-Resources）') : '勾选的引用都已在知识库里，没新增');
+  }  /* ---------- 导出（只导出 HTML onclick 真正用到的）---------- */
   window.renderTwPage = renderTwPage;
   window.twIbAdd = twIbAdd;
   window.twIbUse = twIbUse;
@@ -36218,6 +37094,40 @@ function hpClearDemo(){
   window.twDemoLoad = twDemoLoad;
   window.twDemoClear = twDemoClear;
   window.twDemoToggle = twDemoToggle;
+  /* ---------- 第四批（2026-09-19）导出 ---------- */
+  window.twTyperToggle = twTyperToggle;
+  window.twFocusToggle = twFocusToggle;
+  window.twTrashOpen = twTrashOpen;
+  window.twTrashRestore = twTrashRestore;
+  window.twTrashEmpty = twTrashEmpty;
+  window.twImgOpen = twImgOpen;
+  window.twImgPick = twImgPick;
+  window.twImgFile = twImgFile;
+  window.twImgDrop = twImgDrop;
+  window.twPhoneOpen = twPhoneOpen;
+  window.twIbGrpSet = twIbGrpSet;
+  window.twDrawerOpen = twDrawerOpen;
+  window.twDrawerPaint = twDrawerPaint;
+  window.twDrawerIns = twDrawerIns;
+  window.twRankToggle = twRankToggle;
+  window.twCiteOpen = twCiteOpen;
+  window.twCiteToggle = twCiteToggle;
+  window.twCiteAll = twCiteAll;
+  window.twCiteGo = twCiteGo;
+  window.__tw6 = {
+    pref: twEdPref, prefPaint: twEdPrefPaint, typerTick: twTyperTick, focusMask: twFocusMask,
+    focusTouch: twFocusTouch, focusPaint: twFocusPaint, focusActive: twFocusActive,
+    savedAtStr: twSavedAtStr, trashPurge: twTrashPurge, trashPaint: twTrashPaint,
+    imgPaint: twImgPaint, ratioTip: twImgRatioTip, phonePaint: twPhonePaint,
+    ibSrcOf: twIbSrcOf, ibGrpPaint: twIbGrpPaint, reviewPaint: twReviewPaint,
+    rankData: twRankData, rankPaint: twRankPaint, drawerPaint: twDrawerPaint,
+    citePaint: twCitePaint, citeMark: twCiteMark, IBG: TW_IBG,
+    edgeY: function(){ var t = $('twBody'); return t ? twFocusMeas(t, twFocusBlock(t)) : null; },
+    blk: function(){ var t = $('twBody'); return t ? twFocusBlock(t) : null; },
+    caretY: function(){ var t = $('twBody'); if (!t) return null; return twCaretXY(t, (typeof t.selectionStart === 'number') ? t.selectionStart : 0); },
+    sel: function(){ return TW_IBSEL; }, rk: function(){ return TW_RKOPEN; },
+    focus: function(){ return TW_FOCUS; }
+  };
   /* 2026-09-18 新增：排版皮肤/零件（A2 A7 A8 · B1 B2 B3 B5 B6）+ C2 C3 C4 + D1 */
   window.twStyleCfg = twStyleCfg;       // 当前排版参数（皮肤/主色/零件/字号行距）
   window.twRenderPaper = twRenderPaper; // 纸面渲染（内联样式，预览与导出同一份）
@@ -36233,6 +37143,7 @@ function hpClearDemo(){
   window.twTitleUse = twTitleUse;
   window.twPopOpen = twPopOpen;
   window.twPopClose = twPopClose;
+  window.twPopCloseAll = twPopCloseAll;   // 2026-09-19 补导出：门禁/自检要能一键收起所有浮层
   window.twAiMenu = twAiMenu;
   window.twCmdCopy = twCmdCopy;
   window.twSelWrap = twSelWrap;
@@ -38060,7 +38971,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191019";
+        window.NIKO_VERSION = "202609191138";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
