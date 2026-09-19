@@ -11310,6 +11310,32 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   #twPage .twChip{padding:5px 9px;}
   #twPage .twStyBtn{padding:4px 9px;}
 }
+/* ===== 第五批（2026-09-19 并入）：I1 发布总检 / J2-J4 写作档案 / K2 日记选题 / L1-L3 读者视角 ===== */
+#twPage .twChk.go{cursor:pointer;border-radius:6px;padding-left:5px;padding-right:5px;margin-left:-5px;}
+#twPage .twChk.go:hover{background:var(--twPanel2);}
+#twPage .twChkLoc{flex:0 0 auto;font-size:10.5px;color:var(--twAccent);white-space:nowrap;}
+#twPage .twG5note{font-size:11px;color:var(--twTx);line-height:1.65;margin-top:7px;}
+#twPage .twG5note.dim{color:var(--twTx2);font-size:10.5px;}
+#twPage .twG5grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:2px 0 9px;}
+#twPage .twG5k{font-size:10.5px;color:var(--twTx2);margin-bottom:1px;}
+#twPage .twG5v{font-size:17px;font-family:Georgia,serif;color:var(--twTx);line-height:1.25;}
+#twPage .twG5bar{height:7px;border-radius:4px;background:var(--twPanel2);border:1px solid var(--twLine);overflow:hidden;}
+#twPage .twG5bar>i{display:block;height:100%;background:var(--twAccent);transition:width .2s;}
+#twPage .twG5bar.done>i{background:#12a150;}
+#twPage .twHrs{display:flex;gap:2px;align-items:flex-end;height:56px;margin:5px 0 3px;}
+#twPage .twHrs i{flex:1;display:block;min-height:2px;border-radius:2px;background:var(--twPanel2);}
+#twPage .twHrs i.hi{background:var(--twAccent);}
+#twPage .twHrsAxis{display:flex;font-size:9.5px;color:var(--twTx2);}
+#twPage .twHrsAxis span{flex:1;}
+#twPage .twDel5{background:rgba(224,164,74,.22);color:#b8791f;border-radius:3px;padding:0 2px;}
+#twPage .twG5badge{flex:0 0 auto;border:1px solid var(--twLine);border-radius:999px;padding:0 7px;
+  font-size:10.5px;color:var(--twTx2);white-space:nowrap;}
+#twPage .twMini5{border:1px solid var(--twLine);background:transparent;color:var(--twTx2);border-radius:5px;
+  padding:2px 9px;font-size:11px;cursor:pointer;font-family:inherit;}
+#twPage .twMini5:hover{color:var(--twTx);border-color:var(--twAccent);}
+#twPage .twG5inp{background:var(--twPanel2);border:1px solid var(--twLine);color:var(--twTx);border-radius:6px;
+  padding:3px 7px;font-size:12px;font-family:inherit;width:74px;outline:none;}
+#twPage .twG5inp:focus{border-color:var(--twAccent);}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -14030,6 +14056,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <button class="twNew" id="twBtnOutline" onclick="twOutlineOpen()" title="C1 · 按小标题列出全篇结构，点一行跳到那一段">☰ 大纲</button>
           <button class="twNew" id="twBtnText" onclick="twTextOpen()" title="C3 · 查「的地得 / 重复字 / 中英标点 / 中英空格」四类硬伤">🔍 文字自查</button>
           <button class="twNew" id="twBtnSync" onclick="twSyncToggle()" title="光标同步 · 沉浸式写作：正文里点到哪一行，右侧排版预览就滚到那一段；再点一下关掉">⇄ 光标同步</button>
+          <button class="twNew" id="twBtnGate" onclick="twGateOpen()" title="I1 · 把散在四处的检查收成一张清单，点哪一项光标就跳到正文那一处">✅ 发布总检</button>
+          <button class="twNew" id="twBtnArch" onclick="twArchOpen()" title="J2/J3/J4 · 本周字数与篇数目标 · 高效时段 · 文章骨架库">📊 写作档案</button>
+          <button class="twNew" id="twBtnRead" onclick="twReadOpen()" title="L1/L2/L3 · 读者视角体检 / 哪句能删 / 标题兑现度">👀 读者视角</button>
+          <button class="twNew" id="twBtnDiary" onclick="twDiaryOpen()" title="K2 · 从日记里挑有场景、有情绪的句子当选题">📓 日记选题</button>
           <div class="twHostAi" id="twHostAi"></div>
         </div>
 
@@ -14120,6 +14150,31 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <input class="twPiR" id="twPiR" type="number" min="0" placeholder="阅读">
           <button class="twMini" onclick="twPubAdd()">记一笔</button>
         </div>
+      </div>
+
+
+      <div class="twPop" id="twPopGate">
+        <div class="twPopHd">✅ 发布前总检 <button class="twX" onclick="twPopClose('twPopGate')" title="关闭">×</button></div>
+        <div class="twPopTip">把散在四处的检查收成一张清单（标题 / 段落 / 错字 / 极限词 / 配图 / 屏数 / 首段）。点任意一项，光标直接跳到正文那一处。</div>
+        <div id="twGateBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopArch">
+        <div class="twPopHd">📊 写作档案 <button class="twX" onclick="twPopClose('twPopArch')" title="关闭">×</button></div>
+        <div class="twTxTabs" id="twArchTabs"></div>
+        <div id="twArchBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopRead">
+        <div class="twPopHd">👀 读者视角 <button class="twX" onclick="twPopClose('twPopRead')" title="关闭">×</button></div>
+        <div class="twTxTabs" id="twReadTabs"></div>
+        <div id="twReadBox"></div>
+      </div>
+
+      <div class="twPop" id="twPopDiary">
+        <div class="twPopHd">📓 日记 → 选题 <button class="twX" onclick="twPopClose('twPopDiary')" title="关闭">×</button></div>
+        <div class="twPopTip">只从你自己写下的日记里挑「有场景、有情绪」的句子（最近 60 条）。不读全文、不生成观点，把句子递给你。</div>
+        <div id="twDiaryBox"></div>
       </div>
 
       <div class="twPvwWrap twScroll">
@@ -33848,10 +33903,15 @@ function hpClearDemo(){
     if (curMeta) curMeta.textContent = '编辑中 · ' + wc + ' 字';
     // 同步内存 → 落盘（防抖）
     if (d){ d.title = title; d.body = body; d.updatedAt = new Date().toISOString(); twSaveSoon(); }
+    twWlogCount(d, wc);          // J2/J3：写作量记账（只记新增的字，删改/粘贴不算）
     twRhyRender();                                                              // C4 段落节奏条
     // 浮层开着就跟着刷新（C1 大纲 / C3 自查）
     if ($('twPopOutline') && $('twPopOutline').classList.contains('on')) twOutlinePaint();
     if ($('twPopText') && $('twPopText').classList.contains('on')){ TX.list = txScan(body); twTextPaint(); }
+    // 第五批：开着的浮层跟着正文一起刷新（否则改完稿看到的是旧结论）
+    if ($('twPopGate') && $('twPopGate').classList.contains('on')) twGatePaint();
+    if ($('twPopRead') && $('twPopRead').classList.contains('on')) twReadPaint();
+    if ($('twPopArch') && $('twPopArch').classList.contains('on')) twArchPaint();
     twEdAutoH();
     twSyncToCaret();   // 沉浸式写作：正文光标一动，右侧排版预览跟着滚（2026-09-19）
   }
@@ -35017,7 +35077,8 @@ function hpClearDemo(){
     twLocate(x.off, x.off + x.len);
   }
   /* ---------- 浮层开关 ---------- */
-  var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText', 'twPopPub'];  // 2026-09-18 加后三个
+  var TW_POPS = ['twPopTitle', 'twPopAi', 'twPopCheck', 'twPopOutline', 'twPopText', 'twPopPub',
+                 'twPopGate', 'twPopArch', 'twPopRead', 'twPopDiary'];   // 2026-09-19 第五批补后四个
   function twPopOpen(id){
     TW_POPS.forEach(function(x){
       var el = $(x);
@@ -35408,6 +35469,684 @@ function hpClearDemo(){
     wrap.scrollTop = Math.max(0, wrap.scrollTop + Math.round(shift));
   }
 
+  /* ================================================================
+     第五批（2026-09-19 并入）：I1 发布前总检 · J2 篇/周字数目标 ·
+     J3 高效时段 · J4 文章骨架库 · K2 日记→选题 ·
+     L1 读者视角体检 · L2 哪句能删 · L3 标题兑现度
+     状态全部挂在 T 上（同一个 key，不新开 localStorage key）
+     ================================================================ */
+  var G5 = { gate: [], arch: 'goal', read: 'view', readRows: [], cut: [], skels: [], diary: [] };
+
+  /* ---------- 周起点：跟随本体 niko_week_start（默认 5=周五），禁止硬编码 ---------- */
+  function twWeekStart(){
+    var ws = 5;
+    try { if (typeof nikoWeekStartDay === 'function') ws = nikoWeekStartDay(); } catch (e) {}
+    var d = new Date();
+    var diff = (d.getDay() - ws + 7) % 7;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate() - diff);
+  }
+  function twYmd(d){
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  function twInWeek(ymd, ws){
+    if (!ymd) return false;
+    var d = new Date(String(ymd).slice(0, 10) + 'T00:00:00');
+    if (isNaN(d.getTime())) return false;
+    return d >= ws && d < new Date(ws.getTime() + 7 * 864e5);
+  }
+  /* ---------- 正文字数口径（与 twStWc / twCheckRun 同源） ---------- */
+  function twWc(body){ return String(body || '').replace(/[#>*`\[\]=~\-]/g, '').replace(/\s/g, '').length; }
+
+  /* ---------- 写作量账本（J2 目标 / J3 时段共用）----------
+     T.wlog = { days: { 'YYYY-MM-DD': { w: 当天累计新增字数, h: [24 桶] } } }
+     只记「正的新增字数」：删改不算、粘贴不算、挂机不算 —— 这是最有把握拿到的真实口径。
+     换草稿 / 一次涌入 400 字以上 → 只重置基线，不记账。 */
+  var WLOG = { id: null };
+  function twDays(){
+    if (!T.wlog || typeof T.wlog !== 'object') T.wlog = { days: {} };
+    if (!T.wlog.days || typeof T.wlog.days !== 'object') T.wlog.days = {};
+    return T.wlog.days;
+  }
+  function twDayOne(k){
+    var days = twDays(), d = days[k];
+    if (!d || typeof d !== 'object'){ d = { w: 0, h: [] }; days[k] = d; }
+    if (!Array.isArray(d.h) || d.h.length !== 24){
+      var h = []; for (var i = 0; i < 24; i++) h.push(0); d.h = h;
+    }
+    if (typeof d.w !== 'number') d.w = 0;
+    return d;
+  }
+  function twWlogCount(d, wc){
+    if (!d) return;
+    var same = (WLOG.id === d.id);
+    var delta = (same && typeof d.wsnap === 'number') ? (wc - d.wsnap) : 0;
+    WLOG.id = d.id;
+    d.wsnap = wc;
+    if (delta <= 0 || delta > 400) return;          // 删字 / 粘贴 / 换稿 → 不记账
+    var one = twDayOne(twToday());
+    one.w += delta;
+    one.h[new Date().getHours()] += delta;
+    twSaveSoon();
+    twGoalCheck();
+    if ($('twPopArch') && $('twPopArch').classList.contains('on')) twArchPaint();
+  }
+  function twHourAgg(){
+    var days = twDays(), h = [], i, j;
+    for (i = 0; i < 24; i++) h.push(0);
+    var n = 0;
+    Object.keys(days).forEach(function(k){
+      var d = days[k];
+      if (!d || !Array.isArray(d.h) || d.h.length !== 24) return;
+      n++;
+      for (j = 0; j < 24; j++) h[j] += Number(d.h[j]) || 0;
+    });
+    var total = 0; for (i = 0; i < 24; i++) total += h[i];
+    return { h: h, days: n, total: total };
+  }
+  function twWeekWords(ws){
+    var days = twDays(), w = 0;
+    Object.keys(days).forEach(function(k){
+      if (!twInWeek(k, ws)) return;
+      w += Number(days[k] && days[k].w) || 0;
+    });
+    return w;
+  }
+  /* 每活跃小时的字数（近 14 天）—— 只在有样本时才用来估「还差多久」 */
+  function twPace(){
+    var days = twDays(), keys = Object.keys(days).sort().slice(-14);
+    var w = 0, hs = 0;
+    keys.forEach(function(k){
+      var d = days[k]; if (!d) return;
+      w += Number(d.w) || 0;
+      (d.h || []).forEach(function(x){ if (Number(x) > 0) hs++; });
+    });
+    return hs ? Math.round(w / hs) : 0;
+  }
+
+  /* ================= J2 · 篇/周字数目标 + 达标自动打卡 ================= */
+  function twGoal(){
+    if (!T.goal || typeof T.goal !== 'object') T.goal = { p: 3, w: 6000 };
+    if (typeof T.goal.p !== 'number' || T.goal.p < 0) T.goal.p = 3;
+    if (typeof T.goal.w !== 'number' || T.goal.w < 0) T.goal.w = 6000;
+    return T.goal;
+  }
+  function twGoalStat(){
+    var ws = twWeekStart(), g = twGoal(), done = 0;
+    T.drafts.forEach(function(d){
+      if (twWc(d.body) < 300) return;                  // 成稿线 300 字
+      if (!twInWeek(d.updatedAt, ws)) return;
+      done++;
+    });
+    return { goal: g, words: twWeekWords(ws), done: done, ws: ws };
+  }
+  function twHabitFind(){
+    try {
+      var hs = safeStorage.get('niko_habits', []);
+      if (!Array.isArray(hs)) return null;
+      for (var i = 0; i < hs.length; i++){ var h = hs[i]; if (h && /写/.test(String(h.name || ''))) return h; }
+    } catch (e) {}
+    return null;
+  }
+  function twHabitMake(){
+    try {
+      var hs = safeStorage.get('niko_habits', []);
+      if (!Array.isArray(hs)) hs = [];
+      if (!hs.some(function(x){ return x && /写/.test(String(x.name || '')); })){
+        hs.push({ id: 'hb_' + Date.now(), name: '写作', icon: '✍️', goal: 5, rewardMin: 0,
+                  frequency: 'daily', createdAt: new Date().toISOString() });
+        safeStorage.set('niko_habits', hs);
+      }
+      twToast('已建好「写作」习惯，达标时自动帮你打卡');
+    } catch (e) { twToast('建习惯失败，去「日常习惯」里手动加一个叫「写作」的'); }
+    twArchPaint();
+  }
+  function twHabitAuto(){
+    var h = twHabitFind(); if (!h || !h.id) return false;
+    var today = twToday();
+    try {
+      var logs = safeStorage.get('niko_habit_logs', []);
+      if (!Array.isArray(logs)) logs = [];
+      for (var i = 0; i < logs.length; i++){
+        var l = logs[i];
+        if (l && l.habitId === h.id && String(l.date || '').slice(0, 10) === today) return false;
+      }
+      logs.push({ habitId: h.id, date: today, at: new Date().toISOString(), from: 'tw-goal' });
+      safeStorage.set('niko_habit_logs', logs);
+      return true;
+    } catch (e) { return false; }
+  }
+  /* 达标判定：字数与篇数都够、且今天还没打过卡，才动「日常习惯」 */
+  function twGoalCheck(){
+    var s = twGoalStat();
+    if (!s.goal.w && !s.goal.p) return;
+    if (s.words < s.goal.w || s.done < s.goal.p) return;
+    if (twHabitAuto()) twToast('📌 本周目标达成，已在「日常习惯」里给「写作」打卡');
+  }
+  function twGoalSave(){
+    var p = $('twG5p'), w = $('twG5w'), g = twGoal();
+    if (p) g.p = Math.max(0, Math.min(50, Number(p.value) || 0));
+    if (w) g.w = Math.max(0, Math.min(200000, Number(w.value) || 0));
+    twSave(); twArchPaint(); twGoalCheck();
+    twToast('目标已保存');
+  }
+
+  /* ================= J3 · 高效时段分析 ================= */
+  function twHourWin(h, win){
+    win = win || 3;
+    var best = null, i, j, sum;
+    for (i = 0; i + win <= 24; i++){
+      sum = 0; for (j = i; j < i + win; j++) sum += h[j];
+      if (!best || sum > best.sum) best = { s: i, e: i + win - 1, sum: sum };
+    }
+    return best;
+  }
+  function twHh(n){ return ('0' + n).slice(-2) + ':00'; }
+
+  /* ================= J4 · 文章骨架库（从自己的稿子反过来沉淀） ================= */
+  function twSkelNorm(t){
+    return String(t || '')
+      .replace(/^\s*[（(][^)）]{0,6}[)）]\s*/, '')
+      .replace(/^\s*(?:[一二三四五六七八九十百]+|\d+)\s*[、.．)）:：]\s*/, '')
+      .replace(/^[\s.．·]+/, '').trim();
+  }
+  function twSkelMine(){
+    var seen = {}, out = [];
+    T.drafts.forEach(function(d){
+      var hs = twBlocks(d.body || '').filter(function(b){ return b.t === 'h2'; })
+        .map(function(b){ return twSkelNorm(b.text); }).filter(function(x){ return x; });
+      if (hs.length < 2) return;
+      var k = hs.join(' | ');
+      if (!seen[k]){ seen[k] = { key: k, secs: hs, n: 0, last: '', ids: [] }; out.push(seen[k]); }
+      seen[k].n++;
+      seen[k].ids.push(d.id);
+      var up = String(d.updatedAt || '').slice(0, 10);
+      if (up > seen[k].last) seen[k].last = up;
+    });
+    return out.sort(function(x, y){ return y.n - x.n; });
+  }
+  var TW_CN = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  function twSkelList(){
+    var manual = Array.isArray(T.skels) ? T.skels : [];
+    var auto = twSkelMine();
+    var list = manual.map(function(s, i){
+      return { name: s.name || '未命名', secs: s.secs || [], n: 0, key: s.key, manual: true, del: i };
+    });
+    auto.forEach(function(a){
+      if (list.some(function(m){ return m.key === a.key; })) return;
+      list.push({ name: a.secs[0], secs: a.secs, n: a.n, last: a.last, key: a.key, manual: false, del: -1 });
+    });
+    return list;
+  }
+  function twSkelCur(){
+    var d = twCur();
+    return d ? twBlocks(d.body || '').filter(function(b){ return b.t === 'h2'; })
+      .map(function(b){ return twSkelNorm(b.text); }).filter(function(x){ return x; }) : [];
+  }
+  function twSkelSave(){
+    var hs = twSkelCur();
+    if (hs.length < 2){ twToast('这篇还没两个 ## 小标题，没什么可存的'); return; }
+    if (!Array.isArray(T.skels)) T.skels = [];
+    var k = hs.join(' | ');
+    if (T.skels.some(function(s){ return (s.key || '') === k; })){ twToast('这个结构已经存过了'); return; }
+    T.skels.unshift({ id: twUid(), key: k, name: hs[0], secs: hs, at: twToday() });
+    twSave(); twArchPaint();
+    twToast('已存进骨架库');
+  }
+  function twSkelDel(i){
+    if (!Array.isArray(T.skels)) return;
+    T.skels.splice(i, 1); twSave(); twArchPaint();
+    twToast('已删掉这条手动骨架');
+  }
+  function twSkelUse(i){
+    var s = G5.skels[i]; if (!s) return;
+    var ta = $('twBody'); if (!ta) return;
+    var add = s.secs.map(function(t, k){ return '## ' + (TW_CN[k] || (k + 1)) + '、' + t; }).join('\n\n');
+    var v = ta.value.replace(/\s+$/, '');
+    ta.value = v + (v ? '\n\n' : '') + add + '\n\n';
+    WLOG.id = null;                      // 铺骨架不是打字，别记进写作量
+    twSave(); twEdRender();
+    twToast('骨架已铺到草稿末尾（只铺小标题，内容你自己填）');
+  }
+
+  /* ================= 面板渲染：写作档案（J2 / J3 / J4） ================= */
+  function twGoalHtml(){
+    var s = twGoalStat(), g = s.goal, rate = twPace();
+    var pr = g.w ? Math.min(100, Math.round(s.words / g.w * 100)) : (s.words ? 100 : 0);
+    var needW = Math.max(0, g.w - s.words);
+    var est = needW ? (rate >= 200 ? ('约 ' + Math.round(needW / rate * 60) + ' 分钟（按你每活跃小时 ' + rate + ' 字估）') : '还估不出来（速度样本不够）') : '已达标';
+    var hb = twHabitFind();
+    return '<div class="twG5grid">'
+      + '<div><div class="twG5k">本周打字字数</div><div class="twG5v">' + s.words + '</div></div>'
+      + '<div><div class="twG5k">本周成稿（≥300 字）</div><div class="twG5v">' + s.done + '</div></div>'
+      + '<div><div class="twG5k">本周起点</div><div class="twG5v" style="font-size:14px">' + twYmd(s.ws) + '</div></div>'
+      + '</div>'
+      + '<div class="twG5bar' + (pr >= 100 ? ' done' : '') + '"><i style="width:' + pr + '%"></i></div>'
+      + '<div class="twG5note">字数 <b>' + s.words + '</b> / ' + g.w + '　·　成稿 <b>' + s.done + '</b> / ' + g.p + ' 篇'
+      + (needW ? '　·　还差 <b>' + needW + '</b> 字，' + est : '　·　<span style="color:#12a150">本周目标已达成</span>') + '</div>'
+      + '<div class="twG5note">周目标：<input class="twG5inp" id="twG5p" type="number" min="0" max="50" value="' + g.p + '"> 篇　'
+      + '字数 <input class="twG5inp" id="twG5w" type="number" min="0" step="500" value="' + g.w + '">'
+      + '<button class="twMini5" style="margin-left:6px" onclick="twGoalSave()">保存目标</button></div>'
+      + '<div class="twG5note">' + (hb
+        ? ('达标后自动在「日常习惯」里给「' + twEsc(hb.name) + '」打卡，每天只打一次。')
+        : '「日常习惯」里还没有带「写」字的习惯 —— <button class="twMini5" onclick="twHabitMake()">建一个「写作」</button>，达标后自动打卡。')
+      + '</div>'
+      + '<div class="twG5note dim">口径：字数只算你真实打出来的新增字（删改 / 粘贴 / 挂机都不算）；成稿 = 本周动过、正文 ≥300 字的稿子。'
+      + '目标不达标不催，只会静静写在上面。</div>';
+  }
+  function twHourHtml(){
+    var a = twHourAgg();
+    if (a.days < 2 || a.total < 500){
+      return '<div class="twG5note">数据还不够：现在只攒到 <b>' + a.days + '</b> 天 / <b>' + a.total + '</b> 字。'
+        + '这一项算的是「一天里哪几个钟头真的写得动」，得先写几天才有意义 —— 继续写，够了自动出来。</div>'
+        + '<div class="twG5note dim">它只记你真实打出来的字，挂在页面上不动是不计的。</div>';
+    }
+    var mx = Math.max.apply(null, a.h) || 1;
+    var bars = a.h.map(function(v, i){
+      var h = v ? Math.max(3, Math.round(v / mx * 52)) : 2;
+      return '<i class="' + (v >= mx * 0.6 ? 'hi' : '') + '" style="height:' + h + 'px" title="' + i + ':00 · ' + v + ' 字"></i>';
+    }).join('');
+    var top = twHourWin(a.h, 3);
+    var lines = [];
+    if (top && top.sum > 0){
+      lines.push('高产区：<b>' + twHh(top.s) + '–' + twHh(top.e + 1) + '</b>（累计 ' + top.sum + ' 字）');
+    }
+    var low = [], i, j, sum;
+    for (i = 0; i + 3 <= 24; i++){
+      sum = 0; for (j = i; j < i + 3; j++) sum += a.h[j];
+      if (top && sum < top.sum * 0.25) low.push(twHh(i) + '–' + twHh(i + 3));
+    }
+    if (low.length) lines.push('低谷区：<span style="color:var(--twTx2)">' + low.slice(0, 2).join('、') + '</span> —— 重要稿别排这几段');
+    return '<div class="twG5note">近 <b>' + a.days + '</b> 天累计 <b>' + a.total + '</b> 字</div>'
+      + '<div class="twHrs">' + bars + '</div>'
+      + '<div class="twHrsAxis"><span>0</span><span style="text-align:center">6</span><span style="text-align:center">12</span>'
+      + '<span style="text-align:center">18</span><span style="text-align:right">23</span></div>'
+      + '<div class="twG5note">' + lines.join('<br>') + '</div>'
+      + '<div class="twG5note dim">口径：只记新增的字 —— 它偏向「产出高峰」，不是「坐在电脑前的时间」。</div>';
+  }
+  function twSkelHtml(){
+    var list = twSkelList();
+    G5.skels = list;
+    var head = '<div class="twG5note">骨架是从<b>你自己的稿子</b>反过来的，不是预置模板库。点一行，把它的小标题铺进当前草稿。</div>';
+    if (!list.length){
+      return head + '<div class="twG5note dim">还没有骨架：写满两篇带 ## 小标题的稿子，它们反复用的结构会自动沉到这里；'
+        + '也可以现在点下面的按钮把这篇的结构存下来。</div>'
+        + '<div class="twG5note"><button class="twMini5" onclick="twSkelSave()">存当前这篇的结构</button></div>';
+    }
+    return head + list.map(function(s, i){
+      return '<div class="twChk go" onclick="twSkelUse(' + i + ')">'
+        + '<span class="twChkI">🧩</span><span class="twChkT"><b>' + twEsc(s.secs.join(' / ')) + '</b>'
+        + '<i>' + s.secs.length + ' 个小标题 · '
+        + (s.manual ? '手动存的' : ('你自己的稿子里出现过 ' + s.n + ' 次' + (s.last ? ' · 最近 ' + s.last : ''))) + '</i></span>'
+        + (s.del >= 0 ? '<span class="twG5badge" onclick="event.stopPropagation();twSkelDel(' + s.del + ')" title="删掉这条手动骨架">×</span>' : '')
+        + '<span class="twChkLoc">铺进草稿</span></div>';
+    }).join('')
+      + '<div class="twG5note"><button class="twMini5" onclick="twSkelSave()">存当前这篇的结构</button></div>'
+      + '<div class="twG5note dim">只铺小标题，正文一个字都不代你写。</div>';
+  }
+  var TW_ARCH_TABS = [['goal', '📈 本周目标'], ['hour', '⏰ 高效时段'], ['skel', '🧩 骨架库']];
+  function twArchPaint(){
+    var tabs = $('twArchTabs'), box = $('twArchBox');
+    if (!tabs || !box) return;
+    tabs.innerHTML = TW_ARCH_TABS.map(function(x){
+      return '<button class="twTxTab' + (G5.arch === x[0] ? ' on' : '') + '" onclick="twArchTab(\'' + x[0] + '\')">' + x[1] + '</button>';
+    }).join('');
+    box.innerHTML = G5.arch === 'goal' ? twGoalHtml() : (G5.arch === 'hour' ? twHourHtml() : twSkelHtml());
+  }
+  function twArchTab(k){ G5.arch = k; twArchPaint(); }
+  function twArchOpen(){ twGoalCheck(); twArchPaint(); twPopOpen('twPopArch'); }
+
+  /* ================= I1 · 发布前总检 ================= */
+  var TW_SRC_RE = /(来源|出处|参考文献|依据|文献|指南|发布会|卫健委|医学会|研究|论文|数据来自)/;
+  function twGateRun(){
+    var title = ($('twTitle') ? $('twTitle').value : '').trim();
+    var body = ($('twBody') ? $('twBody').value : '') || '';
+    var lines = String(body).split('\n');
+    var bs = twBlocks(body);
+    var ps = bs.filter(function(b){ return b.len > 0; });
+    var wc = twWc(body);
+    var rows = [];
+    function at(blk){
+      if (!blk) return {};
+      return { off: twLineOff(body, blk.start), len: (lines[blk.start] || '').length };
+    }
+    function find(fn){ for (var i = 0; i < bs.length; i++) if (fn(bs[i])) return bs[i]; return null; }
+
+    /* 1 标题 */
+    var tl = title.replace(/\s/g, '').length;
+    if (!tl) rows.push({ o:3, n:'还没有标题', d:'列表页看到的就是它，发布前必须起一个' });
+    else if (tl < 10) rows.push({ o:2, n:'标题偏短（' + tl + ' 字）', d:'建议 12–22 字，能一眼看懂' });
+    else if (tl > 30) rows.push({ o:2, n:'标题偏长（' + tl + ' 字）', d:'列表页会被截断，建议压到 22 字内' });
+    else rows.push({ o:1, n:'标题 ' + tl + ' 字', d:'在 12–22 字区间内，列表页显示完整' });
+
+    /* 2 正文 */
+    if (!wc) rows.push({ o:3, n:'正文还是空的', d:'没内容可发' });
+    else if (wc < 300) rows.push({ o:2, n:'正文 ' + wc + ' 字', d:'偏短，推文 300–3000 字读起来最舒服' });
+    else if (wc > 5000) rows.push({ o:2, n:'正文 ' + wc + ' 字', d:'偏长，建议拆上下篇或砍铺垫' });
+    else rows.push({ o:1, n:'正文 ' + wc + ' 字', d:'读完约 ' + twReadTime(wc).text });
+
+    /* 3 小标题 */
+    var h2n = body.split('\n').filter(function(l){ return /^##\s+/.test(l); }).length;
+    if (h2n >= 2) rows.push({ o:1, n:'有 ' + h2n + ' 个小标题', d:'结构清楚，读者可以跳读' });
+    else rows.push({ o:2, n:'小标题不足（' + h2n + ' 个）', d:'长文建议每 3–4 段加一个 ## 小标题' });
+
+    /* 4 段落长度（第一个超长段，可跳） */
+    var lp = find(function(b){ return b.t === 'p' && b.len > 150; });
+    if (lp){
+      var j1 = at(lp);
+      rows.push({ o:2, n:'有段落超过 150 字（' + lp.len + ' 字）', d:'手机上像一堵墙，建议从中间断开', off: j1.off, len: j1.len });
+    } else if (ps.length) rows.push({ o:1, n:'段落长度合适', d:'没有超过 150 字的段落' });
+
+    /* 5 长句 / 6 的地得（复用 C3 扫描，不重复造） */
+    var txList = txScan(body);
+    var nLong = txList.filter(function(x){ return x.cat === 'long'; }).length;
+    var fLong = txList.filter(function(x){ return x.cat === 'long'; })[0];
+    if (nLong) rows.push({ o:2, n:nLong + ' 处长句（>30 字）', d:'手机上要换三行，建议按标点断开', off: fLong.off, len: fLong.len });
+    else if (ps.length) rows.push({ o:1, n:'句子长度合适', d:'没有超过 30 字的句子' });
+    var nDe = txList.filter(function(x){ return x.cat === 'dede'; }).length;
+    var fDe = txList.filter(function(x){ return x.cat === 'dede'; })[0];
+    if (nDe) rows.push({ o:3, n:'「的地得」用错 ' + nDe + ' 处', d:'机器能一眼查出的硬伤，点一下跳过去改', off: fDe.off, len: fDe.len });
+    else rows.push({ o:1, n:'「的地得」没查出问题', d:'' });
+
+    /* 7 极限词 / 8 健康专项（复用 D9） */
+    var ban = twBanScan(body, title);
+    var hl = twHealScan(body, title);
+    if (hl.health) ban = ban.filter(function(w){ return TW_HLTH_CURE.indexOf(w) < 0; });
+    if (ban.length) rows.push({ o:3, n:'发现 ' + ban.length + ' 个极限词', d:'「' + ban.join('、') + '」属广告法违禁表述，换掉再发' });
+    else rows.push({ o:1, n:'没有极限词', d: hl.health ? '通用极限词没扫到（健康类词另见下）' : '没扫到广告法常见违禁表述' });
+    if (hl.health){
+      var hbad = hl.rows.filter(function(r){ return r.o === 3; }).length;
+      rows.push(hbad
+        ? { o:3, n:'医疗健康专项有 ' + hbad + ' 项必须改', d:'疗效宣称 / 患者案例 —— 健康类稿子发出去被删多半是这两条' }
+        : { o:1, n:'医疗健康专项通过', d:'没扫到疗效宣称和患者案例表述' });
+      if (!hl.src) rows.push({ o:2, n:'健康类内容没标来源', d:'写一句「来源：××指南 2026」就够，读者和你自己都更放心' });
+    }
+
+    /* 9 配图 */
+    var ph = find(function(b){ return b.t === 'ph'; });
+    var phN = body.split('[图片占位]').length - 1;
+    if (phN){
+      var j9 = at(ph);
+      rows.push({ o:3, n:phN + ' 处「图片占位」还没换成真图', d:'发出去正文里会写着「图片占位」，点一下跳过去', off: j9.off, len: j9.len });
+    } else {
+      rows.push({ o:2, n:'正文里没有图片占位', d:'纯文字读着累，建议至少插 1–2 张图（插 [图片占位] 后发布前替换）' });
+    }
+
+    /* 10 外链 */
+    var links = (body.match(/https?:\/\//g) || []).length;
+    rows.push(links
+      ? { o:2, n:'正文里有 ' + links + ' 条外链', d:'公众号正文外链不可点（小红书更严），建议改成引导语或二维码图片' }
+      : { o:1, n:'正文没有外链', d:'不会因为外链被判导流' });
+
+    /* 11 手机屏数（按真实排版高度估算） */
+    var box = $('twPvwBox'), cfg = twStyleCfg();
+    var hpx = box ? box.scrollHeight : 0;
+    if (hpx > 100 && cfg && cfg.pw){
+      var h375 = hpx * (375 / cfg.pw);
+      var screens = Math.max(1, Math.round(h375 / 667 * 10) / 10);
+      rows.push({ o:(screens >= 3 && screens <= 15) ? 1 : 2, n:'手机约 ' + screens + ' 屏', d:'按当前排版估的；3–15 屏比较舒服，太长建议配小标题' });
+    }
+
+    /* 12 引用出处 */
+    var qn = bs.filter(function(b){ return b.t === 'quote'; }).length;
+    if (qn) rows.push(TW_SRC_RE.test(body)
+      ? { o:1, n:'有 ' + qn + ' 处引用，也标了出处', d:'' }
+      : { o:2, n:'有 ' + qn + ' 处引用但没标出处', d:'引用别人的话要写清来源（书 + 页码 / 机构 + 年份）' });
+    else rows.push({ o:2, n:'正文里没有引用', d:'有引用支撑的段落更经得起质疑，健康类尤其' });
+
+    /* 13 首段吸引力 */
+    var fp = ps.filter(function(b){ return b.t === 'p'; })[0];
+    if (fp){
+      var hook = /[?？]/.test(fp.text) || /\d/.test(fp.text)
+        || /(不是|而是|先说|真正|最重要|说到底|别再|其实就|一句话)/.test(fp.text);
+      var j13 = at(fp);
+      rows.push(hook
+        ? { o:1, n:'首段有钩子', d:'前 3 行能让人决定读下去' }
+        : { o:2, n:'首段偏平，没有钩子', d:'建议前 3 行放一句「数字 / 反常识 / 疑问」——读者平均读到第 3 段就走了', off: j13.off, len: j13.len });
+    }
+
+    /* 14 高亮 */
+    var emN = body.split('==').length ? (body.match(/==[^=]+==/g) || []).length : 0;
+    rows.push(emN
+      ? { o:1, n:'有 ' + emN + ' 处强调高亮', d:'' }
+      : { o:2, n:'还没用 ==高亮==', d:'关键句加一处高亮，手机阅读更抓眼' });
+
+    return rows;
+  }
+  function twGatePaint(){
+    var box = $('twGateBox'); if (!box) return;
+    var list = twGateRun();
+    G5.gate = list;
+    var ok = 0, wn = 0, bad = 0;
+    list.forEach(function(x){ if (x.o === 1) ok++; else if (x.o === 2) wn++; else bad++; });
+    var ico = { 1:'✅', 2:'⚠️', 3:'❌' };
+    var head = bad
+      ? ('❌ 还有 ' + bad + ' 项必须处理' + (wn ? '，另有 ' + wn + ' 条建议' : ''))
+      : (wn ? ('⚠️ 没有硬伤，' + wn + ' 条建议看一眼') : '✅ 全部通过，可以发了');
+    box.innerHTML = '<div class="twChkSum">通过 ' + ok + ' / ' + list.length + '　' + head + '</div>'
+      + list.map(function(x, i){
+        var jump = (typeof x.off === 'number');
+        return '<div class="twChk' + (jump ? ' go' : '') + '"' + (jump ? ' onclick="twGateGo(' + i + ')"' : '') + '>'
+          + '<span class="twChkI">' + ico[x.o] + '</span><span class="twChkT">' + twEsc(x.n)
+          + (x.d ? '<i>' + twEsc(x.d) + '</i>' : '') + '</span>'
+          + (jump ? '<span class="twChkLoc">跳到正文</span>' : '') + '</div>';
+      }).join('');
+  }
+  function twGateGo(i){
+    var x = G5.gate[i];
+    if (!x || typeof x.off !== 'number') return;
+    twLocate(x.off, x.off + (x.len || 0));
+  }
+  function twGateOpen(){ twGatePaint(); twPopOpen('twPopGate'); }
+
+  /* ================= L1 · 读者视角体检 ================= */
+  var TW_FILL = ['说实话', '其实我', '我当时', '那种', '也就是说', '说白了', '反正', '有点', '多少有点',
+    '算是', '后来才', '现在想想', '回头想想', '我觉得', '真的是', '一下子就', '挺'];
+  var TW_CONC = /(最重要|最有用|最关键|关键是|真正|先做的不是|结论|说到底|其实就)/;
+  /* L3 用的两张词表：标题里的「结果承诺」 vs 正文里的「兑现证据」 */
+  var TW_PROMISE = ['救回来', '治好', '搞定', '告别', '摆脱', '压下去', '不疼', '解决', '改善',
+    '恢复', '提升', '翻倍', '瘦下来', '不再', '一次说清', '全讲明白'];
+  var TW_PROOF = /(复查|体检|片子|报告|指标|数据|不疼|消失|下降|改善|恢复|正常|单子)/;
+  function twSentSegs(blk){
+    var out = [], re = /[^。！？；!?;\n]+[。！？；!?;]?/g, m;
+    while ((m = re.exec(blk.text))){ if (m[0].replace(/\s/g, '')) out.push({ t: m[0], i: m.index }); }
+    return out;
+  }
+  function twReadRun(){
+    var body = ($('twBody') ? $('twBody').value : '') || '';
+    var lines = String(body).split('\n');
+    var bs = twBlocks(body), ps = bs.filter(function(b){ return b.len > 0; });
+    var wc = twWc(body);
+    var view = [], cut = [], promise = [];
+    function at(blk){ return { off: twLineOff(body, blk.start), len: (lines[blk.start] || '').length }; }
+    var i;
+
+    /* —— L1 体检 —— */
+    var termN = 0;
+    TW_HLTH_HIT.forEach(function(t){
+      if (termN >= 3) return;
+      var n = body.split(t).length - 1;
+      if (n < 2) return;
+      var blk = null, bi = -1;
+      for (i = 0; i < ps.length; i++){ if (ps[i].text.indexOf(t) >= 0){ blk = ps[i]; bi = i; break; } }
+      if (!blk) return;
+      if (/[（(]|也就是|指的是|俗称|意思是/.test(blk.text)) return;
+      var j = at(blk);
+      termN++;
+      view.push({ o:2, n:'「' + t + '」出现 ' + n + ' 次，第一次没解释', off: j.off, len: j.len,
+        d:'读者第一次看到它是在第 ' + (bi + 1) + ' 段。建议第一次出现就补半句，比如「' + t + '，也就是××」。' });
+    });
+    if (!termN) view.push({ o:1, n:'没有「反复出现却没解释」的术语', d:'' });
+
+    var ci = -1;
+    for (i = 0; i < ps.length; i++){ if (TW_CONC.test(ps[i].text)){ ci = i; break; } }
+    if (ci >= 0 && ps.length >= 4){
+      var ratio = Math.round((ci + 1) / ps.length * 100);
+      var jc = at(ps[ci]);
+      if (ratio > 50) view.push({ o:2, n:'结论出现在全文 ' + ratio + '% 处（第 ' + (ci + 1) + ' / ' + ps.length + ' 段）',
+        off: jc.off, len: jc.len,
+        d:'读者平均读到第 3 段就决定走不走。把「' + twClip(ps[ci].text, 22) + '…」提到前三分之一，后面再展开。' });
+      else view.push({ o:1, n:'结论出现得不算晚（' + ratio + '% 处）', d:'读者不用翻太久就能拿到你要说的那句' });
+    } else if (ps.length >= 4){
+      view.push({ o:2, n:'没找到明确的结论句', d:'读者读完可能不知道「所以呢」。补一句「说到底，×× 才是关键」这类收口。' });
+    }
+
+    var mei = body.split('我').length - 1;
+    var per = wc ? Math.round(mei / wc * 1000) : 0;
+    if (per > 20) view.push({ o:2, n:'「我」出现 ' + mei + ' 次 · 每千字 ' + per + ' 次', d:'密度偏高。经验类可以，科普类建议压到每千字 20 次以内 —— 一部分「我」可以换成「很多人」。' });
+    else view.push({ o:1, n:'第一人称密度正常（「我」' + mei + ' 次 · 每千字 ' + per + ' 次）', d:'' });
+
+    /* —— L2 哪句能删 —— */
+    ps.forEach(function(b){
+      if (b.t !== 'p' && b.t !== 'list' && b.t !== 'quote') return;
+      var base = twLineOff(body, b.start);
+      twSentSegs(b).forEach(function(sg){
+        var raw = sg.t, t = raw.replace(/^-\s+/, '');
+        var cn = twPlainLen(t);
+        if (cn < 8 || cn > 60) return;
+        if (/\d/.test(t)) return;
+        var hit = null;
+        for (var k = 0; k < TW_FILL.length; k++){ if (t.indexOf(TW_FILL[k]) >= 0){ hit = TW_FILL[k]; break; } }
+        if (!hit) return;
+        cut.push({ off: base + sg.i, len: raw.length, t: t, cn: cn, hit: hit });
+      });
+    });
+
+    /* —— L3 标题兑现度 —— */
+    var title = ($('twTitle') ? $('twTitle').value : '').trim();
+    if (!title){
+      promise.push({ o:3, n:'还没有标题', d:'标题兑现度得先有标题' });
+    } else {
+      var tm = title.match(/(\d+|[一二三四五六七八九十]+)\s*(年|个月|月|周|天)/);
+      if (tm){
+        var w0 = tm[0].replace(/\s/g, ''), n0 = body.split(w0).length - 1;
+        promise.push(n0
+          ? { o:1, n:'「' + w0 + '」这个时间跨度，正文交代了', d:'正文出现 ' + n0 + ' 次' }
+          : { o:2, n:'「' + w0 + '」正文里没交代', d:'标题承诺了时间跨度，正文至少点一次，第 1 段最好' });
+      } else {
+        promise.push({ o:1, n:'标题里没有时间跨度', d:'不算问题，只是少一个具体感的抓手' });
+      }
+      var seg = title.replace(/[《》“”"'（）()【】\[\]！？，。、：；—\-!?,.:;]/g, ' ').split(/\s+/)
+        .filter(function(x){ return /^[\u4e00-\u9fa5]{2,}$/.test(x); });
+      seg.sort(function(a, b){ return b.length - a.length; });
+      var topic = seg[0] || '';
+      if (topic){
+        var tn = body.split(topic).length - 1;
+        promise.push(tn
+          ? { o:1, n:'主题词「' + topic + '」正文出现 ' + tn + ' 次', d:'标题和正文是一条线' }
+          : { o:2, n:'标题里的「' + topic + '」正文一次都没提', d:'标题和正文对不上，读者会觉得被骗；正文里至少写一次，或把标题改成正文真正在说的词' });
+      }
+      var hit2 = [];
+      TW_PROMISE.forEach(function(w){ if (title.indexOf(w) >= 0) hit2.push(w); });
+      if (!hit2.length) promise.push({ o:1, n:'标题是开放式的，没有强承诺', d:'没有「治好 / 摆脱」这类结果词，不容易翻车' });
+      else if (TW_PROOF.test(body)) promise.push({ o:1, n:'「' + hit2.join('、') + '」在正文里有兑现', d:'扫到复查 / 体检 / 指标这类结果证据' });
+      else promise.push({ o:2, n:'「' + hit2.join('、') + '」在正文里没兑现',
+        d:'两种改法：① 正文补一句能验证的结果（体检单 / 片子 / 复查数据）；② 把「' + hit2[0] + '」改成「压下去了 / 有改善」这类不把话说满的说法。健康类稿子这条最容易翻车。' });
+    }
+
+    G5.cut = cut;
+    return { view: view, cut: cut, promise: promise };
+  }
+  function twReadPaint(){
+    var tabs = $('twReadTabs'), box = $('twReadBox');
+    if (!tabs || !box) return;
+    var r = twReadRun();
+    G5.readRows = r;
+    var sum = r.cut.reduce(function(a, b){ return a + b.cn; }, 0);
+    var sec = Math.round(sum / 400 * 60);
+    var cnt = [['view', '体检', r.view.length], ['cut', '哪句能删', r.cut.length], ['promise', '标题兑现', r.promise.length]];
+    tabs.innerHTML = cnt.map(function(x){
+      return '<button class="twTxTab' + (G5.read === x[0] ? ' on' : '') + (x[2] ? '' : ' zero')
+        + '" onclick="twReadTab(\'' + x[0] + '\')">' + x[1] + ' ' + x[2] + '</button>';
+    }).join('');
+    if (G5.read === 'cut'){
+      if (!r.cut.length){ box.innerHTML = '<div class="twTxEmpty">✅ 没找到「删掉也不影响意思」的句子。</div>'; return; }
+      box.innerHTML = '<div class="twChkSum">共可删 ' + sum + ' 字（约省 ' + sec + ' 秒阅读）· 只提示，删不删你定</div>'
+        + r.cut.map(function(x, i){
+          return '<div class="twChk go" onclick="twReadGo(' + i + ')"><span class="twChkI">✂️</span>'
+            + '<span class="twChkT"><span class="twDel5">' + twEsc(x.t) + '</span>'
+            + '<i>命中「' + twEsc(x.hit) + '」—— 这段信息量低，删了不影响意思</i></span>'
+            + '<span class="twChkLoc">跳到这句</span></div>';
+        }).join('')
+        + '<div class="twG5note dim">判据：句子里有「说实话 / 其实我 / 那种 / 也就是说」这类填充语，且不含数字 —— 只当提示，不替你删。</div>';
+      return;
+    }
+    var rows = G5.read === 'promise' ? r.promise : r.view;
+    var ico = { 1:'✅', 2:'⚠️', 3:'❌' };
+    box.innerHTML = rows.map(function(x){
+      var jump = (typeof x.off === 'number');
+      return '<div class="twChk' + (jump ? ' go' : '') + '"' + (jump ? ' onclick="twReadJump(' + x.off + ',' + x.len + ')"' : '') + '>'
+        + '<span class="twChkI">' + ico[x.o] + '</span><span class="twChkT">' + twEsc(x.n)
+        + (x.d ? '<i>' + twEsc(x.d) + '</i>' : '') + '</span>'
+        + (jump ? '<span class="twChkLoc">跳到正文</span>' : '') + '</div>';
+    }).join('')
+      + '<div class="twG5note dim">这一栏只给「读者读到这句会怎么想」，不改你的稿子。</div>';
+  }
+  function twReadTab(k){ G5.read = k; twReadPaint(); }
+  function twReadJump(off, len){ twLocate(off, off + (len || 0)); }
+  function twReadGo(i){
+    var x = G5.cut[i]; if (!x) return;
+    twLocate(x.off, x.off + x.len);
+  }
+  function twReadOpen(){ twReadPaint(); twPopOpen('twPopRead'); }
+
+  /* ================= K2 · 日记 → 选题候选 ================= */
+  /* 判据必须是「强信号」：具体场景 / 情绪 / 转折叙事。
+     ★ 2026-09-19 门禁抓到的坑：原来把「今天 / 昨天 / 早上 / 下午 / 晚上」这类纯时间词
+     也算「有场景」，结果日记里「今天没什么好写的，天气阴」也被当成选题候选搬进正文 ——
+     这不是选题，是噪音。所以纯时间词全部踢出，只留真正带信息的。 */
+  var TW_SCENE = /(诊室|医院|办公室|工位|路上|车里|家里|游泳|体检|排队|挂号|同事|医生说|那天|后来|结果|突然|第一次)/;
+  var TW_EMO = /(疼|难受|怕|慌|咯噔|心里|开心|高兴|松了口气|松了|终于|居然|没想到|崩|烦|累|酸|麻|僵|委屈|舒服)/;
+  function twDiaryCands(){
+    var es;
+    try { es = safeStorage.get('niko_diary_entries', []); } catch (e) { es = []; }
+    if (!Array.isArray(es) || !es.length) return [];
+    es = es.slice().sort(function(a, b){
+      return String(b && b.date || '').localeCompare(String(a && a.date || ''));
+    }).slice(0, 60);
+    var out = [], seen = {};
+    es.forEach(function(e){
+      var txt = String(e && e.content || '').replace(/\s+/g, ' ').trim();
+      if (!txt) return;
+      txt.split(/[。！？!?；;]/).forEach(function(sn){
+        sn = sn.trim();
+        if (sn.length < 12 || sn.length > 80) return;
+        if (!TW_SCENE.test(sn) && !TW_EMO.test(sn)) return;
+        if (seen[sn]) return;
+        seen[sn] = 1;
+        out.push({ t: sn, date: String(e.date || '').slice(0, 10) });
+      });
+    });
+    return out.slice(0, 12);
+  }
+  function twDiaryPaint(){
+    var box = $('twDiaryBox'); if (!box) return;
+    var list = twDiaryCands();
+    G5.diary = list;
+    if (!list.length){
+      box.innerHTML = '<div class="twG5note">日记里还没攒到可用的句子。判据是「有场景」或「有情绪」——'
+        + '比如记了地点、时间、身体感受、当时的反应。写几天它就自己长出来了。</div>'
+        + '<div class="twG5note dim">只读你写在日记里的句子，不读全文、不生成观点。</div>';
+      return;
+    }
+    box.innerHTML = '<div class="twG5note">从最近 60 条日记里挑出 ' + list.length + ' 句有场景 / 有情绪的，点一下插到当前草稿开头当引子。</div>'
+      + list.map(function(x, i){
+        return '<div class="twChk go" onclick="twDiaryUse(' + i + ')"><span class="twChkI">📓</span>'
+          + '<span class="twChkT">' + twEsc(x.t) + '<i>' + twEsc(x.date || '日期未记') + '</i></span>'
+          + '<span class="twChkLoc">拿去起稿</span></div>';
+      }).join('')
+      + '<div class="twG5note dim">只搬句子，观点你自己写 —— 这条不代你生成任何立场。</div>';
+  }
+  function twDiaryUse(i){
+    var c = G5.diary[i]; if (!c) return;
+    var ta = $('twBody'); if (!ta) return;
+    ta.value = c.t + '\n\n' + ta.value;
+    WLOG.id = null;                       // 搬句子不是打字
+    twSave(); twEdRender();
+    twLocate(c.t.length, c.t.length);
+    twToast('已插到正文开头当引子，后面的观点你自己写');
+  }
+  function twDiaryOpen(){ twDiaryPaint(); twPopOpen('twPopDiary'); }
+
   /* ---------- 页面入口（由 switchPage 派发）---------- */
   function renderTwPage(){
     twLoad();                       // 铁律 §5：渲染前必须重读 localStorage
@@ -35451,7 +36190,9 @@ function hpClearDemo(){
         var cn = t.className ? String(t.className) : '';
         if (cn.indexOf('twPop') >= 0) return;                       // 点在浮层里
         if (t.id === 'twBtnAi' || t.id === 'twBtnChk' || t.id === 'twBtnTitleIdea'
-            || t.id === 'twBtnOutline' || t.id === 'twBtnText' || t.id === 'twBtnLog') return;  // 点在开启按钮上
+            || t.id === 'twBtnOutline' || t.id === 'twBtnText' || t.id === 'twBtnLog'
+            || t.id === 'twBtnGate' || t.id === 'twBtnArch' || t.id === 'twBtnRead'
+            || t.id === 'twBtnDiary') return;  // 点在开启按钮上
         t = t.parentNode;
       }
       twPopCloseAll();
@@ -35517,6 +36258,22 @@ function hpClearDemo(){
   window.twSyncToggle = twSyncToggle;
   window.twSyncPaint = twSyncPaint;
   window.twLsBlockStart = twLsBlockStart;      // 门禁直接断「行首块级判定」的边界
+  /* 2026-09-19 第五批：发布总检 / 写作档案 / 读者视角 / 日记选题 */
+  window.twGateOpen = twGateOpen;
+  window.twGateGo = twGateGo;
+  window.twArchOpen = twArchOpen;
+  window.twArchTab = twArchTab;
+  window.twGoalSave = twGoalSave;
+  window.twHabitMake = twHabitMake;
+  window.twSkelUse = twSkelUse;
+  window.twSkelSave = twSkelSave;
+  window.twSkelDel = twSkelDel;
+  window.twReadOpen = twReadOpen;
+  window.twReadTab = twReadTab;
+  window.twReadGo = twReadGo;
+  window.twReadJump = twReadJump;
+  window.twDiaryOpen = twDiaryOpen;
+  window.twDiaryUse = twDiaryUse;
   window.__twC = { blocks: twBlocks, txScan: txScan, outline: twOutlineData,
                    TX: TX, RHY: RHY, locate: twLocate, grade: twBlockGrade,
                    // 2026-09-18 第三批
@@ -35526,7 +36283,12 @@ function hpClearDemo(){
                    cats: TX_CATS, chs: TW_CHS,   // 给门禁用的探针
                    // 2026-09-19
                    lsBlock: twLsBlockStart, sync: twSyncToCaret,
-                   syncOn: function(){ return !!T.sync; } };
+                   syncOn: function(){ return !!T.sync; },
+                   // 2026-09-19 第五批
+                   wc: twWc, gate: twGateRun, arch: twGoalStat, hourAgg: twHourAgg, pace: twPace,
+                   hourWin: twHourWin, skelMine: twSkelMine, skelList: twSkelList, skelNorm: twSkelNorm,
+                   read: twReadRun, diary: twDiaryCands, weekStart: twWeekStart, inWeek: twInWeek,
+                   habitFind: twHabitFind, wlog: twWlogCount, G5: G5, pops: TW_POPS };
 })();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
@@ -37298,7 +38060,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609190930";
+        window.NIKO_VERSION = "202609191019";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
