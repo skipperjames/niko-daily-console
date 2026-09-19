@@ -1890,6 +1890,36 @@
         body.dark-mode .tag-region-item .ri-name { color: #e5e7eb; }
         .tag-region-item .ri-count { font-size: 11px; color: #999; }
 
+        /* ===== 标签管理（2026-09-19）：图标自选 · 隐藏/显示 · 删除 ===== */
+        .tag-mg-list { max-height: 300px; overflow-y: auto; margin-bottom: 12px; }
+        .tag-mg-row { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px; background: #fafafa; border: 1px solid #f0f0f0; margin-bottom: 6px; }
+        body.dark-mode .tag-mg-row { background: #1d1f2e; border-color: #2b2d3d; }
+        .tag-mg-row.is-hidden { opacity: .55; }
+        .tag-mg-icon { font-size: 16px; line-height: 1; background: none; border: 1px solid transparent; cursor: pointer; padding: 3px 5px; border-radius: 6px; flex-shrink: 0; }
+        .tag-mg-icon:hover { background: rgba(245,158,11,.16); border-color: #f59e0b; }
+        .tag-mg-name { flex: 1; font-size: 13px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        body.dark-mode .tag-mg-name { color: #e5e7eb; }
+        .tag-mg-badge { font-size: 10.5px; color: #999; flex-shrink: 0; }
+        .tag-mg-act { font-size: 11.5px; padding: 3px 9px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #666; cursor: pointer; flex-shrink: 0; }
+        body.dark-mode .tag-mg-act { background: #232536; border-color: #3a3d51; color: #bbb; }
+        .tag-mg-act:hover { border-color: #f59e0b; color: #f59e0b; }
+        .tag-mg-act.danger:hover { border-color: #ef4444; color: #ef4444; }
+        .tag-mg-edit { border: 1px solid #f0f0f0; border-radius: 8px; padding: 8px 10px; margin: -2px 0 8px; background: #fff; }
+        body.dark-mode .tag-mg-edit { background: #1d1f2e; border-color: #2b2d3d; }
+        .tag-ico-grid { display: flex; flex-wrap: wrap; gap: 4px; max-height: 96px; overflow-y: auto; margin-bottom: 8px; }
+        .tag-ico-cell { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; border-radius: 6px; border: 1px solid #ececec; background: #fafafa; cursor: pointer; }
+        body.dark-mode .tag-ico-cell { background: #232536; border-color: #34374b; }
+        .tag-ico-cell:hover { border-color: #f59e0b; }
+        .tag-ico-cell.active { border-color: #f59e0b; background: #fff7ed; }
+        body.dark-mode .tag-ico-cell.active { background: #3a2f16; }
+        .tag-ico-free { width: 58px; text-align: center; padding: 5px 6px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: #fff; color: #333; }
+        body.dark-mode .tag-ico-free { background: #1f2937; border-color: #374151; color: #eee; }
+        .tag-ico-hint { font-size: 11px; color: #999; margin-bottom: 6px; }
+        .tag-mg-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .tag-icon-btn { width: 46px; height: 33px; font-size: 16px; line-height: 1; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: #333; cursor: pointer; flex-shrink: 0; }
+        body.dark-mode .tag-icon-btn { background: #1f2937; border-color: #374151; color: #eee; }
+        .tag-icon-btn:hover { border-color: #f59e0b; }
+
 /* ===== 板块 CSS 注入区 ===== */
 /* ===== 今日看板专属CSS ===== */
         /* ============================================================
@@ -8069,6 +8099,11 @@
         .nb-stats { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
         .nb-stat { background: #fff; border: 1px solid #e8e6e1; border-radius: 8px; padding: 4px 12px; font-size: 11px; color: #666; transition: background .3s, border-color .3s; }
         .nb-stat strong { font-size: 14px; color: #333; margin-right: 2px; }
+        .nb-stat.nb-stat-btn { cursor: pointer; color: #b45309; background: #fffbeb; border-color: #fde68a; font-weight: 600; }
+        .nb-stat.nb-stat-btn:hover { background: #fef3c7; border-color: #f59e0b; }
+        body.dark-mode .nb-stat.nb-stat-btn { background: #2e2612; border-color: #4a3a12; color: #fbbf24; }
+        body.dark-mode .nb-stat.nb-stat-btn:hover { background: #3a2f16; border-color: #f59e0b; }
+        .nb-col-hidden { font-size: 10px; opacity: .75; }
         .nb-tools { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
         .nb-btn { padding: 6px 12px; font-size: 12px; border: 1px solid #e0ded9; background: #fff; border-radius: 6px; cursor: pointer; color: #555; transition: all .15s; display: inline-flex; align-items: center; gap: 4px; }
         .nb-btn:hover { background: #f5f4f1; }
@@ -11830,6 +11865,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     .tag-name-input { flex: 1 1 100%; }
     .tag-color-pick { flex-wrap: nowrap; overflow-x: auto; }
     .tag-cloud { max-height: 108px; }
+    .tag-mg-row { flex-wrap: wrap; }
+    .tag-mg-act { padding: 5px 10px; }
+    .tag-ico-cell { width: 30px; height: 30px; font-size: 17px; }
 }
         /* ===== 侧边栏花园（2026-09-06）：常用板块门牌长叶，久不去枯 ===== */
         #mainNavSection .nav-item[data-nav] { position: relative; }
@@ -14917,6 +14955,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="tag-seg">
                 <button class="tag-seg-btn active" id="tagSegTags" onclick="tagSwitchSeg('tags')">🏷 按标签</button>
                 <button class="tag-seg-btn" id="tagSegRegions" onclick="tagSwitchSeg('regions')">🌍 按地区</button>
+                <button class="tag-seg-btn" id="tagSegManage" onclick="tagSwitchSeg('manage')">⚙️ 管理</button>
             </div>
             <div id="tagCloudWrap">
                 <div class="tag-total-line" id="tagTotalLine"></div>
@@ -14926,13 +14965,25 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div id="tagRegionWrap" style="display:none;">
                 <div class="tag-result" id="tagRegionList"></div>
             </div>
+            <div id="tagManageWrap" style="display:none;">
+                <div class="tag-total-line" id="tagManageLine"></div>
+                <div class="tag-mg-list" id="tagMgList"></div>
+            </div>
             <div class="tag-form" id="tagFormWrap">
                 <div class="tag-form-title">➕ 新增自定义标签（立即出现在便签选择器，全局生效）</div>
                 <div class="tag-form-row">
                     <input type="text" class="tag-name-input" id="tagNameInput" placeholder="标签名，如：女性向 / 国风 / 抽卡" maxlength="12">
-                    <input type="text" class="tag-icon-input" id="tagIconInput" placeholder="🚀" maxlength="2">
+                    <button type="button" class="tag-icon-btn" id="tagIconBtn" onclick="tagIconPopToggle('new')" title="点这里挑图标（也可在下面手打 / 粘贴任意 emoji）">🏷</button>
                     <div class="tag-color-pick" id="tagColorPick"></div>
                     <button class="btn primary" onclick="tagAddCustom()">添加</button>
+                </div>
+                <div id="tagIconPop" style="display:none;">
+                    <div class="tag-ico-hint">点一下即选中；也可以在右下角手打 / 粘贴任意 emoji</div>
+                    <div class="tag-ico-grid" id="tagIconGrid"></div>
+                    <div class="tag-mg-actions">
+                        <span class="tag-ico-hint" style="margin:0;">手打：</span>
+                        <input type="text" class="tag-ico-free" id="tagIconFree" placeholder="✍️" maxlength="2" oninput="tagFreeIconTyped(this.value)">
+                    </div>
                 </div>
             </div>
         </div>
@@ -24815,7 +24866,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // 2026-09-08 手机端筛选条默认收进抽屉；但筛选生效中必须回显，否则墙被过滤了却看不见原因
             bar.classList.toggle('nb-filter-on', !!nbTagFilter);
             const dict = noteTagDict();
-            const entries = Object.entries(dict);
+            const entries = Object.entries(dict).filter(([, t]) => !t.hidden);   // 隐藏的标签不进筛选栏
             let html = `<span class="nb-tag-chip ${!nbTagFilter ? 'active' : ''}" onclick="nbSetTagFilter(null)">全部</span>`;
             entries.forEach(([key, tag]) => {
                 const cnt = (nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : activeNotes()).filter(n => n.tag === key).length;
@@ -24932,6 +24983,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (tb && safeStorage.get('niko_nb_drawer', 'closed') === 'open') tb.classList.add('drawer-open');
         })();
 
+        // 标签管理入口（2026-09-19 用户点名：按钮放统计行末尾）
+        function nbOpenTags() {
+            if (typeof openTagOverview === 'function') { openTagOverview(); return; }
+            if (typeof showToast === 'function') showToast('ℹ️ 标签管理要在完整版里用（当前是单文件开发版）');
+        }
+        // 批量换标签下拉：只列可见标签（隐藏的不出现），标签增删后由总框架调用重刷
+        function nbSyncTagSelects() {
+            const sel = document.getElementById('nbBatchTagSelect');
+            if (!sel) return;
+            const list = (typeof tagVisibleList === 'function') ? tagVisibleList() : Object.entries(noteTagDict()).map(([k, t]) => ({ id: k, icon: t.icon, name: t.name, hidden: !!t.hidden })).filter(t => !t.hidden);
+            sel.innerHTML = '<option value="">🏷 换标签…</option>' + list.map(t => `<option value="${t.id}">${t.icon} ${t.name}</option>`).join('');
+        }
+
         function renderNbStats() {
             const act = activeNotes(), now = new Date();
             const todayCnt = act.filter(n => {
@@ -24942,7 +25006,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('nbStats').innerHTML =
                 `<span class="nb-stat"><strong>${act.length}</strong> 活跃</span>` +
                 `<span class="nb-stat"><strong>${todayCnt}</strong> 今日新增</span>` +
-                `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>`;
+                `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>` +
+                `<span class="nb-stat nb-stat-btn" onclick="nbOpenTags()" title="标签管理：新增 / 换图标 / 隐藏 / 删除">🏷 标签管理</span>`;
             // 三个收纳箱的计数直接并入按钮文字，一处看清
             const boxBtns = [
                 ['nbArchiveBtn', '📦 归档箱', archivedNotes().length],
@@ -24994,8 +25059,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             let html = '<div class="nb-board">';
             Object.entries(noteTagDict()).forEach(([key, tag]) => {
                 const items = list.filter(n => n.tag === key);
+                // 隐藏的标签不再占一列；但若还有便签挂在这里，仍保留该列（否则内容会在看板视图里凭空消失）
+                if (tag.hidden && !items.length) return;
                 html += `<div class="nb-column">
-                    <div class="nb-column-header"><span>${tag.icon}</span><span class="nb-col-name">${tag.name}</span><span class="nb-col-count">${items.length}</span></div>
+                    <div class="nb-column-header"><span>${tag.icon}</span><span class="nb-col-name">${tag.name}</span>${tag.hidden ? '<span class="nb-col-hidden" title="该标签已隐藏，但还有便签挂在这里">🚫</span>' : ''}<span class="nb-col-count">${items.length}</span></div>
                     <div class="nb-column-body" data-tag="${key}">
                         ${items.map(n => nbCardHtml(n)).join('') || '<div class="nb-col-empty">拖拽便签到这一列</div>'}
                     </div>
@@ -38045,7 +38112,24 @@ function hpClearDemo(){
                 })();
                 return loading;
             }
+            // Tesseract 脚本按需注入（原先写在 body 末尾的同步 <script> 会拖住 load 事件：国内拉 jsdelivr 慢，转圈很久）
+            function ensureTesseractScript() {
+                if (typeof Tesseract !== 'undefined') return Promise.resolve();
+                if (window.__nikoTessLoading) return window.__nikoTessLoading;
+                window.__nikoTessLoading = new Promise(function (res, rej) {
+                    var s = document.createElement('script');
+                    s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+                    s.onload = function () { res(); };
+                    s.onerror = function () { window.__nikoTessLoading = null; rej(new Error('OCR 引擎脚本下载失败（网络或 CDN 不可达）')); };
+                    document.head.appendChild(s);
+                });
+                return window.__nikoTessLoading;
+            }
             async function tesseractRecognize(blob, onProgress) {
+                if (typeof Tesseract === 'undefined') {
+                    if (onProgress) onProgress(6, '加载 OCR 兜底引擎…');
+                    await ensureTesseractScript();
+                }
                 if (typeof Tesseract === 'undefined') throw new Error('Tesseract 未加载');
                 if (!tesseractWorker) {
                     if (onProgress) onProgress(10, '加载 Tesseract 引擎（兜底）…');
@@ -38166,7 +38250,7 @@ function hpClearDemo(){
                 creative: { name: '创意灵感', icon: '💡', chipBg: '#f59e0b' },
                 other: { name: '随手记', icon: '📝', chipBg: '#10b981' }
             };
-            el.innerHTML = Object.entries(tags).map(([k, t]) => {
+            el.innerHTML = Object.entries(tags).filter(([, t]) => !t.hidden).map(([k, t]) => {
                 const active = ocrSelectedTag === k;
                 const isRec = recTag === k;
                 return `<span class="ocr-tag-chip${active ? ' active' : ''}" style="${active ? 'background:' + (t.chipBg || '#d97706') + ';' : ''}" onclick="selectOcrTag('${k}')">${t.icon} ${t.name}${isRec && !active ? '<span class="ocr-tag-rec">✨推荐</span>' : ''}</span>`;
@@ -38907,7 +38991,10 @@ function hpClearDemo(){
             if (changed) safeStorage.set('niko_tags', d);
             return d;
         }
-        function tagList() { return Object.entries(tagDict()).map(([k, t]) => ({ id: k, name: t.name, icon: t.icon, chipBg: t.chipBg, custom: !!t.custom })); }
+        function tagList() { return Object.entries(tagDict()).map(([k, t]) => ({ id: k, name: t.name, icon: t.icon, chipBg: t.chipBg, custom: !!t.custom, hidden: !!t.hidden })); }
+        // 可见标签（排除已隐藏）—— 标签栏 / 选择器 / 标签云都走这个
+        function tagVisibleList() { return tagList().filter(t => !t.hidden); }
+        function tagIsHidden(id) { const t = tagDict()[id]; return !!(t && t.hidden); }
         // 每个标签的跨面板计数（便签 + 文案收藏）
         function tagCounts() {
             const counts = {};
@@ -38978,10 +39065,12 @@ function hpClearDemo(){
             const el = document.getElementById('tagCloud');
             if (!el) return;
             const counts = tagCounts();
-            const total = Object.values(counts).reduce((s, n) => s + n, 0);
+            const vis = tagVisibleList();
+            const total = vis.reduce((s, t) => s + (counts[t.id] || 0), 0);
             const line = document.getElementById('tagTotalLine');
-            if (line) line.textContent = `共 ${tagList().length} 个标签 · 可聚合 ${total} 条素材（便签 + 文案）`;
-            el.innerHTML = tagList().map(t => {
+            if (line) line.textContent = `共 ${vis.length} 个标签 · 可聚合 ${total} 条素材（便签 + 文案）`;
+            if (!vis.length) { el.innerHTML = '<div class="tag-empty">标签都被隐藏了 —— 去「⚙️ 管理」里恢复</div>'; return; }
+            el.innerHTML = vis.map(t => {
                 const n = counts[t.id] || 0;
                 const active = tagActiveId === t.id;
                 return `<span class="tag-chip${active ? ' active' : ''}" style="${active ? 'background:' + t.chipBg + ';color:#fff;' : ''}" onclick="tagPick('${t.id}')">${t.icon} ${escapeHtml(t.name)}<span class="tc-count">${n}</span></span>`;
@@ -39024,33 +39113,190 @@ function hpClearDemo(){
             tagSeg = seg;
             document.getElementById('tagSegTags').className = 'tag-seg-btn' + (seg === 'tags' ? ' active' : '');
             document.getElementById('tagSegRegions').className = 'tag-seg-btn' + (seg === 'regions' ? ' active' : '');
+            document.getElementById('tagSegManage').className = 'tag-seg-btn' + (seg === 'manage' ? ' active' : '');
             document.getElementById('tagCloudWrap').style.display = seg === 'tags' ? '' : 'none';
             document.getElementById('tagRegionWrap').style.display = seg === 'regions' ? '' : 'none';
-            document.getElementById('tagFormWrap').style.display = seg === 'tags' ? '' : 'none';
-            if (seg === 'tags') { renderTagCloud(); renderTagResult(); }
-            else { renderTagRegions(); }
+            document.getElementById('tagManageWrap').style.display = seg === 'manage' ? '' : 'none';
+            // 新增表单在「按标签 / 管理」两页都留着（都是要加标签的场景），只有按地区时收起来
+            document.getElementById('tagFormWrap').style.display = seg === 'regions' ? 'none' : '';
+            if (seg === 'tags') { tagIconPopClose(); renderTagCloud(); renderTagResult(); }
+            else if (seg === 'manage') { tagIconPopClose(); renderTagManage(); }
+            else { tagIconPopClose(); renderTagRegions(); }
         }
         function tagPickColorDot(c, el) {
             tagPickColor = c;
             document.querySelectorAll('#tagColorPick .tag-color-dot').forEach(x => x.classList.remove('active'));
             el.classList.add('active');
         }
+        // ===== 标签管理（2026-09-19）：图标自选 · 隐藏/显示 · 删除 =====
+        const TAG_ICON_SET = ['🏷','💡','🔥','⭐','✅','❌','📌','📎','📝','✍️','🎬','🎮','🕹️','🎨','🎵','🎧','📢','📣','🪝','🎯','🏆','💰','📈','📊','🧠','🤖','👀','👍','🙏','💪','😀','😍','😭','🤔','😱','🌍','🌏','🏠','💼','🎁','⏰','🚀','⚡','🌈','🍀','☕','🛠️','🧩'];
+        let tagPickIcon = '🏷';
+        let tagMgEditId = null;
+        let tagMgEditIcon = '';
+        let tagMgEditColor = '';
+        let tagIconPopFor = null;
+
+        function tagIconPopClose() {
+            tagIconPopFor = null;
+            const pop = document.getElementById('tagIconPop');
+            if (pop) pop.style.display = 'none';
+        }
+        function tagRenderIconGrid(hostId, current, cbName) {
+            const el = document.getElementById(hostId);
+            if (!el) return;
+            el.innerHTML = TAG_ICON_SET.map(ic => `<span class="tag-ico-cell${ic === current ? ' active' : ''}" onclick="${cbName}('${ic}')">${ic}</span>`).join('');
+        }
+        function tagSyncIconBtn() {
+            const b = document.getElementById('tagIconBtn');
+            if (b) b.textContent = tagPickIcon;
+        }
+        function tagIconPopToggle(forWhat) {
+            if (tagIconPopFor === forWhat) { tagIconPopClose(); return; }
+            tagIconPopFor = forWhat;
+            const pop = document.getElementById('tagIconPop');
+            if (!pop) return;
+            pop.style.display = '';
+            tagRenderIconGrid('tagIconGrid', forWhat === 'new' ? tagPickIcon : tagMgEditIcon, forWhat === 'new' ? 'tagNewIconSet' : 'tagEditIconSet');
+            const free = document.getElementById('tagIconFree');
+            if (free) free.value = '';
+        }
+        function tagNewIconSet(ic) { tagPickIcon = ic; tagSyncIconBtn(); tagIconPopClose(); }
+        function tagFreeIconTyped(v) { if (v && v.trim()) { tagPickIcon = Array.from(v.trim()).slice(0, 2).join(''); tagSyncIconBtn(); } }
+        function tagEditIconSet(ic) { tagMgEditIcon = ic; tagRenderIconGrid('tagEditGrid', ic, 'tagEditIconSet'); }
+        function tagEditColorSet(c, el) {
+            tagMgEditColor = c;
+            const box = document.getElementById('tagEditColors');
+            if (box) box.querySelectorAll('.tag-color-dot').forEach(x => x.classList.remove('active'));
+            if (el) el.classList.add('active');
+        }
+        // 改完整套标签后，通知其他面板重读
+        function tagNotifyModules() {
+            try { if (typeof nbSyncTagSelects === 'function') nbSyncTagSelects(); } catch (e) {}
+            try { if (typeof renderNotesPage === 'function') renderNotesPage(); } catch (e) {}
+            try { if (typeof renderCopyPage === 'function') renderCopyPage(); } catch (e) {}
+        }
+        function tagRefreshAll() { renderTagCloud(); renderTagResult(); renderTagManage(); }
+        function tagRowCount(id) { return tagCounts()[id] || 0; }
+
+        function tagEditBlockHtml(t) {
+            return `<div class="tag-mg-edit">
+                <div class="tag-ico-hint">换图标（当前 ${t.icon}）：</div>
+                <div class="tag-ico-grid" id="tagEditGrid"></div>
+                <div class="tag-mg-actions">
+                    <span class="tag-ico-hint" style="margin:0;">手打：</span>
+                    <input type="text" class="tag-ico-free" id="tagEditFree" placeholder="✍️" maxlength="2">
+                    <div class="tag-color-pick" id="tagEditColors"></div>
+                    <button class="btn primary" onclick="tagMgSaveEdit('${t.id}')">保存</button>
+                    <button class="btn" onclick="tagMgCancelEdit()">取消</button>
+                </div>
+            </div>`;
+        }
+        function renderTagManage() {
+            const el = document.getElementById('tagMgList');
+            if (!el) return;
+            const list = tagList();
+            const hiddenN = list.filter(t => t.hidden).length;
+            const line = document.getElementById('tagManageLine');
+            if (line) line.textContent = `共 ${list.length} 个标签 · 已隐藏 ${hiddenN} 个 · 点图标可换；内置标签用「隐藏」（删了会被预置字典补回来），自定义标签可删除`;
+            if (!list.length) { el.innerHTML = '<div class="tag-empty">还没有标签</div>'; return; }
+            const counts = tagCounts();
+            el.innerHTML = list.map(t => {
+                const n = counts[t.id] || 0;
+                let html = `<div class="tag-mg-row${t.hidden ? ' is-hidden' : ''}">
+                    <button class="tag-mg-icon" onclick="tagMgStartEdit('${t.id}')" title="换图标 / 换颜色">${t.icon}</button>
+                    <span class="tag-mg-name">${escapeHtml(t.name)}</span>
+                    <span class="tag-mg-badge">${t.custom ? '自定义' : '内置'} · ${n} 条</span>
+                    <button class="tag-mg-act" onclick="tagToggleHidden('${t.id}')">${t.hidden ? '🚫 已隐藏' : '👁 显示中'}</button>
+                    ${t.custom ? `<button class="tag-mg-act danger" onclick="tagDeleteCustom('${t.id}')">🗑 删除</button>` : ''}
+                </div>`;
+                if (tagMgEditId === t.id) html += tagEditBlockHtml(t);
+                return html;
+            }).join('');
+            if (tagMgEditId && document.getElementById('tagEditGrid')) {
+                tagRenderIconGrid('tagEditGrid', tagMgEditIcon, 'tagEditIconSet');
+                const cbox = document.getElementById('tagEditColors');
+                if (cbox) cbox.innerHTML = TAG_CUSTOM_COLORS.map(c => `<span class="tag-color-dot${c === tagMgEditColor ? ' active' : ''}" style="background:${c}" onclick="tagEditColorSet('${c}', this)"></span>`).join('');
+            }
+        }
+        function tagMgStartEdit(id) {
+            const t = tagDict()[id];
+            if (!t) return;
+            if (tagMgEditId === id) { tagMgEditId = null; renderTagManage(); return; }
+            tagMgEditId = id;
+            tagMgEditIcon = t.icon;
+            tagMgEditColor = t.chipBg || TAG_CUSTOM_COLORS[0];
+            tagIconPopClose();
+            renderTagManage();
+        }
+        function tagMgCancelEdit() { tagMgEditId = null; renderTagManage(); }
+        function tagMgSaveEdit(id) {
+            const d = tagDict();
+            if (!d[id]) return;
+            const free = document.getElementById('tagEditFree');
+            let ic = tagMgEditIcon || d[id].icon;
+            if (free && free.value.trim()) ic = Array.from(free.value.trim()).slice(0, 2).join('');
+            d[id].icon = ic;
+            if (tagMgEditColor) d[id].chipBg = tagMgEditColor;
+            safeStorage.set('niko_tags', d);
+            tagMgEditId = null;
+            tagRefreshAll();
+            tagNotifyModules();
+            showToast('✅ 「' + d[id].name + '」已更新为 ' + ic);
+        }
+        function tagToggleHidden(id) {
+            const d = tagDict();
+            if (!d[id]) return;
+            const toHidden = !d[id].hidden;
+            if (toHidden) d[id].hidden = true; else delete d[id].hidden;
+            safeStorage.set('niko_tags', d);
+            if (tagActiveId === id && toHidden) tagActiveId = null;
+            tagRefreshAll();
+            tagNotifyModules();
+            showToast(toHidden ? ('🚫 「' + d[id].name + '」已隐藏 —— 标签栏 / 选择器 / 标签云里都不再出现') : ('👁 「' + d[id].name + '」已恢复显示'));
+        }
+        function tagDeleteCustom(id) {
+            const d = tagDict();
+            if (!d[id]) return;
+            if (!d[id].custom) { showToast('ℹ️ 内置标签不能删除，请用左边的「👁 / 🚫」隐藏它'); return; }
+            const name = d[id].name;
+            // 该标签下的便签 / 文案迁到「随手记」，避免变成看板里看不见的孤儿数据
+            let movedN = 0, movedC = 0;
+            const notesArr = safeStorage.get('niko_inspiration_notes', []) || [];
+            notesArr.forEach(n => { if (n.tag === id) { n.tag = 'other'; movedN++; } });
+            if (movedN) safeStorage.set('niko_inspiration_notes', notesArr);
+            const copyArr = safeStorage.get('niko_copy_library', []) || [];
+            copyArr.forEach(c => { if (c.category === id) { c.category = 'other'; movedC++; } });
+            if (movedC) safeStorage.set('niko_copy_library', copyArr);
+            delete d[id];
+            safeStorage.set('niko_tags', d);
+            if (tagActiveId === id) tagActiveId = null;
+            tagMgEditId = null;
+            tagRefreshAll();
+            tagNotifyModules();
+            const tail = (movedN || movedC) ? ('，' + (movedN ? movedN + ' 张便签' : '') + (movedN && movedC ? ' + ' : '') + (movedC ? movedC + ' 条文案' : '') + '已移到「随手记」') : '';
+            showToast('🗑 标签「' + name + '」已删除' + tail);
+        }
+
         function tagAddCustom() {
             const nameEl = document.getElementById('tagNameInput');
-            const iconEl = document.getElementById('tagIconInput');
             const name = nameEl.value.trim();
             if (!name) { showToast('🏷 先填标签名'); nameEl.focus(); return; }
-            const icon = (iconEl.value.trim() || '🏷').slice(0, 2);
+            const freeIcoEl = document.getElementById('tagIconFree');
+            let icon = tagPickIcon || '🏷';
+            if (freeIcoEl && freeIcoEl.value.trim()) icon = Array.from(freeIcoEl.value.trim()).slice(0, 2).join('');
             const d = tagDict();
             const dup = Object.entries(d).find(([, t]) => t.name === name);
             if (dup) { showToast('⚠️ 标签「' + name + '」已存在'); nameEl.focus(); return; }
             const id = 't' + Date.now();
             d[id] = { name, icon, chipBg: tagPickColor, custom: true };
             safeStorage.set('niko_tags', d);
-            nameEl.value = ''; iconEl.value = '';
+            nameEl.value = '';
+            if (freeIcoEl) freeIcoEl.value = '';
+            tagPickIcon = '🏷'; tagSyncIconBtn(); tagIconPopClose();
             tagActiveId = id;
-            renderTagCloud(); renderTagResult();
-            showToast('✅ 标签「' + name + '」已添加，可在便签里选用');
+            tagRefreshAll();
+            tagNotifyModules();
+            showToast('✅ 标签「' + name + '」已添加，可在便签 / 文案里选用');
         }
         function openTagOverview() {
             const cp = document.getElementById('tagColorPick');
@@ -39060,6 +39306,9 @@ function hpClearDemo(){
             }
             document.getElementById('tagOverviewModal').classList.add('show');
             tagActiveId = null;
+            tagMgEditId = null;
+            tagIconPopClose();
+            tagSyncIconBtn();
             tagSwitchSeg('tags');
         }
         function closeTagOverview() { document.getElementById('tagOverviewModal').classList.remove('show'); }
@@ -39078,8 +39327,7 @@ function hpClearDemo(){
         document.getElementById('noteModalContent').addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); saveNoteModal(); }
         });
-        document.getElementById('nbBatchTagSelect').innerHTML = '<option value="">🏷 换标签…</option>' +
-            Object.entries(NOTE_TAGS).map(([k, t]) => `<option value="${k}">${t.icon} ${t.name}</option>`).join('');
+        if (typeof nbSyncTagSelects === 'function') nbSyncTagSelects();
 
         // 初始化渲染
         setView('calendar');
@@ -39097,7 +39345,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191157";
+        window.NIKO_VERSION = "202609191520";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
@@ -39556,8 +39804,8 @@ function hpClearDemo(){
         };
     })();
     </script>
-    <!-- 截图识别 OCR 引擎（Tesseract.js，按需加载，首次识别下载语言包后浏览器缓存） -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+    <!-- 截图识别 OCR 引擎（Tesseract.js）已改为「用到时才注入」——见 ensureTesseractScript()。
+         原先这里挂同步 <script>，会拖住 load 事件（国内拉 jsdelivr 慢 → 标签页一直转圈），故移除。 -->
 <style>/* 临时下线板块入口隐藏（verify_merge.py DISABLED_BOARDS）*/
 .nav-item[data-nav="parenting"]{display:none !important;}
 .nav-more-item[data-navpage="parenting"]{display:none !important;}
