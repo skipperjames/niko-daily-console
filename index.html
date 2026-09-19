@@ -8420,13 +8420,103 @@
             .nr-foot { gap: 10px; }
         }
 
-        /* ===== 便签编辑弹窗手机端放大（2026-09-07 用户反馈：输入框想大一点）===== */
+        /* ===== v2.26 便签全屏编辑器（2026-09-19 用户点名：新建/编辑那个小弹窗太小，要全屏写长文）
+           入口仍是 openNoteModal()，一共 4 个：顶栏「＋ 新建」/ 列头「＋ 添加」/ 卡片 ✏️ / 详情卡里的「✏️ 编辑」。
+           ⚠️ 浏览卡片 #nbDetailModal（双击弹出的那张）完全没动，一行都没碰。
+           样式语言沿用推文工坊：细边框 + 小圆角 + 11.5px 辅助字 + 工具行小按钮 + 底部统计行。 ===== */
+        /* z-index 2900：必须压过浮动 dock（2600），但不能盖住 toast（3000） */
+        #noteModal.be-mask { position: fixed; inset: 0; z-index: 2900; display: none; flex-direction: column; background: #fff; }
+        #noteModal.be-mask.show { display: flex; }
+        body.dark-mode #noteModal.be-mask { background: #17171f; }
+        .be-top { flex: 0 0 auto; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid #e5e2dc; }
+        body.dark-mode .be-top { border-color: #3a3a4d; }
+        .be-top b { font-size: 14px; font-weight: 600; color: #2b2b3a; }
+        body.dark-mode .be-top b { color: #e3e1ef; }
+        .be-save { font-size: 11px; color: #9a96a8; display: inline-flex; align-items: center; gap: 4px; }
+        .be-save i { width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block; }
+        .be-top .r { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+        .be-kbd { font-size: 11px; color: #9a96a8; }
+        .be-x { border: 1px solid #e5e2dc; background: transparent; color: #888; border-radius: 6px; width: 28px; height: 28px; cursor: pointer; font-size: 13px; line-height: 1; font-family: inherit; }
+        .be-x:hover { color: #ef4444; border-color: #ef4444; }
+        body.dark-mode .be-x { border-color: #3a3a4d; color: #aaa; }
+        .be-tabs { display: none; }
+        .be-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 236px minmax(0, 1fr) 400px; }
+        .be-col { min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+        .be-col + .be-col { border-left: 1px solid #e5e2dc; }
+        body.dark-mode .be-col + .be-col { border-color: #3a3a4d; }
+        .be-col-hd { flex: 0 0 auto; font-size: 11.5px; color: #9a96a8; padding: 12px 14px 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+        .be-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 0 14px 16px; }
+        .be-sec { margin-bottom: 15px; }
+        .be-lbl { font-size: 11px; color: #9a96a8; margin-bottom: 7px; }
+        .be-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .be-tg { font-size: 11.5px; padding: 3px 9px; border-radius: 999px; background: #f4f2ee; border: 1px solid transparent; color: #6b6878; cursor: pointer; transition: .15s; }
+        .be-tg:hover { border-color: #667eea; }
+        .be-tg.on { color: #fff; font-weight: 600; }
+        body.dark-mode .be-tg { background: #26263a; color: #c9c6d8; }
+        .be-tog { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; padding: 8px 0; border-bottom: 1px dashed rgba(128,128,128,.28); }
+        .be-tog:last-child { border-bottom: none; }
+        .be-tog .k { color: #2b2b3a; }
+        body.dark-mode .be-tog .k { color: #e3e1ef; }
+        .be-tog .v { font-size: 11.5px; color: #9a96a8; }
+        .be-tog input.be-tin { width: 132px; border: 1px solid #e5e2dc; background: #faf9f6; border-radius: 6px; padding: 3px 7px; font-size: 12px; font-family: inherit; color: #2b2b3a; outline: none; }
+        .be-tog input.be-tin:focus { border-color: #667eea; }
+        body.dark-mode .be-tog input.be-tin { background: #26263a; border-color: #3a3a4d; color: #e3e1ef; }
+        .be-edin { width: 100%; max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 16px 18px 10px; }
+        .be-trow { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; flex: 0 0 auto; margin-bottom: 10px; }
+        .be-trow button { border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 5px; padding: 2px 9px; font-size: 11.5px; cursor: pointer; font-family: inherit; line-height: 1.7; }
+        .be-trow button:hover { color: #2b2b3a; border-color: #667eea; }
+        body.dark-mode .be-trow button { border-color: #3a3a4d; color: #c9c6d8; }
+        #noteModalContent { flex: 1; min-height: 160px; width: 100%; background: #faf9f6; border: 1px solid #e5e2dc; border-radius: 8px; padding: 13px 15px; color: #2b2b3a; font-size: 15px; line-height: 1.9; font-family: inherit; resize: none; outline: none; overflow-y: auto; }
+        #noteModalContent:focus { border-color: #667eea; }
+        body.dark-mode #noteModalContent { background: #20202c; border-color: #3a3a4d; color: #e3e1ef; }
+        .be-stat { flex: 0 0 auto; font-size: 11.5px; color: #9a96a8; margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; }
+        .be-stat b { color: #2b2b3a; font-weight: 500; }
+        body.dark-mode .be-stat b { color: #e3e1ef; }
+        .be-caps { border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 999px; padding: 3px 11px; font-size: 11.5px; cursor: pointer; font-family: inherit; }
+        .be-caps.active { border-color: #8b5cf6; color: #8b5cf6; background: rgba(139,92,246,.12); }
+        body.dark-mode .be-caps { border-color: #3a3a4d; color: #c9c6d8; }
+        .be-pvw { background: #faf9f6; }
+        body.dark-mode .be-pvw { background: #1c1c26; }
+        .be-paper { flex: 1; min-height: 0; overflow-y: auto; margin: 0 14px 12px; background: #fff; border: 1px solid #e5e2dc; border-radius: 8px; padding: 15px 17px; font-size: 14px; line-height: 1.85; color: #2b2b3a; }
+        body.dark-mode .be-paper { background: #20202c; border-color: #3a3a4d; color: #e3e1ef; }
+        .be-paper h1 { font-size: 19px; font-weight: 600; margin: 2px 0 12px; }
+        .be-paper h2 { font-size: 16.5px; font-weight: 600; margin: 16px 0 9px; }
+        .be-paper h3 { font-size: 15px; font-weight: 600; margin: 14px 0 8px; }
+        .be-paper p { margin: 0 0 11px; white-space: pre-wrap; }
+        .be-paper ul { margin: 0 0 11px; padding-left: 20px; }
+        .be-paper li { margin-bottom: 5px; }
+        .be-paper blockquote { border-left: 3px solid #667eea; margin: 0 0 11px; padding: 2px 0 2px 11px; color: #6b6878; }
+        body.dark-mode .be-paper blockquote { color: #a8a8b6; }
+        .be-paper hr { border: none; border-top: 1px solid #e5e2dc; margin: 14px 0; }
+        body.dark-mode .be-paper hr { border-top-color: #3a3a4d; }
+        .be-paper strong { font-weight: 600; }
+        .be-paper .ph { color: #9a96a8; font-size: 12.5px; }
+        .be-pvfoot { flex: 0 0 auto; font-size: 10.5px; color: #9a96a8; padding: 0 16px 12px; line-height: 1.6; }
+        .be-foot { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid #e5e2dc; }
+        body.dark-mode .be-foot { border-color: #3a3a4d; }
+        .be-foot .sp { margin-left: auto; display: flex; gap: 8px; }
+        .be-foot .hint { font-size: 11px; color: #9a96a8; }
+        .be-b { border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 6px; padding: 6px 16px; font-size: 12.5px; cursor: pointer; font-family: inherit; }
+        .be-b:hover { color: #2b2b3a; border-color: #667eea; }
+        .be-b.pri { border-color: #667eea; background: rgba(102,126,234,.1); color: #667eea; font-weight: 600; }
+        body.dark-mode .be-b { border-color: #3a3a4d; color: #c9c6d8; }
+        body.dark-mode .be-b.pri { border-color: #7c8ff0; background: rgba(102,126,234,.2); color: #a5b0f5; }
         @media (max-width: 768px) {
-            #noteModal { align-items: flex-end; padding: 0; }
-            #noteModal .modal { width: 100vw !important; max-width: 100vw; margin: 0; border-radius: 18px 18px 0 0; max-height: 88vh; overflow-y: auto; padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
-            #noteModal textarea#noteModalContent { min-height: 200px; font-size: 16px; line-height: 1.7; }
-            #noteModal .form-item label { font-size: 12.5px; }
-            #noteModal .note-tag-picker { max-height: 30vh; overflow-y: auto; }
+            .be-tabs { display: flex; gap: 6px; padding: 8px 12px; border-bottom: 1px solid #e5e2dc; flex: 0 0 auto; }
+            body.dark-mode .be-tabs { border-color: #3a3a4d; }
+            .be-tabs button { flex: 1; border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 6px; padding: 7px; font-size: 12.5px; font-family: inherit; min-height: 38px; }
+            .be-tabs button.on { background: rgba(102,126,234,.1); border-color: #667eea; color: #667eea; font-weight: 600; }
+            body.dark-mode .be-tabs button { border-color: #3a3a4d; color: #c9c6d8; }
+            .be-body { display: flex; flex-direction: column; overflow: hidden; }
+            .be-col { display: none; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+            .be-col.show { display: flex; }
+            .be-col + .be-col { border-left: none; }
+            .be-edin { max-width: none; padding: 14px 14px 10px; }
+            #noteModalContent { min-height: 52vh; font-size: 16px; }
+            .be-paper { margin: 0 12px 12px; font-size: 15px; max-height: none; }
+            .be-kbd { display: none; }
+            .be-top { padding: 10px 12px; }
+            .be-foot { padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0)); }
         }
 
         /* ===== v2.25 页面容器（原行内样式落地为类）===== */
@@ -14532,17 +14622,69 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <button onclick="nbToggleBatch()">✕ 完成</button>
     </div>
 
-    <!-- 便签编辑弹窗（看板用） -->
-    <div class="modal-mask" id="noteModal">
-        <div class="modal" style="width:440px;">
-            <h3 id="noteModalTitle">新建便签</h3>
-            <div id="nbDraftHint"></div>
-            <div class="form-item"><label>便签内容</label><textarea id="noteModalContent" rows="4" placeholder="记录一闪而过的灵感… Ctrl+Enter 快速保存"></textarea></div>
-            <div class="form-item"><label>标签分类</label><div class="note-tag-picker" id="noteModalTagPicker" style="margin:0;"></div></div>
-            <div class="modal-footer">
-                <span class="capsule-chip" id="capsuleChipModal" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己" style="margin-right:auto;">⏳ 寄给未来</span>
-                <button class="btn" onclick="closeNoteModal()">取消</button>
-                <button class="btn primary" onclick="saveNoteModal()">保存</button>
+    <!-- 便签全屏编辑器（v2.26 · 替换原 440px 小弹窗；⚠️ 不是浏览卡片 #nbDetailModal，那张没动） -->
+    <div class="be-mask" id="noteModal">
+        <div class="be-top">
+            <b id="noteModalTitle">新建便签</b>
+            <span class="be-save"><i></i><span id="nbEdSaveTxt">草稿已存档</span></span>
+            <div class="r">
+                <span class="be-kbd">Ctrl + Enter 保存 · ESC 关闭</span>
+                <button class="be-x" type="button" onclick="closeNoteModal()" title="关闭">✕</button>
+            </div>
+        </div>
+        <div class="be-tabs" id="nbEdTabs">
+            <button type="button" data-t="info" onclick="nbEdTab('info')">🏷 信息</button>
+            <button type="button" data-t="body" class="on" onclick="nbEdTab('body')">✍️ 正文</button>
+            <button type="button" data-t="pvw" onclick="nbEdTab('pvw')">👁 预览</button>
+        </div>
+        <div class="be-body">
+            <aside class="be-col be-info" id="nbEdColInfo">
+                <div class="be-col-hd"><span>便签属性</span></div>
+                <div class="be-scroll">
+                    <div id="nbDraftHint"></div>
+                    <div class="be-sec">
+                        <div class="be-lbl">所属标签</div>
+                        <div class="be-tags" id="noteModalTagPicker"></div>
+                    </div>
+                    <div class="be-sec">
+                        <div class="be-tog"><span class="k">📌 置顶</span><span class="be-sw" id="nbEdPin" onclick="nbEdTogglePin()"></span></div>
+                        <div class="be-tog"><span class="k">📮 时间胶囊</span><span class="be-caps" id="capsuleChipModal" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己">⏳ 寄给未来</span></div>
+                    </div>
+                    <div class="be-sec">
+                        <div class="be-lbl">时间</div>
+                        <div class="be-tog"><span class="k">创建</span><span class="v" id="nbEdCreated">—</span></div>
+                    </div>
+                </div>
+            </aside>
+            <section class="be-col be-ed" id="nbEdColBody">
+                <div class="be-edin">
+                    <div class="be-trow">
+                        <button type="button" onclick="nbEdIns('## ')">H2</button>
+                        <button type="button" onclick="nbEdIns('- ')">列表</button>
+                        <button type="button" onclick="nbEdIns('&gt; ')">引用</button>
+                        <button type="button" onclick="nbEdIns('\n---\n')">分割线</button>
+                        <button type="button" onclick="nbEdIns('**加粗**')">加粗</button>
+                        <span class="sp"><button type="button" onclick="nbEdToKnowledge()" title="把正文存进知识库 03-Resources（便签本身不受影响）">📥 存进知识库</button></span>
+                    </div>
+                    <textarea id="noteModalContent" placeholder="记录一闪而过的灵感…支持 Markdown（## 标题 / - 列表 / &gt; 引用 / --- 分割线 / **加粗**）"></textarea>
+                    <div class="be-stat">
+                        <span>字数 <b id="nbEdStW">0</b></span>
+                        <span>段落 <b id="nbEdStP">0</b></span>
+                        <span>阅读 <b id="nbEdStR">0 秒</b></span>
+                    </div>
+                </div>
+            </section>
+            <aside class="be-col be-pvw" id="nbEdColPvw">
+                <div class="be-col-hd"><span>实时预览</span><span style="font-weight:400;">Markdown</span></div>
+                <div class="be-paper" id="nbEdPaper"></div>
+                <div class="be-pvfoot">预览只是「读一遍」—— 便签仍按纯文本原样保存，墙上卡片、浏览卡片、导出 Markdown 都不受影响。</div>
+            </aside>
+        </div>
+        <div class="be-foot">
+            <span class="hint" id="nbEdFootHint">—</span>
+            <div class="sp">
+                <button class="be-b" type="button" onclick="closeNoteModal()">取消</button>
+                <button class="be-b pri" type="button" onclick="saveNoteModal()">保存便签</button>
             </div>
         </div>
     </div>
@@ -25291,21 +25433,29 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (typeof showToast === 'function') showToast('📝 已恢复上次没写完的草稿');
         }
 
-        // 新建 / 编辑弹窗
+        // ===== v2.26 便签全屏编辑器（替换原 440px 小弹窗）
+        // 4 个入口全走这里：顶栏「＋ 新建」/ 列头「＋ 添加」/ 卡片 ✏️ / 浏览卡片里「✏️ 编辑」
+        // ⚠️ 浏览卡片 #nbDetailModal 不经过本函数，一行都没动
+        let nbEditingPinned = false;
         function openNoteModal(id, presetTag, e) {
             e && e.stopPropagation();
             nbEditingId = id || null;
             const n = id ? notes.find(x => x.id === id) : null;
             nbEditingTag = n ? n.tag : (presetTag || 'creative');
-            document.getElementById('noteModalTitle').textContent = n ? '编辑便签' : '新建便签';
+            nbEditingPinned = n ? !!n.pinned : false;
+            document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? n.content : '';
+            document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
             capsulePick = (n && n.capsule && CAPSULE_SPANS[n.capsule.span]) ? n.capsule.span : '';
             updateCapsuleChips();
             renderModalTagPicker();
+            nbEdSyncPin();
             const hint = document.getElementById('nbDraftHint');
             if (hint) hint.style.display = 'none';
             nbDraftTryRestore();    // v2.21 有未保存草稿则自动恢复
             document.getElementById('noteModal').classList.add('show');
+            nbEdTab('body');        // 窄屏默认落在「正文」页签
+            nbEdRefresh();
             setTimeout(() => document.getElementById('noteModalContent').focus(), 50);
         }
         function closeNoteModal() {
@@ -25316,21 +25466,126 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             nbEditingId = null;
         }
         function renderModalTagPicker() {
-            document.getElementById('noteModalTagPicker').innerHTML = Object.entries(noteTagDict()).map(([k, t]) =>
-                `<span class="note-tag-option ${nbEditingTag === k ? 'selected' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbEditingTag='${k}';renderModalTagPicker()">${t.icon} ${t.name}</span>`).join('');
+            const d = noteTagDict();
+            // 隐藏标签不进选择器（当前选中的那个例外，否则改完标签就找不回来了）
+            const list = Object.entries(d).filter(([k]) => k === nbEditingTag || !(typeof tagIsHidden === 'function' && tagIsHidden(k)));
+            document.getElementById('noteModalTagPicker').innerHTML = list.map(([k, t]) =>
+                `<span class="be-tg ${nbEditingTag === k ? 'on' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbEditingTag='${k}';renderModalTagPicker();nbEdRefresh();" title="${escapeHtml(t.name)}">${t.icon} ${escapeHtml(t.name)}</span>`).join('');
+        }
+        function nbEdSyncPin() { const el = document.getElementById('nbEdPin'); if (el) el.classList.toggle('on', nbEditingPinned); }
+        function nbEdTogglePin() { nbEditingPinned = !nbEditingPinned; nbEdSyncPin(); nbEdRefresh(); }
+        // 窄屏三页签（桌面端 .be-tabs 是 display:none，三栏同时显示）
+        function nbEdTab(t) {
+            document.querySelectorAll('#nbEdTabs button').forEach(b => b.classList.toggle('on', b.getAttribute('data-t') === t));
+            [['info', 'nbEdColInfo'], ['body', 'nbEdColBody'], ['pvw', 'nbEdColPvw']].forEach(([k, id]) => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('show', k === t);
+            });
+        }
+        // 工具行：在光标处插入 Markdown 片段，不动已输入内容
+        function nbEdIns(txt) {
+            const ta = document.getElementById('noteModalContent');
+            const s = ta.selectionStart, e2 = ta.selectionEnd, v = ta.value;
+            const pre = (s > 0 && v[s - 1] !== '\n' && txt.charAt(0) === '#') ? '\n' : '';
+            ta.value = v.slice(0, s) + pre + txt + v.slice(e2);
+            ta.focus();
+            ta.selectionStart = ta.selectionEnd = s + pre.length + txt.length;
+            nbEdRefresh();
+            nbDraftSave();
+        }
+        // 底部一行：这张便签要落哪儿（标签 / 置顶 / 密语）
+        function nbEdFootHint() {
+            const el = document.getElementById('nbEdFootHint');
+            if (!el) return;
+            const t = noteTagDict()[nbEditingTag];
+            const parts = [];
+            if (t) parts.push(t.icon + ' ' + t.name);
+            if (nbEditingPinned) parts.push('📌 置顶');
+            if (capsulePick && CAPSULE_SPANS[capsulePick]) parts.push('📮 寄给 ' + CAPSULE_SPANS[capsulePick].label + '后');
+            el.textContent = parts.length ? parts.join(' · ') : '未选标签';
+        }
+        // 字数 / 段落 / 阅读时长 + 右侧实时预览（便签存库仍是纯文本，预览只影响看）
+        function nbEdRefresh() {
+            const v = document.getElementById('noteModalContent').value;
+            const w = v.replace(/\s/g, '').length;
+            const ps = v.split(/\n\s*\n/).filter(x => x.trim()).length;
+            const sec = Math.round(w / 300 * 60);
+            document.getElementById('nbEdStW').textContent = w;
+            document.getElementById('nbEdStP').textContent = ps;
+            document.getElementById('nbEdStR').textContent = sec < 60 ? (sec + ' 秒') : (Math.floor(sec / 60) + ' 分 ' + (sec % 60) + ' 秒');
+            const paper = document.getElementById('nbEdPaper');
+            if (paper) paper.innerHTML = nbEdMd(v) || '<div class="ph">左边开始写，这里会实时变成排好版的样子。</div>';
+            nbEdFootHint();
+            try {
+                const st = document.getElementById('nbEdSaveTxt');
+                if (st) { st.textContent = '草稿已存档'; }
+            } catch (e) {}
+        }
+        // Markdown 轻渲染（只读展示用；便签本体仍按纯文本原样保存）
+        function nbEdEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        function nbEdMd(t) {
+            const lines = String(t || '').split('\n');
+            const out = []; let i = 0, inUl = false;
+            const inline = s => nbEdEsc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            const closeUl = () => { if (inUl) { out.push('</ul>'); inUl = false; } };
+            while (i < lines.length) {
+                const ln = lines[i];
+                if (/^\s*$/.test(ln)) { closeUl(); i++; continue; }
+                if (/^---+\s*$/.test(ln)) { closeUl(); out.push('<hr>'); i++; continue; }
+                const m = ln.match(/^(#{1,3})\s+(.*)$/);
+                if (m) { closeUl(); out.push('<h' + m[1].length + '>' + inline(m[2]) + '</h' + m[1].length + '>'); i++; continue; }
+                if (/^>\s?/.test(ln)) {
+                    closeUl(); const buf = [];
+                    while (i < lines.length && /^>\s?/.test(lines[i])) { buf.push(lines[i].replace(/^>\s?/, '')); i++; }
+                    out.push('<blockquote>' + inline(buf.join(' ')) + '</blockquote>');
+                    continue;
+                }
+                if (/^[-*]\s+/.test(ln)) {
+                    if (!inUl) { out.push('<ul>'); inUl = true; }
+                    out.push('<li>' + inline(ln.replace(/^[-*]\s+/, '')) + '</li>');
+                    i++; continue;
+                }
+                closeUl();
+                const p = [];
+                while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,3}\s|>\s?|[-*]\s|---+\s*$)/.test(lines[i])) { p.push(lines[i]); i++; }
+                out.push('<p>' + inline(p.join('\n')) + '</p>');
+            }
+            closeUl();
+            return out.join('');
+        }
+        // 把正文存进知识库（便签本身不受影响；和保存便签时的自动入库同一套）
+        function nbEdToKnowledge() {
+            const v = document.getElementById('noteModalContent').value.trim();
+            if (!v) { showToast('✏️ 内容不能为空'); return; }
+            if (typeof addToKnowledge !== 'function') { showToast('⚠️ 知识库未就绪'); return; }
+            addToKnowledge({
+                title: v.replace(/\s+/g, ' ').slice(0, 30),
+                body: v,
+                para: '03-Resources',
+                category: '生活',
+                tags: ['便签', nbEditingTag || ''].filter(Boolean),
+                from: '便签',
+                dedup: true
+            });
+            showToast('📥 已存进知识库');
         }
         function saveNoteModal() {
             const content = document.getElementById('noteModalContent').value.trim();
             if (!content) { showToast('✏️ 内容不能为空'); return; }
+            // v2.26 修 bug：原来 closeNoteModal() 会把 nbEditingId 置空，
+            // 之后 nbDraftClear() 拿到的槽位变成 '__new'，编辑已有便签时那个槽永远清不掉
+            // （下次打开会冒出「已恢复草稿」）。先把槽位记下来。
+            const _draftSlot = nbEditingId || '__new';
             if (nbEditingId) {
                 const n = notes.find(x => x.id === nbEditingId);
                 if (n) {
                     n.content = content; n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
+                    n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
                     if (capsulePick && !n.capsule) capsuleAttach(n);
                 }
                 showToast('✅ 便签已更新');
             } else {
-                const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: false, archived: false, deleted: false, order: Date.now() };
+                const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -25346,7 +25601,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 showToast('📌 便签已创建');
             }
             closeNoteModal();
-            nbDraftClear();         // v2.21 已保存，草稿完成使命
+            nbDraftClear(_draftSlot);   // v2.21 已保存，草稿完成使命（v2.26：按真实槽位清）
             capsulePick = ''; updateCapsuleChips();
             saveNotes();
         }
@@ -25885,7 +26140,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         // ===== v2.21 初始化绑定（草稿输入监听 + 档位同步；必须在本 SECTION 内，合并才会提取） =====
-        try { document.getElementById('noteModalContent').addEventListener('input', nbDraftSave); } catch (e) {}
+        // v2.26：输入同时驱动「草稿存档 + 字数/段落/阅读时长 + 右侧实时预览」
+        try {
+            document.getElementById('noteModalContent').addEventListener('input', () => {
+                nbDraftSave();
+                nbEdRefresh();
+                try {
+                    const st = document.getElementById('nbEdSaveTxt');
+                    if (st) { st.textContent = '正在存档…'; setTimeout(() => { st.textContent = '草稿已存档'; }, 500); }
+                } catch (e) {}
+            });
+        } catch (e) {}
+        // v2.26：全屏编辑器 ESC 关闭（框架的 ✕ 注入只认 .modal-mask，本编辑器不适用，故自己接管）
+        try {
+            document.addEventListener('keydown', (e) => {
+                const m = document.getElementById('noteModal');
+                if (!m || !m.classList.contains('show')) return;
+                if (e.key === 'Escape') { e.preventDefault(); closeNoteModal(); }
+            });
+        } catch (e) {}
         nbApplyDensity();
         nbSyncSortUI();
 
@@ -39345,7 +39618,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609191520";
+        window.NIKO_VERSION = "202609191548";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
@@ -39377,12 +39650,19 @@ function hpClearDemo(){
                 if (Date.now() - last < 60 * 1000) return; // 1 分钟内已检测过，避免重复打扰（缩短可让部署更快触达）
                 localStorage.setItem('niko_ver_check_at', String(Date.now()));
                 setTimeout(function () {
-                    fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
-                        .then(function (r) { return r.text(); })
-                        .then(function (txt) {
-                            var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/);
-                            if (!m || !m[1]) return;
-                            var online = m[1];
+                    // v2.26 性能：先问几十字节的 niko_ver.json（此前直接 fetch 整页 ≈ 又下 800KB，一次刷新等于下两遍）
+                    var dir = location.pathname.replace(/[^/]*$/, '');
+                    fetch(dir + 'niko_ver.json?t=' + Date.now(), { cache: 'no-store' })
+                        .then(function (r) { if (!r.ok) throw new Error('no ver json'); return r.json(); })
+                        .then(function (j) { return (j && j.v) ? String(j.v) : ''; })
+                        .catch(function () {
+                            // 兜底：线上还没有 niko_ver.json（老部署）时退回整页比对
+                            return fetch(location.pathname + '?t=' + Date.now(), { cache: 'no-store' })
+                                .then(function (r) { return r.text(); })
+                                .then(function (txt) { var m = txt.match(/NIKO_VERSION\s*=\s*"([^"]+)"/); return m ? m[1] : ''; });
+                        })
+                        .then(function (online) {
+                            if (!online || !/^\d+$/.test(online)) return;
                             if (Number(online) <= Number(cur)) return; // 已是最新
                             var tip = document.getElementById('nikoUpdateTip');
                             if (!tip) return;
