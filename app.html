@@ -18576,11 +18576,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function isDetailPanelCollapsed() {
             try { return localStorage.getItem('niko_detail_panel_collapsed') === '1'; } catch (e) { return false; }
         }
-        // 2026-09-20：右栏显隐会改变日历可用宽度，而跨天甘特覆盖层(.calendar-gantt-layer)是按
-        // getBoundingClientRect() 算出的绝对像素坐标——不重算就会整层停在旧位置（用户截图：收起右栏后
-        // 跨天条仍压在变换前的格子上）。只在 collapsed 真的翻转时重绘，且甩到下一帧避开与 setView/render 重入；
-        // 视图切换本身有自己的 render，不在此处重复触发。
-        var _lastPanelCollapsed = null;
         function applyDayDetailPanel(isCalendar) {
             var panel = document.getElementById('dayDetailPanel');
             var handle = document.getElementById('detailPanelHandle');
@@ -18598,16 +18593,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (handle) handle.style.display = 'none';
             }
             if (btn) btn.classList.toggle('active', !collapsed);
-            // 首次(_lastPanelCollapsed === null)也走一次：刷新时常年处于收起态，若 render 早于本函数隐藏右栏，
-            // 日历就按「展开了」的宽度画了甘特条 → 同样错位。rAF 里再确认 grid 已有内容才重绘，
-            // 避免与「render 尚未跑」的正常时序打架（那种情况 render 自己会按正确宽度画）。
-            if (isCalendar && (_lastPanelCollapsed === null || _lastPanelCollapsed !== collapsed)) {
-                requestAnimationFrame(function () {
-                    var g = document.getElementById('fourWeekGrid');
-                    if (g && g.children.length && typeof renderFourWeekGrid === 'function') renderFourWeekGrid();
-                });
-            }
-            _lastPanelCollapsed = collapsed;
         }
         // 视图判定容错：单独双击本零件时，currentView 的 let 声明可能在另一个（不被注入的）脚本里没跑到，
         // 直接 typeof 会抛 TDZ ReferenceError 并把整个 SECTION 脚本打断 —— 用 try/catch 兜住，按「日历视图」处理。
@@ -32015,13 +32000,14 @@ function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60), x=s%60; re
 /* ===================== 主题 / Tab ===================== */
 /* 预览页的 pvTheme（切整页主题）已删除：并入后主题由本体 html[data-theme] 统一控制 */
 function pvTheme(){ /* no-op：并入本体后主题跟随全站，不再由本板块切换 */ }
-/* 2026-09-20 用户要求：删掉「手表数据 / 我的方案 / 好转推断」三块，并把「用药记录」挪到「总览」右边。
-   面板 HTML 与渲染函数仍保留（休眠、无入口）——避免动到复诊摘要/总览脚注里对「好转推断」的文字引用。 */
 var TABS=[
   {k:'map',   ic:'🫀', t:'总览'},
-  {k:'med',   ic:'💊', t:'用药记录', cnt:function(){return MEDS.length;}},
   {k:'hist',  ic:'📁', t:'病史库',   cnt:function(){return HIST.length;}},
-  {k:'minor', ic:'🤒', t:'小病复发', cnt:function(){return MINOR.length;}}
+  {k:'med',   ic:'💊', t:'用药记录', cnt:function(){return MEDS.length;}},
+  {k:'minor', ic:'🤒', t:'小病复发', cnt:function(){return MINOR.length;}},
+  {k:'watch', ic:'⌚', t:'手表数据'},
+  {k:'plan',  ic:'🩺', t:'我的方案'},
+  {k:'trend', ic:'📈', t:'好转推断'}
 ];
 function renderTabs(){
   document.getElementById('tabs').innerHTML=TABS.map(function(x){
@@ -34355,15 +34341,6 @@ function hpClearDemo(){
   window.hpfCopy = hpfCopy;
   window.renderHealthPage = renderHealthPage;
 
-/* ===== 2026-09-20 用户要求：打开 NIKO 就启用服药提醒（不再等点进健康档案才弹） =====
-   原来 doseInit() 只在 renderHealthPage() 里被调用 → 不进健康档案就没有定时器、不弹。
-   这里在整包加载后无条件启一次（doseInit 自带幂等，重复调用直接 return，不会叠定时器）。 */
-(function(){
-  function hpDoseBoot(){ try{ doseInit(); }catch(e){} }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(hpDoseBoot, 600); });
-  else setTimeout(hpDoseBoot, 600);
-})();
-
 })();
 (function(){
   'use strict';
@@ -34769,8 +34746,11 @@ function hpClearDemo(){
     var title = ($('twTitle') ? $('twTitle').value : '') || '未命名';
     var body = $('twBody') ? $('twBody').value : '';
     // 与预览用的是同一份 HTML（全内联样式）—— 所见即所得，粘过去不会掉格式
+    // ⚠️ 第三个参数 true = 走富文本双格式写入（text/html + text/plain），
+    //    否则 writeText 只给纯文本，公众号编辑器拿不到样式
     twCopy(twRenderPaper(title, body, twStyleCfg()),
-      '已按「' + twSkinName() + '」样式复制，去公众号编辑器直接粘贴');
+      '已按「' + twSkinName() + '」样式复制，去公众号编辑器直接粘贴',
+      true);
   }
   function twToKb(){
     var d = twCur(); if (!d) return;
@@ -34789,19 +34769,57 @@ function hpClearDemo(){
     });
     if (ok) { d.title = title; twSaveSoon(); }
   }
-  function twCopy(text, okMsg){
+  /* 富文本复制：同时写 text/html（公众号编辑器要的）+ text/plain（兜底）
+     ⚠️ 2026-09-21 修：此前只调 writeText()，只写 text/plain，
+        粘进公众号就变成一坨无格式纯文本，排版全丢。
+     twCopy(text)      → 纯文本场景（提示词、AI 指令）
+     twCopy(html, msg, true) → 富文本场景（复制到公众号），自动抽纯文本兜底 */
+  function twHtmlToPlain(html){
+    var d = document.createElement('div');
+    d.innerHTML = String(html);
+    // 块级元素后补换行，尽量还原段落
+    d.querySelectorAll('h1,h2,h3,h4,p,li,blockquote,section,div,br').forEach(function(el){
+      if (el.tagName === 'BR'){ el.replaceWith('\n'); return; }
+      el.appendChild(document.createTextNode('\n'));
+    });
+    return (d.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+  }
+  function twCopy(text, okMsg, isHtml){
+    var html = isHtml ? String(text) : '';
+    var plain = isHtml ? twHtmlToPlain(text) : String(text);
+
+    // 兜底：隐藏 contenteditable + execCommand，能保留部分富文本
     function fallback(){
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.cssText = 'position:fixed;left:-9999px;';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); twToast(okMsg); }
-      catch (e) { twToast('复制失败，请手动选中'); }
-      document.body.removeChild(ta);
+      var box = document.createElement('div');
+      box.contentEditable = 'true';
+      box.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;';
+      box.innerHTML = isHtml ? html : twEsc(plain).replace(/\n/g, '<br>');
+      document.body.appendChild(box);
+      try {
+        var r = document.createRange(); r.selectNodeContents(box);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        var ok = document.execCommand('copy');
+        twToast(ok ? okMsg : '复制失败，请手动选中');
+      } catch (e) {
+        twToast('复制失败，请手动选中');
+      }
+      window.getSelection().removeAllRanges();
+      document.body.removeChild(box);
+    }
+
+    // 首选：ClipboardItem 双格式写入（微信编辑器读 text/html）
+    if (isHtml && navigator.clipboard && window.ClipboardItem){
+      try {
+        var item = new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([plain], { type: 'text/plain' })
+        });
+        navigator.clipboard.write([item]).then(function(){ twToast(okMsg); }, fallback);
+        return;
+      } catch (e) { /* 落到兜底 */ }
     }
     if (navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(text).then(function(){ twToast(okMsg); }, fallback);
+      navigator.clipboard.writeText(plain).then(function(){ twToast(okMsg); }, fallback);
     } else fallback();
   }
 
@@ -39703,7 +39721,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609201111";
+        window.NIKO_VERSION = "202609210027";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
