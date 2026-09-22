@@ -3568,8 +3568,13 @@
         }
         .calendar-wrapper {
             flex: 1;
-            display: flex;
-            flex-direction: column;
+            /* 2026-09-22 修：原先 flex column 里 .calendar-scroll-pane 的 flex:1 不 grow ——
+               wrapper 的高度是 align-items:stretch 得来的（height 属性仍是 auto），
+               对内部 flex 算法而言是 indefinite，所以日历区从来没吃满，底部一直留一大片空白。
+               改 grid 后「1fr」行能正确吃掉剩余高度（实测 scroll-pane 287 → 695px）。 */
+            display: grid;
+            grid-template-rows: minmax(0, 1fr) auto;
+            grid-auto-rows: auto;
             overflow: hidden;
             min-height: 0;
         }
@@ -5102,6 +5107,68 @@
                 overflow: hidden;
             }
             #planPage .event-item { height: auto !important; }
+        }
+
+        /* ===== 桌面顶栏精简 C 方案（2026-09-22）：日期导航并进顶栏同一行 + 低频工具收进 ⚙️ 抽屉 =====
+           背景：1080p 纵向紧张，顶栏工具群在窄视口自己换行成 2 排（.top-bar 113px）+ 日期导航独行 30px
+           目标：顶栏压成 1 行，把省下的 ≈110px 全给日历任务展示。仅 >=769px 生效，手机端规则不受影响 */
+        @media (min-width: 769px) {
+            /* —— 顶栏单行：标题 | 高频工具（靠右）| 日期导航（紧跟） —— */
+            #planPage .top-bar { justify-content: flex-start; flex-wrap: wrap; align-items: center; gap: 10px; }
+            #planPage .top-bar > div:nth-child(2) {
+                flex: 0 1 auto; min-width: 0; flex-wrap: nowrap; gap: 7px !important;
+                justify-content: flex-start; margin-left: auto;
+            }
+            #planPage .top-title { flex: 0 0 auto; }
+            #planPage .top-title p { display: none; }
+            #planPage .top-title h1 { font-size: 16px; margin-bottom: 0; }
+            #planPage .legend-item { display: none; }
+            #planPage .legend { margin-top: 0; }
+
+            /* —— ⚙️ 抽屉按钮：此前只在手机端启用，桌面端也点亮 —— */
+            #planPage #planToolsToggle {
+                display: inline-flex !important; align-items: center; justify-content: center;
+                flex: 0 0 auto; padding: 4px 9px !important; font-size: 14px !important;
+            }
+            /* 收起态（默认）：低频工具全部收进抽屉（模式/时间点/5 个显示开关/4 个彩色功能按钮） */
+            #planPage:not(.tools-open) #scopeModeGroup,
+            #planPage:not(.tools-open) #scopeOffTime,
+            #planPage:not(.tools-open) .top-bar > div:nth-child(2) > .node-toggle,
+            #planPage:not(.tools-open) .top-bar > div:nth-child(2) > .btn-small.primary { display: none !important; }
+            /* 展开态：工具群独占一行铺开（子项不许被压成竖排），日期导航落到下一行 */
+            #planPage.tools-open .top-bar { flex-wrap: wrap; }
+            #planPage.tools-open .top-bar > div:nth-child(2) { flex: 0 0 100%; flex-wrap: wrap; justify-content: flex-start; }
+            #planPage.tools-open .top-bar > div:nth-child(2) > * { flex: 0 0 auto; white-space: nowrap; }
+
+            /* —— 统计卡压成一行药丸（保留原 DOM 与 JS 更新，只改形态） —— */
+            #planPage .top-stats { gap: 5px; flex-wrap: nowrap; }
+            #planPage .top-stats .stat-card {
+                flex-direction: row; align-items: baseline; gap: 4px;
+                padding: 3px 9px; border-radius: 14px; min-width: 0;
+            }
+            #planPage .top-stats .stat-num { font-size: 13px; }
+            #planPage .top-stats .stat-label { font-size: 10px; }
+            #planPage .top-stats .stat-card.sc-week { min-width: 0; gap: 0; }
+            #planPage .top-stats .stat-card.sc-week .week-stat-track { display: none; }
+            #planPage .top-stats .stat-card.sc-week .week-stat-row { display: flex; align-items: baseline; gap: 4px; }
+
+            /* —— 日期导航并进顶栏：单行、紧凑 —— */
+            #planPage .date-nav-bar { flex: 0 1 auto; flex-wrap: nowrap; gap: 6px; }
+            #planPage .date-nav-bar .nav-btn { width: 26px; height: 26px; font-size: 12px; }
+            #planPage .date-nav-bar .date-range { min-width: 112px; font-size: 12px; }
+            #planPage .date-nav-bar .today-btn { padding: 3px 9px; font-size: 11px; }
+            #planPage .date-nav-bar .display-setting { font-size: 10.5px; gap: 3px; }
+            #planPage .date-nav-bar .display-setting input { width: 34px; padding: 2px 3px; }
+            #planPage .date-nav-bar .search-box { width: 110px; }
+        }
+
+        /* 窄屏兜底（1080p@125% ≈1536 逻辑宽、或非全屏窗口）：顶栏 1 行放不下 标题+工具群+导航
+           时，按同一理念再收一轮 —— 图例条先让位，两个「显示设置」也收进 ⚙️ 抽屉 */
+        @media (min-width: 769px) and (max-width: 1680px) {
+            #planPage .legend { display: none !important; }
+            #planPage:not(.tools-open) .date-nav-bar .display-setting { display: none !important; }
+            #planPage .date-nav-bar .search-box { width: 96px; }
+            #planPage .date-nav-bar .date-range { min-width: 100px; }
         }
 
         /* 已延期（自动判定：endDate<今天 且 未完成）：红色描边（v3 角标由 SVG 状态图标替代） */
@@ -12361,7 +12428,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-                    <button id="planToolsToggle" class="btn-small" onclick="togglePlanTools()" title="显示选项：模式 / 开关 / 统计 / 搜索" style="background:#f1f5f9;border-color:#cbd5e1;">⚙️</button>
+                    <!-- 2026-09-22：去掉 inline 的固定浅灰底（#f1f5f9）——深色主题下是个扎眼的白块，
+                         交给 .btn-small + 主题令牌接管，浅/深色都跟得上 -->
+                    <button id="planToolsToggle" class="btn-small" onclick="togglePlanTools()" title="显示选项：模式 / 开关 / 统计 / 搜索">⚙️</button>
                     <div class="view-toggle">
                         <button id="viewCalendarBtn" class="active" onclick="setView('calendar')">📅 日历</button>
                         <button id="viewBoardBtn" onclick="setView('board')">📋 看板</button>
@@ -12415,26 +12484,26 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="date-nav-bar" id="calendarNavBar">
-                <button class="nav-btn" onclick="navigateWeeks(-1)">‹</button>
-                <div class="date-range" id="dateRangeText"></div>
-                <button class="nav-btn" onclick="navigateWeeks(1)">›</button>
-                <button class="today-btn" onclick="goToday()">Today</button>
-                <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示周数（2/3/4 周循环）" style="min-width:44px;">2周</button>
-                <div class="display-setting" title="你的流程周期从哪天开始：任务量/副本/底片全部跟随">
-                    <label>周起始</label>
-                    <select id="weekStartSel" onchange="changeWeekStart()" style="background:transparent;border:1px solid rgba(128,138,158,.3);border-radius:6px;color:inherit;font-size:11.5px;padding:2px 4px;cursor:pointer;">
-                        <option value="0">周日</option><option value="1">周一</option><option value="2">周二</option><option value="3">周三</option><option value="4">周四</option><option value="5">周五</option><option value="6">周六</option>
-                    </select>
+                <div class="date-nav-bar" id="calendarNavBar">
+                    <button class="nav-btn" onclick="navigateWeeks(-1)">‹</button>
+                    <div class="date-range" id="dateRangeText"></div>
+                    <button class="nav-btn" onclick="navigateWeeks(1)">›</button>
+                    <button class="today-btn" onclick="goToday()">Today</button>
+                    <button class="today-btn" id="weekRangeBtn" onclick="toggleWeekCount()" title="切换日历显示周数（2/3/4 周循环）" style="min-width:44px;">2周</button>
+                    <div class="display-setting" title="你的流程周期从哪天开始：任务量/副本/底片全部跟随">
+                        <label>周起始</label>
+                        <select id="weekStartSel" onchange="changeWeekStart()" style="background:transparent;border:1px solid rgba(128,138,158,.3);border-radius:6px;color:inherit;font-size:11.5px;padding:2px 4px;cursor:pointer;">
+                            <option value="0">周日</option><option value="1">周一</option><option value="2">周二</option><option value="3">周三</option><option value="4">周四</option><option value="5">周五</option><option value="6">周六</option>
+                        </select>
+                    </div>
+                    <div class="display-setting">
+                        <label>单日显示</label>
+                        <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
+                        <span>条</span>
+                    </div>
+                    <span id="planDockSlot" style="position:relative;display:inline-flex;align-items:center;gap:6px;margin-left:4px;"></span>
+                    <input type="text" class="search-box" id="searchInput" placeholder="搜索任务..." oninput="render()">
                 </div>
-                <div class="display-setting">
-                    <label>单日显示</label>
-                    <input type="number" id="maxDisplayInput" value="6" min="1" max="15" onchange="updateMaxDisplay()">
-                    <span>条</span>
-                </div>
-                <span id="planDockSlot" style="position:relative;display:inline-flex;align-items:center;gap:6px;margin-left:4px;"></span>
-                <input type="text" class="search-box" id="searchInput" placeholder="搜索任务..." oninput="render()">
             </div>
             <div id="planContentArea" class="calendar-main" style="flex:1;overflow:hidden;display:flex;gap:12px;">
                 <div id="calendarWrapper" class="calendar-wrapper">
@@ -16586,7 +16655,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('viewBoardBtn').classList.toggle('active', view === 'board');
             document.getElementById('viewGanttBtn').classList.toggle('active', view === 'gantt');
             document.getElementById('calendarNavBar').style.display = view === 'calendar' ? 'flex' : 'none';
-            document.getElementById('calendarWrapper').style.display = view === 'calendar' ? 'block' : 'none';
+            // 2026-09-22：原为 'block'，会盖掉 .calendar-wrapper 的 display:grid
+            // （grid 的 1fr 行才能让日历区吃满剩余高度，否则底部永远留一大片空白）
+            document.getElementById('calendarWrapper').style.display = view === 'calendar' ? 'grid' : 'none';
             // 右侧「当天任务」栏：收起态由 计划看板 的 applyDayDetailPanel() 统一决定（顶栏开关 + 右缘拉手）
             if (typeof applyDayDetailPanel === 'function') applyDayDetailPanel(view === 'calendar');
             else document.getElementById('dayDetailPanel').style.display = view === 'calendar' ? 'flex' : 'none';
@@ -39744,7 +39815,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609210034";
+        window.NIKO_VERSION = "202609221313";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
