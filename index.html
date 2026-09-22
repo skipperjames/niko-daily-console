@@ -12731,6 +12731,12 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div class="form-item"><label>重复截止日期</label><input type="date" id="eventRepeatUntil"></div>
                 <div class="form-item"><label>重复次数(可选)</label><input type="number" id="eventRepeatCount" min="1" max="52" placeholder="留空则按截止日期"></div>
             </div>
+            <div class="form-row" id="repeatHolidayRow" style="display:none;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(20,184,166,.5);border-radius:8px;background:rgba(20,184,166,.07);">
+                    <input type="checkbox" id="eventSkipHoliday" checked>
+                    <span>🎌 跳过法定节假日 <span style="color:#888;font-size:11px;">（默认跳过：国庆/春节等假期内的实例不生成，周期继续往后；调休上班日照排）</span></span>
+                </label>
+            </div>
             <div class="form-row" id="applySeriesRow" style="display:none;">
                 <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(124,58,237,.45);border-radius:8px;background:rgba(124,58,237,.06);">
                     <input type="checkbox" id="applySeries" checked>
@@ -20914,6 +20920,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             document.getElementById('repeatUntilRow').style.display = 'none';
             document.getElementById('eventRepeatUntil').value = '';
             document.getElementById('eventRepeatCount').value = '';
+            document.getElementById('repeatHolidayRow').style.display = 'none';
+            document.getElementById('eventSkipHoliday').checked = true;   // ★ 默认跳过法定节假日
             if (eventId) {
                 const ev = events.find(e => e.id === eventId);
                 if (ev) {
@@ -20940,14 +20948,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     if (ev.repeat) {
                         document.getElementById('eventRepeat').value = ev.repeat.mode;
                         document.getElementById('repeatUntilRow').style.display = 'flex';
+                        document.getElementById('repeatHolidayRow').style.display = 'flex';
                         document.getElementById('eventRepeatUntil').value = ev.repeat.until || '';
                         document.getElementById('eventRepeatCount').value = ev.repeat.count || '';
+                        document.getElementById('eventSkipHoliday').checked = ev.repeat.skipHoliday !== false;   // 旧数据无此字段 → 默认跳过
                     } else if (ev.repeatInstance) {
                         // 如果是重复实例，显示父任务的重复设置
                         const parent = events.find(e => e.id === ev.parentId);
                         if (parent && parent.repeat) {
                             document.getElementById('eventRepeat').value = parent.repeat.mode;
                             document.getElementById('repeatUntilRow').style.display = 'flex';
+                            document.getElementById('repeatHolidayRow').style.display = 'flex';
+                            document.getElementById('eventSkipHoliday').checked = parent.repeat.skipHoliday !== false;
                         }
                     }
                     return;
@@ -21014,6 +21026,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const repeatMode = document.getElementById('eventRepeat').value;
             const repeatUntil = document.getElementById('eventRepeatUntil').value;
             const repeatCount = parseInt(document.getElementById('eventRepeatCount').value) || 0;
+            const skipHoliday = document.getElementById('eventSkipHoliday').checked;   // ★ 2026-09-22 循环任务跳过法定节假日（默认勾选）
 
             const id = document.getElementById('eventId').value || Date.now().toString();
             const existing = events.find(e => e.id === id);
@@ -21036,7 +21049,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 repeat: repeatMode !== 'none' ? {
                     mode: repeatMode,
                     until: repeatUntil,
-                    count: repeatCount
+                    count: repeatCount,
+                    skipHoliday: skipHoliday
                 } : null
             };
 
@@ -21045,7 +21059,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const applySeries = editingSeries && document.getElementById('applySeriesRow').style.display !== 'none'
                 && document.getElementById('applySeries').checked;
             // 重复规则是否没变（没变 → 属性同步即可，不必重建实例）
-            const sameRepeat = editingSeries && JSON.stringify(existing.repeat || null) === JSON.stringify(baseEvent.repeat);
+            // ★ 2026-09-22：归一化比较 —— 旧数据缺 skipHoliday 视作 true。否则「只改标题」也会被判成「规则变了」
+            // → 整个系列重建、各实例完成状态全丢（隐性回归）
+            const repNorm = (r) => r ? { mode: r.mode || 'none', until: r.until || '', count: r.count || 0, skipHoliday: r.skipHoliday !== false } : null;
+            const sameRepeat = editingSeries && JSON.stringify(repNorm(existing.repeat)) === JSON.stringify(repNorm(baseEvent.repeat));
 
             if (editingSeries) {
                 if (applySeries && sameRepeat) {
@@ -21076,7 +21093,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             // 生成重复实例
             if (repeatMode !== 'none') {
-                generateRepeatInstances(baseEvent);
+                const skippedHolidays = generateRepeatInstances(baseEvent);
+                if (skippedHolidays && skippedHolidays.length) {
+                    showToast('🎌 已跳过 ' + skippedHolidays.length + ' 天法定节假日：'
+                        + skippedHolidays.slice(0, 3).map(d => d.slice(5)).join('、')
+                        + (skippedHolidays.length > 3 ? ' 等' : ''));
+                }
             }
 
             saveData();
@@ -21112,10 +21134,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         }
 
+        // ★ 2026-09-22 循环任务「跳过法定节假日」：数据源复用排期表真表，不另造一份
+        function repIsHolidayName(ds) {
+            try { return (typeof TBL_CN_HOLIDAYS !== 'undefined' && TBL_CN_HOLIDAYS[ds]) || ''; } catch (e) { return ''; }
+        }
+        function repIsMakeup(ds) {
+            try { return typeof TBL_CN_MAKEUP !== 'undefined' && TBL_CN_MAKEUP.indexOf(ds) >= 0; } catch (e) { return false; }
+        }
+        // useHoliday=true → 按真实工作日：法定节假日不是工作日；调休补班的周末算工作日
+        function repIsWorkday(d, useHoliday) {
+            const ds = formatDate(d), w = d.getDay();
+            if (useHoliday && repIsHolidayName(ds)) return false;
+            if (w === 0 || w === 6) return useHoliday ? repIsMakeup(ds) : false;
+            return true;
+        }
         function generateRepeatInstances(baseEvent) {
             const repeat = baseEvent.repeat;
-            if (!repeat) return;
+            if (!repeat) return [];
 
+            const skipHoliday = repeat.skipHoliday !== false;   // 默认跳过（旧数据无字段也走跳过）
             const instances = [];
             const start = new Date(baseEvent.startDate);
             const end = new Date(baseEvent.endDate);
@@ -21125,12 +21162,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             let count = 1;
             const maxCount = repeat.count || 52; // 默认最多52次
             const untilDate = repeat.until ? new Date(repeat.until) : null;
+            const skippedHolidays = [];
 
             // 生成重复组ID
             const repeatGroup = 'rg_' + Date.now();
             baseEvent.repeatGroup = repeatGroup;
 
-            while (count < maxCount) {
+            let guard = 0;
+            while (count < maxCount && guard++ < 4000) {
                 // 计算下一个日期
                 let nextStart = new Date(currentStart);
                 switch (repeat.mode) {
@@ -21140,7 +21179,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     case 'weekdays':
                         do {
                             nextStart.setDate(nextStart.getDate() + 1);
-                        } while (nextStart.getDay() === 0 || nextStart.getDay() === 6);
+                        } while (!repIsWorkday(nextStart, skipHoliday) && guard++ < 4000);
                         break;
                     case 'weekly':
                         nextStart.setDate(nextStart.getDate() + 7);
@@ -21157,6 +21196,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (untilDate && nextStart > untilDate) break;
                 // 检查是否超过合理范围（1年）
                 if (nextStart.getTime() - start.getTime() > 365 * 24 * 60 * 60 * 1000) break;
+
+                // ★ 落法定节假日的那一次不生成实例，周期继续往后（工作日模式已在上面顺延过）
+                if (skipHoliday && repeat.mode !== 'weekdays' && repIsHolidayName(formatDate(nextStart))) {
+                    skippedHolidays.push(formatDate(nextStart));
+                    currentStart = nextStart;
+                    count++;
+                    continue;
+                }
 
                 const nextEnd = new Date(nextStart.getTime() + duration);
                 const instanceId = 'ri_' + Date.now() + '_' + count;
@@ -21186,6 +21233,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
 
             events.push(...instances);
+            return skippedHolidays;
         }
 
         function deleteEvent() {
@@ -21202,8 +21250,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // 重复选项切换
         document.getElementById('eventRepeat').addEventListener('change', (e) => {
-            const row = document.getElementById('repeatUntilRow');
-            row.style.display = e.target.value !== 'none' ? 'flex' : 'none';
+            const show = e.target.value !== 'none';
+            document.getElementById('repeatUntilRow').style.display = show ? 'flex' : 'none';
+            document.getElementById('repeatHolidayRow').style.display = show ? 'flex' : 'none';
         });
 
         // ===== 方案7 完成盖章（2026-09-06）：完成瞬间盖日期章，印痕留在卡上可回看 =====
@@ -39815,7 +39864,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609221313";
+        window.NIKO_VERSION = "202609221429";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
