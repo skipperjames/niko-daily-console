@@ -4958,6 +4958,10 @@
         /* 2026-09-14 法定节假日（休）/ 调休补班（班）角标：数据复用排期表的 TBL_CN_HOLIDAYS / TBL_CN_MAKEUP（国办发明电〔2025〕7 号），2027 换年只改那一处 */
         /* 类名必须带 cal- 前缀：健康板块.html 里有裸 .ban 规则（padding:9px 12px 大胶囊），
            之前角标用 ban 类被它同特异性后序覆盖，渲染成大方块（2026-09-14 用户截图骂丑） */
+        /* ★ 2026-09-22 系列节假日预警：编辑系列实例时提示将清理哪几条 */
+        .rep-hol-hint { font-size:11.5px; line-height:1.5; padding:6px 10px; border-radius:8px;
+            color:#b45309; background:rgba(245,158,11,.10); border:1px solid rgba(245,158,11,.35); }
+        body.dark-mode .rep-hol-hint { color:#fbbf24; background:rgba(245,158,11,.14); border-color:rgba(251,191,36,.4); }
         .cal-worktag { display:inline-block; font-size:9px; line-height:11px; padding:0 3px; border-radius:3px; border:1px solid transparent; vertical-align:1px; font-weight:600; margin-left:2px; -webkit-text-size-adjust:none; text-size-adjust:none; max-height:15px; }
         .cal-worktag.cal-xiu { background:#fef2f2; color:#dc2626; border-color:#fecaca; }
         .cal-worktag.cal-ban { background:#eff6ff; color:#2563eb; border-color:#bfdbfe; }
@@ -12732,10 +12736,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div class="form-item"><label>重复次数(可选)</label><input type="number" id="eventRepeatCount" min="1" max="52" placeholder="留空则按截止日期"></div>
             </div>
             <div class="form-row" id="repeatHolidayRow" style="display:none;">
-                <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(20,184,166,.5);border-radius:8px;background:rgba(20,184,166,.07);">
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(20,184,166,.5);border-radius:8px;background:rgba(20,184,166,.07);"
+                       title="取消勾选后，法定节假日当天也会生成实例。调休补班的周末始终算工作日，照排。">
                     <input type="checkbox" id="eventSkipHoliday" checked>
-                    <span>🎌 跳过法定节假日 <span style="color:#888;font-size:11px;">（默认跳过：国庆/春节等假期内的实例不生成，周期继续往后；调休上班日照排）</span></span>
+                    <span>🎌 跳过法定节假日 <span style="color:#888;font-size:11px;">（勾选后假期当天不排；调休上班日照排）</span></span>
                 </label>
+            </div>
+            <div class="form-row" id="repSeriesHolidayHint" style="display:none;">
+                <div class="rep-hol-hint">🎌 本系列已有 <b id="repSeriesHolidayHintN">0</b> 条落在法定节假日（<span id="repSeriesHolidayHintD"></span>）· 保存后自动移除，已完成的会保留</div>
             </div>
             <div class="form-row" id="applySeriesRow" style="display:none;">
                 <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;padding:6px 10px;border:1px dashed rgba(124,58,237,.45);border-radius:8px;background:rgba(124,58,237,.06);">
@@ -20945,23 +20953,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     } else {
                         applyRow.style.display = 'none';
                     }
-                    if (ev.repeat) {
-                        document.getElementById('eventRepeat').value = ev.repeat.mode;
+                    // ★ 2026-09-22：实例自身没有 repeat 字段 → 统一回到「系列锚点」读规则
+                    //   （原来只认 parentId，锚点换了/父条被删就读不到，开关会显示成默认值，误导用户）
+                    const repSrc = (ev.repeat ? ev : repSeriesAnchor(ev)) || ev;
+                    if (repSrc && repSrc.repeat) {
+                        document.getElementById('eventRepeat').value = repSrc.repeat.mode;
                         document.getElementById('repeatUntilRow').style.display = 'flex';
                         document.getElementById('repeatHolidayRow').style.display = 'flex';
-                        document.getElementById('eventRepeatUntil').value = ev.repeat.until || '';
-                        document.getElementById('eventRepeatCount').value = ev.repeat.count || '';
-                        document.getElementById('eventSkipHoliday').checked = ev.repeat.skipHoliday !== false;   // 旧数据无此字段 → 默认跳过
-                    } else if (ev.repeatInstance) {
-                        // 如果是重复实例，显示父任务的重复设置
-                        const parent = events.find(e => e.id === ev.parentId);
-                        if (parent && parent.repeat) {
-                            document.getElementById('eventRepeat').value = parent.repeat.mode;
-                            document.getElementById('repeatUntilRow').style.display = 'flex';
-                            document.getElementById('repeatHolidayRow').style.display = 'flex';
-                            document.getElementById('eventSkipHoliday').checked = parent.repeat.skipHoliday !== false;
-                        }
+                        document.getElementById('eventRepeatUntil').value = repSrc.repeat.until || '';
+                        document.getElementById('eventRepeatCount').value = repSrc.repeat.count || '';
+                        document.getElementById('eventSkipHoliday').checked = repSrc.repeat.skipHoliday !== false;   // 旧数据无此字段 → 默认跳过
                     }
+                    updateRepSeriesHolidayHint(ev);   // ★ 提示本系列有多少条落在法定节假日（保存后自动移除）
                     return;
                 }
             }
@@ -21054,19 +21057,22 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 } : null
             };
 
-            // ===== 重复系列处理（2026-09-07 重构） =====
+            // ===== 重复系列处理（2026-09-22 二次重构：改用「日期集合对齐」，彻底不再重建） =====
+            // 历史两处硬伤（2026-09-22 用户截图反馈「已存在的任务勾了跳过也不生效」时挖出）：
+            //   ① 系列「实例」对象上没有 repeat 字段 → 旧归一化比较恒判「规则变了」→ 走重建：
+            //      整个系列被删后以「该实例日期」为起点重生成 → 完成状态全丢，
+            //      且落在节假日的那天变成新基条 → 永远跳过不掉（用户看到 10/06 还在的原因之一）
+            //   ② 编辑系列「基条」走同步路径后，下面又调了一次 generateRepeatInstances
+            //      → 白送一整套重复实例，任务直接翻倍
+            // 现在统一：既有系列只做「日期集合对齐」（删掉不该存在的节假日实例、补上缺的），
+            // 全新系列才走一次性生成。基条 = 唯一日期锚点，实例只做字段同步。
             const editingSeries = !!(existing && existing.repeatGroup);
             const applySeries = editingSeries && document.getElementById('applySeriesRow').style.display !== 'none'
                 && document.getElementById('applySeries').checked;
-            // 重复规则是否没变（没变 → 属性同步即可，不必重建实例）
-            // ★ 2026-09-22：归一化比较 —— 旧数据缺 skipHoliday 视作 true。否则「只改标题」也会被判成「规则变了」
-            // → 整个系列重建、各实例完成状态全丢（隐性回归）
-            const repNorm = (r) => r ? { mode: r.mode || 'none', until: r.until || '', count: r.count || 0, skipHoliday: r.skipHoliday !== false } : null;
-            const sameRepeat = editingSeries && JSON.stringify(repNorm(existing.repeat)) === JSON.stringify(repNorm(baseEvent.repeat));
 
             if (editingSeries) {
-                if (applySeries && sameRepeat) {
-                    // 规则没变：把标题/备注/项目/类型/时间/优先级同步到系列全部实例，各自日期与完成状态保留
+                if (applySeries) {
+                    // 把标题/备注/项目/类型/时间/优先级同步到系列全部实例，各自日期与完成状态保留
                     events.forEach(m => {
                         if (m.repeatGroup === existing.repeatGroup && m.id !== baseEvent.id) {
                             m.title = baseEvent.title;
@@ -21082,8 +21088,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     });
                     baseEvent.repeatGroup = existing.repeatGroup;
                 } else {
-                    // 规则变了 或 用户取消同步：整个系列按新配置重建（原行为）
-                    events = events.filter(e => e.repeatGroup !== existing.repeatGroup);
+                    // 只改这一条：保留系列归属（避免变成孤儿），不动其他成员
+                    baseEvent.repeatGroup = existing.repeatGroup;
+                }
+                if (repeatMode === 'none') {
+                    // 用户把「重复」关掉 → 解散系列，只保留当前这条
+                    if (applySeries) events = events.filter(e => e.repeatGroup !== existing.repeatGroup || e.id === baseEvent.id);
+                    baseEvent.repeatGroup = null;
                 }
             }
 
@@ -21091,13 +21102,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (idx >= 0) events[idx] = baseEvent;
             else events.push(baseEvent);
 
-            // 生成重复实例
+            // 生成 / 对齐重复实例
+            // 既有系列 → 对齐日期集合（不重建、不翻倍、不丢完成状态）；全新系列 → 一次性生成
             if (repeatMode !== 'none') {
-                const skippedHolidays = generateRepeatInstances(baseEvent);
-                if (skippedHolidays && skippedHolidays.length) {
-                    showToast('🎌 已跳过 ' + skippedHolidays.length + ' 天法定节假日：'
-                        + skippedHolidays.slice(0, 3).map(d => d.slice(5)).join('、')
-                        + (skippedHolidays.length > 3 ? ' 等' : ''));
+                if (editingSeries && applySeries) {
+                    const rec = reconcileRepeatSeries(baseEvent);
+                    if (rec) {
+                        const msgs = [];
+                        if (rec.removed) {
+                            const dl = rec.removedDates.slice(0, 3).map(d => d.slice(5)).join('、');
+                            msgs.push('移除 ' + rec.removed + ' 条节假日实例' + (dl ? '（' + dl + (rec.removedDates.length > 3 ? ' 等' : '') + '）' : ''));
+                        }
+                        if (rec.added) msgs.push('补回 ' + rec.added + ' 条');
+                        if (rec.keptDone) msgs.push(rec.keptDone + ' 条已完成保留');
+                        if (msgs.length) showToast('🎌 ' + msgs.join(' · '));
+                    }
+                } else if (!editingSeries) {
+                    const skippedHolidays = generateRepeatInstances(baseEvent);
+                    if (skippedHolidays && skippedHolidays.length) {
+                        showToast('🎌 已跳过 ' + skippedHolidays.length + ' 天法定节假日：'
+                            + skippedHolidays.slice(0, 3).map(d => d.slice(5)).join('、')
+                            + (skippedHolidays.length > 3 ? ' 等' : ''));
+                    }
                 }
             }
 
@@ -21148,29 +21174,36 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (w === 0 || w === 6) return useHoliday ? repIsMakeup(ds) : false;
             return true;
         }
-        function generateRepeatInstances(baseEvent) {
-            const repeat = baseEvent.repeat;
-            if (!repeat) return [];
+        // ★ 2026-09-22：系列「日期锚点」——重复规则的唯一真相源。
+        //   基条（!repeatInstance）优先；异常数据退化为系列内最早的一条。
+        //   编辑实例时它的 repeat 字段是 undefined，必须回到锚点取规则与起点日期，
+        //   否则会以「该实例日期」为起点重算 → 落在节假日的那天被当成基条，永远跳过不掉。
+        function repSeriesAnchor(ev) {
+            if (!ev || !ev.repeatGroup) return ev || null;
+            const members = events.filter(e => e.repeatGroup === ev.repeatGroup);
+            if (!members.length) return ev;
+            let a = members.find(e => !e.repeatInstance);
+            if (!a) a = members.slice().sort((x, y) => (x.startDate < y.startDate ? -1 : 1))[0];
+            return a || ev;
+        }
 
+        // 纯计算：按规则算出「应当存在的日期集合」（含起点基条），不落库。
+        // dates[0] 恒为基条（用户手选的起点，永不自动删）；skipped 为被跳过的法定节假日
+        function repSeriesDates(baseEvent) {
+            const repeat = baseEvent.repeat;
+            if (!repeat) return { dates: [], skipped: [] };
             const skipHoliday = repeat.skipHoliday !== false;   // 默认跳过（旧数据无字段也走跳过）
-            const instances = [];
             const start = new Date(baseEvent.startDate);
             const end = new Date(baseEvent.endDate);
             const duration = end.getTime() - start.getTime();
-
+            const dates = [{ ds: formatDate(start), de: formatDate(end), n: 1 }];
+            const skipped = [];
             let currentStart = new Date(start);
             let count = 1;
             const maxCount = repeat.count || 52; // 默认最多52次
             const untilDate = repeat.until ? new Date(repeat.until) : null;
-            const skippedHolidays = [];
-
-            // 生成重复组ID
-            const repeatGroup = 'rg_' + Date.now();
-            baseEvent.repeatGroup = repeatGroup;
-
             let guard = 0;
             while (count < maxCount && guard++ < 4000) {
-                // 计算下一个日期
                 let nextStart = new Date(currentStart);
                 switch (repeat.mode) {
                     case 'daily':
@@ -21191,49 +21224,117 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         nextStart.setMonth(nextStart.getMonth() + 1);
                         break;
                 }
-
-                // 检查是否超过截止日期
                 if (untilDate && nextStart > untilDate) break;
-                // 检查是否超过合理范围（1年）
                 if (nextStart.getTime() - start.getTime() > 365 * 24 * 60 * 60 * 1000) break;
 
+                const ds = formatDate(nextStart);
                 // ★ 落法定节假日的那一次不生成实例，周期继续往后（工作日模式已在上面顺延过）
-                if (skipHoliday && repeat.mode !== 'weekdays' && repIsHolidayName(formatDate(nextStart))) {
-                    skippedHolidays.push(formatDate(nextStart));
+                if (skipHoliday && repeat.mode !== 'weekdays' && repIsHolidayName(ds)) {
+                    skipped.push(ds);
                     currentStart = nextStart;
                     count++;
                     continue;
                 }
-
-                const nextEnd = new Date(nextStart.getTime() + duration);
-                const instanceId = 'ri_' + Date.now() + '_' + count;
-
-                instances.push({
-                    id: instanceId,
-                    title: baseEvent.title,
-                    desc: baseEvent.desc,
-                    startDate: formatDate(nextStart),
-                    endDate: formatDate(nextEnd),
-                    type: baseEvent.type,
-                    startTime: baseEvent.startTime,
-                    endTime: baseEvent.endTime,
-                    priority: baseEvent.priority,
-                    status: 'todo',
-                    track: baseEvent.track,
-                    projectId: baseEvent.projectId,   // 修复：实例此前漏拷项目 → 回退到第一个项目（日本项目）挂错旗
-                    customBoss: baseEvent.customBoss,
-                    scope: '',
-                    repeatGroup: repeatGroup,
-                    repeatInstance: true,
-                    parentId: baseEvent.id
-                });
-
+                dates.push({ ds: ds, de: formatDate(new Date(nextStart.getTime() + duration)), n: dates.length + 1 });
                 currentStart = nextStart;
                 count++;
             }
+            return { dates: dates, skipped: skipped };
+        }
 
+        // 造一条系列实例（不落库）。id 带随机段：纯 Date.now() 在毫秒内会碰撞（2026-09-22 踩过）
+        function repMakeInstance(src, repeatGroup, ds, de, n) {
+            return {
+                id: 'ri_' + Date.now() + '_' + n + '_' + Math.random().toString(36).slice(2, 6),
+                title: src.title,
+                desc: src.desc,
+                startDate: ds,
+                endDate: de,
+                type: src.type,
+                startTime: src.startTime,
+                endTime: src.endTime,
+                priority: src.priority,
+                status: 'todo',
+                track: src.track,
+                projectId: src.projectId,   // 修复：实例此前漏拷项目 → 回退到第一个项目（日本项目）挂错旗
+                customBoss: src.customBoss,
+                scope: '',
+                repeatGroup: repeatGroup,
+                repeatInstance: true,
+                parentId: src.id
+            };
+        }
+
+        function generateRepeatInstances(baseEvent) {
+            const repeat = baseEvent.repeat;
+            if (!repeat) return [];
+            const repeatGroup = 'rg_' + Date.now();
+            baseEvent.repeatGroup = repeatGroup;
+            const r = repSeriesDates(baseEvent);
+            const instances = r.dates
+                .filter(d => d.ds !== baseEvent.startDate)
+                .map(d => repMakeInstance(baseEvent, repeatGroup, d.ds, d.de, d.n));
             events.push(...instances);
-            return skippedHolidays;
+            return r.skipped;
+        }
+
+        // ★ 2026-09-22 核心修复：既有系列的「日期集合对齐」
+        //   删：系列内落在法定节假日且未完成的实例（含正在编辑的那条）；
+        //       以及规则变化后落在网格外、又不是当前正在编辑的那条（保护用户刚改的）
+        //   留：已完成的实例（用户做过的事不抹）、基条、网格内的实例
+        //   补：网格里应当存在但系列内缺失的日期（服务「取消跳过节假日」场景）
+        function reconcileRepeatSeries(editedEvent) {
+            const out = { removed: 0, added: 0, keptDone: 0, removedDates: [], skipped: [] };
+            const rg = editedEvent && editedEvent.repeatGroup;
+            if (!rg || !editedEvent.repeat) return out;
+            const anchor = repSeriesAnchor(editedEvent);
+            if (!anchor) return out;
+
+            // 锚点定日期、被编辑对象定新规则
+            const spec = Object.assign({}, anchor, {
+                repeat: editedEvent.repeat,
+                startDate: anchor.startDate,
+                endDate: anchor.endDate
+            });
+            const r = repSeriesDates(spec);
+            out.skipped = r.skipped;
+            const should = {};
+            r.dates.forEach(d => { should[d.ds] = d; });
+
+            const members = events.filter(e => e.repeatGroup === rg);
+            const kill = [];
+            members.forEach(m => {
+                if (m.id === anchor.id) return;
+                if (m.status === 'done') { out.keptDone++; return; }
+                if (repIsHolidayName(m.startDate)) { kill.push(m.id); out.removedDates.push(m.startDate); return; }
+                if (!should[m.startDate] && m.id !== editedEvent.id) kill.push(m.id);
+            });
+            if (kill.length) events = events.filter(e => kill.indexOf(e.id) < 0);
+            out.removed = kill.length;
+            out.removedDates = out.removedDates.filter((v, i, a) => a.indexOf(v) === i).sort();
+
+            const have = {};
+            events.forEach(e => { if (e.repeatGroup === rg) have[e.startDate] = 1; });
+            r.dates.forEach(d => {
+                if (d.ds === anchor.startDate) return;
+                if (have[d.ds]) return;
+                events.push(repMakeInstance(anchor, rg, d.ds, d.de, d.n));
+                out.added++;
+            });
+            return out;
+        }
+
+        // 打开编辑弹窗时提示：本系列现有多少条落在法定节假日（保存后会被移除）
+        function updateRepSeriesHolidayHint(ev) {
+            const row = document.getElementById('repSeriesHolidayHint');
+            if (!row) return;
+            if (!ev || !ev.repeatGroup) { row.style.display = 'none'; return; }
+            const hits = events.filter(e => e.repeatGroup === ev.repeatGroup && e.status !== 'done' && repIsHolidayName(e.startDate));
+            if (!hits.length) { row.style.display = 'none'; return; }
+            document.getElementById('repSeriesHolidayHintN').textContent = hits.length;
+            document.getElementById('repSeriesHolidayHintD').textContent =
+                hits.slice(0, 4).map(e => e.startDate.slice(5)).join('、') + (hits.length > 4 ? ' 等' : '');
+            row.style.display = 'flex';
         }
 
         function deleteEvent() {
@@ -39864,7 +39965,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609221429";
+        window.NIKO_VERSION = "202609221738";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
