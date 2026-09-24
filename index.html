@@ -1912,6 +1912,16 @@
         .tag-mg-name { flex: 1; font-size: 13px; font-weight: 600; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         body.dark-mode .tag-mg-name { color: #e5e7eb; }
         .tag-mg-badge { font-size: 10.5px; color: #999; flex-shrink: 0; }
+        .tag-use-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .tag-use-btn { font-size: 11.5px; padding: 3px 9px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #666; cursor: pointer; white-space: nowrap; }
+        .tag-use-btn:hover { border-color: #a855f7; color: #7c3aed; }
+        .tag-use-btn.on { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+        .tag-mg-use { font-size: 10.5px; padding: 2px 8px; border-radius: 10px; background: rgba(168,85,247,.12); color: #7c3aed; flex-shrink: 0; }
+        .tag-mg-use.off { background: rgba(120,120,140,.14); color: #8a8fa8; }
+        body.dark-mode .tag-use-btn { background: #232335; border-color: #3b3b50; color: #cbd5e1; }
+        body.dark-mode .tag-use-btn.on { background: #7c3aed; border-color: #7c3aed; color: #fff; }
+        body.dark-mode .tag-mg-use { background: rgba(168,85,247,.2); color: #d8b4fe; }
+        body.dark-mode .tag-mg-use.off { background: rgba(255,255,255,.08); color: #9aa0b4; }
         .tag-mg-act { font-size: 11.5px; padding: 3px 9px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; color: #666; cursor: pointer; flex-shrink: 0; }
         body.dark-mode .tag-mg-act { background: #232536; border-color: #3a3d51; color: #bbb; }
         .tag-mg-act:hover { border-color: #f59e0b; color: #f59e0b; }
@@ -8391,6 +8401,7 @@
         body.dark-mode .nb-card.nb-drop-after { box-shadow: 0 3px 0 0 #8b9ef5; }
         /* ===== v2.21 常翻常新：最近被翻过/改过的便签保持崭新 ===== */
         .nb-fresh-mark { font-size: 10px; line-height: 1; flex-shrink: 0; opacity: .85; cursor: default; }
+        .nb-norev-mark { font-size: 10px; line-height: 1; flex-shrink: 0; opacity: .75; cursor: default; }
         /* ===== v2.21 草稿恢复提示条 ===== */
         #nbDraftHint { display: none; font-size: 11px; color: #8a6d1f; background: #fdf6e3; border: 1px solid #f0e6c8; border-radius: 6px; padding: 4px 10px; margin-bottom: 10px; }
         body.dark-mode #nbDraftHint { color: #d6c99a; background: #2b2733; border-color: #4a4258; }
@@ -8754,6 +8765,10 @@
         .kb-card.pinned { border-color:rgba(251,191,36,.5); box-shadow:0 0 0 1px rgba(251,191,36,.20), 0 4px 16px rgba(251,191,36,.10); }
         .kb-card.pinned .kb-ribbon { background:linear-gradient(180deg,#fcd34d,#f59e0b); box-shadow:0 0 12px rgba(251,191,36,.7); }
         .kb-card-top { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+        .kb-badge-pending { background:rgba(245,158,11,.18) !important; color:#b45309 !important; cursor:pointer; }
+        .kb-badge-pending:hover { background:rgba(245,158,11,.32) !important; }
+        body.dark-mode .kb-badge-pending { background:rgba(251,191,36,.2) !important; color:#fcd34d !important; }
+        .kb-imp-btn { font-size:12px !important; }
         .kb-badge-para { background:transparent !important; border:1px solid; }
         .kb-badge-cat { background:rgba(127,127,159,.14) !important; color:#8a8fa8 !important; }
         /* 撕页引文：日记/便签/读书笔记来源的条目，用分区色引文条区分，字体与全站一致（用户铁律：禁宋体/楷体类衬线） */
@@ -14745,6 +14760,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <div class="be-sec">
                         <div class="be-tog"><span class="k">📌 置顶</span><span class="be-sw" id="nbEdPin" onclick="nbEdTogglePin()"></span></div>
                         <div class="be-tog"><span class="k">📮 时间胶囊</span><span class="be-caps" id="capsuleChipModal" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己">⏳ 寄给未来</span></div>
+                        <div class="be-tog"><span class="k">🧠 参与复习</span><span class="be-sw" id="nbEdRev" onclick="nbEdToggleRev()"></span></div>
+                        <div id="nbEdRevHint" style="font-size:11px;color:#9aa0b4;line-height:1.5;margin:2px 0 0;"></div>
                     </div>
                     <div class="be-sec">
                         <div class="be-lbl">时间</div>
@@ -15209,6 +15226,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             </div>
             <div class="tag-form" id="tagFormWrap">
                 <div class="tag-form-title">➕ 新增自定义标签（立即出现在便签选择器，全局生效）</div>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
+                    <span class="tag-ico-hint" style="margin:0;">用途：</span>
+                    <div class="tag-use-row" id="tagNewUse"></div>
+                </div>
                 <div class="tag-form-row">
                     <input type="text" class="tag-name-input" id="tagNameInput" placeholder="标签名，如：女性向 / 国风 / 抽卡" maxlength="12">
                     <button type="button" class="tag-icon-btn" id="tagIconBtn" onclick="tagIconPopToggle('new')" title="点这里挑图标（也可在下面手打 / 粘贴任意 emoji）">🏷</button>
@@ -25567,6 +25588,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const ageD = Math.floor((Date.now() - touchTs) / 86400000);
             const retouched = touchTs - new Date(n.createdAt).getTime() > 60000;   // 创建之后被翻过/改过
             const fresh = retouched && ageD <= 7;
+            const noRevMark = noteReviewOff(n) ? '<span class="nb-norev-mark" title="只查不背 · 不参与早读 / 复习 / 摇一张">🔍</span>' : '';
             const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
             // v2.23 短便签自适应密排：单行且 ≤32 字的短卡挂 nb-slim 收紧留白（有胶囊角标的除外）
             const slim = n.content.length <= 32 && !n.content.includes('\n') && !capsuleBadgeHtml(n);
@@ -25577,7 +25599,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 <div class="nb-card-content">${escapeHtml(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
-                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${noRevMark}
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
@@ -25735,12 +25757,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 4 个入口全走这里：顶栏「＋ 新建」/ 列头「＋ 添加」/ 卡片 ✏️ / 浏览卡片里「✏️ 编辑」
         // ⚠️ 浏览卡片 #nbDetailModal 不经过本函数，一行都没动
         let nbEditingPinned = false;
+        let nbEditingNoRev = "inherit";   // "inherit" 跟随标签 / "on" 参与 / "off" 不参与
         function openNoteModal(id, presetTag, e) {
             e && e.stopPropagation();
             nbEditingId = id || null;
             const n = id ? notes.find(x => x.id === id) : null;
             nbEditingTag = n ? n.tag : (presetTag || 'creative');
             nbEditingPinned = n ? !!n.pinned : false;
+            nbEditingNoRev = (n && n.noReview === true) ? "off" : (n && n.noReview === false) ? "on" : "inherit";
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? n.content : '';
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
@@ -25771,6 +25795,29 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 `<span class="be-tg ${nbEditingTag === k ? 'on' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbEditingTag='${k}';renderModalTagPicker();nbEdRefresh();" title="${escapeHtml(t.name)}">${t.icon} ${escapeHtml(t.name)}</span>`).join('');
         }
         function nbEdSyncPin() { const el = document.getElementById('nbEdPin'); if (el) el.classList.toggle('on', nbEditingPinned); }
+        // 2026-09-23 #2：单条便签「参与复习」三态（inherit 跟随标签 / on / off）
+        function nbEdRevEffective() {
+            if (nbEditingNoRev === "on") return true;
+            if (nbEditingNoRev === "off") return false;
+            try { const t = noteTagDict()[nbEditingTag]; return !(t && t.use && t.use !== "review"); } catch (e) { return true; }
+        }
+        function nbEdToggleRev() {
+            nbEditingNoRev = nbEdRevEffective() ? "off" : "on";   // 点一下 = 取反并显式化（不再跟随标签）
+            nbEdSyncRev(); nbEdRefresh();
+        }
+        function nbEdSyncRev() {
+            const sw = document.getElementById("nbEdRev");
+            if (!sw) return;
+            const on = nbEdRevEffective();
+            sw.classList.toggle("on", on);
+            const hint = document.getElementById("nbEdRevHint");
+            if (hint) {
+        let src = "本条单独设置";
+        if (nbEditingNoRev === "inherit") { const t = noteTagDict()[nbEditingTag]; src = "跟随标签「" + (t ? t.name : "未选") + "」"; }
+        hint.textContent = (on ? "参与早读 / 复习 / 摇一张" : "不参与早读 / 复习 / 摇一张，也不会被整理人收进寂寂角") + " · " + src;
+        hint.style.color = on ? "" : "#f59e0b";
+            }
+        }
         function nbEdTogglePin() { nbEditingPinned = !nbEditingPinned; nbEdSyncPin(); nbEdRefresh(); }
         // 窄屏三页签（桌面端 .be-tabs 是 display:none，三栏同时显示）
         function nbEdTab(t) {
@@ -25804,6 +25851,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         // 字数 / 段落 / 阅读时长 + 右侧实时预览（便签存库仍是纯文本，预览只影响看）
         function nbEdRefresh() {
+        nbEdSyncRev();
             const v = document.getElementById('noteModalContent').value;
             const w = v.replace(/\s/g, '').length;
             const ps = v.split(/\n\s*\n/).filter(x => x.trim()).length;
@@ -25879,11 +25927,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (n) {
                     n.content = content; n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
                     n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
+                    if (nbEditingNoRev === "on") n.noReview = false; else if (nbEditingNoRev === "off") n.noReview = true; else delete n.noReview;   // #2 单条覆盖（inherit 时清字段）
                     if (capsulePick && !n.capsule) capsuleAttach(n);
                 }
                 showToast('✅ 便签已更新');
             } else {
                 const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
+                if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -26147,11 +26197,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             setTimeout(() => ov.remove(), 320);
         }
 
+        // 2026-09-23 #1#3#4：复习嗅探 —— 标签「用途」+ 单条覆盖
+        // 语义：标签 use === "review"（缺省也算）才参与早读 / 复习 / 摇一张；n.noReview 单条覆盖
+        function noteUseIsReview(n) {
+            if (!n) return false;
+            if (n.noReview === true) return false;
+            if (n.noReview === false) return true;
+            try { const t = noteTagDict()[n.tag]; if (t && t.use && t.use !== "review") return false; } catch (e) {}
+            return true;
+        }
+        function noteReviewOff(n) { return !noteUseIsReview(n); }
         // ---------- 晨读三张 ----------
         function nbMorningPool() {
             const now = Date.now();
             return activeNotes()
-                .filter(n => !n.quiet && !n.pinned && !(n.capsule && !n.capsule.opened) && now - new Date(n.createdAt).getTime() >= 7 * 86400000)
+                .filter(n => !n.quiet && !n.pinned && !(n.capsule && !n.capsule.opened) && now - new Date(n.createdAt).getTime() >= 7 * 86400000 && noteUseIsReview(n))
                 .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
         }
         function nbMorningState() {
@@ -26260,7 +26320,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // ---------- 复习模式（过卡） ----------
         let nbReview = null;   // { deck:[id], pos, got, back }
         function nbOpenReview() {
-            let pool = activeNotes().filter(n => !n.quiet);
+            let pool = activeNotes().filter(n => !n.quiet && noteUseIsReview(n));
             if (nbTagFilter) pool = pool.filter(n => n.tag === nbTagFilter);
             if (!pool.length) { showToast('🎴 墙上没有可复习的便签'); return; }
             const deck = pool.map(n => n.id);
@@ -26359,7 +26419,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             const cutoff = Date.now() - 30 * 86400000;
             const candidates = activeNotes().filter(n =>
                 !n.quiet && !n.pinned &&
-                !morningIds.has(n.id) &&
+                !morningIds.has(n.id) && noteUseIsReview(n) &&
                 !(n.capsule && !n.capsule.opened) &&
                 new Date(n.updatedAt || n.createdAt).getTime() < cutoff
             );
@@ -26512,7 +26572,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ===== v2.22 骰子模式：随手摇一张旧便签（娱乐+回访，摇到即算翻过） =====
         let nbDiceLast = null;
-        function nbDicePool() { return activeNotes().filter(n => !n.quiet && !(n.capsule && !n.capsule.opened)); }
+        function nbDicePool() { return activeNotes().filter(n => !n.quiet && noteUseIsReview(n) && !(n.capsule && !n.capsule.opened)); }
         function nbOpenDice() {
             const pool = nbDicePool();
             if (!pool.length) { showToast('🎲 墙上没有可摇的便签'); return; }
@@ -26811,6 +26871,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="kb-card-top">
                         <span class="kb-badge kb-badge-para" style="color:${paraColor};">${getKbParaLabel(it.para)}</span>
                         <span class="kb-badge kb-badge-cat">${escapeHtml(it.category)}</span>
+                        ${it.status === 'pending' ? `<span class="kb-badge kb-badge-pending" onclick="event.stopPropagation();kbMarkReady('${it.id}',event)" title="新入库 · 点我标为已整理，之后才会进复习队列">📥 待整理 · 点我转正</span>` : ''}
                     </div>
                     <div class="kb-card-title">${it.pinned ? '📌 ' : ''}${escapeHtml(it.title)}</div>
                     ${it.body ? `<div class="kb-card-body">${escapeHtml(it.body.replace(/[#*`\[]/g, '').slice(0, 160))}</div>` : ''}
@@ -26820,6 +26881,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                     <div class="kb-card-actions">
                         <button class="kb-icon-btn" onclick="event.stopPropagation();toggleKbPin('${it.id}')" title="${it.pinned ? '取消置顶' : '置顶'}">${it.pinned ? '📌' : '📌'}</button>
+                        <button class="kb-icon-btn kb-imp-btn" onclick="cycleKbImp('${it.id}',event)" title="重要度：${(it.imp || 2) === 3 ? '重点 · 复习更勤' : (it.imp || 2) === 2 ? '普通' : '边角 · 间隔拉长'}（点击切换）">${(it.imp || 2) === 3 ? '🔥' : (it.imp || 2) === 2 ? '⭐' : '💤'}</button>
                         <button class="kb-icon-btn" onclick="event.stopPropagation();openKbEdit('${it.id}')" title="编辑">✏️</button>
                         <button class="kb-icon-btn" onclick="event.stopPropagation();deleteKbEntry('${it.id}')" title="删除">🗑</button>
                     </div>
@@ -26934,6 +26996,32 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 category: it.category || '',
                 tags: Array.isArray(it.tags) ? it.tags.slice() : []
             };
+        }
+        // #7 重要度循环：边角 → 普通 → 重点 → 边角
+        function cycleKbImp(id, e) {
+            e && e.stopPropagation();
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            const it = knowledge.find(x => x.id === id);
+            if (!it) return;
+            const cur = it.imp || 2;
+            it.imp = cur === 1 ? 2 : (cur === 2 ? 3 : 1);
+            it.updatedAt = new Date().toISOString();
+            safeStorage.set(KB_STORE, knowledge);
+            renderKbList();
+            showToast(it.imp === 3 ? '🔥 已标为重点 · 复习更勤' : it.imp === 2 ? '⭐ 已标为普通' : '💤 已标为边角 · 复习间隔拉长');
+        }
+        // #8 待整理 → 已整理（开始进复习队列）
+        function kbMarkReady(id, e) {
+            e && e.stopPropagation();
+            knowledge = safeStorage.get(KB_STORE, knowledge);
+            const it = knowledge.find(x => x.id === id);
+            if (!it) return;
+            it.status = 'ready';
+            it.updatedAt = new Date().toISOString();
+            safeStorage.set(KB_STORE, knowledge);
+            renderKbList();
+            updateKbReviewBadge();
+            showToast('✅ 已整理 · 这条开始进复习队列');
         }
         function toggleKbPin(id) {
             const it = knowledge.find(x => x.id === id);
@@ -27141,6 +27229,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 .map(it => ({ it, st: getKbReviewState(it) }))
                 .filter(x => {
                     const { lastReviewedAt, intervalDays, reps } = x.st;
+                    if (x.it.status === 'pending') return false;   // #8 待整理不进队列
                     // 全新条目：从未复习过的，立即进队列
                     if (!lastReviewedAt && reps === 0) return true;
                     // 已复习过：到期
@@ -27173,6 +27262,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 else nextInterval = Math.max(2, Math.round((st.intervalDays || 1) * 2.5));
                 st.reps = (st.reps || 0) + 1;
             }
+            // #7 重要度调节：重点更勤、边角更疏（1 星 ×1.6 / 2 星 ×1 / 3 星 ×0.7）
+            const _imp = it.imp || 2;
+            nextInterval = Math.max(1, Math.round(nextInterval * (_imp >= 3 ? 0.7 : (_imp === 1 ? 1.6 : 1))));
             st.lastReviewedAt = today;
             st.intervalDays = nextInterval;
             setKbReviewState(it, st);
@@ -27278,6 +27370,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 pinned: false,
                 source: { from: opts.from || '手动', title: opts.title || '', link: opts.link || '', date: opts.date || now },
                 history: [],  // 时光机：编辑历史快照（首次创建为空，编辑时由 saveKbEntry / upsertKnowledge 写入）
+                imp: 2,                 // #7 重要度：1 边角 / 2 普通 / 3 重点（影响复习间隔）
+                status: 'pending',      // #8 新入库先进「待整理」，标为已整理后才进复习队列
                 createdAt: now, updatedAt: now
             });
             safeStorage.set(KB_STORE, knowledge);
@@ -33282,7 +33376,7 @@ var DOSE={};
 var DOSE_INIT=false;
 var DOSE_OPEN='';
 var DOSE_NOTIFIED={};
-var DOSE_CFG={first:'08:50', mode:'meal'};   /* first=第一顿时间（跟 8:50 习惯）· mode=meal 跟饭点 / gap 均匀间隔 */
+var DOSE_CFG={first:'08:50', mode:'meal', off:false};   /* first=第一顿时间（跟 8:50 习惯）· mode=meal 跟饭点 / gap 均匀间隔 · off=true 到点弹窗总开关（缺字段=开启，零迁移） */
 function hm2min(t){ var p=String(t||'').split(':'); return (+p[0]||0)*60+(+p[1]||0); }
 function min2hm(m){ m=Math.round(m); m=(m+1440)%1440; return pad2(Math.floor(m/60))+':'+pad2(m%60); }
 var MEAL_BASE={l:720, d:1140, s:1350};       /* 午 12:00 · 晚 19:00 · 睡前 22:30（早 = 第一顿时间） */
@@ -33352,18 +33446,21 @@ function doseNextHint(){
 function doseStrip(){
   var td=doseToday();
   if(!td.total) return '';
+  var off=!!DOSE_CFG.off;
   var modeTxt=(DOSE_CFG.mode==='gap')?'均匀间隔':'跟饭点（饭后自动 +15 分钟）';
-  return '<div class="card" style="margin-bottom:14px">'+
+  return '<div class="card" style="margin-bottom:14px'+(off?';opacity:.6':'')+'">'+
     '<div style="font-size:13px;font-weight:700;margin-bottom:2px">⏰ 今日服药 <span style="color:var(--accent)">'+td.done+' / '+td.total+' 次</span>'+
-      ' <span class="chip sm" style="cursor:pointer" onclick="doseCfgOpen()">⚙️ 提醒设置</span></div>'+
-    '<div style="font-size:11px;color:var(--muted);margin-bottom:3px">第一顿 '+esc(DOSE_CFG.first||'08:50')+' · '+modeTxt+'；到点弹窗提醒，点「已吃」自动记次数；漏了的点时间补记</div>'+
+      ' <span class="hp-chip sm" style="cursor:pointer" onclick="doseCfgOpen()">⚙️ 提醒设置</span>'+
+      ' <span class="hp-chip sm'+(off?'':' on')+'" style="cursor:pointer" onclick="doseToggleOff()" title="'+(off?'点一下重新开启到点提醒':'点一下关掉到点弹窗（时间表和已记次数都保留）')+'">'+(off?'🔕 已关闭':'🔔 提醒中')+'</span></div>'+
+    '<div style="font-size:11px;color:var(--muted);margin-bottom:3px">第一顿 '+esc(DOSE_CFG.first||'08:50')+' · '+modeTxt+'；'+
+      (off?'<b style="color:var(--bad)">到点弹窗已关闭</b>，时间表还在，可以手动补记':'到点弹窗提醒，点「已吃」自动记次数；漏了的点时间补记')+'</div>'+
     '<div style="font-size:11.5px;color:var(--text);margin-bottom:9px">👉 '+doseNextHint()+'</div>'+
     '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
       td.plan.map(function(s){
         var dn=td.log[s.t]&&td.log[s.t].names;
         return dn
-          ? '<span class="chip sm" style="cursor:default" title="'+esc((dn||[]).join('、'))+'">✅ '+s.t+' 已吃</span>'
-          : '<span class="chip sm" onclick="doseTakeSlot(\''+s.t+'\')">＋ '+s.t+' 补记</span>';
+          ? '<span class="hp-chip sm" style="cursor:default" title="'+esc((dn||[]).join('、'))+'">✅ '+s.t+' 已吃</span>'
+          : '<span class="hp-chip sm" onclick="doseTakeSlot(\''+s.t+'\')">＋ '+s.t+' 补记</span>';
       }).join('')+
     '</div></div>';
 }
@@ -33375,7 +33472,27 @@ function doseCfgOpen(){
     '<option value="meal"'+(DOSE_CFG.mode!=='gap'?' selected':'')+'>跟饭点 · 早/午/晚/睡前，饭后自动 +15 分钟</option>'+
     '<option value="gap"'+(DOSE_CFG.mode==='gap'?' selected':'')+'>均匀间隔 · 第一顿到 23:00 之间均分（看药物间隔要求）</option></select></div>'+
     '<div style="font-size:11.5px;color:var(--muted);line-height:1.7">饭点基准：早 <b>'+esc(DOSE_CFG.first||'08:50')+'</b>（= 第一顿）· 午 12:00 · 晚 19:00 · 睡前 22:30。处方标了「饭后」的药自动推迟 15 分钟吃（饭前的药仍提前 30 分钟）。</div>';
+  doseAskNotify();
   gOpen('⏰ 服药提醒设置', html, '✅ 保存', doseCfgSave);
+}
+/* ===== 提醒总开关 + 通知权限（2026-09-24 用户反馈：用药提醒一个都关不掉） =====
+   卡片上的「🔔 提醒中 / 🔕 已关闭」走这里；DOSE_CFG.off 缺字段=开启 → 老数据零迁移。
+   顺带补上 Notification 权限申请（此前只有番茄钟会申请 → 页面切后台时系统通知发不出来）。 */
+function doseAskNotify(){
+  try{ if(window.Notification && Notification.permission==='default') Notification.requestPermission(function(){}); }catch(e){}
+}
+function doseToggleOff(){
+  if(!DOSE_CFG.off){
+    if(!confirm('关掉到点用药提醒？\n（时间表和你已记的次数都还在，只是不再弹窗；随时能再打开）')) return;
+    DOSE_CFG.off=true;
+    HSAVE(); if(S.tab==='med') renderMed();
+    pvToast('🔕 用药提醒已关闭 · 时间表和补记都还在');
+  }else{
+    DOSE_CFG.off=false;
+    HSAVE(); if(S.tab==='med') renderMed();
+    pvToast('🔔 用药提醒已开启');
+    doseAskNotify();
+  }
 }
 function doseCfgSave(){
   DOSE_CFG.first=document.getElementById('dc_first').value||'08:50';
@@ -33453,6 +33570,7 @@ function doseShow(s){
 function doseTick(){
   try{
     HLOAD();
+    if(DOSE_CFG.off) return;                   /* 总开关关了：不弹窗、不发系统通知（2026-09-24） */
     var td=doseToday();
     if(!td.total) return;
     var now=new Date();
@@ -34523,13 +34641,15 @@ function hpClearDemo(){
   window.medAdd = medAdd;
   window.medDel = medDel;
   window.medEdit = medEdit;
-  window.doseDebug = { perDay:dosePerDay, plan:dosePlan, slot:doseSlot, show:doseShow, tick:doseTick, load:HLOAD, get DOSE(){ return DOSE; }, times:doseTimesFor, cfg:DOSE_CFG, rxJson:rxExtractJson, rxNorm:rxNormalize, prompt:rxPrompt };
+  window.doseDebug = { perDay:dosePerDay, plan:dosePlan, slot:doseSlot, show:doseShow, tick:doseTick, load:HLOAD, get DOSE(){ return DOSE; }, times:doseTimesFor, cfg:DOSE_CFG, strip:doseStrip, get off(){ return !!DOSE_CFG.off; }, rxJson:rxExtractJson, rxNorm:rxNormalize, prompt:rxPrompt };
   window.doseDismiss = doseDismiss;
   window.doseMark = doseMark;
   window.doseSnooze = doseSnooze;
   window.doseTakeSlot = doseTakeSlot;
   window.doseCfgOpen = doseCfgOpen;
   window.doseCfgSave = doseCfgSave;
+  window.doseToggleOff = doseToggleOff;
+  window.doseAskNotify = doseAskNotify;
   window.rxCopyPrompt = rxCopyPrompt;
   window.medAiCopy = medAiCopy;
   window.medAiVisit = medAiVisit;
@@ -39753,6 +39873,24 @@ function hpClearDemo(){
         let tagPickIcon = '🏷';
         let tagMgEditId = null;
         let tagMgEditIcon = '';
+        let tagPickUse = 'review';
+        let tagMgEditUse = 'review';
+        const TAG_USE_OPTIONS = [
+            { k: 'review',  icon: '🧠', name: '复习型', tip: '参与早读 / 复习 / 摇一张' },
+            { k: 'lookup',  icon: '🔍', name: '查阅型', tip: '只查不背：不参与早读 / 复习 / 摇一张，也不会被整理人收进寂寂角' },
+            { k: 'todo',    icon: '✅', name: '待办型', tip: '待处理事项：不参与复习类通道' },
+            { k: 'archive', icon: '📦', name: '归档型', tip: '留档备查：不参与复习类通道' }
+        ];
+        function tagUseName(use) { const o = TAG_USE_OPTIONS.find(x => x.k === (use || 'review')); return o ? o.name : '复习型'; }
+        function tagUseIcon(use) { const o = TAG_USE_OPTIONS.find(x => x.k === (use || 'review')); return o ? o.icon : '🧠'; }
+        function tagUseRowHtml(hostId, cur) {
+            return TAG_USE_OPTIONS.map(o => `<span class="tag-use-btn${(cur || 'review') === o.k ? ' on' : ''}" title="${o.tip}" onclick="tagUsePick('${hostId}','${o.k}',this)">${o.icon} ${o.name}</span>`).join('');
+        }
+        function tagUsePick(hostId, k, el) {
+            if (hostId === 'tagNewUse') tagPickUse = k; else tagMgEditUse = k;
+            const host = document.getElementById(hostId);
+            if (host) Array.prototype.forEach.call(host.querySelectorAll(".tag-use-btn"), b => b.classList.toggle("on", b === el));
+        }
         let tagMgEditColor = '';
         let tagIconPopFor = null;
 
@@ -39800,6 +39938,8 @@ function hpClearDemo(){
 
         function tagEditBlockHtml(t) {
             return `<div class="tag-mg-edit">
+                <div class="tag-ico-hint">用途（决定是否参与早读 / 复习 / 摇一张）：</div>
+                <div class="tag-use-row" id="tagEditUse">${tagUseRowHtml('tagEditUse', t.use)}</div>
                 <div class="tag-ico-hint">换图标（当前 ${t.icon}）：</div>
                 <div class="tag-ico-grid" id="tagEditGrid"></div>
                 <div class="tag-mg-actions">
@@ -39826,6 +39966,7 @@ function hpClearDemo(){
                     <button class="tag-mg-icon" onclick="tagMgStartEdit('${t.id}')" title="换图标 / 换颜色">${t.icon}</button>
                     <span class="tag-mg-name">${escapeHtml(t.name)}</span>
                     <span class="tag-mg-badge">${t.custom ? '自定义' : '内置'} · ${n} 条</span>
+                    <span class="tag-mg-use${(t.use && t.use !== 'review') ? ' off' : ''}">${tagUseIcon(t.use)} ${tagUseName(t.use)}</span>
                     <button class="tag-mg-act" onclick="tagToggleHidden('${t.id}')">${t.hidden ? '🚫 已隐藏' : '👁 显示中'}</button>
                     ${t.custom ? `<button class="tag-mg-act danger" onclick="tagDeleteCustom('${t.id}')">🗑 删除</button>` : ''}
                 </div>`;
@@ -39845,6 +39986,7 @@ function hpClearDemo(){
             tagMgEditId = id;
             tagMgEditIcon = t.icon;
             tagMgEditColor = t.chipBg || TAG_CUSTOM_COLORS[0];
+            tagMgEditUse = t.use || 'review';
             tagIconPopClose();
             renderTagManage();
         }
@@ -39857,11 +39999,13 @@ function hpClearDemo(){
             if (free && free.value.trim()) ic = Array.from(free.value.trim()).slice(0, 2).join('');
             d[id].icon = ic;
             if (tagMgEditColor) d[id].chipBg = tagMgEditColor;
+            if (tagMgEditUse) d[id].use = tagMgEditUse;
             safeStorage.set('niko_tags', d);
             tagMgEditId = null;
             tagRefreshAll();
             tagNotifyModules();
-            showToast('✅ 「' + d[id].name + '」已更新为 ' + ic);
+            try { if (typeof renderNotesPage === "function") renderNotesPage(); } catch (e) {}
+            showToast('✅ 「' + d[id].name + '」已更新为 ' + ic + ' · ' + tagUseName(d[id].use));
         }
         function tagToggleHidden(id) {
             const d = tagDict();
@@ -39908,7 +40052,7 @@ function hpClearDemo(){
             const dup = Object.entries(d).find(([, t]) => t.name === name);
             if (dup) { showToast('⚠️ 标签「' + name + '」已存在'); nameEl.focus(); return; }
             const id = 't' + Date.now();
-            d[id] = { name, icon, chipBg: tagPickColor, custom: true };
+            d[id] = { name, icon, chipBg: tagPickColor, use: tagPickUse, custom: true };
             safeStorage.set('niko_tags', d);
             nameEl.value = '';
             if (freeIcoEl) freeIcoEl.value = '';
@@ -39919,6 +40063,9 @@ function hpClearDemo(){
             showToast('✅ 标签「' + name + '」已添加，可在便签 / 文案里选用');
         }
         function openTagOverview() {
+            tagPickUse = 'review';
+            const useHost = document.getElementById('tagNewUse');
+            if (useHost) useHost.innerHTML = tagUseRowHtml('tagNewUse', tagPickUse);
             const cp = document.getElementById('tagColorPick');
             if (cp && !cp.dataset.rendered) {
                 cp.dataset.rendered = '1';
@@ -39965,7 +40112,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609221738";
+        window.NIKO_VERSION = "202609240916";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
