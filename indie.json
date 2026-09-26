@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T01:10:09+08:00",
+  "fetchedAt": "2026-09-27T01:16:32+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
@@ -70,7 +70,7 @@
         "primary": "Simulation",
         "label": "模拟经营",
         "saturation": {
-          "total": 52614,
+          "total": 52615,
           "sampleCount": 100,
           "perDay": 100,
           "perMonth": null,
@@ -78,12 +78,12 @@
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 52,614 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
+          "basis": "全站 52,615 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
           "sampleOldest": "2026-09-25"
         }
       },
-      "playersCurrent": 26104,
+      "playersCurrent": 26050,
       "analysis": null
     },
     {
@@ -148,7 +148,7 @@
         "primary": "Simulation",
         "label": "模拟经营",
         "saturation": {
-          "total": 52614,
+          "total": 52615,
           "sampleCount": 100,
           "perDay": 100,
           "perMonth": null,
@@ -156,12 +156,12 @@
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 52,614 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
+          "basis": "全站 52,615 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
           "sampleOldest": "2026-09-25"
         }
       },
-      "playersCurrent": 926,
+      "playersCurrent": 985,
       "analysis": null
     },
     {
@@ -236,7 +236,7 @@
           "sampleOldest": "2026-09-25"
         }
       },
-      "playersCurrent": 169,
+      "playersCurrent": 185,
       "analysis": null
     },
     {
@@ -317,7 +317,7 @@
           "sampleOldest": "2026-09-25"
         }
       },
-      "playersCurrent": 742,
+      "playersCurrent": 744,
       "analysis": null
     },
     {
