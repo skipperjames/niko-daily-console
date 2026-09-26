@@ -35,10 +35,10 @@ const path = require('path');
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const OUTPUT = path.join(__dirname, '..', 'indie.json');
 
-const MAX_CANDIDATES = 220;   // 候选池上限（最近发行的游戏）
-const MIN_REVIEWS = 120;      // 进榜门槛：评论数下限
+const MAX_CANDIDATES = 400;   // 候选池上限（最近发行的游戏）220→400（2026-09-27：首跑只出 4 款，扩池）
+const MIN_REVIEWS = 80;       // 进榜门槛：评论数下限 120→80（同上，保证能凑满 TOP_N）
 const TOP_N = 8;              // 最终保留款数
-const SEARCH_PAGES = 2;       // 搜索翻页数（每页 100）
+const SEARCH_PAGES = 4;       // 搜索翻页数（每页 100）2→4
 const CONCURRENCY = 8;        // 并发数
 
 // ---------- 通用工具 ----------
@@ -259,6 +259,20 @@ const GENRE_CN2EN = {
 // 过于宽泛、不具区分度的分类，不作为赛道主标签
 const GENRE_TOO_BROAD = new Set(['Indie', 'Free to Play', 'Early Access', 'Casual', 'Utilities', 'Massively Multiplayer']);
 
+// ---------- AAA / 大厂排除（2026-09-27：首跑混入 The Last of Us Part II Remastered）----------
+// 只排「确定的大厂 / 第一方」。独立游戏发行商（Devolver / Annapurna / Team17 / Hooded Horse / Focus 等）一律不动，
+// 否则会把真正的独立爆款误杀。匹配 publishers + developers 小写包含。
+const AAA_PUBLISHERS = [
+    'sony', 'playstation', 'microsoft', 'xbox game studios', 'nintendo',
+    'electronic arts', 'ea games', 'ubisoft', 'activision', 'blizzard', 'take-two', 'take 2',
+    '2k games', 'rockstar', 'bethesda', 'zenimax', 'capcom', 'bandai namco', 'square enix',
+    'sega', 'konami', 'warner bros', 'wb games', 'epic games', 'tencent', 'netease', 'miHoYo',
+];
+function isAAA(g) {
+    const names = [].concat(g.publishers || [], g.developers || []).join(' ').toLowerCase();
+    return AAA_PUBLISHERS.some(k => names.includes(k));
+}
+
 async function fetchTagTable() {
     const d = await getJSON('https://store.steampowered.com/tagdata/populartags/english');
     if (!Array.isArray(d)) return {};
@@ -273,32 +287,59 @@ function pickTrackGenre(genres) {
     return specific[0] || en[0] || null;
 }
 
+// 采样密度判定：单页 100 条按 Released_DESC 取，时间跨度完全不可控（热门标签 100 条可能只跨 1 天）。
+// → 翻页扩充样本；跨不满 SAT_MIN_SPAN 天就判「样本不足」，绝不用 1 天的样本外推月密度。
+const SAT_PAGES = 5;        // 最多翻 5 页 = 500 条
+const SAT_MIN_SPAN = 14;    // 样本跨度下限（天）
+
 async function fetchSaturation(tagId) {
     if (!tagId) return null;
-    const url = `https://store.steampowered.com/search/results/?query&start=0&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
-    const d = await getJSON(url);
-    const html = (d && d.results_html) || '';
-    const total = (d && d.total_count) ? d.total_count : null;
     const dates = [];
-    const re = /search_released[^>]*>\s*([^<]+?)\s*</g;
-    let m;
-    while ((m = re.exec(html)) !== null) {
-        const dt = parseRelease(m[1]);
-        if (dt) dates.push(dt);
+    let total = null;
+    for (let p = 0; p < SAT_PAGES; p++) {
+        const url = `https://store.steampowered.com/search/results/?query&start=${p * 100}&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
+        const d = await getJSON(url);
+        if (!d) break;
+        if (total === null && d.total_count) total = d.total_count;
+        const html = (d && d.results_html) || '';
+        const re = /search_released[^>]*>\s*([^<]+?)\s*</g;
+        let m, added = 0;
+        while ((m = re.exec(html)) !== null) {
+            const dt = parseRelease(m[1]);
+            if (dt) { dates.push(dt); added++; }
+        }
+        if (added === 0) break;
+        const s = dates.slice().sort();
+        const span = Math.round((Date.parse(s[s.length - 1] + 'T00:00:00Z') - Date.parse(s[0] + 'T00:00:00Z')) / 86400000);
+        if (span >= SAT_MIN_SPAN) break;
+        await sleep(250);
     }
-    if (dates.length < 10) return { total, recent12m: null, perMonth: null, verdict: null, basis: '样本不足' };
-    dates.sort().reverse();
-    const newest = dates[0];
-    const oldest = dates[dates.length - 1];
-    const spanDays = Math.max(1, Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000));
-    const perMonth = +(dates.length / Math.max(1, spanDays / 30)).toFixed(1);
-    const cutoff = Date.now() - 365 * 86400000;
-    const recent12m = dates.filter(x => Date.parse(x + 'T00:00:00Z') >= cutoff).length;
+    if (dates.length < 10) {
+        return { total, sampleCount: dates.length, perMonth: null, verdict: null, confidence: 'none', basis: '样本不足' };
+    }
+    dates.sort();
+    const oldest = dates[0], newest = dates[dates.length - 1];
+    const spanDays = Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000);
+    if (spanDays < SAT_MIN_SPAN) {
+        // 采样跨度太窄（该标签新作密集到 500 条也只能覆盖几天）→ 拒绝密度外推，避免「1 天 100 款 = 100 款/月」的假红海
+        return {
+            total, sampleCount: dates.length, perMonth: null,
+            verdict: { key: 'unknown', label: '❓ 样本不足' },
+            confidence: 'low',
+            basis: `最近 ${dates.length} 款新作只跨 ${spanDays} 天，发布密度无法外推（该标签新作过于密集）`,
+            sampleNewest: newest, sampleOldest: oldest,
+        };
+    }
+    const perMonth = +(dates.length / (spanDays / 30)).toFixed(1);
     let verdict;
     if (perMonth >= 60) verdict = { key: 'shark', label: '🦈 红海' };
     else if (perMonth >= 15) verdict = { key: 'fish', label: '🐠 一般' };
     else verdict = { key: 'empty', label: '🐟 空旷' };
-    return { total, recent12m, perMonth, verdict, basis: `该标签最近 ${dates.length} 款新作的发行密度`, sampleNewest: newest, sampleOldest: oldest };
+    return {
+        total, sampleCount: dates.length, perMonth, verdict, confidence: 'ok',
+        basis: `最近 ${dates.length} 款新作跨 ${spanDays} 天（≈ ${perMonth} 款/月）`,
+        sampleNewest: newest, sampleOldest: oldest,
+    };
 }
 
 // ---------- 8. 赛道归类标签（供前端展示与 X5 对比用）----------
@@ -360,8 +401,14 @@ async function main() {
             analysis: (oldByAppid[g.appid] && oldByAppid[g.appid].analysis) || null
         };
     })
-        // 只保留近 18 个月内发行、且指数达标的
-        .filter(g => g.days != null && g.days <= 550 && g.burst.rank >= 1)
+        // 先排掉 AAA / 大厂（可查证的发行商黑名单），再只保留近 18 个月内发行、且指数达标的
+        .filter(g => {
+            if (isAAA(g)) {
+                console.log(`   ⛔ 排除大厂作品: ${g.name}（${(g.publishers || g.developers || []).join(' / ') || '—'}）`);
+                return false;
+            }
+            return g.days != null && g.days <= 550 && g.burst.rank >= 1;
+        })
         .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
 
     const picked = scored.slice(0, TOP_N);
