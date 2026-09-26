@@ -39,7 +39,7 @@ const MAX_CANDIDATES = 400;   // 候选池上限（最近发行的游戏）220�
 const MIN_REVIEWS = 80;       // 进榜门槛：评论数下限 120→80（同上，保证能凑满 TOP_N）
 const TOP_N = 8;              // 最终保留款数
 const SEARCH_PAGES = 4;       // 搜索翻页数（每页 100）2→4
-const CONCURRENCY = 8;        // 并发数
+const CONCURRENCY = 3;        // 并发数（8→3：2026-09-27 扩池后触发 Steam 限流、详情抓取全灭，主动降速）
 
 // ---------- 通用工具 ----------
 function nowCST() { return new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 19) + '+08:00'; }
@@ -47,14 +47,27 @@ function localDateStr() { return new Date(Date.now() + 8 * 3600 * 1000).toISOStr
 function pad(n) { return String(n).padStart(2, '0'); }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-async function fetchRaw(url, headers = {}, timeoutMs = 15000) {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-    try {
-        const res = await fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8', ...headers }, signal: ctrl.signal });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return await res.text();
-    } finally { clearTimeout(timer); }
+// 带退避重试：Steam 对高频请求会返回 403/429（2026-09-27 扩池到 400 后实测被限流，详情抓取全灭）
+async function fetchRaw(url, headers = {}, timeoutMs = 15000, retries = 3) {
+    let lastErr = null;
+    for (let attempt = 0; attempt <= retries; attempt++) {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        try {
+            const res = await fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8', ...headers }, signal: ctrl.signal });
+            clearTimeout(timer);
+            if (res.ok) return await res.text();
+            lastErr = new Error('HTTP ' + res.status);
+            // 只有「限流 / 临时故障」才重试，404 之类的直接抛
+            if (!(res.status === 403 || res.status === 429 || res.status >= 500) || attempt >= retries) throw lastErr;
+        } catch (e) {
+            clearTimeout(timer);
+            lastErr = e;
+            if (attempt >= retries) throw lastErr;
+        }
+        await sleep(1200 * Math.pow(2, attempt) + Math.floor(Math.random() * 700)); // 1.2s → 2.4s → 4.8s（带抖动）
+    }
+    throw lastErr || new Error('fetch failed');
 }
 
 async function getJSON(url, headers, timeoutMs) {
@@ -62,8 +75,8 @@ async function getJSON(url, headers, timeoutMs) {
     return JSON.parse(t);
 }
 
-// 并发池：任一任务抛错返回 null，不中断整批
-async function pool(list, worker, size = CONCURRENCY) {
+// 并发池：任一任务抛错返回 null，不中断整批；gapMs 用于主动限速（避免触发 Steam 限流）
+async function pool(list, worker, size = CONCURRENCY, gapMs = 0) {
     const out = new Array(list.length).fill(null);
     let cursor = 0;
     const runners = Array.from({ length: Math.min(size, list.length) }, async () => {
@@ -72,6 +85,7 @@ async function pool(list, worker, size = CONCURRENCY) {
             if (i >= list.length) break;
             try { out[i] = await worker(list[i], i); }
             catch (e) { out[i] = null; }
+            if (gapMs) await sleep(gapMs);
         }
     });
     await Promise.all(runners);
@@ -369,7 +383,7 @@ async function main() {
     const revResults = await pool(candidates, async (appid) => {
         const r = await fetchReviews(appid);
         return r ? { appid, reviews: r } : null;
-    });
+    }, 3, 120);
     revResults.forEach(x => { if (x && x.reviews && x.reviews.total >= MIN_REVIEWS) withReviews.push(x); });
     console.log(`✅ 评论数 ≥ ${MIN_REVIEWS} 的: ${withReviews.length} 款`);
 
@@ -384,7 +398,7 @@ async function main() {
         const d = await fetchDetails(item.appid);
         if (!d) return null;
         return { ...d, reviews: item.reviews };
-    })).filter(Boolean);
+    }, 3, 150)).filter(Boolean);
     console.log(`✅ 详情抓取成功: ${detailed.length} 款`);
 
     // 计算爆款指数 + 销量估算 + 排序
@@ -413,6 +427,14 @@ async function main() {
 
     const picked = scored.slice(0, TOP_N);
     console.log(`🎯 入选 ${picked.length} 款`);
+
+    // ★ 保护：抓取异常（限流导致详情全灭）时绝不覆盖线上数据。
+    // 2026-09-27 教训：候选池扩到 400 触发 Steam 限流 → detailed=0 → 空 games 被写进 indie.json，线上雷达被清空。
+    const MIN_KEEP = 3;
+    if (picked.length < MIN_KEEP) {
+        console.error(`❌ 入选仅 ${picked.length} 款（< ${MIN_KEEP}），判定为抓取异常 / 被限流，保留旧文件不覆盖`);
+        process.exit(1);
+    }
 
     // 第三轮：当前在线 + 赛道饱和度（只对入选款做）
     console.log('⏳ 第三轮：当前在线 + 赛道密度…');
