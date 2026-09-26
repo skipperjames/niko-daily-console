@@ -6392,6 +6392,120 @@
         body.dark-mode .ai-detail-grid dd { color:#e5e7eb; }
         .ai-detail-actions { display:flex; gap:8px; justify-content:flex-end; padding:12px 20px; border-top:1px solid #e5e7eb; }
         body.dark-mode .ai-detail-actions { border-color:#333; }
+
+
+/* ===== 独立游戏雷达（2026-09-26 新增）===== */
+.indie-caliber { display:flex; gap:10px; align-items:flex-start; background:#f0f7ff; border:1px solid #cfe4ff; border-radius:10px; padding:10px 14px; font-size:12.5px; line-height:1.75; color:#334155; }
+.indie-caliber b { flex-shrink:0; color:#4f46e5; }
+.indie-caliber em { font-style:normal; color:#667eea; font-weight:600; }
+body.dark-mode .indie-caliber { background:#182233; border-color:#2a3a55; color:#c7d2e0; }
+body.dark-mode .indie-caliber b { color:#a5b4fc; }
+
+.indie-card { background:#fff; border:1px solid #e8e8ee; border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:12px; transition:box-shadow .18s, border-color .18s; }
+.indie-card:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); border-color:#d8d8e2; }
+body.dark-mode .indie-card { background:#1e1e24; border-color:#33333d; }
+body.dark-mode .indie-card:hover { border-color:#444455; box-shadow:0 4px 18px rgba(0,0,0,.4); }
+
+.indie-hd { display:flex; gap:14px; align-items:flex-start; }
+.indie-cover { width:134px; height:63px; border-radius:8px; object-fit:cover; flex-shrink:0; background:#eceff4; }
+.indie-hd-main { flex:1; min-width:0; }
+.indie-name-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+.indie-name { font-size:17px; font-weight:700; color:#16181d; line-height:1.3; }
+.indie-name-cn { font-size:12px; color:#94a3b8; font-weight:400; }
+body.dark-mode .indie-name { color:#f2f4f8; }
+.indie-meta { font-size:12px; color:#94a3b8; margin-top:5px; display:flex; flex-wrap:wrap; gap:4px 12px; }
+.indie-hd-act { display:flex; gap:6px; flex-shrink:0; }
+.indie-iconbtn { border:1px solid #e2e8f0; background:#fff; border-radius:8px; padding:5px 9px; font-size:12px; cursor:pointer; color:#64748b; transition:all .15s; line-height:1; white-space:nowrap; }
+.indie-iconbtn:hover { border-color:#a5b4fc; color:#4f46e5; }
+.indie-iconbtn.on { background:#eef2ff; border-color:#a5b4fc; color:#4f46e5; font-weight:600; }
+body.dark-mode .indie-iconbtn { background:#26262e; border-color:#3a3a46; color:#9aa4b2; }
+body.dark-mode .indie-iconbtn.on { background:#272c47; border-color:#4a4a7a; color:#a5b4fc; }
+
+.indie-tier { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; padding:2px 9px; border-radius:999px; white-space:nowrap; }
+.indie-tier.burst { background:#fff1f0; color:#d4380d; border:1px solid #ffccc7; }
+.indie-tier.dark { background:#fff7e6; color:#d46b08; border:1px solid #ffe7ba; }
+.indie-tier.watch { background:#f6ffed; color:#389e0d; border:1px solid #d9f7be; }
+.indie-tier.na { background:#f5f5f7; color:#8c8c94; border:1px solid #e5e5ea; }
+body.dark-mode .indie-tier.burst { background:#3a1a16; border-color:#5e2a22; color:#ff9c8a; }
+body.dark-mode .indie-tier.dark { background:#3a2c10; border-color:#5c4418; color:#ffc069; }
+body.dark-mode .indie-tier.watch { background:#16301a; border-color:#254a2a; color:#95de64; }
+body.dark-mode .indie-tier.na { background:#26262e; border-color:#3a3a46; color:#8c8c94; }
+
+.indie-grid8 { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#eef0f4; border:1px solid #eef0f4; border-radius:10px; overflow:hidden; }
+.indie-cell { background:#fff; padding:9px 11px; display:flex; flex-direction:column; gap:3px; min-width:0; }
+body.dark-mode .indie-grid8 { background:#2c2c36; border-color:#2c2c36; }
+body.dark-mode .indie-cell { background:#1e1e24; }
+.indie-cell .k { font-size:10.5px; color:#94a3b8; }
+.indie-cell .v { font-size:14px; font-weight:700; color:#1e293b; line-height:1.25; word-break:break-word; }
+.indie-cell .s { font-size:10.5px; color:#a3adbb; line-height:1.4; }
+.indie-cell .v em { font-style:normal; font-size:11px; font-weight:500; color:#94a3b8; }
+body.dark-mode .indie-cell .v { color:#e8ecf3; }
+body.dark-mode .indie-cell .s { color:#79828f; }
+
+.indie-sec { border-top:1px dashed #e8e8ee; padding-top:10px; }
+body.dark-mode .indie-sec { border-color:#33333d; }
+.indie-sec-t { font-size:12.5px; font-weight:700; color:#475569; margin-bottom:7px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.indie-sec-t .lnk { font-size:11px; font-weight:500; color:#818cf8; cursor:pointer; margin-left:auto; }
+body.dark-mode .indie-sec-t { color:#a8b3c2; }
+
+.indie-factor { display:flex; gap:7px; font-size:12.5px; line-height:1.7; color:#475569; margin-bottom:5px; }
+.indie-factor .dot { color:#c7cbf7; flex-shrink:0; }
+.indie-factor b { color:#1e293b; font-weight:600; }
+.indie-factor .src { font-size:10.5px; color:#b6bdc8; }
+body.dark-mode .indie-factor { color:#a8b3c2; }
+body.dark-mode .indie-factor b { color:#e8ecf3; }
+body.dark-mode .indie-factor .src { color:#6b7480; }
+
+.indie-tl { display:flex; flex-direction:column; }
+.indie-tl-row { display:flex; gap:10px; font-size:12px; padding:3px 0; }
+.indie-tl-d { width:78px; flex-shrink:0; color:#94a3b8; font-variant-numeric:tabular-nums; }
+.indie-tl-x { flex:1; color:#475569; line-height:1.65; min-width:0; }
+.indie-tl-x b { color:#4f46e5; font-weight:700; }
+body.dark-mode .indie-tl-x { color:#a8b3c2; }
+body.dark-mode .indie-tl-x b { color:#a5b4fc; }
+
+.indie-axis { display:flex; align-items:center; gap:8px; font-size:12px; color:#475569; margin-bottom:5px; }
+.indie-axis .nm { width:34px; flex-shrink:0; color:#94a3b8; }
+.indie-bars { display:flex; gap:3px; }
+.indie-bars i { width:15px; height:7px; border-radius:2px; background:#e2e8f0; display:block; }
+.indie-bars i.f { background:#818cf8; }
+body.dark-mode .indie-bars i { background:#33333d; }
+body.dark-mode .indie-bars i.f { background:#6366f1; }
+.indie-chain { font-size:12px; color:#64748b; line-height:1.75; }
+.indie-chain span { display:inline-block; margin-right:10px; }
+body.dark-mode .indie-chain { color:#9aa4b2; }
+
+.indie-totem-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(152px,1fr)); gap:12px; }
+.indie-totem { background:#fff; border:1px solid #e8e8ee; border-radius:12px; overflow:hidden; cursor:pointer; transition:all .18s; position:relative; }
+.indie-totem:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(0,0,0,.09); }
+body.dark-mode .indie-totem { background:#1e1e24; border-color:#33333d; }
+.indie-totem img { width:100%; height:74px; object-fit:cover; display:block; background:#eceff4; }
+.indie-totem .tt { padding:8px 10px; }
+.indie-totem .tn { font-size:12.5px; font-weight:600; color:#1e293b; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.indie-totem .ts { font-size:10.5px; color:#94a3b8; margin-top:3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body.dark-mode .indie-totem .tn { color:#e8ecf3; }
+.indie-totem .sel { position:absolute; top:6px; right:6px; width:19px; height:19px; border-radius:5px; border:2px solid #fff; background:rgba(0,0,0,.3); display:flex; align-items:center; justify-content:center; color:transparent; font-size:11px; font-weight:700; }
+.indie-totem.on { border-color:#818cf8; }
+.indie-totem.on .sel { background:#4f46e5; color:#fff; }
+
+.indie-cmp-wrap { overflow-x:auto; }
+.indie-cmp { width:100%; border-collapse:collapse; font-size:12px; min-width:520px; }
+.indie-cmp th, .indie-cmp td { border:1px solid #eef0f4; padding:7px 10px; text-align:left; vertical-align:top; }
+.indie-cmp th { background:#f8fafc; color:#64748b; font-weight:600; white-space:nowrap; }
+.indie-cmp td { color:#334155; }
+body.dark-mode .indie-cmp th, body.dark-mode .indie-cmp td { border-color:#33333d; }
+body.dark-mode .indie-cmp th { background:#26262e; color:#a8b3c2; }
+body.dark-mode .indie-cmp td { color:#c7d2e0; }
+
+@media (max-width:768px) {
+  .indie-grid8 { grid-template-columns:repeat(2,1fr); }
+  .indie-hd { flex-wrap:wrap; }
+  .indie-cover { width:100%; height:118px; }
+  .indie-hd-act { width:100%; justify-content:flex-end; }
+  .indie-tl-d { width:66px; font-size:11px; }
+  .indie-totem-grid { grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); }
+  .indie-name { font-size:15.5px; }
+}
 /* ===== 梗文化速查专属CSS ===== */
         .meme-region-tabs {
             display: flex;
@@ -12958,236 +13072,46 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div style="display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;">
                     <div>
                         <h1 style="font-size:22px;font-weight:600;display:flex;align-items:center;gap:10px;">
-                            🔥 行业热点全景
-                            <span style="font-size:13px;font-weight:400;color:#888;" id="hotFullDate"></span>
+                            🎮 独立游戏雷达
+                            <span style="font-size:13px;font-weight:400;color:#888;" id="indieFullDate"></span>
                         </h1>
-                        <p style="color:#888;font-size:13px;margin-top:2px;">日本 · 韩国 · 国内 — 热点话题与梗文化科普</p>
+                        <p style="color:#888;font-size:13px;margin-top:2px;">每周 Steam 新爆款 · 销量双轨 / 曝光链路 / 爆款因子 / 赛道饱和度</p>
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
-                        <span id="hotFullLastUpdated" style="font-size:11px;padding:4px 12px;border-radius:14px;background:#eef2ff;color:#667eea;border:1px solid #c7d2fe;"></span>
-                        <span id="hotUnreadBadge" style="font-size:11px;padding:4px 12px;border-radius:14px;background:#eef2ff;color:#667eea;border:1px solid #c7d2fe;"></span>
-                        <button class="btn" onclick="markAllHotRead()" id="hotMarkAllReadBtn" style="padding:8px 14px;" title="把当前所有热点标记为已读">👁 全部已读</button>
-                        <button class="btn primary" onclick="refreshHot()" id="hotFullRefreshBtn" style="padding:8px 20px;">🔄 刷新热点</button>
+                        <span id="indieFreshness" style="font-size:11px;padding:4px 12px;border-radius:14px;background:#eef2ff;color:#667eea;border:1px solid #c7d2fe;"></span>
+                        <button class="btn primary" onclick="refreshIndie()" id="indieRefreshBtn" style="padding:8px 20px;">🔄 刷新雷达</button>
                     </div>
                 </div>
 
-                <!-- 二级视图切换：行业热点 / AI快报 / 竞品买量监控 / 文案库 / 梗文化（同一级别） -->
+                <!-- 二级视图切换：独立游戏雷达 / 精神图腾墙 / AI 资讯（同级） -->
                 <div class="hot-view-tabs">
-                    <span class="hot-view-tab active" id="viewTabHot" onclick="switchHotView('hot')">🔥 行业热点</span>
-                    <span class="hot-view-tab" id="viewTabAi" onclick="switchHotView('ai')">🤖 AI快报</span>
-                    <span class="hot-view-tab" id="viewTabComp" onclick="switchHotView('comp')">🎯 竞品买量监控</span>
-                    <span class="hot-view-tab" id="viewTabCopy" onclick="switchHotView('copy')">✍️ 文案库</span>
-                    <span class="hot-view-tab" id="viewTabMeme" onclick="switchHotView('meme')">🈯 梗文化</span>
+                    <span class="hot-view-tab active" id="viewTabIndie" onclick="switchHotView('indie')">🎮 独立游戏雷达</span>
+                    <span class="hot-view-tab" id="viewTabTotem" onclick="switchHotView('totem')">🗿 精神图腾墙</span>
+                    <span class="hot-view-tab" id="viewTabAi" onclick="switchHotView('ai')">🤖 AI 资讯</span>
                 </div>
 
-                <!-- 热点关键词过滤 + 刷新控制 -->
-                <div class="hot-controls" id="hotFilterControls">
-                    <div class="hot-keyword-row">
-                        <span class="hot-filter-label">🎯 只看：</span>
-                        <span id="hotKeywordChips"></span>
-                        <div class="hot-keyword-input-wrap">
-                            <input type="text" class="hot-keyword-input" id="hotKeywordInput" placeholder="+ 添加词" onkeydown="if(event.key==='Enter') addHotKeyword(this.value)" />
-                            <button class="hot-keyword-add" onclick="addHotKeyword(document.getElementById('hotKeywordInput').value)">添加</button>
-                        </div>
-                        <span class="hot-filter-count" id="hotFilterCount"></span>
-                    </div>
-                    <div class="hot-refresh-row">
-                        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
-                            <label class="hot-auto-switch" title="开启后每次打开热点页会自动拉取云端最新数据">
-                                <input type="checkbox" id="hotAutoRefreshSwitch" onchange="toggleHotAutoRefresh(this.checked)" />
-                                <span>每天自动刷新热点</span>
-                            </label>
-                            <label class="hot-filter-toggle" title="关闭后将忽略关键词，显示全部热点">
-                                <input type="checkbox" id="hotFilterEnabledSwitch" onchange="toggleHotFilter(this.checked)" />
-                                <span id="hotFilterToggleLabel">只看筛选话题</span>
-                            </label>
-                        </div>
-                        <button class="btn primary" onclick="refreshHotNow()" title="从云端拉取最新热点。如需后台重新爬取实时热榜，请在本机运行「刷新热点.bat」">⚡ 立即刷新</button>
-                    </div>
+                <!-- 数据口径说明（G1 双轨制的说明书，常驻显示） -->
+                <div class="indie-caliber">
+                    <b>📐 数据口径</b>
+                    <span>销量分两轨 —— <em>官方公告</em>取自开发者 / 发行商公开声明，权威但滞后，而且多数游戏根本不公布；<em>第三方估算</em>用 Boxleiter 法（评论数 × 价格带系数）反推，误差可达 ±60%，<b>只看量级不看精度</b>。两者打架是常态，而打架本身就是热度真假的最强信号。</span>
                 </div>
 
-                <!-- AI 每日热点摘要（来自云端 hotspot.json，由每日自动化搜索+分析生成） -->
-                <div id="hotCloudSummary" style="display:none;background:#f0f7ff;border:1px solid #cfe4ff;border-radius:10px;padding:10px 14px;font-size:13px;line-height:1.8;color:#333;flex-shrink:0;"></div>
-
-                <!-- 实时热搜直达（点开真实平台热榜，验证/追实时） -->
-                <div class="hot-live-links" id="hotLiveLinks">
-                    <span class="hot-live-title">📡 实时热榜直达：</span>
-                    <a href="https://s.weibo.com/top/summary" target="_blank" rel="noopener" onclick="event.stopPropagation()">微博热搜</a>
-                    <a href="https://www.douyin.com/hot" target="_blank" rel="noopener" onclick="event.stopPropagation()">抖音热榜</a>
-                    <a href="https://www.bilibili.com/v/popular/rank/all" target="_blank" rel="noopener" onclick="event.stopPropagation()">B站热门</a>
-                    <a href="https://www.xiaohongshu.com/explore" target="_blank" rel="noopener" onclick="event.stopPropagation()">小红书</a>
-                    <a href="https://www.kuaishou.com/?isHome=1" target="_blank" rel="noopener" onclick="event.stopPropagation()">快手热榜</a>
-                    <a href="https://top.baidu.com/board?tab=realtime" target="_blank" rel="noopener" onclick="event.stopPropagation()">百度热搜</a>
-                    <a href="https://www.zhihu.com/hot" target="_blank" rel="noopener" onclick="event.stopPropagation()">知乎热榜</a>
-                    <a href="https://trends.google.com/trending?geo=JP" target="_blank" rel="noopener" onclick="event.stopPropagation()">日本趋势</a>
-                    <a href="https://trends.google.com/trending?geo=KR" target="_blank" rel="noopener" onclick="event.stopPropagation()">韩国趋势</a>
-                    <span class="hot-live-note">（本页为 AI 预置示例，点击上方可看各平台实时热榜）</span>
+                <!-- ===== 独立游戏雷达视图 ===== -->
+                <div id="indieViewMain" class="comp-view active">
+                    <div id="indieList" style="display:flex;flex-direction:column;gap:14px;"></div>
+                    <div id="indieEmpty" style="display:none;padding:44px 20px;text-align:center;color:#999;font-size:13px;line-height:1.9;"></div>
                 </div>
 
-                <!-- ===== 行业热点视图 ===== -->
-                <div id="hotViewMain" style="display:flex;flex-direction:column;gap:16px;flex:1;min-height:0;">
-                <!-- 当月热点排行 -->
-                <div class="hot-rank-section">
-                    <h3>🏆 当月热点排行</h3>
-                    <div class="hot-rank-grid" id="hotRankGrid"></div>
-                </div>
-
-                <!-- 我的收藏（带时效标记） -->
-                <div class="hot-fav-section">
-                    <div class="hot-fav-head" onclick="toggleHotFavList()">
-                        <span>⭐ 我的收藏</span>
-                        <span class="fav-count" id="hotFavCount"></span>
-                        <span style="margin-left:auto;font-size:11px;color:#999;" id="hotFavToggleHint">收起 ▲</span>
+                <!-- ===== 精神图腾墙视图 ===== -->
+                <div id="totemViewMain" class="comp-view">
+                    <div class="indie-caliber">
+                        <b>🗿 精神图腾墙</b>
+                        <span>收藏过的爆款沉在这里。每周随机翻一张出来 —— 提醒你：<em>2 个人、2 个月、$5.99，也能做出 2000 万份</em>。</span>
                     </div>
-                    <div class="hot-fav-grid" id="hotFavList"></div>
-                </div>
-
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;flex:1;align-content:start;">
-                        <div class="panel-card" style="border-left:4px solid #8b5cf6;">
-                            <h3>🇯🇵 日本</h3><div class="subtitle">亚文化 · 消费现象 · 社会趋势</div>
-                            <div class="hot-list" id="hotFullJP"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #ec4899;">
-                            <h3>🇰🇷 韩国</h3><div class="subtitle">MZ世代新造词 · 一次性社交 · 直播/Webtoon 文化</div>
-                            <div class="hot-list" id="hotFullKR"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #ff8200;">
-                            <h3>🟧 微博热搜</h3><div class="subtitle">社会 · 娱乐 · 民生 · 舆论场</div>
-                            <div class="hot-list" id="hotCNWeibo"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #fe2c55;">
-                            <h3>🟥 抖音热榜</h3><div class="subtitle">短视频 · 挑战 · 种草 · 神曲</div>
-                            <div class="hot-list" id="hotCNDouyin"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #00aeec;">
-                            <h3>🟦 B站热搜</h3><div class="subtitle">科技 · 二次元 · UP主 · 鬼畜</div>
-                            <div class="hot-list" id="hotCNBilibili"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #ff2442;">
-                            <h3>🟪 小红书热门</h3><div class="subtitle">生活方式 · 美妆 · 家居 · 探店</div>
-                            <div class="hot-list" id="hotCNXhs"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #ff5d1f;">
-                            <h3>🟧 快手热榜</h3><div class="subtitle">生活记录 · 县域 · 老铁 · 烟火气</div>
-                            <div class="hot-list" id="hotCNKuaishou"></div>
-                        </div>
-                        <div class="panel-card" style="border-left:4px solid #3c9df7;">
-                            <h3>🟦 百度热搜</h3><div class="subtitle">综合 · 健康 · 民生 · 时事</div>
-                            <div class="hot-list" id="hotCNBaidu"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== 买量情报视图（AI 预置为主，手动记录为辅） ===== -->
-                <div id="compViewMain" class="comp-view">
-                    <!-- 头部：时效 + 一键刷新入口 -->
-                    <div class="ai-head">
-                        <div class="ai-head-left">
-                            <span class="ai-badge">🚀 买量情报</span>
-                            <span class="ai-unread" id="adsUnreadBadge"></span>
-                            <span class="ai-stale-badge" id="adsStaleBadge" style="display:none;"></span>
-                        </div>
-                        <div class="ai-head-right">
-                            <span class="ai-updated-at" id="adsUpdatedAt"></span>
-                            <button class="btn ai-refresh-btn" onclick="openUpdateCenter()" title="打开数据更新中心，一键复制刷新指令">🔄 一键刷新全部板块</button>
-                        </div>
-                    </div>
-
-                    <!-- 大盘洞察 -->
-                    <div class="ads-sec-head">📡 本月买量大盘洞察 <span class="ads-sec-note">DataEye-ADX · 2026-07 · 点卡片看解读 / ⭐ 收藏 / 💡 转灵感</span></div>
-                    <div class="ads-insight-grid" id="adsInsightList"></div>
-
-                    <!-- 地区 Tab + 游戏列表 -->
-                    <div class="ads-sec-head" style="margin-top:16px;">🎮 各地区买量热门游戏 <span class="ads-sec-note">AI 调研预置 · 点 💡 转灵感 / ⭐ 收藏</span></div>
-                    <div class="ads-region-tabs" id="adsRegionTabs"></div>
-                    <div class="ads-list" id="adsGameList"></div>
-
-                    <!-- 手动记录（折叠补充） -->
-                    <div class="comp-manual-wrap">
-                        <button class="comp-manual-toggle" onclick="toggleCompManual()" title="展开 / 收起手动记录">
-                            <span id="compManualTitle">📝 我的手动记录</span>
-                            <span class="comp-manual-count" id="compManualCount"></span>
-                            <span class="comp-manual-arrow" id="compManualArrow">▾</span>
-                        </button>
-                        <div id="compManualBody" style="display:none;">
-                            <div class="comp-form">
-                                <div class="full">
-                                    <label>🎮 竞品游戏名</label>
-                                    <input type="text" id="compGame" placeholder="如：XX联盟手游 新版本素材" />
-                                </div>
-                                <div>
-                                    <label>🎬 素材类型</label>
-                                    <select id="compMaterialType">
-                                        <option>录屏演示</option>
-                                        <option>真人实拍</option>
-                                        <option>剧情短片</option>
-                                        <option>福利诱导</option>
-                                        <option>试玩直播</option>
-                                        <option>3D动画</option>
-                                        <option>其他</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>🌍 投放地区</label>
-                                    <select id="compRegion">
-                                        <option>日本</option>
-                                        <option>韩国</option>
-                                        
-                                        <option>国内</option>
-                                        <option>其他</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>📅 上线日期</label>
-                                    <input type="date" id="compDate" />
-                                </div>
-                                <div>
-                                    <label>💡 值不值得抄</label>
-                                    <select id="compWorth">
-                                        <option value="worth">值得抄</option>
-                                        <option value="reference">参考</option>
-                                        <option value="skip">不抄</option>
-                                    </select>
-                                </div>
-                                <div class="full" style="display:flex;gap:12px;align-items:flex-end;">
-                                    <div style="flex:1;">
-                                        <label>📝 备注（亮点 / 可借鉴点）</label>
-                                        <textarea id="compNote" rows="1" placeholder="如：前3秒福利钩子+结算画面放大，转化率高，可借鉴"></textarea>
-                                    </div>
-                                    <button class="btn primary" onclick="addCompetitor()" style="padding:9px 24px;flex-shrink:0;">➕ 添加记录</button>
-                                </div>
-                            </div>
-                            <div class="comp-filter">
-                                <input type="text" id="compFilterKw" placeholder="🔍 搜游戏名 / 备注…" oninput="compFilterKw=this.value;renderCompetitors()" />
-                                <select id="compFilterWorth" onchange="compFilterWorth=this.value;renderCompetitors()">
-                                    <option value="">全部价值</option>
-                                    <option value="worth">值得抄</option>
-                                    <option value="reference">参考</option>
-                                    <option value="skip">不抄</option>
-                                </select>
-                                <select id="compFilterRegion" onchange="compFilterRegion=this.value;renderCompetitors()">
-                                    <option value="">全部地区</option>
-                                    <option value="日本">日本</option>
-                                    <option value="韩国">韩国</option>
-                                    
-                                    <option value="国内">国内</option>
-                                    <option value="其他">其他</option>
-                                </select>
-                                <select id="compFilterType" onchange="compFilterType=this.value;renderCompetitors()">
-                                    <option value="">全部类型</option>
-                                    <option>录屏演示</option>
-                                    <option>真人实拍</option>
-                                    <option>剧情短片</option>
-                                    <option>福利诱导</option>
-                                    <option>试玩直播</option>
-                                    <option>3D动画</option>
-                                    <option>其他</option>
-                                </select>
-                                <span class="cf-count" id="compFilterCount"></span>
-                            </div>
-                            <div class="comp-list" id="compList"></div>
-                        </div>
-                    </div>
+                    <div id="totemWeekly" style="margin:14px 0 2px;"></div>
+                    <div id="totemWall" class="indie-totem-grid" style="margin-top:12px;"></div>
+                    <div id="totemEmpty" style="display:none;padding:44px 20px;text-align:center;color:#999;font-size:13px;line-height:1.9;"></div>
+                    <div id="totemCompare" style="margin-top:18px;"></div>
                 </div>
 
                 <!-- ===== AI 行业快报视图 ===== -->
@@ -13255,50 +13179,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                 </div>
 
-                <!-- 文案库（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
-                <div id="hotViewCopy" class="comp-view">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                        <h3 style="font-size:15px;font-weight:600;">✍️ 文案库 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
-                        <button class="btn" onclick="switchPage('copy')" style="padding:7px 14px;" title="进入完整版文案库：搜索/分类/我的收藏/添加">📂 打开完整版</button>
-                    </div>
-                    <div id="hotCopyList"></div>
-                </div>
-
-                <!-- 梗文化（热点板块内嵌预览，与行业热点/AI快报/竞品买量监控同级） -->
-                <div id="hotViewMeme" class="comp-view">
-                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
-                        <h3 style="font-size:15px;font-weight:600;">🈯 梗文化 <span style="font-size:12px;color:#888;font-weight:400;">Top 10 预览 · 完整功能在独立页</span></h3>
-                        <button class="btn" onclick="switchPage('meme')" style="padding:7px 14px;" title="进入完整版梗文化：搜索/地区/我的收藏/添加">📂 打开完整版</button>
-                    </div>
-                    <div id="hotMemeList"></div>
-                </div>
             </div>
-
-
-        <!-- 热点详情弹窗 -->
-    <!-- 热点详情弹窗 -->
-    <div class="modal-mask" id="hotDetailModal">
-        <div class="modal" style="width:520px;">
-            <div id="hotDetailContent" class="hot-detail-content">
-                <!-- 动态填充 -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn" onclick="closeHotDetail()">关闭</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 买量情报详情弹窗 -->
-    <div class="modal-mask" id="adsDetailModal">
-        <div class="modal" style="width:560px;">
-            <div id="adsDetailContent" class="hot-detail-content">
-                <!-- 动态填充 -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn" onclick="closeAdsDetail()">关闭</button>
-            </div>
-        </div>
-    </div>
 
     <!-- AI快报 · 数据更新中心弹窗 -->
     <div class="modal-mask" id="aiUpdateModal">
@@ -22370,1513 +22251,618 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync); else sync();
         })();
 // ===== 媒体热点专属JS =====
-        // ========== 热点数据系统 ==========
-        let hotData = { '日本': [], '韩国': [], '国内': [] };
-        let hotLoading = false;
-        let hotLastFetchTime = safeStorage.get('niko_hot_last_fetch', null);
-        // 热点关键词过滤（默认话题）
-        const DEFAULT_HOT_KEYWORDS = ['游戏行业', '独立游戏', '梗文化', '搞怪', '文化', '娱乐'];
-        let hotKeywords = safeStorage.get('niko_hot_keywords', DEFAULT_HOT_KEYWORDS);
-        if (!Array.isArray(hotKeywords) || hotKeywords.length === 0) hotKeywords = DEFAULT_HOT_KEYWORDS.slice();
-        let activeHotKeywords = safeStorage.get('niko_hot_keywords_active', DEFAULT_HOT_KEYWORDS.slice());
-        if (!Array.isArray(activeHotKeywords)) activeHotKeywords = [];
-        let hotAutoRefresh = safeStorage.get('niko_hot_auto_refresh', true) === true;
-        let hotFilterEnabled = safeStorage.get('niko_hot_filter_enabled', true) === true;
+        // ===== 独立游戏雷达（2026-09-26 重构：替代原「行业热点 / 竞品买量监控 / 文案库内嵌 / 梗文化内嵌」四视图）=====
+        // 数据链路：GitHub Actions 每周五 08:30 跑 scripts/fetch_indie.js → indie.json → 前端拉取
+        // 抓不到时回退内置种子（种子只在首次上线/离线时兜底，云端可用即以云端硬数据为准）
+        var INDIE_KEY_DATA = 'niko_indie_v1';
+        var INDIE_KEY_FAVS = 'niko_indie_favs';
+        var INDIE_KEY_LAST = 'niko_indie_last_fetch';
+        var INDIE_CLOUD = 'https://skipperjames.github.io/niko-daily-console/indie.json';
 
-        // 热点内容模板库（基于日期伪随机生成，确保每天内容一致且看起来真实）
-        const hotTemplates = {
-            '韩国': [
-                { title: '「휴지친구」纸巾朋友', desc: '韩国 MZ 世代最新社交趋势：像抽纸巾一样"一次性"社交，用完即散、不加好友', detail: '휴지친구（纸巾朋友）是韩国 MZ 世代 2026 年最火的社交新词：一群陌生人围坐聊天，全程不问姓名、不换电话、不加 KakaoTalk，聊完各自散去、再也不见。组织者早上在社交媒体发帖，名额几分钟抢光；衍生出「감자튀김 모임」（薯条聚会）——只吃薯条、不问来历、聊完就散。本质是高压社会里年轻人对"轻社交、零负担"的诉求，是韩国社交媒体上最有传播力的亚文化现象之一。', tags: ['社交', 'MZ世代', '新造词'] },
-                { title: '「샤갈」新造感叹词', desc: '韩国年轻人新感叹词：表达"太离谱、无语、崩溃"，语气类似中文的"我去！真服了！"', detail: '샤갈 是韩国年轻人 2026 年常用的网络感叹词，用于表达太离谱、无语、崩溃、惊讶、不敢相信，不同语境可表示惊喜或震惊（类似中文"我去！""真服了！""绝了！"）。例句：「샤갈… 또 지각했네」（我去，又迟到了）、「샤갈, 이걸 진짜 샀다고?」（天啊，这你居然真买了？）。新造词在 KakaoTalk 和 Instagram 上扩散速度极快，是判断韩国年轻网民语境的温度计。', tags: ['网络用语', '新造词', 'MZ世代'] },
-                { title: '「테무인간」Temu人', desc: '来自购物平台 Temu 的嘲讽梗：外表看起来很高级，实际质量一般（外强中干）', detail: '테무인간（Temu 人）源于购物平台 Temu——外表看起来高级、实际质量一般，引申形容"实力没有看起来那么厉害"的人。例句：「프로필은 엄청 화려한데 완전 테무인간이었어」（简历特别漂亮，实际却很普通）。这个梗精准戳中韩国年轻人对"人设包装"的集体嘲讽，在职场吐槽、相亲翻车、追星塌房等场景高频使用，是当前韩网最流行的反装逼梗。', tags: ['网络梗', '反装逼', 'MZ世代'] },
-                { title: '「젬민이」AI依赖症', desc: '源自 Gemini 的嘲讽新词：形容"什么事都先问 AI"的 AI 重度依赖人群', detail: '젬민이 源自谷歌 Gemini，韩国网友用来调侃"任何事情都先问 AI"的人（类似中文"AI 依赖症"）。例句：「그것도 AI한테 물어봤어? 완전 젬민이네.」（这你也问 AI？你真是 AI 重度用户）。随着 ChatGPT/Gemini 在韩国普及，这个梗成为"数字原住民 vs 传统人"的代际幽默，也反映韩国年轻一代把 AI 当日常工具的文化现状。', tags: ['AI', '新造词', '嘲讽梗'] },
-                { title: '「킹받네」超烦', desc: 'Gen Z 加强版"烦死我了"：king（超）+ 生气，带喜剧效果的自嘲式烦躁', detail: '킹받네 是"king"（Gen Z 加强级前缀，意为"超"）+ 받네（生气）的组合，意思是"超级烦人"但带喜剧色彩，比普通的 짜증나（好烦）更时髦。例句：「이 광고 보고 킹받네」（看这广告真是超烦）。在游戏社区和直播弹幕里高频出现，是 2026 年韩国 Z 世代情绪表达的标配词，适合做"真实玩家吐槽"类素材。', tags: ['网络用语', '情绪表达', '游戏社区'] },
-                { title: '「갑분싸」突然冷场', desc: '缩写梗：气氛突然冷掉的尴尬瞬间——一个烂梗/尬聊让全场沉默', detail: '갑분싸 是「갑자기 분위기 싸해짐」（气氛突然变冷）的缩写，形容一个烂梗、尴尬发言或跑调歌声让聊天瞬间冷场的时刻。例句：「그거 갑분싸였지」（那真是全场冷场）。这个梗既是"冷场瞬间"的标签，也用来调侃造成冷场的人。韩国综艺和直播里被频繁使用，是理解韩式幽默（冷场本身就是笑点）的关键词。', tags: ['网络梗', '综艺', '缩写'] },
-                { title: '「인싸/아싸」社牛/社恐', desc: 'insider/outsider 缩写：社交达人与独行侠的二元标签，韩式社交身份认同', detail: '인싸（insider 缩写）指社交中心、人脉广的"社牛"；아싸（outsider）指内向、独来独往的"社恐"。这不是简单的褒贬：아싸 被内向人群主动认领为身份标签，핵인싸（最大号社牛）则形容社交天花板。在韩国，这两个词是判断一个人社交生态位的第一标签，游戏社区里"아싸 游戏搭子""인싸 公会会长"是常见人设。', tags: ['社交', '标签', '亚文化'] },
-                { title: '「존맛탱/JMT」太好吃', desc: '韩国最出圈的美食梗：존나(超)+맛(好吃)，JMT 罗马字缩写横扫菜单和美食测评', detail: '존맛탱（JMT 是罗马字缩写）是韩国搜索量最高的美食俚语：존나（超强语气词）+ 맛（味道）+ 탱（卖萌后缀），原词略粗但被 탱 软化成卡通感，现在很多餐厅菜单和美食博主直接写 JMT。例句：「치킨 진짜 존맛탱」（炸鸡真的绝了）。这个梗已经渗透到游戏素材里——"JMT" 直接当福利文案的结尾词，是韩国本地化文案的"流量密码"。', tags: ['美食', '网络梗', '本地化文案'] },
-                { title: '「치맥」炸鸡啤酒', desc: '韩国国民仪式：炸鸡（치킨）+啤酒（맥주），从体育观赛标配到深夜社交礼仪', detail: '치맥（炸鸡啤酒）是 치킨+맥주 的缩写，韩国人下班后/看球赛/深夜的国民仪式。2026 年韩国炸鸡外卖市场规模持续扩大，치맥 文化甚至影响游戏营销——晚上黄金时段投放"치맥 套餐"类福利素材转化率明显更高。对游戏买量而言，치맥 是韩国用户"放松时刻"的情绪符号，用它在素材里制造"打完游戏吃 치맥"的场景代入感是本地化常规操作。', tags: ['美食', '国民文化', '游戏营销'] },
-                { title: '「대박/헐」感叹词双雄', desc: '韩式反应标配：대박（太棒了/不会吧）与 헐（震惊），KakaoTalk 聊天最高频感叹词', detail: '대박（大发）和 헐（吓）是韩国网络聊天最高频的两个感叹词：대박 表达"太棒了/太夸张了/不会吧"（「콘서트 완전 대박!」演唱会太炸了），헐 表达震惊无语（相当于"what?! really?!"）。这两个词贯穿韩剧、综艺、游戏弹幕，是韩国用户情绪的"万能反应键"。素材里"대박"作为福利落点词、"헐"作为钩子前置词，是韩国本地化素材的高转化套路。', tags: ['网络用语', '高频词', '本地化'] }
-            ],
-            '日本': [
-                { title: '「ガチャ」文化', desc: '扭蛋（Gacha）从儿童玩具演变为全年龄段收集癖，甚至成为社交货币', detail: '扭蛋（ガチャガチャ）是日本自动贩卖机式的小玩具胶囊，价格 200-500 日元。近年扭蛋内容从卡通角色扩展到超写实微缩模型（如"等待中的猫""便利店收银员""地铁里睡觉的上班族"）。成年人（尤其是 20-30 岁女性）成为主力消费群体，扭蛋机前排队拍照发 Instagram 已成固定流程。部分稀有款在二手市场溢价 10 倍以上。', tags: ['消费', '收藏', '社交'] },
-                { title: '「断捨離」2.0', desc: '近藤麻理惠的整理魔法进化版：从"扔东西"转向"不买东西"的极简主义', detail: '近藤麻理惠（Marie Kondo）的《怦然心动的人生整理魔法》曾引发全球断舍离热潮。近年日本年轻人中兴起"断捨離 2.0"：不再只是整理已有物品，而是从源头减少购买。相关概念包括"ミニマリスト"（极简主义者）、"持たない暮らし"（不持有生活）、"100 things challenge"（只拥有 100 件物品）。社交媒体上，展示"空房间""胶囊衣橱"的内容获得高互动。', tags: ['生活方式', '极简', '消费观'] },
-                { title: '「ぼっち飯」美化', desc: '一个人吃饭（ぼっち飯）从"孤独"变成"自在"，单人餐厅、一人烤肉店爆发', detail: 'ぼっち飯（Bocchi-meshi，一个人吃饭）曾带有社交失败的负面含义。但近年日本年轻人主动拥抱单人用餐，认为"不用配合别人的节奏、不用找话题"是一种奢侈。餐饮业界迅速响应：一蘭拉面的"味集中カウンター"（单人隔间）成为标志性设计；"一人焼肉"（单人烤肉）连锁店扩张；便利店推出"一人份豪华便当"。社交媒体上的 #ぼっち飯 标签充满仪式感摆盘。', tags: ['饮食', '独居', '社交'] },
-                { title: '「推し活」经济', desc: '为偶像/角色消费（推し活）成为日本年轻人最大支出项，形成完整产业链', detail: '推し活（Oshi-katsu）指为支持的偶像、动漫角色、Vtuber 等进行的消费活动，包括：买周边、参加握手会、投票打榜、制作应援物、追行程。日本年轻人平均每月推し活支出约 1-3 万日元，部分狂热粉丝超过 10 万。衍生出"推し活グッズ"（应援周边）、"推し活カフェ"（主题咖啡厅）、"推し活バッグ"（展示用痛包）等完整产业链。', tags: ['偶像', '消费', '亚文化'] },
-                { title: '「社畜」自嘲文学', desc: '日本上班族用黑色幽默解构过劳文化，"社畜"从贬义词变成共鸣标签', detail: '社畜（Shachiku）原指被公司当牲畜一样压榨的员工。近年演变为一种自嘲式身份认同，催生了大量社畜文化产品：漫画《深夜食堂》《无法成为野兽的我们》、Twitter 账号"社畜の日常"、"残業おじさん"（加班大叔）表情包。2024 年热门趋势是"社畜の休日"——展示周末如何极致放松（睡 12 小时、吃便利店、不回复工作消息）。', tags: ['职场', '自嘲', '文学'] },
-                { title: '「猫の日」2月22日', desc: '日本将 2 月 22 日定为"猫之日"（谐音 nyannyannyan），成为全国性猫咪庆典', detail: '2 月 22 日在日语中读作"ni-ni-ni"，谐音猫叫声"nyan-nyan-nyan"，因此被日本猫协会定为"猫之日"。这一天全国宠物店、猫咪咖啡厅推出限定活动；社交媒体被猫咪照片刷屏；甚至铁路公司推出"猫咪主题列车"。2024 年"猫之日"相关话题在 X（Twitter）日本区 trending 持续 48 小时。部分公司允许员工带猫上班。', tags: ['节日', '动物', '文化'] },
-                { title: '「駅弁」复兴', desc: '日本铁路便当（駅弁）从实用食品升级为地方文化名片，甚至出现"駅弁评比大赛"', detail: '駅弁（Ekiben）是日本火车站销售的特色便当，每个地区有独特配方（如北海道的"蟹肉饭"、九州"鸡肉饭"）。近年经历复兴：JR 各公司推出限定款、电视台举办"駅弁総選挙"、美食博主专门测评各地駅弁。2024 年趋势是"高級駅弁"——使用 A5 和牛、海胆、松露等食材，单价超过 3000 日元，成为游客"打卡"项目。', tags: ['美食', '铁路', '旅游'] },
-                { title: '「平成レトロ」怀旧', desc: '平成时代（1989-2019）美学复兴，翻盖手机、CD 店、泡泡袜重新流行', detail: '令和时代（2019 至今）的年轻人开始怀旧平成时代，形成"平成レトロ"（Heisei Retro）潮流。具体表现：翻盖手机（ガラケー）在二手市场涨价；原宿街头重新出现泡泡袜（ルーズソックス）；平成初期 J-POP（宇多田光、滨崎步）在 TikTok 上翻红；复古滤镜 App"Heisei Cam"下载量破百万。本质是 Z 世代对"没有智能手机的慢生活"的浪漫想象。', tags: ['怀旧', '时尚', '音乐'] },
-                { title: '「コンビニ」哲学', desc: '便利店在日本不仅是商店，而是"城市基础设施"——24 小时的社会安全网', detail: '日本便利店（7-Eleven、Lawson、FamilyMart）密度全球最高，功能远超购物：ATM、票务、快递、打印、厕所、免费 WiFi、防灾物资储备。疫情期间，便利店成为"不接触社会的最后社交场所"。社交媒体上，"コンビニ巡り"（便利店巡礼）是热门内容——比较不同品牌的新品、测评季节限定、寻找隐藏好物。甚至有哲学家出书讨论"便利店作为现代日本精神空间"。', tags: ['社会', '消费', '基础设施'] },
-                { title: '「山姥切国広」刀男现象', desc: '《刀剑乱舞》等"刀男"游戏让日本历史名刀拟人化，引发博物馆参观热潮', detail: '《刀剑乱舞》（Touken Ranbu）是一款将日本历史名刀拟人化为美少年的网页游戏。玩家（以女性为主）收集、培养这些"刀剑男士"。游戏的意外影响：玩家为了"见本命"而前往博物馆看真刀，导致日本国立博物馆刀剑展区女性观众比例从 20% 升至 60%；历史书籍销量上升；甚至影响了日本刀锻造技艺的传承（年轻人开始学锻刀）。被称为"刀剣ブーム"（刀剑热潮）。', tags: ['游戏', '历史', '博物馆'] }
-            ],
-            '国内': [
-                { title: '「松弛感」', desc: '2024 年最火生活态度词，指面对意外时不焦虑、不内耗的从容心态', detail: '"松弛感"最早源自一位博主分享的家庭旅行故事：全家人出国时行李被航空公司弄丢，但没有人焦虑或互相指责，而是笑着说"那正好买新衣服"。这种"不紧绷、不计较、顺其自然"的态度引发全网共鸣。与之对比的是"紧绷感"——过度准备、害怕出错、追求完美。社交媒体上，"松弛感穿搭"（宽松、不刻意）、"松弛感拍照"（不摆拍、自然表情）成为流量密码。', tags: ['生活态度', '心理', '社交媒体'] },
-                { title: '「Citywalk」', desc: '城市漫步从"压马路"升级为有路线、有主题、有穿搭的精致生活方式', detail: 'Citywalk（城市漫步）指有计划地在城市中步行探索，强调"发现日常中被忽略的美"。典型路线：上海梧桐区（武康路-安福路-巨鹿路）、北京胡同（五道营-国子监）、广州西关。参与者会提前研究建筑历史、咖啡店分布、拍照机位，并搭配"适合走路的穿搭"（舒适但上镜）。小红书 #Citywalk 笔记超 500 万篇，相关话题阅读量破 10 亿。', tags: ['生活方式', '旅游', '城市'] },
-                { title: '「电子榨菜」', desc: '吃饭时必须配视频/播客，内容成为"下饭"必需品，催生特定类型内容', detail: '"电子榨菜"指吃饭时观看的视频/播客内容，如同佐餐小菜。理想电子榨菜的特点是：节奏慢、不需要全神贯注、单集时长 15-30 分钟（刚好一顿饭）、剧情简单或重复。热门类型：修蹄子/洗地毯/挤痘痘（解压类）、老剧解说（《甄嬛传》《知否》）、游戏实况、Vlog。B站、抖音都有专门的"下饭"分区。部分餐厅甚至提供手机支架。', tags: ['饮食', '视频', '习惯'] },
-                { title: '「显眼包」', desc: '形容在群体中格外突出、爱表现、有点搞笑但让人印象深刻的人', detail: '"显眼包"源自东北方言，原略带贬义，指爱出风头的人。但在 2024 年语境中演变为中性甚至褒义：指那些在聚会、综艺、社交媒体上"不按常理出牌"、制造笑点、让人过目不忘的人。典型代表：综艺中的魏大勋、范丞丞；社交媒体上的"社牛"博主。核心特质是"有分寸的夸张"——不是让人反感，而是让人忍不住想看。', tags: ['社交', '网络用语', '娱乐'] },
-                { title: '「脆皮大学生」', desc: '自嘲体质差、容易受伤生病的大学生群体，反映年轻人亚健康状态', detail: '"脆皮"原指食物酥脆易碎，引申为"身体脆弱"。社交媒体上大量大学生分享自己"离谱的受伤经历"：打喷嚏闪到腰、换裤子骨折、海底捞门口饿晕、玩密室逃脱被吓进医院。这些看似荒诞的故事背后，是年轻人长期熬夜、缺乏运动、饮食不规律导致的真实亚健康。教育部 2024 年报告显示大学生体质合格率持续下降，"脆皮"从梗变成了社会议题。', tags: ['健康', '大学生', '自嘲'] },
-                { title: '「听劝体」', desc: '小红书上的"听劝"文化：发照片求改造建议，网友集体出谋划策', detail: '"听劝"指虚心接受他人建议并执行。小红书上的典型场景：用户发自己的穿搭/妆容/房间照片，配文"听劝，怎么改"，评论区网友从发型、配色、家具摆放等角度给出具体建议，博主后续发"改造后"对比照。这种"陌生人互助"氛围成为小红书区别于其他平台的核心特色。2024 年甚至有"听劝改造"综艺立项。', tags: ['社交媒体', '互助', '改造'] },
-                { title: '「公园 20 分钟效应」', desc: '研究表明每天公园待 20 分钟即可降低压力，成为打工人午休新仪式', detail: '源自《国际环境健康研究杂志》的一篇论文：即使不做运动，每天到公园待 20 分钟也能显著降低皮质醇（压力荷尔蒙）水平。这个"科学依据"在中文互联网迅速传播，成为打工人对抗"班味"的低成本方案。午休时公司附近的公园长椅上坐满年轻人，带着便当或咖啡，不聊天、不刷手机，只是"待着"。城市公园开始被重新评价为"精神快充站"。', tags: ['健康', '职场', '城市'] },
-                { title: '「毛坯人生 vs 精装朋友圈」', desc: '现实生活一团糟，但朋友圈必须精致完美的反差现象', detail: '这个对比精准描述了当代年轻人的社交媒体生存状态：现实中可能加班到凌晨、吃泡面、住合租屋，但朋友圈/小红书呈现的是精心修图的美食、旅行、自拍。"毛坯人生"指真实生活的粗糙、混乱、不完美；"精装朋友圈"指经过滤镜、排版、文案打磨的社交形象。这种割裂引发广泛共鸣，也催生了"反精装"潮流——故意发未经修饰的真实生活照。', tags: ['社交媒体', '心理', '自嘲'] },
-                { title: '「科目三」舞蹈', desc: '源自广西婚礼的魔性舞蹈，通过海底捞服务员表演火遍全球，成为文化输出符号', detail: '"科目三"最初是广西民间婚礼上的即兴舞蹈，特点是扭腰、摇花手、滑步，配乐为《一笑江湖》（DJ 版）。2023 年底通过海底捞服务员在顾客生日时表演而爆红，随后席卷 TikTok（海外称"Chinese Street Dance"）。全球各地出现模仿版本：英国皇家芭蕾舞团、俄罗斯芭蕾舞者、非洲小孩都跳过。成为近年最成功的中国民间文化输出之一。', tags: ['舞蹈', '文化输出', ' viral'] },
-                { title: '「挖呀挖」儿歌', desc: '幼儿园老师黄老师教唱《花园种花》儿歌，简单旋律引发全民模仿', detail: '2023 年 4 月，幼儿园老师黄琼（网名"音乐老师花开富贵"）在抖音发布教小朋友唱《花园种花》的视频。歌词"在小小的花园里面挖呀挖呀挖，种小小的种子开小小的花"配合手指动作，因反差萌（甜美老师+幼稚儿歌）而病毒式传播。播放量超 100 亿，衍生出无数改编版本（打工人版、考研版、炒股版）。黄老师直播带货单场销售额破百万，但也引发"幼师能否商业化"的争议。', tags: ['音乐', ' viral', '教育'] },
-                // ===== 主流媒体平台当周热点（2026-08 当周，含真实来源链接）=====
-                { title: '「牛来」烂片逆袭成全民许愿梗', desc: '微博热搜：86分钟动画《牛来》零宣发上映票房7169元，因"牛来=牛市来"被股民当许愿池，几天冲到千万级票房', platform: '微博热搜', link: 'https://weibo.com/ttarticle/p/show?id=2309405333397622096459', detail: '2026年夏天最魔幻的流量故事：国产动画《牛来》8月5日零宣发上映，前9天全国票房7169元，粗糙到被调侃"AI都做不出这么烂"；结果8月14日起突然翻红，单日票房冲到87万，累计破1700万，热搜挂了一整天。核心梗：片名"牛来"谐音"牛市来"被A股股民当许愿咒，晒票根求回本；片中"小牛被石头绊倒"名场面被命名"绊倒体"（谐音半导体），趴地微笑牛被封"半导体老祖"，甚至火到韩国散户。', tags: ['电影', '股市', '网络梗'] },
-                { title: '「绊倒体」小牛表情包席卷全网', desc: '抖音热榜：《牛来》小牛绊倒四脚朝天还微笑的画面，被网友二创为"半导体老祖"表情包', platform: '抖音热榜', link: 'https://www.toutiao.com/w/1873846314022922/', detail: '《牛来》高潮段落小牛被石头绊倒四脚朝天、还露出诡异微笑的镜头，被网友命名为"绊倒体"（谐音"半导体"），黄色小牛成为股民自嘲神兽：半导体板块受冲击时"还能笑着站起来"。表情包从股民朋友圈扩散到全网，韩国散户也用来表达三星/SK海力士波动的心情，一位在韩发展的中国艺人发梗图直接把它顶上韩网热搜。', tags: ['表情包', '股市', '二创'] },
-                { title: '「86分钟电影鸟飞5分钟」', desc: 'B站热门：动画《牛来》开场5分钟纯飞鸟长镜头被剪成梗，"剩下81分钟都在等它落地"', platform: 'B站热搜', link: 'https://weibo.com/3602560841/5332598154855091', detail: 'B站UP主把《牛来》开场5分钟无台词纯飞鸟长镜头剪成视频疯传，话题"86分钟电影开头鸟飞了5分钟"登上热门。网友神评："像电脑屏保""剩下81分钟都在等它落地""开盘集合竞价5分钟，导演把散户的日常拍出来了"。叠加"牛来=牛市来"的许愿梗，飞鸟5分钟被解读成A股9:25-9:30集合竞价后的贤者时间，金牛化工、公牛集团、铜牛信息都被带过热搜。', tags: ['电影', '股市', '搞笑'] },
-                { title: '「演唱会抢票难」黄牛治理再引关注', desc: '微博热搜：热门演唱会开票秒空，实名制与退票机制成讨论焦点', platform: '微博热搜', detail: '多场热门演唱会开票秒空，"抢票难"再度登上微博热搜。网友吐槽黄牛囤票、平台卡顿，呼吁更严格的实名制购票与合理退票机制。票务平台回应称将升级风控、增加候补购票功能。话题也延伸出"文化消费性价比""为情绪价值买单"等讨论。', tags: ['娱乐', '消费', '社会'] },
-                { title: 'AI 修图「一键变装」挑战', desc: '抖音热榜：用 AI 修图 App 一键生成古风/异域/职场造型，全民玩梗', platform: '抖音热榜', detail: 'AI 修图"一键变装"功能在抖音爆火：上传一张自拍，即可生成汉服、赛博朋克、空乘、法官等多种职业造型。话题播放量破 20 亿，明星素人纷纷晒"AI 版自己"。背后是国产 AIGC 图像模型的成熟，多家修图 App 借势冲上应用榜前列。也有声音提醒肖像权与"过度美颜"焦虑问题。', tags: ['AI', '娱乐', '短视频'] },
-                { title: 'B站科技区「AI 眼镜横评」', desc: 'B站热搜：多款 AI 眼镜实测对比，从拍摄到实时翻译到底实不实用', platform: 'B站热搜', detail: 'B站多位科技 UP 主发布 AI 眼镜深度横评，从续航、拍摄画质、实时翻译、导航提示等维度实测。评论区争论焦点从"是不是智商税"转向"续航与重量何时突破"。视频带动 AI 眼镜搜索量翻倍，电商平台相关品类销量明显上涨，成为近期最热的硬件话题。', tags: ['科技', 'AI', '评测'] },
-                { title: '「35 岁真的没有职场竞争力了吗」', desc: '百度热搜：关于中年职场焦虑的讨论，高赞回答提出"能力组合"论', platform: '百度热搜', detail: '百度热搜出现"35 岁是否真的失去职场竞争力"的长篇讨论，多位从业者分享转型经历。高赞回答提出"T 型能力组合"——深耕一个专业领域的同时，叠加沟通、管理、AI 工具等通用能力，用组合优势对冲年龄焦虑。话题也带动"AI 时代哪些岗位更抗衰"的衍生讨论。', tags: ['职场', '社会', '成长'] },
-                { title: '「多巴胺家居」改造风潮', desc: '小红书热门：用高饱和撞色改造出租屋，低成本换掉"班味"', platform: '小红书热门', detail: '小红书兴起"多巴胺家居"改造风潮：用高饱和撞色软装（抱枕、挂布、地毯、收纳盒）低成本改造出租屋，强调"房子是租的，生活不是"。大量笔记晒出改造前后对比，点赞破万。带火了平价家居店铺与"租房软装清单"内容，成为继"多巴胺穿搭"后的又一情绪消费热点。', tags: ['家居', '生活方式', '消费'] },
-                { title: '「县城夜市」烟火气回归', desc: '快手热榜：县城夜市摆摊与赶集视频走红，被赞"最治愈的人间烟火"', platform: '快手热榜', detail: '快手上一批县城夜市、乡村大集 vlog 走红：热气腾腾的小吃摊、讨价还价的赶集现场、熟客寒暄，被网友称为"最治愈的人间烟火"。视频带动"县城夜市攻略"搜索上涨，也引发对县域经济与青年返乡创业的讨论。部分摊主从线下摆摊转型为直播带货，探索新变现路径。', tags: ['生活', '县城', '治愈'] },
-                { title: '「三伏天养生」与高温作业安全', desc: '百度热搜：持续高温下的防暑降温与科学养生指南', platform: '百度热搜', detail: '持续高温天气让"三伏天养生""热射病预防"等词条登上百度热搜。医生提醒：高温时段避免户外作业、及时补水补盐、警惕"先兆中暑"。养生账号借势科普"冬病夏治"与"三伏贴"的正确用法，同时纠正"出汗越多越排毒"等误区。外卖、环卫等户外岗位的高温津贴话题也再次被关注。', tags: ['健康', '天气', '民生'] },
-                { title: '「演唱会抢票难」黄牛治理再引关注', desc: '微博热搜：热门演唱会开票秒空，实名制与退票机制成讨论焦点', platform: '微博热搜', detail: '多场热门演唱会开票秒空，"抢票难"再度登上微博热搜。网友吐槽黄牛囤票、平台卡顿，呼吁更严格的实名制购票与合理退票机制。票务平台回应称将升级风控、增加候补购票功能。话题也延伸出"文化消费性价比""为情绪价值买单"等讨论。', tags: ['娱乐', '消费', '社会'] },
-                { title: '「宠物短剧」成新流量密码', desc: '抖音热榜：以猫狗为主角的微短剧走红，萌宠+剧情双重加成', platform: '抖音热榜', detail: '以宠物为主角的微短剧在抖音走红：用猫狗"出演"家庭、职场、恋爱等剧情，配上拟人化配音。萌宠自带治愈感叠加剧情冲突，单集播放动辄破千万。催生了专业"宠物演员"经纪与宠物短剧制作团队，成为继"重生""赘婿"之后的新赛道，也引发对动物福利与拍摄规范的讨论。', tags: ['短视频', '萌宠', '文娱'] },
-                { title: '「AI 会取代哪些职业」再次升温', desc: '百度热搜：生成式 AI 能力升级后，关于职业替代的理性讨论', platform: '百度热搜', detail: '随着生成式 AI 在多模态、长任务规划上的能力提升，"AI 会取代哪些职业"再次成为搜索热议话题。高赞回答区分了"任务替代"与"职业替代"：AI 先替代的是可标准化的任务环节，而非整个职业；并提出"人机协作"是新常态，关键是把 AI 当杠杆而非对手。', tags: ['AI', '职场', '社会'] },
-                { title: '「极简主义」断舍离 3.0', desc: '小红书热门：从扔东西进阶到"不买清单"，消费降级下的清醒', platform: '小红书热门', detail: '小红书"断舍离 3.0"话题兴起：不再只是整理房间，而是主动建立"不买清单"（不买快时尚、不买一次性用品、不买冲动种草）。用户晒出"一年不买衣服挑战""空瓶计划"，强调"少而精"。这背后是消费降级大环境下的理性回归，也带火了一波"极简收纳""胶囊衣橱"内容。', tags: ['生活方式', '消费', '极简'] },
-                { title: '「月薪三万撑不起一个暑假」', desc: '微博热议：暑期亲子研学、夏令营价格飞涨引发家庭消费讨论', platform: '微博热搜', detail: '一条"月薪三万撑不起孩子一个暑假"的话题冲上微博热搜：高端研学营单日费用破千、海外游学动辄数万、夏令营报价阶梯式上涨。家长吐槽"卷不动又躺不平"，呼吁理性看待暑期消费。教育博主则建议根据家庭实际收入分级选择，不必被制造焦虑的营销裹挟。话题也带动"穷游式亲子陪伴""图书馆式夏令营"等平价方案走红。', tags: ['育儿', '消费', '社会'] },
-                { title: '「关灯刷手机」成睡眠第一杀手', desc: '微博热议：深夜关灯玩手机对视力和睡眠的双重危害', platform: '微博热搜', detail: '"关灯刷手机对眼睛到底有多大伤害"再度成为微博热议话题。眼科医生提醒：黑暗与强光对比会诱发视疲劳、干眼症、急性青光眼；睡前蓝光还会抑制褪黑素分泌导致入睡困难。网友晒出"越刷越精神"的崩溃体验，催生"屏幕灰度模式""强制睡眠 App""纸质书替代"等补救方案。', tags: ['健康', '生活', '视力'] },
-                { title: '「City不City」中国游走红', desc: '抖音热门：海外博主用"City不City"形容中国城市反差，全网玩梗', platform: '抖音热榜', detail: '一位来华旅游的外国博主在抖音发布"City不City"系列视频：用魔性中英混搭形容北上广深的现代感与烟火气反差（地铁、外卖、移动支付、24 小时便利店），播放量破 50 亿。海外网友二创连连，带动"反向种草"中国旅游。"City"成为 2026 年度热词之一，相关话题登上多国热搜。', tags: ['文化输出', ' viral', '旅游'] },
-                { title: '「小学生盘手串」解压视频爆红', desc: '抖音热门：小学生课间盘手串视频意外走红，成年网友称"被治愈"', platform: '抖音热榜', detail: '一批小学生课间盘手串、盘核桃、玩指尖陀螺的短视频在抖音走红：孩子一边写作业一边单手转核桃，或边听课边搓手串，表情专注解压。成年用户评论"看孩子盘手串比自己盘还解压"，引发"为什么年轻人也需要指尖玩具"的讨论。带火了儿童解压玩具品类（指尖陀螺、核桃、史莱姆），相关搜索量翻数倍。', tags: ['解压', '生活', '萌娃'] },
-                { title: 'B站「TikTok难民涌入」系列观察', desc: 'B站热议：海外用户涌入小红书后，B站 UP 主做对比观察视频', platform: 'B站热搜', detail: '"TikTok 难民涌入小红书"事件持续发酵，B站科技与文化区 UP 主纷纷制作"小红书突然涌入百万外国网友"的现象观察：从"互教英语""中美物价对比""审美差异"到"为什么他们觉得中国 App 更好用"。多条视频登顶热门总榜，播放破千万。B站借此话题讨论自身国际化策略与社区文化差异。', tags: ['社交媒体', '文化', '国际'] },
-                { title: 'B站「00 后整顿职场」纪录片', desc: 'B站热搜：UP 主跟拍 00 后新员工，如何与 80 后领导相处', platform: 'B站热搜', detail: 'B站职场区 UP 主发布"00 后整顿职场"系列纪录片，跟拍多位刚毕业的 00 后新员工：准时下班、拒绝无意义加班、邮件用敬语但边界感强。视频引发两个阵营热议——支持者认为"打破了无效加班文化"，反对者觉得"是个人自由不是集体规则"。多条视频进入热搜总榜，并衍生"职场礼仪新规范""Z 世代沟通指南"等内容。', tags: ['职场', '社会', 'Z世代'] },
-                { title: 'B站二次元「国创动画」霸权榜', desc: 'B站热搜：暑期国创动画集体爆发，多部作品豆瓣 9 分以上', platform: 'B站热搜', detail: 'B站国创区今夏迎来"霸权榜"级别表现：《凡人修仙传》《镖人》等多部国创动画豆瓣评分稳定在 9 分以上，弹幕量日均破百万。UP 主解说视频密集出圈，从作画、配乐到剧情改编细节全方位解读。海外粉丝同步追番带动"中配英配哪个好""国创 vs 日漫"的话题讨论。业内认为这是国创动画从"崛起"走向"成熟"的标志性节点。', tags: ['二次元', '国创', '动画'] },
-                { title: '「City walk」升级版「公交 walk」', desc: '小红书热门：用公交/地铁漫游城市，单趟花费不到 10 元', platform: '小红书热门', detail: '小红书兴起"公交 walk"风潮：不打车、不骑行，专挑公交或地铁线路漫游城市——从首发站坐到末站，沿途下车探店、拍照、喝咖啡。单趟花费不过几块钱，却能逛遍半个城。博主晒出"用公交把上海逛完""北京二环漫游路线"等攻略，单篇笔记点赞破万。带火了沿线小众咖啡馆、文创店与城市边缘游内容。', tags: ['生活方式', '旅游', '省钱'] },
-                { title: '「上班穿搭 vs 周末穿搭」反差', desc: '小红书热门：周一到周五的"体制内"穿搭，与周末的"自己"对比', platform: '小红书热门', detail: '小红书"上班 vs 周末穿搭反差"内容持续火热：周一到周五是衬衫、西装、制服感穿搭；周末切换成 Y2K、辣妹、森系、机能风。博主用同一件配饰（帽子、眼镜、包）串起"打工人 vs 真实自我"的反差对比，评论区共鸣强烈："上班是演戏，周末才是人生"。衍生出"通勤穿搭显瘦公式""周末胶囊衣橱"等内容。', tags: ['穿搭', '生活方式', '职场'] },
-                { title: '「自助修眉」成男生新社交货币', desc: '快手热榜：县域男生分享自助修眉教程，意外成为"精致男孩"入门', platform: '快手热榜', detail: '一批县域男生在快手分享"自助修眉""刮胡子细节""发型打理"教程，意外成为"精致男孩"入门内容。视频风格朴实，工具多在 20 元以内，修眉前后对比明显。评论区女性用户喊话"希望男同事也学一下"，话题延伸至"男女审美共同进步""男生化妆去污名化"。相关品类（小眉刀、修眉剪、男士素颜霜）搜索量大涨。', tags: ['生活', '男性', '审美'] },
-                { title: '「返乡 vlog」年轻人回县城', desc: '快手热榜：95 后辞职回县城开咖啡店/烘焙坊，真实记录走红', platform: '快手热榜', detail: '一批 95 后、00 后在快手发布"辞职回县城开店"系列 vlog：开咖啡店、烘焙坊、宠物店、花艺工作室，用真实镜头记录选品、装修、客流、亏损与坚持。视频里"县城老板的一天"比想象中更累，但"时间自由、陪伴家人"成为最大吸引力。话题带动县域小成本创业讨论，也有博主提醒"不要美化冲动型返乡，需提前测算现金流"。', tags: ['返乡', '创业', '县城'] },
-                { title: '「老铁助农」直播助农季', desc: '快手热榜：地方农人 + 头部主播联合助农，单场水果销售破百万斤', platform: '快手热榜', detail: '快手"老铁助农"直播季启动：地方果农与头部主播联合直播，陕西苹果、四川猕猴桃、广西百香果等当季水果单场销售破百万斤。直播画面里"现摘现发""果园直发""坏果包赔"等承诺强化信任，老铁文化下的"熟人推荐"模式缩短决策路径。话题也带动"农产品品牌化""电商助农可持续性"等深度讨论。', tags: ['助农', '电商', '直播'] },
-                { title: '「月薪 1 万 vs 1 千生活费」中外对比', desc: '百度热搜：中国一线城市与海外二三线城市的"生活质量性价比"讨论', platform: '百度热搜', detail: '百度热搜出现一组"中国一线月薪 1 万 vs 海外二三线月薪 1 万"的生活质量对比：房租、餐饮、交通、医疗可支配比例差异显著。讨论从单一物价扩展到"工作强度""社会安全""教育医疗可及性"等综合维度，催生大量"反向海归""远程办公回流"案例分享。客观来看不再有绝对优劣，而是不同人生优先级下的取舍。', tags: ['社会', '生活', '国际'] },
-                { title: '「医保异地结算」覆盖再扩大', desc: '百度热搜：跨省异地就医直接结算医院突破 4 万家', platform: '百度热搜', detail: '"医保异地就医直接结算"再度登上百度热搜，覆盖医院突破 4 万家、门诊费用跨省结算试点扩展到所有省份。官方解读政策细节（备案流程、报销比例、药品目录），网友晒出"老家参保、北京看病直接结算"的真实经历。配套话题"异地安置退休""跨省急诊抢救"也获得大量搜索，办事指南类内容流量明显上涨。', tags: ['医保', '民生', '政策'] }
+        // ---- 内置种子：2026 年可查证案例（每条 analysis 均带来源）----
+        var NIKO_INDIE_SEED = {
+            version: 1, date: '2026-09-26', fetchedAt: '2026-09-26T23:40:00+08:00', seed: true,
+            games: [
+                {
+                    appid: '', name: 'MECCHA CHAMELEON', nameCn: '超级变色龙',
+                    header: '', url: 'https://store.steampowered.com/search/?term=MECCHA%20CHAMELEON',
+                    release: '2026-06-10', releaseText: '2026年6月10日',
+                    developers: ['lemorion_1224', 'Haganeiro'], publishers: ['lemorion_1224', 'Haganeiro'],
+                    genres: ['休闲', '独立', '动作'], categories: ['多人', '联机合作', '创意工坊'],
+                    priceUsd: 5.99, priceCny: 26, isFree: false,
+                    desc: '2–24 人非对称躲猫猫。躲藏方给纯白小人涂色伪装进环境，搜寻方限时找出来。',
+                    reviews: { total: 73000, positive: 63500, positivePct: 87, score: '特别好评' },
+                    sales: {
+                        mid: 3285000, low: 1971000, high: 5256000,
+                        basis: 'Boxleiter 法 · 评论数 × 45（$5.99 价格带）', confidence: 2,
+                        note: '⚠️ 该估算与官方数字相差 6 倍 —— 实测评论率仅约 0.37%（7.3 万评测 / 2000 万份），远低于 Boxleiter 常规假设的 2–3%。结论：低价派对品类用评论数反推会严重低估，需上调 5–8 倍。'
+                    },
+                    burst: { score: 105, key: 'burst', label: '🔥 现象级', rank: 3 },
+                    track: {
+                        primary: 'Casual', label: '多人派对 / friendslop', saturation: {
+                            verdict: { key: 'shark', label: '🦈 红海' },
+                            basis: 'friendslop 赛道 2025–2026 密集爆发，同期同源作品有 Repo / Peak / Schedule 1', manual: true
+                        }
+                    },
+                    playersCurrent: null,
+                    analysis: {
+                        officialSales: '2000 万份（开发者 lemorion_1224 于 X 公告，2026-07 下旬）',
+                        officialTimeline: '6/12 50万 → 6/14 100万 → 6/19 500万 → 6/26 1000万 → 7/5 1500万 → 7月下旬 2000万',
+                        peakOnline: 340534, peakOnlineSrc: 'SteamDB（2026-06-21），列 Steam 历史最受欢迎第 44 位',
+                        teamSize: '2 人', devTime: '约 2 个月',
+                        revenue: '约 9000 万美元（未扣渠道分成）',
+                        honors: '2026 上半年全球销量冠军（Alinea Analytics 1260 万份，超 EA SPORTS FC 26 的 910 万）；2026 年 6 月 PC 游戏收入榜第 2，仅次于《堡垒之夜》（Newzoo）',
+                        timeline: [
+                            { d: '06-10', x: 'Steam 裸奔上线：<b>零宣发 · 零预热 · 无发行商</b>，无官网、无媒体前瞻、无主播造势' },
+                            { d: '06-10', x: '开服 1 小时同时在线破 <b>1.5 万</b>（纯自然流量）' },
+                            { d: '06-12', x: '上线 2 天销量 <b>50 万份</b>' },
+                            { d: '06-14', x: '4 天 <b>100 万份</b>' },
+                            { d: '06-15', x: '5 天 <b>200 万份</b>' },
+                            { d: '06-16', x: '6 天登顶 <b>Steam 全球周销榜</b>' },
+                            { d: '06-19', x: '9 天 <b>500 万份</b>' },
+                            { d: '06-21', x: '同时在线峰值 <b>34.05 万</b>，冲进 Steam 历史最受欢迎第 44 位' },
+                            { d: '07-05', x: '上线 25 天 <b>1500 万份</b>' },
+                            { d: '07 下旬', x: '突破 <b>2000 万份</b>，超越《赛博朋克 2077》《极限竞速：地平线 6》稳居周销榜前列' },
+                            { d: '09-09', x: '任天堂直面会官宣登陆 <b>Switch 2</b>，当日开放下载' }
+                        ],
+                        burstFactors: [
+                            { f: '零宣发冷启动', ev: '无发行商操盘、无官网、无媒体前瞻、上线前零主播预热 —— 全部流量来自玩家自发 UGC', src: '头条/3DM 2026-08' },
+                            { f: '低价 + 零门槛', ev: '$5.99（国区 ¥26）；砍掉枪械/养成/赛季通行证/氪金商城，2–24 人即开即玩，新手 0 教程', src: '17173 2026-07' },
+                            { f: '伪装创作 = 天然 UGC 素材', ev: '涂色自由度极高（伪装成仙人球、生肉、名画），几分钟一局天然产出短视频切片', src: '腾讯网 2026-07-22' },
+                            { f: '主播驱动传播', ev: 'Twitch / YouTube 直播切片大量转发，成为主要获客渠道，零投放预算', src: 'Mix Vale 2026-07-21' },
+                            { f: '高频更新续命', ev: '上线后持续加新地图（Sugarland / 大阪）、3D 吸色、11 种新姿势、立方体造型', src: '百度百科 + 官方更新日志' }
+                        ],
+                        toolchain: { engine: 'Unreal Engine 5', art: '免费/低模资源 + 自绘涂装系统', audio: '未披露', inferred: false, src: 'VGTimes 2026-07' },
+                        difficulty: { art: 2, tech: 3, content: 3, note: '美术门槛低（低多边形+自由涂装），技术门槛在 24 人联机同步，内容门槛在地图与姿势产出' },
+                        lesson: '你真正要抄的是这个结构：极简规则 × 极低价格 × 极强社交流量承接。2 人 2 个月能做出 2000 万份，靠的不是预算，是规则的可传播性。'
+                    }
+                },
+                {
+                    appid: '', name: 'Mewgenics', nameCn: '喵基因',
+                    header: '', url: 'https://store.steampowered.com/search/?term=Mewgenics',
+                    release: '2026-02', releaseText: '2026年2月',
+                    developers: ['Edmund McMillen', 'Tyler Glaiel'], publishers: [],
+                    genres: ['角色扮演', '策略', '独立'], categories: ['单人'],
+                    priceUsd: null, priceCny: null, isFree: false,
+                    desc: '战术回合制 RPG，培育基因改造猫在动态棋盘上作战。',
+                    reviews: null, sales: null,
+                    burst: { score: null, key: 'burst', label: '🔥 现象级', rank: 3, manual: true },
+                    track: { primary: 'RPG', label: '战术 Roguelite', saturation: null },
+                    playersCurrent: null,
+                    analysis: {
+                        officialSales: '7 天 100 万份（2026-02 首发，媒体报道）',
+                        peakOnline: '10 万+ 同时在线',
+                        teamSize: '2 人（Edmund McMillen + Tyler Glaiel）',
+                        devTime: '多年（The Binding of Isaac / Super Meat Boy 原班主创）',
+                        timeline: [
+                            { d: '2026-02', x: 'Steam 发售，<b>7 天 100 万份</b>，同时在线破 10 万' }
+                        ],
+                        burstFactors: [
+                            { f: '主创 IP 信用', ev: 'Edmund McMillen 是以撒的结合 / 超级肉肉哥的主创，Tyler Glaiel 是同系列长期合作者 —— 作品本身就是流量', src: 'Mix Vale 2026-09-06' },
+                            { f: '战术 Roguelite 品类红利', ev: '回合制 + 基因培育的组合在同类中差异化明显，卡在策略与养成之间', src: 'Mix Vale 2026-09-06' }
+                        ],
+                        difficulty: { art: 3, tech: 3, content: 4, note: '数据待补（云端抓取后自动填充销量/价格/评测数）' },
+                        lesson: '反向样本：不是所有爆款都靠零宣发。主创信用 + 品类定位也能在 7 天内破百万 —— 但你手上没有这个信用，所以这款看的是「品类位置」而不是「复制路径」。'
+                    }
+                },
+                {
+                    appid: '', name: 'Slay the Spire II', nameCn: '杀戮尖塔 2',
+                    header: '', url: 'https://store.steampowered.com/search/?term=Slay%20the%20Spire%20II',
+                    release: '2026-03', releaseText: '2026年3月（抢先体验）',
+                    developers: ['Mega Crit'], publishers: ['Mega Crit'],
+                    genres: ['策略', '角色扮演', '独立'], categories: ['单人'],
+                    priceUsd: null, priceCny: null, isFree: false,
+                    desc: '卡牌构筑 Roguelite 正统续作，2026 年 3 月进入 Steam 抢先体验。',
+                    reviews: null, sales: null,
+                    burst: { score: null, key: 'burst', label: '🔥 现象级', rank: 3, manual: true },
+                    track: { primary: 'Strategy', label: '卡牌建构 Roguelite', saturation: null },
+                    playersCurrent: null,
+                    analysis: {
+                        peakOnline: '57.4 万同时在线',
+                        teamSize: 'Mega Crit（独立团队）',
+                        devTime: '续作，前作 2019 年上线',
+                        honors: '同时在线接近《空洞骑士：丝之歌》2025 年的 58.7 万',
+                        timeline: [
+                            { d: '2026-03', x: 'Steam 抢先体验上线，同时在线峰值 <b>57.4 万</b>' }
+                        ],
+                        burstFactors: [
+                            { f: '正统续作 + 前作口碑', ev: '前作《杀戮尖塔》是卡牌 Roguelite 的开创者，续作自带巨大愿望单基数', src: 'Mix Vale 2026-09-06' },
+                            { f: '抢先体验低成本试错', ev: '以 EA 形式上线，用玩家反馈迭代，边做边卖', src: 'Mix Vale 2026-09-06' }
+                        ],
+                        difficulty: { art: 3, tech: 3, content: 5, note: '卡牌构筑的内容量是核心成本（卡池/敌人/事件），个人开发者最难扛的一轴' },
+                        lesson: '抢先体验是独立开发者的正解：不用等做完，先卖再做。但内容量（第 3 轴打 5 分）是它的护城河，也是你的天花板。'
+                    }
+                },
+                {
+                    appid: '', name: 'Mixtape', nameCn: '混音带',
+                    header: '', url: 'https://store.steampowered.com/search/?term=Mixtape',
+                    release: '2026-03', releaseText: '2026年3月',
+                    developers: [], publishers: ['Annapurna Interactive'],
+                    genres: ['冒险', '独立'], categories: ['单人'],
+                    priceUsd: null, priceCny: null, isFree: false,
+                    desc: '1990 年代青少年叙事游戏，用授权音乐与复古美学讲青春故事，2026 Q1 媒体评分最高。',
+                    reviews: null, sales: null,
+                    burst: { score: null, key: 'dark', label: '⚡ 黑马', rank: 2, manual: true },
+                    track: { primary: 'Adventure', label: '叙事冒险', saturation: null },
+                    playersCurrent: null,
+                    analysis: {
+                        honors: '2026 年 Q1 媒体均分最高的作品之一，评分压过同期高预算作品',
+                        teamSize: '未披露',
+                        timeline: [
+                            { d: '2026-03', x: 'Annapurna 发行，媒体均分登顶 2026 Q1' }
+                        ],
+                        burstFactors: [
+                            { f: '授权音乐 + 年代怀旧', ev: '90 年代青少年代入 + 正版授权金曲，情绪价值密度高', src: 'Mix Vale 2026-09-06' },
+                            { f: '发行商筛选器背书', ev: 'Annapurna Interactive 的发行片单本身是品质信号（Stray / Outer Wilds）', src: 'Mix Vale 2026-09-06' }
+                        ],
+                        difficulty: { art: 3, tech: 2, content: 3, note: '数据待补' },
+                        lesson: '口碑爆款 ≠ 销量爆款。这款是「评分最高」，但 4 小时流程引来争议 —— 提醒你关注「评价」和「卖得动」是两件事。'
+                    }
+                },
+                {
+                    appid: '', name: 'Mina the Hollower', nameCn: '鼹鼠米娜',
+                    header: '', url: 'https://store.steampowered.com/search/?term=Mina%20the%20Hollower',
+                    release: '', releaseText: '2026 年（多年延期后发售）',
+                    developers: ['Yacht Club Games'], publishers: ['Yacht Club Games'],
+                    genres: ['动作', '冒险', '独立'], categories: ['单人'],
+                    priceUsd: null, priceCny: null, isFree: false,
+                    desc: 'NES 卡带视觉的 2D 动作游戏，主角用挖掘能力闯关，设计上致敬塞尔达与铲子骑士。',
+                    reviews: null, sales: null,
+                    burst: { score: null, key: 'watch', label: '🌱 值得蹲', rank: 1, manual: true },
+                    track: { primary: 'Action', label: '2D 复古动作', saturation: null },
+                    playersCurrent: null,
+                    analysis: {
+                        officialSales: '首发销量足以支撑工作室继续运营（Yacht Club 公开说明，未给具体数字）',
+                        teamSize: 'Yacht Club Games（铲子骑士团队）',
+                        devTime: '多年（经历多轮延期与预算问题）',
+                        timeline: [
+                            { d: '2026', x: '多轮延期与预算压力后发售，首发销量让工作室得以继续运转' }
+                        ],
+                        burstFactors: [
+                            { f: '复古美学 + 大厂级手感', ev: 'NES 卡带美术 + 铲子骑士团队的平台动作功底，像素赛道里的质量标杆', src: 'Mix Vale 2026-09-06' },
+                            { f: '延期透支：反面教材', ev: '多年延期与预算问题几乎拖垮工作室，靠首发销量回血', src: 'Mix Vale 2026-09-06' }
+                        ],
+                        difficulty: { art: 4, tech: 3, content: 4, note: '像素美术的量产成本容易被低估（第 1 轴打 4 分）' },
+                        lesson: '这款是「反面镜鉴」：延期 + 预算失控能把好团队拖到生死线。做副业时，控制规模比追求完美重要。'
+                    }
+                }
             ]
         };
 
-        const hotSources = ['X/Twitter', 'TikTok', '小红书', '微博', 'B站', '抖音', 'Instagram', 'YouTube'];
-        // 国内热点专属来源：各大主流媒体平台
-        const hotSourcesCN = ['微博热搜', '抖音热榜', 'B站热搜', '小红书热门', '快手热榜', '百度热搜'];
-        const hotTags = [' viral', '文化', '生活方式', '社交', '娱乐'];
+        var indieData = null;
+        var indieTlOpen = {};
+        var indieCompareSel = [];
+        var indieLoading = false;
 
-        // 基于日期生成确定性伪随机数
-        function seededRandom(seed) {
-            let x = Math.sin(seed) * 10000;
-            return x - Math.floor(x);
+        // ---------- 工具 ----------
+        function indieNorm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, ''); }
+
+        function indieFmtNum(n) {
+            if (n === null || n === undefined || n === '' || isNaN(Number(n))) return '—';
+            n = Number(n);
+            if (n >= 100000000) { var y = n / 100000000; return (y >= 10 ? y.toFixed(0) : y.toFixed(2).replace(/\.?0+$/, '')) + ' 亿'; }
+            if (n >= 10000) { var w = n / 10000; return (w >= 100 ? w.toFixed(0) : w.toFixed(1).replace(/\.0$/, '')) + ' 万'; }
+            return n.toLocaleString('zh-CN');
         }
 
-        function generateHotData() {
-            const today = new Date();
-            const baseSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-            const result = { '日本': [], '韩国': [], '国内': [] };
-
-            Object.keys(hotTemplates).forEach(cat => {
-                const templates = hotTemplates[cat];
-                if (cat === '国内') {
-                    // ===== 国内：按主流平台分组，每个平台显示 4-5 条 =====
-                    // 无平台标签的旧模板随机归入某平台
-                    const byPlatform = {};
-                    hotSourcesCN.forEach(p => byPlatform[p] = []);
-                    templates.forEach(tpl => {
-                        const p = tpl.platform || hotSourcesCN[Math.floor(seededRandom(baseSeed + tpl.title.length) * hotSourcesCN.length)];
-                        (byPlatform[p] = byPlatform[p] || []).push(tpl);
-                    });
-                    hotSourcesCN.forEach((p, pi) => {
-                        const pool = byPlatform[p] || [];
-                        if (!pool.length) return;
-                        // 每个平台取 4-5 条（让用户能看完国内全部热搜）
-                        const n = Math.min(4 + Math.floor(seededRandom(baseSeed + pi * 7 + p.length) * 2), pool.length);
-                        const shuffled = pool.slice();
-                        for (let i = shuffled.length - 1; i > 0; i--) {
-                            const j = Math.floor(seededRandom(baseSeed + p.charCodeAt(0) + i * 29) * (i + 1));
-                            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                        }
-                        for (let i = 0; i < n; i++) {
-                            const tpl = shuffled[i];
-                            const tag = tpl.tags ? tpl.tags[Math.floor(seededRandom(baseSeed + i * 17 + p.length) * tpl.tags.length)] : hotTags[0];
-                            const isHot = seededRandom(baseSeed + i * 19 + p.length) > 0.5;
-                            result['国内'].push({
-                                title: tpl.title,
-                                desc: tpl.desc,
-                                detail: tpl.detail,
-                                source: p,
-                                tag: tag,
-                                isHot: isHot,
-                                region: '国内',
-                                link: tpl.link || '',
-                                time: `${Math.floor(seededRandom(baseSeed + i * 23 + p.length) * 12) + 1}小时前`
-                            });
-                        }
-                    });
-                    return;
-                }
-                // ===== 其他地区：原逻辑 =====
-                const count = Math.min(4 + Math.floor(seededRandom(baseSeed + cat.length) * 3), templates.length);
-
-                // Fisher-Yates 洗牌
-                const shuffled = templates.slice();
-                for (let i = shuffled.length - 1; i > 0; i--) {
-                    const j = Math.floor(seededRandom(baseSeed + cat.charCodeAt(0) + i * 31) * (i + 1));
-                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-                }
-
-                for (let i = 0; i < count; i++) {
-                    const tpl = shuffled[i];
-                    const source = hotSources[Math.floor(seededRandom(baseSeed + i * 13 + cat.length) * hotSources.length)];
-                    const tag = tpl.tags ? tpl.tags[Math.floor(seededRandom(baseSeed + i * 17 + cat.length) * tpl.tags.length)] : hotTags[0];
-                    const isHot = seededRandom(baseSeed + i * 19 + cat.length) > 0.5;
-                    result[cat].push({
-                        title: tpl.title,
-                        desc: tpl.desc,
-                        detail: tpl.detail,
-                        source: source,
-                        tag: tag,
-                        isHot: isHot,
-                        region: cat,
-                        link: tpl.link || '',
-                        time: `${Math.floor(seededRandom(baseSeed + i * 23 + cat.length) * 12) + 1}小时前`
-                    });
-                }
-            });
-            return result;
+        function indieFmtDate(s) {
+            if (!s) return '—';
+            var m = String(s).match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (m) return m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2);
+            return String(s);
         }
 
-        // 热点数据同步时间提示：返回"更新于 X月X日 HH:MM（N 分钟前）"格式，跨天自动带日期
-        function hotUpdateTimeText() {
-            if (!hotLastFetchTime) return '🕐 刚刚更新';
-            const d = new Date(hotLastFetchTime);
-            const now = new Date();
-            const diffMs = now - d;
-            const diffMin = Math.floor(diffMs / 60000);
-            const hh = d.getHours().toString().padStart(2, '0');
-            const mm = d.getMinutes().toString().padStart(2, '0');
-            // 相对时间后缀
-            let rel = '';
-            if (diffMin < 1) rel = '刚刚';
-            else if (diffMin < 60) rel = `${diffMin} 分钟前`;
-            else if (diffMin < 1440) rel = `${Math.floor(diffMin / 60)} 小时前`;
-            else rel = `${Math.floor(diffMin / 1440)} 天前`;
-            // 日期前缀：今天省略日期，昨天显示"昨天"，更早显示日期
-            const sameDay = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth() && d.getDate() === now.getDate();
-            const yesterday = new Date(now); yesterday.setDate(now.getDate() - 1);
-            const isYest = d.getFullYear() === yesterday.getFullYear() && d.getMonth() === yesterday.getMonth() && d.getDate() === yesterday.getDate();
-            let dayTxt = '';
-            if (!sameDay) dayTxt = isYest ? '昨天 ' : `${d.getMonth() + 1}月${d.getDate()}日 `;
-            return `🕐 数据同步于 ${dayTxt}${hh}:${mm}（${rel}）`;
-        }
-
-        // ===== 云端 AI 热榜（hotspot.json）：每日自动化搜索+分析生成，推送到 GitHub Pages =====
-        let hotCloudMeta = null;   // {fetchedAt, date, summary}
-
-        function applyCloudHot(data) {
-            if (!data || !data.regions) return false;
-            let applied = 0;
-            ['日本', '韩国', '国内'].forEach(key => {
-                const items = (data.regions[key] || []).filter(x => x && x.title);
-                if (!items.length) return;
-                hotData[key] = items.map((it, i) => ({
-                    title: it.title,
-                    desc: it.desc || (it.title + '（' + (it.platform || '热榜') + '）'),
-                    detail: it.desc || it.detail || '',
-                    tags: (it.tags && it.tags.length ? it.tags : [it.platform || '热榜']).filter(Boolean),
-                    platform: it.platform || '热榜',
-                    source: it.platform || it.source || '热榜',
-                    time: it.hot || it.time || '热',
-                    link: it.link || '',
-                    isHot: i < Math.min(8, items.length),
-                    cloud: 1
-                }));
-                applied++;
-            });
-            if (!applied) return false;
-            hotCloudMeta = { fetchedAt: data.fetchedAt || null, date: data.date || null, summary: data.summary || '' };
-            safeStorage.set('niko_hot_cloud', data);
-            hotLastFetchTime = data.fetchedAt || new Date().toISOString();
-            safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
-            return true;
-        }
-
-        function renderHotCloudSummary() {
-            const el = document.getElementById('hotCloudSummary');
-            if (!el) return;
-            if (!hotCloudMeta) { el.style.display = 'none'; return; }
-            const when = (hotCloudMeta.fetchedAt || '').slice(0, 16).replace('T', ' ') || '';
-            el.style.display = '';
-            el.innerHTML = `<div><span class="hs-title">🤖 AI 每日热点简报</span>　${escapeHtml(hotCloudMeta.summary || '今日热点速览（每日自动更新）')}</div>
-                <div class="hs-meta">📡 数据由每日自动化从各平台实时热榜整理 + AI 分析生成 · 更新于 ${when} · 点「🔄 刷新热点」可重新拉取</div>`;
-        }
-
-        // ===== 热点关键词过滤 =====
-        function saveHotKeywords() {
-            safeStorage.set('niko_hot_keywords', hotKeywords);
-            safeStorage.set('niko_hot_keywords_active', activeHotKeywords);
-        }
-        function addHotKeyword(kw) {
-            kw = String(kw || '').trim();
-            if (!kw) return;
-            if (hotKeywords.indexOf(kw) === -1) {
-                hotKeywords.push(kw);
-                activeHotKeywords.push(kw);
-            } else if (activeHotKeywords.indexOf(kw) === -1) {
-                activeHotKeywords.push(kw);
-            }
-            const input = document.getElementById('hotKeywordInput');
-            if (input) input.value = '';
-            saveHotKeywords();
-            renderHotKeywordFilter();
-            renderHot();
-            if (currentPage === 'hot') renderHotFull();
-        }
-        function removeHotKeyword(kw) {
-            hotKeywords = hotKeywords.filter(k => k !== kw);
-            activeHotKeywords = activeHotKeywords.filter(k => k !== kw);
-            saveHotKeywords();
-            renderHotKeywordFilter();
-            renderHot();
-            if (currentPage === 'hot') renderHotFull();
-        }
-        function toggleHotKeyword(kw) {
-            const idx = activeHotKeywords.indexOf(kw);
-            if (idx >= 0) activeHotKeywords.splice(idx, 1);
-            else activeHotKeywords.push(kw);
-            saveHotKeywords();
-            renderHotKeywordFilter();
-            renderHot();
-            if (currentPage === 'hot') renderHotFull();
-        }
-        function clearHotKeywords() {
-            activeHotKeywords = [];
-            saveHotKeywords();
-            renderHotKeywordFilter();
-            renderHot();
-            if (currentPage === 'hot') renderHotFull();
-        }
-        function matchesHotKeywords(item) {
-            if (!hotFilterEnabled) return true;
-            if (!activeHotKeywords.length) return true;
-            const text = [
-                item.title || '', item.desc || '', item.detail || '',
-                item.source || '', item.platform || '',
-                (item.tags || []).join(' '), item.tag || ''
-            ].join(' ').toLowerCase();
-            return activeHotKeywords.some(kw => text.includes(kw.toLowerCase()));
-        }
-        function renderHotKeywordFilter() {
-            const chips = document.getElementById('hotKeywordChips');
-            const count = document.getElementById('hotFilterCount');
-            const sw = document.getElementById('hotAutoRefreshSwitch');
-            const fsw = document.getElementById('hotFilterEnabledSwitch');
-            const flabel = document.getElementById('hotFilterToggleLabel');
-            if (sw) sw.checked = hotAutoRefresh;
-            if (fsw) fsw.checked = hotFilterEnabled;
-            if (flabel) flabel.textContent = hotFilterEnabled ? '只看筛选话题' : '显示全部热点';
-            if (!chips) return;
-            if (hotKeywords.length === 0) {
-                chips.innerHTML = '<span style="font-size:11px;color:#999;">暂无过滤词</span>';
-            } else {
-                chips.innerHTML = hotKeywords.map(kw => {
-                    const active = activeHotKeywords.indexOf(kw) >= 0;
-                    const dim = !hotFilterEnabled ? ' opacity:0.45;' : '';
-                    return `<span class="hot-keyword-chip ${active ? 'active' : ''}" style="${dim}" onclick="toggleHotKeyword('${kw.replace(/'/g, "\\'")}')" title="${active ? '点击取消' : '点击筛选'}">${escapeHtml(kw)}<span class="chip-remove" onclick="event.stopPropagation();removeHotKeyword('${kw.replace(/'/g, "\\'")}')" title="删除">×</span></span>`;
-                }).join('');
-            }
-            if (count) {
-                if (!hotFilterEnabled) count.textContent = '显示全部';
-                else {
-                    const active = activeHotKeywords.length;
-                    count.textContent = active ? `已选 ${active} 个话题` : '显示全部';
-                }
-            }
-        }
-        function toggleHotAutoRefresh(checked) {
-            hotAutoRefresh = !!checked;
-            safeStorage.set('niko_hot_auto_refresh', hotAutoRefresh);
-        }
-        function toggleHotFilter(checked) {
-            hotFilterEnabled = !!checked;
-            safeStorage.set('niko_hot_filter_enabled', hotFilterEnabled);
-            renderHotKeywordFilter();
-            renderHot();
-            if (currentPage === 'hot') renderHotFull();
-        }
-        // 立即刷新：强制重新拉取云端最新数据
-        function refreshHotNow() {
-            refreshHot();
-        }
-
-        // 拉取云端热榜：优先线上 hotspot.json，失败回退本地缓存
-        function loadCloudHot(cb) {
-            const finish = ok => { renderHotCloudSummary(); if (typeof cb === 'function') cb(ok); };
-            const tryFetch = (url) => new Promise(resolve => {
-                let timer = null;
-                try {
-                    const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-                    timer = setTimeout(() => { try { ctrl && ctrl.abort(); } catch (e) {} resolve(null); }, 9000);
-                    fetch(url, { signal: ctrl ? ctrl.signal : undefined })
-                        .then(r => (r.ok ? r.json() : null))
-                        .then(d => { clearTimeout(timer); resolve(d); })
-                        .catch(() => { clearTimeout(timer); resolve(null); });
-                } catch (e) { if (timer) clearTimeout(timer); resolve(null); }
-            });
-            tryFetch('https://skipperjames.github.io/niko-daily-console/hotspot.json?t=' + Date.now()).then(d => {
-                if (d && applyCloudHot(d)) { finish(true); return; }
-                // 线上失败 → 本地缓存
-                const cached = safeStorage.get('niko_hot_cloud', null);
-                if (cached && applyCloudHot(cached)) { finish(true); return; }
-                finish(false);
-            });
-        }
-
-        function refreshHot() {
-            if (hotLoading) return;
-            hotLoading = true;
-
-            // 显示 loading 状态（按钮自身也要给出反馈，避免点击后"完全没反应"）
-            const btn = document.getElementById('hotFullRefreshBtn');
-            const btnOrgText = btn ? btn.textContent : null;
-            if (btn) { btn.disabled = true; btn.textContent = '⏳ 刷新中…'; }
-            const todayList = document.getElementById('hotList');
-            const fullBuy = document.getElementById('hotFullBuy');
-            const fullGame = document.getElementById('hotFullGame');
-            const fullMedia = document.getElementById('hotFullMedia');
-            const loadingHtml = '<div class="hot-empty">⏳ 正在刷新热点数据...</div>';
-            if (todayList) todayList.innerHTML = loadingHtml;
-            if (fullBuy) fullBuy.innerHTML = loadingHtml;
-            if (fullGame) fullGame.innerHTML = loadingHtml;
-            if (fullMedia) fullMedia.innerHTML = loadingHtml;
-
-            // 真实刷新：先拉云端 AI 热榜（每日自动化更新），云端失败才回退本地预置数据
-            const finish = (ok) => {
-                hotLoading = false;
-                if (btn) { btn.disabled = false; btn.textContent = btnOrgText || '🔄 刷新热点'; }
-                if (typeof showToast === 'function') {
-                    showToast(ok ? '✅ 热点已刷新为最新云端数据' : '⚠️ 云端拉取失败，已回退预置数据');
-                }
-            };
-            try {
-                loadCloudHot(ok => {
-                    if (!ok) {
-                        hotData = generateHotData();
-                        hotLastFetchTime = new Date().toISOString();
-                        safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
-                        hotCloudMeta = null;
-                    }
-                    renderHot();
-                    if (currentPage === 'hot') renderHotFull();
-                    finish(ok);
-                });
-            } catch (e) {
-                // 防御性兜底：即使 loadCloudHot 同步抛错也能恢复按钮 + 渲染
-                hotData = generateHotData();
-                hotLastFetchTime = new Date().toISOString();
-                safeStorage.set('niko_hot_last_fetch', hotLastFetchTime);
-                hotCloudMeta = null;
-                renderHot();
-                if (currentPage === 'hot') renderHotFull();
-                finish(false);
-            }
-        }
-
-        function renderHot() {
-            const container = document.getElementById('hotList');
-            const dateLabel = document.getElementById('hotDateLabel');
-            const lastUpdated = document.getElementById('hotLastUpdated');
-            const statusBadge = document.getElementById('hotStatusBadge');
-
-            if (!container) return;
-
-            // 有云端缓存先应用（每日自动化推送的真实热榜），无则等刷新
-            if (!hotCloudMeta && safeStorage.get('niko_hot_cloud', null)) {
-                applyCloudHot(safeStorage.get('niko_hot_cloud', null));
-            }
-
-            const today = new Date();
-            if (dateLabel) dateLabel.textContent = `${today.getMonth()+1}月${today.getDate()}日`;
-
-            // 如果没有数据，自动拉取云端/刷新一次
-            if (hotData['国内'].length === 0 && !hotLoading) {
-                refreshHot();
-                return;
-            }
-
-            if (statusBadge) {
-                const hasCloud = hotData['国内'].length && hotData['国内'][0] && hotData['国内'][0].cloud;
-                statusBadge.textContent = hasCloud ? '📡 云端热榜' : 'AI 预置';
-                statusBadge.style.background = hasCloud ? '#e8f7ef' : '#eef2ff';
-                statusBadge.style.color = hasCloud ? '#059669' : '#667eea';
-                statusBadge.style.border = hasCloud ? '1px solid #a7e3c1' : '1px solid #c7d2fe';
-            }
-            if (lastUpdated) lastUpdated.textContent = hotUpdateTimeText();
-            renderHotCloudSummary();
-
-            // 根据当前选中的分类过滤
-            const cat = currentHotCategory || 'all';
-            let items = [];
-            if (cat === 'all') {
-                Object.keys(hotData).forEach(key => {
-                    hotData[key].forEach((item, idx) => items.push({ ...item, category: key, index: idx }));
-                });
-            } else {
-                items = hotData[cat].map((item, idx) => ({ ...item, category: cat, index: idx }));
-            }
-
-            // 关键词过滤
-            items = items.filter(matchesHotKeywords);
-
-            // 按 isHot 排序，热门在前
-            items.sort((a, b) => (b.isHot ? 1 : 0) - (a.isHot ? 1 : 0));
-            // 今日页面只显示前 5 条
-            items = items.slice(0, 5);
-
-            if (items.length === 0) {
-                container.innerHTML = '<div class="hot-empty">暂无热点数据</div>';
-                return;
-            }
-
-            container.innerHTML = items.map(item => createHotItemHtml(item, false, true)).join('');
-            updateHotUnreadCount();
-        }
-
-        function renderHotFull() {
-            const fullDate = document.getElementById('hotFullDate');
-            const lastUpdated = document.getElementById('hotFullLastUpdated');
-            const fullKR = document.getElementById('hotFullKR');
-            const fullJP = document.getElementById('hotFullJP');
-
-            const today = new Date();
-            if (fullDate) fullDate.textContent = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
-            if (lastUpdated) lastUpdated.textContent = hotUpdateTimeText();
-
-            // 如果没有数据，自动刷新
-            if (hotData['国内'].length === 0 && !hotLoading) {
-                refreshHot();
-                return;
-            }
-            if (fullKR) fullKR.innerHTML = hotData['韩国'].map((item, idx) => ({...item, region: '韩国', index: idx})).filter(matchesHotKeywords).map(item => createHotItemHtml(item, true)).join('') || '<div class="hot-empty">暂无数据</div>';
-            if (fullJP) fullJP.innerHTML = hotData['日本'].map((item, idx) => ({...item, region: '日本', index: idx})).filter(matchesHotKeywords).map(item => createHotItemHtml(item, true)).join('') || '<div class="hot-empty">暂无数据</div>';
-
-            // ===== 国内各平台独立专区 =====
-            const cnMap = {
-                'hotCNWeibo': '微博热搜', 'hotCNDouyin': '抖音热榜', 'hotCNBilibili': 'B站热搜',
-                'hotCNXhs': '小红书热门', 'hotCNKuaishou': '快手热榜', 'hotCNBaidu': '百度热搜'
-            };
-            // 平台名称兼容：云端 hotspot.json 与本地预置可能用不同写法（百度热点 / 百度热搜）
-            const cnAlias = {
-                '微博热搜': ['微博热搜'],
-                '抖音热榜': ['抖音热榜'],
-                'B站热搜': ['B站热搜', 'B站热门', '哔哩哔哩热搜'],
-                '小红书热门': ['小红书热门', '小红书热搜'],
-                '快手热榜': ['快手热榜', '快手热门'],
-                '百度热搜': ['百度热搜', '百度热点']
-            };
-            const cnAll = hotData['国内'] || [];
-            Object.keys(cnMap).forEach(containerId => {
-                const el = document.getElementById(containerId);
-                if (!el) return;
-                const plat = cnMap[containerId];
-                const aliases = cnAlias[plat] || [plat];
-                // 注意：必须用原始索引（openHotDetail 按 hotData[region][index] 定位），
-                // 过滤后重新编号会导致点击"看过/收藏/转灵感"打开错误的条目
-                const items = [];
-                cnAll.forEach((it, i) => {
-                    if (aliases.indexOf(it.source) !== -1 || aliases.indexOf(it.platform) !== -1) {
-                        items.push({ ...it, region: '国内', index: i });
-                    }
-                });
-                // 应用关键词过滤（保留原始 index 供 openHotDetail 定位）
-                const filteredItems = items.filter(matchesHotKeywords);
-                // 没数据的平台：整张卡片（含 panel-card 容器）直接隐藏，避免出现"暂无数据"空白栏
-                const panel = el.closest('.panel-card');
-                if (filteredItems.length) {
-                    el.innerHTML = filteredItems.map(item => createHotItemHtml(item, true)).join('');
-                    if (panel) panel.style.display = '';
-                } else {
-                    el.innerHTML = '<div class="hot-empty" style="padding:10px;">暂无数据</div>';
-                    if (panel) panel.style.display = 'none';
-                }
-            });
-
-            // 渲染热点排行
-            renderHotRank();
-            // 渲染收藏列表
-            renderHotFavorites();
-            // 更新未读计数徽标
-            updateHotUnreadCount();
-        }
-
-        function renderHotRank() {
-            const container = document.getElementById('hotRankGrid');
-            if (!container) return;
-
-            const regions = [
-                { key: '日本', flag: '🇯🇵', color: '#8b5cf6' },
-                { key: '韩国', flag: '🇰🇷', color: '#ec4899' },
-                { key: '国内', flag: '🇨🇳', color: '#10b981' }
-            ];
-
-            container.innerHTML = regions.map(region => {
-                const items = hotData[region.key] || [];
-                // 按热度排序：isHot 优先，然后随机热度值（基于日期种子保持一致）
-                const today = new Date();
-                const baseSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-                const sorted = items.slice().filter(matchesHotKeywords).sort((a, b) => {
-                    if (a.isHot && !b.isHot) return -1;
-                    if (!a.isHot && b.isHot) return 1;
-                    // 相同热度时，用标题哈希值排序（保持稳定）
-                    const hashA = a.title.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
-                    const hashB = b.title.split('').reduce((s, c) => s + c.charCodeAt(0), 0);
-                    return (hashA % 100) - (hashB % 100);
-                }).slice(0, 5);
-
-                return `
-                    <div class="hot-rank-card">
-                        <div class="rank-header">
-                            <span class="region-flag">${region.flag}</span>
-                            <span class="region-name">${region.key}</span>
-                            <span class="rank-count">TOP ${sorted.length}</span>
-                        </div>
-                        ${sorted.map((item, idx) => {
-                            const rankClass = idx === 0 ? 'top1' : idx === 1 ? 'top2' : idx === 2 ? 'top3' : 'other';
-                            const heatLevel = item.isHot ? '🔥' : '•';
-                            const read = isHotRead(region.key, item.title);
-                            return `
-                                <div class="hot-rank-item ${read ? 'read' : ''}" onclick="openHotDetail('${region.key}', ${items.indexOf(item)})">
-                                    <div class="rank-num ${rankClass}">${idx + 1}</div>
-                                    <div class="rank-content">
-                                        <div class="rank-title">${read ? '👁 ' : ''}${item.title}</div>
-                                        <div class="rank-meta">${item.tag} · ${item.source}</div>
-                                    </div>
-                                    <div class="rank-heat">${heatLevel}</div>
-                                </div>
-                            `;
-                        }).join('')}
-                        ${sorted.length === 0 ? '<div style="text-align:center;color:#aaa;font-size:12px;padding:8px 0;">暂无数据</div>' : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function createHotItemHtml(item, isFull = false, isPreview = false) {
-            const tagClass = item.isHot ? 'hot' : '';
-            const regionKey = item.region || item.category || '';
-            const index = item.index !== undefined ? item.index : 0;
-            const faved = isHotFavorited(regionKey, item.title);
-            const read = isHotRead(regionKey, item.title);
-            // 今日看板预览模式：点击直接跳到热点板块，不再原地弹详情
-            const clickAttr = isPreview
-                ? `onclick="switchPage('hot')" style="cursor:pointer;"`
-                : `onclick="openHotDetail('${regionKey}', ${index})" style="cursor:pointer;"`;
-            const footerHint = isPreview
-                ? `<span style="font-size:11px;color:#667eea;">👉 打开热点板块 →</span>`
-                : `<span style="font-size:11px;color:#667eea;">👆 点击查看详情</span>`;
-            // 预览模式隐藏 转灵感 / 收藏 操作，避免误触
-            const actionBtns = isPreview ? '' : `
-                        <span class="inspire-btn" onclick="event.stopPropagation();saveHotAsInspiration('${regionKey}', ${index})" title="转为灵感便签，可后续加工成脚本">💡 转灵感</span>
-                        <span class="fav-btn ${faved ? 'done' : ''}" onclick="event.stopPropagation();toggleHotFavorite('${regionKey}', ${index})" title="${faved ? '取消收藏' : '收藏热点，留档随时回看'}">${faved ? '★ 已收藏' : '☆ 收藏'}</span>`;
-            return `
-                <div class="hot-item ${read ? 'read' : ''}" ${clickAttr}>
-                    <div class="hot-title">
-                        ${item.title}
-                        ${read ? '<span class="read-badge">👁 已读</span>' : ''}
-                        <span class="tag ${tagClass}">${item.isHot ? '🔥 热门' : item.tag}</span>
-                    </div>
-                    <div class="hot-desc">${item.desc}</div>
-                    <div class="hot-source">
-                        <span class="src-icon">${item.source.charAt(0)}</span>
-                        <span>${item.source}</span>
-                        <span>·</span>
-                        <span>${item.time}</span>
-                        ${regionKey ? `<span>·</span><span>${regionKey}</span>` : ''}
-                        ${item.link ? `<a class="hot-link" href="${escapeHtml(item.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation();markHotRead('${regionKey}','${escapeHtml(item.title)}')" title="打开来源页面查看实时热点">🔗 来源</a>` : ''}
-                    </div>
-                    <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
-                        ${footerHint}${actionBtns}
-                    </div>
-                </div>
-            `;
-        }
-
-        // ===== 热点一键转灵感（写入便签数据，标签=创意灵感） =====
-        function saveHotAsInspiration(region, index) {
-            const items = hotData[region];
-            if (!items || !items[index]) return;
-            const item = items[index];
-            const notes = safeStorage.get('niko_inspiration_notes', []);
-            const hotRef = region + '::' + item.title;
-            const contentPrefix = `【${region}·热点转灵感】${item.title}`;
-            // 去重：未删除的便签中已存在同一条热点 → 提示并跳过
-            const existing = notes.find(n => !n.deleted && (
-                n.hotRef === hotRef ||
-                (n.source === '热点' && typeof n.content === 'string' && n.content.startsWith(contentPrefix))
-            ));
-            if (existing) {
-                showToast('⚠️ 这条热点已经转过灵感了，去便签看板看看吧');
-                return;
-            }
-            const content = contentPrefix + `\n${item.desc}\n来源：${item.source} · ${item.time}`;
-            notes.unshift({
-                id: 'note_' + Date.now(),
-                content: content,
-                tag: 'creative',
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-                pinned: false,
-                archived: false,
-                deleted: false,
-                source: '热点',
-                hotRef: hotRef
-            });
-            safeStorage.set('niko_inspiration_notes', notes);
-            showToast('💡 已转为灵感便签（切到便签看板查看）');
-        }
-
-        // ===== 热点已读标记（点开过详情=已读，跨日持久化） =====
-        let hotReadMap = safeStorage.get('niko_hot_read', {});
-        function hotReadKey(region, title) { return region + '::' + title; }
-        function isHotRead(region, title) { return !!(region && title && hotReadMap[hotReadKey(region, title)]); }
-        function markHotRead(region, title) {
-            if (!region || !title) return;
-            const key = hotReadKey(region, title);
-            if (!hotReadMap[key]) {
-                hotReadMap[key] = Date.now();
-                // 防止无限增长：最多保留 800 条，超出则清理最旧记录
-                const entries = Object.entries(hotReadMap).sort((a, b) => b[1] - a[1]);
-                if (entries.length > 800) {
-                    hotReadMap = Object.fromEntries(entries.slice(0, 800));
-                }
-                safeStorage.set('niko_hot_read', hotReadMap);
-            }
-        }
-        function markAllHotRead() {
-            let count = 0;
-            Object.keys(hotData).forEach(region => {
-                (hotData[region] || []).forEach(item => {
-                    if (!isHotRead(region, item.title)) { markHotRead(region, item.title); count++; }
-                });
-            });
-            renderHotFull();
-            renderHot();
-            showToast(count > 0 ? `👁 已标记 ${count} 条热点为已读` : '👁 当前没有未读热点啦');
-        }
-        function updateHotUnreadCount() {
-            const badge = document.getElementById('hotUnreadBadge');
-            if (!badge) return;
-            let total = 0, unread = 0;
-            Object.keys(hotData).forEach(region => {
-                (hotData[region] || []).forEach(item => {
-                    total++;
-                    if (!isHotRead(region, item.title)) unread++;
-                });
-            });
-            badge.textContent = unread > 0 ? `📭 ${unread} 条未读` : '✅ 全部已读';
-        }
-
-        // ===== 热点收藏（带时效标记） =====
-        let hotFavorites = safeStorage.get('niko_hot_favorites', []);
-        let hotFavCollapsed = safeStorage.get('niko_hot_fav_collapsed', false);
-
-        function isHotFavorited(region, title) {
-            return hotFavorites.some(f => f.region === region && f.title === title);
-        }
-
-        function toggleHotFavorite(region, index) {
-            const items = hotData[region];
-            if (!items || !items[index]) return;
-            const item = items[index];
-            const exists = hotFavorites.find(f => f.region === region && f.title === item.title);
-            if (exists) {
-                hotFavorites = hotFavorites.filter(f => !(f.region === region && f.title === item.title));
-                safeStorage.set('niko_hot_favorites', hotFavorites);
-                renderHotFavorites();
-                renderHotFull();
-                showToast('⭐ 已取消收藏');
-            } else {
-                hotFavorites.unshift({ region: region, title: item.title, desc: item.desc, source: item.source, savedAt: new Date().toISOString() });
-                safeStorage.set('niko_hot_favorites', hotFavorites);
-                renderHotFavorites();
-                renderHotFull();
-                showToast('⭐ 已收藏，随时回来查看（3天内新鲜，超7天提醒过气）');
-            }
-        }
-
-        // 时效标记：3天内=新鲜，3-7天=即将过气，>7天=已过气
-        function hotFavAgeLabel(savedAt) {
-            if (!savedAt) return { cls: 'fresh', label: '新鲜' };
-            const days = Math.floor((Date.now() - new Date(savedAt).getTime()) / 86400000);
-            if (days <= 3) return { cls: 'fresh', label: '新鲜' };
-            if (days <= 7) return { cls: 'aging', label: '即将过气' };
-            return { cls: 'stale', label: '已过气' };
-        }
-
-        function renderHotFavorites() {
-            const list = document.getElementById('hotFavList');
-            if (!list) return;
-            const count = document.getElementById('hotFavCount');
-            if (count) count.textContent = hotFavorites.length ? `（${hotFavorites.length} 条）` : '';
-            const hint = document.getElementById('hotFavToggleHint');
-            if (hint) hint.textContent = hotFavCollapsed ? '展开 ▼' : '收起 ▲';
-            list.style.display = hotFavCollapsed ? 'none' : 'grid';
-            if (hotFavCollapsed) return;
-            if (hotFavorites.length === 0) {
-                list.innerHTML = '<div class="hot-fav-empty">还没有收藏 — 看到想留档的热点，点卡片上的 ⭐ 收藏</div>';
-                return;
-            }
-            list.innerHTML = hotFavorites.map(f => {
-                const age = hotFavAgeLabel(f.savedAt);
-                const sourceIcon = (f.source || 'X').charAt(0);
-                const read = isHotRead(f.region, f.title);
-                return `
-                    <div class="hot-fav-card ${read ? 'read' : ''}">
-                        <div class="hot-fav-main">
-                            <div class="hot-fav-title">${read ? '👁 ' : ''}${f.title}</div>
-                            <div class="hot-fav-meta">
-                                <span>📍 ${f.region}</span>
-                                <span>📰 ${f.source || ''}</span>
-                                <span class="hot-fav-age ${age.cls}">${age.label}</span>
-                            </div>
-                        </div>
-                        <button class="hot-fav-rm" onclick="removeHotFavorite('${f.region.replace(/'/g, "\\'")}','${f.title.replace(/'/g, "\\'")}')" title="取消收藏">✕</button>
-                    </div>`;
-            }).join('');
-        }
-
-        function removeHotFavorite(region, title) {
-            hotFavorites = hotFavorites.filter(f => !(f.region === region && f.title === title));
-            safeStorage.set('niko_hot_favorites', hotFavorites);
-            renderHotFavorites();
-            renderHotFull();
-            showToast('⭐ 已取消收藏');
-        }
-
-        function toggleHotFavList() {
-            hotFavCollapsed = !hotFavCollapsed;
-            safeStorage.set('niko_hot_fav_collapsed', hotFavCollapsed);
-            renderHotFavorites();
-        }
-
-        // ===== 买量情报（AI 预置：各地区买量热门游戏 + 买量特点 + 可借鉴点） =====
-        // 预置数据版本号：AI 更新数据后 bump 此版本，用户打开新文件自动注入新数据（收藏/手动记录不受影响）
-        const ADS_SEED_VERSION = 'v2026-08-14c';
-
-        // 大盘洞察（DataEye-ADX 2026-07 全球/出海投放月报；summary=一句话总结，detail=详细解读）
-        const NIKO_ADS_INSIGHTS = [
-            { id:'i1', icon:'📉', title:'全球买量进入「筛选期」',
-              summary:'7月全球投放素材 375.6 万组、参与手游 5.7 万款，环比 -12.5% / -26%，资源向头部集中。',
-              detail:'7月全球投放素材 375.6 万组、参与手游 5.7 万款，环比分别下滑 12.5% 和 26%。低效产品加速退出竞争，投放资源向成熟头部集中，素材量与产品数同步收缩。对买量团队的含义：纯堆量的窗口在收窄，「素材质量 + 产品确定性」才是本阶段的核心变量，跟头部产品的素材风向比堆数量更重要。',
-              features:['素材量环比 -12.5%，产品数环比 -26%','低效产品出清，资源向头部集中'],
-              learn:['跟随头部素材风向判断题材风口','纯堆量窗口收窄，素材质量优先'],
-              source:'DataEye-ADX 2026-07', url:'https://www.jiemian.com/article/14903895.html' },
-            { id:'i2', icon:'🇺🇸', title:'美国仍是出海第一市场',
-              summary:'中国出海月投放素材 54.4 万组、产品 2873 款，美国 17.6 万组居首，葡/巴/德/法/新/印尼/菲紧随其后。',
-              detail:'中国出海月投放素材 54.4 万组（环比 -12.5%）、参与产品 2873 款（环比 -15%）；其中美国市场以 17.6 万组素材量居首，葡萄牙、巴西、德国、法国、新加坡、印尼、菲律宾紧随其后。美国依然是出海基本盘，但欧洲/东南亚/拉美的分散投放越来越明显——多市场并行能摊薄单一市场风险，也考验素材本地化的产能。',
-              features:['美国 17.6 万组素材居首','出海目的地明显分散化（欧/东南亚/拉美跟进）'],
-              learn:['美国仍是基本盘，多市场并行摊薄风险'],
-              source:'DataEye-ADX 2026-07', url:'https://www.jiemian.com/article/14903895.html' },
-            { id:'i3', icon:'🎯', title:'出海品类投放前三：RPG / 策略 / 超休闲',
-              summary:'角色扮演 12.4 万组、策略 10.1 万组、超休闲 8.8 万组，轻度玩法占流量入口。',
-              detail:'出海投放品类前三：角色扮演 12.4 万组、策略 10.1 万组、超休闲 8.8 万组。麻将/拼图/文字解谜/合成等轻度玩法占据流量入口，规则简单、素材可快速迭代，规模化投放能力最强。对休闲/超休闲团队：轻度矩阵 + 多产品并行是吃下流量入口的标准打法。',
-              features:['RPG 12.4 万组 / 策略 10.1 万组 / 超休闲 8.8 万组','轻度玩法（麻将/拼图/解谜/合成）占流量入口'],
-              learn:['轻度矩阵+多产品并行=流量入口打法'],
-              source:'DataEye-ADX 2026-07', url:'https://www.jiemian.com/article/14903895.html' },
-            { id:'i4', icon:'🧊', title:'SLG 用「轻量化素材」多市场通吃',
-              summary:'《Dark War Survival》同期投放美/日/韩/中国台湾，SLG 轻量化素材+爽感钩子获量能力最强。',
-              detail:'《Dark War Survival》同期投放美国、日本、韩国、中国台湾等市场，SLG 通过轻量化素材 + 爽感钩子获取用户的能力依旧最强，是买量长跑型品类。末日题材 + 轻量素材在多个市场验证了可复用性——先用素材 hook 快速获量，再用长线养成承接留存，是出海 SLG 的标准节奏。',
-              features:['SLG 轻量化素材+爽感钩子','末日题材多市场复用验证'],
-              learn:['轻量化素材 hook + 长线养成承接=出海SLG标准节奏'],
-              source:'DataEye-ADX 2026-07', url:'https://new.qq.com/rain/a/20260811A02FZC00?refer=cp_1009' },
-            { id:'i5', icon:'🔑', title:'竞争重点：从「扩量」转向「确定性」',
-              summary:'出海厂商从单纯扩量转向产品确定性、长线运营与素材迭代效率，高质量产品+高效率素材才是留存关键。',
-              detail:'出海厂商正从单纯扩大投放规模，转向产品确定性、长线运营与素材迭代效率。素材量不再是唯一胜负手，「高质量产品 + 高效率素材」才是留存关键。落到日常：建自己的素材复盘机制（什么 hook 点击率高、什么转化好），用数据反哺下一批素材，比盲目加量更有效。',
-              features:['投放竞争从扩量转向确定性','素材迭代效率成为核心能力'],
-              learn:['建立素材复盘机制，用数据反哺下一批素材'],
-              source:'DataEye-ADX 2026-07', url:'https://www.jiemian.com/article/14903895.html' }
-        ];
-
-        // 地区定义
-        const ADS_REGIONS = [
-            { key:'cn',  icon:'🇨🇳', name:'国内' },
-            { key:'na',  icon:'🇺🇸', name:'北美' },
-            { key:'jk',  icon:'🇯🇵', name:'日韩' },
-            { key:'sea', icon:'🌏', name:'东南亚·其他' }
-        ];
-
-        // 各地区买量热门游戏（真实调研 2026-07；features=买量特点，learn=可借鉴点，summary=一句话总结，detail=详细解读）
-        const NIKO_ADS_GAMES = [
-            // 国内
-            { id:'ads_cn1', region:'cn', game:'超自然行动组', vendor:'DataEye 买量榜首', type:'动作冒险', intensity:'🔥 周投放素材 11.6 万条 · 国内第一', date:'2026-07',
-              summary:'素材海战术碾压式堆量，量级断层第一，靠工业化产能建立曝光壁垒。',
-              detail:'单周素材量 11.6 万条、断层领先，本质是「多创意并行测试 + 高产能」的工业化投放体系：动作表现、角色展示、福利诱导全类型并行，靠概率跑出爆款素材。对中小团队而言重点不是模仿堆量，而是盯它近期素材的题材风向来判断市场风口。',
-              features:['素材量断层第一，纯堆量战术','多创意并行测试，素材产能要求极高'],
-              learn:['量级战术只适合大预算团队','看它的素材方向可判断题材风口'],
-              source:'DataEye', url:'https://new.qq.com/rain/a/20260719A058PN00?refer=cp_1009' },
-            { id:'ads_cn2', region:'cn', game:'向僵尸开炮', vendor:'大梦龙途', type:'僵尸题材 · 射击割草', intensity:'🔥 周投放素材紧随第一', date:'2026-07',
-              summary:'僵尸题材+割草爽感的「末日钩子」素材公式，趁题材红利期持续加投。',
-              detail:'用高代入感的僵尸末日场景开场，配合割草清屏的即时爽感钩子，素材转化率显著高于同品类均值。这类「题材红利 + 爽感可视化」的公式在轻度射击投放里可直接复用，关键是前 3 秒就要让用户看到清屏爽感，而不是讲世界观。',
-              features:['僵尸题材+爽感钩子，素材代入感强','题材红利期持续加投'],
-              learn:['「末日+割草爽感」素材公式可直接复用'],
-              source:'DataEye', url:'https://new.qq.com/rain/a/20260719A058PN00?refer=cp_1009' },
-            { id:'ads_cn3', region:'cn', game:'时空猎人·觉醒', vendor:'贪玩游戏', type:'横版格斗 ARPG', intensity:'💰 7月新游收入国内第一（456万美元）', date:'2026-07',
-              summary:'不走纯买量，用「格斗职业选手直播挑战 + 全民搬砖经济」把话题炒热，首发登顶免费榜。',
-              detail:'买量之外另辟内容营销：邀格斗圈职业选手「小孩」做技术挑战直播，直接打透格斗标签人群；「全民搬砖」自由交易经济自带话题传播，玩家自发讨论即素材。上线前预约破 500 万，首发登顶免费榜，7 月新游收入国内第一。启示：强 IP 产品可以用「内容事件 + 经济系统话题」替代部分买量预算。',
-              features:['IP 情怀+「全民搬砖」自由交易经济','不走纯买量：邀格斗职业选手「小孩」技术挑战直播造势','上线前预约破 500 万，首发登顶免费榜'],
-              learn:['「高手直播挑战」比素材更能打透格斗标签人群','搬砖经济=内容话题，自带传播'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_cn4', region:'cn', game:'失控进化', vendor:'腾讯 × 无端科技', type:'Rust 授权 SOC 生存对抗', intensity:'🚀 上线24h 在线100万+ · 月下载977万', date:'2026-07',
-              summary:'KOL 分层预热 + 4000 万预约蓄水，多端互通承接流量，首发即峰值。',
-              detail:'「搜打拆」核心循环 + 失败保底降低新手门槛，把买量转化池做大；预热期用蓝战非/谭乔/籽岷等多圈层创作者联盟分层种草，预约 4000 万，上线 24 小时在线破 100 万。买量只是承接，真正的蓄水在内容生态——KOL 分层 + 预约蓄水 + 多端互通是 SOC 品类首发标准打法。',
-              features:['「搜打拆」核心循环+失败保底，新手门槛低','多圈层创作者联盟（蓝战非/谭乔/籽岷）分层预热','预约 4000 万，多端互通承接蓄水'],
-              learn:['KOL 分层预热+预约蓄水，首发即峰值','SOC 品类用「低惩罚」设计扩大买量池'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_cn5', region:'cn', game:'镇邪人', vendor:'三七互娱 · 安徽雷虎', type:'中式微恐 · 搜打撤轻RPG', intensity:'📈 首发后收入持续爬升', date:'2026-07',
-              summary:'中式微恐题材差异化突围，把 RPG 门槛压到微信小游戏场景。',
-              detail:'自动战斗 + 短流程 + 即时抽卡，把搜打撤轻 RPG 的玩法门槛降到微信小游戏用户也能秒上手；中式微恐题材在当前市场差异化明显、素材自带猎奇点击率。首发靠买量爆发拉新，之后靠养成付费撑长线，属于「题材差异化 + 轻量化缝合」的标杆。',
-              features:['自动战斗+短流程+即时抽卡，门槛降到微信小游戏场景','中式微恐题材差异化突围','首发买量爆发后靠养成付费撑住长线'],
-              learn:['「搜打撤」机制轻量化缝合，题材差异化'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_cn6', region:'cn', game:'我要当老祖', vendor:'野趣 × 海南科翔', type:'修仙放置', intensity:'📈 稳定爬升', date:'2026-07',
-              summary:'限定角色活动驱动付费峰值，背包构筑+五行流派策略框架稳住长线。',
-              detail:'修仙放置品类，用哪吒/灶神等限定角色活动制造付费峰值，活动节奏即收入节奏；背包构筑 + 五行流派给核心用户留足深度，稳住长线留存。买量主打「当老祖」的爽感预期，素材以养成成长线 + 活动福利为主。',
-              features:['限定角色活动（哪吒/灶神）驱动付费峰值','背包构筑+五行流派策略框架稳住核心用户'],
-              learn:['活动节奏=收入节奏，策略框架留住长线'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            // 北美
-            { id:'ads_na1', region:'na', game:'Hotel Legacy', vendor:'点点互动', type:'Merge 二合 + 模拟经营', intensity:'🔥 美区休闲榜 100+→25 · 日下载峰值 1.4万', date:'2026-07',
-              summary:'Merge 二合「生成器即时满足」是天然买量钩子，95% 视频素材多市场投放。',
-              detail:'Merge 即叙事：短目标即时满足是休闲买量的天然钩子，剧情碎片做长线锚点，二者结合的素材结构让转化和留存兼顾。视频素材占比 95%，投放美/韩/日/法/加多市场，7 月下载日均从 4000 冲到 1 万+。二合类「生成器分类」玩法与素材结构值得所有休闲项目对标。',
-              features:['视频素材占比 95%，投放美/韩/日/法/加','Merge 即叙事：短目标即时满足+剧情碎片长线锚点','7月下载日均 4000→1万+，高速拉新'],
-              learn:['二合「生成器分类」即时满足是买量天然钩子','95% 视频素材占比值得对标'],
-              source:'广大大/点点数据', url:'https://dy.163.com/article/L310393605568DTV.html' },
-            { id:'ads_na2', region:'na', game:'Meowdoku', vendor:'乐信圣文', type:'猫咪数独 · 益智', intensity:'🔥 出海投放榜前列', date:'2026-07',
-              summary:'猫咪题材+数独玩法的「萌宠叠加」素材，可爱化降低点击门槛。',
-              detail:'在益智品类上叠猫咪题材，素材可爱化、治愈感强，点击率显著高于纯数独素材；厂商多产品储备轮转投放摊薄风险。益智 + 萌宠是低风险高点击的素材公式，适合小团队快速复制。',
-              features:['猫咪题材+数独玩法，素材可爱化','厂商多产品储备轮转投放'],
-              learn:['益智品类叠萌宠题材，素材点击率高'],
-              source:'DataEye-ADX', url:'https://www.jiemian.com/article/14903895.html' },
-            { id:'ads_na3', region:'na', game:'Last Light', vendor:'冰川网络', type:'SLG / 生存', intensity:'🔥 出海投放榜前列', date:'2026-07',
-              summary:'末日题材+轻量化素材多市场复用，与 Dark War 同赛道对打。',
-              detail:'海外题材美术素材强，末日生存赛道与《Dark War Survival》正面竞争、多市场同步投放，验证了「末日题材 + 轻量素材」的跨市场复用性。SLG 用轻量化素材获量、再用长线养成承接，是出海长跑型打法。',
-              features:['海外题材美术素材强','与 Dark War 同赛道多市场投放'],
-              learn:['末日题材+轻量素材可多市场复用'],
-              source:'DataEye-ADX', url:'https://www.jiemian.com/article/14903895.html' },
-            { id:'ads_na4', region:'na', game:'Vita麻将 / Zen Word / Amaze GO!', vendor:'多家中国厂商', type:'麻将 / 拼图 / 文字解谜', intensity:'🔥 中国出海投放榜前列（多款）', date:'2026-07',
-              summary:'轻度玩法矩阵规模化投放，麻将/文字/解谜三方向并行铺量，吃下北美流量入口。',
-              detail:'多家中国厂商以轻度休闲矩阵（麻将/拼图/文字解谜）并行投放：素材可快速迭代、制作成本低、CTR 稳定，规模化铺量占据北美流量入口。轻度矩阵 + 多产品并行 = 出海北美的基本盘打法，适合有产能的团队。',
-              features:['轻度玩法素材可快速迭代','麻将/文字/解谜三方向并行铺量'],
-              learn:['轻度矩阵规模化投放=北美流量入口'],
-              source:'DataEye-ADX', url:'https://www.jiemian.com/article/14903895.html' },
-            // 日韩
-            { id:'ads_jk1', region:'jk', game:'hololive Dreams', vendor:'QualiArts × COVER', type:'Rhythm & RPG', intensity:'💰 上线10天 2176万美元（1.46亿元）', date:'2026-07',
-              summary:'VTuber 直播生态天然种草 + 限定卡池引爆付费，上线 10 天破 2176 万美元。',
-              detail:'吃 VTuber 直播生态的天然种草（主播日常直播即素材），上线前预约 150 万；泳装限定卡池 + 成员人气联动引爆付费，10 天 2176 万美元。日区二次元爆量公式：直播生态蓄水 + 限定卡池收割，素材只需放大主播名场面。',
-              features:['VTuber 直播生态天然种草，上线前预约 150 万','泳装限定卡池+成员人气联动引爆付费'],
-              learn:['「IP 直播生态+限定卡池」=日区爆量公式'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_jk2', region:'jk', game:'DIGIMON UP', vendor:'万代南梦宫', type:'IP 像素风养成', intensity:'🔥 日/美/韩快速起量', date:'2026-07',
-              summary:'初代角色开服集中登场，像素风唤醒 IP 情怀，日/美/韩快速起量。',
-              detail:'开服卡池集中放太一/亚古兽等初代角色，像素风精准唤醒老粉丝情怀；素材主打「进化名场面」唤醒记忆，运营主打初代情怀。IP 初代角色集中引爆 = 怀旧转化最快的素材与运营双策略。',
-              features:['初代角色（太一/亚古兽）开服卡池集中登场','像素风唤醒 IP 情怀共鸣'],
-              learn:['IP 初代角色集中引爆=怀旧转化最快'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_jk3', region:'jk', game:'恺英网络新游', vendor:'恺英网络', type:'（暂未披露）', intensity:'🏆 登顶韩国投放榜', date:'2026-07',
-              summary:'韩国市场投放力度第一登顶榜单，印证韩区买量红海的竞争烈度。',
-              detail:'恺英新游登顶韩国投放榜，与大梦龙途/高图网络同区热投，说明韩区买量已是红海、头部预算密集。中小厂需要差异化题材切入，纯拼预算难出头，题材或玩法差异化才是突破口。',
-              features:['韩国市场投放力度第一','大梦龙途/高图网络同区热投，东亚市场竞争烈度高'],
-              learn:['韩区买量已红海，中小厂需差异化题材切入'],
-              source:'DataEye-ADX', url:'https://new.qq.com/rain/a/20260811A02FZC00?refer=cp_1009' },
-            { id:'ads_jk4', region:'jk', game:'VAMPIR', vendor:'Netmarble（日服发行）', type:'暗黑吸血鬼 MMORPG', intensity:'📈 13万下载 / 251万美元', date:'2026-07',
-              summary:'哥特美术 + 高额开服福利拉新，成熟 MMORPG 养成承接付费。',
-              detail:'哥特暗黑美术差异化吸量，高额开服福利冲下载（13 万），成熟 MMO 养成体系承接长线付费（251 万美元）。韩厂「本土验证 → 区域扩张」的发行路径值得出海团队参考。',
-              features:['哥特美术+高额开服福利','成熟 MMO 养成承接付费'],
-              learn:['韩厂「本土验证→区域扩张」路径可参考'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            // 东南亚 · 其他
-            { id:'ads_sea1', region:'sea', game:'Blade War: Three Kingdoms', vendor:'途游', type:'三国 + 冰雪生存 + 城建', intensity:'📈 5-6月投放放大 · 覆盖欧美/日韩/东南亚', date:'2026-07',
-              summary:'「休闲爽感拉人、城建成长留预期」双钩子素材结构，创意 DNA 拆解到素材占比。',
-              detail:'创意 DNA 拆解：基地建设素材占比 45.5%，快反馈 + 城堡攻防 + 华丽特效构成素材 hook（即时反馈/可爱风格/数值爆炸/一键清怪）。Meta 打底 → TikTok/Applovin 扩量，欧美承接轻策略、亚洲承接三国认知。核心启示：先不讲历史，先让用户「点一下就有结果」。',
-              features:['创意DNA：快反馈+城堡攻防+基地建设（基地建设素材占比45.5%）','素材Hook：即时反馈/可爱风格/华丽特效/数值爆炸/一键清怪','Meta 打底 → TikTok/Applovin 扩量，欧美承接轻策略、亚洲承接三国认知'],
-              learn:['「用休闲爽感拉人，用城建成长留预期」双钩子素材结构','先不讲历史，先让用户「点一下就有结果」'],
-              source:'橙果数航', url:'http://www.datavoyage.cn/news/detail/48.html' },
-            { id:'ads_sea2', region:'sea', game:'Ragnarok: The New World', vendor:'Gravity', type:'仙境传说 IP MMORPG', intensity:'📈 泰/菲等稳定获量', date:'2026-07',
-              summary:'东南亚吃 IP 认知度，老 IP 焕新是高性价比获量路径。',
-              detail:'仙境传说 IP 在东南亚长期积累、地区认知深，配合情怀素材稳定获量。东南亚市场 IP 认知度 > 买量预算，老 IP 焕新的性价比高——素材只需唤醒记忆，不必教育玩法。',
-              features:['IP 在东南亚长期积累，地区认知深'],
-              learn:['东南亚吃 IP 认知度，老 IP 焕新性价比高'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_sea3', region:'sea', game:'Flash Peak: Freestyle Football', vendor:'Moco Studios（印尼）', type:'4V4 街机足球', intensity:'🔥 世界杯热点带量', date:'2026-07',
-              summary:'世界杯热点 + Free Fire 角色授权，小团队出奇兵的「热点+IP」模板。',
-              detail:'蹭世界杯热点带量，Free Fire 角色授权直接借流量；热门 IP 角色重组进全新竞技规则，素材借热点事件天然有讨论度。「热点 + IP 授权」组合是低成本出奇兵的模板，关键是热点窗口期内快速上线。',
-              features:['世界杯热点+Free Fire 角色授权','热门 IP 角色重组进全新竞技规则'],
-              learn:['「热点+IP授权」是小团队出奇兵模板'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_sea4', region:'sea', game:'CookieRun Classic', vendor:'Devsisters', type:'跑酷复刻', intensity:'💰 泰国占全球收入 87.8%', date:'2026-07',
-              summary:'初代玩法原汁原味复刻，单一市场深耕成收入基本盘。',
-              detail:'初代玩法原汁原味复刻，老玩家情怀转化率极高；泰国 60% 下载贡献 87.8% 全球收入，单一市场深耕可以成为收入基本盘。复刻 IP 的素材主打「经典回忆 + 原汁原味」，不需要新玩法教育。',
-              features:['初代玩法原汁原味复刻','泰国 60% 下载贡献 87.8% 全球收入'],
-              learn:['单一市场深耕可成为收入基本盘'],
-              source:'点点数据', url:'https://www.sohu.com/a/1062203820_121846689' },
-            { id:'ads_sea5', region:'sea', game:'Kingshot / 食光旅行', vendor:'点点互动', type:'SLG / 三消', intensity:'📈 印度 iOS 畅销榜前列', date:'2026-07',
-              summary:'印度 iOS 畅销榜前列，瞄准全球下载大盘的前瞻布局。',
-              detail:'SLG 和三消双产品在印度 iOS 畅销榜表现突出。印度占全球下载 16.4%，是未来最大的增量市场之一，先手布局的参考价值高——印度用户对价格敏感，素材强福利诱导 + 本地化语言是关键。',
-              features:['印度市场畅销榜表现出色'],
-              learn:['印度=全球下载大盘（占16.4%），先手布局可关注'],
-              source:'竞核', url:'https://new.qq.com/rain/a/20260719A058PN00?refer=cp_1009' }
-        ];
-
-        let adsRegion = 'cn';
-        let adsFavMap = safeStorage.get('niko_ads_fav', {});
-
-        // 幂等注入：版本号变更（AI 更新数据后）或手动 force 时覆盖预置；用户的收藏/手动记录不受影响
-        function seedAdsIntel(force) {
-            const storedVer = safeStorage.get('niko_ads_seed_version', null);
-            if (storedVer !== ADS_SEED_VERSION || force) {
-                safeStorage.set('niko_ads_intel', { insights: NIKO_ADS_INSIGHTS, games: NIKO_ADS_GAMES, version: ADS_SEED_VERSION });
-                safeStorage.set('niko_ads_seed_version', ADS_SEED_VERSION);
-                safeStorage.set('niko_ads_updated_at', new Date().toISOString());
-                return true;
-            }
-            return false;
-        }
-
-        function renderAdsIntel() {
-            seedAdsIntel();
-            updateAdsFreshness();
-            renderAdsInsights();
-            renderAdsRegionTabs();
-            renderAdsGames();
-            updateAdsUnreadCount();
-        }
-
-        // 时效黄标：>14 天提示对我说刷新
-        function updateAdsFreshness() {
-            const updatedAt = safeStorage.get('niko_ads_updated_at', null);
-            const badge = document.getElementById('adsStaleBadge');
-            const label = document.getElementById('adsUpdatedAt');
-            if (!updatedAt) { if (label) label.textContent = '数据准备中…'; return; }
-            const days = Math.max(0, Math.floor((Date.now() - new Date(updatedAt).getTime()) / 86400000));
-            const d = new Date(updatedAt);
-            const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-            if (label) label.textContent = '数据更新于 ' + dateStr + '（' + (days === 0 ? '今天' : days + ' 天前') + '）';
-            if (badge) {
-                if (days > 14) { badge.style.display = ''; badge.textContent = '⏰ 数据较旧 · 对我说「刷新买量情报」'; }
-                else badge.style.display = 'none';
-            }
-        }
-
-        function renderAdsInsights() {
-            const el = document.getElementById('adsInsightList');
-            if (!el) return;
-            const intel = safeStorage.get('niko_ads_intel', null);
-            const insights = intel ? intel.insights : NIKO_ADS_INSIGHTS;
-            el.innerHTML = insights.map(i => {
-                const fav = !!adsFavMap[i.id];
-                const read = isAdsRead(i.id);
-                return `
-                <div class="ads-insight-card${read ? ' read' : ''}" onclick="openAdsDetail('${i.id}')">
-                    <div class="ads-game-head">
-                        <div class="ads-game-title">${i.icon} ${escapeHtml(i.title)}</div>
-                        <div class="ads-game-actions" onclick="event.stopPropagation()">
-                            <button class="ads-act-btn${fav ? ' on' : ''}" onclick="toggleAdsFav('${i.id}')" title="收藏">${fav ? '⭐' : '☆'}</button>
-                            <button class="ads-act-btn" onclick="adsToInspiration('${i.id}')" title="转成灵感便签">💡</button>
-                        </div>
-                    </div>
-                    <div class="ads-game-meta">
-                        <span class="ads-insight-tag">📊 大盘洞察</span>
-                        <span class="ads-game-intensity">${escapeHtml(i.icon === '📉' ? '环比 -12.5%' : (i.features && i.features[0] ? i.features[0] : '本月要点'))}</span>
-                    </div>
-                    <div class="ads-summary">${escapeHtml(i.summary || '')}</div>
-                    <div class="ads-card-foot">
-                        <span class="ads-read-badge${read ? '' : ' new'}">${read ? '👁 已读过' : '🆕 未读'}</span>
-                        <span class="ads-game-src">${escapeHtml(i.source || '')}</span>
-                        <button class="ads-detail-btn" onclick="event.stopPropagation();openAdsDetail('${i.id}')">📖 解读</button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function renderAdsRegionTabs() {
-            const el = document.getElementById('adsRegionTabs');
-            if (!el) return;
-            const favCount = Object.keys(adsFavMap).filter(k => adsFavMap[k]).length;
-            el.innerHTML = ADS_REGIONS.map(r =>
-                `<span class="ads-region-tab${r.key === adsRegion ? ' active' : ''}" onclick="switchAdsRegion('${r.key}')">${r.icon} ${r.name}</span>`
-            ).join('') +
-            `<span class="ads-region-tab${adsRegion === 'fav' ? ' active' : ''}" onclick="switchAdsRegion('fav')">⭐ 我的收藏${favCount ? ' <b style="color:#f59e0b;">' + favCount + '</b>' : ''}</span>`;
-        }
-
-        function switchAdsRegion(region) {
-            adsRegion = region;
-            renderAdsRegionTabs();
-            if (region === 'fav') renderAdsFav();
-            else renderAdsGames();
-        }
-
-        // ===== 买量情报：我的收藏夹 =====
-        function renderAdsFav() {
-            const el = document.getElementById('adsGameList');
-            if (!el) return;
-            const intel = safeStorage.get('niko_ads_intel', null);
-            const games = intel ? intel.games : NIKO_ADS_GAMES;
-            const insights = intel ? intel.insights : NIKO_ADS_INSIGHTS;
-            const favGames = games.filter(g => adsFavMap[g.id]);
-            const favInsights = insights.filter(i => adsFavMap[i.id]);
-            if (!favGames.length && !favInsights.length) {
-                el.innerHTML = '<div class="ads-empty">⭐ 还没有收藏 — 在游戏 / 大盘洞察卡片上点 ☆ 收藏，就会出现在这里</div>';
-                return;
-            }
-            const items = [
-                ...favInsights.map(i => Object.assign({}, i, { kind: 'insight' })),
-                ...favGames.map(g => Object.assign({}, g, { kind: 'game' }))
-            ];
-            el.innerHTML = items.map(it => {
-                const read = isAdsRead(it.id);
-                const isGame = it.kind === 'game';
-                const title = isGame ? '🎮 ' + it.game : (it.icon + ' ' + it.title);
-                const vendor = isGame ? (it.vendor || '') : (it.source || '');
-                const summary = isGame ? (it.summary || '') : (it.summary || it.body || '');
-                const meta = isGame ? (it.type || '') + ' · ' + (it.intensity || '') : '📊 大盘洞察 · ' + (it.source || '');
-                return `
-                <div class="ads-game-card${read ? ' read' : ''}" onclick="openAdsDetail('${it.id}')">
-                    <div class="ads-game-head">
-                        <div class="ads-game-title">${title}<span class="ads-game-vendor">${vendor}</span></div>
-                        <div class="ads-game-actions" onclick="event.stopPropagation()">
-                            <button class="ads-act-btn on" onclick="toggleAdsFav('${it.id}')" title="取消收藏">⭐</button>
-                        </div>
-                    </div>
-                    <div class="ads-game-meta">
-                        <span class="ads-game-tag">${isGame ? (it.type || '') : '📊 大盘洞察'}</span>
-                        <span class="ads-game-intensity">${isGame ? (it.intensity || '') : (it.source || '')}</span>
-                    </div>
-                    <div class="ads-summary">${summary}</div>
-                    <div class="ads-card-foot">
-                        <span class="ads-read-badge${read ? '' : ' new'}">${read ? '👁 已读过' : '🆕 未读'}</span>
-                        <span class="ads-game-src">${isGame ? (it.region ? regionName(it.region) : '') : '大盘洞察'}</span>
-                        <button class="ads-detail-btn" onclick="event.stopPropagation();openAdsDetail('${it.id}')">📖 解读</button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        // 按 id 找回条目（大盘洞察 i* / 游戏 ads_*）
-        function adsItemById(id) {
-            const intel = safeStorage.get('niko_ads_intel', null);
-            if (intel) {
-                const ins = intel.insights || [];
-                for (let i = 0; i < ins.length; i++) if (ins[i].id === id) return Object.assign({}, ins[i], { id: id, kind: 'insight' });
-                const games = intel.games || [];
-                for (let i = 0; i < games.length; i++) if (games[i].id === id) return Object.assign({}, games[i], { id: id, kind: 'game' });
-            } else {
-                for (let i = 0; i < NIKO_ADS_INSIGHTS.length; i++) if (NIKO_ADS_INSIGHTS[i].id === id) return Object.assign({}, NIKO_ADS_INSIGHTS[i], { id: id, kind: 'insight' });
-                for (let i = 0; i < NIKO_ADS_GAMES.length; i++) if (NIKO_ADS_GAMES[i].id === id) return Object.assign({}, NIKO_ADS_GAMES[i], { id: id, kind: 'game' });
+        function indieFind(key) {
+            if (!indieData || !indieData.games) return null;
+            for (var i = 0; i < indieData.games.length; i++) {
+                var g = indieData.games[i];
+                if ((g.appid && String(g.appid) === String(key)) || indieNorm(g.name) === indieNorm(key)) return g;
             }
             return null;
         }
-        function adsGameById(id) {
-            const g = adsItemById(id);
-            return g && g.kind === 'game' ? g : null;
-        }
 
-        // ===== 买量情报：已读 =====
-        let adsReadMap = safeStorage.get('niko_ads_read', {});
-        function isAdsRead(id) { return !!adsReadMap[id]; }
-        function markAdsRead(id) {
-            if (!id || adsReadMap[id]) return;
-            adsReadMap[id] = Date.now();
-            const entries = Object.entries(adsReadMap).sort((a, b) => b[1] - a[1]);
-            if (entries.length > 600) adsReadMap = Object.fromEntries(entries.slice(0, 600));
-            safeStorage.set('niko_ads_read', adsReadMap);
-        }
-        function updateAdsUnreadCount() {
-            const intel = safeStorage.get('niko_ads_intel', null);
-            const games = intel ? intel.games : NIKO_ADS_GAMES;
-            const insights = intel ? intel.insights : NIKO_ADS_INSIGHTS;
-            const total = games.length + insights.length;
-            const unread = games.filter(g => !isAdsRead(g.id)).length + insights.filter(i => !isAdsRead(i.id)).length;
-            const badge = document.getElementById('adsUnreadBadge');
-            if (!badge) return;
-            badge.textContent = unread > 0 ? '📭 ' + unread + '/' + total + ' 未读' : '✅ 全部已读';
-        }
+        function indieKeyOf(g) { return (g && g.appid) ? String(g.appid) : indieNorm(g && g.name); }
 
-        function renderAdsGames() {
-            const el = document.getElementById('adsGameList');
-            if (!el) return;
-            const intel = safeStorage.get('niko_ads_intel', null);
-            const games = intel ? intel.games : NIKO_ADS_GAMES;
-            const list = games.filter(g => g.region === adsRegion);
-            if (list.length === 0) { el.innerHTML = '<div class="ads-empty">该地区暂无买量情报数据</div>'; return; }
-            el.innerHTML = list.map(g => {
-                const fav = !!adsFavMap[g.id];
-                const read = isAdsRead(g.id);
-                return `
-                <div class="ads-game-card${read ? ' read' : ''}" onclick="openAdsDetail('${g.id}')">
-                    <div class="ads-game-head">
-                        <div class="ads-game-title">🎮 ${escapeHtml(g.game)}<span class="ads-game-vendor">${escapeHtml(g.vendor || '')}</span></div>
-                        <div class="ads-game-actions" onclick="event.stopPropagation()">
-                            <button class="ads-act-btn${fav ? ' on' : ''}" onclick="toggleAdsFav('${g.id}')" title="收藏">${fav ? '⭐' : '☆'}</button>
-                            <button class="ads-act-btn" onclick="adsToInspiration('${g.id}')" title="转成灵感便签">💡</button>
-                        </div>
-                    </div>
-                    <div class="ads-game-meta">
-                        <span class="ads-game-tag">${escapeHtml(g.type || '')}</span>
-                        <span class="ads-game-intensity">${escapeHtml(g.intensity || '')}</span>
-                    </div>
-                    <div class="ads-summary">${escapeHtml(g.summary || '')}</div>
-                    <div class="ads-card-foot">
-                        <span class="ads-read-badge${read ? '' : ' new'}">${read ? '👁 已读过' : '🆕 未读'}</span>
-                        <span class="ads-game-src">${escapeHtml(g.source || '')}</span>
-                        <button class="ads-detail-btn" onclick="event.stopPropagation();openAdsDetail('${g.id}')">📖 解读</button>
-                    </div>
-                </div>`;
-            }).join('');
+        // ---------- 收藏 ----------
+        function indieFavs() { return safeStorage.get(INDIE_KEY_FAVS, []) || []; }
+        function indieIsFav(g) {
+            var k = indieKeyOf(g), f = indieFavs();
+            for (var i = 0; i < f.length; i++) { if (f[i].key === k) return true; }
+            return false;
         }
-
-        // 详情弹窗：一句话总结 + 详细解读 + 买量特点/可借鉴 + 来源
-        function regionName(key) {
-            const r = ADS_REGIONS.find(x => x.key === key);
-            return r ? r.name : key;
-        }
-        function openAdsDetail(id) {
-            const g = adsItemById(id);
-            if (!g) return;
-            markAdsRead(id);
-            renderAdsInsights();
-            renderAdsGames();
-            updateAdsUnreadCount();
-            const modal = document.getElementById('adsDetailModal');
-            const content = document.getElementById('adsDetailContent');
-            if (g.kind === 'insight') {
-                content.innerHTML = `
-                    <div class="detail-title">${g.icon} ${escapeHtml(g.title)}</div>
-                    <div class="detail-meta">
-                        <span class="source">📊 大盘洞察</span>
-                        <span class="source">📅 2026-07</span>
-                        <span class="source">📰 ${escapeHtml(g.source || '')}</span>
-                    </div>
-                    <div class="detail-section">
-                        <h4>📝 一句话总结</h4>
-                        <p>${escapeHtml(g.summary || '')}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>📖 详细解读</h4>
-                        <div class="detail-box">${escapeHtml(g.detail || '')}</div>
-                    </div>
-                    <div class="detail-section">
-                        <h4>🎯 核心要点</h4>
-                        <div class="detail-box">${(g.features || []).map(f => '▸ ' + escapeHtml(f)).join('<br/>')}</div>
-                    </div>
-                    <div class="detail-section">
-                        <h4>💡 可借鉴点</h4>
-                        <div class="detail-box">${(g.learn || []).map(l => '💡 ' + escapeHtml(l)).join('<br/>')}</div>
-                    </div>
-                    ${g.url ? '<div class="detail-tags"><span>📎 <a href="' + g.url + '" target="_blank" rel="noreferrer">' + escapeHtml(g.source || '数据源') + '</a></span></div>' : ''}
-                    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-                        <span class="detail-inspire-btn" onclick="adsToInspiration('${g.id}')">💡 转为灵感便签</span>
-                        <span class="detail-inspire-btn" style="background:#f59e0b;" onclick="toggleAdsFav('${g.id}')">${adsFavMap[g.id] ? '⭐ 已收藏' : '☆ 收藏'}</span>
-                    </div>
-                `;
-            } else {
-                content.innerHTML = `
-                    <div class="detail-title">🎮 ${escapeHtml(g.game)}</div>
-                    <div class="detail-meta">
-                        <span class="source">🌍 ${escapeHtml(regionName(g.region))}</span>
-                        <span class="source">🏷️ ${escapeHtml(g.type || '')}</span>
-                        <span class="source">💰 ${escapeHtml(g.intensity || '')}</span>
-                        ${g.vendor ? '<span class="source">🏢 ' + escapeHtml(g.vendor) + '</span>' : ''}
-                        ${g.date ? '<span class="source">📅 ' + escapeHtml(g.date) + '</span>' : ''}
-                    </div>
-                    <div class="detail-section">
-                        <h4>📝 一句话总结</h4>
-                        <p>${escapeHtml(g.summary || '')}</p>
-                    </div>
-                    <div class="detail-section">
-                        <h4>📖 详细解读</h4>
-                        <div class="detail-box">${escapeHtml(g.detail || '')}</div>
-                    </div>
-                    <div class="detail-section">
-                        <h4>🎯 买量特点</h4>
-                        <div class="detail-box">${(g.features || []).map(f => '▸ ' + escapeHtml(f)).join('<br/>')}</div>
-                    </div>
-                    <div class="detail-section">
-                        <h4>💡 可借鉴点</h4>
-                        <div class="detail-box">${(g.learn || []).map(l => '💡 ' + escapeHtml(l)).join('<br/>')}</div>
-                    </div>
-                    ${g.url ? '<div class="detail-tags"><span>📎 <a href="' + g.url + '" target="_blank" rel="noreferrer">' + escapeHtml(g.source || '数据源') + '</a></span></div>' : ''}
-                    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
-                        <span class="detail-inspire-btn" onclick="adsToInspiration('${g.id}')">💡 转为灵感便签</span>
-                        <span class="detail-inspire-btn" style="background:#f59e0b;" onclick="toggleAdsFav('${g.id}')">${adsFavMap[g.id] ? '⭐ 已收藏' : '☆ 收藏'}</span>
-                    </div>
-                `;
+        function indieToggleFav(key) {
+            var g = indieFind(key); if (!g) return;
+            var k = indieKeyOf(g), f = indieFavs(), idx = -1;
+            for (var i = 0; i < f.length; i++) { if (f[i].key === k) { idx = i; break; } }
+            if (idx >= 0) { f.splice(idx, 1); showToast('已从图腾墙移除'); }
+            else {
+                f.unshift({
+                    key: k, appid: g.appid || '', name: g.name, nameCn: g.nameCn || '',
+                    header: g.header || '', url: g.url || '',
+                    official: (g.analysis && g.analysis.officialSales) || '',
+                    salesMid: (g.sales && g.sales.mid) || null,
+                    team: (g.analysis && g.analysis.teamSize) || '',
+                    price: g.priceUsd, tier: (g.burst && g.burst.label) || '',
+                    date: new Date().toISOString().slice(0, 10),
+                    source: '独立游戏雷达'
+                });
+                showToast('⭐ 已收进精神图腾墙');
             }
-            modal.classList.add('show');
-        }
-        function closeAdsDetail() {
-            document.getElementById('adsDetailModal').classList.remove('show');
-        }
-        document.getElementById('adsDetailModal').onclick = (e) => {
-            if (e.target.id === 'adsDetailModal') closeAdsDetail();
-        };
-
-        function toggleAdsFav(id) {
-            adsFavMap[id] = !adsFavMap[id];
-            safeStorage.set('niko_ads_fav', adsFavMap);
-            renderAdsRegionTabs();
-            renderAdsInsights();
-            if (adsRegion === 'fav') renderAdsFav();
-            else renderAdsGames();
-            showToast(adsFavMap[id] ? '⭐ 已收藏（切到「我的收藏」查看）' : '☆ 已取消收藏');
+            safeStorage.set(INDIE_KEY_FAVS, f);
+            renderIndie(); renderTotem();
         }
 
-        // 一键转灵感（写入便签 niko_inspiration_notes，标签=创意灵感；支持大盘洞察 i* 与游戏 ads_*）
-        function adsToInspiration(id) {
-            const g = adsItemById(id);
-            if (!g) return;
-            const notes = safeStorage.get('niko_inspiration_notes', []);
-            const name = g.game || g.title;
-            const contentPrefix = '【买量情报】' + name;
-            const existing = notes.find(n => !n.deleted && (n.adsRef === id || (n.source === '买量情报' && typeof n.content === 'string' && n.content.startsWith(contentPrefix))));
-            if (existing) { showToast('⚠️ 这条已经转过灵感了，去便签看板看看吧'); return; }
-            const features = (g.features || []).join('；');
-            const learn = (g.learn || []).join('；');
-            const content = contentPrefix + '\n' + (g.summary || '') + '\n🎯 ' + (g.kind === 'insight' ? '核心要点：' : '买量特点：') + features + '\n💡 可借鉴：' + learn + '\n来源：' + (g.source || '');
+        // ---------- 转便签（复用便签看板的 niko_inspiration_notes 通道）----------
+        function indieToNote(key) {
+            var g = indieFind(key); if (!g) return;
+            var a = g.analysis || {};
+            var notes = safeStorage.get('niko_inspiration_notes', []) || [];
+            var prefix = '【独立游戏雷达】' + g.name + (g.nameCn ? '（' + g.nameCn + '）' : '');
+            for (var i = 0; i < notes.length; i++) {
+                if (!notes[i].deleted && notes[i].indieRef === indieKeyOf(g)) { showToast('⚠️ 这款已经转过便签了，去便签看板看看'); return; }
+            }
+            var lines = [prefix];
+            if (g.releaseText) lines.push('发行：' + g.releaseText);
+            if (a.officialSales) lines.push('官方销量：' + a.officialSales);
+            if (g.sales && g.sales.mid) lines.push('第三方估算：约 ' + indieFmtNum(g.sales.mid) + ' 份');
+            if (a.teamSize || a.devTime) lines.push('团队/工期：' + [a.teamSize, a.devTime].filter(Boolean).join(' · '));
+            if (g.priceUsd != null) lines.push('价格：$' + g.priceUsd + (g.priceCny ? ' / ¥' + g.priceCny : ''));
+            if (a.toolchain && a.toolchain.engine) lines.push('引擎：' + a.toolchain.engine);
+            if (a.lesson) lines.push('启示：' + a.lesson);
+            if (g.url) lines.push('商店：' + g.url);
             notes.unshift({
                 id: 'note_' + Date.now(),
-                content: content,
+                content: lines.join('\n'),
                 tag: 'creative',
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
                 pinned: false, archived: false, deleted: false,
-                source: '买量情报',
-                adsRef: id
+                source: '独立游戏雷达',
+                indieRef: indieKeyOf(g)
             });
             safeStorage.set('niko_inspiration_notes', notes);
             showToast('💡 已转为灵感便签（切到便签看板查看）');
         }
 
-        // 手动记录折叠
-        let compManualOpen = false;
-        function toggleCompManual() {
-            compManualOpen = !compManualOpen;
-            const body = document.getElementById('compManualBody');
-            const arrow = document.getElementById('compManualArrow');
-            if (body) body.style.display = compManualOpen ? '' : 'none';
-            if (arrow) arrow.classList.toggle('open', compManualOpen);
+        function indieOpenUrl(key) {
+            var g = indieFind(key); if (!g) return;
+            var u = g.url || ('https://store.steampowered.com/search/?term=' + encodeURIComponent(g.name || ''));
+            window.open(u, '_blank', 'noopener');
         }
 
-        // ===== 竞品买量监控 =====
-        const COMP_WORTH_NAMES = { worth: '值得抄', reference: '参考', skip: '不抄' };
-        const COMP_WORTH_BADGE = { worth: 'worth', reference: 'reference', skip: 'skip' };
-        let competitors = safeStorage.get('niko_competitors', []);
+        // ---------- 渲染：单卡 ----------
+        function indieTierCls(g) { return (g.burst && g.burst.key) ? g.burst.key : 'na'; }
 
-        function switchHotView(view) {
-            const isComp = view === 'comp';
-            const isAi = view === 'ai';
-            const isCopy = view === 'copy';
-            const isMeme = view === 'meme';
-            const isHot = !isComp && !isAi && !isCopy && !isMeme;
-            document.getElementById('viewTabHot').classList.toggle('active', isHot);
-            document.getElementById('viewTabComp').classList.toggle('active', isComp);
-            document.getElementById('viewTabAi').classList.toggle('active', isAi);
-            document.getElementById('viewTabCopy').classList.toggle('active', isCopy);
-            document.getElementById('viewTabMeme').classList.toggle('active', isMeme);
-            document.getElementById('hotViewMain').style.display = isHot ? 'flex' : 'none';
-            document.getElementById('compViewMain').classList.toggle('active', isComp);
-            document.getElementById('aiViewMain').classList.toggle('active', isAi);
-            document.getElementById('hotViewCopy').classList.toggle('active', isCopy);
-            document.getElementById('hotViewMeme').classList.toggle('active', isMeme);
-            if (isComp) { renderAdsIntel(); renderCompetitors(); }
-            if (isAi) renderAiReport();
-            if (isCopy) renderHotCopyPreview();
-            if (isMeme) renderHotMemePreview();
+        function indieCell(k, v, s) {
+            return '<div class="indie-cell"><div class="k">' + k + '</div><div class="v">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>';
         }
 
-        // 热点板块内嵌预览：文案库 Top10（读取 copyRecommend，字段 text/note/category/region/recDate）
-        function renderHotCopyPreview() {
-            const box = document.getElementById('hotCopyList');
-            if (!box) return;
-            const rec = (typeof copyRecommend !== 'undefined' && copyRecommend) ? copyRecommend : [];
-            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">文案库暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
-            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
-            box.innerHTML = rec.slice(0, 10).map(c => `
-                <div class="hot-preview-card">
-                    <div class="hot-preview-main">${escapeHtml(c.text)}</div>
-                    <div class="hot-preview-meta">
-                        ${REG[c.region] ? '<span class="chip">' + REG[c.region] + '</span>' : ''}
-                        ${c.category ? '<span class="chip">' + escapeHtml(c.category) + '</span>' : ''}
-                        ${c.recDate ? '<span class="chip">🤖 ' + escapeHtml(c.recDate) + '</span>' : ''}
-                        ${c.note ? '<span class="hot-preview-note">' + escapeHtml(c.note) + '</span>' : ''}
-                    </div>
-                </div>`).join('');
-        }
+        function indieCard(g) {
+            var a = g.analysis || {}, rv = g.reviews, sl = g.sales, bu = g.burst || {}, tr = g.track || {}, sat = tr.saturation || {};
+            var key = indieKeyOf(g), fav = indieIsFav(g);
+            var official = a.officialSales || '';
+            var third = (sl && sl.mid) ? ('约 ' + indieFmtNum(sl.mid) + ' 份') : '—';
+            var thirdSub = (sl && sl.basis) ? sl.basis : (sl ? '' : '官方未公布，且无评论数可反推');
+            var peak = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.peakOnline;
+            var peakV = (peak !== null && peak !== undefined) ? indieFmtNum(peak) + ' <em>人</em>' : '—';
+            var revV = rv ? indieFmtNum(rv.total) + ' <em>条</em>' : '—';
+            var revS = rv ? (rv.positivePct !== null && rv.positivePct !== undefined ? '好评率 ' + rv.positivePct + '% · ' + (rv.score || '') : (rv.score || '')) : '暂无数据';
+            var priceV = g.isFree ? '免费' : (g.priceUsd != null ? '$' + g.priceUsd + (g.priceCny ? ' <em>/ ¥' + g.priceCny + '</em>' : '') : '—');
+            var teamV = a.teamSize || '—';
+            var teamS = a.devTime ? '工期 ' + a.devTime : '';
+            var satV = sat.verdict ? sat.verdict.label : '—';
+            var satS = sat.basis ? sat.basis : '待云端抓取';
+            var toolV = (a.toolchain && a.toolchain.engine) ? a.toolchain.engine : '—';
+            var toolS = (a.toolchain && a.toolchain.src) ? (a.toolchain.inferred ? '推测 · ' : '') + a.toolchain.src : '待补';
+            var days = g.days ? ('上线 ' + g.days + ' 天') : '';
 
-        // 热点板块内嵌预览：梗文化 Top10（读取 memeRecommend，字段 term/meaning/region/recDate）
-        function renderHotMemePreview() {
-            const box = document.getElementById('hotMemeList');
-            if (!box) return;
-            const rec = (typeof memeRecommend !== 'undefined' && memeRecommend) ? memeRecommend : [];
-            if (!rec.length) { box.innerHTML = '<div class="hot-preview-empty">梗文化暂无推荐，点「📂 打开完整版」去添加</div>'; return; }
-            const REG = { JP: '🇯🇵 日本', KR: '🇰🇷 韩国', CN: '🇨🇳 国内' };
-            box.innerHTML = rec.slice(0, 10).map(m => `
-                <div class="hot-preview-card">
-                    <div class="hot-preview-main">${escapeHtml(m.term)}<span class="hot-preview-term">${escapeHtml((m.meaning || '').slice(0, 40))}</span></div>
-                    <div class="hot-preview-meta">
-                        ${REG[m.region] ? '<span class="chip">' + REG[m.region] + '</span>' : ''}
-                        ${m.recDate ? '<span class="chip">🤖 ' + escapeHtml(m.recDate) + '</span>' : ''}
-                    </div>
-                </div>`).join('');
-        }
+            var h = '';
+            h += '<div class="indie-card">';
+            // 头部
+            h += '<div class="indie-hd">';
+            if (g.header) h += '<img class="indie-cover" src="' + escapeHtml(g.header) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
+            h += '<div class="indie-hd-main">';
+            h += '<div class="indie-name-row"><span class="indie-name">' + escapeHtml(g.name || '未命名') + '</span>'
+                + (g.nameCn ? '<span class="indie-name-cn">' + escapeHtml(g.nameCn) + '</span>' : '')
+                + '<span class="indie-tier ' + indieTierCls(g) + '">' + escapeHtml(bu.label || '—') + '</span>'
+                + (bu.score ? '<span class="indie-name-cn">爆款指数 ' + bu.score + (bu.manual ? '（人工判定）' : '') + '</span>' : (bu.manual ? '<span class="indie-name-cn">人工判定档位</span>' : ''))
+                + '</div>';
+            var metaBits = [];
+            if (g.releaseText) metaBits.push('📅 ' + escapeHtml(g.releaseText));
+            if (days) metaBits.push(days);
+            if (g.developers && g.developers.length) metaBits.push('👤 ' + escapeHtml(g.developers.join(' / ')));
+            if (a.revenue) metaBits.push('💰 ' + escapeHtml(a.revenue));
+            h += '<div class="indie-meta">' + metaBits.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>';
+            h += '<div class="indie-meta" style="color:#8b95a5;">' + (g.desc ? escapeHtml(g.desc) : '') + '</div>';
+            h += '</div>';
+            h += '<div class="indie-hd-act">'
+                + '<button class="indie-iconbtn' + (fav ? ' on' : '') + '" onclick="indieToggleFav(\'' + key.replace(/'/g, "\\'") + '\')" title="收进精神图腾墙">' + (fav ? '⭐ 已收藏' : '⭐ 收藏') + '</button>'
+                + '<button class="indie-iconbtn" onclick="indieToNote(\'' + key.replace(/'/g, "\\'") + '\')" title="转成灵感便签">📝 转便签</button>'
+                + '<button class="indie-iconbtn" onclick="indieOpenUrl(\'' + key.replace(/'/g, "\\'") + '\')" title="打开 Steam 商店页">🔗 商店</button>'
+                + '</div>';
+            h += '</div>';
 
-        // 竞品筛选状态
-        let compFilterKw = '', compFilterWorth = '', compFilterRegion = '', compFilterType = '';
+            // W1：固定 8 格（位置永远不挪，保证横向可比）
+            h += '<div class="indie-grid8">';
+            h += indieCell('销量 · 官方公告', official ? escapeHtml(official.split('（')[0]) : '—', official ? escapeHtml(official.replace(/^[^（]*/, '').replace(/^（|）$/g, '')) : '开发方未公开具体数字');
+            h += indieCell('销量 · 第三方估算', third, escapeHtml(thirdSub));
+            h += indieCell('峰值在线', peakV, a.peakOnlineSrc ? escapeHtml(a.peakOnlineSrc) : 'SteamDB / 官方未披露');
+            h += indieCell('评测 / 好评率', revV, escapeHtml(revS));
+            h += indieCell('价格', priceV, g.isFree ? 'F2P 不适用评论数反推' : '美元原价（国区价另计）');
+            h += indieCell('团队 / 工期', escapeHtml(teamV), escapeHtml(teamS || '未披露'));
+            h += indieCell('赛道饱和度', satV, escapeHtml(satS));
+            h += indieCell('引擎 / 工具链', escapeHtml(toolV), escapeHtml(toolS));
+            h += '</div>';
 
-        function renderCompetitors() {
-            const container = document.getElementById('compList');
-            if (!container) return;
-            const manualCount = document.getElementById('compManualCount');
-            if (manualCount) manualCount.textContent = competitors.length ? `(${competitors.length})` : '';
-            let list = competitors;
-            if (compFilterKw) {
-                const kw = compFilterKw.toLowerCase();
-                list = list.filter(c => (c.game || '').toLowerCase().includes(kw) || (c.note || '').toLowerCase().includes(kw) || (c.materialType || '').toLowerCase().includes(kw));
+            // G4：爆款因子证据链
+            if (a.burstFactors && a.burstFactors.length) {
+                h += '<div class="indie-sec"><div class="indie-sec-t">🎯 为什么能爆 · 每条都挂证据</div>';
+                a.burstFactors.forEach(function (f) {
+                    h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + escapeHtml(f.f) + '</b> —— ' + escapeHtml(f.ev)
+                        + (f.src ? ' <span class="src">[' + escapeHtml(f.src) + ']</span>' : '') + '</span></div>';
+                });
+                h += '</div>';
             }
-            if (compFilterWorth) list = list.filter(c => c.worthCopy === compFilterWorth);
-            if (compFilterRegion) list = list.filter(c => (c.region || '') === compFilterRegion);
-            if (compFilterType) list = list.filter(c => (c.materialType || '') === compFilterType);
-            const countEl = document.getElementById('compFilterCount');
-            if (countEl) countEl.textContent = list.length === competitors.length ? `共 ${competitors.length} 条` : `${list.length} / ${competitors.length} 条`;
-            if (list.length === 0) {
-                container.innerHTML = competitors.length === 0
-                    ? '<div class="comp-empty">暂无竞品记录 — 看到同行新素材，第一时间记下来，别等忘了</div>'
-                    : '<div class="comp-empty">没有符合筛选条件的竞品记录</div>';
+
+            // G3：曝光过程时间线（默认收起）
+            if (a.timeline && a.timeline.length) {
+                var open = !!indieTlOpen[key];
+                h += '<div class="indie-sec"><div class="indie-sec-t">📈 曝光过程 · 可查证的传播链路'
+                    + '<span class="lnk" onclick="indieToggleTl(\'' + key.replace(/'/g, "\\'") + '\')">' + (open ? '收起 ▲' : '展开 ' + a.timeline.length + ' 个节点 ▾') + '</span></div>';
+                if (open) {
+                    h += '<div class="indie-tl">';
+                    a.timeline.forEach(function (t) {
+                        h += '<div class="indie-tl-row"><span class="indie-tl-d">' + escapeHtml(t.d) + '</span><span class="indie-tl-x">' + t.x + '</span></div>';
+                    });
+                    h += '</div>';
+                }
+                h += '</div>';
+            }
+
+            // W4：工具链 + 难度三轴
+            if (a.difficulty) {
+                var d = a.difficulty;
+                h += '<div class="indie-sec"><div class="indie-sec-t">🛠 开发难度三轴 <span class="indie-name-cn">（1–5，越高越难）</span></div>';
+                [['美术量', d.art], ['技术量', d.tech], ['内容量', d.content]].forEach(function (row) {
+                    var n = Number(row[1]) || 0, bars = '';
+                    for (var i = 1; i <= 5; i++) bars += '<i class="' + (i <= n ? 'f' : '') + '"></i>';
+                    h += '<div class="indie-axis"><span class="nm">' + row[0] + '</span><span class="indie-bars">' + bars + '</span><span class="indie-name-cn">' + n + '/5</span></div>';
+                });
+                if (d.note) h += '<div class="indie-factor" style="margin-top:6px;"><span class="dot">▸</span><span>' + escapeHtml(d.note) + '</span></div>';
+                h += '</div>';
+            }
+
+            // 教训（只对种子数据存在）
+            if (a.lesson) {
+                h += '<div class="indie-sec"><div class="indie-sec-t">🧭 对你意味着什么</div><div class="indie-factor"><span class="dot">▸</span><span>' + escapeHtml(a.lesson) + '</span></div></div>';
+            }
+            if (sl && sl.note) {
+                h += '<div class="indie-sec"><div class="indie-factor"><span class="dot">⚠️</span><span>' + escapeHtml(sl.note) + '</span></div></div>';
+            }
+            h += '</div>';
+            return h;
+        }
+
+        function indieToggleTl(key) {
+            var g = indieFind(key); if (!g) return;
+            var k = indieKeyOf(g);
+            indieTlOpen[k] = !indieTlOpen[k];
+            renderIndie();
+        }
+
+        // ---------- 渲染：列表 ----------
+        function renderIndie() {
+            var host = document.getElementById('indieList');
+            var empty = document.getElementById('indieEmpty');
+            if (!host) return;
+            var games = (indieData && indieData.games) || [];
+            if (!games.length) {
+                host.innerHTML = '';
+                if (empty) { empty.style.display = 'block'; empty.innerHTML = '雷达还没抓到数据。<br>云端 <code>indie.json</code> 未就绪时会显示内置种子；点右上角「🔄 刷新雷达」可手动重试。'; }
                 return;
             }
-            const worthBadge = { worth: ['worth', '值得抄'], reference: ['reference', '参考'], skip: ['skip', '不抄'] };
-            container.innerHTML = list.map(c => `
-                <div class="comp-card" style="border-left-color:${c.worthCopy === 'worth' ? '#10b981' : c.worthCopy === 'reference' ? '#f59e0b' : '#6b7280'};">
-                    <div class="comp-main">
-                        <div class="comp-title">
-                            🎮 ${escapeHtml(c.game)}
-                            <span class="comp-badge ${COMP_WORTH_BADGE[c.worthCopy] || 'reference'}">${worthBadge[c.worthCopy] ? worthBadge[c.worthCopy][1] : '参考'}</span>
-                        </div>
-                        <div class="comp-meta">
-                            <span>🎬 ${escapeHtml(c.materialType || '')}</span>
-                            <span>🌍 ${escapeHtml(c.region || '')}</span>
-                            <span>📅 ${c.date || '未填'}</span>
-                            <span>🕒 ${formatCompTime(c.createdAt)}</span>
-                        </div>
-                        ${c.note ? `<div class="comp-note">📝 ${escapeHtml(c.note)}</div>` : ''}
-                    </div>
-                    <button class="comp-del" onclick="deleteCompetitor('${c.id}')" title="删除">✕</button>
-                </div>
-            `).join('');
+            if (empty) empty.style.display = 'none';
+            var html = '';
+            games.forEach(function (g) { html += indieCard(g); });
+            host.innerHTML = html;
+            var dEl = document.getElementById('indieFullDate');
+            if (dEl && indieData) dEl.textContent = indieData.date ? ('· ' + indieData.date) : '';
+            indieUpdateFreshness();
         }
 
-        function formatCompTime(iso) {
-            if (!iso) return '';
-            const d = new Date(iso);
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            const thatDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-            const diffDays = Math.round((today - thatDay) / 86400000);
-            if (diffDays === 0) return `今天 ${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')}`;
-            if (diffDays === 1) return '昨天';
-            if (diffDays < 7) return `${diffDays} 天前`;
-            return `${d.getMonth()+1}月${d.getDate()}日`;
+        function indieUpdateFreshness() {
+            var el = document.getElementById('indieFreshness');
+            if (!el || !indieData) return;
+            var t = indieData.fetchedAt || '';
+            var tag = indieData.seed ? '🧩 内置种子' : '☁️ 云端数据';
+            el.textContent = tag + (t ? ' · 抓于 ' + String(t).slice(5, 16).replace('T', ' ') : '');
         }
 
-        function addCompetitor() {
-            const game = document.getElementById('compGame').value.trim();
-            if (!game) { showToast('⚠️ 先填竞品游戏名'); return; }
-            const materialType = document.getElementById('compMaterialType').value;
-            const region = document.getElementById('compRegion').value;
-            const date = document.getElementById('compDate').value;
-            const worthCopy = document.getElementById('compWorth').value;
-            const note = document.getElementById('compNote').value.trim();
-            competitors.unshift({
-                id: 'comp_' + Date.now(),
-                game, materialType, region, date, worthCopy, note,
-                createdAt: new Date().toISOString()
+        // ---------- 视图切换（重写：indie / totem / ai）----------
+        function switchHotView(view) {
+            var v = (view === 'totem') ? 'totem' : ((view === 'ai') ? 'ai' : 'indie');
+            [['viewTabIndie', 'indie'], ['viewTabTotem', 'totem'], ['viewTabAi', 'ai']].forEach(function (p) {
+                var t = document.getElementById(p[0]); if (t) t.classList.toggle('active', p[1] === v);
             });
-            safeStorage.set('niko_competitors', competitors);
-            document.getElementById('compGame').value = '';
-            document.getElementById('compNote').value = '';
-            document.getElementById('compDate').value = '';
-            renderCompetitors();
-            showToast('✅ 竞品记录已保存');
+            [['indieViewMain', 'indie'], ['totemViewMain', 'totem'], ['aiViewMain', 'ai']].forEach(function (p) {
+                var m = document.getElementById(p[0]); if (m) m.classList.toggle('active', p[1] === v);
+            });
+            if (v === 'ai') { if (typeof renderAiReport === 'function') renderAiReport(); }
+            else if (v === 'totem') { renderTotem(); }
+            else { renderIndie(); }
         }
 
-        function deleteCompetitor(id) {
-            competitors = competitors.filter(c => c.id !== id);
-            safeStorage.set('niko_competitors', competitors);
-            renderCompetitors();
-            showToast('🗑 已删除竞品记录');
+        // ---------- X4：精神图腾墙 ----------
+        function indieWeekKey() {
+            var d = new Date();
+            var ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 4;
+            var diff = (d.getDay() - ws + 7) % 7;
+            var mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - diff);
+            return mon.getFullYear() + '-' + (mon.getMonth() + 1) + '-' + mon.getDate();
         }
 
-        // 热点分类切换事件绑定（直接绑定，不依赖DOMContentLoaded）
-        (function bindHotTabs() {
-            const hotTabs = document.getElementById('hotTabs');
-            if (hotTabs) {
-                hotTabs.addEventListener('click', (e) => {
-                    const tab = e.target.closest('.hot-tab');
-                    if (!tab) return;
-                    hotTabs.querySelectorAll('.hot-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    currentHotCategory = tab.dataset.cat || 'all';
-                    renderHot();
-                });
+        function renderTotem() {
+            var wall = document.getElementById('totemWall');
+            var empty = document.getElementById('totemEmpty');
+            var wk = document.getElementById('totemWeekly');
+            var cmp = document.getElementById('totemCompare');
+            if (!wall) return;
+            var favs = indieFavs();
+            if (!favs.length) {
+                wall.innerHTML = ''; if (wk) wk.innerHTML = ''; if (cmp) cmp.innerHTML = '';
+                if (empty) { empty.style.display = 'block'; empty.innerHTML = '图腾墙还是空的。<br>回到「🎮 独立游戏雷达」，点任意卡片右上角的 <b>⭐ 收藏</b>，它就会沉到这里。'; }
+                return;
             }
+            if (empty) empty.style.display = 'none';
+
+            // 每周随机翻一张（同一周内稳定）
+            if (wk) {
+                var key = indieWeekKey(), h = 0;
+                for (var i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
+                var pick = favs[h % favs.length];
+                wk.innerHTML = '<div class="indie-card" style="border-color:#c7d2fe;">'
+                    + '<div class="indie-sec-t" style="margin-bottom:8px;">🗿 本周翻牌 · 重新看一眼 <span class="indie-name-cn">（每周一换）</span></div>'
+                    + '<div class="indie-name-row"><span class="indie-name">' + escapeHtml(pick.name) + '</span>'
+                    + (pick.nameCn ? '<span class="indie-name-cn">' + escapeHtml(pick.nameCn) + '</span>' : '')
+                    + (pick.tier ? '<span class="indie-tier burst">' + escapeHtml(pick.tier) + '</span>' : '') + '</div>'
+                    + '<div class="indie-chain" style="margin-top:8px;">'
+                    + (pick.team ? '<span>👤 ' + escapeHtml(pick.team) + '</span>' : '')
+                    + (pick.price != null ? '<span>💵 $' + pick.price + '</span>' : '')
+                    + (pick.official ? '<span>📦 ' + escapeHtml(pick.official) + '</span>' : (pick.salesMid ? '<span>📦 约 ' + indieFmtNum(pick.salesMid) + ' 份（估算）</span>' : ''))
+                    + '</div></div>';
+            }
+
+            // 墙
+            var html = '';
+            favs.forEach(function (f) {
+                var on = indieCompareSel.indexOf(f.key) >= 0;
+                html += '<div class="indie-totem' + (on ? ' on' : '') + '" onclick="totemToggleSel(\'' + String(f.key).replace(/'/g, "\\'") + '\')" title="点一下加入对比">'
+                    + '<span class="sel">✓</span>'
+                    + (f.header ? '<img src="' + escapeHtml(f.header) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div style="height:74px;background:linear-gradient(135deg,#eef2ff,#e0e7ff);"></div>')
+                    + '<div class="tt"><div class="tn">' + escapeHtml(f.name) + '</div>'
+                    + '<div class="ts">' + (f.official ? escapeHtml(String(f.official).split('（')[0]) : (f.salesMid ? '约 ' + indieFmtNum(f.salesMid) + ' 份' : '销量待补')) + (f.team ? ' · ' + escapeHtml(f.team) : '') + '</div>'
+                    + '</div></div>';
+            });
+            wall.innerHTML = html;
+
+            // X5：同赛道对比
+            if (cmp) {
+                if (indieCompareSel.length >= 2) {
+                    var picked = favs.filter(function (f) { return indieCompareSel.indexOf(f.key) >= 0; }).slice(0, 4).map(function (f) { return indieFind(f.key); }).filter(Boolean);
+                    var rows = [
+                        ['游戏', picked.map(function (g) { return escapeHtml(g.name); })],
+                        ['发行', picked.map(function (g) { return escapeHtml(g.releaseText || '—'); })],
+                        ['官方销量', picked.map(function (g) { return escapeHtml((g.analysis && g.analysis.officialSales) || '—'); })],
+                        ['第三方估算', picked.map(function (g) { return (g.sales && g.sales.mid) ? ('约 ' + indieFmtNum(g.sales.mid)) : '—'; })],
+                        ['价格', picked.map(function (g) { return g.isFree ? '免费' : (g.priceUsd != null ? '$' + g.priceUsd : '—'); })],
+                        ['团队 / 工期', picked.map(function (g) { var a = g.analysis || {}; return escapeHtml([a.teamSize, a.devTime].filter(Boolean).join(' · ') || '—'); })],
+                        ['引擎', picked.map(function (g) { var a = g.analysis || {}; return escapeHtml((a.toolchain && a.toolchain.engine) || '—'); })],
+                        ['难度 美术/技术/内容', picked.map(function (g) { var d = (g.analysis || {}).difficulty; return d ? (d.art + ' / ' + d.tech + ' / ' + d.content) : '—'; })],
+                        ['赛道', picked.map(function (g) { return escapeHtml((g.track && g.track.label) || '—'); })]
+                    ];
+                    var th = '<tr><th>维度</th>' + picked.map(function (g) { return '<th>' + escapeHtml(g.name) + '</th>'; }).join('') + '</tr>';
+                    var tb = rows.map(function (r) { return '<tr><th>' + r[0] + '</th>' + r[1].map(function (c) { return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('');
+                    cmp.innerHTML = '<div class="indie-sec-t">🔍 同赛道对比 <span class="indie-name-cn">（已选 ' + picked.length + ' 款，最多 4 款）</span>'
+                        + '<span class="lnk" onclick="indieCompareSel=[];renderTotem()">清空选择</span></div>'
+                        + '<div class="indie-cmp-wrap"><table class="indie-cmp">' + th + tb + '</table></div>';
+                } else {
+                    cmp.innerHTML = '<div class="indie-sec-t">🔍 同赛道对比</div><div class="indie-chain">在墙上<b>点选 2–4 款</b>（右上角打勾），这里会自动生成横向对比表 —— 单看一款是故事，几款放一起才是你要找的那个「位置」。</div>';
+                }
+            }
+        }
+
+        function totemToggleSel(key) {
+            var i = indieCompareSel.indexOf(key);
+            if (i >= 0) indieCompareSel.splice(i, 1);
+            else { if (indieCompareSel.length >= 4) { showToast('最多同时对比 4 款'); return; } indieCompareSel.push(key); }
+            renderTotem();
+        }
+
+        // ---------- 数据加载 ----------
+        function indieNormalize(d) {
+            if (!d || !d.games || !d.games.length) return null;
+            return d;
+        }
+
+        function indieMergeCloud(cloud) {
+            var seedGames = (NIKO_INDIE_SEED.games || []);
+            var byAppid = {}, byName = {};
+            seedGames.forEach(function (g) { if (g.appid) byAppid[String(g.appid)] = g; byName[indieNorm(g.name)] = g; });
+
+            var games = (cloud.games || []).map(function (g) {
+                var s = (g.appid && byAppid[String(g.appid)]) || byName[indieNorm(g.name)];
+                if (!s) return g;
+                var m = {};
+                Object.keys(s).forEach(function (k) { m[k] = s[k]; });
+                Object.keys(g).forEach(function (k) { if (g[k] !== null && g[k] !== undefined && g[k] !== '') m[k] = g[k]; });
+                m.analysis = g.analysis || s.analysis;
+                return m;
+            });
+            // 种子里有、云端没抓到的也保留（爆款案例长期有效，不因一次抓取缺失而消失）
+            seedGames.forEach(function (s) {
+                var hit = games.some(function (g) {
+                    return (g.appid && s.appid && String(g.appid) === String(s.appid)) || indieNorm(g.name) === indieNorm(s.name);
+                });
+                if (!hit) games.push(s);
+            });
+            games.sort(function (a, b) { return ((b.burst && b.burst.score) || 0) - ((a.burst && a.burst.score) || 0); });
+            return { version: cloud.version, date: cloud.date, fetchedAt: cloud.fetchedAt, caveat: cloud.caveat, games: games };
+        }
+
+        function applyIndie(d) {
+            var norm = indieNormalize(d);
+            if (!norm) return false;
+            indieData = norm;
+            safeStorage.set(INDIE_KEY_DATA, indieData);
+            renderIndie();
+            if (document.getElementById('totemViewMain') && document.getElementById('totemViewMain').classList.contains('active')) renderTotem();
+            return true;
+        }
+
+        function refreshIndie() {
+            if (indieLoading) return;
+            indieLoading = true;
+            var btn = document.getElementById('indieRefreshBtn');
+            var oldTxt = btn ? btn.textContent : '';
+            if (btn) { btn.textContent = '⏳ 刷新中'; btn.disabled = true; }
+            var done = function (ok) {
+                indieLoading = false;
+                if (btn) { btn.textContent = oldTxt || '🔄 刷新雷达'; btn.disabled = false; }
+                if (ok) showToast('✅ 独立游戏雷达已更新');
+                else showToast('⚠️ 云端暂无新数据，继续显示当前版本');
+            };
+            var url = INDIE_CLOUD + '?t=' + Date.now();
+            var finish = function (ok) { done(ok); };
+            try {
+                fetch(url).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+                    if (d && applyIndie(indieMergeCloud(d))) {
+                        safeStorage.set(INDIE_KEY_LAST, new Date().toISOString());
+                        finish(true);
+                    } else finish(false);
+                }).catch(function () { finish(false); });
+            } catch (e) { finish(false); }
+        }
+
+        // 从缓存 / 云端 / 种子 依次取数
+        function indieBootstrap() {
+            var cached = safeStorage.get(INDIE_KEY_DATA, null);
+            if (cached && cached.games && cached.games.length) indieData = cached;
+            else indieData = NIKO_INDIE_SEED;
+            renderIndie();
+            // 后台尝试云端（成功则覆盖，失败静默保留种子）
+            try {
+                fetch(INDIE_CLOUD + '?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+                    if (d && d.games && d.games.length) {
+                        applyIndie(indieMergeCloud(d));
+                        safeStorage.set(INDIE_KEY_LAST, new Date().toISOString());
+                    }
+                }).catch(function () { });
+            } catch (e) { }
+        }
+
+        (function initIndie() {
+            try { indieBootstrap(); } catch (e) { console.warn('[独立游戏雷达] 初始化失败', e && e.message); }
         })();
-
-        // 日期工具
-
-
-// 热点详情弹窗
-        function openHotDetail(region, index) {
-            const items = hotData[region];
-            if (!items || !items[index]) return;
-            const item = items[index];
-
-            // 点开详情即视为已读，并立即刷新列表让状态生效
-            markHotRead(region, item.title);
-            updateHotUnreadCount();
-            if (typeof renderHotFull === 'function') renderHotFull();
-            if (typeof renderHot === 'function') renderHot();
-
-            const modal = document.getElementById('hotDetailModal');
-            const content = document.getElementById('hotDetailContent');
-
-            const tagHtml = item.isHot 
-                ? '<span class="tag hot">🔥 热门</span>' 
-                : `<span class="tag">${item.tag}</span>`;
-
-            const detailTags = item.tags ? item.tags.map(t => `<span>#${t}</span>`).join('') : '';
-
-            content.innerHTML = `
-                <div class="detail-title">${item.title}</div>
-                <div class="detail-meta">
-                    ${tagHtml}
-                    <span class="source">📍 ${region}</span>
-                    <span class="source">📰 ${item.source}</span>
-                    <span class="source">🕒 ${item.time}</span>
-                </div>
-                <div class="detail-section">
-                    <h4>📝 一句话总结</h4>
-                    <p>${item.desc}</p>
-                </div>
-                <div class="detail-section">
-                    <h4>📖 详细解读</h4>
-                    <div class="detail-box">${item.detail}</div>
-                </div>
-                ${detailTags ? `<div class="detail-tags">${detailTags}</div>` : ''}
-                <span class="detail-inspire-btn" onclick="saveHotAsInspiration('${region}', ${index});closeHotDetail()">💡 转为灵感便签</span>
-            `;
-
-            modal.classList.add('show');
-        }
-
-        function closeHotDetail() {
-            document.getElementById('hotDetailModal').classList.remove('show');
-        }
-
-        document.getElementById('hotDetailModal').onclick = (e) => {
-            if (e.target.id === 'hotDetailModal') closeHotDetail();
-        };
 
         // ===== AI 行业快报 =====
         // 预置数据版本号：AI 更新数据后 bump 此版本，用户打开新文件自动注入新数据（收藏/已读/我的清单不受影响）
@@ -24402,12 +23388,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderAiTools();
             renderAiRanks();
             renderAiMyTools();
-        })();
-
-        // ===== 买量情报初始化（seed 幂等，时间戳供更新中心展示） =====
-        (function initAdsIntel() {
-            seedAdsIntel();
-            updateAdsFreshness();
         })();
 // ===== 梗文化速查专属JS =====
         const MEME_REGIONS = [
@@ -40112,7 +39092,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609240916";
+        window.NIKO_VERSION = "202609262344";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
