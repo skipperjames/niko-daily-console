@@ -13134,7 +13134,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         </div>
                         <div class="ai-head-right">
                             <span class="ai-updated-at" id="aiUpdatedAt"></span>
-                            <button class="btn ai-refresh-btn" onclick="openUpdateCenter()" title="打开数据更新中心，一键复制刷新指令">🔄 一键刷新全部板块</button>
+                            <button class="btn ai-refresh-btn" onclick="openUpdateCenter()" title="打开数据更新中心，一键复制刷新指令">🔄 数据更新中心</button>
                         </div>
                     </div>
 
@@ -13195,7 +13195,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <div class="modal-mask" id="aiUpdateModal">
         <div class="modal" style="width:580px;">
             <div class="ai-update-title">🔄 数据更新中心</div>
-            <div class="ai-update-desc">工作台是静态页面，没法自己联网抓数据。点「复制刷新指令」，把指令发给我（AI），我就会重新搜索最新数据、更新预置并交付新版本。竞品监控是你自己记的，不在刷新范围。</div>
+            <div class="ai-update-desc">工作台是静态页面，没法自己联网抓数据。点「复制刷新指令」，把指令发给我（AI），我就会重新搜索最新数据、更新预置并交付新版本。<br>🎮 独立游戏雷达的销量 / 评测 / 在线数由服务器每周五自动抓取，你只需要让它补「分析」那几栏。</div>
             <div class="ai-update-blocks" id="aiUpdateBlocks"></div>
             <div class="ai-update-actions">
                 <button class="btn ai-update-all" onclick="copyRefreshCmd('all')">📋 复制「全部板块」刷新指令</button>
@@ -22984,17 +22984,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         };
 
         // 数据更新中心板块定义
+        // 2026-09-26 媒体热点重构：行业热点 / 买量情报 / 文案库 / 梗文化 四块已下线，
+        // 更新中心只保留仍走「人工复制指令 → AI 刷新」的两块。
+        // 独立游戏雷达的原始数据（销量/评测/在线）由 GitHub Actions 每周自动抓，
+        // 这里只刷 AI 分析字段（爆款因子 / 曝光时间线 / 工具链 / 难度）——脚本按 appid 保留旧 analysis、绝不覆盖。
         const AI_UPDATE_BLOCKS = [
-            { key:'ads', icon:'🚀', name:'买量情报', storeKey:'niko_ads_updated_at', desc:'各地区买量热门游戏 / 买量特点 / 可借鉴点',
-              cmd:'请帮我刷新【买量情报】数据：搜索最近1个月国内、北美、日韩、东南亚等地区买量投放最强的游戏（素材量/投放榜/新游爆量案例），总结每款的买量特点与可借鉴点，更新预置数据后重新合并交付。' },
             { key:'ai', icon:'🤖', name:'AI 行业快报', storeKey:'niko_ai_updated_at', desc:'模型发布 / 工具月活 / 6大细分领域TOP',
               cmd:'请帮我刷新【AI行业快报】数据：搜索最新发布的AI模型、工具月活排行榜、以及 AI视频生成/AI图片生成/AI编程/AI配音/AI 3D/AI UI设计 六个细分领域的TOP榜，更新预置数据后重新合并交付。' },
-            { key:'hot', icon:'🔥', name:'行业热点', storeKey:'niko_hot_last_fetch', desc:'日/韩/中 最新热点话题',
-              cmd:'请帮我刷新【行业热点】数据：搜索日本、韩国、国内三个地区最新的热点话题/梗文化/社交媒体趋势，更新预置数据后重新合并交付。' },
-            { key:'meme', icon:'💬', name:'梗文化 AI推荐', storeKey:'niko_meme_rec_updated_at', desc:'出海买量梗文化（JP/KR/CN）',
-              cmd:'请帮我刷新【梗文化AI推荐】数据：调研最新出海买量梗文化（日本/韩国/国内），更新预置推荐数据后重新合并交付。' },
-            { key:'copy', icon:'📝', name:'文案库 AI推荐', storeKey:'niko_copy_rec_updated_at', desc:'高转化买量文案模板与钩子',
-              cmd:'请帮我刷新【文案库AI推荐】数据：调研最新高转化买量文案模板/钩子/CTA套路，更新预置推荐数据后重新合并交付。' }
+            { key:'indie', icon:'🎮', name:'独立游戏雷达 · AI 分析', storeKey:'niko_indie_analysis_updated_at', desc:'爆款因子 / 曝光时间线 / 工具链 / 难度（原始数据每周自动抓，此处只补分析）',
+              cmd:'请帮我刷新【独立游戏雷达】的 AI 分析字段：读取 niko-app/indie.json，为 games[] 里每款游戏（按 appid 对齐）补写 analysis 中的「爆款因子(why) / 曝光时间线(timeline) / 工具链(tools) / 难度(difficulty)」，每条结论必须挂可查证的数据点，不许写形容词；官方数据与 appid 一律不动，更新后提交。' }
         ];
 
         let aiMyTools = safeStorage.get('niko_ai_mytools', []);
@@ -39165,7 +39163,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609262354";
+        window.NIKO_VERSION = "202609262359";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
