@@ -82,7 +82,60 @@
         }
       },
       "playersCurrent": 26139,
-      "analysis": null
+      "analysis": {
+        "officialSales": "官方未公布具体数字（Cozy Lives 公告：上市 24 小时内回收开发成本）",
+        "teamSize": "Cozy Lives（Free Lives 旗下休闲品牌）",
+        "devTime": "未披露",
+        "revenue": "首日即回本；金额未公布",
+        "toolchain": {
+          "engine": "未公开披露",
+          "src": "开发方未公布引擎信息",
+          "inferred": false
+        },
+        "burstFactors": [
+          {
+            "f": "预约蓄水极深",
+            "ev": "发售前 Steam 愿望单突破 40 万",
+            "src": "4Gamers 2026-09-22 报道"
+          },
+          {
+            "f": "上市首日回本",
+            "ev": "官方公告：上线 24 小时内回收开发成本",
+            "src": "Cozy Lives 官方 Steam 公告"
+          },
+          {
+            "f": "发行商品牌背书",
+            "ev": "Free Lives 前作《Broforce》《Terra Nil》已有口碑积累",
+            "src": "4Gamers / 官方资料"
+          },
+          {
+            "f": "品类缺口",
+            "ev": "真实服装工艺（排料、顺纹/斜裁、缝纫机）此前无同类拟真作品",
+            "src": "官方商店页描述"
+          }
+        ],
+        "timeline": [
+          {
+            "d": "发售前",
+            "x": "Steam 愿望单突破 40 万"
+          },
+          {
+            "d": "2026-09-21",
+            "x": "正式发售（PC / Mac），首发即有简中"
+          },
+          {
+            "d": "2026-09-22",
+            "x": "官方宣布 24 小时回本；千则评价 96% 压倒性好评"
+          }
+        ],
+        "difficulty": {
+          "art": 4,
+          "tech": 2,
+          "content": 3,
+          "note": "美术量大（布料/服装拟真绘制）；技术量中等（裁剪排料与缝纫手感模拟）；内容量中等（顾客订单循环）"
+        },
+        "lesson": "「真实工艺拟真 + cozy 外壳」是当前最稳的独立爆款配方：愿望单 40 万不是靠营销砸出来的，是靠一个此前没人认真做过的具体手艺。"
+      }
     },
     {
       "appid": "4173620",
@@ -158,7 +211,66 @@
         }
       },
       "playersCurrent": 1004,
-      "analysis": null
+      "analysis": {
+        "officialSales": "官方未公布",
+        "peakOnline": 260,
+        "peakOnlineSrc": "PureGameStats 第三方追踪（2026-05-25 历史峰值）",
+        "teamSize": "Bunch'o'Nerds（独立团队，Steam 旗下共 2 款作品）",
+        "devTime": "EA 2026-04-01 → 1.0 于 2026-09-25，约 6 个月",
+        "revenue": "第三方估算区间 54.2 万 – 66.6 万美元（毛收入，非官方）",
+        "toolchain": {
+          "engine": "未公开披露",
+          "src": "开发方未公布引擎信息",
+          "inferred": false
+        },
+        "burstFactors": [
+          {
+            "f": "Steam 节庆曝光",
+            "ev": "House & Home Fest 8 天带来 18,555 愿望单，是常态增速的 9.3 倍",
+            "src": "PureGameStats 第三方追踪"
+          },
+          {
+            "f": "题材反差",
+            "ev": "前台经营披萨店 + 后厨处理黑帮脏活的「双面人生」",
+            "src": "官方商店页描述"
+          },
+          {
+            "f": "多人合作",
+            "ev": "支持 1–4 人在线合作，可用于分摊双线任务",
+            "src": "官方商店页"
+          },
+          {
+            "f": "EA 长跑沉淀",
+            "ev": "EA 期约 6 个月积累 420+ 条评测、90% 好评后转 1.0",
+            "src": "Steam 评测数据"
+          }
+        ],
+        "timeline": [
+          {
+            "d": "2026-04-01",
+            "x": "Early Access 上线"
+          },
+          {
+            "d": "2026-04 上旬",
+            "x": "Steam House & Home Fest 节庆窗口，8 天涨 18,555 愿望单"
+          },
+          {
+            "d": "2026-05-25",
+            "x": "历史峰值同时在线 260"
+          },
+          {
+            "d": "2026-09-25",
+            "x": "1.0 正式版发布"
+          }
+        ],
+        "difficulty": {
+          "art": 3,
+          "tech": 3,
+          "content": 4,
+          "note": "内容量大（数十个手写 NPC 与剧情线）；技术量中上（4 人联机同步）；美术量中等"
+        },
+        "lesson": "从 EA 起步、蹭一次 Steam 主题节庆（House & Home Fest），是零预算团队最可复制的一条曝光路径 —— 前提是题材能对上节庆主题。"
+      }
     },
     {
       "appid": "4694270",
@@ -231,7 +343,56 @@
         }
       },
       "playersCurrent": 190,
-      "analysis": null
+      "analysis": {
+        "officialSales": "官方未公布（EA 期，第三方估 4.0k–8.1k 份）",
+        "peakOnline": 184,
+        "peakOnlineSrc": "VideoGamesCritic 第三方追踪（2026-09 历史峰值）",
+        "teamSize": "GameMechanic",
+        "devTime": "Early Access 2026-09-25 上线",
+        "toolchain": {
+          "engine": "未公开披露",
+          "src": "开发方未公布引擎信息",
+          "inferred": false
+        },
+        "burstFactors": [
+          {
+            "f": "热门题材 + 联机",
+            "ev": "Backrooms 题材心理恐怖，支持 1–6 人在线合作",
+            "src": "官方商店页"
+          },
+          {
+            "f": "首发质量失控",
+            "ev": "上线 48 小时内连发 6 个补丁（Launch Day Patch #4 / #5 / #6）",
+            "src": "VideoGamesCritic 补丁记录"
+          },
+          {
+            "f": "口碑未达预期",
+            "ev": "好评率仅 46%–47%，与同期同类心理恐怖作品差距明显",
+            "src": "Steam 评测 / VideoGamesCritic"
+          }
+        ],
+        "timeline": [
+          {
+            "d": "2026-09-21",
+            "x": "原定解锁时间（UTC 16:00）"
+          },
+          {
+            "d": "2026-09-25",
+            "x": "Early Access 上线"
+          },
+          {
+            "d": "2026-09-25 ~ 09-26",
+            "x": "48 小时内连发 6 个紧急补丁修复门锁、医用药剂、录像上交等阻塞性 bug"
+          }
+        ],
+        "difficulty": {
+          "art": 3,
+          "tech": 4,
+          "content": 2,
+          "note": "技术量大（6 人联机 + 程序化生成场景）；美术量中等；内容量偏薄（任务循环单一）"
+        },
+        "lesson": "题材热度和联机玩法都只是入场券 —— 首发 bug 会直接把好评率打到 46%。这个案例值得反过来读：它证明了「蹭热门题材」并不省钱，省下的钱会在口碑上加倍还回去。"
+      }
     },
     {
       "appid": "4072240",
@@ -310,7 +471,58 @@
         }
       },
       "playersCurrent": 744,
-      "analysis": null
+      "analysis": {
+        "officialSales": "官方未公布",
+        "teamSize": "Sebasa Games",
+        "devTime": "多次跳票，原定 2026-03-08，实际 2026-09-25 上线",
+        "toolchain": {
+          "engine": "未公开披露",
+          "src": "开发方未公布引擎信息",
+          "inferred": false
+        },
+        "burstFactors": [
+          {
+            "f": "争议即流量",
+            "ev": "原定国际妇女节发售并配文调侃，引发全网抵制与请愿下架，被迫延期后仍持续获得媒体关注",
+            "src": "搜狐 / 33游戏网 2026-09 报道"
+          },
+          {
+            "f": "立场反转叙事",
+            "ev": "玩家需讨好丈夫换取手提包、变卖攒钱以逃离家庭，形成「打工赎身」循环",
+            "src": "官方商店页 / 新闻报道"
+          },
+          {
+            "f": "本地化投入",
+            "ev": "支持 11 种语言（含简中），首发即全覆盖",
+            "src": "Datahumble 商店数据"
+          }
+        ],
+        "timeline": [
+          {
+            "d": "2026-03 上旬",
+            "x": "定档 3 月 8 日国际妇女节并配文调侃 → 引发抵制与请愿下架"
+          },
+          {
+            "d": "2026-03",
+            "x": "宣布延期，商店页下架"
+          },
+          {
+            "d": "2026-07",
+            "x": "Valve 完成内容审核，商店页重新开放，窗口改为 2026 Q3"
+          },
+          {
+            "d": "2026-09-25",
+            "x": "正式上线，同步支持简体中文"
+          }
+        ],
+        "difficulty": {
+          "art": 2,
+          "tech": 2,
+          "content": 2,
+          "note": "三轴均偏低：第一人称家务交互、清单式任务、场景集中"
+        },
+        "lesson": "「争议营销」确实能换来免费流量，但代价是口碑从上线第一天就分裂。这条路能博一次曝光，换不来复购和长尾 —— 对做长期作品的人不是好模型。"
+      }
     },
     {
       "appid": "3116730",
@@ -386,7 +598,58 @@
         }
       },
       "playersCurrent": 28,
-      "analysis": null
+      "analysis": {
+        "officialSales": "官方未公布（EA 期，第三方估约 6.0k 份）",
+        "peakOnline": 69,
+        "peakOnlineSrc": "SteamBase 第三方追踪（2025-08-21 历史峰值）",
+        "teamSize": "Reverie Clouds（单人开发）",
+        "devTime": "正职工作之外业余开发约 1.5 年",
+        "revenue": "第三方估算毛收入 3.2 万 – 6.4 万美元（非官方）",
+        "toolchain": {
+          "engine": "GDevelop",
+          "src": "作品提交于 itch.io「GDevelop Big Game Jam 7」",
+          "inferred": true
+        },
+        "burstFactors": [
+          {
+            "f": "单人副业完成度",
+            "ev": "作者自述：在正职工作之外熬夜开发了 1.5 年才拿出可玩版本",
+            "src": "itch.io GDevelop Big Game Jam 7 提交页"
+          },
+          {
+            "f": "低门槛引擎起步",
+            "ev": "作品提交于 GDevelop Big Game Jam 7，引擎为 GDevelop",
+            "src": "itch.io jam 页面"
+          },
+          {
+            "f": "风险即机制",
+            "ev": "背包会随拾取物理膨胀、变重并拖慢移动，把「贪心」做成可感知的负担",
+            "src": "官方描述 / Steam 评测"
+          }
+        ],
+        "timeline": [
+          {
+            "d": "开发期",
+            "x": "正职之余开发约 1.5 年，先发布免费 Demo 收集反馈"
+          },
+          {
+            "d": "2025-08-21",
+            "x": "Steam Early Access 上线，峰值同时在线 69"
+          },
+          {
+            "d": "2026-09",
+            "x": "持续更新中，Steam Deck 可玩、支持 14 种语言"
+          }
+        ],
+        "difficulty": {
+          "art": 2,
+          "tech": 3,
+          "content": 3,
+          "note": "美术量低（风格化卡通）；技术量中等（程序化路线 + 背包物理）；内容量中等（每次 run 随机）"
+        },
+        "lesson": "五款里最贴近你现状的一个：白天有正职、用低门槛引擎、靠业余时间熬 1.5 年做出可玩版本。它没有爆，但完整走完了「jam → Demo → EA → 持续更新」的全流程 —— 这条路本身就是可执行的。"
+      }
     }
-  ]
+  ],
+  "analysisUpdatedAt": "2026-09-27T01:25:44+08:00"
 }
