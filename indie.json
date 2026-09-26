@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T01:04:00+08:00",
+  "fetchedAt": "2026-09-27T01:10:09+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
@@ -45,23 +45,23 @@
       "url": "https://store.steampowered.com/app/4019220/",
       "requiredAge": 0,
       "reviews": {
-        "total": 3690,
-        "positive": 3586,
+        "total": 3719,
+        "positive": 3615,
         "negative": 104,
         "score": "好评如潮",
         "positivePct": 97
       },
       "days": 6,
       "burst": {
-        "score": 599.63,
+        "score": 604.34,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 110700,
-        "low": 66420,
-        "high": 177120,
+        "mid": 111570,
+        "low": 66942,
+        "high": 178512,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -71,16 +71,16 @@
         "label": "模拟经营",
         "saturation": {
           "total": 52614,
-          "sampleCount": 500,
+          "sampleCount": 100,
+          "perDay": 100,
           "perMonth": null,
           "verdict": {
-            "key": "unknown",
-            "label": "❓ 样本不足"
+            "key": "shark",
+            "label": "🦈 红海"
           },
-          "confidence": "low",
-          "basis": "最近 500 款新作只跨 6 天，发布密度无法外推（该标签新作过于密集）",
+          "basis": "全站 52,614 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-20"
+          "sampleOldest": "2026-09-25"
         }
       },
       "playersCurrent": 26104,
@@ -149,16 +149,16 @@
         "label": "模拟经营",
         "saturation": {
           "total": 52614,
-          "sampleCount": 500,
+          "sampleCount": 100,
+          "perDay": 100,
           "perMonth": null,
           "verdict": {
-            "key": "unknown",
-            "label": "❓ 样本不足"
+            "key": "shark",
+            "label": "🦈 红海"
           },
-          "confidence": "low",
-          "basis": "最近 500 款新作只跨 6 天，发布密度无法外推（该标签新作过于密集）",
+          "basis": "全站 52,614 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-20"
+          "sampleOldest": "2026-09-25"
         }
       },
       "playersCurrent": 926,
@@ -198,23 +198,23 @@
       "url": "https://store.steampowered.com/app/4694270/",
       "requiredAge": 0,
       "reviews": {
-        "total": 193,
-        "positive": 90,
-        "negative": 103,
+        "total": 200,
+        "positive": 93,
+        "negative": 107,
         "score": "褒贬不一",
         "positivePct": 47
       },
       "days": 2,
       "burst": {
-        "score": 112.91,
+        "score": 117,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 7334,
-        "low": 4400,
-        "high": 11734,
+        "mid": 7600,
+        "low": 4560,
+        "high": 12160,
         "basis": "Boxleiter 法 · 评论数 × 38（$7.99 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -223,17 +223,17 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 89465,
-          "sampleCount": 500,
+          "total": 89466,
+          "sampleCount": 100,
+          "perDay": 100,
           "perMonth": null,
           "verdict": {
-            "key": "unknown",
-            "label": "❓ 样本不足"
+            "key": "shark",
+            "label": "🦈 红海"
           },
-          "confidence": "low",
-          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "basis": "全站 89,466 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-16"
+          "sampleOldest": "2026-09-25"
         }
       },
       "playersCurrent": 169,
@@ -304,20 +304,20 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 89465,
-          "sampleCount": 500,
+          "total": 89466,
+          "sampleCount": 100,
+          "perDay": 100,
           "perMonth": null,
           "verdict": {
-            "key": "unknown",
-            "label": "❓ 样本不足"
+            "key": "shark",
+            "label": "🦈 红海"
           },
-          "confidence": "low",
-          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "basis": "全站 89,466 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-16"
+          "sampleOldest": "2026-09-25"
         }
       },
-      "playersCurrent": 761,
+      "playersCurrent": 742,
       "analysis": null
     },
     {
@@ -382,17 +382,17 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 82873,
-          "sampleCount": 500,
+          "total": 82874,
+          "sampleCount": 100,
+          "perDay": 100,
           "perMonth": null,
           "verdict": {
-            "key": "unknown",
-            "label": "❓ 样本不足"
+            "key": "shark",
+            "label": "🦈 红海"
           },
-          "confidence": "low",
-          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "basis": "全站 82,874 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
           "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-16"
+          "sampleOldest": "2026-09-25"
         }
       },
       "playersCurrent": 28,
