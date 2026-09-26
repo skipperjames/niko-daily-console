@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T01:16:32+08:00",
+  "fetchedAt": "2026-09-27T01:23:13+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
@@ -71,19 +71,17 @@
         "label": "模拟经营",
         "saturation": {
           "total": 52615,
-          "sampleCount": 100,
-          "perDay": 100,
+          "sampleCount": null,
+          "perDay": null,
           "perMonth": null,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 52,615 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
-          "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-25"
+          "basis": "Steam 该标签全站 52,615 款（分档：≥5 万红海 / ≥1 万一般）"
         }
       },
-      "playersCurrent": 26050,
+      "playersCurrent": 26139,
       "analysis": null
     },
     {
@@ -149,19 +147,17 @@
         "label": "模拟经营",
         "saturation": {
           "total": 52615,
-          "sampleCount": 100,
-          "perDay": 100,
+          "sampleCount": null,
+          "perDay": null,
           "perMonth": null,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 52,615 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
-          "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-25"
+          "basis": "Steam 该标签全站 52,615 款（分档：≥5 万红海 / ≥1 万一般）"
         }
       },
-      "playersCurrent": 985,
+      "playersCurrent": 1004,
       "analysis": null
     },
     {
@@ -223,20 +219,18 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 89466,
-          "sampleCount": 100,
-          "perDay": 100,
+          "total": 89467,
+          "sampleCount": null,
+          "perDay": null,
           "perMonth": null,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 89,466 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
-          "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-25"
+          "basis": "Steam 该标签全站 89,467 款（分档：≥5 万红海 / ≥1 万一般）"
         }
       },
-      "playersCurrent": 185,
+      "playersCurrent": 190,
       "analysis": null
     },
     {
@@ -304,17 +298,15 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 89466,
-          "sampleCount": 100,
-          "perDay": 100,
+          "total": 89467,
+          "sampleCount": null,
+          "perDay": null,
           "perMonth": null,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 89,466 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
-          "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-25"
+          "basis": "Steam 该标签全站 89,467 款（分档：≥5 万红海 / ≥1 万一般）"
         }
       },
       "playersCurrent": 744,
@@ -383,16 +375,14 @@
         "label": "冒险",
         "saturation": {
           "total": 82874,
-          "sampleCount": 100,
-          "perDay": 100,
+          "sampleCount": null,
+          "perDay": null,
           "perMonth": null,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "全站 82,874 款 · 最近 100 款新作集中在 1 天内发布（≈ 每天 100 款）",
-          "sampleNewest": "2026-09-26",
-          "sampleOldest": "2026-09-25"
+          "basis": "Steam 该标签全站 82,874 款（分档：≥5 万红海 / ≥1 万一般）"
         }
       },
       "playersCurrent": 28,
