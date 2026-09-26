@@ -1,0 +1,48 @@
+name: 独立游戏雷达抓取
+
+# 触发方式：
+#  1. 手动：打开仓库 → Actions → 左侧选「独立游戏雷达抓取」→ 右侧点「Run workflow」按钮
+#  2. 定时：每周五北京时间 08:30（UTC 周五 00:30）自动执行
+#
+# 为什么必须跑在 Actions 上：
+#   本机（国内网络）直连 Steam 全部超时，只有海外 IP 能稳定访问 Steam 公开接口。
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 0 * * 5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: indie-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch-indie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 安装 Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 抓取独立游戏数据（Steam 公开接口）
+        run: node scripts/fetch_indie.js
+
+      - name: 提交并推送 indie.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add indie.json
+          if git diff --cached --quiet; then
+            echo "✅ 独立游戏数据无变化，跳过提交"
+          else
+            git commit -m "indie: 自动更新独立游戏雷达数据 $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "✅ 已推送最新独立游戏数据"
+          fi
