@@ -6488,6 +6488,16 @@ body.dark-mode .indie-totem .tn { color:#e8ecf3; }
 .indie-totem.on { border-color:#818cf8; }
 .indie-totem.on .sel { background:#4f46e5; color:#fff; }
 
+/* ===== A2/A3：AI 资讯 与你相关 + 商用硬指标 ===== */
+.ai-card.ai-rel { border-left:3px solid #818cf8; }
+.ai-chip.rel { background:#eef2ff; color:#4f46e5; border-color:#c7d2fe; font-weight:600; }
+.ai-chip.lic-ok { background:#f6ffed; color:#389e0d; border-color:#d9f7be; }
+.ai-chip.lic-warn { background:#fff7e6; color:#d46b08; border-color:#ffe7ba; }
+body.dark-mode .ai-card.ai-rel { border-left-color:#6366f1; }
+body.dark-mode .ai-chip.rel { background:#272c47; color:#a5b4fc; border-color:#3f4470; }
+body.dark-mode .ai-chip.lic-ok { background:#16301a; color:#95de64; border-color:#254a2a; }
+body.dark-mode .ai-chip.lic-warn { background:#3a2c10; color:#ffc069; border-color:#5c4418; }
+
 .indie-cmp-wrap { overflow-x:auto; }
 .indie-cmp { width:100%; border-collapse:collapse; font-size:12px; min-width:520px; }
 .indie-cmp th, .indie-cmp td { border:1px solid #eef0f4; padding:7px 10px; text-align:left; vertical-align:top; }
@@ -23093,17 +23103,74 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderAiRanks();
         }
 
+        // ===== A2/A3（2026-09-26）：AI 资讯「🎮 与你相关」判定 + 工具商用硬指标 =====
+        // A2：独立游戏开发真正用得上的 AI 能力标签 —— 命中的条目在列表里置顶 + 卡片高亮
+        const AI_REL_TAGS = ['生图', '3D', '配音', 'UI设计', '脚本'];
+
+        function aiIsGameRelated(it) {
+            const tags = (it.tags || []);
+            for (let i = 0; i < tags.length; i++) {
+                if (AI_REL_TAGS.indexOf(tags[i]) !== -1) return true;
+            }
+            const s = (it.cat || '') + ' ' + (it.tag || '') + ' ' + (it.desc || '');
+            return /游戏|美术|建模|立绘|素材|配音|语音|本地化|引擎|Unity|Unreal|UE5|Cocos|像素/.test(s);
+        }
+
+        // 相关条目置顶（sort 稳定，组内保持原有顺序）
+        function aiRelFirst(list) {
+            return list.slice().sort(function (a, b) {
+                return (aiIsGameRelated(b) ? 1 : 0) - (aiIsGameRelated(a) ? 1 : 0);
+            });
+        }
+
+        // A3：AI 工具能不能商用 —— 四项硬指标里「有出处」的两项从 license 解析，其余如实标未披露
+        function aiLicenseVerdict(license) {
+            const s = String(license || '');
+            const blank = {
+                ok: false, short: '⚠️ 商用未披露', tip: '官方未披露许可条款，商用前须自行确认',
+                license: '未披露', commercial: '未披露',
+                data: '未披露', output: '未披露'
+            };
+            if (!s) return blank;
+            const dataNote = '官方未单独披露（多数厂商不公开训练数据授权范围）';
+            const outputNote = '官方未单独披露输出物归属；多数平台默认归使用者，但商用仍须符合付费档/服务条款';
+            let licenseType = s, ok = false, short = '', commercial = '';
+            if (/MIT|Apache|BSD|CC0|开放权重|开源/i.test(s)) {
+                const m = s.match(/(MIT[^，,；;)]*|Apache[^，,；;)]*|BSD[^，,；;)]*|CC0)/i);
+                licenseType = m ? m[0].trim() : s;
+                if (/非商业|禁止商用|不可商用|Non-?Commercial/i.test(s)) { ok = false; short = '⛔ 不可商用'; commercial = '明确禁止商用'; }
+                else if (/Modified MIT|自定义|社区协议|不含|地域|限制/i.test(s)) { ok = true; short = '⚠️ 可商用·有附加条款'; commercial = '可商用，但有附加条款（地域/营收/用途限制，见原始协议）'; }
+                else { ok = true; short = '✅ 可商用'; commercial = '可商用（开源许可）'; }
+            } else if (/Proprietary|闭源|付费|订阅|须 Pro|Pro 付费|按个计费/i.test(s)) {
+                licenseType = 'Proprietary（闭源托管）';
+                ok = false;
+                short = /商业使用须 Pro|商用须 Pro/i.test(s) ? '⚠️ 免费档不可商用' : (/部分免费|免费/.test(s) ? '⚠️ 免费额度不可商用' : '⚠️ 商用需付费/授权');
+                commercial = /商业使用须 Pro|商用须 Pro/i.test(s) ? '免费档不可商用，须升级 Pro' : '须按服务条款付费/授权后方可商用';
+            } else {
+                short = '⚠️ 商用未明确';
+                commercial = '表述不明确，商用前须自行确认';
+            }
+            return {
+                ok: ok, short: short, tip: '许可原文：' + s,
+                license: licenseType, commercial: commercial, data: dataNote, output: outputNote
+            };
+        }
+
         function aiCardHtml(it) {
             const dateOrMetric = it.date ? it.date : (it.metric ? it.metric : '');
+            const rel = aiIsGameRelated(it);
+            const lic = aiLicenseVerdict(it.license);
             // 总预览 chips（分类/亮点/日期或指标/环比）——分类检索统一走顶部筛选行
             const chips =
+                (rel ? '<span class="ai-chip rel" title="这条能直接用在做游戏上（AI美术/3D资产/配音/UI/代码辅助）">🎮 与你相关</span>' : '') +
                 (it.cat ? '<span class="ai-chip cat">' + it.cat + '</span>' : '') +
                 (it.tag ? '<span class="ai-chip hot">' + it.tag + '</span>' : '') +
                 (dateOrMetric ? '<span class="ai-chip">' + dateOrMetric + '</span>' : '') +
-                (it.delta ? '<span class="ai-chip">' + it.delta + '</span>' : '');
+                (it.delta ? '<span class="ai-chip">' + it.delta + '</span>' : '') +
+                (lic ? '<span class="ai-chip ' + (lic.ok ? 'lic-ok' : 'lic-warn') + '" title="' + lic.tip + '">' + lic.short + '</span>' : '');
             const src = it.source ? '<a class="ai-src" href="' + (it.url || '#') + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">📎 ' + it.source + '</a>' : '';
             // 卡片整体可点（打开基本信息详情），子元素通过 stopPropagation 阻止冒泡
-            return '<div class="ai-card" onclick="openAiDetail(\'' + it.id + '\')" title="点卡片查看「基本信息速览」（开发公司/参数/上下文/多模态等）">' +
+            return '<div class="ai-card' + (rel ? ' ai-rel' : '') + '" onclick="openAiDetail(\'' + it.id + '\')" title="点卡片查看「基本信息速览」（开发公司/参数/上下文/多模态等）">' +
                 '<div class="ai-card-top"><div style="flex:1;min-width:0;"><div class="ai-card-name">' + it.name + '</div></div><span class="ai-card-vendor">' + it.vendor + '</span></div>' +
                 '<div class="ai-card-tags">' +
                     '<span class="ai-tags-group">' + chips + '</span>' +
@@ -23123,6 +23190,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!m) { showToast('⚠️ 找不到该条目（已被清理？）'); return; }
             document.getElementById('aiDetailTitle').textContent = m.name + ' · 基本信息';
             const body = document.getElementById('aiDetailBody');
+            const lic = aiLicenseVerdict(m.license);
             const rows = [
                 ['开发公司', m.vendor || '—'],
                 ['发布时间', m.date || '—'],
@@ -23132,6 +23200,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 ['上下文窗口', m.context || '—'],
                 ['多模态', m.multimodal || '—'],
                 ['开源协议', m.license || '—'],
+                ['🎮 能否商用', (m.license ? (lic.ok ? '✅ 可以商用' : '⚠️ ' + lic.commercial) : '未披露')],
+                ['　· 许可证判定', lic.license],
+                ['　· 训练数据版权', lic.data],
+                ['　· 输出物归属', lic.output],
                 ['指标', m.metric ? (m.metric + (m.metricUnit ? ' ' + m.metricUnit : '')) : '—'],
                 ['分类标签', (m.cat ? m.cat + ' · ' : '') + ((m.tags && m.tags.length) ? m.tags.join(' / ') : '—')],
                 ['数据来源', m.source || (m.url ? '官方页面' : '—')]
@@ -23170,6 +23242,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!grid) return;
             let models = safeStorage.get('niko_ai_models', []);
             if (aiTagFilter) models = models.filter(m => aiItemMatchesTag(m, aiTagFilter));
+            models = aiRelFirst(models);   // A2：与你相关的置顶
             if (!models.length) { grid.innerHTML = aiTagFilter ? '<div class="comp-empty">没有「' + aiFilterIcon(aiTagFilter) + ' ' + aiTagFilter + '」分类的模型，点 ✕ 清除筛选</div>' : '<div class="comp-empty">暂无模型数据</div>'; return; }
             grid.innerHTML = models.map(m => aiCardHtml(m)).join('');
         }
@@ -39092,7 +39165,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609262344";
+        window.NIKO_VERSION = "202609262354";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
