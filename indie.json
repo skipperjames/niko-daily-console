@@ -1,14 +1,402 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T00:55:48+08:00",
+  "fetchedAt": "2026-09-27T01:04:00+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
   "stats": {
     "candidates": 400,
     "passedReviews": 20,
-    "detailed": 0,
-    "picked": 0
+    "detailed": 10,
+    "picked": 5
   },
-  "games": []
+  "games": [
+    {
+      "appid": "4019220",
+      "name": "针影裁梦",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1790176022",
+      "desc": "在《针影裁梦》的世界，成为一名裁缝吧！选择布料、裁剪制版、缝制各类服装，来满足（或恶搞！）小镇居民。这款温馨的裁缝模拟游戏，灵感源自真实的服装制作工艺。",
+      "releaseText": "2026 年 9 月 21 日",
+      "release": "2026-09-21",
+      "comingSoon": false,
+      "developers": [
+        "Cozy Lives"
+      ],
+      "publishers": [
+        "Free Lives"
+      ],
+      "genres": [
+        "休闲",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "自定义音量控制",
+        "可以仅用鼠标",
+        "无需应对快速反应事件",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 13.49,
+      "priceInitial": 14.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4019220/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 3690,
+        "positive": 3586,
+        "negative": 104,
+        "score": "好评如潮",
+        "positivePct": 97
+      },
+      "days": 6,
+      "burst": {
+        "score": 599.63,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 110700,
+        "low": 66420,
+        "high": 177120,
+        "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 52614,
+          "sampleCount": 500,
+          "perMonth": null,
+          "verdict": {
+            "key": "unknown",
+            "label": "❓ 样本不足"
+          },
+          "confidence": "low",
+          "basis": "最近 500 款新作只跨 6 天，发布密度无法外推（该标签新作过于密集）",
+          "sampleNewest": "2026-09-26",
+          "sampleOldest": "2026-09-20"
+        }
+      },
+      "playersCurrent": 26104,
+      "analysis": null
+    },
+    {
+      "appid": "4173620",
+      "name": "I Know a Guy: Shady Life Simulator",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4173620/40f0d33c6acce88b1eaa63939a53d1068ed7d848/header_alt_assets_2.jpg?t=1790433103",
+      "desc": "Run your pizza shop up front and handle shady business out back. Help hand-crafted NPCs with favors that never go as planned. Play solo or online co-op with up to four players and expand your operation across Hobarey Town. In this darkly comedic management sim - become that guy everyone knows.",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        " Bunch'o'Nerds"
+      ],
+      "publishers": [
+        " Bunch'o'Nerds"
+      ],
+      "genres": [
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "合作",
+        "在线合作",
+        "Steam 成就",
+        "视角舒适度",
+        "无需应对快速反应事件",
+        "随时保存",
+        "立体声",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 9.74,
+      "priceInitial": 12.99,
+      "discount": 25,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4173620/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 482,
+        "positive": 430,
+        "negative": 52,
+        "score": "特别好评",
+        "positivePct": 89
+      },
+      "days": 2,
+      "burst": {
+        "score": 281.97,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 18316,
+        "low": 10990,
+        "high": 29306,
+        "basis": "Boxleiter 法 · 评论数 × 38（$9.74 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 52614,
+          "sampleCount": 500,
+          "perMonth": null,
+          "verdict": {
+            "key": "unknown",
+            "label": "❓ 样本不足"
+          },
+          "confidence": "low",
+          "basis": "最近 500 款新作只跨 6 天，发布密度无法外推（该标签新作过于密集）",
+          "sampleNewest": "2026-09-26",
+          "sampleOldest": "2026-09-20"
+        }
+      },
+      "playersCurrent": 926,
+      "analysis": null
+    },
+    {
+      "appid": "4694270",
+      "name": "Backrooms: Code Yellow",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4694270/89a94e014b54f925af55d29121a6197fb76e7286/header.jpg?t=1790352033",
+      "desc": "An online 1-6 player co-op game about investigating and collecting data in the infinitely massive Backrooms with your fellow employees. Explore. Do your job. Return alive.",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        " GameMechanic"
+      ],
+      "publishers": [
+        " GameMechanic"
+      ],
+      "genres": [
+        "动作",
+        "冒险",
+        "独立",
+        "抢先体验"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "合作",
+        "在线合作",
+        "家庭共享"
+      ],
+      "priceUsd": 7.99,
+      "priceInitial": 9.99,
+      "discount": 20,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4694270/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 193,
+        "positive": 90,
+        "negative": 103,
+        "score": "褒贬不一",
+        "positivePct": 47
+      },
+      "days": 2,
+      "burst": {
+        "score": 112.91,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 7334,
+        "low": 4400,
+        "high": 11734,
+        "basis": "Boxleiter 法 · 评论数 × 38（$7.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 89465,
+          "sampleCount": 500,
+          "perMonth": null,
+          "verdict": {
+            "key": "unknown",
+            "label": "❓ 样本不足"
+          },
+          "confidence": "low",
+          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "sampleNewest": "2026-09-26",
+          "sampleOldest": "2026-09-16"
+        }
+      },
+      "playersCurrent": 169,
+      "analysis": null
+    },
+    {
+      "appid": "4072240",
+      "name": "Woman Simulator",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4072240/ce30d61b72088ab181c23b4ed5a6f8063492cc5d/header_schinese.jpg?t=1790341225",
+      "desc": "这款游戏让你体验做女性的感觉：打扫、洗衣、做饭，没有片刻安宁。完全沉浸在女性烦恼的世界中.",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Sebasa Games"
+      ],
+      "publishers": [
+        "Sebasa Games"
+      ],
+      "genres": [
+        "动作",
+        "冒险",
+        "休闲",
+        "独立",
+        "角色扮演",
+        "模拟",
+        "体育"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "完全支持控制器",
+        "视角舒适度",
+        "自定义音量控制",
+        "立体声",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 6.39,
+      "priceInitial": 7.99,
+      "discount": 20,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4072240/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 145,
+        "positive": 105,
+        "negative": 40,
+        "score": "多半好评",
+        "positivePct": 72
+      },
+      "days": 2,
+      "burst": {
+        "score": 84.83,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 5510,
+        "low": 3306,
+        "high": 8816,
+        "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 89465,
+          "sampleCount": 500,
+          "perMonth": null,
+          "verdict": {
+            "key": "unknown",
+            "label": "❓ 样本不足"
+          },
+          "confidence": "low",
+          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "sampleNewest": "2026-09-26",
+          "sampleOldest": "2026-09-16"
+        }
+      },
+      "playersCurrent": 761,
+      "analysis": null
+    },
+    {
+      "appid": "3116730",
+      "name": "BIG LOOT",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3116730/5a6190ba3117755748b3aff1eb5beb3df8dfb773/header.jpg?t=1790341227",
+      "desc": "款关于商队、贸易与生存的Roguelike冒险。探索世界，明智选择装备与路线——前往下个城镇的道路充满惊喜。",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Reverie Clouds"
+      ],
+      "publishers": [
+        "Reverie Clouds"
+      ],
+      "genres": [
+        "冒险",
+        "独立",
+        "角色扮演"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "完全支持控制器",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 13.59,
+      "priceInitial": 15.99,
+      "discount": 15,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/3116730/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 90,
+        "positive": 62,
+        "negative": 28,
+        "score": "褒贬不一",
+        "positivePct": 69
+      },
+      "days": 2,
+      "burst": {
+        "score": 43.88,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 2700,
+        "low": 1620,
+        "high": 4320,
+        "basis": "Boxleiter 法 · 评论数 × 30（$13.59 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Adventure",
+        "label": "冒险",
+        "saturation": {
+          "total": 82873,
+          "sampleCount": 500,
+          "perMonth": null,
+          "verdict": {
+            "key": "unknown",
+            "label": "❓ 样本不足"
+          },
+          "confidence": "low",
+          "basis": "最近 500 款新作只跨 10 天，发布密度无法外推（该标签新作过于密集）",
+          "sampleNewest": "2026-09-26",
+          "sampleOldest": "2026-09-16"
+        }
+      },
+      "playersCurrent": 28,
+      "analysis": null
+    }
+  ]
 }
