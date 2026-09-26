@@ -323,6 +323,9 @@ async function fetchSaturation(tagId) {
     }
     dates.sort();
     const oldest = dates[0], newest = dates[dates.length - 1];
+    // 诊断：确认 100 条样本的日期到底怎么分布（2026-09-27 实测所有标签都算出「1 天内 100 款」，明显异常）
+    const uniq = Array.from(new Set(dates)).sort();
+    console.log(`   [饱和诊断] tag=${tagId} 样本 ${dates.length} 条 / 唯一日期 ${uniq.length} 个 → ${uniq.slice(0, 14).join(', ')}`);
     const spanDays = Math.max(1, Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000));
     const perDay = +(dates.length / spanDays).toFixed(1);         // 每天新作数（下界）
     let verdict;
