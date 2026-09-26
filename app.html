@@ -21909,8 +21909,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var official = a.officialSales || '';
             var third = (sl && sl.mid) ? ('约 ' + indieFmtNum(sl.mid) + ' 份') : '—';
             var thirdSub = (sl && sl.basis) ? sl.basis : (sl ? '' : '官方未公布，且无评论数可反推');
-            var peak = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.peakOnline;
+            // 2026-09-27 修：云端脚本给的是「当前在线」(playersCurrent)，与「峰值在线」语义不同 → 有 AI 补的峰值就显峰值，否则显当前在线并如实标源
+            var hasPeak = (a.peakOnline !== undefined && a.peakOnline !== null);
+            var peak = hasPeak ? a.peakOnline : g.playersCurrent;
             var peakV = (peak !== null && peak !== undefined) ? indieFmtNum(peak) + ' <em>人</em>' : '—';
+            var peakLabel = hasPeak ? '峰值在线' : '当前在线';
+            var peakSrc = hasPeak ? (a.peakOnlineSrc || 'AI 查证') : 'Steam 官方接口 · 抓取时点';
             var revV = rv ? indieFmtNum(rv.total) + ' <em>条</em>' : '—';
             var revS = rv ? (rv.positivePct !== null && rv.positivePct !== undefined ? '好评率 ' + rv.positivePct + '% · ' + (rv.score || '') : (rv.score || '')) : '暂无数据';
             var priceV = g.isFree ? '免费' : (g.priceUsd != null ? '$' + g.priceUsd + (g.priceCny ? ' <em>/ ¥' + g.priceCny + '</em>' : '') : '—');
@@ -21952,7 +21956,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += '<div class="indie-grid8">';
             h += indieCell('销量 · 官方公告', official ? escapeHtml(official.split('（')[0]) : '—', official ? escapeHtml(official.replace(/^[^（]*/, '').replace(/^（|）$/g, '')) : '开发方未公开具体数字');
             h += indieCell('销量 · 第三方估算', third, escapeHtml(thirdSub));
-            h += indieCell('峰值在线', peakV, a.peakOnlineSrc ? escapeHtml(a.peakOnlineSrc) : 'SteamDB / 官方未披露');
+            h += indieCell(peakLabel, peakV, escapeHtml(peakSrc));
             h += indieCell('评测 / 好评率', revV, escapeHtml(revS));
             h += indieCell('价格', priceV, g.isFree ? 'F2P 不适用评论数反推' : '美元原价（国区价另计）');
             h += indieCell('团队 / 工期', escapeHtml(teamV), escapeHtml(teamS || '未披露'));
@@ -37846,7 +37850,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609270031";
+        window.NIKO_VERSION = "202609270054";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
