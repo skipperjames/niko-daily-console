@@ -301,43 +301,27 @@ function pickTrackGenre(genres) {
     return specific[0] || en[0] || null;
 }
 
-// 采样密度判定（2026-09-27 二次修正）
-// 教训：① 原算法 `Math.max(1, spanDays/30)` 把「1 天」当「1 个月」→ 假红海；
-//      ② 改成翻页取 500 条后实测：Steam 的 `start` 翻页对 tag 搜索基本无效（跨度不增），500 条仍只跨 6–10 天。
-// 结论：不翻页、绝不外推月密度。直接用「最近 100 款新作覆盖多少天」当饱和信号 —— 它本身就等价于发布密度。
+// 赛道饱和度（2026-09-27 三次修正，最终版）
+// 教训链：① 原算法 Math.max(1, spanDays/30) 把「1 天」当「1 个月」→ 假红海；
+//        ② 改翻页取 500 条 → Steam 的 start 翻页对 tag 搜索无效（跨度不增）；
+//        ③ 加诊断实测发现：按 Released_DESC 返回的 100 条**唯一日期只有 2 个**（最近两天的上架条目），
+//           说明该接口下「最近 N 款」根本不代表该标签的新作分布，任何密度外推都是假的。
+// → 最终改用**可查证的硬指标**：该标签在 Steam 的全站游戏总数（total_count）。它回答的是「这个赛道有多拥挤」，
+//   而不是伪精确的「每月新增多少款」。
 async function fetchSaturation(tagId) {
     if (!tagId) return null;
     const url = `https://store.steampowered.com/search/results/?query&start=0&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
     const d = await getJSON(url);
     const html = (d && d.results_html) || '';
-    const total = (d && d.total_count) ? d.total_count : null;
-    const dates = [];
-    const re = /search_released[^>]*>\s*([^<]+?)\s*</g;
-    let m;
-    while ((m = re.exec(html)) !== null) {
-        const dt = parseRelease(m[1]);
-        if (dt) dates.push(dt);
-    }
-    if (dates.length < 10) {
-        return { total, sampleCount: dates.length, perDay: null, perMonth: null, verdict: null, basis: '样本不足' };
-    }
-    dates.sort();
-    const oldest = dates[0], newest = dates[dates.length - 1];
-    // 诊断：确认 100 条样本的日期到底怎么分布（2026-09-27 实测所有标签都算出「1 天内 100 款」，明显异常）
-    const uniq = Array.from(new Set(dates)).sort();
-    console.log(`   [饱和诊断] tag=${tagId} 样本 ${dates.length} 条 / 唯一日期 ${uniq.length} 个 → ${uniq.slice(0, 14).join(', ')}`);
-    const spanDays = Math.max(1, Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000));
-    const perDay = +(dates.length / spanDays).toFixed(1);         // 每天新作数（下界）
+    const total = (d && d.total_count) ? Number(d.total_count) : null;
+    if (!total) return { total: null, sampleCount: null, verdict: null, basis: '接口未返回全站总数' };
     let verdict;
-    if (spanDays <= 7) verdict = { key: 'shark', label: '🦈 红海' };        // 100 款挤在 1 周内
-    else if (spanDays <= 21) verdict = { key: 'fish', label: '🐠 一般' };
+    if (total >= 50000) verdict = { key: 'shark', label: '🦈 红海' };
+    else if (total >= 10000) verdict = { key: 'fish', label: '🐠 一般' };
     else verdict = { key: 'empty', label: '🐟 空旷' };
-    const perMonth = spanDays >= 14 ? +(dates.length / (spanDays / 30)).toFixed(1) : null;  // 跨度不足就不外推
-    const totalTxt = total ? `全站 ${total.toLocaleString('en-US')} 款 · ` : '';
     return {
-        total, sampleCount: dates.length, perDay, perMonth, verdict,
-        basis: `${totalTxt}最近 ${dates.length} 款新作集中在 ${spanDays} 天内发布（≈ 每天 ${perDay} 款）`,
-        sampleNewest: newest, sampleOldest: oldest,
+        total, sampleCount: null, perDay: null, perMonth: null, verdict,
+        basis: `Steam 该标签全站 ${total.toLocaleString('en-US')} 款（分档：≥5 万红海 / ≥1 万一般）`,
     };
 }
 
