@@ -301,57 +301,39 @@ function pickTrackGenre(genres) {
     return specific[0] || en[0] || null;
 }
 
-// 采样密度判定：单页 100 条按 Released_DESC 取，时间跨度完全不可控（热门标签 100 条可能只跨 1 天）。
-// → 翻页扩充样本；跨不满 SAT_MIN_SPAN 天就判「样本不足」，绝不用 1 天的样本外推月密度。
-const SAT_PAGES = 5;        // 最多翻 5 页 = 500 条
-const SAT_MIN_SPAN = 14;    // 样本跨度下限（天）
-
+// 采样密度判定（2026-09-27 二次修正）
+// 教训：① 原算法 `Math.max(1, spanDays/30)` 把「1 天」当「1 个月」→ 假红海；
+//      ② 改成翻页取 500 条后实测：Steam 的 `start` 翻页对 tag 搜索基本无效（跨度不增），500 条仍只跨 6–10 天。
+// 结论：不翻页、绝不外推月密度。直接用「最近 100 款新作覆盖多少天」当饱和信号 —— 它本身就等价于发布密度。
 async function fetchSaturation(tagId) {
     if (!tagId) return null;
+    const url = `https://store.steampowered.com/search/results/?query&start=0&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
+    const d = await getJSON(url);
+    const html = (d && d.results_html) || '';
+    const total = (d && d.total_count) ? d.total_count : null;
     const dates = [];
-    let total = null;
-    for (let p = 0; p < SAT_PAGES; p++) {
-        const url = `https://store.steampowered.com/search/results/?query&start=${p * 100}&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
-        const d = await getJSON(url);
-        if (!d) break;
-        if (total === null && d.total_count) total = d.total_count;
-        const html = (d && d.results_html) || '';
-        const re = /search_released[^>]*>\s*([^<]+?)\s*</g;
-        let m, added = 0;
-        while ((m = re.exec(html)) !== null) {
-            const dt = parseRelease(m[1]);
-            if (dt) { dates.push(dt); added++; }
-        }
-        if (added === 0) break;
-        const s = dates.slice().sort();
-        const span = Math.round((Date.parse(s[s.length - 1] + 'T00:00:00Z') - Date.parse(s[0] + 'T00:00:00Z')) / 86400000);
-        if (span >= SAT_MIN_SPAN) break;
-        await sleep(250);
+    const re = /search_released[^>]*>\s*([^<]+?)\s*</g;
+    let m;
+    while ((m = re.exec(html)) !== null) {
+        const dt = parseRelease(m[1]);
+        if (dt) dates.push(dt);
     }
     if (dates.length < 10) {
-        return { total, sampleCount: dates.length, perMonth: null, verdict: null, confidence: 'none', basis: '样本不足' };
+        return { total, sampleCount: dates.length, perDay: null, perMonth: null, verdict: null, basis: '样本不足' };
     }
     dates.sort();
     const oldest = dates[0], newest = dates[dates.length - 1];
-    const spanDays = Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000);
-    if (spanDays < SAT_MIN_SPAN) {
-        // 采样跨度太窄（该标签新作密集到 500 条也只能覆盖几天）→ 拒绝密度外推，避免「1 天 100 款 = 100 款/月」的假红海
-        return {
-            total, sampleCount: dates.length, perMonth: null,
-            verdict: { key: 'unknown', label: '❓ 样本不足' },
-            confidence: 'low',
-            basis: `最近 ${dates.length} 款新作只跨 ${spanDays} 天，发布密度无法外推（该标签新作过于密集）`,
-            sampleNewest: newest, sampleOldest: oldest,
-        };
-    }
-    const perMonth = +(dates.length / (spanDays / 30)).toFixed(1);
+    const spanDays = Math.max(1, Math.round((Date.parse(newest + 'T00:00:00Z') - Date.parse(oldest + 'T00:00:00Z')) / 86400000));
+    const perDay = +(dates.length / spanDays).toFixed(1);         // 每天新作数（下界）
     let verdict;
-    if (perMonth >= 60) verdict = { key: 'shark', label: '🦈 红海' };
-    else if (perMonth >= 15) verdict = { key: 'fish', label: '🐠 一般' };
+    if (spanDays <= 7) verdict = { key: 'shark', label: '🦈 红海' };        // 100 款挤在 1 周内
+    else if (spanDays <= 21) verdict = { key: 'fish', label: '🐠 一般' };
     else verdict = { key: 'empty', label: '🐟 空旷' };
+    const perMonth = spanDays >= 14 ? +(dates.length / (spanDays / 30)).toFixed(1) : null;  // 跨度不足就不外推
+    const totalTxt = total ? `全站 ${total.toLocaleString('en-US')} 款 · ` : '';
     return {
-        total, sampleCount: dates.length, perMonth, verdict, confidence: 'ok',
-        basis: `最近 ${dates.length} 款新作跨 ${spanDays} 天（≈ ${perMonth} 款/月）`,
+        total, sampleCount: dates.length, perDay, perMonth, verdict,
+        basis: `${totalTxt}最近 ${dates.length} 款新作集中在 ${spanDays} 天内发布（≈ 每天 ${perDay} 款）`,
         sampleNewest: newest, sampleOldest: oldest,
     };
 }
