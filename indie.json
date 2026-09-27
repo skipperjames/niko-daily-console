@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T22:23:51+08:00",
+  "fetchedAt": "2026-09-27T22:36:00+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
@@ -8,7 +8,7 @@
     "candidates": 400,
     "passedReviews": 17,
     "detailed": 8,
-    "picked": 5
+    "picked": 4
   },
   "games": [
     {
@@ -99,6 +99,15 @@
           "idKnown": true
         },
         {
+          "name": "Design & Illustration",
+          "total": 5519,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
           "name": "Life Sim",
           "total": 5995,
           "verdict": {
@@ -126,26 +135,8 @@
           "idKnown": true
         },
         {
-          "name": "Stylized",
-          "total": 20832,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
           "name": "Relaxing",
           "total": 24901,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Colorful",
-          "total": 35382,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -160,33 +151,9 @@
             "label": "🦈 红海"
           },
           "idKnown": true
-        },
-        {
-          "name": "Casual",
-          "total": 89394,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 119001,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Design &amp; Illustration",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
         }
       ],
-      "playersCurrent": 29419,
+      "playersCurrent": 29979,
       "analysis": {
         "officialSales": "官方未公布具体数字（Cozy Lives 公告：上市 24 小时内回收开发成本）",
         "teamSize": "Cozy Lives（Free Lives 旗下休闲品牌）",
@@ -333,47 +300,11 @@
           "idKnown": true
         },
         {
-          "name": "Capitalism",
-          "total": 2930,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Stealth",
-          "total": 4902,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
           "name": "Economy",
           "total": 6059,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Immersive Sim",
-          "total": 9712,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Management",
-          "total": 11767,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
           },
           "idKnown": true
         },
@@ -397,7 +328,7 @@
         },
         {
           "name": "First-Person",
-          "total": 28514,
+          "total": 28513,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -423,7 +354,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 924,
+      "playersCurrent": 968,
       "analysis": {
         "officialSales": "官方未公布",
         "peakOnline": 260,
@@ -550,14 +481,14 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 2853,
+          "total": 5995,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
           },
-          "basis": "细分标签「Memes」全站 2,853 款"
+          "basis": "细分标签「Life Sim」全站 5,995 款"
         },
-        "niche": "Memes"
+        "niche": "Life Sim"
       },
       "tags": [
         {
@@ -579,15 +510,6 @@
           "idKnown": true
         },
         {
-          "name": "Immersive Sim",
-          "total": 9712,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
           "name": "Funny",
           "total": 22709,
           "verdict": {
@@ -599,24 +521,6 @@
         {
           "name": "Relaxing",
           "total": 24901,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "First-Person",
-          "total": 28514,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Atmospheric",
-          "total": 38474,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -651,15 +555,6 @@
           "idKnown": true
         },
         {
-          "name": "Casual",
-          "total": 89394,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
           "name": "Singleplayer",
           "total": 119001,
           "verdict": {
@@ -669,7 +564,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 719,
+      "playersCurrent": 697,
       "analysis": {
         "officialSales": "官方未公布",
         "teamSize": "Sebasa Games",
@@ -722,178 +617,6 @@
         },
         "lesson": "「争议营销」确实能换来免费流量，但代价是口碑从上线第一天就分裂。这条路能博一次曝光，换不来复购和长尾 —— 对做长期作品的人不是好模型。"
       }
-    },
-    {
-      "appid": "4260270",
-      "name": "与你流落荒岛",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4260270/1e1cec55c82d71ee65a181bdf616e81ddd1ea7ca/header_schinese.jpg?t=1790391557",
-      "desc": "在这款生存游戏里，你和好友巳月流落到了一座荒岛。两人将结伴探索岛上的一切、狩猎并收集生存物资、搭建简易的住所、在一次次的相处中感情逐渐升温。巳月也会全程陪在你的身边，努力保护好彼此并活着回家吧！",
-      "releaseText": "2026 年 9 月 25 日",
-      "release": "2026-09-25",
-      "comingSoon": false,
-      "developers": [
-        "Kumada Gaon"
-      ],
-      "publishers": [
-        "Saikey Studios"
-      ],
-      "genres": [
-        "冒险",
-        "角色扮演",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "DUALSHOCK 控制器支持",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "部分支持控制器",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 7.99,
-      "priceInitial": 9.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4260270/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 165,
-        "positive": 156,
-        "negative": 9,
-        "score": "特别好评",
-        "positivePct": 95
-      },
-      "days": 3,
-      "burst": {
-        "score": 64.35,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 6270,
-        "low": 3762,
-        "high": 10032,
-        "basis": "Boxleiter 法 · 评论数 × 38（$7.99 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Adventure",
-        "label": "冒险",
-        "saturation": {
-          "total": 1732,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Hentai」全站 1,732 款"
-        },
-        "niche": "Hentai"
-      },
-      "tags": [
-        {
-          "name": "Hentai",
-          "total": 1732,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Sexual Content",
-          "total": 5352,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Survival",
-          "total": 13426,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Female Protagonist",
-          "total": 16613,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Anime",
-          "total": 17761,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "RPG",
-          "total": 47889,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 52635,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Adventure",
-          "total": 82891,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "2D",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Visual Novel",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Point &amp; Click",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Cute",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 1209,
-      "analysis": null
     },
     {
       "appid": "3116730",
@@ -957,16 +680,25 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 3880,
+          "total": 1067,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
           },
-          "basis": "细分标签「Loot」全站 3,880 款"
+          "basis": "细分标签「Open World Survival Craft」全站 1,067 款"
         },
-        "niche": "Loot"
+        "niche": "Open World Survival Craft"
       },
       "tags": [
+        {
+          "name": "Open World Survival Craft",
+          "total": 1067,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
         {
           "name": "Loot",
           "total": 3880,
@@ -995,33 +727,6 @@
           "idKnown": true
         },
         {
-          "name": "Procedural Generation",
-          "total": 8937,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Management",
-          "total": 11767,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Survival",
-          "total": 13426,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
           "name": "Roguelike",
           "total": 14278,
           "verdict": {
@@ -1041,7 +746,7 @@
         },
         {
           "name": "3D",
-          "total": 47310,
+          "total": 47309,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1056,21 +761,9 @@
             "label": "🦈 红海"
           },
           "idKnown": true
-        },
-        {
-          "name": "Open World Survival Craft",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Trading",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
         }
       ],
-      "playersCurrent": 26,
+      "playersCurrent": 24,
       "analysis": {
         "officialSales": "官方未公布（EA 期，第三方估约 6.0k 份）",
         "peakOnline": 69,
