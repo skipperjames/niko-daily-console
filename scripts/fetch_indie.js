@@ -220,11 +220,19 @@ async function fetchStoreTags(appid) {
     const re = /class="app_tag"[^>]*>\s*([^<]+?)\s*</g;
     let m;
     while ((m = re.exec(html || '')) !== null) {
-        const t = m[1].replace(/\s+/g, ' ').trim();
+        // Steam 页面里标签名带 HTML 实体（实测 Design &amp; Illustration）→ 必须解码，否则前端显示 &amp;
+        const t = decodeEnt(m[1].replace(/\s+/g, ' ').trim());
         if (t && out.indexOf(t) < 0) out.push(t);
-        if (out.length >= 12) break;
+        if (out.length >= 8) break;   // 只留前 8 个：Steam 按社区投票序返回，后面的多是 Simulation/Singleplayer 这类噪声
     }
     return out;
+}
+
+function decodeEnt(s) {
+    return String(s)
+        .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&apos;/g, "'")
+        .replace(/&#x27;/gi, "'").replace(/&nbsp;/g, ' ');
 }
 
 // ---------- 4. 当前在线 ----------
