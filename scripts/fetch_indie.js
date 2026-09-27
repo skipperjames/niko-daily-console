@@ -346,6 +346,21 @@ async function fetchSaturation(tagId) {
 }
 
 // ---------- 8. 赛道归类标签（供前端展示与 X5 对比用）----------
+// 2026-09-27 加：标签黑名单
+// 背景：把「全站总数最小的标签」当成细分赛道，会挑出 Memes / Loot / Hentai 这种噪声。
+// → NON_TRACK 列出「情绪 / 形式 / 功能 / 体量」类标签，它们不构成赛道，不参与「细分定位」评选（但仍然展示）。
+// → NSFW 命中的作品整款剔除，不进雷达。
+const NON_TRACK_TAGS = new Set([
+    'Memes', 'Funny', 'Comedy', 'Cute', 'Atmospheric', 'Relaxing', 'Colorful', 'Beautiful',
+    'Great Soundtrack', 'Soundtrack', 'Music', 'Violent', 'Gore', 'Sexual Content',
+    'Indie', 'Early Access', 'Free to Play', 'Singleplayer', 'Multiplayer', 'Co-op',
+    'Online Co-Op', 'Local Co-Op', 'Local Multiplayer', 'PvP', 'Massively Multiplayer',
+    'Steam Achievements', 'Steam Cloud', 'Steam Workshop', 'Full controller support',
+    'Controller', 'Trading Cards', 'Remote Play Together', 'In-App Purchases',
+    '2D', '3D', 'Pixel Graphics', 'Retro', 'Stylized', 'Realistic', 'Cartoony',
+    'Fantasy', 'Sci-fi', 'Anime', 'Dark', 'Nudity', 'Mature', 'Point & Click',
+]);
+const NSFW_TAG_RE = /hentai|nsfw|sexual content|sexual themes|adult only|mature content|nudity|erotic/i;
 const TRACK_HINT = {
     'Roguelike': 'Roguelike / 肉鸽', 'Roguelite': 'Roguelike / 肉鸽',
     'Simulation': '模拟经营', 'Strategy': '策略', 'RPG': '角色扮演',
@@ -415,28 +430,39 @@ async function main() {
         })
         .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
 
-    const picked = scored.slice(0, TOP_N);
-    console.log(`🎯 入选 ${picked.length} 款`);
-
     // ★ 保护：抓取异常（限流导致详情全灭）时绝不覆盖线上数据。
     // 2026-09-27 教训：候选池扩到 400 触发 Steam 限流 → detailed=0 → 空 games 被写进 indie.json，线上雷达被清空。
     const MIN_KEEP = 3;
-    if (picked.length < MIN_KEEP) {
-        console.error(`❌ 入选仅 ${picked.length} 款（< ${MIN_KEEP}），判定为抓取异常 / 被限流，保留旧文件不覆盖`);
+    // 2026-09-27：多取 5 个候选 —— 因为要等抓到社区标签后才能剔掉成人内容，剔完再取前 TOP_N
+    const pre = scored.slice(0, TOP_N + 5);
+    if (pre.length < MIN_KEEP) {
+        console.error(`❌ 上榜仅 ${pre.length} 款（< ${MIN_KEEP}），判定为抓取异常 / 被限流，保留旧文件不覆盖`);
         process.exit(1);
     }
 
-    // 第三轮：当前在线 + 社区标签（只对入选款做）
+    // 第三轮：当前在线 + 社区标签（对候选入选款做）
     console.log('⏳ 第三轮：当前在线 + 社区标签…');
     let tagTable = {};
     try { tagTable = await fetchTagTable(); console.log(`✅ 标签表: ${Object.keys(tagTable).length} 项`); }
     catch (e) { console.warn('⚠️ 标签表失败: ' + e.message); }
 
-    await pool(picked, async (g) => {
+    await pool(pre, async (g) => {
         try { g.playersCurrent = await fetchPlayers(g.appid); } catch (e) { }
         try { g.tags = await fetchStoreTags(g.appid); } catch (e) { }
         return g;
     }, 2, 300);
+
+    // 3.0 剔掉成人内容（标签命中 NSFW）—— 再定最终 TOP_N
+    const picked = pre.filter(g => {
+        const hit = (g.tags || []).find(t => NSFW_TAG_RE.test(t));
+        if (hit) { console.log(`   🚫 排除成人内容: ${g.name}（标签「${hit}」）`); return false; }
+        return true;
+    }).slice(0, TOP_N);
+    console.log(`🎯 最终入选 ${picked.length} 款（候选 ${pre.length} → 剔除成人内容后取前 ${TOP_N}）`);
+    if (picked.length < MIN_KEEP) {
+        console.error(`❌ 最终入选仅 ${picked.length} 款（< ${MIN_KEEP}），保留旧文件不覆盖`);
+        process.exit(1);
+    }
 
     // 3.1 逐标签算全站总数（跨游戏去重 + 限量 + 间隔，避免限流）
     // 目的：回答「到底是哪个标签红海」。粗标签（动作 8.9 万）必然红海，没信息量；
@@ -468,7 +494,9 @@ async function main() {
             return a.total - b.total;
         });
         g.tags = arr;
-        const niche = arr.find(x => x.total != null && x.verdict);
+        // 细分定位优先挑「非噪声标签」里最窄的那个；全都命中黑名单时退回最窄的任意标签
+        const niche = arr.find(x => x.total != null && x.verdict && !NON_TRACK_TAGS.has(x.name))
+            || arr.find(x => x.total != null && x.verdict);
         g.track.niche = niche ? niche.name : null;
         if (niche) {
             g.track.saturation = {
