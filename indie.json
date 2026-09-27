@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T01:23:13+08:00",
+  "fetchedAt": "2026-09-27T22:16:06+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
   "stats": {
     "candidates": 400,
-    "passedReviews": 20,
-    "detailed": 10,
+    "passedReviews": 17,
+    "detailed": 8,
     "picked": 5
   },
   "games": [
     {
       "appid": "4019220",
       "name": "针影裁梦",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1790176022",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1790484978",
       "desc": "在《针影裁梦》的世界，成为一名裁缝吧！选择布料、裁剪制版、缝制各类服装，来满足（或恶搞！）小镇居民。这款温馨的裁缝模拟游戏，灵感源自真实的服装制作工艺。",
       "releaseText": "2026 年 9 月 21 日",
       "release": "2026-09-21",
@@ -45,23 +45,23 @@
       "url": "https://store.steampowered.com/app/4019220/",
       "requiredAge": 0,
       "reviews": {
-        "total": 3719,
-        "positive": 3615,
-        "negative": 104,
+        "total": 4421,
+        "positive": 4314,
+        "negative": 107,
         "score": "好评如潮",
-        "positivePct": 97
+        "positivePct": 98
       },
-      "days": 6,
+      "days": 7,
       "burst": {
-        "score": 604.34,
+        "score": 615.78,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 111570,
-        "low": 66942,
-        "high": 178512,
+        "mid": 132630,
+        "low": 79578,
+        "high": 212208,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -70,18 +70,123 @@
         "primary": "Simulation",
         "label": "模拟经营",
         "saturation": {
-          "total": 52615,
-          "sampleCount": null,
-          "perDay": null,
-          "perMonth": null,
+          "total": 817,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Job Simulator」全站 817 款"
+        },
+        "niche": "Job Simulator"
+      },
+      "tags": [
+        {
+          "name": "Job Simulator",
+          "total": 817,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Cozy",
+          "total": 4458,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Life Sim",
+          "total": 5995,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Crafting",
+          "total": 8311,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Management",
+          "total": 11767,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Stylized",
+          "total": 20832,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Relaxing",
+          "total": 24901,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Colorful",
+          "total": 35382,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52635,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "Steam 该标签全站 52,615 款（分档：≥5 万红海 / ≥1 万一般）"
+          "idKnown": true
+        },
+        {
+          "name": "Casual",
+          "total": 89394,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119001,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Design &amp; Illustration",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
         }
-      },
-      "playersCurrent": 26139,
+      ],
+      "playersCurrent": 28837,
       "analysis": {
         "officialSales": "官方未公布具体数字（Cozy Lives 公告：上市 24 小时内回收开发成本）",
         "teamSize": "Cozy Lives（Free Lives 旗下休闲品牌）",
@@ -174,23 +279,23 @@
       "url": "https://store.steampowered.com/app/4173620/",
       "requiredAge": 0,
       "reviews": {
-        "total": 482,
-        "positive": 430,
-        "negative": 52,
+        "total": 506,
+        "positive": 453,
+        "negative": 53,
         "score": "特别好评",
-        "positivePct": 89
+        "positivePct": 90
       },
-      "days": 2,
+      "days": 3,
       "burst": {
-        "score": 281.97,
+        "score": 197.34,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 18316,
-        "low": 10990,
-        "high": 29306,
+        "mid": 19228,
+        "low": 11537,
+        "high": 30765,
         "basis": "Boxleiter 法 · 评论数 × 38（$9.74 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -199,18 +304,126 @@
         "primary": "Simulation",
         "label": "模拟经营",
         "saturation": {
-          "total": 52615,
-          "sampleCount": null,
-          "perDay": null,
-          "perMonth": null,
+          "total": 2158,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Cooking」全站 2,158 款"
+        },
+        "niche": "Cooking"
+      },
+      "tags": [
+        {
+          "name": "Cooking",
+          "total": 2158,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Crime",
+          "total": 2667,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Capitalism",
+          "total": 2930,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Stealth",
+          "total": 4902,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Economy",
+          "total": 6059,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Immersive Sim",
+          "total": 9712,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Management",
+          "total": 11767,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Character Customization",
+          "total": 12052,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Co-op",
+          "total": 16336,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "First-Person",
+          "total": 28514,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52635,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "Steam 该标签全站 52,615 款（分档：≥5 万红海 / ≥1 万一般）"
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119001,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
         }
-      },
-      "playersCurrent": 1004,
+      ],
+      "playersCurrent": 924,
       "analysis": {
         "officialSales": "官方未公布",
         "peakOnline": 260,
@@ -273,131 +486,9 @@
       }
     },
     {
-      "appid": "4694270",
-      "name": "Backrooms: Code Yellow",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4694270/89a94e014b54f925af55d29121a6197fb76e7286/header.jpg?t=1790352033",
-      "desc": "An online 1-6 player co-op game about investigating and collecting data in the infinitely massive Backrooms with your fellow employees. Explore. Do your job. Return alive.",
-      "releaseText": "2026 年 9 月 25 日",
-      "release": "2026-09-25",
-      "comingSoon": false,
-      "developers": [
-        " GameMechanic"
-      ],
-      "publishers": [
-        " GameMechanic"
-      ],
-      "genres": [
-        "动作",
-        "冒险",
-        "独立",
-        "抢先体验"
-      ],
-      "categories": [
-        "单人",
-        "多人",
-        "合作",
-        "在线合作",
-        "家庭共享"
-      ],
-      "priceUsd": 7.99,
-      "priceInitial": 9.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4694270/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 200,
-        "positive": 93,
-        "negative": 107,
-        "score": "褒贬不一",
-        "positivePct": 47
-      },
-      "days": 2,
-      "burst": {
-        "score": 117,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 7600,
-        "low": 4560,
-        "high": 12160,
-        "basis": "Boxleiter 法 · 评论数 × 38（$7.99 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Action",
-        "label": "动作",
-        "saturation": {
-          "total": 89467,
-          "sampleCount": null,
-          "perDay": null,
-          "perMonth": null,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "basis": "Steam 该标签全站 89,467 款（分档：≥5 万红海 / ≥1 万一般）"
-        }
-      },
-      "playersCurrent": 190,
-      "analysis": {
-        "officialSales": "官方未公布（EA 期，第三方估 4.0k–8.1k 份）",
-        "peakOnline": 184,
-        "peakOnlineSrc": "VideoGamesCritic 第三方追踪（2026-09 历史峰值）",
-        "teamSize": "GameMechanic",
-        "devTime": "Early Access 2026-09-25 上线",
-        "toolchain": {
-          "engine": "未公开披露",
-          "src": "开发方未公布引擎信息",
-          "inferred": false
-        },
-        "burstFactors": [
-          {
-            "f": "热门题材 + 联机",
-            "ev": "Backrooms 题材心理恐怖，支持 1–6 人在线合作",
-            "src": "官方商店页"
-          },
-          {
-            "f": "首发质量失控",
-            "ev": "上线 48 小时内连发 6 个补丁（Launch Day Patch #4 / #5 / #6）",
-            "src": "VideoGamesCritic 补丁记录"
-          },
-          {
-            "f": "口碑未达预期",
-            "ev": "好评率仅 46%–47%，与同期同类心理恐怖作品差距明显",
-            "src": "Steam 评测 / VideoGamesCritic"
-          }
-        ],
-        "timeline": [
-          {
-            "d": "2026-09-21",
-            "x": "原定解锁时间（UTC 16:00）"
-          },
-          {
-            "d": "2026-09-25",
-            "x": "Early Access 上线"
-          },
-          {
-            "d": "2026-09-25 ~ 09-26",
-            "x": "48 小时内连发 6 个紧急补丁修复门锁、医用药剂、录像上交等阻塞性 bug"
-          }
-        ],
-        "difficulty": {
-          "art": 3,
-          "tech": 4,
-          "content": 2,
-          "note": "技术量大（6 人联机 + 程序化生成场景）；美术量中等；内容量偏薄（任务循环单一）"
-        },
-        "lesson": "题材热度和联机玩法都只是入场券 —— 首发 bug 会直接把好评率打到 46%。这个案例值得反过来读：它证明了「蹭热门题材」并不省钱，省下的钱会在口碑上加倍还回去。"
-      }
-    },
-    {
       "appid": "4072240",
       "name": "Woman Simulator",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4072240/ce30d61b72088ab181c23b4ed5a6f8063492cc5d/header_schinese.jpg?t=1790341225",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4072240/ce30d61b72088ab181c23b4ed5a6f8063492cc5d/header_schinese.jpg?t=1790507859",
       "desc": "这款游戏让你体验做女性的感觉：打扫、洗衣、做饭，没有片刻安宁。完全沉浸在女性烦恼的世界中.",
       "releaseText": "2026 年 9 月 25 日",
       "release": "2026-09-25",
@@ -434,23 +525,23 @@
       "url": "https://store.steampowered.com/app/4072240/",
       "requiredAge": 0,
       "reviews": {
-        "total": 145,
-        "positive": 105,
-        "negative": 40,
-        "score": "多半好评",
-        "positivePct": 72
+        "total": 211,
+        "positive": 147,
+        "negative": 64,
+        "score": "褒贬不一",
+        "positivePct": 70
       },
-      "days": 2,
+      "days": 3,
       "burst": {
-        "score": 84.83,
+        "score": 82.29,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 5510,
-        "low": 3306,
-        "high": 8816,
+        "mid": 8018,
+        "low": 4811,
+        "high": 12829,
         "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -459,18 +550,126 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 89467,
-          "sampleCount": null,
-          "perDay": null,
-          "perMonth": null,
+          "total": 2853,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Memes」全站 2,853 款"
+        },
+        "niche": "Memes"
+      },
+      "tags": [
+        {
+          "name": "Memes",
+          "total": 2853,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Life Sim",
+          "total": 5995,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Immersive Sim",
+          "total": 9712,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Funny",
+          "total": 22709,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Relaxing",
+          "total": 24901,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "First-Person",
+          "total": 28514,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Atmospheric",
+          "total": 38474,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "RPG",
+          "total": 47889,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52635,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "Steam 该标签全站 89,467 款（分档：≥5 万红海 / ≥1 万一般）"
+          "idKnown": true
+        },
+        {
+          "name": "Adventure",
+          "total": 82891,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Casual",
+          "total": 89394,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119001,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
         }
-      },
-      "playersCurrent": 744,
+      ],
+      "playersCurrent": 719,
       "analysis": {
         "officialSales": "官方未公布",
         "teamSize": "Sebasa Games",
@@ -525,6 +724,178 @@
       }
     },
     {
+      "appid": "4260270",
+      "name": "与你流落荒岛",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4260270/1e1cec55c82d71ee65a181bdf616e81ddd1ea7ca/header_schinese.jpg?t=1790391557",
+      "desc": "在这款生存游戏里，你和好友巳月流落到了一座荒岛。两人将结伴探索岛上的一切、狩猎并收集生存物资、搭建简易的住所、在一次次的相处中感情逐渐升温。巳月也会全程陪在你的身边，努力保护好彼此并活着回家吧！",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Kumada Gaon"
+      ],
+      "publishers": [
+        "Saikey Studios"
+      ],
+      "genres": [
+        "冒险",
+        "角色扮演",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "部分支持控制器",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 7.99,
+      "priceInitial": 9.99,
+      "discount": 20,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4260270/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 165,
+        "positive": 156,
+        "negative": 9,
+        "score": "特别好评",
+        "positivePct": 95
+      },
+      "days": 3,
+      "burst": {
+        "score": 64.35,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 6270,
+        "low": 3762,
+        "high": 10032,
+        "basis": "Boxleiter 法 · 评论数 × 38（$7.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Adventure",
+        "label": "冒险",
+        "saturation": {
+          "total": 1732,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Hentai」全站 1,732 款"
+        },
+        "niche": "Hentai"
+      },
+      "tags": [
+        {
+          "name": "Hentai",
+          "total": 1732,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Sexual Content",
+          "total": 5352,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Survival",
+          "total": 13426,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Female Protagonist",
+          "total": 16613,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Anime",
+          "total": 17761,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "RPG",
+          "total": 47889,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52635,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Adventure",
+          "total": 82891,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "2D",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "Visual Novel",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "Point &amp; Click",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Cute",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 1209,
+      "analysis": null
+    },
+    {
       "appid": "3116730",
       "name": "BIG LOOT",
       "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3116730/5a6190ba3117755748b3aff1eb5beb3df8dfb773/header.jpg?t=1790341227",
@@ -561,23 +932,23 @@
       "url": "https://store.steampowered.com/app/3116730/",
       "requiredAge": 0,
       "reviews": {
-        "total": 90,
-        "positive": 62,
+        "total": 93,
+        "positive": 65,
         "negative": 28,
         "score": "褒贬不一",
-        "positivePct": 69
+        "positivePct": 70
       },
-      "days": 2,
+      "days": 3,
       "burst": {
-        "score": 43.88,
+        "score": 30.23,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 2700,
-        "low": 1620,
-        "high": 4320,
+        "mid": 2790,
+        "low": 1674,
+        "high": 4464,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.59 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -586,18 +957,120 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 82874,
-          "sampleCount": null,
-          "perDay": null,
-          "perMonth": null,
+          "total": 3880,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Loot」全站 3,880 款"
+        },
+        "niche": "Loot"
+      },
+      "tags": [
+        {
+          "name": "Loot",
+          "total": 3880,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Crafting",
+          "total": 8311,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Cartoon",
+          "total": 8651,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Procedural Generation",
+          "total": 8937,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Management",
+          "total": 11767,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Survival",
+          "total": 13426,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Roguelike",
+          "total": 14278,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Exploration",
+          "total": 32449,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "3D",
+          "total": 47310,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Adventure",
+          "total": 82891,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "Steam 该标签全站 82,874 款（分档：≥5 万红海 / ≥1 万一般）"
+          "idKnown": true
+        },
+        {
+          "name": "Open World Survival Craft",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "Trading",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
         }
-      },
-      "playersCurrent": 28,
+      ],
+      "playersCurrent": 26,
       "analysis": {
         "officialSales": "官方未公布（EA 期，第三方估约 6.0k 份）",
         "peakOnline": 69,
@@ -650,6 +1123,5 @@
         "lesson": "五款里最贴近你现状的一个：白天有正职、用低门槛引擎、靠业余时间熬 1.5 年做出可玩版本。它没有爆，但完整走完了「jam → Demo → EA → 持续更新」的全流程 —— 这条路本身就是可执行的。"
       }
     }
-  ],
-  "analysisUpdatedAt": "2026-09-27T01:25:44+08:00"
+  ]
 }
