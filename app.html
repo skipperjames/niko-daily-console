@@ -6405,6 +6405,9 @@ body.dark-mode .indie-caliber b { color:#a5b4fc; }
 .indie-card:hover { box-shadow:0 4px 18px rgba(0,0,0,.07); border-color:#d8d8e2; }
 body.dark-mode .indie-card { background:#1e1e24; border-color:#33333d; }
 body.dark-mode .indie-card:hover { border-color:#444455; box-shadow:0 4px 18px rgba(0,0,0,.4); }
+/* 空筛选态用独立类名：不要复用 .indie-card，否则「筛选后卡片数」类断言会把空态当成一张卡 */
+.indie-empty { background:#fff; border:1px dashed #d8d8e2; border-radius:14px; padding:26px 18px; text-align:center; color:#94a3b8; font-size:13px; line-height:1.9; }
+body.dark-mode .indie-empty { background:#1e1e24; border-color:#3a3a46; color:#8a94a6; }
 
 .indie-hd { display:flex; gap:14px; align-items:flex-start; }
 .indie-cover { width:134px; height:63px; border-radius:8px; object-fit:cover; flex-shrink:0; background:#eceff4; }
@@ -6500,13 +6503,15 @@ body.dark-mode .indie-factor { color:#a8b3c2; }
 body.dark-mode .indie-factor b { color:#e8ecf3; }
 body.dark-mode .indie-factor .src { color:#6b7480; }
 
-.indie-tl { display:flex; flex-direction:column; }
-.indie-tl-row { display:flex; gap:10px; font-size:12px; padding:3px 0; }
-.indie-tl-d { width:78px; flex-shrink:0; color:#94a3b8; font-variant-numeric:tabular-nums; }
-.indie-tl-x { flex:1; color:#475569; line-height:1.65; min-width:0; }
-.indie-tl-x b { color:#4f46e5; font-weight:700; }
-body.dark-mode .indie-tl-x { color:#a8b3c2; }
-body.dark-mode .indie-tl-x b { color:#a5b4fc; }
+/* .indie-tl* = 曝光时间线专用；.indie-bk* = P22「发售前倒推清单」专用。
+   两者样式相同但类名必须分开 —— 混用会让「时间线默认收起」这类按行计数的门禁被倒推清单污染。 */
+.indie-tl, .indie-tl-back { display:flex; flex-direction:column; }
+.indie-tl-row, .indie-bk-row { display:flex; gap:10px; font-size:12px; padding:3px 0; }
+.indie-tl-d, .indie-bk-d { width:78px; flex-shrink:0; color:#94a3b8; font-variant-numeric:tabular-nums; }
+.indie-tl-x, .indie-bk-x { flex:1; color:#475569; line-height:1.65; min-width:0; }
+.indie-tl-x b, .indie-bk-x b { color:#4f46e5; font-weight:700; }
+body.dark-mode .indie-tl-x, body.dark-mode .indie-bk-x { color:#a8b3c2; }
+body.dark-mode .indie-tl-x b, body.dark-mode .indie-bk-x b { color:#a5b4fc; }
 
 .indie-axis { display:flex; align-items:center; gap:8px; font-size:12px; color:#475569; margin-bottom:5px; }
 .indie-axis .nm { width:34px; flex-shrink:0; color:#94a3b8; }
@@ -6551,6 +6556,158 @@ body.dark-mode .indie-cmp th, body.dark-mode .indie-cmp td { border-color:#33333
 body.dark-mode .indie-cmp th { background:#26262e; color:#a8b3c2; }
 body.dark-mode .indie-cmp td { color:#c7d2e0; }
 
+/* ===== 2026-09-27 雷达 v3：筛选工具栏 / 角标 / 归因 / 分组详情 / 独立面板 / 键盘流 ===== */
+.indie-tools { display:flex; flex-wrap:wrap; gap:6px 16px; align-items:center; background:#f8fafc; border:1px solid #e8edf5; border-radius:10px; padding:8px 12px; margin-bottom:10px; font-size:12px; }
+body.dark-mode .indie-tools { background:#1c1c23; border-color:#33333d; }
+.indie-tools .grp { display:flex; align-items:center; gap:4px; flex-wrap:wrap; }
+.indie-tools .gl { color:#94a3b8; font-size:11.5px; margin-right:2px; }
+.indie-tools button { font-size:11.5px; padding:3px 9px; border-radius:999px; border:1px solid #dbe3ee; background:#fff; color:#475569; cursor:pointer; font-family:inherit; }
+.indie-tools button.on { background:#6366f1; border-color:#6366f1; color:#fff; font-weight:700; }
+body.dark-mode .indie-tools button { background:#26262e; border-color:#3a3a46; color:#c3ccda; }
+body.dark-mode .indie-tools button.on { background:#6366f1; border-color:#6366f1; color:#fff; }
+.indie-tools .sp { flex:1 1 auto; }
+.indie-tools .tbtn { border-color:#c7d2fe; color:#4f46e5; font-weight:600; }
+.indie-tools .tbtn.on { background:#eef2ff; border-color:#818cf8; color:#4f46e5; }
+body.dark-mode .indie-tools .tbtn { border-color:#3f4470; color:#a5b4fc; }
+body.dark-mode .indie-tools .tbtn.on { background:#272c47; border-color:#4a4a7a; color:#a5b4fc; }
+.indie-tools .cnt { color:#94a3b8; font-size:11.5px; }
+.indie-tools .kb { color:#a5b4fc; font-size:11px; }
+
+/* 角标（P02 UE5 适配 / P04 别碰 / P06 分区 / P08 我的标记 / P33 单人分档） */
+.indie-flags { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
+.indie-flag { display:inline-flex; align-items:center; gap:3px; font-size:10.5px; padding:1px 7px; border-radius:999px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; white-space:nowrap; }
+.indie-flag.green { background:#ecfdf5; border-color:#a7f3d0; color:#047857; font-weight:600; }
+.indie-flag.yellow { background:#fffbeb; border-color:#fde68a; color:#b45309; font-weight:600; }
+.indie-flag.red { background:#fff1f2; border-color:#fecdd3; color:#be123c; font-weight:600; }
+.indie-flag.score { background:#eef2ff; border-color:#c7d2fe; color:#4338ca; font-weight:700; }
+.indie-flag.want { background:#fef3c7; border-color:#fcd34d; color:#a16207; font-weight:600; }
+.indie-flag.can { background:#dbeafe; border-color:#93c5fd; color:#1d4ed8; font-weight:600; }
+.indie-flag.no { background:#f1f5f9; border-color:#cbd5e1; color:#64748b; }
+.indie-flag.flop { background:#fff1f2; border-color:#fda4af; color:#be123c; font-weight:700; }
+.indie-flag.sect { background:#f5f3ff; border-color:#ddd6fe; color:#6d28d9; }
+body.dark-mode .indie-flag { background:#26262e; border-color:#3a3a46; color:#9aa4b2; }
+body.dark-mode .indie-flag.green { background:#12302a; border-color:#1f6b56; color:#6ee7b7; }
+body.dark-mode .indie-flag.yellow { background:#3a2f14; border-color:#8a6b1f; color:#fcd34d; }
+body.dark-mode .indie-flag.red { background:#3b1d24; border-color:#7f2436; color:#fda4af; }
+body.dark-mode .indie-flag.score { background:#272c47; border-color:#3f4470; color:#a5b4fc; }
+body.dark-mode .indie-flag.want { background:#3a2f14; border-color:#8a6b1f; color:#fcd34d; }
+body.dark-mode .indie-flag.can { background:#1c2c47; border-color:#2f4a75; color:#93c5fd; }
+body.dark-mode .indie-flag.flop { background:#3b1d24; border-color:#7f2436; color:#fda4af; }
+body.dark-mode .indie-flag.sect { background:#262346; border-color:#3d3872; color:#c4b5fd; }
+.indie-card.kb { outline:2px solid #6366f1; outline-offset:2px; }
+
+/* P09 七维归因 */
+.indie-f7 { display:grid; grid-template-columns:1fr 1fr; gap:4px 14px; }
+.indie-f7-row { display:flex; align-items:center; gap:7px; font-size:11.5px; color:#64748b; }
+.indie-f7-row .nm { width:58px; flex-shrink:0; }
+.indie-f7-row .bars { display:flex; gap:2px; }
+.indie-f7-row .bars i { width:11px; height:6px; border-radius:2px; background:#e2e8f0; display:block; }
+.indie-f7-row .bars i.f { background:#f472b6; }
+.indie-f7-row .bars i.f5 { background:#be185d; }
+.indie-f7-row b { color:#334155; font-weight:700; }
+.indie-f7-top { font-size:11.5px; color:#be185d; margin-top:7px; line-height:1.7; }
+body.dark-mode .indie-f7-row { color:#9aa4b2; }
+body.dark-mode .indie-f7-row .bars i { background:#33333d; }
+body.dark-mode .indie-f7-row .bars i.f { background:#ec4899; }
+body.dark-mode .indie-f7-row b { color:#e8ecf3; }
+body.dark-mode .indie-f7-top { color:#f9a8d4; }
+
+/* P11 曝光成本分档 */
+.indie-cost { font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; margin-right:6px; white-space:nowrap; }
+.indie-cost.free { background:#ecfdf5; color:#047857; }
+.indie-cost.low { background:#fffbeb; color:#b45309; }
+.indie-cost.paid { background:#fff1f2; color:#be123c; }
+body.dark-mode .indie-cost.free { background:#12302a; color:#6ee7b7; }
+body.dark-mode .indie-cost.low { background:#3a2f14; color:#fcd34d; }
+body.dark-mode .indie-cost.paid { background:#3b1d24; color:#fda4af; }
+.indie-tl-fest { display:inline-block; font-size:10px; padding:0 5px; border-radius:4px; background:#eef2ff; color:#4338ca; border:1px solid #c7d2fe; margin-right:5px; }
+body.dark-mode .indie-tl-fest { background:#272c47; color:#a5b4fc; border-color:#3f4470; }
+
+/* P26/P27 人月条 · P44 沙盘 */
+.indie-met { display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:6px; }
+.indie-mc { background:#fff; border:1px solid #e8edf5; border-radius:9px; padding:7px 10px; }
+.indie-mc .k { font-size:10.5px; color:#94a3b8; }
+.indie-mc .v { font-size:13.5px; font-weight:800; color:#0f172a; line-height:1.3; }
+.indie-mc .v em { font-style:normal; font-size:10.5px; font-weight:500; color:#94a3b8; }
+.indie-mc.hot .v { color:#4338ca; }
+body.dark-mode .indie-mc { background:#22222a; border-color:#33333d; }
+body.dark-mode .indie-mc .v { color:#eef2f8; }
+body.dark-mode .indie-mc.hot .v { color:#a5b4fc; }
+
+/* 独立面板（P05 / P07 / P37+P38+P40 / P50） */
+.indie-panels { margin-bottom:4px; }
+.indie-panel { background:#f8fafc; border:1px solid #e8edf5; border-radius:12px; padding:12px 14px; margin-bottom:12px; }
+body.dark-mode .indie-panel { background:#1c1c23; border-color:#33333d; }
+.indie-panel .pt { font-size:13px; font-weight:700; color:#475569; margin-bottom:9px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.indie-panel .pt .hint { font-size:11.5px; font-weight:400; color:#94a3b8; }
+.indie-panel .pt .x { margin-left:auto; font-size:11.5px; color:#94a3b8; cursor:pointer; font-weight:400; }
+body.dark-mode .indie-panel .pt { color:#c3ccda; }
+.indie-map-row { display:flex; align-items:center; gap:8px; font-size:11.5px; padding:3px 0; }
+.indie-map-row .nm { width:96px; flex-shrink:0; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600; }
+.indie-map-row .bar { flex:0 0 190px; height:9px; background:#e8edf5; border-radius:5px; overflow:hidden; }
+.indie-map-row .bar i { display:block; height:100%; }
+.indie-map-row .bar i.crowd { background:linear-gradient(90deg,#fda4af,#e11d48); }
+.indie-map-row .bar i.mid { background:linear-gradient(90deg,#fcd34d,#d97706); }
+.indie-map-row .bar i.roomy { background:linear-gradient(90deg,#6ee7b7,#059669); }
+.indie-map-row .bar i.unknown { background:linear-gradient(90deg,#cbd5e1,#94a3b8); }
+.indie-map-row .n { flex:0 0 62px; text-align:right; color:#0f172a; font-weight:700; font-variant-numeric:tabular-nums; }
+.indie-map-row .who { flex:1 1 auto; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+body.dark-mode .indie-map-row .nm { color:#c3ccda; }
+body.dark-mode .indie-map-row .bar { background:#33333d; }
+body.dark-mode .indie-map-row .n { color:#eef2f8; }
+
+.indie-pipe { display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:6px; }
+.indie-pipe-item { display:flex; align-items:center; gap:6px; font-size:11.5px; background:#fff; border:1px solid #e8edf5; border-radius:8px; padding:5px 8px; cursor:pointer; color:#475569; }
+.indie-pipe-item .sq { width:16px; height:16px; border-radius:4px; flex-shrink:0; font-size:10px; display:flex; align-items:center; justify-content:center; color:#fff; }
+.indie-pipe-item.lv2 .sq { background:#059669; }
+.indie-pipe-item.lv1 .sq { background:#d97706; }
+.indie-pipe-item.lv0 .sq { background:#cbd5e1; }
+.indie-pipe-item .lv { margin-left:auto; font-size:10.5px; color:#94a3b8; }
+body.dark-mode .indie-pipe-item { background:#22222a; border-color:#33333d; color:#c3ccda; }
+.indie-ship-item { display:flex; gap:8px; font-size:11.5px; padding:3px 0; cursor:pointer; color:#475569; }
+.indie-ship-item .bx { width:15px; height:15px; border-radius:4px; border:1.5px solid #cbd5e1; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; color:#fff; margin-top:1px; }
+.indie-ship-item.on .bx { background:#6366f1; border-color:#6366f1; }
+.indie-ship-item.on .tx { color:#94a3b8; text-decoration:line-through; }
+body.dark-mode .indie-ship-item { color:#c3ccda; }
+.indie-desk-rec { background:#eef2ff; border:1px solid #c7d2fe; border-radius:10px; padding:10px 12px; font-size:12.5px; line-height:1.8; color:#3730a3; margin-bottom:10px; }
+body.dark-mode .indie-desk-rec { background:#272c47; border-color:#3f4470; color:#c7d2fe; }
+.indie-desk-sub { font-size:12px; font-weight:700; color:#64748b; margin:11px 0 6px; }
+body.dark-mode .indie-desk-sub { color:#a8b3c2; }
+
+.indie-health { display:grid; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); gap:8px; }
+.indie-hc { background:#fff; border:1px solid #e8edf5; border-radius:10px; padding:8px 11px; }
+.indie-hc .k { font-size:11px; color:#94a3b8; }
+.indie-hc .v { font-size:16px; font-weight:800; color:#0f172a; line-height:1.35; }
+.indie-hc .v em { font-style:normal; font-size:10.5px; font-weight:500; color:#94a3b8; }
+.indie-hc.warn .v { color:#d97706; }
+.indie-hc.bad .v { color:#e11d48; }
+.indie-hc.good .v { color:#059669; }
+body.dark-mode .indie-hc { background:#22222a; border-color:#33333d; }
+body.dark-mode .indie-hc .v { color:#eef2f8; }
+body.dark-mode .indie-hc.warn .v { color:#fbbf24; }
+body.dark-mode .indie-hc.bad .v { color:#fb7185; }
+body.dark-mode .indie-hc.good .v { color:#34d399; }
+.indie-health-lack { font-size:11.5px; color:#94a3b8; line-height:1.85; margin-top:9px; }
+.indie-health-lack b { color:#475569; }
+body.dark-mode .indie-health-lack b { color:#c3ccda; }
+
+/* 动作区（P18 / P42 / P43 / P44） */
+.indie-act { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; align-items:center; }
+.indie-act button { font-size:11.5px; padding:4px 10px; border-radius:8px; border:1px solid #dbe3ee; background:#fff; color:#475569; cursor:pointer; font-family:inherit; }
+.indie-act button:hover { border-color:#a5b4fc; color:#4f46e5; }
+.indie-act button.pri { background:#6366f1; border-color:#6366f1; color:#fff; font-weight:600; }
+.indie-act button.done { background:#ecfdf5; border-color:#a7f3d0; color:#047857; font-weight:600; }
+body.dark-mode .indie-act button { background:#26262e; border-color:#3a3a46; color:#c3ccda; }
+body.dark-mode .indie-act button.pri { background:#6366f1; border-color:#6366f1; color:#fff; }
+body.dark-mode .indie-act button.done { background:#12302a; border-color:#1f6b56; color:#6ee7b7; }
+.indie-box { font-size:12.5px; line-height:1.8; color:#475569; background:#f8fafc; border-left:3px solid #6366f1; border-radius:0 8px 8px 0; padding:7px 11px; margin-top:7px; }
+body.dark-mode .indie-box { background:#22222a; color:#c3ccda; border-left-color:#818cf8; }
+.indie-box b { color:#1e293b; }
+body.dark-mode .indie-box b { color:#e8ecf3; }
+.indie-box .sm { font-size:11px; color:#94a3b8; }
+.indie-mvp { font-size:12.5px; line-height:1.8; color:#7c2d12; background:#fffbeb; border:1px dashed #fcd34d; border-radius:9px; padding:8px 12px; }
+body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd34d; }
+
 @media (max-width:768px) {
   #indieList.indie-waterfall { column-count:1; }
   .indie-stat { min-width:64px; padding:6px 8px; }
@@ -6558,10 +6715,16 @@ body.dark-mode .indie-cmp td { color:#c7d2e0; }
   .indie-hd { flex-wrap:wrap; }
   .indie-cover { width:100%; height:118px; }
   .indie-hd-act { width:100%; justify-content:flex-end; }
-  .indie-tl-d { width:66px; font-size:11px; }
+  .indie-tl-d, .indie-bk-d { width:66px; font-size:11px; }
   .indie-totem-grid { grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); }
   .indie-name { font-size:15.5px; }
   .indie-board { font-size:11.5px; }
+  .indie-f7 { grid-template-columns:1fr; }
+  .indie-tools { gap:5px 10px; padding:7px 10px; }
+  .indie-map-row .bar { flex-basis:110px; }
+  .indie-map-row .who { display:none; }
+  .indie-met { grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); }
+  .indie-health { grid-template-columns:repeat(auto-fill,minmax(136px,1fr)); }
 }
 
 
@@ -12627,6 +12790,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
                 <!-- ===== 独立游戏雷达视图 ===== -->
                 <div id="indieViewMain" class="comp-view active">
+                    <div id="indieTools" class="indie-tools"></div>
+                    <div id="indiePanels" class="indie-panels"></div>
                     <div id="indieBoard" class="indie-board"></div>
                     <div id="indieList" class="indie-waterfall"></div>
                     <div id="indieEmpty" style="display:none;padding:44px 20px;text-align:center;color:#999;font-size:13px;line-height:1.9;"></div>
@@ -21849,6 +22014,957 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         var indieCompareSel = [];
         var indieLoading = false;
 
+        // ============================================================
+        // 2026-09-27 雷达 v3 —— 用户从 50 方案里勾选的 33 项落地点
+        //   设计原则：① 新字段缺了就不渲染，绝不出空壳；
+        //             ② 能自动推断的一律自动推断，不依赖 AI 补数据也立刻可用；
+        //             ③ 全部新增存储都是本地键，不进云同步。
+        // ============================================================
+
+        var INDIE_KEY_PREF   = 'niko_indie_pref';      // 筛选 + 我的参数（每周可投入小时）
+        var INDIE_KEY_MARK   = 'niko_indie_marks';     // P08 三态标记 + P42 动作完成
+        var INDIE_KEY_PIPE   = 'niko_indie_pipeline';  // P37 十二环节自评
+        var INDIE_KEY_SHIP   = 'niko_indie_shipck';    // P40 上架检查表
+
+        var INDIE_PREF = null, INDIE_MARKS = null, INDIE_PIPE = null, INDIE_SHIP = null;
+        var indieKbIdx = -1;
+
+        // P09 七维归因维度（固定 7 项 → 可横向比较）
+        var INDIE_F7 = [
+            { k: 'niche',     n: '题材缺口', d: '这个题材当时没人做' },
+            { k: 'hook',      n: '玩法钩子', d: '一句话能讲清的爽点' },
+            { k: 'visual',    n: '视觉冲击', d: '截图 / 视频一眼抓人' },
+            { k: 'price',     n: '价格锚点', d: '定价踩中冲动区' },
+            { k: 'publisher', n: '发行背书', d: '有发行商 / 大 IP 推' },
+            { k: 'festival',  n: '平台节庆', d: '踩中 Next Fest / 主题节' },
+            { k: 'viral',     n: '病毒传播', d: '短视频 / 主播自传播' }
+        ];
+        var INDIE_SECTS = [
+            { k: 'all',   label: '全部' },
+            { k: 'cloud', label: '🆕 本周新爆款' },
+            { k: 'seed',  label: '🗿 长效案例' },
+            { k: 'flop',  label: '⚠️ 反面案例' }
+        ];
+        var INDIE_TEAMS = [
+            { k: 'all', label: '不限' }, { k: '1', label: '1 人' },
+            { k: '23', label: '2–3 人' }, { k: '4', label: '4 人以上' }
+        ];
+        var INDIE_FITS = [
+            { k: 'all', label: '不限' }, { k: 'green', label: '🟢 UE5 顺手' },
+            { k: 'yellow', label: '🟡 要补技能' }, { k: 'red', label: '🔴 别用 UE5' }
+        ];
+        var INDIE_MARKDEF = [
+            { k: 'want', label: '我想做', ic: '💡' },
+            { k: 'can',  label: '我能做', ic: '✋' },
+            { k: 'no',   label: '做不到', ic: '🚫' }
+        ];
+        var INDIE_PIPE_STEPS = ['立项', '原型', '垂直切片', '内容量产', '打磨', '打包', 'Steamworks', '商店页', '预告片', '社区', '上架', '售后'];
+        var INDIE_SHIP_STEPS = [
+            'UE5 项目设置：Shipping 打包配置 + 图标 / 启动画面',
+            '产出签名证书（或先只发 Windows 版）',
+            'Steamworks 后台建 App，拿到 AppID',
+            '接入 Steamworks SDK（成就 / 云存档 / 富状态）',
+            '商店页素材：胶囊图 6 种尺寸 + 截图 ≥5 张 + 预告片',
+            '商店页上线、开始收愿望单（越早越好）',
+            'Demo 打包并上传（报名 Next Fest 的前提）',
+            '定价 + 首发折扣定稿（独立游戏常见 -10%）',
+            '构建上传：Depot 配置 + 分支（default / beta）',
+            '发售设置：发售时间 / 区域 / 年龄分级',
+            '媒体与主播 key 批量生成并寄出',
+            '发售日值守：48 小时内响应崩溃与差评'
+        ];
+        // Steam 官方节庆：Next Fest 每年 2 / 6 / 10 月各一次，另有主题节。
+        // ⚠️ 这里给的是「按往年节奏」的估算日期（est:true），前端统一显示 ≈ 前缀；
+        //    官方公布后应更新本表 —— 不许当成官方确切日期使用。
+        var STEAM_FESTS = [
+            { d: '2026-02-05', e: 'Steam Next Fest（2 月）', est: true },
+            { d: '2026-06-15', e: 'Steam Next Fest（6 月）', est: true },
+            { d: '2026-10-14', e: 'Steam Next Fest（10 月）', est: true },
+            { d: '2026-11-20', e: 'Steam 秋季特卖', est: true },
+            { d: '2026-12-18', e: 'Steam 冬季特卖', est: true },
+            { d: '2027-01-20', e: 'Steam 家居 & 生活节（House & Home）', est: true }
+        ];
+
+        // ---------- 本地档案读写 ----------
+        function indiePref() {
+            if (!INDIE_PREF) {
+                INDIE_PREF = safeStorage.get(INDIE_KEY_PREF, null) || {};
+                if (typeof INDIE_PREF.sect !== 'string') INDIE_PREF.sect = 'all';
+                if (typeof INDIE_PREF.team !== 'string') INDIE_PREF.team = 'all';
+                if (typeof INDIE_PREF.fit !== 'string') INDIE_PREF.fit = 'all';
+                if (typeof INDIE_PREF.mark !== 'string') INDIE_PREF.mark = 'all';
+                if (typeof INDIE_PREF.hours !== 'number' || !(INDIE_PREF.hours > 0)) INDIE_PREF.hours = 8;
+                if (typeof INDIE_PREF.panel !== 'string') INDIE_PREF.panel = '';
+            }
+            return INDIE_PREF;
+        }
+        function indieMarks() { if (!INDIE_MARKS) INDIE_MARKS = safeStorage.get(INDIE_KEY_MARK, null) || {}; return INDIE_MARKS; }
+        function indiePipe()  { if (!INDIE_PIPE)  INDIE_PIPE  = safeStorage.get(INDIE_KEY_PIPE, null) || {}; return INDIE_PIPE; }
+        function indieShip()  { if (!INDIE_SHIP)  INDIE_SHIP  = safeStorage.get(INDIE_KEY_SHIP, null) || {}; return INDIE_SHIP; }
+
+        function indiePrefSet(k, v) {
+            var p = indiePref(); p[k] = v;
+            safeStorage.set(INDIE_KEY_PREF, p);
+            renderIndie();
+            renderIndieTools();
+        }
+        function indiePanelToggle(k) {
+            var p = indiePref();
+            p.panel = (p.panel === k) ? '' : k;
+            safeStorage.set(INDIE_KEY_PREF, p);
+            renderIndieTools(); renderIndiePanels();
+        }
+        function indiePanelClose() { indiePrefSet('panel', ''); }
+
+        // ---------- 自动推断：团队 / 引擎 / 联机 / 可做性 ----------
+        var INDIE_UE_RE     = /unreal|虚幻|\bue[45]\b|ue5/i;
+        var INDIE_2DENG_RE  = /godot|gdevelop|gamemaker|rpg ?maker|construct|love2d|game ?salad|ren'?py/i;
+        var INDIE_ONLINE_RE = /多人|联机|合作|co-?op|multiplayer|online|pvp|mmo|联线|同屏双人/i;
+        var INDIE_2DTAG_RE  = /像素|pixel|2d|2\.5d|视觉小说|文字冒险|卡牌|三消|galgame|放置|点选|互动小说/i;
+
+        function indieTagNames(g) {
+            return (g.tags || []).map(function (t) { return (t && t.name) ? t.name : ''; }).filter(Boolean);
+        }
+        function indieIsOnline(g) {
+            var s = indieTagNames(g).join(' ') + ' ' + ((g.genres || []).join(' ')) + ' ' + ((g.analysis && g.analysis.lesson) || '');
+            return INDIE_ONLINE_RE.test(s);
+        }
+        function indieCNNum(s) {
+            s = String(s || '');
+            var map = { '一': 1, '两': 2, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10 };
+            var m = s.match(/([一两二三四五六七八九十])\s*人/);
+            if (m && map[m[1]]) return map[m[1]];
+            m = s.match(/(\d+)\s*[-–~～至]\s*(\d+)\s*人/);
+            if (m) return Math.round((Number(m[1]) + Number(m[2])) / 2);
+            m = s.match(/(\d+)\s*人/);
+            if (m) return Number(m[1]);
+            if (/单人|一人|solo|独立开发者/i.test(s)) return 1;
+            return 0;
+        }
+        function indieTeamN(g) {
+            var a = g.analysis || {};
+            if (typeof a.teamN === 'number' && a.teamN > 0) return a.teamN;
+            var n = indieCNNum(a.teamSize || '');
+            if (n) return n;
+            if (g.developers && g.developers.length === 1) return 1;
+            return 0;
+        }
+        function indieTeamBucket(g) {
+            var n = indieTeamN(g);
+            if (!n) return '?';
+            if (n <= 1) return '1';
+            if (n <= 3) return '23';
+            return '4';
+        }
+        function indieMonthsFromText(s) {
+            if (!s) return 0;
+            s = String(s);
+            var m = s.match(/(\d+(?:\.\d+)?)\s*(?:个?月|months?|mos?)/i);
+            if (m) return Number(m[1]);
+            m = s.match(/(\d+(?:\.\d+)?)\s*(?:年|years?|yrs?)/i);
+            if (m) return Math.round(Number(m[1]) * 12);
+            m = s.match(/(\d+(?:\.\d+)?)\s*(?:周|weeks?|wks?)/i);
+            if (m) return Math.round(Number(m[1]) / 4.33 * 10) / 10;
+            m = s.match(/(\d+(?:\.\d+)?)\s*(?:天|days?)/i);
+            if (m) return Math.round(Number(m[1]) / 30 * 10) / 10;
+            if (/多年|数年/.test(s)) return 30;
+            if (/半年/.test(s)) return 6;
+            if (/一年/.test(s)) return 12;
+            return 0;
+        }
+        // P26 人月 = 人数 × 工期(月)
+        function indieWorkload(g) {
+            var a = g.analysis || {};
+            var n = indieTeamN(g);
+            var mo = (typeof a.devMonths === 'number' && a.devMonths > 0) ? a.devMonths : indieMonthsFromText(a.devTime || '');
+            if (!n || !mo) return null;
+            return { people: n, months: mo, pm: Math.round(n * mo * 10) / 10 };
+        }
+        // P27 按「我每周能投入 X 小时」换算成我需要的月数
+        function indieMyPlan(g) {
+            var w = indieWorkload(g);
+            if (!w) return null;
+            var hours = w.pm * 160;                          // 1 人月 ≈ 160 工时
+            var perMonth = (indiePref().hours || 8) * 4.33;  // 每周小时 × 月均周数
+            return { hours: Math.round(hours), months: Math.round(hours / perMonth * 10) / 10 };
+        }
+        // P02 + P33：UE5 可做性 / 单人可完成度（AI 字段优先，否则自动推断）
+        function indieFit(g) {
+            var a = g.analysis || {}, tc = a.toolchain || {}, eng = String(tc.engine || '');
+            var tags = indieTagNames(g).join(' ');
+            var online = indieIsOnline(g);
+            var out = { ue5: 'yellow', ue5Why: '', solo: 'yellow', soloWhy: '' };
+            if (a.ue5Fit === 'green' || a.ue5Fit === 'yellow' || a.ue5Fit === 'red') {
+                out.ue5 = a.ue5Fit; out.ue5Why = a.ue5FitWhy || 'AI 判定';
+            } else if (INDIE_UE_RE.test(eng)) {
+                out.ue5 = 'green'; out.ue5Why = '原作本身就是虚幻引擎，UE5 可直接接手';
+            } else if (INDIE_2DENG_RE.test(eng) || INDIE_2DTAG_RE.test(tags)) {
+                out.ue5 = 'red'; out.ue5Why = '2D / 小品量级，UE5 的包体与打包开销反而是负担';
+            } else if (eng) {
+                out.ue5 = 'yellow'; out.ue5Why = '原作是 ' + eng + '，UE5 要自己补对应模块';
+            } else {
+                out.ue5 = 'yellow'; out.ue5Why = '引擎未确认，先按「要补技能」估';
+            }
+            if (online && out.ue5 === 'green') { out.ue5 = 'yellow'; out.ue5Why += '；含联机，网络同步要自己写'; }
+            if (a.soloFit === 'green' || a.soloFit === 'yellow' || a.soloFit === 'red') {
+                out.solo = a.soloFit; out.soloWhy = a.soloWhy || 'AI 判定';
+            } else {
+                var n = indieTeamN(g);
+                if (n === 1) { out.solo = 'green'; out.soloWhy = '原作就是一个人做出来的'; }
+                else if (n === 2 || n === 3) { out.solo = 'yellow'; out.soloWhy = '原作 ' + n + ' 人，一个人要砍量或外包美术'; }
+                else if (n >= 4) { out.solo = 'red'; out.soloWhy = '原作 ' + n + ' 人，单人复刻不现实'; }
+                else { out.solo = 'yellow'; out.soloWhy = '团队规模未知，先按 2–3 人估'; }
+            }
+            if (online) {
+                out.solo = 'red';
+                out.soloWhy = '含联机，单人基本做不完' + (out.soloWhy ? '（原判：' + out.soloWhy + '）' : '');
+            }
+            return out;
+        }
+        // P38 内部用：0–100「作为你的第一个完整上架项目的现实度」
+        function indieReality(g) {
+            var f = indieFit(g), a = g.analysis || {}, d = a.difficulty || {};
+            var s = 100;
+            var n = indieTeamN(g);
+            if (n >= 4) s -= 34; else if (n >= 2) s -= 18; else if (!n) s -= 10;
+            if (f.ue5 === 'red') s -= 26; else if (f.ue5 === 'yellow') s -= 7;
+            var art = Number(a.artLevel || d.art || 3);
+            s -= Math.max(0, art - 2) * 9;
+            s -= Math.max(0, Number(d.content || 3) - 2) * 7;
+            if (indieIsOnline(g)) s -= 22;
+            var w = indieWorkload(g);
+            if (w) { if (w.pm >= 40) s -= 18; else if (w.pm >= 18) s -= 9; else if (w.pm <= 6) s += 6; }
+            else s -= 6;
+            return Math.max(5, Math.min(99, Math.round(s)));
+        }
+        // P04「看着香但别碰」判定
+        function indieTrap(g) {
+            var a = g.analysis || {};
+            if (a.trap === true) return true;
+            var n = indieTeamN(g);
+            var art = Number(a.artLevel || (a.difficulty && a.difficulty.art) || 0);
+            if (n >= 6) return true;
+            if (indieIsOnline(g) && n >= 3) return true;
+            if (art >= 5) return true;
+            return false;
+        }
+        function indieTrapWhy(g) {
+            var a = g.analysis || {};
+            if (a.trapWhy) return a.trapWhy;
+            var xs = [], n = indieTeamN(g);
+            if (indieIsOnline(g)) xs.push('要联机服务器与同步，单人生命周期内几乎做不完');
+            if (n >= 6) xs.push('原作团队 ' + n + ' 人以上');
+            else if (n >= 4) xs.push('原作团队 ' + n + ' 人');
+            if (Number(a.artLevel || (a.difficulty && a.difficulty.art)) >= 5) xs.push('美术量顶格');
+            if (!xs.length) xs.push('规模超出单人 / 小团队可承受范围');
+            return xs.join('；');
+        }
+        // P06 分区
+        function indieSect(g) {
+            var a = g.analysis || {};
+            if (a.flop || a.isFlop) return 'flop';
+            if (g.__src === 'seed') return 'seed';
+            if (g.__src === 'cloud') return 'cloud';
+            return indieTagNames(g).length ? 'cloud' : 'seed';
+        }
+        function indieFiltered() {
+            var p = indiePref(), all = (indieData && indieData.games) || [];
+            return all.filter(function (g) {
+                if (p.sect !== 'all' && indieSect(g) !== p.sect) return false;
+                if (p.team !== 'all' && indieTeamBucket(g) !== p.team) return false;
+                if (p.fit !== 'all' && indieFit(g).ue5 !== p.fit) return false;
+                if (p.mark !== 'all' && indieMarkOf(g) !== p.mark) return false;
+                return true;
+            });
+        }
+
+        // ---------- P08 三态标记 / P42 动作完成 ----------
+        function indieMarkOf(g) { return indieMarks()[indieKeyOf(g)] || ''; }
+        function indieMarkMenu(key) {
+            var g = indieFind(key); if (!g) return;
+            var order = ['', 'want', 'can', 'no'];
+            var cur = indieMarkOf(g);
+            var next = order[(order.indexOf(cur) + 1) % order.length];
+            var m = indieMarks(), kk = String(indieKeyOf(g));
+            if (next) m[kk] = next; else delete m[kk];
+            safeStorage.set(INDIE_KEY_MARK, m);
+            var lb = { '': '已清除标记', want: '💡 标成「我想做」', can: '✋ 标成「我能做」', no: '🚫 标成「做不到」' };
+            showToast(lb[next] || '标记已更新');
+            renderIndie();
+        }
+        function indieActionDone(g) { return !!indieMarks()['act:' + indieKeyOf(g)]; }
+        function indieActionToggle(key) {
+            var m = indieMarks(), kk = 'act:' + String(key);
+            if (m[kk]) delete m[kk]; else m[kk] = 1;
+            safeStorage.set(INDIE_KEY_MARK, m);
+            renderIndie();
+        }
+        function indiePipeCycle(i) {
+            var p = indiePipe();
+            p[i] = ((p[i] === undefined ? 0 : p[i]) + 1) % 3;
+            safeStorage.set(INDIE_KEY_PIPE, p);
+            renderIndiePanels();
+        }
+        function indieShipToggle(i) {
+            var s = indieShip();
+            if (s[i]) delete s[i]; else s[i] = 1;
+            safeStorage.set(INDIE_KEY_SHIP, s);
+            renderIndiePanels();
+        }
+
+        // ---------- 工具栏 ----------
+        function renderIndieTools() {
+            var el = document.getElementById('indieTools');
+            if (!el) return;
+            var all = (indieData && indieData.games) || [];
+            if (!all.length) { el.innerHTML = ''; el.style.display = 'none'; return; }
+            el.style.display = 'flex';
+            var p = indiePref(), shown = indieFiltered().length;
+            function grp(label, list, cur, key) {
+                var s = '<div class="grp"><span class="gl">' + label + '</span>';
+                list.forEach(function (o) {
+                    s += '<button class="' + (o.k === cur ? 'on' : '') + '" onclick="indiePrefSet(\'' + key + '\',\'' + o.k + '\')">' + o.label + '</button>';
+                });
+                return s + '</div>';
+            }
+            var h = '';
+            h += grp('🗂 分区', INDIE_SECTS, p.sect, 'sect');
+            h += grp('👥 团队', INDIE_TEAMS, p.team, 'team');
+            h += grp('🎮 UE5', INDIE_FITS, p.fit, 'fit');
+            h += '<div class="grp"><span class="gl">🏷 我的标记</span><button class="' + (p.mark === 'all' ? 'on' : '') + '" onclick="indiePrefSet(\'mark\',\'all\')">全部</button>';
+            INDIE_MARKDEF.forEach(function (o) {
+                h += '<button class="' + (p.mark === o.k ? 'on' : '') + '" onclick="indiePrefSet(\'mark\',\'' + o.k + '\')">' + o.ic + ' ' + o.label + '</button>';
+            });
+            h += '</div>';
+            h += '<span class="sp"></span>';
+            h += '<span class="cnt">显示 ' + shown + ' / ' + all.length + ' 款</span>';
+            h += '<div class="grp">'
+                + '<button class="tbtn' + (p.panel === 'map' ? ' on' : '') + '" onclick="indiePanelToggle(\'map\')">🗺 赛道地图</button>'
+                + '<button class="tbtn' + (p.panel === 'rival' ? ' on' : '') + '" onclick="indiePanelToggle(\'rival\')">⚔️ 对标池</button>'
+                + '<button class="tbtn' + (p.panel === 'desk' ? ' on' : '') + '" onclick="indiePanelToggle(\'desk\')">🧭 我的作战台</button>'
+                + '<button class="tbtn' + (p.panel === 'health' ? ' on' : '') + '" onclick="indiePanelToggle(\'health\')">🩺 数据体检</button>'
+                + '</div>';
+            h += '<span class="kb">⌨️ J/K 上下 · S 收藏 · N 便签 · Enter 展开</span>';
+            el.innerHTML = h;
+        }
+
+        // ---------- 独立面板 ----------
+        function renderIndiePanels() {
+            var el = document.getElementById('indiePanels');
+            if (!el) return;
+            var p = indiePref();
+            if (!p.panel) { el.innerHTML = ''; return; }
+            if (p.panel === 'map') el.innerHTML = indiePanelMap();
+            else if (p.panel === 'rival') el.innerHTML = indiePanelRival();
+            else if (p.panel === 'desk') el.innerHTML = indiePanelDesk();
+            else if (p.panel === 'health') el.innerHTML = indiePanelHealth();
+            else el.innerHTML = '';
+        }
+
+        // P05 细分赛道热度地图
+        function indiePanelMap() {
+            var games = indieFiltered();
+            var map = {};
+            games.forEach(function (g) {
+                (g.tags || []).forEach(function (t) {
+                    if (!t || !t.name || t.total == null) return;
+                    if (!map[t.name]) map[t.name] = { name: t.name, total: t.total, verdict: t.verdict, who: [] };
+                    map[t.name].who.push(g.name || '');
+                });
+            });
+            var rows = Object.keys(map).map(function (k) { return map[k]; });
+            rows.sort(function (a, b) { return a.total - b.total; });
+            var head = '<div class="indie-panel"><div class="pt">🗺 细分赛道热度地图';
+            var tail = '<span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            if (!rows.length) {
+                return head + ' <span class="hint">当前这批还没抓到社区标签（Actions 抓取跑过一次后才会出现）</span>' + tail
+                    + '<div class="indie-health-lack">没有标签就无法判断细分赛道拥挤度。标签是「这个玩法到底挤不挤」的唯一硬指标。</div></div>';
+            }
+            var max = rows[rows.length - 1].total || 1;
+            var logMax = Math.log(max + 1);
+            var h = head + ' <span class="hint">条越短 = 越空旷 · 从上往下看就是机会区（共 ' + rows.length + ' 个标签）</span>' + tail;
+            rows.forEach(function (r) {
+                var vk = (r.verdict && r.verdict.key) || 'unknown';
+                var vlabel = (r.verdict && r.verdict.label) || '?';
+                var w = Math.max(2, Math.round(Math.log(r.total + 1) / logMax * 100));
+                var rh = r.who.slice(0, 3).join('、') + (r.who.length > 3 ? ' 等 ' + r.who.length + ' 款' : '');
+                h += '<div class="indie-map-row">'
+                    + '<span class="nm" title="' + escapeHtml(r.name) + '">' + escapeHtml(r.name) + '</span>'
+                    + '<span class="bar"><i class="' + vk + '" style="width:' + w + '%"></i></span>'
+                    + '<span class="n">' + indieFmtNum(r.total) + '</span>'
+                    + '<span class="who" title="' + escapeHtml(rh) + '">' + vlabel + ' · ' + escapeHtml(rh) + '</span>'
+                    + '</div>';
+            });
+            h += '<div class="indie-health-lack">判据 = <b>该标签在 Steam 的全站游戏总数</b>（官方搜索 total_count）：≥5 万 🦈红海 / ≥1 万 🐠一般 / 其余 🐟空旷。'
+                + '注意这是 <b>主标签</b> 的宽度，宽标签几乎必然红海 —— 它回答的是「这个大品类挤不挤」，不是「你的具体玩法挤不挤」。</div>';
+            return h + '</div>';
+        }
+
+        // P07 对标池（收藏即建池，每周自动比对同标签新人）
+        function indiePanelRival() {
+            var favs = indieFavs();
+            var h = '<div class="indie-panel"><div class="pt">⚔️ 对标池 <span class="hint">你收藏过的爆款 = 你的对标赛道，下面标出本周新数据里同标签的新人</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            if (!favs.length) {
+                return h + '<div class="indie-health-lack">还没收藏任何爆款。点卡片上的 <b>⭐ 收藏</b> 就会进这里，并自动成为你的对标赛道。</div></div>';
+            }
+            var all = (indieData && indieData.games) || [];
+            var hitAny = false;
+            favs.forEach(function (f) {
+                var g = indieFind(f.key);
+                var tags = g ? indieTagNames(g).filter(function (n) { return !/^indie$|^独立$/i.test(n); }) : [];
+                h += '<div class="indie-desk-sub">' + escapeHtml(f.name || '')
+                    + (f.nameCn ? '（' + escapeHtml(f.nameCn) + '）' : '')
+                    + ' <span class="hint" style="font-weight:400;color:#94a3b8;">对标标签：'
+                    + (tags.length ? escapeHtml(tags.slice(0, 4).join(' / ')) : '无标签数据') + '</span></div>';
+                var rows = [];
+                if (tags.length) {
+                    all.forEach(function (o) {
+                        if (indieKeyOf(o) === f.key) return;
+                        if (indieSect(o) === 'seed') return;
+                        var ot = indieTagNames(o);
+                        var shared = tags.filter(function (t) { return ot.indexOf(t) >= 0; });
+                        if (shared.length) rows.push({ g: o, shared: shared });
+                    });
+                }
+                if (!rows.length) {
+                    h += '<div class="indie-health-lack">本周新数据里没有同标签的新人。' + (tags.length ? '' : '（这款还没抓到社区标签）') + '</div>';
+                } else {
+                    hitAny = true;
+                    rows.sort(function (a, b) { return ((b.g.burst && b.g.burst.score) || 0) - ((a.g.burst && a.g.burst.score) || 0); });
+                    rows.slice(0, 6).forEach(function (r) {
+                        var bscore = (r.g.burst && r.g.burst.score) || 0;
+                        h += '<div class="indie-map-row" style="cursor:pointer;" onclick="indieJump(\'' + String(indieKeyOf(r.g)).replace(/'/g, "\\'") + '\')">'
+                            + '<span class="nm" title="' + escapeHtml(r.g.name || '') + '">' + escapeHtml(r.g.name || '') + '</span>'
+                            + '<span class="bar"><i class="mid" style="width:' + Math.min(100, bscore) + '%"></i></span>'
+                            + '<span class="n" style="font-size:11px;color:#64748b;">爆款 ' + (bscore || '—') + '</span>'
+                            + '<span class="who">共用标签：' + escapeHtml(r.shared.slice(0, 3).join('、')) + '</span>'
+                            + '</div>';
+                    });
+                }
+            });
+            h += '<div class="indie-health-lack">共 ' + favs.length + ' 个对标 · ' + (hitAny ? '本周有新人进场（上面已列出）' : '本周暂无同赛道新人')
+                + '。每次点「🔄 刷新雷达」后这里会自动重算。</div>';
+            return h + '</div>';
+        }
+
+        // P37 + P38 + P40 我的作战台
+        function indiePanelDesk() {
+            var h = '<div class="indie-panel"><div class="pt">🧭 我的作战台 <span class="hint">缺口地图 + 本周推荐 + 上架清单</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            // P38 决策减负：只给一个
+            var games = indieFiltered(), best = null, bestS = -1;
+            games.forEach(function (g) {
+                if (indieSect(g) === 'flop') return;
+                var s = indieReality(g);
+                if (s > bestS) { bestS = s; best = g; }
+            });
+            if (best) {
+                var f = indieFit(best), plan = indieMyPlan(best);
+                var ue5lb = { green: '🟢 顺手', yellow: '🟡 要补技能', red: '🔴 不建议' }[f.ue5] || '—';
+                h += '<div class="indie-desk-rec">🎯 <b>这批里最适合你当「第一个完整上架项目」的是《' + escapeHtml(best.name || '') + '》</b><br>'
+                    + '理由：现实度 ' + bestS + '/100 · UE5 ' + ue5lb
+                    + (plan ? ' · 按你每周 ' + indiePref().hours + ' 小时算约 <b>' + plan.months + ' 个月</b>（' + indieFmtNum(plan.hours) + ' 工时）' : '')
+                    + '<br><span style="font-size:11.5px;opacity:.85;">' + escapeHtml(f.ue5Why || '') + '</span></div>';
+            } else {
+                h += '<div class="indie-desk-rec">当前筛选下没有可推荐的款（换个分区或放宽筛选试试）。</div>';
+            }
+            // P37 拼图
+            var pipe = indiePipe(), done = 0, gap = 0;
+            INDIE_PIPE_STEPS.forEach(function (s, i) { var v = pipe[i]; if (v === 2) done++; else if (!v) gap++; });
+            h += '<div class="indie-desk-sub">🧩 全流程拼图（12 个环节）—— 点一下切换「不会 → 半会 → 我会」。你缺的正是这张图。</div><div class="indie-pipe">';
+            INDIE_PIPE_STEPS.forEach(function (s, i) {
+                var v = (pipe[i] === undefined) ? 0 : pipe[i];
+                var lb = v === 2 ? '我会' : (v === 1 ? '半会' : '不会');
+                h += '<div class="indie-pipe-item lv' + v + '" onclick="indiePipeCycle(' + i + ')"><span class="sq">' + (v === 2 ? '✓' : (v === 1 ? '~' : '')) + '</span><span>' + s + '</span><span class="lv">' + lb + '</span></div>';
+            });
+            h += '</div><div class="indie-health-lack">已掌握 <b>' + done + ' / 12</b>，完全不会 <b>' + gap + '</b> 个。'
+                + (gap ? '把「不会」按顺序补，就是你缺的那条完整全流程路径。' : '全绿了 —— 可以准备上架。') + '</div>';
+            // P40 上架检查表
+            var ship = indieShip(), sn = 0;
+            INDIE_SHIP_STEPS.forEach(function (s, i) { if (ship[i]) sn++; });
+            h += '<div class="indie-desk-sub">📦 UE5 打包 → Steam 上架检查表（<b style="color:#6366f1;">' + sn + ' / ' + INDIE_SHIP_STEPS.length + '</b>）</div>';
+            INDIE_SHIP_STEPS.forEach(function (s, i) {
+                h += '<div class="indie-ship-item' + (ship[i] ? ' on' : '') + '" onclick="indieShipToggle(' + i + ')"><span class="bx">' + (ship[i] ? '✓' : '') + '</span><span class="tx">' + escapeHtml(s) + '</span></div>';
+            });
+            return h + '</div>';
+        }
+
+        // P50 数据体检
+        function indiePanelHealth() {
+            var all = (indieData && indieData.games) || [];
+            var noAnalysis = 0, noF7 = 0, noUe5 = 0, noTags = 0, noArt = 0, noMvp = 0, noTimeline = 0, noAction = 0;
+            all.forEach(function (g) {
+                var a = g.analysis || {};
+                if (!g.analysis) noAnalysis++;
+                if (!a.f7) noF7++;
+                if (!a.ue5 && !(a.toolchain && a.toolchain.engine)) noUe5++;
+                if (!indieTagNames(g).length) noTags++;
+                if (!a.artScale) noArt++;
+                if (!a.mvp) noMvp++;
+                if (!a.timeline || !a.timeline.length) noTimeline++;
+                if (!a.action) noAction++;
+            });
+            var last = safeStorage.get(INDIE_KEY_LAST, '') || (indieData && indieData.fetchedAt) || '';
+            var lastTxt = last ? indieFmtDate(String(last).slice(0, 10)) : '从未';
+            var N = all.length || 1;
+            function cls(n) { return n === 0 ? 'good' : (n > N / 2 ? 'bad' : 'warn'); }
+            var h = '<div class="indie-panel"><div class="pt">🩺 数据体检 <span class="hint">官方数据由 Actions 每周自动抓；下面是 AI 要补的分析字段</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            h += '<div class="indie-health">'
+                + '<div class="indie-hc"><div class="k">当前款数</div><div class="v">' + all.length + ' <em>款</em></div></div>'
+                + '<div class="indie-hc"><div class="k">上次抓取</div><div class="v" style="font-size:13px;">' + lastTxt + '</div></div>'
+                + '<div class="indie-hc ' + cls(noTags) + '"><div class="k">缺社区标签</div><div class="v">' + noTags + ' <em>/ ' + all.length + '</em></div></div>'
+                + '<div class="indie-hc ' + cls(noAnalysis) + '"><div class="k">缺 AI 分析</div><div class="v">' + noAnalysis + ' <em>/ ' + all.length + '</em></div></div>'
+                + '<div class="indie-hc ' + cls(noF7) + '"><div class="k">缺七维归因</div><div class="v">' + noF7 + '</div></div>'
+                + '<div class="indie-hc ' + cls(noTimeline) + '"><div class="k">缺曝光时间线</div><div class="v">' + noTimeline + '</div></div>'
+                + '<div class="indie-hc ' + cls(noArt) + '"><div class="k">缺美术量</div><div class="v">' + noArt + '</div></div>'
+                + '<div class="indie-hc ' + cls(noMvp) + '"><div class="k">缺 MVP 底线</div><div class="v">' + noMvp + '</div></div>'
+                + '<div class="indie-hc ' + cls(noAction) + '"><div class="k">缺本周动作</div><div class="v">' + noAction + '</div></div>'
+                + '</div>';
+            var lacks = [];
+            if (noAnalysis) lacks.push('<b>AI 分析</b> ' + noAnalysis + ' 款');
+            if (noF7) lacks.push('<b>七维归因</b> ' + noF7 + ' 款');
+            if (noUe5) lacks.push('<b>UE5 判定</b> ' + noUe5 + ' 款');
+            if (noArt) lacks.push('<b>美术量</b> ' + noArt + ' 款');
+            if (noMvp) lacks.push('<b>MVP 底线</b> ' + noMvp + ' 款');
+            if (noTimeline) lacks.push('<b>曝光时间线</b> ' + noTimeline + ' 款');
+            if (noTags) lacks.push('<b>社区标签</b> ' + noTags + ' 款（要先跑一次抓取）');
+            h += '<div class="indie-health-lack">' + (lacks.length ? ('待补：' + lacks.join(' · ') + '。') : '数据完整，没有缺口。') + '</div>';
+            h += '<div class="indie-act"><button class="pri" onclick="indieCopyCmd()">📋 复制「补分析」指令</button><button onclick="refreshIndie()">🔄 现在抓一次</button></div>';
+            h += '<div class="indie-health-lack" style="margin-top:7px;">把复制到的指令整段丢给我，我会按 appid 把缺的字段补齐并写回 <code>indie.json</code> —— 你一句话就行，不用自己想怎么说。</div>';
+            return h + '</div>';
+        }
+        function indieCopyCmd() {
+            var cmd = '请帮我补齐【独立游戏雷达】的 AI 分析字段。数据源 = 仓库根目录 indie.json 的 games[]。'
+                + '逐款补齐（按 appid 对齐，已有值不许覆盖，官方抓取数据一律不动）：'
+                + '① teamN（团队人数·数字）+ devMonths（工期·月数）'
+                + '② f7 七维归因打分：niche 题材缺口 / hook 玩法钩子 / visual 视觉冲击 / price 价格锚点 / publisher 发行背书 / festival 平台节庆 / viral 病毒传播，每项 0–5 整数'
+                + '③ ue5Fit（green/yellow/red）+ ue5FitWhy（一句话理由）'
+                + '④ artScale：{chars 角色数, scenes 场景数, anims 动画条数, fx 特效量, level 1–5, note}'
+                + '⑤ mvp：从成品倒推「最小可玩版本砍到什么程度还能卖」'
+                + '⑥ ue5：{pick 用 UE5 能白捡的模块[], build 要自己写的[], vs 与原作引擎相比的差异, learn [{t 该学的功能, url 官方文档}]}'
+                + '⑦ timeline 每条加 cost：free 零成本 / low 花小钱 / paid 砸钱'
+                + '⑧ videoEdge：这款的曝光里有多少是靠片子换来的（给我做视频的启发）+ trailerImpact 1–5'
+                + '⑨ action：本周我能做的一条具体动作（可执行、可勾选，不要感想）'
+                + '⑩ pricing [{d 日期, price 价格, off 折扣, note}]；soloFit + soloWhy；若是反面案例写 flop {reason 死因, death 过程, lesson 教训}；wishlist [{d, n}] 若有公开愿望单数据；partner 同赛道对照组（一成功一失败）'
+                + '每条结论必须挂可查证来源，查不到就留空，不许编。改完提交并推 indie.json。';
+            try {
+                var pr = navigator.clipboard.writeText(cmd);
+                if (pr && pr.catch) pr.catch(function () { });
+                showToast('📋 已复制「补分析」指令，直接粘给我就行');
+            } catch (e) { showToast('⚠️ 复制失败，请手动抄一下'); }
+        }
+
+        // ---------- 卡片内的各段渲染 ----------
+        function indieJump(key) {
+            var k = String(key);
+            var el = document.getElementById('indieCard-' + k);
+            if (!el) return;
+            if (!indieMoreOpen[k]) indieToggleMore(k);
+            try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
+        }
+        function indieFlagsHtml(g) {
+            var f = indieFit(g), out = [];
+            var ue5Txt = { green: '🟢 UE5 顺手', yellow: '🟡 要补技能', red: '🔴 别用 UE5' }[f.ue5] || '';
+            if (ue5Txt) out.push('<span class="indie-flag ' + f.ue5 + '" title="' + escapeHtml(f.ue5Why || '') + '">' + ue5Txt + '</span>');
+            var soloTxt = { green: '🟢 一人可做', yellow: '🟡 一人 + 外包', red: '🔴 必须团队' }[f.solo] || '';
+            if (soloTxt) out.push('<span class="indie-flag ' + f.solo + '" title="' + escapeHtml(f.soloWhy || '') + '">' + soloTxt + '</span>');
+            var plan = indieMyPlan(g);
+            if (plan) out.push('<span class="indie-flag score" title="按你每周 ' + indiePref().hours + ' 小时折算（1 人月 ≈ 160 工时）">⏳ 你约需 ' + plan.months + ' 个月</span>');
+            var sect = indieSect(g);
+            if (sect === 'seed') out.push('<span class="indie-flag sect">🗿 长效案例</span>');
+            else if (sect === 'cloud') out.push('<span class="indie-flag sect">🆕 本周新爆款</span>');
+            if (sect === 'flop') out.push('<span class="indie-flag flop">⚠️ 反面案例</span>');
+            if (indieTrap(g)) out.push('<span class="indie-flag red" title="' + escapeHtml(indieTrapWhy(g)) + '">🚫 看着香但别碰</span>');
+            var mk = indieMarkOf(g);
+            if (mk) {
+                var md = null;
+                INDIE_MARKDEF.forEach(function (x) { if (x.k === mk) md = x; });
+                if (md) out.push('<span class="indie-flag ' + md.k + '">' + md.ic + ' ' + md.label + '</span>');
+            }
+            out.push('<span class="indie-flag" style="cursor:pointer;border-style:dashed;" onclick="indieMarkMenu(\'' + String(indieKeyOf(g)).replace(/'/g, "\\'") + '\')" title="给这款打一个你自己的标记（会一直保存）">🏷 ' + (mk ? '改标记' : '标记') + '</span>');
+            return '<div class="indie-flags">' + out.join('') + '</div>';
+        }
+        function indieF7Html(a) {
+            if (!a || !a.f7) return '';
+            var vals = [];
+            INDIE_F7.forEach(function (x) {
+                var v = Number(a.f7[x.k]);
+                if (!isNaN(v) && v > 0) vals.push({ x: x, v: v });
+            });
+            if (!vals.length) return '';
+            var sorted = vals.slice().sort(function (p, q) { return q.v - p.v; });
+            var h = '<div class="indie-sec"><div class="indie-sec-t">🎲 爆款归因 · 七维打分 <span class="indie-name-cn">（0–5，横向可比 —— 爆款大多靠哪两件事，一眼看得出）</span></div><div class="indie-f7">';
+            INDIE_F7.forEach(function (x) {
+                var v = Number(a.f7[x.k]) || 0, bars = '';
+                for (var i = 1; i <= 5; i++) bars += '<i class="' + (i <= v ? (v === 5 ? 'f f5' : 'f') : '') + '"></i>';
+                h += '<div class="indie-f7-row"><span class="nm" title="' + escapeHtml(x.d) + '">' + x.n + '</span><span class="bars">' + bars + '</span><b>' + v + '</b></div>';
+            });
+            h += '</div><div class="indie-f7-top">🔑 主要靠 <b>' + sorted[0].x.n + '（' + sorted[0].v + '）</b>'
+                + (sorted[1] ? ' + <b>' + sorted[1].x.n + '（' + sorted[1].v + '）</b>' : '')
+                + ' —— ' + escapeHtml(sorted[0].x.d) + '</div>';
+            return h + '</div>';
+        }
+        function indieFestOf(dateStr) {
+            var d = String(dateStr || '').slice(0, 10);
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return null;
+            var t = new Date(d + 'T00:00:00').getTime();
+            if (isNaN(t)) return null;
+            for (var i = 0; i < STEAM_FESTS.length; i++) {
+                var f = STEAM_FESTS[i];
+                var ft = new Date(f.d + 'T00:00:00').getTime();
+                if (Math.abs(t - ft) <= 10 * 86400000) return f;
+            }
+            return null;
+        }
+        function indieTimelineHtml(g, a) {
+            var tl = a.timeline || [];
+            if (!tl.length) return '';
+            var key = indieKeyOf(g);
+            var open = !!indieTlOpen[key];
+            var freeN = 0, lowN = 0, paidN = 0;
+            tl.forEach(function (t) { if (t.cost === 'free') freeN++; else if (t.cost === 'low') lowN++; else if (t.cost === 'paid') paidN++; });
+            var h = '<div class="indie-sec"><div class="indie-sec-t">📈 曝光过程 · 可查证的传播链路';
+            if (freeN || lowN || paidN) {
+                h += ' <span class="indie-name-cn">🆓 零成本 ' + freeN + ' · 💰 花小钱 ' + lowN + ' · 💸 砸钱 ' + paidN + '</span>';
+            }
+            h += '<span class="lnk" onclick="indieToggleTl(\'' + String(key).replace(/'/g, "\\'") + '\')">' + (open ? '收起 ▲' : '展开 ' + tl.length + ' 个节点 ▾') + '</span></div>';
+            if (open) {
+                var ordered = tl.slice().sort(function (p, q) {
+                    var rank = { free: 0, low: 1, paid: 2 };
+                    var rp = (p.cost && rank[p.cost] != null) ? rank[p.cost] : 3;
+                    var rq = (q.cost && rank[q.cost] != null) ? rank[q.cost] : 3;
+                    return rp - rq;
+                });
+                h += '<div class="indie-tl indie-tl-exp">';
+                ordered.forEach(function (t) {
+                    var cl = t.cost || '', clb = { free: '🆓 零成本', low: '💰 花小钱', paid: '💸 砸钱' }[cl] || '';
+                    var fest = indieFestOf(t.d);
+                    h += '<div class="indie-tl-row"><span class="indie-tl-d">' + escapeHtml(t.d) + '</span><span class="indie-tl-x">'
+                        + (clb ? '<span class="indie-cost ' + cl + '">' + clb + '</span>' : '')
+                        + (fest ? '<span class="indie-tl-fest" title="' + escapeHtml(fest.e) + '（日期为估算，标注 ' + (fest.est ? '≈' : '') + '）">≈ ' + escapeHtml(fest.e) + '</span>' : '')
+                        + t.x + '</span></div>';
+                });
+                h += '</div>';
+                h += '<div class="indie-factor" style="margin-top:6px;"><span class="dot">▸</span><span class="src">节点按「零成本 → 花小钱 → 砸钱」排序 —— 你最该抄的是最上面那几条。</span></div>';
+            }
+            return h + '</div>';
+        }
+        function indieWishHtml(a) {
+            if (!a || !a.wishlist || a.wishlist.length < 2) return '';
+            var pts = a.wishlist.map(function (x) { return { d: String(x.d || '').slice(0, 10), n: Number(x.n) || 0 }; })
+                .filter(function (x) { return x.n > 0; });
+            if (pts.length < 2) return '';
+            var W = 560, H = 116, pad = 10;
+            var maxN = 0;
+            pts.forEach(function (p) { if (p.n > maxN) maxN = p.n; });
+            var step = (W - pad * 2) / (pts.length - 1);
+            var pl = pts.map(function (p, i) {
+                return [Math.round(pad + step * i), Math.round(H - pad - (p.n / maxN) * (H - pad * 2 - 14))];
+            });
+            var bigI = 0, bigD = 0;
+            for (var i = 1; i < pts.length; i++) { var dd = pts[i].n - pts[i - 1].n; if (dd > bigD) { bigD = dd; bigI = i; } }
+            var h = '<div class="indie-sec"><div class="indie-sec-t">📊 愿望单曲线 <span class="indie-name-cn">（发售前唯一真实指标）</span></div>';
+            h += '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;max-width:560px;height:auto;display:block;">';
+            h += '<polyline points="' + pl.map(function (c) { return c.join(','); }).join(' ') + '" fill="none" stroke="#6366f1" stroke-width="2" stroke-linejoin="round"/>';
+            pl.forEach(function (c, i) {
+                var big = (i === bigI && bigD > 0);
+                h += '<circle cx="' + c[0] + '" cy="' + c[1] + '" r="' + (big ? 4.5 : 3) + '" fill="' + (big ? '#e11d48' : '#6366f1') + '"/>';
+            });
+            h += '<text x="' + pl[0][0] + '" y="' + (H - 1) + '" font-size="9" fill="#94a3b8" text-anchor="start">' + escapeHtml(pts[0].d.slice(5)) + '</text>';
+            h += '<text x="' + pl[pl.length - 1][0] + '" y="' + (H - 1) + '" font-size="9" fill="#94a3b8" text-anchor="end">' + escapeHtml(pts[pts.length - 1].d.slice(5)) + '</text>';
+            if (bigD > 0) h += '<text x="' + pl[bigI][0] + '" y="' + (pl[bigI][1] - 7) + '" font-size="10" font-weight="700" fill="#e11d48" text-anchor="middle">+' + escapeHtml(indieFmtNum(bigD)) + '</text>';
+            h += '</svg>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span>从 ' + indieFmtNum(pts[0].n) + ' 涨到 ' + indieFmtNum(pts[pts.length - 1].n)
+                + (bigD > 0 ? '；最大一次跳跃 <b>+' + indieFmtNum(bigD) + '</b>（' + escapeHtml(pts[bigI].d) + ' 前后）—— 那个窗口就是你该抄的' : '')
+                + '</span></div></div>';
+            return h;
+        }
+        function indiePriceHtml(g, a) {
+            var rows = (a && a.pricing && a.pricing.length) ? a.pricing : null;
+            if (!rows) return '';
+            var h = '<div class="indie-sec"><div class="indie-sec-t">💵 价格与折扣节奏 <span class="indie-name-cn">（可照抄的表）</span></div>';
+            rows.forEach(function (r) {
+                h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + escapeHtml(indieFmtDate(r.d)) + '</b>：'
+                    + escapeHtml(String(r.price || '')) + (r.off ? ' <b>' + escapeHtml(String(r.off)) + '</b>' : '')
+                    + (r.note ? '　' + escapeHtml(String(r.note)) : '') + '</span></div>';
+            });
+            return h + '</div>';
+        }
+        function indieBackHtml(g) {
+            var plan = indieMyPlan(g);
+            var mos = plan ? Math.max(2, Math.round(plan.months)) : 12;
+            function m(ratio) { var v = mos * ratio; return v < 1 ? '1 个月内' : ('约 ' + (v < 2 ? v.toFixed(1) : Math.round(v)) + ' 个月后'); }
+            var rows = [
+                ['现在', '建 Steam 商店页 + 开愿望单', '唯一免费的长期曝光位，越早越好'],
+                ['T-55%', m(0.45), '垂直切片跑通：一个核心循环 + 一张场景 + 一个角色'],
+                ['T-38%', m(0.38), 'Demo 打包 → 报名 Next Fest（报名通常提前 1 个月截止）'],
+                ['T-25%', m(0.25), '商店页素材定稿：截图 ≥5 张 + 预告片'],
+                ['T-12%', m(0.12), '预告片发布 + press kit + 批量寄媒体 / 主播 key'],
+                ['D-Day', '约 ' + mos + ' 个月后', '发售：定价 + 首发折扣，48 小时值守评论与崩溃'],
+                ['D+7', '发售一周后', '首个补丁：差评集中在哪儿就修哪儿'],
+                ['D+30', '发售一月后', '首次打折 + 复盘愿望单转化率']
+            ];
+            var kk = String(indieKeyOf(g)).replace(/'/g, "\\'");
+            var h = '<div class="indie-sec"><div class="indie-sec-t">📅 发售前倒推清单 <span class="indie-name-cn">（按「你约需 ' + mos + ' 个月」折算）</span></div><div class="indie-tl-back">';
+            rows.forEach(function (r) {
+                h += '<div class="indie-bk-row"><span class="indie-bk-d">' + r[0] + '</span><span class="indie-bk-x"><b>' + escapeHtml(r[1]) + '</b> · ' + escapeHtml(r[2]) + '</span></div>';
+            });
+            h += '</div><div class="indie-act"><button class="pri" onclick="indiePlan(\'' + kk + '\')">📌 一键写进我的日历</button></div></div>';
+            return h;
+        }
+        function indieMetHtml(g) {
+            var w = indieWorkload(g), plan = indieMyPlan(g);
+            if (!w && !plan) return '';
+            var h = '<div class="indie-sec"><div class="indie-sec-t">🧮 人力与工期 <span class="indie-name-cn">（人月是唯一能跨游戏比较的难度单位）</span></div><div class="indie-met">';
+            if (w) {
+                h += '<div class="indie-mc"><div class="k">团队 / 工期</div><div class="v">' + w.people + ' 人 <em>×</em> ' + w.months + ' <em>月</em></div></div>';
+                h += '<div class="indie-mc hot"><div class="k">人月</div><div class="v">' + w.pm + ' <em>人月</em></div></div>';
+            }
+            if (plan) {
+                h += '<div class="indie-mc hot"><div class="k">你一个人要做</div><div class="v">' + plan.months + ' <em>个月</em></div></div>';
+                h += '<div class="indie-mc"><div class="k">折算工时</div><div class="v">' + indieFmtNum(plan.hours) + ' <em>小时</em></div></div>';
+            }
+            h += '</div>';
+            h += '<div class="indie-health-lack" style="margin-top:8px;">按你每周投入 '
+                + '<input type="number" min="1" max="80" value="' + indiePref().hours + '" onchange="indiePrefSet(\'hours\', Math.max(1, Math.min(80, Number(this.value) || 8)))" style="width:58px;padding:2px 6px;font-size:11.5px;border:1px solid #dbe3ee;border-radius:6px;background:#fff;color:inherit;">'
+                + ' 小时折算（1 人月 ≈ 160 工时）。改了这里，所有卡片的「你约需几个月」会一起变。</div>';
+            return h + '</div>';
+        }
+        function indieArtHtml(a) {
+            var s = a && a.artScale;
+            if (!s) return '';
+            var cells = [];
+            if (s.chars != null) cells.push(['角色数', s.chars]);
+            if (s.scenes != null) cells.push(['场景数', s.scenes]);
+            if (s.anims != null) cells.push(['动画条数', s.anims]);
+            if (s.fx != null) cells.push(['特效量', s.fx]);
+            if (s.poly != null) cells.push(['建模量', s.poly]);
+            var h = '<div class="indie-sec"><div class="indie-sec-t">🎨 美术量硬指标 <span class="indie-name-cn">（别的都能糊弄，这一项糊弄不了）</span></div>';
+            if (cells.length) {
+                h += '<div class="indie-met">';
+                cells.forEach(function (c) { h += '<div class="indie-mc"><div class="k">' + c[0] + '</div><div class="v">' + escapeHtml(String(c[1])) + '</div></div>'; });
+                h += '</div>';
+            }
+            if (s.note) h += '<div class="indie-factor" style="margin-top:7px;"><span class="dot">▸</span><span>' + escapeHtml(s.note) + '</span></div>';
+            return h + '</div>';
+        }
+        function indieMvpHtml(a) {
+            if (!a || !a.mvp) return '';
+            return '<div class="indie-sec"><div class="indie-sec-t">✂️ MVP 底线 · 砍到什么程度还能卖</div><div class="indie-mvp">' + escapeHtml(a.mvp) + '</div></div>';
+        }
+        function indieFlopHtml(a) {
+            if (!a || !a.flop) return '';
+            var f = a.flop, h = '<div class="indie-sec"><div class="indie-sec-t">⚠️ 反面案例 · 它怎么死的</div>';
+            if (f.reason) h += '<div class="indie-factor"><span class="dot">▸</span><span><b>死因</b>：' + escapeHtml(f.reason) + '</span></div>';
+            if (f.death) h += '<div class="indie-factor"><span class="dot">▸</span><span><b>过程</b>：' + escapeHtml(f.death) + '</span></div>';
+            if (f.lesson) h += '<div class="indie-box" style="margin-top:6px;">避坑：' + escapeHtml(f.lesson) + '</div>';
+            return h + '</div>';
+        }
+        function indiePairHtml(a) {
+            if (!a || !a.partner) return '';
+            var p = indieFind(a.partner);
+            return '<div class="indie-sec"><div class="indie-sec-t">🆚 同赛道对照 · 一成功一失败</div><div class="indie-box">对照组：<b>'
+                + escapeHtml(p ? (p.name || '') : String(a.partner)) + '</b>'
+                + (p ? '（爆款指数 ' + ((p.burst && p.burst.score) || '—') + ' · 好评率 ' + ((p.reviews && p.reviews.positivePct != null) ? p.reviews.positivePct + '%' : '—') + '）' : '')
+                + (a.partnerNote ? '<br>' + escapeHtml(a.partnerNote) : '')
+                + '<br><span class="sm">差异才是结论 —— 同一个标签下，活的和死的差在哪一项，就是你要避开的那一项。</span></div></div>';
+        }
+        function indieUe5Html(g, a) {
+            var u = (a && a.ue5) || {}, tool = (a && a.toolchain) || {};
+            var out = [];
+            if (u.pick && u.pick.length) out.push('<div class="indie-factor"><span class="dot">🟢</span><span><b>UE5 能白捡</b>：' + escapeHtml(u.pick.join(' / ')) + '</span></div>');
+            if (u.build && u.build.length) out.push('<div class="indie-factor"><span class="dot">🔴</span><span><b>UE5 要自己写</b>：' + escapeHtml(u.build.join(' / ')) + '</span></div>');
+            if (u.vs) out.push('<div class="indie-factor"><span class="dot">🔁</span><span><b>换到 UE5 会怎样</b>：' + escapeHtml(u.vs) + '</span></div>');
+            if (!out.length && tool.engine) {
+                out.push('<div class="indie-factor"><span class="dot">▸</span><span>原作用 <b>' + escapeHtml(tool.engine) + '</b>；UE5 的对应关系还没补（AI 未填 <code>analysis.ue5</code>）</span></div>');
+            }
+            var learn = u.learn || [];
+            if (learn.length) {
+                out.push('<div class="indie-factor" style="margin-top:5px;"><span class="dot">📚</span><span><b>要做它，你先学会</b>：'
+                    + learn.map(function (x) {
+                        return x.url ? '<a href="' + escapeHtml(x.url) + '" target="_blank" rel="noopener">' + escapeHtml(x.t) + '</a>' : escapeHtml(x.t);
+                    }).join(' · ') + '</span></div>');
+            }
+            if (!out.length) return '';
+            return '<div class="indie-sec"><div class="indie-sec-t">🎮 UE5 怎么落地 <span class="indie-name-cn">（把案例翻译成你的技术栈）</span></div>' + out.join('') + '</div>';
+        }
+        function indieVideoHtml(g, a) {
+            var out = [];
+            if (a && a.videoEdge) out.push('<div class="indie-box">🎬 ' + escapeHtml(a.videoEdge) + '</div>');
+            if (a && a.trailerImpact != null) {
+                var n = Number(a.trailerImpact) || 0, bars = '';
+                for (var i = 1; i <= 5; i++) bars += '<i class="' + (i <= n ? 'f' : '') + '"></i>';
+                out.push('<div class="indie-factor" style="margin-top:6px;"><span class="dot">▸</span><span><b>曝光里靠片子的比重</b>：<span class="indie-bars">' + bars + '</span> ' + n + '/5　<span class="src">你的强项就在这</span></span></div>');
+            }
+            if (!out.length) {
+                out.push('<div class="indie-box">🎬 你是视频设计师 —— 预告片 / 商店页 GIF / 短视频买量素材，恰好是 90% 独立开发者最弱的一环。看这款时重点看它的 <b>前 3 张截图</b> 和 <b>预告片前 6 秒</b>：那两处决定点击率与完播率，也就是你的主场。</div>');
+            }
+            return '<div class="indie-sec"><div class="indie-sec-t">🎬 你的非对称优势 · 视频能力</div>' + out.join('') + '</div>';
+        }
+        function indieActionHtml(g, a) {
+            var done = indieActionDone(g);
+            var kk = String(indieKeyOf(g)).replace(/'/g, "\\'");
+            var h = '<div class="indie-sec"><div class="indie-sec-t">✅ 本周可做的一条动作 <span class="indie-name-cn">（不是感想，是能划掉的）</span></div>';
+            h += '<div class="indie-act"><button class="' + (done ? 'done' : 'pri') + '" onclick="indieActionToggle(\'' + kk + '\')">' + (done ? '✓ 已做' : '☐ 标记完成') + '</button>'
+                + '<button onclick="indieTodo(\'' + kk + '\')">➕ 转成我的项目待办</button></div>';
+            h += '<div class="indie-box" style="margin-top:8px;">'
+                + (a && a.action ? escapeHtml(a.action) : '<span class="sm">这条 AI 还没填（<code>analysis.action</code>）。打开工具栏的「🩺 数据体检」→ 复制「补分析」指令发我即可。</span>')
+                + '</div>';
+            return h + '</div>';
+        }
+        // P44 沙盘推演（内联，不弹窗）
+        function indieSandboxHtml(g) {
+            var f = indieFit(g), plan = indieMyPlan(g), w = indieWorkload(g), a = g.analysis || {};
+            var rows = [];
+            if (plan) {
+                var days = Math.round(plan.months * 30.4);
+                rows.push('按你每周 ' + indiePref().hours + ' 小时，照抄这个规模要 <b>约 ' + plan.months + ' 个月</b>（' + indieFmtNum(plan.hours) + ' 工时）→ 最早的合理上线时间 ≈ <b>' + indieFmtDate(indieDateShift(days)) + '</b>');
+            } else if (w) {
+                rows.push('照抄这个规模 = <b>' + w.pm + ' 人月</b>，你一个人做至少一年');
+            } else {
+                rows.push('人数 / 工期缺数据，先按「2 人 × 6 个月」保守估，你一个人大概要 <b>1 年</b>以上');
+            }
+            var risks = [];
+            if (indieIsOnline(g)) risks.push('联机同步 —— 独立开发翻车率最高的一类');
+            if (f.ue5 === 'red') risks.push('你熟悉的是 UE5，这款更适合 ' + ((a.toolchain && a.toolchain.engine) || '2D 引擎') + '，等于要换工具链');
+            else if (f.ue5 === 'yellow') risks.push('UE5 缺对应模块，要先补 ' + ((a.ue5 && a.ue5.learn && a.ue5.learn.length) ? a.ue5.learn.map(function (x) { return x.t; }).join(' / ') : '相关功能'));
+            if (Number(a.artLevel || (a.difficulty && a.difficulty.art)) >= 4) risks.push('美术量是硬约束，最容易拖垮单人项目');
+            if (!risks.length) risks.push('没有明确高风险项，但独立开发最常见的死法是「做太大」');
+            rows.push('最大风险：<b>' + risks[0] + '</b>');
+            rows.push('最该砍的：<b>' + (a.mvp || '先砍到「一个核心循环 + 一张场景 + 一个角色」能跑通') + '</b>');
+            return '<div class="indie-sec"><div class="indie-sec-t">🧪 如果我做这个 · 沙盘推演</div><div class="indie-box">'
+                + rows.map(function (r) { return '· ' + r; }).join('<br>') + '</div></div>';
+        }
+
+        // ---------- P18 / P43 写进我的日历 ----------
+        function indieCalTemplate() {
+            var evs = safeStorage.get('work_calendar_events', []) || [];
+            for (var i = 0; i < evs.length; i++) {
+                var e = evs[i];
+                if (e && e.startDate && !e.repeat && !e.repeatInstance) {
+                    var t = {};
+                    Object.keys(e).forEach(function (k) { t[k] = e[k]; });
+                    ['id', 'title', 'desc', 'startDate', 'endDate', 'repeat', 'repeatGroup', 'parentId', 'repeatInstance', 'status', 'rolledDays', 'rolledAt', 'doneAt'].forEach(function (k) { delete t[k]; });
+                    return t;
+                }
+            }
+            return { type: 'task', startTime: '', endTime: '', priority: 'medium', customBoss: false, scope: '', projectId: '' };
+        }
+        function indieDateShift(days) {
+            var d = new Date(); d.setDate(d.getDate() + Math.round(days));
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        }
+        function indieCalAdd(items, tip) {
+            if (!items || !items.length) return 0;
+            var evs = safeStorage.get('work_calendar_events', []) || [];
+            var tpl = indieCalTemplate();
+            var exist = {};
+            evs.forEach(function (e) { if (e && e.title) exist[e.title + '|' + e.startDate] = 1; });
+            var added = 0, skipped = 0;
+            items.forEach(function (it) {
+                if (exist[it.title + '|' + it.date]) { skipped++; return; }
+                var e = {};
+                Object.keys(tpl).forEach(function (k) { e[k] = tpl[k]; });
+                e.id = Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6);
+                e.title = it.title;
+                e.desc = it.desc || '';
+                e.startDate = it.date;
+                e.endDate = it.date;
+                e.status = 'todo';
+                e.repeat = null;
+                evs.push(e);
+                exist[it.title + '|' + it.date] = 1;
+                added++;
+            });
+            if (!added) { showToast('⚠️ 这些任务已经在你的日历里了（按「标题 + 日期」查重）'); return 0; }
+            safeStorage.set('work_calendar_events', evs);
+            try { events = evs; } catch (e2) { }
+            try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (e3) { }
+            try { if (typeof renderTodayPage === 'function') renderTodayPage(); } catch (e4) { }
+            showToast('✅ 已写进日历看板：新增 ' + added + ' 条' + (skipped ? '，跳过重复 ' + skipped + ' 条' : '') + '（' + (tip || '') + '）');
+            return added;
+        }
+        function indiePlanList(g) {
+            var plan = indieMyPlan(g);
+            var mos = plan ? Math.max(2, Math.round(plan.months)) : 12;
+            var total = Math.round(mos * 30.4);
+            function at(ratio) { return indieDateShift(total * ratio); }
+            return [
+                { title: '《' + g.name + '》建 Steam 商店页 + 开愿望单', date: at(0.05), desc: '对标案例：' + g.name + '。商店页是唯一免费的长期曝光位，越早开越好。' },
+                { title: '《' + g.name + '》垂直切片跑通', date: at(0.45), desc: '一个核心循环 + 一张场景 + 一个角色，能玩通再谈量产。' },
+                { title: '《' + g.name + '》Demo 打包 → 报名 Next Fest', date: at(0.62), desc: 'Next Fest 每年 2 / 6 / 10 月，报名通常提前 1 个月截止。' },
+                { title: '《' + g.name + '》商店页素材定稿（截图 + 预告片）', date: at(0.75), desc: '你的强项：前 3 张截图决定点击率，预告片前 6 秒决定完播率。' },
+                { title: '《' + g.name + '》预告片发布 + 批量寄媒体 key', date: at(0.88), desc: 'Press kit + 主播 / 媒体 key，独立游戏最有效的零成本曝光路径。' },
+                { title: '《' + g.name + '》发售日', date: at(1), desc: '定价 + 首发折扣定稿；发售 48 小时内盯评论与崩溃。' },
+                { title: '《' + g.name + '》D+7 首个补丁 + 复盘评价', date: indieDateShift(total + 7), desc: '差评集中在哪儿，第一个补丁就修哪儿。' },
+                { title: '《' + g.name + '》D+30 首次打折', date: indieDateShift(total + 30), desc: '首次折扣常见 -10%~-20%。' }
+            ];
+        }
+        function indiePlan(key) {
+            var g = indieFind(key); if (!g) return;
+            var items = indiePlanList(g);
+            if (!confirm('按《' + g.name + '》的节奏，在你的日历里建 ' + items.length + ' 条「发售作战图」任务。\n\n'
+                + '第一条例：今天（建商店页）\n最后一条例：约 ' + items[items.length - 1].date + '（首次打折）\n\n确认写入吗？（写入后可随时在日历里删除）')) return;
+            indieCalAdd(items, '发售作战图');
+        }
+        function indieTodoList(g) {
+            var a = g.analysis || {}, items = [];
+            items.push({ title: '拆解《' + g.name + '》商店页前 3 张图 + 预告片前 6 秒', date: indieDateShift(1), desc: '你的强项，直接抄它的构图与节奏。' });
+            if (a.action) items.push({ title: a.action, date: indieDateShift(2), desc: '来自独立游戏雷达：' + g.name });
+            ((a.ue5 && a.ue5.learn) || []).slice(0, 2).forEach(function (x, i) {
+                items.push({ title: '学 UE5：' + x.t, date: indieDateShift(4 + i * 3), desc: x.url || '' });
+            });
+            items.push({ title: '试玩《' + g.name + '》并记录手感结论', date: indieDateShift(6), desc: g.url || '' });
+            return items;
+        }
+        function indieTodo(key) {
+            var g = indieFind(key); if (!g) return;
+            var items = indieTodoList(g);
+            if (!confirm('把这 ' + items.length + ' 条具体待办写进你的日历？\n\n'
+                + items.map(function (x) { return '· ' + x.date + '　' + x.title; }).join('\n'))) return;
+            indieCalAdd(items, '案例拆解待办');
+        }
+
+        // ---------- P48 键盘流 ----------
+        function indieKbMove(d) {
+            var list = indieFiltered();
+            if (!list.length) return;
+            if (indieKbIdx < 0) indieKbIdx = (d > 0 ? 0 : list.length - 1);
+            else indieKbIdx = Math.max(0, Math.min(list.length - 1, indieKbIdx + d));
+            indieKbPaint();
+        }
+        function indieKbPaint() {
+            var old = document.querySelector('.indie-card.kb');
+            if (old) old.classList.remove('kb');
+            var list = indieFiltered(), g = list[indieKbIdx];
+            if (!g) return;
+            var el = document.getElementById('indieCard-' + indieKeyOf(g));
+            if (!el) return;
+            el.classList.add('kb');
+            try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { }
+        }
+        function indieKbCur() { return indieFiltered()[indieKbIdx] || null; }
+        function indieKb(ev) {
+            try {
+                var t = ev.target || {};
+                var tn = String(t.tagName || '').toUpperCase();
+                if (tn === 'INPUT' || tn === 'TEXTAREA' || tn === 'SELECT' || t.isContentEditable) return;
+                var hp = document.getElementById('hotPage'), iv = document.getElementById('indieViewMain');
+                if (!hp || !hp.classList.contains('active')) return;
+                if (!iv || !iv.classList.contains('active')) return;
+                var k = ev.key, g = null;
+                if (k === 'j' || k === 'J') { indieKbMove(1); if (ev.preventDefault) ev.preventDefault(); }
+                else if (k === 'k' || k === 'K') { indieKbMove(-1); if (ev.preventDefault) ev.preventDefault(); }
+                else if (k === 's' || k === 'S') { g = indieKbCur(); if (g) { indieToggleFav(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
+                else if (k === 'n' || k === 'N') { g = indieKbCur(); if (g) { indieToNote(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
+                else if (k === 'Enter') { g = indieKbCur(); if (g) { indieToggleMore(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
+                else if (k === 'Escape') {
+                    var old = document.querySelector('.indie-card.kb');
+                    if (old) old.classList.remove('kb');
+                    indieKbIdx = -1;
+                }
+            } catch (e) { }
+        }
+
         // ---------- 2026-09-27 新增：横向对比维度 + 冠军排名 ----------
         // 用户反馈「看不出哪个游戏数据最好」→ 每个维度算一遍名次，卡上给 🥇🥈🥉 徽章，顶部给榜单条。
         var INDIE_METRICS = [
@@ -21865,17 +22981,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             for (var i = 0; i < INDIE_METRICS.length; i++) if (INDIE_METRICS[i].k === k) return INDIE_METRICS[i];
             return INDIE_METRICS[0];
         }
-        function indieRankMap() {
+        function indieRankMap(list) {
             var out = {};
+            var src = list || ((indieData && indieData.games) || []);
             INDIE_METRICS.forEach(function (mt) {
-                var arr = ((indieData && indieData.games) || []).filter(function (g) { return mt.get(g) > 0; });
+                var arr = src.filter(function (g) { return mt.get(g) > 0; });
                 arr.sort(function (a, b) { return mt.asc ? (mt.get(a) - mt.get(b)) : (mt.get(b) - mt.get(a)); });
                 out[mt.k] = {};
                 arr.forEach(function (g, i) { out[mt.k][indieKeyOf(g)] = i + 1; });
             });
             return out;
-        }
-        function indieRankBadge(k, key) {
+        }        function indieRankBadge(k, key) {
             var r = (indieRanks[k] || {})[key];
             if (!r || r > 3) return '';
             var ic = r === 1 ? '🥇' : (r === 2 ? '🥈' : '🥉');
@@ -21890,7 +23006,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function renderIndieBoard() {
             var el = document.getElementById('indieBoard');
             if (!el) return;
-            var games = (indieData && indieData.games) || [];
+            var games = indieFiltered();
             if (!games.length) { el.innerHTML = ''; el.style.display = 'none'; return; }
             el.style.display = 'flex';
             var mt = indieMetricOf(indieBoardMetric);
@@ -21907,17 +23023,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }).join('　') + '</span>';
             }
             el.innerHTML = h;
-        }
-        function indieToggleMore(key) {
+        }        function indieToggleMore(key) {
             var k = String(key);
             indieMoreOpen[k] = !indieMoreOpen[k];
             var card = document.getElementById('indieCard-' + k);
             if (card) card.classList.toggle('open', !!indieMoreOpen[k]);
             var tg = document.getElementById('indieExpand-' + k);
-            if (tg) tg.textContent = indieMoreOpen[k] ? '收起详情 ▲' : '展开详情 · 为什么能爆 / 曝光过程 / 难度三轴 ▾';
-        }
-
-        // ---------- 工具 ----------
+            if (tg) tg.textContent = indieMoreOpen[k] ? '收起详情 ▲' : '展开详情 · 归因 / 工期 / UE5 / 曝光 / 我能做什么 ▾';
+        }        // ---------- 工具 ----------
         function indieNorm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, ''); }
 
         function indieFmtNum(n) {
@@ -22022,7 +23135,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var official = a.officialSales || '';
             var third = (sl && sl.mid) ? ('约 ' + indieFmtNum(sl.mid) + ' 份') : '—';
             var thirdSub = (sl && sl.basis) ? sl.basis : (sl ? '' : '官方未公布，且无评论数可反推');
-            // 2026-09-27 修：云端脚本给的是「当前在线」(playersCurrent)，与「峰值在线」语义不同 → 有 AI 补的峰值就显峰值，否则显当前在线并如实标源
+            // 云端脚本给的是「当前在线」(playersCurrent)，与「峰值在线」语义不同 → 有 AI 补的峰值就显峰值，否则如实标源
             var hasPeak = (a.peakOnline !== undefined && a.peakOnline !== null);
             var peak = hasPeak ? a.peakOnline : g.playersCurrent;
             var peakV = (peak !== null && peak !== undefined) ? indieFmtNum(peak) + ' <em>人</em>' : '—';
@@ -22033,19 +23146,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var priceV = g.isFree ? '免费' : (g.priceUsd != null ? '$' + g.priceUsd + (g.priceCny ? ' <em>/ ¥' + g.priceCny + '</em>' : '') : '—');
             var teamV = a.teamSize || '—';
             var teamS = a.devTime ? '工期 ' + a.devTime : '';
-            var satV = sat.verdict ? sat.verdict.label : '—';
             var satS = sat.basis ? sat.basis : '待云端抓取';
             var toolV = (a.toolchain && a.toolchain.engine) ? a.toolchain.engine : '—';
-            var toolS = (a.toolchain && a.toolchain.src) ? (a.toolchain.inferred ? '推测 · ' : '') + a.toolchain.src : '待补';
+            var toolS = (a.toolchain && a.toolchain.src) ? ((a.toolchain.inferred ? '推测 · ' : '') + a.toolchain.src) : '待补';
             var days = g.days ? ('上线 ' + g.days + ' 天') : '';
 
-            // ===== 2026-09-27 改造：宽卡 → 瀑布流摘要卡 =====
-            // 摘要态只留「一眼能对比」的：名称/档位 + 5 个关键数字（带名次徽章）+ 真实标签 + 一句话启发
-            // 详情（官方销量/团队/引擎/爆款因子/曝光时间线/难度三轴）折叠进 .indie-more，默认收起
-            var kk = key.replace(/'/g, "\\'");
+            // ===== 瀑布流摘要卡：一眼可对比 + 角标 + 折叠五段详情 =====
+            var kk = String(key).replace(/'/g, "\\'");
             var h = '';
             h += '<div class="indie-card' + (indieMoreOpen[key] ? ' open' : '') + '" id="indieCard-' + escapeHtml(key) + '">';
-            // 头部
             h += '<div class="indie-hd">';
             if (g.header) h += '<img class="indie-cover" src="' + escapeHtml(g.header) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
             h += '<div class="indie-hd-main">';
@@ -22066,7 +23175,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 + '</div>';
             h += '</div>';
 
-            // 关键数字条（5 格，带名次徽章 —— 直接回答「哪个数据最好」）
+            // 角标：UE5 可做性 / 单人可完成度 / 我的工期 / 分区 / 别碰 / 我的标记
+            h += indieFlagsHtml(g);
+
+            // 关键数字条（5 格，带名次徽章）
             var onlineNow = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.playersCurrent;
             var statRows = [
                 { k: 'burst', label: '爆款指数', v: (bu.score ? String(bu.score) : '—') },
@@ -22083,7 +23195,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             h += '</div>';
 
-            // 真实社区标签 + 逐标签饱和度（回答「到底是哪个标签红海」）
+            // 真实社区标签 + 逐标签全站总数
             var tagArr = (g.tags && g.tags.length) ? g.tags : null;
             if (tagArr) {
                 h += '<div class="indie-tags">';
@@ -22100,7 +23212,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
                 h += '</div>';
             } else {
-                // 没有社区标签 = 内置长效案例（无真实 appid，抓不到标签）→ 明确标出来，别让卡片看起来像缺数据
                 h += '<div class="indie-tags"><span class="indie-tag unknown" title="内置长效案例，没有真实 appid 因而抓不到 Steam 社区标签">🗿 长效案例</span>';
                 if (sat.verdict) {
                     h += '<span class="indie-tag ' + (sat.verdict.key || 'unknown') + '" title="' + escapeHtml(sat.basis || '') + '">'
@@ -22109,52 +23220,35 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 h += '</div>';
             }
 
-            // 一句话启发（用户核心诉求：对「我」有何启发）
+            // 「看着香但别碰」独立提示（P04：省得每次看到都心动一遍）
+            if (indieTrap(g)) {
+                h += '<div class="indie-box" style="border-left-color:#e11d48;color:#be123c;">🚫 <b>看着香但别碰</b>：' + escapeHtml(indieTrapWhy(g)) + '</div>';
+            }
+
+            // 一句话启发
             if (a.lesson) h += '<div class="indie-lesson">🧭 ' + escapeHtml(a.lesson) + '</div>';
 
             // 展开详情
             h += '<div class="indie-expand" id="indieExpand-' + escapeHtml(key) + '" onclick="indieToggleMore(\'' + kk + '\')">'
-                + (indieMoreOpen[key] ? '收起详情 ▲' : '展开详情 · 为什么能爆 / 曝光过程 / 难度三轴 ▾') + '</div>';
+                + (indieMoreOpen[key] ? '收起详情 ▲' : '展开详情 · 归因 / 工期 / UE5 / 曝光 / 我能做什么 ▾') + '</div>';
             h += '<div class="indie-more">';
 
-            // 口径细项（折叠区，替代原来占满一行的 8 格）
-            h += '<div class="indie-sec"><div class="indie-sec-t">📋 口径与来源</div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 官方公告</b>：' + (official ? escapeHtml(official) : '开发方未公开') + '</span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 第三方估算</b>：' + third + '　<span class="src">[' + escapeHtml(thirdSub) + ']</span></span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + peakLabel + '</b>：' + peakV + '　<span class="src">[' + escapeHtml(peakSrc) + ']</span></span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>评测</b>：' + revV + '　' + escapeHtml(revS) + '</span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>价格</b>：' + priceV + '</span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>团队 / 工期</b>：' + escapeHtml(teamV) + (teamS ? '　' + escapeHtml(teamS) : '') + '</span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>引擎 / 工具链</b>：' + escapeHtml(toolV) + '　<span class="src">[' + escapeHtml(toolS) + ']</span></span></div>';
-            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>细分赛道</b>：' + escapeHtml(satS) + (sat.verdict ? ' → ' + escapeHtml(sat.verdict.label) : '') + '</span></div>';
-            h += '</div>';
-
-            // G4：爆款因子证据链
+            // ① 为什么能爆
+            h += indieF7Html(a);
             if (a.burstFactors && a.burstFactors.length) {
-                h += '<div class="indie-sec"><div class="indie-sec-t">🎯 为什么能爆 · 每条都挂证据</div>';
+                h += '<div class="indie-sec"><div class="indie-sec-t">🎯 爆款因子 · 每条都挂证据</div>';
                 a.burstFactors.forEach(function (f) {
                     h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + escapeHtml(f.f) + '</b> —— ' + escapeHtml(f.ev)
                         + (f.src ? ' <span class="src">[' + escapeHtml(f.src) + ']</span>' : '') + '</span></div>';
                 });
                 h += '</div>';
             }
+            h += indiePairHtml(a);
+            h += indieFlopHtml(a);
 
-            // G3：曝光过程时间线（默认收起）
-            if (a.timeline && a.timeline.length) {
-                var open = !!indieTlOpen[key];
-                h += '<div class="indie-sec"><div class="indie-sec-t">📈 曝光过程 · 可查证的传播链路'
-                    + '<span class="lnk" onclick="indieToggleTl(\'' + key.replace(/'/g, "\\'") + '\')">' + (open ? '收起 ▲' : '展开 ' + a.timeline.length + ' 个节点 ▾') + '</span></div>';
-                if (open) {
-                    h += '<div class="indie-tl">';
-                    a.timeline.forEach(function (t) {
-                        h += '<div class="indie-tl-row"><span class="indie-tl-d">' + escapeHtml(t.d) + '</span><span class="indie-tl-x">' + t.x + '</span></div>';
-                    });
-                    h += '</div>';
-                }
-                h += '</div>';
-            }
-
-            // W4：工具链 + 难度三轴
+            // ② 难度 / 工期 / 我能扛吗
+            h += indieMetHtml(g);
+            h += indieArtHtml(a);
             if (a.difficulty) {
                 var d = a.difficulty;
                 h += '<div class="indie-sec"><div class="indie-sec-t">🛠 开发难度三轴 <span class="indie-name-cn">（1–5，越高越难）</span></div>';
@@ -22166,8 +23260,34 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (d.note) h += '<div class="indie-factor" style="margin-top:6px;"><span class="dot">▸</span><span>' + escapeHtml(d.note) + '</span></div>';
                 h += '</div>';
             }
+            h += indieMvpHtml(a);
+            h += indieSandboxHtml(g);
 
-            // 教训（只对种子数据存在）—— 已提到摘要区显示，这里不再重复
+            // ③ UE5 怎么落地
+            h += indieUe5Html(g, a);
+
+            // ④ 曝光与节奏
+            h += indieTimelineHtml(g, a);
+            h += indieWishHtml(a);
+            h += indiePriceHtml(g, a);
+            h += indieBackHtml(g);
+
+            // ⑤ 我该做什么
+            h += indieVideoHtml(g, a);
+            h += indieActionHtml(g, a);
+
+            // ⑥ 口径与来源（脚注）
+            h += '<div class="indie-sec"><div class="indie-sec-t">📋 口径与来源</div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 官方公告</b>：' + (official ? escapeHtml(official) : '开发方未公开') + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 第三方估算</b>：' + third + '　<span class="src">[' + escapeHtml(thirdSub) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + peakLabel + '</b>：' + peakV + '　<span class="src">[' + escapeHtml(peakSrc) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>评测</b>：' + revV + '　' + escapeHtml(revS) + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>价格</b>：' + priceV + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>团队 / 工期</b>：' + escapeHtml(teamV) + (teamS ? '　' + escapeHtml(teamS) : '') + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>引擎 / 工具链</b>：' + escapeHtml(toolV) + '　<span class="src">[' + escapeHtml(toolS) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>细分赛道</b>：' + escapeHtml(satS) + (sat.verdict ? ' → ' + escapeHtml(sat.verdict.label) : '') + '</span></div>';
+            h += '</div>';
+
             if (sl && sl.note) {
                 h += '<div class="indie-sec"><div class="indie-factor"><span class="dot">⚠️</span><span>' + escapeHtml(sl.note) + '</span></div></div>';
             }
@@ -22175,7 +23295,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += '</div>';  // .indie-card
             return h;
         }
-
         function indieToggleTl(key) {
             var g = indieFind(key); if (!g) return;
             var k = indieKeyOf(g);
@@ -22188,25 +23307,35 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var host = document.getElementById('indieList');
             var empty = document.getElementById('indieEmpty');
             if (!host) return;
-            var games = (indieData && indieData.games) || [];
-            if (!games.length) {
+            renderIndieTools();
+            renderIndiePanels();
+            var all = (indieData && indieData.games) || [];
+            if (!all.length) {
                 host.innerHTML = '';
                 if (empty) { empty.style.display = 'block'; empty.innerHTML = '雷达还没抓到数据。<br>云端 <code>indie.json</code> 未就绪时会显示内置种子；点右上角「🔄 刷新雷达」可手动重试。'; }
+                indieRanks = {};
+                renderIndieBoard();
+                return;
+            }
+            var games = indieFiltered();
+            if (!games.length) {
+                host.innerHTML = '<div class="indie-empty">当前筛选下没有匹配的款。<br>把工具栏上「分区 / 团队 / UE5 / 我的标记」放宽一点试试。</div>';
+                if (empty) empty.style.display = 'none';
+                indieRanks = {};
                 renderIndieBoard();
                 return;
             }
             if (empty) empty.style.display = 'none';
-            indieRanks = indieRankMap();   // 2026-09-27：先算好各维度名次，卡片渲染时打徽章
+            indieRanks = indieRankMap(games);
             var html = '';
             games.forEach(function (g) { html += indieCard(g); });
             host.innerHTML = html;
             renderIndieBoard();
+            if (indieKbIdx >= 0) indieKbPaint();
             var dEl = document.getElementById('indieFullDate');
             if (dEl && indieData) dEl.textContent = indieData.date ? ('· ' + indieData.date) : '';
             indieUpdateFreshness();
-        }
-
-        function indieUpdateFreshness() {
+        }        function indieUpdateFreshness() {
             var el = document.getElementById('indieFreshness');
             if (!el || !indieData) return;
             var t = indieData.fetchedAt || '';
@@ -22327,11 +23456,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             var games = (cloud.games || []).map(function (g) {
                 var s = (g.appid && byAppid[String(g.appid)]) || byName[indieNorm(g.name)];
+                g.__src = 'cloud';   // 2026-09-27：分区标记（本周新爆款）
                 if (!s) return g;
                 var m = {};
-                Object.keys(s).forEach(function (k) { m[k] = s[k]; });
+                Object.keys(s).forEach(function (k) { if (k !== '__src') m[k] = s[k]; });
                 Object.keys(g).forEach(function (k) { if (g[k] !== null && g[k] !== undefined && g[k] !== '') m[k] = g[k]; });
                 m.analysis = g.analysis || s.analysis;
+                m.__src = 'cloud';
                 return m;
             });
             // 种子里有、云端没抓到的也保留（爆款案例长期有效，不因一次抓取缺失而消失）
@@ -22339,7 +23470,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 var hit = games.some(function (g) {
                     return (g.appid && s.appid && String(g.appid) === String(s.appid)) || indieNorm(g.name) === indieNorm(s.name);
                 });
-                if (!hit) games.push(s);
+                if (!hit) { s.__src = 'seed'; games.push(s); }   // 2026-09-27：长效案例标记
             });
             games.sort(function (a, b) { return ((b.burst && b.burst.score) || 0) - ((a.burst && a.burst.score) || 0); });
             return { version: cloud.version, date: cloud.date, fetchedAt: cloud.fetchedAt, caveat: cloud.caveat, games: games };
@@ -22398,6 +23529,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         (function initIndie() {
             try { indieBootstrap(); } catch (e) { console.warn('[独立游戏雷达] 初始化失败', e && e.message); }
+            try { document.addEventListener('keydown', indieKb); } catch (e) { }
         })();
 
         // ===== AI 行业快报 =====
@@ -22518,7 +23650,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { key:'ai', icon:'🤖', name:'AI 行业快报', storeKey:'niko_ai_updated_at', desc:'模型发布 / 工具月活 / 6大细分领域TOP',
               cmd:'请帮我刷新【AI行业快报】数据：搜索最新发布的AI模型、工具月活排行榜、以及 AI视频生成/AI图片生成/AI编程/AI配音/AI 3D/AI UI设计 六个细分领域的TOP榜，更新预置数据后重新合并交付。' },
             { key:'indie', icon:'🎮', name:'独立游戏雷达 · AI 分析', storeKey:'niko_indie_analysis_updated_at', desc:'爆款因子 / 曝光时间线 / 工具链 / 难度（原始数据每周自动抓，此处只补分析）',
-              cmd:'请帮我刷新【独立游戏雷达】的 AI 分析字段：读取 niko-app/indie.json，为 games[] 里每款游戏（按 appid 对齐）补写 analysis 中的「爆款因子(why) / 曝光时间线(timeline) / 工具链(tools) / 难度(difficulty)」，每条结论必须挂可查证的数据点，不许写形容词；官方数据与 appid 一律不动，更新后提交。' }
+              cmd:'请帮我刷新【独立游戏雷达】的 AI 分析字段：读取仓库根目录 indie.json，为 games[] 每款（按 appid 对齐）补齐 analysis 里的：teamN 团队人数 + devMonths 工期月数 / f7 七维归因打分（niche 题材缺口, hook 玩法钩子, visual 视觉冲击, price 价格锚点, publisher 发行背书, festival 平台节庆, viral 病毒传播，各 0–5）/ ue5Fit 与 ue5FitWhy / artScale 美术量（chars, scenes, anims, fx, level, note）/ mvp 最小可玩底线 / ue5 翻译（pick 能白捡, build 要自己写, vs 与原作引擎差异, learn 学习清单带官方文档链接）/ timeline 每条加 cost（free 零成本, low 花小钱, paid 砸钱）/ videoEdge 与 trailerImpact（片子对曝光的贡献）/ action 本周一条可执行动作 / pricing 价格折扣节奏 / soloFit 与 soloWhy / 反面案例写 flop / wishlist 公开愿望单数据 / partner 同赛道对照组。每条结论必须挂可查证来源，查不到就留空，不许编；官方抓取数据与 appid 一律不动，已有值不覆盖，更新后提交。' }
         ];
 
         let aiMyTools = safeStorage.get('niko_ai_mytools', []);
@@ -38016,7 +39148,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272238";
+        window.NIKO_VERSION = "202609272316";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
