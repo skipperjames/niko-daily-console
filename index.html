@@ -6442,6 +6442,59 @@ body.dark-mode .indie-cell { background:#1e1e24; }
 body.dark-mode .indie-cell .v { color:#e8ecf3; }
 body.dark-mode .indie-cell .s { color:#79828f; }
 
+/* ===== 2026-09-27 瀑布流重排（用户反馈：空间利用率低 / 看不出哪个数据最好）===== */
+#indieList.indie-waterfall { display:block !important; column-count:2; column-gap:14px; }
+#indieList.indie-waterfall > .indie-card { break-inside:avoid; -webkit-column-break-inside:avoid; margin:0 0 14px; }
+@media (max-width:1180px) { #indieList.indie-waterfall { column-count:1; } }
+
+.indie-stats { display:flex; flex-wrap:wrap; gap:1px; background:#eef0f4; border:1px solid #eef0f4; border-radius:10px; overflow:hidden; }
+.indie-stat { flex:1 1 0; min-width:78px; background:#fff; padding:7px 10px; display:flex; flex-direction:column; gap:2px; position:relative; }
+body.dark-mode .indie-stats { background:#2c2c36; border-color:#2c2c36; }
+body.dark-mode .indie-stat { background:#1e1e24; }
+.indie-stat .k { font-size:10.5px; color:#94a3b8; }
+.indie-stat .v { font-size:14.5px; font-weight:800; color:#0f172a; line-height:1.2; }
+.indie-stat .v em { font-style:normal; font-size:11px; font-weight:500; color:#94a3b8; }
+body.dark-mode .indie-stat .v { color:#eef2f8; }
+.indie-stat.best { background:#fff7f9; }
+body.dark-mode .indie-stat.best { background:#2a1a20; }
+.indie-stat.best .v { color:#e11d48; }
+.indie-stat .rank { position:absolute; top:4px; right:7px; font-size:10.5px; font-weight:800; color:#cbd5e1; }
+.indie-stat .rank.r1 { color:#f59e0b; }
+.indie-stat .rank.r2 { color:#94a3b8; }
+.indie-stat .rank.r3 { color:#c2833a; }
+
+.indie-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.indie-tag { display:inline-flex; align-items:center; gap:4px; font-size:11px; padding:2px 7px; border-radius:999px; background:#f1f5f9; color:#475569; border:1px solid #e6ebf2; white-space:nowrap; }
+.indie-tag.crowd { background:#fff1f2; border-color:#fecdd3; color:#be123c; }
+.indie-tag.mid { background:#fffbeb; border-color:#fde68a; color:#b45309; }
+.indie-tag.roomy { background:#ecfdf5; border-color:#a7f3d0; color:#047857; }
+.indie-tag.niche { box-shadow:0 0 0 2px #6366f1; font-weight:700; }
+.indie-tag.unknown { background:#f8fafc; border-style:dashed; color:#94a3b8; }
+body.dark-mode .indie-tag { background:#26262e; border-color:#3a3a46; color:#c3ccda; }
+body.dark-mode .indie-tag.crowd { background:#3b1d24; border-color:#7f2436; color:#fda4af; }
+body.dark-mode .indie-tag.mid { background:#3a2f14; border-color:#8a6b1f; color:#fcd34d; }
+body.dark-mode .indie-tag.roomy { background:#12302a; border-color:#1f6b56; color:#6ee7b7; }
+body.dark-mode .indie-tag.unknown { background:#22222a; color:#8b95a5; }
+
+.indie-more { display:none; }
+.indie-card.open .indie-more { display:block; }
+.indie-expand { font-size:11.5px; color:#6366f1; cursor:pointer; user-select:none; font-weight:600; }
+body.dark-mode .indie-expand { color:#a5b4fc; }
+.indie-lesson { font-size:12px; line-height:1.65; color:#475569; background:#f8fafc; border-left:3px solid #6366f1; border-radius:0 8px 8px 0; padding:7px 11px; }
+body.dark-mode .indie-lesson { background:#22222a; color:#c3ccda; border-left-color:#818cf8; }
+
+.indie-board { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#f8fafc; border:1px solid #e8edf5; border-radius:10px; padding:9px 12px; margin-bottom:12px; font-size:12px; }
+body.dark-mode .indie-board { background:#1c1c23; border-color:#33333d; }
+.indie-board .lb { font-weight:700; color:#475569; }
+body.dark-mode .indie-board .lb { color:#c3ccda; }
+.indie-board button { font-size:11.5px; padding:3px 9px; border-radius:999px; border:1px solid #dbe3ee; background:#fff; color:#475569; cursor:pointer; }
+.indie-board button.on { background:#6366f1; border-color:#6366f1; color:#fff; font-weight:700; }
+body.dark-mode .indie-board button { background:#26262e; border-color:#3a3a46; color:#c3ccda; }
+body.dark-mode .indie-board button.on { background:#6366f1; border-color:#6366f1; color:#fff; }
+.indie-board .top3 { color:#64748b; }
+.indie-board .top3 b { color:#0f172a; }
+body.dark-mode .indie-board .top3 b { color:#eef2f8; }
+
 .indie-sec { border-top:1px dashed #e8e8ee; padding-top:10px; }
 body.dark-mode .indie-sec { border-color:#33333d; }
 .indie-sec-t { font-size:12.5px; font-weight:700; color:#475569; margin-bottom:7px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
@@ -6508,13 +6561,17 @@ body.dark-mode .indie-cmp th { background:#26262e; color:#a8b3c2; }
 body.dark-mode .indie-cmp td { color:#c7d2e0; }
 
 @media (max-width:768px) {
+  #indieList.indie-waterfall { column-count:1; }
   .indie-grid8 { grid-template-columns:repeat(2,1fr); }
+  .indie-stat { min-width:64px; padding:6px 8px; }
+  .indie-stat .v { font-size:13.5px; }
   .indie-hd { flex-wrap:wrap; }
   .indie-cover { width:100%; height:118px; }
   .indie-hd-act { width:100%; justify-content:flex-end; }
   .indie-tl-d { width:66px; font-size:11px; }
   .indie-totem-grid { grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); }
   .indie-name { font-size:15.5px; }
+  .indie-board { font-size:11.5px; }
 }
 
 
@@ -12580,7 +12637,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
                 <!-- ===== 独立游戏雷达视图 ===== -->
                 <div id="indieViewMain" class="comp-view active">
-                    <div id="indieList" style="display:flex;flex-direction:column;gap:14px;"></div>
+                    <div id="indieBoard" class="indie-board"></div>
+                    <div id="indieList" class="indie-waterfall"></div>
                     <div id="indieEmpty" style="display:none;padding:44px 20px;text-align:center;color:#999;font-size:13px;line-height:1.9;"></div>
                 </div>
 
@@ -21797,8 +21855,77 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         var indieData = null;
         var indieTlOpen = {};
+        var indieMoreOpen = {};        // 2026-09-27：摘要卡「展开详情」状态
         var indieCompareSel = [];
         var indieLoading = false;
+
+        // ---------- 2026-09-27 新增：横向对比维度 + 冠军排名 ----------
+        // 用户反馈「看不出哪个游戏数据最好」→ 每个维度算一遍名次，卡上给 🥇🥈🥉 徽章，顶部给榜单条。
+        var INDIE_METRICS = [
+            { k: 'burst', label: '爆款指数', asc: false, get: function (g) { return (g.burst && g.burst.score) || 0; }, fmt: function (v) { return String(v); } },
+            { k: 'sales', label: '估算销量', asc: false, get: function (g) { return (g.sales && g.sales.mid) || 0; }, fmt: function (v) { return indieFmtNum(v) + ' 份'; } },
+            { k: 'rating', label: '好评率', asc: false, get: function (g) { return (g.reviews && g.reviews.positivePct) || 0; }, fmt: function (v) { return v + '%'; } },
+            { k: 'online', label: '在线人数', asc: false, get: function (g) { return (g.analysis && g.analysis.peakOnline) || g.playersCurrent || 0; }, fmt: function (v) { return indieFmtNum(v) + ' 人'; } },
+            { k: 'fresh', label: '最新上线', asc: true, get: function (g) { return (g.days != null) ? g.days : 99999; }, fmt: function (v) { return v >= 99999 ? '—' : (v + ' 天前'); } }
+        ];
+        var indieBoardMetric = 'burst';
+        var indieRanks = {};
+
+        function indieMetricOf(k) {
+            for (var i = 0; i < INDIE_METRICS.length; i++) if (INDIE_METRICS[i].k === k) return INDIE_METRICS[i];
+            return INDIE_METRICS[0];
+        }
+        function indieRankMap() {
+            var out = {};
+            INDIE_METRICS.forEach(function (mt) {
+                var arr = ((indieData && indieData.games) || []).filter(function (g) { return mt.get(g) > 0; });
+                arr.sort(function (a, b) { return mt.asc ? (mt.get(a) - mt.get(b)) : (mt.get(b) - mt.get(a)); });
+                out[mt.k] = {};
+                arr.forEach(function (g, i) { out[mt.k][indieKeyOf(g)] = i + 1; });
+            });
+            return out;
+        }
+        function indieRankBadge(k, key) {
+            var r = (indieRanks[k] || {})[key];
+            if (!r || r > 3) return '';
+            var ic = r === 1 ? '🥇' : (r === 2 ? '🥈' : '🥉');
+            return '<span class="rank r' + r + '">' + ic + '</span>';
+        }
+        function indieSetMetric(k) {
+            if (!indieMetricOf(k)) return;
+            indieBoardMetric = k;
+            renderIndieBoard();
+            renderIndie();
+        }
+        function renderIndieBoard() {
+            var el = document.getElementById('indieBoard');
+            if (!el) return;
+            var games = (indieData && indieData.games) || [];
+            if (!games.length) { el.innerHTML = ''; el.style.display = 'none'; return; }
+            el.style.display = 'flex';
+            var mt = indieMetricOf(indieBoardMetric);
+            var h = '<span class="lb">🏁 谁最强 ·</span>';
+            INDIE_METRICS.forEach(function (m) {
+                h += '<button class="' + (m.k === indieBoardMetric ? 'on' : '') + '" onclick="indieSetMetric(\'' + m.k + '\')">' + m.label + '</button>';
+            });
+            var arr = games.filter(function (g) { return mt.get(g) > 0; })
+                .sort(function (a, b) { return mt.asc ? (mt.get(a) - mt.get(b)) : (mt.get(b) - mt.get(a)); }).slice(0, 3);
+            if (arr.length) {
+                h += '<span class="top3">｜' + arr.map(function (g, i) {
+                    var ic = i === 0 ? '🥇' : (i === 1 ? '🥈' : '🥉');
+                    return ic + ' <b>' + escapeHtml(g.name || '') + '</b> ' + escapeHtml(mt.fmt(mt.get(g)));
+                }).join('　') + '</span>';
+            }
+            el.innerHTML = h;
+        }
+        function indieToggleMore(key) {
+            var k = String(key);
+            indieMoreOpen[k] = !indieMoreOpen[k];
+            var card = document.getElementById('indieCard-' + k);
+            if (card) card.classList.toggle('open', !!indieMoreOpen[k]);
+            var tg = document.getElementById('indieExpand-' + k);
+            if (tg) tg.textContent = indieMoreOpen[k] ? '收起详情 ▲' : '展开详情 · 为什么能爆 / 曝光过程 / 难度三轴 ▾';
+        }
 
         // ---------- 工具 ----------
         function indieNorm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, ''); }
@@ -21926,8 +22053,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var toolS = (a.toolchain && a.toolchain.src) ? (a.toolchain.inferred ? '推测 · ' : '') + a.toolchain.src : '待补';
             var days = g.days ? ('上线 ' + g.days + ' 天') : '';
 
+            // ===== 2026-09-27 改造：宽卡 → 瀑布流摘要卡 =====
+            // 摘要态只留「一眼能对比」的：名称/档位 + 5 个关键数字（带名次徽章）+ 真实标签 + 一句话启发
+            // 详情（官方销量/团队/引擎/爆款因子/曝光时间线/难度三轴）折叠进 .indie-more，默认收起
+            var kk = key.replace(/'/g, "\\'");
             var h = '';
-            h += '<div class="indie-card">';
+            h += '<div class="indie-card' + (indieMoreOpen[key] ? ' open' : '') + '" id="indieCard-' + escapeHtml(key) + '">';
             // 头部
             h += '<div class="indie-hd">';
             if (g.header) h += '<img class="indie-cover" src="' + escapeHtml(g.header) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
@@ -21935,33 +22066,77 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += '<div class="indie-name-row"><span class="indie-name">' + escapeHtml(g.name || '未命名') + '</span>'
                 + (g.nameCn ? '<span class="indie-name-cn">' + escapeHtml(g.nameCn) + '</span>' : '')
                 + '<span class="indie-tier ' + indieTierCls(g) + '">' + escapeHtml(bu.label || '—') + '</span>'
-                + (bu.score ? '<span class="indie-name-cn">爆款指数 ' + bu.score + (bu.manual ? '（人工判定）' : '') + '</span>' : (bu.manual ? '<span class="indie-name-cn">人工判定档位</span>' : ''))
                 + '</div>';
             var metaBits = [];
             if (g.releaseText) metaBits.push('📅 ' + escapeHtml(g.releaseText));
             if (days) metaBits.push(days);
             if (g.developers && g.developers.length) metaBits.push('👤 ' + escapeHtml(g.developers.join(' / ')));
-            if (a.revenue) metaBits.push('💰 ' + escapeHtml(a.revenue));
             h += '<div class="indie-meta">' + metaBits.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>';
-            h += '<div class="indie-meta" style="color:#8b95a5;">' + (g.desc ? escapeHtml(g.desc) : '') + '</div>';
             h += '</div>';
             h += '<div class="indie-hd-act">'
-                + '<button class="indie-iconbtn' + (fav ? ' on' : '') + '" onclick="indieToggleFav(\'' + key.replace(/'/g, "\\'") + '\')" title="收进精神图腾墙">' + (fav ? '⭐ 已收藏' : '⭐ 收藏') + '</button>'
-                + '<button class="indie-iconbtn" onclick="indieToNote(\'' + key.replace(/'/g, "\\'") + '\')" title="转成灵感便签">📝 转便签</button>'
-                + '<button class="indie-iconbtn" onclick="indieOpenUrl(\'' + key.replace(/'/g, "\\'") + '\')" title="打开 Steam 商店页">🔗 商店</button>'
+                + '<button class="indie-iconbtn' + (fav ? ' on' : '') + '" onclick="indieToggleFav(\'' + kk + '\')" title="收进精神图腾墙">' + (fav ? '⭐ 已收藏' : '⭐ 收藏') + '</button>'
+                + '<button class="indie-iconbtn" onclick="indieToNote(\'' + kk + '\')" title="转成灵感便签">📝 转便签</button>'
+                + '<button class="indie-iconbtn" onclick="indieOpenUrl(\'' + kk + '\')" title="打开 Steam 商店页">🔗 商店</button>'
                 + '</div>';
             h += '</div>';
 
-            // W1：固定 8 格（位置永远不挪，保证横向可比）
-            h += '<div class="indie-grid8">';
-            h += indieCell('销量 · 官方公告', official ? escapeHtml(official.split('（')[0]) : '—', official ? escapeHtml(official.replace(/^[^（]*/, '').replace(/^（|）$/g, '')) : '开发方未公开具体数字');
-            h += indieCell('销量 · 第三方估算', third, escapeHtml(thirdSub));
-            h += indieCell(peakLabel, peakV, escapeHtml(peakSrc));
-            h += indieCell('评测 / 好评率', revV, escapeHtml(revS));
-            h += indieCell('价格', priceV, g.isFree ? 'F2P 不适用评论数反推' : '美元原价（国区价另计）');
-            h += indieCell('团队 / 工期', escapeHtml(teamV), escapeHtml(teamS || '未披露'));
-            h += indieCell('赛道饱和度', satV, escapeHtml(satS));
-            h += indieCell('引擎 / 工具链', escapeHtml(toolV), escapeHtml(toolS));
+            // 关键数字条（5 格，带名次徽章 —— 直接回答「哪个数据最好」）
+            var onlineNow = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.playersCurrent;
+            var statRows = [
+                { k: 'burst', label: '爆款指数', v: (bu.score ? String(bu.score) : '—') },
+                { k: 'sales', label: '估算销量', v: (sl && sl.mid ? indieFmtNum(sl.mid) + ' <em>份</em>' : '—') },
+                { k: 'rating', label: '好评率', v: (rv && rv.positivePct != null ? rv.positivePct + '%' : '—') },
+                { k: 'online', label: (a.peakOnline != null ? '峰值在线' : '当前在线'), v: (onlineNow != null ? indieFmtNum(onlineNow) + ' <em>人</em>' : '—') },
+                { k: 'fresh', label: '上线', v: (g.days != null ? g.days + ' <em>天</em>' : '—') }
+            ];
+            h += '<div class="indie-stats">';
+            statRows.forEach(function (s) {
+                var rk = (indieRanks[s.k] || {})[key];
+                h += '<div class="indie-stat' + (rk === 1 ? ' best' : '') + '">' + indieRankBadge(s.k, key)
+                    + '<div class="k">' + s.label + '</div><div class="v">' + s.v + '</div></div>';
+            });
+            h += '</div>';
+
+            // 真实社区标签 + 逐标签饱和度（回答「到底是哪个标签红海」）
+            var tagArr = (g.tags && g.tags.length) ? g.tags : null;
+            if (tagArr) {
+                h += '<div class="indie-tags">';
+                tagArr.forEach(function (t) {
+                    var cls = 'unknown', txt = '?';
+                    if (t.total != null) {
+                        cls = (t.verdict && t.verdict.key) || 'unknown';
+                        txt = indieFmtNum(t.total);
+                    } else if (t.idKnown === false) { txt = '小众'; }
+                    var isNiche = (tr.niche && t.name === tr.niche);
+                    h += '<span class="indie-tag ' + cls + (isNiche ? ' niche' : '') + '" title="'
+                        + (t.total != null ? '该标签全站 ' + t.total.toLocaleString('en-US') + ' 款（Steam 官方搜索总数）' : '未取得全站总数')
+                        + '">' + (isNiche ? '🎯 ' : '') + escapeHtml(t.name) + ' <b>' + txt + '</b></span>';
+                });
+                h += '</div>';
+            } else if (sat.verdict) {
+                // 兜底：没抓到社区标签时，退回 genres 粗标签（老行为）
+                h += '<div class="indie-tags"><span class="indie-tag ' + (sat.verdict.key || 'unknown') + '" title="' + escapeHtml(sat.basis || '') + '">'
+                    + escapeHtml(tr.label || '未归类') + ' <b>' + escapeHtml(sat.verdict.label) + '</b></span></div>';
+            }
+
+            // 一句话启发（用户核心诉求：对「我」有何启发）
+            if (a.lesson) h += '<div class="indie-lesson">🧭 ' + escapeHtml(a.lesson) + '</div>';
+
+            // 展开详情
+            h += '<div class="indie-expand" id="indieExpand-' + escapeHtml(key) + '" onclick="indieToggleMore(\'' + kk + '\')">'
+                + (indieMoreOpen[key] ? '收起详情 ▲' : '展开详情 · 为什么能爆 / 曝光过程 / 难度三轴 ▾') + '</div>';
+            h += '<div class="indie-more">';
+
+            // 口径细项（折叠区，替代原来占满一行的 8 格）
+            h += '<div class="indie-sec"><div class="indie-sec-t">📋 口径与来源</div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 官方公告</b>：' + (official ? escapeHtml(official) : '开发方未公开') + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>销量 · 第三方估算</b>：' + third + '　<span class="src">[' + escapeHtml(thirdSub) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + peakLabel + '</b>：' + peakV + '　<span class="src">[' + escapeHtml(peakSrc) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>评测</b>：' + revV + '　' + escapeHtml(revS) + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>价格</b>：' + priceV + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>团队 / 工期</b>：' + escapeHtml(teamV) + (teamS ? '　' + escapeHtml(teamS) : '') + '</span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>引擎 / 工具链</b>：' + escapeHtml(toolV) + '　<span class="src">[' + escapeHtml(toolS) + ']</span></span></div>';
+            h += '<div class="indie-factor"><span class="dot">▸</span><span><b>细分赛道</b>：' + escapeHtml(satS) + (sat.verdict ? ' → ' + escapeHtml(sat.verdict.label) : '') + '</span></div>';
             h += '</div>';
 
             // G4：爆款因子证据链
@@ -22002,14 +22177,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 h += '</div>';
             }
 
-            // 教训（只对种子数据存在）
-            if (a.lesson) {
-                h += '<div class="indie-sec"><div class="indie-sec-t">🧭 对你意味着什么</div><div class="indie-factor"><span class="dot">▸</span><span>' + escapeHtml(a.lesson) + '</span></div></div>';
-            }
+            // 教训（只对种子数据存在）—— 已提到摘要区显示，这里不再重复
             if (sl && sl.note) {
                 h += '<div class="indie-sec"><div class="indie-factor"><span class="dot">⚠️</span><span>' + escapeHtml(sl.note) + '</span></div></div>';
             }
-            h += '</div>';
+            h += '</div>';  // .indie-more
+            h += '</div>';  // .indie-card
             return h;
         }
 
@@ -22029,12 +22202,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!games.length) {
                 host.innerHTML = '';
                 if (empty) { empty.style.display = 'block'; empty.innerHTML = '雷达还没抓到数据。<br>云端 <code>indie.json</code> 未就绪时会显示内置种子；点右上角「🔄 刷新雷达」可手动重试。'; }
+                renderIndieBoard();
                 return;
             }
             if (empty) empty.style.display = 'none';
+            indieRanks = indieRankMap();   // 2026-09-27：先算好各维度名次，卡片渲染时打徽章
             var html = '';
             games.forEach(function (g) { html += indieCard(g); });
             host.innerHTML = html;
+            renderIndieBoard();
             var dEl = document.getElementById('indieFullDate');
             if (dEl && indieData) dEl.textContent = indieData.date ? ('· ' + indieData.date) : '';
             indieUpdateFreshness();
@@ -37850,7 +38026,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609270054";
+        window.NIKO_VERSION = "202609272206";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
