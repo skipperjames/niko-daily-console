@@ -6573,6 +6573,107 @@ body.dark-mode .indie-tools .tbtn.on { background:#272c47; border-color:#4a4a7a;
 .indie-tools .cnt { color:#94a3b8; font-size:11.5px; }
 .indie-tools .kb { color:#a5b4fc; font-size:11px; }
 
+/* ══════════════════════════════════════════════════════════════
+   2026-09-27 雷达 v4 —— 用户勾选 13 项（C01 C02 C03 C07 C08 C10
+   D02 D05 E02 E05 E07）。D01 / D03 本体已有（indiePlanList /
+   indieCalAdd / indieToNote），本批未重复实现。
+   ══════════════════════════════════════════════════════════════ */
+/* ── C01 销量双轨 + C02 置信度（卡片内）── */
+.indie-dual{display:flex;flex-wrap:wrap;align-items:center;gap:3px 10px;margin:7px 0 0;padding:6px 9px;border:1px dashed #dfe6f2;border-radius:8px;background:#f8fafc;font-size:11.5px;color:#475569;line-height:1.75}
+.indie-dual .d-lb{font-weight:700;color:#64748b;flex:0 0 auto}
+.indie-dual .d-a,.indie-dual .d-b{flex:1 1 140px;min-width:0}
+.indie-dual b{color:#0f172a}
+.indie-dual .d-b b{color:#6366f1}
+.indie-dual .d-c{color:#b45309;font-weight:700}
+.indie-dual .d-c.up{color:#0f9c7b}
+.indie-dual i{font-style:normal;color:#94a3b8}
+.indie-conf{font-size:10.5px;padding:1px 7px;border-radius:999px;border:1px solid #e2e8f0;color:#94a3b8;background:#f8fafc;flex:0 0 auto;cursor:help}
+.indie-conf.c-high{border-color:#86efac;color:#15803d;background:#f0fdf4}
+.indie-conf.c-mid{border-color:#fcd34d;color:#a16207;background:#fffbeb}
+/* ── C02 低置信格变灰 ── */
+.indie-stat.low .v{color:#94a3b8}
+.indie-stat.low .k{opacity:.72}
+/* ── C03 缺失值显式化 ── */
+.indie-miss{display:flex;flex-wrap:wrap;gap:2px 12px;margin:6px 0 0;font-size:11px;color:#94a3b8;line-height:1.75}
+.indie-miss b{color:#b45309;font-weight:700}
+/* ── E02 环节验收定义（作战台）── */
+.indie-pipe-item .pd{display:block;font-size:10.5px;color:#94a3b8;line-height:1.5;margin-top:1px}
+.indie-pipe-item.lv2 .pd{color:#86b3a0}
+/* ── C07 定价分布 ── */
+.ipd-row{display:flex;align-items:center;gap:9px;margin:6px 0;font-size:12px}
+.ipd-row .lb{flex:0 0 88px;color:#475569}
+.ipd-row .bar{flex:1;height:14px;border-radius:4px;background:#eef2f8;overflow:hidden;min-width:60px}
+.ipd-row .bar i{display:block;height:100%;background:linear-gradient(90deg,#a5b4fc,#6366f1);border-radius:4px}
+.ipd-row.sweet .bar i{background:linear-gradient(90deg,#6ee7b7,#0f9c7b)}
+.ipd-row .vv{flex:0 0 132px;text-align:right;color:#64748b;font-variant-numeric:tabular-nums}
+.ipd-row.sweet .lb{color:#0f9c7b;font-weight:700}
+/* ── C08 标签治理台 ── */
+.itm-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #eef2f8;font-size:12px}
+.itm-row:last-child{border-bottom:0}
+.itm-row .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.itm-row .nm em{font-style:normal;color:#94a3b8;font-size:11px;margin-left:5px}
+.itm-row .tt{flex:0 0 92px;text-align:right;color:#64748b;font-variant-numeric:tabular-nums}
+.itm-row.off .nm{color:#b6bfcc;text-decoration:line-through}
+.itm-row button{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid #dbe3ee;background:#fff;color:#475569;cursor:pointer;font-family:inherit;flex:0 0 auto}
+.itm-row button.on{background:#6366f1;border-color:#6366f1;color:#fff;font-weight:700}
+.itm-row button.ign{border-color:#fca5a5;color:#b91c1c}
+/* ── C10 我的竞品池 ── */
+.iw-add{display:flex;gap:7px;margin:9px 0;flex-wrap:wrap}
+.iw-add input{flex:1 1 190px;min-width:150px;padding:6px 9px;border:1px solid #dbe3ee;border-radius:8px;background:#fff;color:inherit;font-family:inherit;font-size:13px}
+.iw-card{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #eef2f8;font-size:12px}
+.iw-card:last-child{border-bottom:0}
+.iw-card .mn{flex:1 1 auto;min-width:0}
+.iw-card .mn b{display:block;font-size:12.5px}
+.iw-card .mn span{color:#94a3b8;font-size:11px}
+.iw-card .idc{font-size:11px;color:#64748b;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.iw-card button{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid #dbe3ee;background:#fff;color:#475569;cursor:pointer;font-family:inherit}
+/* ── E05 卡点经验库 ── */
+.isk-chips{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0}
+.isk-chips button{font-size:11.5px;padding:3px 10px;border-radius:999px;border:1px solid #dbe3ee;background:#fff;color:#475569;cursor:pointer;font-family:inherit}
+.isk-chips button.on{background:#6366f1;border-color:#6366f1;color:#fff;font-weight:700}
+/* ── E07 技能雷达图 ── */
+.ir-wrap{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.ir-svg{flex:0 0 260px;max-width:100%}
+.ir-legend{flex:1 1 230px;min-width:200px;font-size:12px}
+.ir-legend .lg{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed #eef2f8}
+.ir-legend .lg i{font-style:normal;font-variant-numeric:tabular-nums}
+.ir-legend .lg.v0 i{color:#b45309;font-weight:700}
+.ir-legend .lg.v2 i{color:#0f9c7b;font-weight:700}
+/* ── 深色适配 ── */
+body.dark-mode .indie-dual{background:#1c1c23;border-color:#33333d;color:#b9c2d0}
+body.dark-mode .indie-dual b{color:#e6ebf3}
+body.dark-mode .indie-dual .d-b b{color:#a5b4fc}
+body.dark-mode .indie-dual .d-c{color:#fbbf24}
+body.dark-mode .indie-dual .d-c.up{color:#5fd39a}
+body.dark-mode .indie-dual i{color:#78828f}
+body.dark-mode .indie-conf{border-color:#3a3a46;color:#78828f;background:#1c1c23}
+body.dark-mode .indie-conf.c-high{border-color:#2f6b46;color:#5fd39a;background:#16241c}
+body.dark-mode .indie-conf.c-mid{border-color:#6b5a2f;color:#e0b23c;background:#241f16}
+body.dark-mode .indie-miss{color:#78828f}
+body.dark-mode .indie-miss b{color:#fbbf24}
+body.dark-mode .indie-pipe-item .pd{color:#78828f}
+body.dark-mode .ipd-row .bar{background:#26262e}
+body.dark-mode .itm-row{border-color:#2a2a33}
+body.dark-mode .itm-row button,body.dark-mode .iw-card button,body.dark-mode .isk-chips button{background:#26262e;border-color:#3a3a46;color:#c3ccda}
+body.dark-mode .itm-row button.on,body.dark-mode .isk-chips button.on{background:#6366f1;border-color:#6366f1;color:#fff}
+body.dark-mode .iw-add input{background:#1c1c23;border-color:#3a3a46}
+body.dark-mode .iw-card,body.dark-mode .ir-legend .lg{border-color:#2a2a33}
+body.dark-mode .ipd-row .lb,body.dark-mode .ir-legend{color:#b9c2d0}
+/* ── 面板内通用小按钮 ── */
+.tb2btn{font-family:inherit;font-size:11.5px;padding:4px 11px;border-radius:999px;border:1px solid #c7d2fe;background:#fff;color:#4f46e5;font-weight:600;cursor:pointer}
+.tb2btn:hover{background:#eef2ff}
+body.dark-mode .tb2btn{background:#272c47;border-color:#4a4a7a;color:#a5b4fc}
+body.dark-mode .tb2btn:hover{background:#2f3556}
+/* ── 手机端 ── */
+@media (max-width:768px){
+  .indie-dual{font-size:11px;gap:2px 8px}
+  .indie-dual .d-a,.indie-dual .d-b{flex:1 1 100%}
+  .ipd-row .lb{flex:0 0 72px;font-size:11px}
+  .ipd-row .vv{flex:0 0 106px;font-size:11px}
+  .itm-row .tt{flex:0 0 70px}
+  .ir-svg{flex:1 1 100%;display:flex;justify-content:center}
+}
+
 /* 角标（P02 UE5 适配 / P04 别碰 / P06 分区 / P08 我的标记 / P33 单人分档） */
 .indie-flags { display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
 .indie-flag { display:inline-flex; align-items:center; gap:3px; font-size:10.5px; padding:1px 7px; border-radius:999px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; white-space:nowrap; }
@@ -22343,6 +22444,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 + '<button class="tbtn' + (p.panel === 'rival' ? ' on' : '') + '" onclick="indiePanelToggle(\'rival\')">⚔️ 对标池</button>'
                 + '<button class="tbtn' + (p.panel === 'desk' ? ' on' : '') + '" onclick="indiePanelToggle(\'desk\')">🧭 我的作战台</button>'
                 + '<button class="tbtn' + (p.panel === 'health' ? ' on' : '') + '" onclick="indiePanelToggle(\'health\')">🩺 数据体检</button>'
+                + '<button class="tbtn' + (p.panel === 'price' ? ' on' : '') + '" onclick="indiePanelToggle(\'price\')">📊 定价分布</button>'
+                + '<button class="tbtn' + (p.panel === 'tags' ? ' on' : '') + '" onclick="indiePanelToggle(\'tags\')">🏷 标签治理</button>'
+                + '<button class="tbtn' + (p.panel === 'watch' ? ' on' : '') + '" onclick="indiePanelToggle(\'watch\')">👁 竞品池</button>'
+                + '<button class="tbtn' + (p.panel === 'stuck' ? ' on' : '') + '" onclick="indiePanelToggle(\'stuck\')">🧗 卡点经验</button>'
+                + '<button class="tbtn' + (p.panel === 'skill' ? ' on' : '') + '" onclick="indiePanelToggle(\'skill\')">📈 技能雷达</button>'
                 + '</div>';
             h += '<span class="kb">⌨️ J/K 上下 · S 收藏 · N 便签 · Enter 展开</span>';
             el.innerHTML = h;
@@ -22358,6 +22464,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             else if (p.panel === 'rival') el.innerHTML = indiePanelRival();
             else if (p.panel === 'desk') el.innerHTML = indiePanelDesk();
             else if (p.panel === 'health') el.innerHTML = indiePanelHealth();
+            else if (p.panel === 'price') el.innerHTML = indiePanelPrice();
+            else if (p.panel === 'tags') el.innerHTML = indiePanelTags();
+            else if (p.panel === 'watch') el.innerHTML = indiePanelWatch();
+            else if (p.panel === 'stuck') el.innerHTML = indiePanelStuck();
+            else if (p.panel === 'skill') el.innerHTML = indiePanelSkill();
             else el.innerHTML = '';
         }
 
@@ -22474,7 +22585,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             INDIE_PIPE_STEPS.forEach(function (s, i) {
                 var v = (pipe[i] === undefined) ? 0 : pipe[i];
                 var lb = v === 2 ? '我会' : (v === 1 ? '半会' : '不会');
-                h += '<div class="indie-pipe-item lv' + v + '" onclick="indiePipeCycle(' + i + ')"><span class="sq">' + (v === 2 ? '✓' : (v === 1 ? '~' : '')) + '</span><span>' + s + '</span><span class="lv">' + lb + '</span></div>';
+                h += '<div class="indie-pipe-item lv' + v + '" onclick="indiePipeCycle(' + i + ')"><span class="sq">' + (v === 2 ? '✓' : (v === 1 ? '~' : '')) + '</span><span>' + s + '<span class="pd">完工定义：' + escapeHtml(INDIE_PIPE_DONE[i] || '') + '</span></span><span class="lv">' + lb + '</span></div>';
             });
             h += '</div><div class="indie-health-lack">已掌握 <b>' + done + ' / 12</b>，完全不会 <b>' + gap + '</b> 个。'
                 + (gap ? '把「不会」按顺序补，就是你缺的那条完整全流程路径。' : '全绿了 —— 可以准备上架。') + '</div>';
@@ -23171,6 +23282,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += '<div class="indie-hd-act">'
                 + '<button class="indie-iconbtn' + (fav ? ' on' : '') + '" onclick="indieToggleFav(\'' + kk + '\')" title="收进精神图腾墙">' + (fav ? '⭐ 已收藏' : '⭐ 收藏') + '</button>'
                 + '<button class="indie-iconbtn" onclick="indieToNote(\'' + kk + '\')" title="转成灵感便签">📝 转便签</button>'
+                + '<button class="indie-iconbtn" onclick="indieToKb(\'' + kk + '\')" title="写成知识库条目（进复习队列）">📥 知识库</button>'
                 + '<button class="indie-iconbtn" onclick="indieOpenUrl(\'' + kk + '\')" title="打开 Steam 商店页">🔗 商店</button>'
                 + '</div>';
             h += '</div>';
@@ -23180,9 +23292,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             // 关键数字条（5 格，带名次徽章）
             var onlineNow = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.playersCurrent;
+            var _conf = indieConfOf(g);   // C02：按评测数分档
             var statRows = [
                 { k: 'burst', label: '爆款指数', v: (bu.score ? String(bu.score) : '—') },
-                { k: 'sales', label: '估算销量', v: (sl && sl.mid ? indieFmtNum(sl.mid) + ' <em>份</em>' : '—') },
+                { k: 'sales', label: '估算销量', low: _conf.low, v: (sl && sl.mid ? indieFmtNum(sl.mid) + ' <em>份</em>' : '—') },
                 { k: 'rating', label: '好评率', v: (rv && rv.positivePct != null ? rv.positivePct + '%' : '—') },
                 { k: 'online', label: (a.peakOnline != null ? '峰值在线' : '当前在线'), v: (onlineNow != null ? indieFmtNum(onlineNow) + ' <em>人</em>' : '—') },
                 { k: 'fresh', label: '上线', v: (g.days != null ? g.days + ' <em>天</em>' : '—') }
@@ -23190,10 +23303,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += '<div class="indie-stats">';
             statRows.forEach(function (s) {
                 var rk = (indieRanks[s.k] || {})[key];
-                h += '<div class="indie-stat' + (rk === 1 ? ' best' : '') + '">' + indieRankBadge(s.k, key)
+                h += '<div class="indie-stat' + (rk === 1 ? ' best' : '') + (s.low ? ' low' : '') + '">' + indieRankBadge(s.k, key)
                     + '<div class="k">' + s.label + '</div><div class="v">' + s.v + '</div></div>';
             });
             h += '</div>';
+            h += indieDualHtml(g, a);      // C01 销量双轨 + C02 置信度
+            h += indieMissingHtml(g);      // C03 缺失值显式化
 
             // 真实社区标签 + 逐标签全站总数
             var tagArr = (g.tags && g.tags.length) ? g.tags : null;
@@ -23495,6 +23610,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             indieData = norm;
             safeStorage.set(INDIE_KEY_DATA, indieData);
             renderIndie();
+            try { indieWeeklyDigest(); } catch (e) { }   // D05 每周一次，幂等
             if (document.getElementById('totemViewMain') && document.getElementById('totemViewMain').classList.contains('active')) renderTotem();
             return true;
         }
@@ -23529,6 +23645,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (cached && cached.games && cached.games.length) indieData = cached;
             else indieData = NIKO_INDIE_SEED;
             renderIndie();
+            try { indieWeeklyDigest(); } catch (e) { }   // D05
             // 后台尝试云端（成功则覆盖，失败静默保留种子）
             try {
                 fetch(INDIE_CLOUD + '?t=' + Date.now()).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
@@ -23539,6 +23656,496 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }).catch(function () { });
             } catch (e) { }
         }
+
+// ══════════════════════════════════════════════════════════════
+        // 2026-09-27 雷达 v4 —— 用户从第二批 50 方案里勾选的 13 项
+        //   C01 C02 C03（卡片内）· C07 C08 C10 E05 E07（新面板）
+        //   D02（知识库）· D05（周报日程）· E02（环节验收定义）
+        //   ⚠️ D01（日历倒排）、D03（转便签）本体已有，本批未重复实现
+        // ══════════════════════════════════════════════════════════════
+        var INDIE_KEY_TAGIGN   = 'niko_indie_tagignore';    // C08 我忽略的标签（本地）
+        var INDIE_KEY_WATCH    = 'niko_indie_watch';        // C10 我的竞品池
+        var INDIE_KEY_SKILLLOG = 'niko_indie_skilllog';     // E07 技能自评留档
+        var INDIE_KEY_DIGEST   = 'niko_indie_digest_week';  // D05 周报去重（年-周）
+        var INDIE_KEY_STUCK    = 'niko_indie_stuck_idx';    // E05 上次看的环节
+
+        // E02 每道工序的「什么算完成」——含糊的目标是拖期的最大来源
+        var INDIE_PIPE_DONE = [
+            '一句话说清「谁、在什么场景、做什么、爽在哪」，且你愿意为它做一年',
+            '核心循环跑通：一个按钮就能玩到爽点，丑没关系',
+            '一个 5 分钟能玩、能直接给别人试玩的 demo（一场景 + 一角色，循环闭合）',
+            '所有关卡 / 角色 / 道具都进了表驱动流程，加一条内容 < 半天',
+            '连玩 30 分钟不遇阻塞性 bug，打击感 / 反馈调到位',
+            '在没有开发环境的另一台机器上双击运行，稳定 30 分钟不崩',
+            'AppID 拿到、成就 / 云存档接上、Depot 能上传构建',
+            '6 种尺寸胶囊图 + ≥5 张截图 + 预告片 + 描述，全部在线',
+            '60–90 秒，前 6 秒给钩子，有字幕，结尾有明确 CTA（加愿望单）',
+            '商店页开了愿望单、至少 1 个社媒在更新、Demo 已报名 Next Fest',
+            '定价 + 首发折扣定稿，发售时间已设，媒体 / 主播 key 已备',
+            'D+7 发了首个补丁、D+30 首次打折，差评都在 48 小时内回过'
+        ];
+        // E05 每个环节的检索关键词（用来在库内案例里找相关经验）
+        var INDIE_STUCK_KW = [
+            ['立项', '想法', '题材', '定位', '一句话'],
+            ['原型', '核心循环', '玩法', '手感'],
+            ['垂直切片', '切片', 'demo', 'Demo', '试玩'],
+            ['量产', '内容', '关卡', '流程', '管线'],
+            ['打磨', '优化', '性能', 'bug', '手感'],
+            ['打包', '构建', 'build', 'Build', '发布版'],
+            ['steamworks', 'Steamworks', '成就', '云存档', 'SDK'],
+            ['商店页', '胶囊', '截图', '愿望单', '描述'],
+            ['预告片', 'trailer', '预告', '片头', 'CTA'],
+            ['社区', '社媒', '推特', 'Discord', 'Next Fest'],
+            ['上架', '定价', '发售', '折扣', 'key'],
+            ['售后', '补丁', '评价', '差评', '更新']
+        ];
+
+        // ---------- C03 长文本截断 / 数字抽取 ----------
+        function indieShortText(s) {
+            s = String(s || '').trim();
+            if (s.length <= 22) return s;
+            var m = s.match(/^[^（(，,；;]{1,22}/);
+            return m ? m[0] : s.slice(0, 22);
+        }
+        // 从「2000 万份」「7 天 100 万份」这类文本里抽出数字（优先中文量词）
+        function indieNumFromText(s) {
+            if (!s) return 0;
+            var t = String(s).replace(/[,，\s]/g, '');
+            var m = t.match(/(\d+(?:\.\d+)?)(亿|百万|万|千)/);
+            if (m) {
+                var n = parseFloat(m[1]), u = m[2];
+                var mult = u === '亿' ? 1e8 : (u === '百万' ? 1e6 : (u === '万' ? 1e4 : 1e3));
+                return Math.round(n * mult);
+            }
+            var m2 = t.match(/(\d{4,})/);
+            return m2 ? parseInt(m2[1], 10) : 0;
+        }
+
+        // ---------- C02 置信度（按评测数分档）----------
+        function indieConfOf(g) {
+            var n = (g && g.reviews && g.reviews.total) || 0;
+            if (!n) return { k: 'none', label: '无样本', low: true, tip: '没有评测数，Boxleiter 反推无从下手 —— 这个销量数字别信' };
+            if (n >= 2000) return { k: 'high', label: '高', low: false, tip: '评测 ' + n + ' 条 —— 这个量级上 Boxleiter 反推比较稳' };
+            if (n >= 500) return { k: 'mid', label: '中', low: false, tip: '评测 ' + n + ' 条 —— 方向可信，量级会有偏差' };
+            return { k: 'low', label: '低', low: true, tip: '评测仅 ' + n + ' 条 —— 样本太少，仅供方向参考' };
+        }
+
+        // ---------- C01 销量双轨：官方 vs 第三方并排 + 偏差 ----------
+        function indieDualHtml(g, a) {
+            var sl = g.sales || {};
+            var official = (a && a.officialSales) || '';
+            var est = (sl && sl.mid) || 0;
+            var conf = indieConfOf(g);
+            if (!official && !est) return '';
+            var h = '<div class="indie-dual">';
+            h += '<span class="d-lb">💱 销量双轨</span>';
+            h += '<span class="d-a">官方 <b>' + (official ? escapeHtml(indieShortText(official)) : '<i>未公布</i>') + '</b></span>';
+            h += '<span class="d-b">第三方 <b>' + (est ? '约 ' + indieFmtNum(est) + ' 份' : '<i>无法反推</i>') + '</b></span>';
+            var num = indieNumFromText(official);
+            if (official && est && num > 0) {
+                var r = num / est;
+                if (r >= 1.05) h += '<span class="d-c">官方是估算的 <b>' + r.toFixed(1) + ' 倍</b>（估算偏低 ' + Math.round(Math.abs(num - est) / num * 100) + '%）</span>';
+                else if (r <= 0.95) h += '<span class="d-c up">估算偏高 ' + Math.round(Math.abs(est - num) / num * 100) + '%（官方更小）</span>';
+                else h += '<span class="d-c up">两轨基本一致</span>';
+            } else if (official && est) {
+                h += '<span class="d-c">官方公布了但没给具体数字，偏差算不出</span>';
+            }
+            h += '<span class="indie-conf c-' + conf.k + '" title="' + escapeHtml(conf.tip) + '">销量可信度 ' + conf.label + '</span>';
+            h += '</div>';
+            return h;
+        }
+
+        // ---------- C03 缺失值显式化（空值 ≠ 零值）----------
+        function indieMissingHtml(g) {
+            var out = [];
+            if (!g.reviews || !g.reviews.total) out.push('评测数<b>未抓到</b>（Steam 未公开，或抓取被限流）');
+            if (!g.sales || g.sales.mid == null) out.push('估算销量<b>未抓到</b>（无评测数可反推）');
+            if (!g.analysis) out.push('AI 分析<b>未补</b>（打开「🩺 数据体检」复制补分析指令）');
+            if (!indieTagNames(g).length) out.push('社区标签<b>未抓到</b>（长效案例没有真实 appid）');
+            if (!out.length) return '';
+            return '<div class="indie-miss"><span>⚠️ 本轮缺：</span>'
+                + out.map(function (x) { return '<span>· ' + x + '</span>'; }).join('') + '</div>';
+        }
+
+        // ---------- C07 同赛道定价分布 ----------
+        var INDIE_PRICE_BANDS = [
+            { k: 'free',  label: '免费' },
+            { k: 'lt5',   label: '< $5' },
+            { k: 'b510',  label: '$5–10' },
+            { k: 'b1020', label: '$10–20' },
+            { k: 'gt20',  label: '≥ $20' }
+        ];
+        function indiePriceBandOf(g) {
+            if (!g) return null;
+            var p = g.isFree ? 0 : (g.priceUsd != null ? Number(g.priceUsd) : null);
+            if (p === null || isNaN(p)) return null;
+            if (p <= 0) return 'free';
+            if (p < 5) return 'lt5';
+            if (p < 10) return 'b510';
+            if (p < 20) return 'b1020';
+            return 'gt20';
+        }
+        function indiePanelPrice() {
+            var games = indieFiltered().filter(function (g) { return indiePriceBandOf(g); });
+            var head = '<div class="indie-panel"><div class="pt">📊 同赛道定价分布 <span class="hint">价格带 × 款数 × 平均估算销量</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            if (!games.length) return head + '<div class="indie-health-lack">当前筛选下没有带价格的款（换「分区 / 团队」放宽一点）。</div></div>';
+            var rows = INDIE_PRICE_BANDS.map(function (b) {
+                var list = games.filter(function (g) { return indiePriceBandOf(g) === b.k; });
+                var ws = list.filter(function (g) { return g.sales && g.sales.mid; });
+                var avg = ws.length ? Math.round(ws.reduce(function (s, g) { return s + g.sales.mid; }, 0) / ws.length) : 0;
+                return { k: b.k, label: b.label, n: list.length, avg: avg, names: list.map(function (g) { return g.name || ''; }) };
+            });
+            var maxN = 1;
+            rows.forEach(function (r) { if (r.n > maxN) maxN = r.n; });
+            var sweet = null, bestAvg = -1;
+            rows.forEach(function (r) { if (r.n >= 2 && r.avg > bestAvg) { bestAvg = r.avg; sweet = r; } });
+            if (!sweet) rows.forEach(function (r) { if (r.n >= 1 && r.avg > bestAvg) { bestAvg = r.avg; sweet = r; } });
+            var h = head;
+            rows.forEach(function (r) {
+                var isS = sweet && r.k === sweet.k && r.n > 0;
+                h += '<div class="ipd-row' + (isS ? ' sweet' : '') + '">'
+                    + '<span class="lb">' + (isS ? '🎯 ' : '') + escapeHtml(r.label) + '</span>'
+                    + '<span class="bar"><i style="width:' + Math.round(r.n / maxN * 100) + '%"></i></span>'
+                    + '<span class="vv">' + r.n + ' 款' + (r.avg ? ' · 均 ' + indieFmtNum(r.avg) + ' 份' : '') + '</span></div>';
+            });
+            if (sweet && sweet.n > 0) {
+                h += '<div class="indie-box" style="margin-top:9px;">🎯 <b>甜点价位落在「' + escapeHtml(sweet.label) + '」</b>：'
+                    + sweet.n + ' 款，平均估算销量最高（' + indieFmtNum(sweet.avg) + ' 份）。'
+                    + '定价优先照这一档选。<br><span class="indie-name-cn">⚠️ 样本只有现在筛选后的 ' + games.length + ' 款，只看方向；'
+                    + '等你库里款数上到几十款，这张表的结论才真正可用。</span></div>';
+            }
+            return h + '</div>';
+        }
+
+        // ---------- C08 标签字典治理台 ----------
+        function indieTagIgnore() { var l = safeStorage.get(INDIE_KEY_TAGIGN, []); return Array.isArray(l) ? l : []; }
+        function indieTagIgnoreToggle(name) {
+            var l = indieTagIgnore(), i = l.indexOf(name);
+            if (i >= 0) l.splice(i, 1); else l.push(name);
+            safeStorage.set(INDIE_KEY_TAGIGN, l);
+            renderIndiePanels(); renderIndie();
+            showToast(i >= 0 ? '↩︎ 已恢复「' + name + '」' : '🚫 已忽略「' + name + '」（只影响你本机的显示）');
+        }
+        function indieTagIgnoreExport() {
+            var l = indieTagIgnore();
+            var txt = 'NON_TRACK_TAGS = ' + JSON.stringify(l);
+            try { if (navigator.clipboard) navigator.clipboard.writeText(txt); } catch (e) { }
+            showToast(l.length ? ('📋 已复制 ' + l.length + ' 个标签，发给 NIKO 就能同步到抓取脚本') : '（忽略清单是空的）');
+        }
+        function indiePanelTags() {
+            var games = (indieData && indieData.games) || [];
+            var map = {};
+            games.forEach(function (g) {
+                (g.tags || []).forEach(function (t) {
+                    if (!t || !t.name) return;
+                    if (!map[t.name]) map[t.name] = { name: t.name, total: null, who: 0, niche: 0, idKnown: t.idKnown };
+                    var e = map[t.name];
+                    e.who++;
+                    if (t.total != null) e.total = t.total;
+                    if (g.track && g.track.niche === t.name) e.niche++;
+                });
+            });
+            var rows = Object.keys(map).map(function (k) { return map[k]; });
+            var ign = indieTagIgnore();
+            rows.sort(function (a, b) {
+                var at = (a.total == null ? 1e12 : a.total), bt = (b.total == null ? 1e12 : b.total);
+                if (at !== bt) return at - bt;
+                return a.name < b.name ? -1 : 1;
+            });
+            var h = '<div class="indie-panel"><div class="pt">🏷 标签字典治理台 <span class="hint">' + rows.length + ' 个标签 · 细分定位（🎯）选得准不准全看这张表</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            var _tagEmpty = rows.length ? '' : '<div class="indie-health-lack">库里还没有社区标签数据（长效案例没有真实 appid，抓不到标签）。等云端抓取跑过一轮再看 —— 下面的忽略清单仍然可用。</div>';
+            h += '<div class="indie-factor" style="margin-bottom:7px;"><span class="dot">▸</span><span>按 <b>全站总数升序</b>排（越靠上越窄）。'
+                + '<code>Memes / Loot / Hentai</code> 这类噪声标签会把真正的细分定位挤掉 —— 点「忽略」把它从你的推送里去掉。<br>'
+                + '<span class="indie-name-cn">这套黑名单的权威版本在抓取脚本里（<code>NON_TRACK_TAGS</code>）；你在这里改的只影响本机显示，改完点右边按钮复制清单发我，才算真的改到位。</span></span></div>';
+            h += '<div style="text-align:right;margin-bottom:6px;"><button class="tb2btn" onclick="indieTagIgnoreExport()">📋 复制忽略清单' + (ign.length ? '（' + ign.length + '）' : '') + '</button></div>';
+            if (_tagEmpty) return h + _tagEmpty + '</div>';
+            h += '<div style="max-height:340px;overflow-y:auto;">';
+            rows.forEach(function (r) {
+                var off = ign.indexOf(r.name) >= 0;
+                h += '<div class="itm-row' + (off ? ' off' : '') + '">'
+                    + '<span class="nm">' + (r.niche ? '🎯 ' : '') + escapeHtml(r.name)
+                    + '<em>出现在 ' + r.who + ' 款' + (r.idKnown === false ? ' · 未进热门榜' : '') + '</em></span>'
+                    + '<span class="tt">' + (r.total != null ? (r.total >= 10000 ? indieFmtNum(r.total) : r.total.toLocaleString('en-US')) + ' 款' : '未取得') + '</span>'
+                    + '<button class="' + (off ? 'ign on' : 'ign') + '" onclick="indieTagIgnoreToggle(\'' + String(r.name).replace(/'/g, "\\'") + '\')">' + (off ? '已忽略' : '忽略') + '</button>'
+                    + '</div>';
+            });
+            return h + '</div></div>';
+        }
+
+        // ---------- C10 我的竞品池 ----------
+        function indieWatch() { var l = safeStorage.get(INDIE_KEY_WATCH, []); return Array.isArray(l) ? l : []; }
+        function indieWatchAdd() {
+            var inp = document.getElementById('iwInput');
+            var raw = inp ? String(inp.value || '').trim() : '';
+            if (!raw) return;
+            var m = raw.match(/(\d{3,})/);
+            if (!m) { showToast('⚠️ 请填 Steam appid —— 商店链接里那串数字，如 413150'); return; }
+            var appid = m[1], l = indieWatch();
+            if (l.some(function (x) { return String(x.appid) === appid; })) { showToast('这款已经在池子里了'); return; }
+            var g = indieFind(appid);
+            l.unshift({ appid: appid, name: (g && g.name) || '', url: (g && g.url) || '', addedAt: new Date().toISOString().slice(0, 10) });
+            safeStorage.set(INDIE_KEY_WATCH, l);
+            if (inp) inp.value = '';
+            renderIndiePanels();
+            showToast('👁 已加入竞品池（' + (g ? '雷达里有它的数据' : '雷达本周还没抓到它') + '）');
+        }
+        function indieWatchDel(appid) {
+            var l = indieWatch().filter(function (x) { return String(x.appid) !== String(appid); });
+            safeStorage.set(INDIE_KEY_WATCH, l);
+            renderIndiePanels();
+            showToast('已移出竞品池');
+        }
+        function indieWatchExport() {
+            var l = indieWatch();
+            var txt = l.map(function (x) { return x.appid; }).join(',');
+            try { if (navigator.clipboard) navigator.clipboard.writeText(txt); } catch (e) { }
+            showToast(l.length ? ('📋 已复制 ' + l.length + ' 个 appid') : '（池子是空的）');
+        }
+        function indiePanelWatch() {
+            var l = indieWatch();
+            var h = '<div class="indie-panel"><div class="pt">👁 我的竞品池 <span class="hint">雷达是「它觉得重要」，这里是「你觉得重要」</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            h += '<div class="iw-add"><input id="iwInput" placeholder="粘 Steam 链接或 appid（如 413150）" onkeydown="if(event.key===\'Enter\')indieWatchAdd()"><button class="tb2btn" onclick="indieWatchAdd()">➕ 加入</button><button class="tb2btn" onclick="indieWatchExport()">📋 导出</button></div>';
+            h += '<div class="indie-factor" style="margin-bottom:6px;"><span class="dot">▸</span><span>5–8 款就够，贪多会看不动。池里能匹配到本周雷达数据的直接显示；匹配不到的要等下一次抓取（抓取侧已支持读 <code>indie_watch.json</code> —— 把导出的 appid 发我，我写进仓库就会每周自动抓）。</span></div>';
+            if (!l.length) return h + '<div class="indie-health-lack">池子还是空的 —— 把你想长期盯的那几款 appid 加进来。</div></div>';
+            l.forEach(function (x) {
+                var g = indieFind(x.appid);
+                var sub, num = '';
+                if (g) {
+                    var a = g.analysis || {}, rv = g.reviews, sl = g.sales || {};
+                    sub = '📈 评测 ' + (rv && rv.total ? indieFmtNum(rv.total) : '—')
+                        + ' ｜ 好评 ' + (rv && rv.positivePct != null ? rv.positivePct + '%' : '—')
+                        + ' ｜ 在线 ' + ((a.peakOnline != null ? a.peakOnline : g.playersCurrent) != null ? indieFmtNum(a.peakOnline != null ? a.peakOnline : g.playersCurrent) : '—');
+                    num = sl.mid ? '约 ' + indieFmtNum(sl.mid) + ' 份' : '';
+                } else {
+                    sub = '不在本周雷达范围（等下次抓取，或它已从榜上掉下来）';
+                }
+                h += '<div class="iw-card"><span class="mn"><b>' + escapeHtml(x.name || ('appid ' + x.appid)) + '</b><span>' + escapeHtml(sub) + '</span></span>'
+                    + (num ? '<span class="idc">' + escapeHtml(num) + '</span>' : '')
+                    + '<button onclick="indieWatchDel(\'' + String(x.appid).replace(/'/g, "\\'") + '\')">移出</button></div>';
+            });
+            return h + '</div>';
+        }
+
+        // ---------- E05「我卡在这一步」→ 看别人怎么过 ----------
+        function indieStuckIdx() {
+            var v = safeStorage.get(INDIE_KEY_STUCK, 0);
+            return (typeof v === 'number' && v >= 0 && v < INDIE_PIPE_STEPS.length) ? v : 0;
+        }
+        function indieStuckPick(i) { safeStorage.set(INDIE_KEY_STUCK, i); renderIndiePanels(); }
+        function indiePanelStuck() {
+            var i = indieStuckIdx(), step = INDIE_PIPE_STEPS[i], kw = INDIE_STUCK_KW[i] || [];
+            var hits = [];
+            ((indieData && indieData.games) || []).forEach(function (g) {
+                var a = g.analysis || {}, found = [];
+                if (a.toolchain && a.toolchain.engine) found.push('引擎 · ' + a.toolchain.engine);
+                if (a.devTime) found.push('工期 · ' + a.devTime);
+                if (a.teamSize) found.push('编制 · ' + a.teamSize);
+                if (a.ue5 && a.ue5.learn) a.ue5.learn.forEach(function (x) { if (x && x.t) found.push('要学 · ' + x.t); });
+                if (a.lesson && kw.some(function (k) { return String(a.lesson).indexOf(k) >= 0; })) found.push('启示 · ' + a.lesson);
+                if (found.length) hits.push({ n: g.name || '', items: found });
+            });
+            var h = '<div class="indie-panel"><div class="pt">🧗 我卡在这一步 <span class="hint">选一个环节 → 先看「什么算完成」，再看别人怎么过</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            h += '<div class="isk-chips">';
+            INDIE_PIPE_STEPS.forEach(function (s, j) {
+                h += '<button class="' + (j === i ? 'on' : '') + '" onclick="indieStuckPick(' + j + ')">' + escapeHtml(s) + '</button>';
+            });
+            h += '</div>';
+            h += '<div class="indie-sec"><div class="indie-sec-t">✅ 「' + escapeHtml(step) + '」什么算完成</div><div class="indie-box">' + escapeHtml(INDIE_PIPE_DONE[i]) + '</div></div>';
+            if (hits.length) {
+                h += '<div class="indie-sec"><div class="indie-sec-t">📚 库里这几款是怎么做的 <span class="indie-name-cn">（' + hits.length + ' 款有可参考信息）</span></div>';
+                hits.slice(0, 8).forEach(function (x) {
+                    h += '<div class="indie-factor"><span class="dot">▸</span><span><b>' + escapeHtml(x.n) + '</b>：' + escapeHtml(x.items.join('　|　')) + '</span></div>';
+                });
+                if (hits.length > 8) h += '<div class="indie-factor"><span class="dot">…</span><span>还有 ' + (hits.length - 8) + ' 款，放宽筛选可以看全</span></div>';
+                h += '</div>';
+            } else {
+                h += '<div class="indie-sec"><div class="indie-sec-t">📚 库里这几款是怎么做的</div><div class="indie-box">这一环暂时没有可参考的库内记录 —— <code>analysis</code> 里还没人填过这一块。</div></div>';
+            }
+            h += '<div class="indie-sec"><div class="indie-sec-t">🔗 官方资料入口</div>'
+                + '<div class="indie-factor"><span class="dot">▸</span><span><a href="https://dev.epicgames.com/documentation/en-us/unreal-engine" target="_blank" rel="noopener">Epic 官方 UE5 文档</a>'
+                + ' —— 在这个站内搜「' + escapeHtml(step) + '」相关关键词（' + escapeHtml(kw.slice(0, 3).join(' / ')) + '）。'
+                + '<span class="indie-name-cn">（不给具体页面链接，免得给你一条死链）</span></span></div>'
+                + '<div class="indie-factor"><span class="dot">▸</span><span>Steamworks 官方文档：<a href="https://partner.steamgames.com/doc/home" target="_blank" rel="noopener">partner.steamgames.com/doc</a></span></div>'
+                + '</div>';
+            h += '<div class="indie-health-lack" style="margin-top:8px;">你缺的不是教程，是「有人这么干过」。把库里那几款的 <code>analysis</code> 补全（🩺 数据体检 → 复制补分析指令），这里的内容会自动长出来。</div>';
+            return h + '</div>';
+        }
+
+        // ---------- E07 技能雷达图（看得见在进步）----------
+        function indieSkillLog() { var l = safeStorage.get(INDIE_KEY_SKILLLOG, []); return Array.isArray(l) ? l : []; }
+        function indieSkillSnapshot() {
+            var pipe = indiePipe();
+            var v = INDIE_PIPE_STEPS.map(function (s, i) { return pipe[i] || 0; });
+            var l = indieSkillLog(), d = new Date().toISOString().slice(0, 10);
+            if (l.length && l[l.length - 1].d === d) l[l.length - 1].v = v;
+            else l.push({ d: d, v: v });
+            if (l.length > 40) l = l.slice(-40);
+            safeStorage.set(INDIE_KEY_SKILLLOG, l);
+            renderIndiePanels();
+            showToast('📈 已存一笔技能快照（共 ' + l.length + ' 笔）');
+        }
+        function indieRadarSvg(vals) {
+            var R = 104, C = 130, N = INDIE_PIPE_STEPS.length;
+            function pt(i, r) {
+                var a = -Math.PI / 2 + i * 2 * Math.PI / N;
+                return [C + Math.cos(a) * r, C + Math.sin(a) * r];
+            }
+            var h = '<svg class="ir-svg" viewBox="0 0 ' + (C * 2) + ' ' + (C * 2) + '" role="img" aria-label="技能雷达图">';
+            [1 / 3, 2 / 3, 1].forEach(function (f) {
+                var ps = [];
+                for (var i = 0; i < N; i++) { var p = pt(i, R * f); ps.push(p[0].toFixed(1) + ',' + p[1].toFixed(1)); }
+                h += '<polygon points="' + ps.join(' ') + '" fill="none" stroke="#dbe3ee" stroke-width="1"/>';
+            });
+            for (var i = 0; i < N; i++) {
+                var p = pt(i, R);
+                h += '<line x1="' + C + '" y1="' + C + '" x2="' + p[0].toFixed(1) + '" y2="' + p[1].toFixed(1) + '" stroke="#e8edf5" stroke-width="1"/>';
+            }
+            var dp = [];
+            for (var j = 0; j < N; j++) { var q = pt(j, R * Math.max(0.05, vals[j] / 2)); dp.push(q[0].toFixed(1) + ',' + q[1].toFixed(1)); }
+            h += '<polygon points="' + dp.join(' ') + '" fill="rgba(99,102,241,.20)" stroke="#6366f1" stroke-width="2"/>';
+            for (var m = 0; m < N; m++) {
+                var r = pt(m, R * Math.max(0.05, vals[m] / 2));
+                var col = vals[m] === 0 ? '#f59e0b' : (vals[m] === 2 ? '#0f9c7b' : '#6366f1');
+                h += '<circle cx="' + r[0].toFixed(1) + '" cy="' + r[1].toFixed(1) + '" r="3" fill="' + col + '"/>';
+                var lp = pt(m, R + 16);
+                h += '<text x="' + lp[0].toFixed(1) + '" y="' + lp[1].toFixed(1) + '" font-size="9.5" text-anchor="middle" dominant-baseline="middle" fill="#64748b">' + escapeHtml(INDIE_PIPE_STEPS[m]) + '</text>';
+            }
+            return h + '</svg>';
+        }
+        function indiePanelSkill() {
+            var pipe = indiePipe();
+            var vals = INDIE_PIPE_STEPS.map(function (s, i) { return pipe[i] || 0; });
+            var done = vals.filter(function (v) { return v === 2; }).length;
+            var gapIdx = vals.indexOf(0);
+            var log = indieSkillLog();
+            var h = '<div class="indie-panel"><div class="pt">📈 我的技能雷达图 <span class="hint">自评留档 · 看得见在进步</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            h += '<div class="ir-wrap">' + indieRadarSvg(vals) + '<div class="ir-legend">';
+            INDIE_PIPE_STEPS.forEach(function (s, i) {
+                var v = vals[i], lb = v === 2 ? '我会' : (v === 1 ? '半会' : '不会');
+                h += '<div class="lg v' + v + '"><span>' + escapeHtml(s) + '</span><i>' + lb + '</i></div>';
+            });
+            h += '</div></div>';
+            h += '<div class="indie-box" style="margin-top:9px;">已掌握 <b>' + done + ' / ' + INDIE_PIPE_STEPS.length + '</b>。'
+                + (gapIdx >= 0 ? '本周该补：<b>' + escapeHtml(INDIE_PIPE_STEPS[gapIdx]) + '</b> —— ' + escapeHtml(INDIE_PIPE_DONE[gapIdx]) : '12 环全绿了，可以准备上架。')
+                + '</div>';
+            h += '<div class="indie-health-lack">自评在「🧭 我的作战台」的拼图里点（不会 → 半会 → 我会）。'
+                + '下面是留档记录：每次调完自评点「📸 存一笔」，以后回头看曲线就知道自己有没有动。'
+                + (log.length ? '' : '（还没有记录）') + '</div>';
+            if (log.length) {
+                h += '<div class="indie-factor" style="margin-top:6px;"><span class="dot">▸</span><span>'
+                    + log.slice(-6).map(function (x) {
+                        var d = x.v.filter(function (u) { return u === 2; }).length;
+                        return '<b>' + escapeHtml(x.d) + '</b> ' + d + '/12';
+                    }).join('　→　') + '</span></div>';
+            }
+            h += '<div style="text-align:right;margin-top:8px;"><button class="tb2btn" onclick="indieSkillSnapshot()">📸 存一笔快照</button></div>';
+            return h + '</div>';
+        }
+
+        // ---------- D02 爆款 → 知识库条目 ----------
+        function indieToKb(key) {
+            var g = indieFind(key); if (!g) return;
+            if (typeof addToKnowledge !== 'function') { showToast('⚠️ 知识库模块没加载，稍后再试'); return; }
+            var a = g.analysis || {}, sl = g.sales || {};
+            var lines = [];
+            lines.push('【案例】' + (g.nameCn ? g.nameCn + ' / ' : '') + g.name);
+            if (g.releaseText) lines.push('发行：' + g.releaseText);
+            if (a.officialSales) lines.push('官方销量：' + a.officialSales);
+            if (sl.mid) lines.push('第三方估算：约 ' + indieFmtNum(sl.mid) + ' 份（' + (sl.basis || 'Boxleiter 反推') + '）');
+            if (a.teamSize || a.devTime) lines.push('团队 / 工期：' + [a.teamSize, a.devTime].filter(Boolean).join(' · '));
+            if (g.priceUsd != null) lines.push('价格：$' + g.priceUsd + (g.priceCny ? ' / ¥' + g.priceCny : ''));
+            if (a.toolchain && a.toolchain.engine) lines.push('引擎：' + a.toolchain.engine);
+            if (g.track && g.track.label) lines.push('细分赛道：' + g.track.label);
+            if (a.burstFactors && a.burstFactors.length) lines.push('爆款因子：' + a.burstFactors.map(function (f) { return f.f; }).join(' / '));
+            if (a.lesson) lines.push('启示：' + a.lesson);
+            if (g.url) lines.push('商店：' + g.url);
+            try {
+                addToKnowledge({
+                    title: '【独立游戏雷达】' + g.name + (g.nameCn ? '（' + g.nameCn + '）' : ''),
+                    body: lines.join('\n'),
+                    para: '03-Resources',
+                    category: '副业',
+                    tags: ['独立游戏雷达', (g.track && g.track.label) || '未归类'],
+                    from: '独立游戏雷达',
+                    link: g.url || '',
+                    date: new Date().toISOString().slice(0, 10),
+                    dedup: true
+                });
+            } catch (e) { showToast('⚠️ 入库失败：' + (e && e.message)); }
+        }
+
+        // ---------- D05 每周五自动写一条「雷达周报」日程 ----------
+        // ISO 周编号（周一为一周之始）→ '2026-W39'
+        function indieWeekTag(d) {
+            var t = d ? new Date(d) : new Date();
+            if (isNaN(t.getTime())) t = new Date();
+            t = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+            var day = (t.getDay() + 6) % 7;
+            t.setDate(t.getDate() - day + 3);
+            var y = t.getFullYear();
+            var jan4 = new Date(y, 0, 4);
+            var jd = (jan4.getDay() + 6) % 7;
+            var w1 = new Date(y, 0, 4 - jd + 3);
+            if (t < w1) {
+                y -= 1; jan4 = new Date(y, 0, 4); jd = (jan4.getDay() + 6) % 7;
+                w1 = new Date(y, 0, 4 - jd + 3);
+            }
+            var wk = 1 + Math.round((t - w1) / 604800000);
+            return y + '-W' + (wk < 10 ? '0' + wk : wk);
+        }
+        function indieWeeklyDigest(force) {
+            try {
+                var wk = indieWeekTag();
+                if (!force && safeStorage.get(INDIE_KEY_DIGEST, '') === wk) return false;
+                var games = ((indieData && indieData.games) || []).slice();
+                if (!games.length) return false;
+                games.sort(function (a, b) { return ((b.burst && b.burst.score) || 0) - ((a.burst && a.burst.score) || 0); });
+                var top = games[0];
+                var fresh = games.filter(function (g) { return g.__src === 'cloud'; });
+                var l1 = '这周最值得学的一款：《' + (top.name || '') + '》（爆款指数 ' + ((top.burst && top.burst.score) || '—') + '）—— '
+                    + ((top.analysis && top.analysis.lesson) || '点开看它的前 3 张截图和预告片前 6 秒');
+                var l2 = fresh.length
+                    ? ('本周新进雷达 ' + fresh.length + ' 款：' + fresh.slice(0, 3).map(function (g) { return g.name || ''; }).join(' / '))
+                    : '本周没有新的云端数据（未到周五，或这轮抓取失败）';
+                var l3 = '你能做的一件事：挑最上面那款，去它商店页截前 3 张图，10 分钟。';
+                var evs = safeStorage.get('work_calendar_events', []) || [];
+                var title = '🛰 雷达周报 · ' + wk;
+                if (evs.some(function (e) { return e && e.title === title; })) { safeStorage.set(INDIE_KEY_DIGEST, wk); return false; }
+                var tpl = indieCalTemplate(), e = {};
+                Object.keys(tpl).forEach(function (k) { e[k] = tpl[k]; });
+                e.id = Date.now().toString() + '_' + Math.random().toString(36).slice(2, 6);
+                e.title = title;
+                e.desc = l1 + '\n' + l2 + '\n' + l3; e.noDeadlineRemind = true;   // 2026-09-27：周报不参与「任务到期提醒」弹窗
+                e.startDate = indieDateShift(0);
+                e.endDate = indieDateShift(0);
+                e.status = 'todo';
+                e.repeat = null;
+                evs.push(e);
+                safeStorage.set('work_calendar_events', evs);
+                try { events = evs; } catch (e2) { }
+                try { if (typeof renderPlanPage === 'function') renderPlanPage(); } catch (e3) { }
+                try { if (typeof renderTodayPage === 'function') renderTodayPage(); } catch (e4) { }
+                safeStorage.set(INDIE_KEY_DIGEST, wk);
+                try { showToast('🛰 本周雷达周报已写进日历（' + wk + '）'); } catch (e5) { }
+                return true;
+            } catch (err) { return false; }
+        }
+
+        // ---------- 门禁探针（本批新增能力的可断言入口）----------
+        window.__ig13 = {
+            confOf: function (k) { var g = indieFind(k); return g ? indieConfOf(g) : null; },
+            numFromText: indieNumFromText,
+            weekTag: function () { return indieWeekTag(); },
+            digestKey: function () { return safeStorage.get(INDIE_KEY_DIGEST, ''); },
+            digestRun: function (force) { return indieWeeklyDigest(!!force); },
+            panels: function () { return ['price', 'tags', 'watch', 'stuck', 'skill']; },
+            priceBands: function () { return INDIE_PRICE_BANDS.map(function (b) { return b.k; }); },
+            pipeDone: function () { return INDIE_PIPE_DONE.length; },
+            skillLog: function () { return indieSkillLog().length; },
+            skillSnapshot: function () { indieSkillSnapshot(); return indieSkillLog().length; },
+            radarSvg: function () { return indieRadarSvg(INDIE_PIPE_STEPS.map(function () { return 1; })).indexOf('<polygon') >= 0; },
+            watchList: function () { return indieWatch(); }
+        };
 
         (function initIndie() {
             try { indieBootstrap(); } catch (e) { console.warn('[独立游戏雷达] 初始化失败', e && e.message); }
@@ -25756,6 +26363,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { key: '文案库', label: '✍️ 文案库', page: 'copy' },
             { key: '计划看板', label: '📋 计划', page: 'plan' },
             { key: '热点收藏', label: '🔥 热点', page: 'hot' },
+            { key: '独立游戏雷达', label: '🎮 游戏雷达', page: 'hot' },
             { key: '梗文化', label: '🈯 梗文化', page: 'meme' },
             { key: '育儿手册', label: '👶 育儿', page: 'parenting' }
         ];
@@ -37653,7 +38261,8 @@ function hpClearDemo(){
             const today = new Date();
             const todayStr = formatDate(today);
             const tomorrowStr = formatDate(addDays(today, 1));
-            const pending = events.filter(e => e.status !== 'done' && e.endDate);
+            // 2026-09-27：带 noDeadlineRemind 标记的日程（如雷达周报）不算「到期任务」，不进提醒弹窗
+            const pending = events.filter(e => e.status !== 'done' && e.endDate && !e.noDeadlineRemind);
             const overdue = pending.filter(e => e.endDate < todayStr);
             const soon = pending.filter(e => e.endDate >= todayStr && e.endDate <= tomorrowStr);
             if (overdue.length === 0 && soon.length === 0) return;
@@ -39161,7 +39770,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272332";
+        window.NIKO_VERSION = "202609272354";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
