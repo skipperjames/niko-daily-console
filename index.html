@@ -23357,6 +23357,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             else { renderIndie(); }
         }
 
+        // 兼容垫片：媒体热点重构（2026-09-26）把旧的 renderHotFull 删掉了，但总框架及其余 parts 的
+        // switchPage 里还留着 `if (page === 'hot') renderHotFull();` 的调用点 —— 不补这个垫片，
+        // 每次从侧栏点「热点」都会抛 `renderHotFull is not defined`（页面能切过去，但 JS 中断）。
+        // 语义 = 「按当前激活的 Tab 重新渲染一次」。
+        function renderHotFull() {
+            var v = 'indie';
+            try {
+                if (document.querySelector('#viewTabTotem.active')) v = 'totem';
+                else if (document.querySelector('#viewTabAi.active')) v = 'ai';
+            } catch (e) { }
+            switchHotView(v);
+        }
+
         // ---------- X4：精神图腾墙 ----------
         function indieWeekKey() {
             var d = new Date();
@@ -39148,7 +39161,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272316";
+        window.NIKO_VERSION = "202609272332";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
