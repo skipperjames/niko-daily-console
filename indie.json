@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T22:16:06+08:00",
+  "fetchedAt": "2026-09-27T22:23:51+08:00",
   "date": "2026-09-27",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
@@ -186,7 +186,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 28837,
+      "playersCurrent": 29419,
       "analysis": {
         "officialSales": "官方未公布具体数字（Cozy Lives 公告：上市 24 小时内回收开发成本）",
         "teamSize": "Cozy Lives（Free Lives 旗下休闲品牌）",
