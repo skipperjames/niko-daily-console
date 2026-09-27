@@ -22099,10 +22099,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         + '">' + (isNiche ? '🎯 ' : '') + escapeHtml(t.name) + ' <b>' + txt + '</b></span>';
                 });
                 h += '</div>';
-            } else if (sat.verdict) {
-                // 兜底：没抓到社区标签时，退回 genres 粗标签（老行为）
-                h += '<div class="indie-tags"><span class="indie-tag ' + (sat.verdict.key || 'unknown') + '" title="' + escapeHtml(sat.basis || '') + '">'
-                    + escapeHtml(tr.label || '未归类') + ' <b>' + escapeHtml(sat.verdict.label) + '</b></span></div>';
+            } else {
+                // 没有社区标签 = 内置长效案例（无真实 appid，抓不到标签）→ 明确标出来，别让卡片看起来像缺数据
+                h += '<div class="indie-tags"><span class="indie-tag unknown" title="内置长效案例，没有真实 appid 因而抓不到 Steam 社区标签">🗿 长效案例</span>';
+                if (sat.verdict) {
+                    h += '<span class="indie-tag ' + (sat.verdict.key || 'unknown') + '" title="' + escapeHtml(sat.basis || '') + '">'
+                        + escapeHtml(tr.label || '未归类') + ' <b>' + escapeHtml(sat.verdict.label) + '</b></span>';
+                }
+                h += '</div>';
             }
 
             // 一句话启发（用户核心诉求：对「我」有何启发）
@@ -38012,7 +38016,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272214";
+        window.NIKO_VERSION = "202609272238";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
