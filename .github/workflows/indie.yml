@@ -41,8 +41,19 @@ jobs:
           git add indie.json
           if git diff --cached --quiet; then
             echo "✅ 独立游戏数据无变化，跳过提交"
-          else
-            git commit -m "indie: 自动更新独立游戏雷达数据 $(date -u +'%Y-%m-%d %H:%M UTC')"
-            git push
-            echo "✅ 已推送最新独立游戏数据"
+            exit 0
           fi
+          git commit -m "indie: 自动更新独立游戏雷达数据 $(date -u +'%Y-%m-%d %H:%M UTC')"
+          # 2026-09-27 加：抓取要跑 6 分钟，期间只要有人推了别的东西（例如前端部署），
+          # 直接 push 就会 non-fast-forward 被拒，整轮抓取白跑（当天实测踩到）。
+          # → 先 rebase 再推，失败重试 4 次。
+          for i in 1 2 3 4; do
+            if git pull --rebase --autostash origin main && git push; then
+              echo "✅ 已推送最新独立游戏数据"
+              exit 0
+            fi
+            echo "⚠️ 第 $i 次推送失败，3 秒后重试…"
+            sleep 3
+          done
+          echo "❌ 推送 indie.json 失败（已重试 4 次）"
+          exit 1
