@@ -40,6 +40,7 @@ const MIN_REVIEWS = 80;       // 进榜门槛：评论数下限 120→80（同�
 const TOP_N = 8;              // 最终保留款数
 const SEARCH_PAGES = 4;       // 搜索翻页数（每页 100）2→4
 const CONCURRENCY = 3;        // 并发数（8→3：2026-09-27 扩池后触发 Steam 限流、详情抓取全灭，主动降速）
+const REQ_GAP = 320;          // 单请求之间的主动间隔（ms），标签总数这类串行请求用
 
 // ---------- 通用工具 ----------
 function nowCST() { return new Date(Date.now() + 8 * 3600 * 1000).toISOString().slice(0, 19) + '+08:00'; }
@@ -205,6 +206,25 @@ async function fetchDetails(appid) {
         url: `https://store.steampowered.com/app/${appid}/`,
         requiredAge: g.required_age || 0
     };
+}
+
+// ---------- 3.5 社区标签（2026-09-27 新增）----------
+// 为什么要抓：appdetails 只给 genres（动作/冒险/独立这种大颗粒），说明不了「这个作真正打在哪个细分赛道」。
+// 用户反馈：「每个游戏都是红海，看不出区别」→ 必须展示该作真实的社区标签，并**逐标签**算全站总数，
+// 才能回答「窄标签（细分赛道）挤不挤」。标签顺序 = Steam 社区投票序（最相关在前）。
+async function fetchStoreTags(appid) {
+    const html = await fetchRaw(`https://store.steampowered.com/app/${appid}/?l=english&cc=us`, {
+        'Cookie': 'birthtime=283993201; lastagecheckage=1-January-1980; wants_mature_content=1;'
+    }, 20000);
+    const out = [];
+    const re = /class="app_tag"[^>]*>\s*([^<]+?)\s*</g;
+    let m;
+    while ((m = re.exec(html || '')) !== null) {
+        const t = m[1].replace(/\s+/g, ' ').trim();
+        if (t && out.indexOf(t) < 0) out.push(t);
+        if (out.length >= 12) break;
+    }
+    return out;
 }
 
 // ---------- 4. 当前在线 ----------
@@ -379,7 +399,8 @@ async function main() {
             days,
             burst: { score, ...tierOf(score) },
             sales: estimateSales(g.reviews, g.priceUsd, g.isFree),
-            track: { primary: pickTrackGenre(g.genres), label: trackLabel(pickTrackGenre(g.genres)), saturation: null },
+            track: { primary: pickTrackGenre(g.genres), label: trackLabel(pickTrackGenre(g.genres)), saturation: null, niche: null },
+            tags: [],            // 社区标签（第三轮补），[{ name, total, verdict, idKnown }]
             playersCurrent: null,
             analysis: (oldByAppid[g.appid] && oldByAppid[g.appid].analysis) || null
         };
@@ -405,20 +426,70 @@ async function main() {
         process.exit(1);
     }
 
-    // 第三轮：当前在线 + 赛道饱和度（只对入选款做）
-    console.log('⏳ 第三轮：当前在线 + 赛道密度…');
+    // 第三轮：当前在线 + 社区标签（只对入选款做）
+    console.log('⏳ 第三轮：当前在线 + 社区标签…');
     let tagTable = {};
     try { tagTable = await fetchTagTable(); console.log(`✅ 标签表: ${Object.keys(tagTable).length} 项`); }
     catch (e) { console.warn('⚠️ 标签表失败: ' + e.message); }
 
     await pool(picked, async (g) => {
         try { g.playersCurrent = await fetchPlayers(g.appid); } catch (e) { }
-        try {
-            const tagId = tagTable[g.track.primary];
-            if (tagId) g.track.saturation = await fetchSaturation(tagId);
-        } catch (e) { }
+        try { g.tags = await fetchStoreTags(g.appid); } catch (e) { }
         return g;
-    }, 4);
+    }, 2, 300);
+
+    // 3.1 逐标签算全站总数（跨游戏去重 + 限量 + 间隔，避免限流）
+    // 目的：回答「到底是哪个标签红海」。粗标签（动作 8.9 万）必然红海，没信息量；
+    //       把标签按全站总数升序排，**最靠前的那个 = 该作真正的细分赛道**，这才是有效信号。
+    const MAX_TAGS = 42;
+    const uniqTags = [];
+    picked.forEach(g => (g.tags || []).forEach(t => { if (uniqTags.indexOf(t) < 0) uniqTags.push(t); }));
+    const tagStat = {};
+    let tagHit = 0;
+    for (const name of uniqTags.slice(0, MAX_TAGS)) {
+        const id = tagTable[name];
+        if (!id) { tagStat[name] = { total: null, verdict: null, idKnown: false }; continue; }
+        try {
+            const s = await fetchSaturation(id);
+            tagStat[name] = { total: (s && s.total) || null, verdict: (s && s.verdict) || null, idKnown: true };
+            if (s && s.total) tagHit++;
+        } catch (e) { tagStat[name] = { total: null, verdict: null, idKnown: true }; }
+        await sleep(REQ_GAP);
+    }
+    console.log(`✅ 标签总数已取 ${tagHit}/${uniqTags.length} 个（限量 ${MAX_TAGS}）`);
+
+    // 3.2 挂回每款：按全站总数升序（越靠前越细分），并挑出「细分定位」
+    picked.forEach(g => {
+        const arr = (g.tags || []).map(name => Object.assign({ name }, tagStat[name] || { total: null, verdict: null, idKnown: false }));
+        arr.sort((a, b) => {
+            if (a.total == null && b.total == null) return 0;
+            if (a.total == null) return 1;
+            if (b.total == null) return -1;
+            return a.total - b.total;
+        });
+        g.tags = arr;
+        const niche = arr.find(x => x.total != null && x.verdict);
+        g.track.niche = niche ? niche.name : null;
+        if (niche) {
+            g.track.saturation = {
+                total: niche.total, verdict: niche.verdict,
+                basis: `细分标签「${niche.name}」全站 ${niche.total.toLocaleString('en-US')} 款`,
+            };
+        }
+    });
+
+    // 3.3 兜底：一款标签都没抓到 → 退回 genres 的粗标签总数（保持旧行为，前端不至于空）
+    const noTag = picked.filter(g => !g.tags.length);
+    if (noTag.length) {
+        console.warn(`⚠️ ${noTag.length} 款未抓到社区标签，退回 genres 粗标签`);
+        await pool(noTag, async (g) => {
+            try {
+                const id = tagTable[g.track.primary];
+                if (id) g.track.saturation = await fetchSaturation(id);
+            } catch (e) { }
+            return g;
+        }, 2, 300);
+    }
 
     const next = {
         version: 1,
