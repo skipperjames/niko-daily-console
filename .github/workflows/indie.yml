@@ -34,26 +34,38 @@ jobs:
       - name: 抓取独立游戏数据（Steam 公开接口）
         run: node scripts/fetch_indie.js
 
-      - name: 提交并推送 indie.json
+      - name: 提交并推送 indie.json（走 Contents API，避开 git 冲突）
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add indie.json
-          if git diff --cached --quiet; then
+          set -u
+          API="https://api.github.com/repos/${{ github.repository }}/contents/indie.json"
+          git fetch origin main --depth=1 -q || true
+          if git show origin/main:indie.json 2>/dev/null | diff -q - indie.json >/dev/null 2>&1; then
             echo "✅ 独立游戏数据无变化，跳过提交"
             exit 0
           fi
-          git commit -m "indie: 自动更新独立游戏雷达数据 $(date -u +'%Y-%m-%d %H:%M UTC')"
-          # 2026-09-27 加：抓取要跑 6 分钟，期间只要有人推了别的东西（例如前端部署），
-          # 直接 push 就会 non-fast-forward 被拒，整轮抓取白跑（当天实测踩到）。
-          # → 先 rebase 再推，失败重试 4 次。
-          for i in 1 2 3 4; do
-            if git pull --rebase --autostash origin main && git push; then
-              echo "✅ 已推送最新独立游戏数据"
+          # 2026-09-27：从 git push 改走 Contents API。
+          # 原因：抓取要跑 6-8 分钟，期间只要有人往仓库推了别的东西（例如前端部署），
+          #   git push 就 non-fast-forward 被拒，而且 `pull --rebase` 会在 indie.json 上产生冲突，
+          #   工作区变成 unmerged 状态，之后的重试也救不回来 —— 当天连撞两次
+          #   （run 36324472316 直接 push 被拒；run 36325387976 rebase 冲突后 4 次重试全废）。
+          # Contents API 每次重新读 sha，撞车只是 HTTP 409，重读即可，永远不会留下脏工作区。
+          for i in 1 2 3 4 5; do
+            SHA=$(curl -s -H "Authorization: Bearer $GH_TOKEN" "$API" \
+              | python3 -c "import sys,json;print(json.load(sys.stdin).get('sha',''))")
+            CONTENT=$(base64 -w0 indie.json)
+            CODE=$(curl -s -o /tmp/resp.json -w "%{http_code}" -X PUT \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "$API" \
+              -d "{\"message\":\"indie: 自动更新独立游戏雷达数据 $(date -u +'%Y-%m-%d %H:%M UTC')\",\"content\":\"$CONTENT\",\"sha\":\"$SHA\"}")
+            if [ "$CODE" = "200" ] || [ "$CODE" = "201" ]; then
+              echo "✅ 已推送最新独立游戏数据（HTTP $CODE，第 $i 次尝试）"
               exit 0
             fi
-            echo "⚠️ 第 $i 次推送失败，3 秒后重试…"
+            echo "⚠️ 第 $i 次写入失败 HTTP $CODE，3 秒后重试…"
             sleep 3
           done
-          echo "❌ 推送 indie.json 失败（已重试 4 次）"
+          echo "❌ 写入 indie.json 失败（已重试 5 次）"
           exit 1
