@@ -6431,16 +6431,7 @@ body.dark-mode .indie-tier.dark { background:#3a2c10; border-color:#5c4418; colo
 body.dark-mode .indie-tier.watch { background:#16301a; border-color:#254a2a; color:#95de64; }
 body.dark-mode .indie-tier.na { background:#26262e; border-color:#3a3a46; color:#8c8c94; }
 
-.indie-grid8 { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:#eef0f4; border:1px solid #eef0f4; border-radius:10px; overflow:hidden; }
-.indie-cell { background:#fff; padding:9px 11px; display:flex; flex-direction:column; gap:3px; min-width:0; }
-body.dark-mode .indie-grid8 { background:#2c2c36; border-color:#2c2c36; }
-body.dark-mode .indie-cell { background:#1e1e24; }
-.indie-cell .k { font-size:10.5px; color:#94a3b8; }
-.indie-cell .v { font-size:14px; font-weight:700; color:#1e293b; line-height:1.25; word-break:break-word; }
-.indie-cell .s { font-size:10.5px; color:#a3adbb; line-height:1.4; }
-.indie-cell .v em { font-style:normal; font-size:11px; font-weight:500; color:#94a3b8; }
-body.dark-mode .indie-cell .v { color:#e8ecf3; }
-body.dark-mode .indie-cell .s { color:#79828f; }
+/* 2026-09-27：原「固定 8 格」网格（.indie-grid8 / .indie-cell）已被瀑布流摘要卡取代，样式与 indieCell() 一并删除 */
 
 /* ===== 2026-09-27 瀑布流重排（用户反馈：空间利用率低 / 看不出哪个数据最好）===== */
 #indieList.indie-waterfall { display:block !important; column-count:2; column-gap:14px; }
@@ -6562,7 +6553,6 @@ body.dark-mode .indie-cmp td { color:#c7d2e0; }
 
 @media (max-width:768px) {
   #indieList.indie-waterfall { column-count:1; }
-  .indie-grid8 { grid-template-columns:repeat(2,1fr); }
   .indie-stat { min-width:64px; padding:6px 8px; }
   .indie-stat .v { font-size:13.5px; }
   .indie-hd { flex-wrap:wrap; }
@@ -22025,10 +22015,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         // ---------- 渲染：单卡 ----------
         function indieTierCls(g) { return (g.burst && g.burst.key) ? g.burst.key : 'na'; }
-
-        function indieCell(k, v, s) {
-            return '<div class="indie-cell"><div class="k">' + k + '</div><div class="v">' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>';
-        }
 
         function indieCard(g) {
             var a = g.analysis || {}, rv = g.reviews, sl = g.sales, bu = g.burst || {}, tr = g.track || {}, sat = tr.saturation || {};
@@ -38026,7 +38012,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272206";
+        window.NIKO_VERSION = "202609272214";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
