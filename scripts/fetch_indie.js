@@ -37,12 +37,18 @@ const OUTPUT = path.join(__dirname, '..', 'indie.json');
 
 const MAX_CANDIDATES = 1000;  // 候选池上限 220→400→1000（2026-09-28 二改：用户要「多搜点独立游戏」）
 const MIN_REVIEWS = 20;       // 进榜门槛：评论数下限（太冷门的没有参考价值）
-// ★ 体量上限（2026-09-28 新增，本轮核心）：超过此评论数 = 大制作，直接剔除。
-//   用户原话：「两到三人开发的，别给我整大体量的游戏，这些都是无效信息了」
-//   点名剔除：WARDOGS（9.4 万评论）/ 沙丘：觉醒（7.9 万）—— 那类作品对「独立游戏怎么打」没有参考价值。
-//   定 6 万的理由：18 个月窗口内，2-3 人小团队几乎不可能堆到 6 万评论（≈ 180 万份销量）；能破线的基本是大厂大制作。
-//   注意：这是「体量」代理指标，不是「团队人数」。真正区分小团队靠下面的 teamSignal()（自研自发 + 开发商 ≤2 家）。
+// ★ 团队规模范围（2026-09-28 三改）：用户原话「搜索游戏改成 1-3 人可做的范围吧，别把个人制作过滤掉了」。
+//   判据是「1-3 人可做」：自研自发（无外部发行商，或发行商 == 开发商），或开发商家数 ≤ MAX_TEAM。
+//   1 人（个人制作）当然在范围内，而且**享有体量豁免**（见 MAX_REVIEWS 的说明）。
+const MAX_TEAM = 3;
+// 体量上限：评论数 > MAX_REVIEWS 判为大制作（18 个月窗口内，1-3 人团队几乎堆不到 6 万评论）。
+//   点名剔除过：WARDOGS（9.4 万 · 发行 Team17）/ 沙丘：觉醒（7.9 万 · Funcom）—— 对「独立游戏怎么打」无参考价值。
+//   ⚠️ 豁免（本轮新增）：**个人制作**（开发商仅 1 家 + 无发行商）不受此上限约束 ——
+//      一个人/两个人做出来的爆款恰恰最值得看（「我也能做到，而且它爆了」），绝不能被体量门槛误杀。
 const MAX_REVIEWS = 60000;
+// 粗筛上限：第一轮先砍掉明显的大厂巨制（避免为它们多抓一遍详情，纯省流量）；
+//   真正的大小判定挪到详情之后，因为那时才拿得到 developers / publishers，才能做「个人制作豁免」。
+const MAX_REVIEWS_PREFILTER = 250000;
 const TOP_N = 20;             // 最终保留款数（用户要求雷达墙展示 20 款）
 const MIN_BURST = 1.5;        // 爆款指数下限
 const SEARCH_PAGES = 6;       // 全站新作倒序翻页数 4→6
@@ -361,18 +367,33 @@ function isAAA(g) {
     return AAA_PUBLISHERS.some(k => names.includes(k));
 }
 
-// ★ 2026-09-28 新增：小团队信号（这是「2-3 人开发」的可查证代理）
+// ★ 2026-09-28 新增：小团队信号（这是「1-3 人可做」的可查证代理）
 //   Steam 公开接口拿不到员工人数，但「自研自发」是小团队最强的结构性特征：
 //     ① 没有发行商（publishers 为空）→ 自己发；
 //     ② 发行商与开发商同名 → 自己发（小工作室常见，大厂会把发行独立成实体）；
-//   再叠加「开发商 ≤ 2 家」（多家联合开发通常意味着体量更大）。
-//   tier 0 = 最像 2-3 人小团队，tier 2 = 有独立发行商、体量可能更大。仅用于「排序优先级」，不硬砍（避免误杀有发行商的独立佳作）。
+//   再叠加「开发商 ≤ MAX_TEAM(3) 家」（多家联合开发通常体量更大）。
+//   solo = 开发商仅 1 家且无发行商 → 真·个人制作（享体量豁免）。
+//   tier 0 = 最像 1-3 人小团队，tier 1 = 自研自发但开发商偏多，tier 2 = 有独立发行商。仅用于排序优先级。
 function teamSignal(g) {
     const devs = (g.developers || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
     const pubs = (g.publishers || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
     const devCount = devs.length || 1;
     const selfPub = pubs.length === 0 || pubs.some(p => devs.includes(p));
-    return { selfPub, devCount, tier: (selfPub && devCount <= 2) ? 0 : (selfPub ? 1 : 2) };
+    const solo = devs.length === 1 && pubs.length === 0;
+    return { selfPub, devCount, solo, tier: (selfPub && devCount <= MAX_TEAM) ? 0 : (selfPub ? 1 : 2) };
+}
+
+// ★ 2026-09-28 三改：把「1-3 人可做」从「排序偏好」升级为**硬门槛**（用户要「搜索范围」改成 1-3 人）。
+//   进范围 = 自研自发，或开发商 ≤ 3 家 —— 换句话说，「有外部发行商 + 多家开发商」的大体量作品直接不进榜。
+function inTeamScope(g) {
+    const t = teamSignal(g);
+    return t.selfPub || t.devCount <= MAX_TEAM;
+}
+// 个人制作（1 家开发商 + 无发行商）→ 体量上限豁免。
+function isSoloDev(g) {
+    const devs = (g.developers || []).filter(Boolean);
+    const pubs = (g.publishers || []).filter(Boolean);
+    return devs.length === 1 && pubs.length === 0;
 }
 
 async function fetchTagTable() {
@@ -460,13 +481,14 @@ async function main() {
     revResults.forEach(x => {
         if (!x || !x.reviews) return;
         const n = x.reviews.total;
-        // 双门槛：低于 MIN_REVIEWS（太冷门没参考价值）或高于 MAX_REVIEWS（大制作，无效信息）都剔除
-        if (n > MAX_REVIEWS) { tooBig++; return; }
+        // 第一轮只做「粗筛」：砍掉明显的大厂巨制，省掉一轮详情请求。
+        // （真正的体量判定挪到第二轮之后 —— 那时才拿得到 developers / publishers，才能做「个人制作豁免」）
+        if (n > MAX_REVIEWS_PREFILTER) { tooBig++; return; }
         if (n < MIN_REVIEWS) { tooSmall++; return; }
         withReviews.push(x);
     });
-    console.log(`✅ 评论数 ${MIN_REVIEWS} ~ ${MAX_REVIEWS} 的: ${withReviews.length} 款`);
-    console.log(`   ↳ 剔除：体量过大 ${tooBig} 款（评论 > ${MAX_REVIEWS}，大制作）· 过于冷门 ${tooSmall} 款（< ${MIN_REVIEWS}）`);
+    console.log(`✅ 评论数 ≥ ${MIN_REVIEWS} 的: ${withReviews.length} 款（粗筛上限 ${MAX_REVIEWS_PREFILTER}）`);
+    console.log(`   ↳ 剔除：粗筛巨制 ${tooBig} 款（评论 > ${MAX_REVIEWS_PREFILTER}）· 过于冷门 ${tooSmall} 款（< ${MIN_REVIEWS}）`);
 
     if (!withReviews.length) {
         console.error('❌ 没有抓到任何达标游戏，保留旧文件不覆盖');
@@ -482,8 +504,30 @@ async function main() {
     }, 2, 400)).filter(Boolean);   // 2026-09-28：并发 3→2、间隔 150→400ms —— 上一轮 17 款详情挂了 9 款，是限流
     console.log(`✅ 详情抓取成功: ${detailed.length} 款`);
 
+    // ★ 2026-09-28 三改（核心）：拿到 developers / publishers 之后再定「体量 + 团队范围」
+    //   ① 体量上限：评论 > MAX_REVIEWS 判为大制作 → 剔除；**个人制作豁免**（1 家开发商 + 无发行商）。
+    //   ② 团队范围：只保留「1-3 人可做」（自研自发，或开发商 ≤ MAX_TEAM 家）。
+    //   顺序：先判体量（信息更硬），再判范围（兜底挡掉「发行商 + 多开发商」的大体量组合）。
+    let tooBigTeam = 0, outScope = 0;
+    const detailedKept = detailed.filter(g => {
+        const n = (g.reviews && g.reviews.total) || 0;
+        if (n > MAX_REVIEWS && !isSoloDev(g)) {
+            tooBigTeam++;
+            console.log(`   ⛔ 排除大体量作品: ${g.name}（评论 ${n} · ${(g.publishers || g.developers || []).join('/') || '—'}）`);
+            return false;
+        }
+        if (!inTeamScope(g)) {
+            outScope++;
+            console.log(`   ⛔ 超出 1-3 人范围: ${g.name}（开发商 ${(g.developers || []).join('/') || '—'} · 发行 ${(g.publishers || []).join('/') || '—'}）`);
+            return false;
+        }
+        return true;
+    });
+    console.log(`✅ 体量 + 1-3 人范围过滤后: ${detailedKept.length} 款（剔：大体量 ${tooBigTeam} · 超范围 ${outScope}）`);
+    console.log(`   ↳ 其中个人制作（1 家开发商 + 无发行商）${detailedKept.filter(isSoloDev).length} 款 —— 已豁免体量上限`);
+
     // 计算爆款指数 + 销量估算 + 排序
-    const scoredAll = detailed.map(g => {
+    const scoredAll = detailedKept.map(g => {
         const days = daysSince(g.release);
         const score = burstScore(g.reviews, days, g.priceUsd, g.isFree);
         return {
@@ -508,8 +552,8 @@ async function main() {
         }
     });
 
-    // ★ 排序口径（2026-09-28 二改）：小团队优先级 > 爆款指数。
-    //   用户要的是「2-3 人小团队作品」，所以 tier 0（自研自发 + 开发商 ≤2 家）排最前，同 tier 内再比爆款指数。
+    // ★ 排序口径（2026-09-28 二改 / 三改沿用）：小团队优先级 > 爆款指数。
+    //   用户要的是「1-3 人可做」的作品，所以 tier 0（自研自发 + 开发商 ≤3 家）排最前，同 tier 内再比爆款指数。
     const rankCmp = (a, b) => ((a.team ? a.team.tier : 2) - (b.team ? b.team.tier : 2)) || ((b.burst.score || 0) - (a.burst.score || 0));
 
     // 再只保留近 18 个月内发行、且爆款指数达标的
@@ -529,7 +573,8 @@ async function main() {
         scored.push(...extra.slice(0, need));
         scored.sort(rankCmp);
     }
-    console.log(`ℹ️ 排序后前 ${Math.min(scored.length, TOP_N)} 款中「自研自发小团队」${scored.slice(0, TOP_N).filter(g => g.team && g.team.tier === 0).length} 款`);
+    console.log(`ℹ️ 排序后前 ${Math.min(scored.length, TOP_N)} 款中「1-3 人可做（tier 0）」${scored.slice(0, TOP_N).filter(g => g.team && g.team.tier === 0).length} 款`
+        + `（个人制作 ${scored.slice(0, TOP_N).filter(isSoloDev).length} 款）`);
     console.log(`✅ 进榜候选: ${scored.length} 款（目标 ${TOP_N}）`);
 
     // ★ 保护：抓取异常（限流导致详情全灭）时绝不覆盖线上数据。
@@ -634,6 +679,9 @@ async function main() {
             picked: picked.length,
             minReviews: MIN_REVIEWS,
             maxReviews: MAX_REVIEWS,
+            maxReviewsPrefilter: MAX_REVIEWS_PREFILTER,
+            maxTeam: MAX_TEAM,
+            soloDev: picked.filter(isSoloDev).length,
             selfPublished: picked.filter(g => g.team && g.team.selfPub).length,
             indieTagId: INDIE_TAG_ID
         },
