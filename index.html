@@ -21437,27 +21437,58 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 var wl = g.wl || '';
                 // 产能标记（从项目原文解析，如 1迭5）→ 校验基准；无 C 列时还当拆分母版（见下）
                 var cap = tblCapMark(g.project) || tblCapMark(g.mtype);
-                // ★★ 2026-09-28 用户定版：**该素材类型格下「没有 C 列」、但项目名带「n迭m」时，
-                //   拿标记当分母版拆分**。
-                //   场景（用户截图）：单位行只有一个 D、数量 10，项目名标「1迭5」
-                //   → 这 10 个 D 里，n 个 C + m 个 D 属同一条需求（合写 1C5D），
-                //     余下的 D 是单独迭代 → 另成一条 5D。
-                //   ⚠️ 判据必须用「**表里该格有没有 C 这一列**」（hasCCol），不能用「算出来 cCount>0」——
-                //     后者在「蜜蜂1迭3 纯 D=5」上也为 0，会把正确的 5D 误拆成 1C3D + 2D（踩过）。
-                //   有 C 列时以 C 列为准（上面已按列配对），此处不触发。
-                if (!g.hasCCol && g.cCount === 0 && g.dCount > 0 && cap && cap.d < g.dCount && !wl) {
-                    out.push({
-                        game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
-                        cCount: cap.c, dCount: cap.d, realCount: 0, pfx: pfx, wl: '',
-                        cap: cap, capNote: '',
-                        code: tblReqCode(cap.c, cap.d, 0), kind: 'main', col: g.col
-                    });
-                    out.push({
-                        game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
-                        cCount: 0, dCount: g.dCount - cap.d, realCount: 0, pfx: pfx, wl: '',
-                        cap: cap, capNote: '',
-                        code: tblReqCode(0, g.dCount - cap.d, 0), kind: 'main', col: g.col + 0.5
-                    });
+                // ★★★ 2026-09-28 用户二次定版（推翻上一条）：**项目名带「n迭m」标记时，标记就是
+                //   拆分母版，优先于表格读数**。
+                //   —— 用户原话：「1C10D 在 1迭5 的情况下，应该要拆成两个需求
+                //      Pin Puzzle - Solve Puzzle Game-1C5D、Pin Puzzle - Solve Puzzle Game-5D」。
+                //   语义：该格总产能按标记分成两块 ——
+                //     · 一块是「n 个 C + m 个 D」的一条需求（合写 nCmD，如 1C5D）
+                //     · 剩下的是单独迭代（如 5D）
+                //   判据：只要 cap 存在、且「表里读到的总量」与「标记总量」不一致 → 按标记拆。
+                //     总量 = (cCount>0 ? cCount : 0) + dCount（表里 C=1 D=10 → 11；标记 1+5=6 → 不等 → 拆）。
+                //   ⚠️ 上一条「用 hasCCol 判有没有 C 列」的做法已废弃：用户表里 C 列与 D 列**同项目相邻**时
+                //      hasCCol=true → 跳过拆分 → 仍出 1C10D（用户二次截图踩到）。
+                //   ⚠️ 必须排除改工程（wl）：改工程的 D 是独立工种，不吃标记。
+                //   ⚠️ 标记与表里读数**恰好一致**时（如 C=1 D=5 标 1迭5）不拆，走下面的普通分支。
+                // ★★★ 2026-09-28 用户最终定版（口径唯一真相）：
+                //   **「n迭m」= 每个 C 配 m 个 D**。用户原话：
+                //     「1迭5 的时候，有 1C，那就是：项目-1C5D，超出 5D 的 n 个 D，就单独：项目-nD；
+                //      有 2C，那就是：项目-1C5D、项目-1C5D，超出 10D 的 n 个 D，就单独：项目-nD」
+                //   ⇒ 算法：令 k = 表里 C 数（g.cCount）。
+                //      · 前 k×m 个 D 分摊给 k 个 C，**每份输出一条 `1CmD`**（共 k 条）。
+                //      · 余下的 D = dCount - k×m > 0 时，再输出一条 `{余数}D`（无 C）。
+                //   对照：
+                //     · 截图 1迭5 C=1 D=10 → 1条 1C5D + 余 5D ✅
+                //     · 2迭5 C=2 D=12 → 2条 1C5D + 余 2D ✅
+                //     · ②.6 1迭3 C=1 D=5 → 1条 1C3D + 余 2D ✅（旧断言 1C5D 按新口径作废）
+                //     · 同色连线1迭3 C=1 D=3 → 1条 1C3D，无余 ✅
+                //     · 猫猫虫 3迭6 C=1 D=5 → k×m=6 > 5，每份取 min(m, 剩余) → 1条 1C5D，无余 ✅
+                //     · 蜜蜂1迭3 C 空（cCount=0）→ **不拆**，照表 `5D` ✅
+                //   ⚠️ 只有 cCount>0（表里真有 C）才走此分支；无 C 的纯 D 段一律照表读。
+                //   ⚠️ 排除改工程（wl）。
+                var capSplit = !!(cap && !wl && g.cCount > 0 && cap.d > 0 && g.dCount > g.cCount * cap.d);
+                if (capSplit) {
+                    var cOut = g.cCount;                       // C 数永远用表读数
+                    var per = cap.d;                           // 每个 C 配 m 个 D
+                    var used = 0;
+                    for (var ci = 0; ci < cOut; ci++) {
+                        out.push({
+                            game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
+                            cCount: 1, dCount: per, realCount: 0, pfx: pfx, wl: '',
+                            cap: cap, capNote: '',
+                            code: tblReqCode(1, per, 0), kind: 'main', col: g.col + ci * 0.01
+                        });
+                        used += per;
+                    }
+                    var dLeft = g.dCount - used;
+                    if (dLeft > 0) {
+                        out.push({
+                            game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
+                            cCount: 0, dCount: dLeft, realCount: 0, pfx: pfx, wl: '',
+                            cap: cap, capNote: '',
+                            code: tblReqCode(0, dLeft, 0), kind: 'main', col: g.col + 0.5
+                        });
+                    }
                     return;
                 }
                 if (g.cCount > 0 || g.dCount > 0) {
@@ -39927,7 +39958,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609280923";
+        window.NIKO_VERSION = "202609280944";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
