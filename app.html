@@ -6486,6 +6486,113 @@ body.dark-mode .indie-expand { color:#a5b4fc; }
 .indie-lesson { font-size:12px; line-height:1.65; color:#475569; background:#f8fafc; border-left:3px solid #6366f1; border-radius:0 8px 8px 0; padding:7px 11px; }
 body.dark-mode .indie-lesson { background:#22222a; color:#c3ccda; border-left-color:#818cf8; }
 
+/* ===== 2026-09-28 新增：卡片「情报带」+「买量速览」+ 双击详情弹窗 ===== */
+.indie-brief { display:flex; flex-direction:column; gap:5px; background:#f8fafc; border:1px solid #eef2f7; border-radius:10px; padding:9px 11px; }
+body.dark-mode .indie-brief { background:#22222a; border-color:#2e2e38; }
+.indie-brief .row { display:flex; gap:7px; font-size:12px; line-height:1.6; color:#475569; }
+body.dark-mode .indie-brief .row { color:#b9c2d0; }
+.indie-brief .row .ic { flex-shrink:0; width:15px; text-align:center; }
+.indie-brief .row .lb { flex-shrink:0; color:#94a3b8; font-size:11.5px; }
+.indie-brief .row .tx { flex:1; min-width:0; }
+.indie-brief .row .tx.clamp { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.indie-brief b { color:#1e293b; font-weight:700; }
+body.dark-mode .indie-brief b { color:#eef2f8; }
+.indie-buyer { display:flex; flex-direction:column; gap:6px; border-left:3px solid #f59e0b; background:#fffbf5; border-radius:0 10px 10px 0; padding:9px 11px; }
+body.dark-mode .indie-buyer { background:#2a2113; border-left-color:#f59e0b; }
+.indie-buyer .bt { font-size:11.5px; font-weight:800; color:#b45309; }
+body.dark-mode .indie-buyer .bt { color:#fcd34d; }
+.indie-buyer .row { display:flex; gap:7px; font-size:12px; line-height:1.6; color:#475569; }
+body.dark-mode .indie-buyer .row { color:#b9c2d0; }
+.indie-buyer .row .ic { flex-shrink:0; }
+.indie-buyer .row .tx { flex:1; min-width:0; }
+.indie-buyer .row .tx b { color:#1e293b; }
+body.dark-mode .indie-buyer .row .tx b { color:#eef2f8; }
+.indie-buyer .loop-mini { font-size:11px; color:#7c3aed; font-weight:600; }
+body.dark-mode .indie-buyer .loop-mini { color:#c4b5fd; }
+.indie-hint { font-size:11.5px; color:#6366f1; font-weight:600; text-align:right; cursor:pointer; user-select:none; }
+.indie-hint:hover { text-decoration:underline; }
+body.dark-mode .indie-hint { color:#a5b4fc; }
+
+/* ---- 详情弹窗（双击卡片打开）---- */
+.im-mask { position:fixed; inset:0; background:rgba(10,12,18,.58); backdrop-filter:blur(3px); z-index:1200; display:none; align-items:center; justify-content:center; padding:22px; }
+.im-mask.show { display:flex; }
+.im-box { background:#fff; border-radius:18px; width:min(1000px,100%); max-height:min(92vh,1040px); display:flex; flex-direction:column; overflow:hidden; box-shadow:0 26px 70px rgba(0,0,0,.4); animation:imIn .18s ease-out; }
+@keyframes imIn { from { transform:translateY(16px) scale(.985); opacity:0 } to { transform:none; opacity:1 } }
+body.dark-mode .im-box { background:#1b1b22; }
+.im-hd { padding:16px 56px 14px 20px; border-bottom:1px solid #eef0f4; display:flex; gap:14px; align-items:flex-start; position:relative; flex-shrink:0; flex-wrap:wrap; }
+body.dark-mode .im-hd { border-color:#2e2e38; }
+.im-hd .indie-hd-act { margin-left:auto; flex-wrap:wrap; justify-content:flex-end; }
+.im-x { position:absolute; top:13px; right:14px; width:30px; height:30px; border-radius:9px; border:1px solid #e2e8f0; background:#fff; cursor:pointer; font-size:15px; color:#64748b; line-height:1; display:flex; align-items:center; justify-content:center; font-family:inherit; }
+.im-x:hover { border-color:#a5b4fc; color:#4f46e5; }
+body.dark-mode .im-x { background:#26262e; border-color:#3a3a46; color:#9aa4b2; }
+.im-body { padding:16px 20px 4px; overflow-y:auto; flex:1; min-height:0; }
+.im-ft { padding:10px 20px; border-top:1px solid #eef0f4; display:flex; gap:8px; align-items:center; flex-shrink:0; background:#fbfbfd; flex-wrap:wrap; }
+body.dark-mode .im-ft { border-color:#2e2e38; background:#191920; }
+.im-nav { font-size:12px; padding:6px 13px; border-radius:9px; border:1px solid #dbe3ee; background:#fff; cursor:pointer; color:#475569; font-weight:600; white-space:nowrap; font-family:inherit; }
+.im-nav:hover { border-color:#a5b4fc; color:#4f46e5; }
+body.dark-mode .im-nav { background:#26262e; border-color:#3a3a46; color:#c3ccda; }
+.im-cnt { font-size:11.5px; color:#94a3b8; margin-left:auto; margin-right:6px; font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+.im-nav.im-close { background:#4f46e5; border-color:#4f46e5; color:#fff; }
+.im-nav.im-close:hover { background:#4338ca; color:#fff; }
+.im-group { margin-bottom:6px; }
+.im-group-t { font-size:13px; font-weight:800; color:#4f46e5; display:flex; align-items:center; gap:8px; margin:4px 0 10px; }
+body.dark-mode .im-group-t { color:#a5b4fc; }
+.im-ai { font-size:10.5px; font-weight:600; color:#7c3aed; background:#f3e8ff; border:1px solid #e9d5ff; padding:1px 7px; border-radius:999px; }
+body.dark-mode .im-ai { background:#2b2140; border-color:#4c3b73; color:#c4b5fd; }
+.im-cols { display:grid; grid-template-columns:repeat(3,1fr); gap:11px; }
+@media (max-width:820px) { .im-cols { grid-template-columns:1fr; } }
+.im-col { border:1px solid #e8e8ee; border-radius:12px; padding:11px 12px; background:#fcfcfe; }
+body.dark-mode .im-col { background:#20202a; border-color:#33333d; }
+.im-col-h { font-size:12.5px; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+body.dark-mode .im-col-h { color:#dbe3ee; }
+.im-pts { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px; }
+.im-pts li { font-size:12.5px; line-height:1.62; color:#475569; padding-left:11px; position:relative; }
+.im-pts li::before { content:""; position:absolute; left:0; top:7px; width:5px; height:5px; border-radius:50%; background:#a5b4fc; }
+.im-col.sells .im-pts li::before { background:#f59e0b; }
+.im-col.hooks .im-pts li::before { background:#ef4444; }
+.im-col.pains .im-pts li::before { background:#0ea5e9; }
+body.dark-mode .im-pts li { color:#b9c2d0; }
+.im-pts li b { color:#1e293b; font-weight:700; display:block; }
+.im-pts li span { color:#64748b; }
+body.dark-mode .im-pts li b { color:#eef2f8; }
+body.dark-mode .im-pts li span { color:#8b95a5; }
+.im-sec { border-top:1px dashed #e8e8ee; padding-top:11px; margin-top:12px; }
+body.dark-mode .im-sec { border-color:#33333d; }
+.im-sec-t { font-size:12.5px; font-weight:700; color:#475569; margin-bottom:8px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+body.dark-mode .im-sec-t { color:#a8b3c2; }
+.im-empty { border:1px dashed #dbe3ee; border-radius:12px; padding:14px; text-align:center; font-size:12.5px; color:#94a3b8; line-height:1.8; background:#fafbfd; }
+body.dark-mode .im-empty { background:#20202a; border-color:#3a3a46; color:#8b95a5; }
+.im-flow { display:flex; flex-direction:column; }
+.im-flow-row { display:flex; gap:11px; align-items:flex-start; padding:6px 0; }
+.im-flow-idx { flex-shrink:0; width:22px; height:22px; border-radius:50%; background:#eef2ff; color:#4f46e5; font-size:11.5px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+body.dark-mode .im-flow-idx { background:#272c47; color:#a5b4fc; }
+.im-flow-s { flex-shrink:0; width:112px; font-size:12.5px; font-weight:700; color:#1e293b; }
+body.dark-mode .im-flow-s { color:#eef2f8; }
+.im-flow-d { flex:1; font-size:12.5px; color:#475569; line-height:1.62; min-width:0; }
+body.dark-mode .im-flow-d { color:#b9c2d0; }
+@media (max-width:560px) { .im-flow-row { flex-wrap:wrap; gap:4px 11px; } .im-flow-s { width:auto; } }
+.im-loop { border:1px solid #ddd6fe; border-radius:12px; padding:12px 13px; background:#faf9ff; }
+body.dark-mode .im-loop { background:#1f1c2c; border-color:#3d3560; }
+.im-loop-core { font-size:13.5px; font-weight:700; color:#4f46e5; line-height:1.5; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+body.dark-mode .im-loop-core { color:#c4b5fd; }
+.im-loop-mins { font-size:11px; font-weight:600; color:#7c3aed; background:#f3e8ff; border:1px solid #e9d5ff; padding:1px 8px; border-radius:999px; }
+body.dark-mode .im-loop-mins { background:#2b2140; border-color:#4c3b73; color:#c4b5fd; }
+.im-loop-steps { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; }
+.im-loop-step { font-size:12px; font-weight:600; color:#4338ca; background:#eef2ff; border:1px solid #ddd6fe; border-radius:8px; padding:4px 9px; }
+body.dark-mode .im-loop-step { background:#272c47; border-color:#3d3560; color:#c7d2fe; }
+.im-loop-arrow { color:#a5b4fc; font-weight:700; }
+.im-loop-back { font-size:11.5px; font-weight:700; color:#7c3aed; margin-left:2px; }
+.im-loop-note { margin-top:9px; font-size:12px; color:#64748b; line-height:1.6; }
+body.dark-mode .im-loop-note { color:#8b95a5; }
+.im-div { display:flex; align-items:center; gap:10px; margin:18px 0 12px; font-size:11.5px; color:#94a3b8; }
+.im-div::before,.im-div::after { content:""; height:1px; background:#e8e8ee; flex:1; }
+body.dark-mode .im-div::before,body.dark-mode .im-div::after { background:#2e2e38; }
+.im-fold { font-size:12px; font-weight:700; color:#4f46e5; cursor:pointer; user-select:none; padding:7px 0; }
+body.dark-mode .im-fold { color:#a5b4fc; }
+.im-deep { display:none; }
+.im-deep.open { display:block; }
+.im-deep .indie-sec:first-child { border-top:none; padding-top:0; margin-top:0; }
+
 .indie-board { display:flex; flex-wrap:wrap; gap:8px; align-items:center; background:#f8fafc; border:1px solid #e8edf5; border-radius:10px; padding:9px 12px; margin-bottom:12px; font-size:12px; }
 body.dark-mode .indie-board { background:#1c1c23; border-color:#33333d; }
 .indie-board .lb { font-weight:700; color:#475569; }
@@ -13009,6 +13116,20 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <button class="btn" onclick="closeAiDetail()">关闭</button>
             </div>
             <div class="ai-detail-body" id="aiDetailBody"></div>
+        </div>
+    </div>
+
+    <!-- 独立游戏雷达 · 详情弹窗（双击卡片打开，2026-09-28 新增） -->
+    <div class="im-mask" id="indieDetailMask" onclick="if(event.target===this)indieDetailClose()">
+        <div class="im-box" role="dialog" aria-modal="true" aria-label="独立游戏详情">
+            <div class="im-hd" id="indieDetailHd"></div>
+            <div class="im-body" id="indieDetailBody"></div>
+            <div class="im-ft">
+                <button class="im-nav" onclick="indieDetailNav(-1)">← 上一款</button>
+                <button class="im-nav" onclick="indieDetailNav(1)">下一款 →</button>
+                <span class="im-cnt" id="indieDetailCnt"></span>
+                <button class="im-nav im-close" onclick="indieDetailClose()">关闭</button>
+            </div>
         </div>
     </div>
         </div>
@@ -22299,7 +22420,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         var indieData = null;
         var indieTlOpen = {};
-        var indieMoreOpen = {};        // 2026-09-27：摘要卡「展开详情」状态
         var indieCompareSel = [];
         var indieLoading = false;
 
@@ -22856,9 +22976,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function indieJump(key) {
             var k = String(key);
             var el = document.getElementById('indieCard-' + k);
-            if (!el) return;
-            if (!indieMoreOpen[k]) indieToggleMore(k);
-            try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
+            if (el) { try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { try { el.scrollIntoView(); } catch (e2) { } } }
+            indieDetailOpen(k);
         }
         function indieFlagsHtml(g) {
             var f = indieFit(g), out = [];
@@ -23244,6 +23363,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function indieKbCur() { return indieFiltered()[indieKbIdx] || null; }
         function indieKb(ev) {
             try {
+                // 2026-09-28：详情弹窗打开时，键盘接管给弹窗 —— ESC 关，← → 换款
+                if (indieDetailIsOpen()) {
+                    var kd = ev.key;
+                    if (kd === 'Escape') { indieDetailClose(); if (ev.preventDefault) ev.preventDefault(); }
+                    else if (kd === 'ArrowLeft') { indieDetailNav(-1); if (ev.preventDefault) ev.preventDefault(); }
+                    else if (kd === 'ArrowRight') { indieDetailNav(1); if (ev.preventDefault) ev.preventDefault(); }
+                    return;
+                }
                 var t = ev.target || {};
                 var tn = String(t.tagName || '').toUpperCase();
                 if (tn === 'INPUT' || tn === 'TEXTAREA' || tn === 'SELECT' || t.isContentEditable) return;
@@ -23255,7 +23382,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 else if (k === 'k' || k === 'K') { indieKbMove(-1); if (ev.preventDefault) ev.preventDefault(); }
                 else if (k === 's' || k === 'S') { g = indieKbCur(); if (g) { indieToggleFav(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
                 else if (k === 'n' || k === 'N') { g = indieKbCur(); if (g) { indieToNote(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
-                else if (k === 'Enter') { g = indieKbCur(); if (g) { indieToggleMore(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
+                else if (k === 'Enter') { g = indieKbCur(); if (g) { indieDetailOpen(indieKeyOf(g)); if (ev.preventDefault) ev.preventDefault(); } }
                 else if (k === 'Escape') {
                     var old = document.querySelector('.indie-card.kb');
                     if (old) old.classList.remove('kb');
@@ -23322,13 +23449,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }).join('　') + '</span>';
             }
             el.innerHTML = h;
-        }        function indieToggleMore(key) {
-            var k = String(key);
-            indieMoreOpen[k] = !indieMoreOpen[k];
-            var card = document.getElementById('indieCard-' + k);
-            if (card) card.classList.toggle('open', !!indieMoreOpen[k]);
-            var tg = document.getElementById('indieExpand-' + k);
-            if (tg) tg.textContent = indieMoreOpen[k] ? '收起详情 ▲' : '展开详情 · 归因 / 工期 / UE5 / 曝光 / 我能做什么 ▾';
         }        // ---------- 工具 ----------
         function indieNorm(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]/g, ''); }
 
@@ -23453,7 +23573,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             // ===== 瀑布流摘要卡：一眼可对比 + 角标 + 折叠五段详情 =====
             var kk = String(key).replace(/'/g, "\\'");
             var h = '';
-            h += '<div class="indie-card' + (indieMoreOpen[key] ? ' open' : '') + '" id="indieCard-' + escapeHtml(key) + '">';
+            h += '<div class="indie-card" id="indieCard-' + escapeHtml(key) + '" ondblclick="indieDetailOpen(\'' + kk + '\', event)" title="双击看全部详情">';
             h += '<div class="indie-hd">';
             if (g.header) h += '<img class="indie-cover" src="' + escapeHtml(g.header) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">';
             h += '<div class="indie-hd-main">';
@@ -23479,6 +23599,33 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             h += indieFlagsHtml(g);
 
             // 关键数字条（5 格，带名次徽章）
+            h += indieStatsHtml(g);
+            h += indieDualHtml(g, a);      // C01 销量双轨 + C02 置信度
+            h += indieMissingHtml(g);      // C03 缺失值显式化
+
+            // 真实社区标签 + 逐标签全站总数
+            h += indieTagsHtml(g);
+
+            // 「看着香但别碰」独立提示（P04：省得每次看到都心动一遍）
+            if (indieTrap(g)) {
+                h += '<div class="indie-box" style="border-left-color:#e11d48;color:#be123c;">🚫 <b>看着香但别碰</b>：' + escapeHtml(indieTrapWhy(g)) + '</div>';
+            }
+
+            // 一句话启发
+            if (a.lesson) h += '<div class="indie-lesson">🧭 ' + escapeHtml(a.lesson) + '</div>';
+
+            // ===== 2026-09-28：卡片只留「摘要 + 情报带 + 买量速览」；详情全部搬进双击弹窗 =====
+            h += indieBriefHtml(g, a);     // ★ 新增：情报带（简介 / 赛道饱和度 / 团队 / 类型）
+            h += indieBuyerHtml(g, a);     // ★ 新增：买量速览（卖点 / 爽点 / 痛点 / 最小循环 / 本周动作）
+            h += '<div class="indie-hint" onclick="event.stopPropagation();indieDetailOpen(\'' + kk + '\')">双击卡片看全部详情 →</div>';
+            h += '</div>';  // .indie-card
+            return h;
+        }
+
+        // ---------- 关键数字条（卡片与弹窗共用）----------
+        function indieStatsHtml(g) {
+            var a = g.analysis || {}, rv = g.reviews, sl = g.sales, bu = g.burst || {};
+            var key = indieKeyOf(g);
             var onlineNow = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.playersCurrent;
             var _conf = indieConfOf(g);   // C02：按评测数分档
             var statRows = [
@@ -23488,17 +23635,18 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 { k: 'online', label: (a.peakOnline != null ? '峰值在线' : '当前在线'), v: (onlineNow != null ? indieFmtNum(onlineNow) + ' <em>人</em>' : '—') },
                 { k: 'fresh', label: '上线', v: (g.days != null ? g.days + ' <em>天</em>' : '—') }
             ];
-            h += '<div class="indie-stats">';
+            var h = '<div class="indie-stats">';
             statRows.forEach(function (s) {
                 var rk = (indieRanks[s.k] || {})[key];
                 h += '<div class="indie-stat' + (rk === 1 ? ' best' : '') + (s.low ? ' low' : '') + '">' + indieRankBadge(s.k, key)
                     + '<div class="k">' + s.label + '</div><div class="v">' + s.v + '</div></div>';
             });
-            h += '</div>';
-            h += indieDualHtml(g, a);      // C01 销量双轨 + C02 置信度
-            h += indieMissingHtml(g);      // C03 缺失值显式化
+            return h + '</div>';
+        }
 
-            // 真实社区标签 + 逐标签全站总数
+        // ---------- 社区标签（卡片与弹窗共用）----------
+        function indieTagsHtml(g) {
+            var tr = g.track || {}, sat = tr.saturation || {}, h = '';
             var tagArr = (g.tags && g.tags.length) ? g.tags : null;
             if (tagArr) {
                 h += '<div class="indie-tags">';
@@ -23522,19 +23670,221 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }
                 h += '</div>';
             }
+            return h;
+        }
 
-            // 「看着香但别碰」独立提示（P04：省得每次看到都心动一遍）
-            if (indieTrap(g)) {
-                h += '<div class="indie-box" style="border-left-color:#e11d48;color:#be123c;">🚫 <b>看着香但别碰</b>：' + escapeHtml(indieTrapWhy(g)) + '</div>';
+        // ---------- 2026-09-28 新增：卡片「情报带」----------
+        // 用户反馈「卡片外面的信息太少了」→ 把只在弹窗里的关键信息提到卡面：
+        // 简介（这游戏是干嘛的）/ 赛道 + 饱和度（挤不挤）/ 团队（1-3 人范围的可查证代理）/ 类型。
+        function indieBriefHtml(g, a) {
+            var tr = g.track || {}, sat = tr.saturation || {}, rows = [];
+            var desc = String(g.desc || '').replace(/\s+/g, ' ').trim();
+            if (desc) rows.push({ ic: '📖', lb: '简介', tx: escapeHtml(desc), clamp: true });
+            var track = tr.label || tr.primary || '';
+            var satLabel = (sat.verdict && sat.verdict.label) ? sat.verdict.label : '';
+            if (track || satLabel) {
+                rows.push({
+                    ic: '🧭', lb: '赛道',
+                    tx: escapeHtml(track || '未归类') + (satLabel ? ' · <b>' + escapeHtml(satLabel) + '</b>' : '')
+                        + (sat.total != null ? '　<span style="color:#94a3b8;">全站 ' + escapeHtml(indieFmtNum(sat.total)) + ' 款</span>' : '')
+                });
             }
+            var t = g.team || {}, devs = (g.developers || []).filter(Boolean), pubs = (g.publishers || []).filter(Boolean);
+            if (devs.length || pubs.length) {
+                var tx = devs.length ? '<b>' + escapeHtml(devs.join(' / ')) + '</b>' : '';
+                if (t.selfPub) tx += '　<span style="color:#047857;font-weight:600;">自研自发</span>';
+                else if (pubs.length) tx += '　<span style="color:#94a3b8;">发行 ' + escapeHtml(pubs.join(' / ')) + '</span>';
+                if (t.devCount) tx += '　<span style="color:#94a3b8;">开发 ' + t.devCount + ' 家</span>';
+                rows.push({ ic: '👥', lb: '团队', tx: tx });
+            }
+            var genres = (g.genres || []).filter(Boolean);
+            if (genres.length) rows.push({ ic: '🏷', lb: '类型', tx: escapeHtml(genres.slice(0, 4).join(' · ')) });
+            if (!rows.length) return '';
+            var h = '<div class="indie-brief">';
+            rows.forEach(function (r) {
+                h += '<div class="row"><span class="ic">' + r.ic + '</span><span class="lb">' + r.lb + '</span>'
+                    + '<span class="tx' + (r.clamp ? ' clamp' : '') + '">' + r.tx + '</span></div>';
+            });
+            return h + '</div>';
+        }
 
-            // 一句话启发
-            if (a.lesson) h += '<div class="indie-lesson">🧭 ' + escapeHtml(a.lesson) + '</div>';
+        // ---------- 2026-09-28 新增：卡片「买量速览」----------
+        // 只吃 analysis 的新五块（sells / hooks / pains / loop）+ 本周动作；没有就整块不渲染（不留空壳）。
+        function indieBuyerHtml(g, a) {
+            if (!a) return '';
+            var rows = [];
+            function head(x) {
+                if (!x || !x.length) return '';
+                var it = x[0];
+                if (typeof it === 'string') return escapeHtml(it);
+                return (it.t ? '<b>' + escapeHtml(it.t) + '</b>' : '') + (it.d ? (it.t ? '　' : '') + escapeHtml(it.d) : '');
+            }
+            var s = head(a.sells); if (s) rows.push({ ic: '🎯', lb: '卖点', tx: s });
+            var hk = head(a.hooks); if (hk) rows.push({ ic: '🔥', lb: '爽点', tx: hk });
+            var pn = head(a.pains); if (pn) rows.push({ ic: '😖', lb: '痛点', tx: pn });
+            if (a.loop && a.loop.core) rows.push({ ic: '♻️', lb: '循环', tx: escapeHtml(a.loop.core) + (a.loop.mins ? '　<span class="loop-mini">单轮 ≈ ' + a.loop.mins + ' 分钟</span>' : '') });
+            if (a.action) rows.push({ ic: '✅', lb: '本周动作', tx: escapeHtml(a.action) });
+            else if (a.videoEdge) rows.push({ ic: '🎬', lb: '能剪什么', tx: escapeHtml(a.videoEdge) });
+            if (!rows.length) return '';
+            var h = '<div class="indie-buyer"><div class="bt">🎬 买量速览</div>';
+            rows.forEach(function (r) {
+                h += '<div class="row"><span class="ic">' + r.ic + '</span><span class="lb" style="flex-shrink:0;color:#94a3b8;font-size:11.5px;">' + r.lb + '</span><span class="tx">' + r.tx + '</span></div>';
+            });
+            return h + '</div>';
+        }
 
-            // 展开详情
-            h += '<div class="indie-expand" id="indieExpand-' + escapeHtml(key) + '" onclick="indieToggleMore(\'' + kk + '\')">'
-                + (indieMoreOpen[key] ? '收起详情 ▲' : '展开详情 · 归因 / 工期 / UE5 / 曝光 / 我能做什么 ▾') + '</div>';
-            h += '<div class="indie-more">';
+        // ---------- 2026-09-28 新增：详情弹窗「五块拆解」（AI 补录）----------
+        function indiePtsHtml(list) {
+            if (!list || !list.length) return '<div class="im-empty" style="padding:10px;">未填</div>';
+            return '<ul class="im-pts">' + list.map(function (x) {
+                if (typeof x === 'string') return '<li>' + escapeHtml(x) + '</li>';
+                return '<li><b>' + escapeHtml(x.t || '') + '</b>' + (x.d ? '<span>' + escapeHtml(x.d) + '</span>' : '') + '</li>';
+            }).join('') + '</ul>';
+        }
+        function indieFlowHtml(list) {
+            return '<div class="im-flow">' + list.map(function (x, i) {
+                return '<div class="im-flow-row"><span class="im-flow-idx">' + (i + 1) + '</span>'
+                    + '<span class="im-flow-s">' + escapeHtml(x.s || '') + '</span>'
+                    + '<span class="im-flow-d">' + escapeHtml(x.d || '') + '</span></div>';
+            }).join('') + '</div>';
+        }
+        function indieLoopHtml(lp) {
+            var h = '<div class="im-loop">';
+            if (lp.core) h += '<div class="im-loop-core">♻️ ' + escapeHtml(lp.core) + (lp.mins ? '<span class="im-loop-mins">单轮 ≈ ' + lp.mins + ' 分钟</span>' : '') + '</div>';
+            if (lp.steps && lp.steps.length) {
+                h += '<div class="im-loop-steps">' + lp.steps.map(function (s) { return '<span class="im-loop-step">' + escapeHtml(s) + '</span>'; }).join('<span class="im-loop-arrow">→</span>')
+                    + '<span class="im-loop-arrow">→</span><span class="im-loop-back">↺ 回到第一步</span></div>';
+            }
+            if (lp.note) h += '<div class="im-loop-note">💡 ' + escapeHtml(lp.note) + '</div>';
+            return h + '</div>';
+        }
+        function indieFiveHtml(a) {
+            a = a || {};
+            var hasNew = a.sells || a.hooks || a.pains || a.flow || a.loop;
+            var h = '<div class="im-group" style="margin-top:14px;">';
+            h += '<div class="im-group-t">🎬 买量视角 · 五块拆解 <span class="im-ai">AI 分析</span></div>';
+            if (!hasNew) {
+                return h + '<div class="im-empty">🤖 这五块 AI 还没补 —— 主要卖点 / 爽点 / 解决的痛点 / 游戏流程 / 最小循环<br>打开「🩺 数据体检」→ 复制「补分析」指令发我，补完这里就会自动长出来。</div></div>';
+            }
+            if (a.sells || a.hooks || a.pains) {
+                h += '<div class="im-cols">'
+                    + '<div class="im-col sells"><div class="im-col-h">🎯 主要卖点</div>' + indiePtsHtml(a.sells) + '</div>'
+                    + '<div class="im-col hooks"><div class="im-col-h">🔥 爽点</div>' + indiePtsHtml(a.hooks) + '</div>'
+                    + '<div class="im-col pains"><div class="im-col-h">😖 解决的痛点</div>' + indiePtsHtml(a.pains) + '</div>'
+                    + '</div>';
+            }
+            if (a.flow && a.flow.length) h += '<div class="im-sec"><div class="im-sec-t">🔄 游戏流程（玩家第一小时）</div>' + indieFlowHtml(a.flow) + '</div>';
+            if (a.loop) h += '<div class="im-sec"><div class="im-sec-t">♻️ 最小循环逻辑</div>' + indieLoopHtml(a.loop) + '</div>';
+            return h + '</div>';
+        }
+
+        // ---------- 详情弹窗 ----------
+        var indieDetailKey = null;
+        function indieDetailIsOpen() {
+            var m = document.getElementById('indieDetailMask');
+            return !!(m && m.classList.contains('show'));
+        }
+        function indieDetailOpen(key, ev) {
+            try {
+                if (ev && ev.target && ev.target.closest && ev.target.closest('button, a, .indie-tag, .indie-hint')) return;
+            } catch (e) { }
+            var g = indieFind(key);
+            var mask = document.getElementById('indieDetailMask');
+            if (!g || !mask) return;
+            indieDetailKey = indieKeyOf(g);
+            mask.classList.add('show');
+            indieDetailPaint();
+        }
+        function indieDetailClose() {
+            var mask = document.getElementById('indieDetailMask');
+            if (mask) mask.classList.remove('show');
+            indieDetailKey = null;
+        }
+        function indieDetailFold() {
+            var box = document.getElementById('indieDeepBox');
+            var f = document.getElementById('indieDeepFold');
+            if (!box) return;
+            var open = box.classList.toggle('open');
+            if (f) f.textContent = open ? '▾ 收起深度归因' : '▸ 展开深度归因（为什么能爆 / 难度工期 / UE5 落地 / 曝光节奏 / 我该做什么）';
+        }
+        function indieDetailPaint() {
+            var g = indieFind(indieDetailKey);
+            var hd = document.getElementById('indieDetailHd'), bd = document.getElementById('indieDetailBody'), cn = document.getElementById('indieDetailCnt');
+            if (!g || !hd || !bd) return;
+            var kk = String(indieDetailKey).replace(/'/g, "\\'");
+            var fav = indieIsFav(g), kh = '';
+            kh += '<button class="im-x" onclick="indieDetailClose()" title="关闭（ESC）">✕</button>';
+            if (g.header) kh += '<img class="indie-cover" src="' + escapeHtml(g.header) + '" alt="" onerror="this.style.display=\'none\'">';
+            kh += '<div class="indie-hd-main">';
+            kh += '<div class="indie-name-row"><span class="indie-name">' + escapeHtml(g.name || '未命名') + '</span>'
+                + (g.nameCn ? '<span class="indie-name-cn">' + escapeHtml(g.nameCn) + '</span>' : '')
+                + '<span class="indie-tier ' + indieTierCls(g) + '">' + escapeHtml((g.burst && g.burst.label) || '—') + '</span></div>';
+            var bits = [];
+            if (g.releaseText) bits.push('📅 ' + escapeHtml(g.releaseText));
+            if (g.days != null) bits.push('上线 ' + g.days + ' 天');
+            if (g.developers && g.developers.length) bits.push('👤 ' + escapeHtml(g.developers.join(' / ')));
+            kh += '<div class="indie-meta">' + bits.map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>';
+            kh += '</div>';
+            kh += '<div class="indie-hd-act">'
+                + '<button class="indie-iconbtn' + (fav ? ' on' : '') + '" onclick="indieToggleFav(\'' + kk + '\');indieDetailPaint()">' + (fav ? '⭐ 已收藏' : '⭐ 收藏') + '</button>'
+                + '<button class="indie-iconbtn" onclick="indieToNote(\'' + kk + '\')">📝 转便签</button>'
+                + '<button class="indie-iconbtn" onclick="indieToKb(\'' + kk + '\')">📥 知识库</button>'
+                + (g.url ? '<a class="indie-iconbtn" href="' + escapeHtml(g.url) + '" target="_blank" rel="noopener">🔗 商店</a>' : '')
+                + '</div>';
+            hd.innerHTML = kh;
+            bd.innerHTML = indieDetailHtml(g);
+            bd.scrollTop = 0;
+            var list = indieFiltered(), idx = -1;
+            for (var i = 0; i < list.length; i++) { if (indieKeyOf(list[i]) === indieDetailKey) { idx = i; break; } }
+            if (cn) cn.textContent = (idx >= 0 ? (idx + 1) + ' / ' + list.length + '　' : '') + (g.name || '');
+        }
+        function indieDetailNav(d) {
+            var list = indieFiltered();
+            if (!list.length) return;
+            var idx = -1;
+            for (var i = 0; i < list.length; i++) { if (indieKeyOf(list[i]) === indieDetailKey) { idx = i; break; } }
+            if (idx < 0) idx = 0;
+            idx = (idx + d + list.length) % list.length;
+            indieDetailKey = indieKeyOf(list[idx]);
+            indieDetailPaint();
+        }
+        function indieDetailHtml(g) {
+            var a = g.analysis || {};
+            var h = '';
+            h += indieFlagsHtml(g);
+            h += indieStatsHtml(g);
+            h += indieDualHtml(g, a);      // C01 销量双轨 + C02 置信度
+            h += indieMissingHtml(g);      // C03 缺失值显式化
+            h += '<div style="margin-top:10px;">' + indieTagsHtml(g) + '</div>';
+            if (indieTrap(g)) h += '<div class="indie-box" style="border-left-color:#e11d48;color:#be123c;">🚫 <b>看着香但别碰</b>：' + escapeHtml(indieTrapWhy(g)) + '</div>';
+            if (a.lesson) h += '<div class="indie-lesson" style="margin-top:10px;">🧭 ' + escapeHtml(a.lesson) + '</div>';
+            h += indieFiveHtml(a);
+            h += '<div class="im-div">深度归因 · 原有内容，一并搬进这里</div>';
+            h += '<div class="im-fold" id="indieDeepFold" onclick="indieDetailFold()">▸ 展开深度归因（为什么能爆 / 难度工期 / UE5 落地 / 曝光节奏 / 我该做什么）</div>';
+            h += '<div class="im-deep" id="indieDeepBox">' + indieDeepHtml(g, a) + '</div>';
+            return h;
+        }
+
+        // ---------- 详情（弹窗用）：原「展开详情」的全部内容 ----------
+        function indieDeepHtml(g, a) {
+            var rv = g.reviews, sl = g.sales, tr = g.track || {}, sat = tr.saturation || {};
+            var official = a.officialSales || '';
+            var third = (sl && sl.mid) ? ('约 ' + indieFmtNum(sl.mid) + ' 份') : '—';
+            var thirdSub = (sl && sl.basis) ? sl.basis : (sl ? '' : '官方未公布，且无评论数可反推');
+            var hasPeak = (a.peakOnline !== undefined && a.peakOnline !== null);
+            var peak = hasPeak ? a.peakOnline : g.playersCurrent;
+            var peakV = (peak !== null && peak !== undefined) ? indieFmtNum(peak) + ' <em>人</em>' : '—';
+            var peakLabel = hasPeak ? '峰值在线' : '当前在线';
+            var peakSrc = hasPeak ? (a.peakOnlineSrc || 'AI 查证') : 'Steam 官方接口 · 抓取时点';
+            var revV = rv ? indieFmtNum(rv.total) + ' <em>条</em>' : '—';
+            var revS = rv ? (rv.positivePct !== null && rv.positivePct !== undefined ? '好评率 ' + rv.positivePct + '% · ' + (rv.score || '') : (rv.score || '')) : '暂无数据';
+            var priceV = g.isFree ? '免费' : (g.priceUsd != null ? '$' + g.priceUsd + (g.priceCny ? ' <em>/ ¥' + g.priceCny + '</em>' : '') : '—');
+            var teamV = a.teamSize || '—';
+            var teamS = a.devTime ? '工期 ' + a.devTime : '';
+            var satS = sat.basis ? sat.basis : '待云端抓取';
+            var toolV = (a.toolchain && a.toolchain.engine) ? a.toolchain.engine : '—';
+            var toolS = (a.toolchain && a.toolchain.src) ? ((a.toolchain.inferred ? '推测 · ' : '') + a.toolchain.src) : '待补';
+            var h = '';
 
             // ① 为什么能爆
             h += indieF7Html(a);
@@ -23594,8 +23944,6 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (sl && sl.note) {
                 h += '<div class="indie-sec"><div class="indie-factor"><span class="dot">⚠️</span><span>' + escapeHtml(sl.note) + '</span></div></div>';
             }
-            h += '</div>';  // .indie-more
-            h += '</div>';  // .indie-card
             return h;
         }
         function indieToggleTl(key) {
@@ -39958,7 +40306,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609281101";
+        window.NIKO_VERSION = "202609281316";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
