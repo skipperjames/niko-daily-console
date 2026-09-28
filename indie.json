@@ -1,16 +1,165 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-27T22:43:13+08:00",
-  "date": "2026-09-27",
+  "fetchedAt": "2026-09-28T11:57:01+08:00",
+  "date": "2026-09-28",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
   "stats": {
     "candidates": 400,
-    "passedReviews": 17,
-    "detailed": 8,
-    "picked": 4
+    "passedReviews": 24,
+    "detailed": 24,
+    "picked": 15
   },
   "games": [
+    {
+      "appid": "1867240",
+      "name": "WARDOGS",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1867240/be00107d586c0bf0412e9e4acedb64629a99aa5b/header_schinese.jpg?t=1789503126",
+      "desc": "《WARDOGS》是一款全面战争式第一人称射击游戏，在一个最高可支持 100 名玩家的大规模军事沙盒中，融合了战术枪战、诸兵种联合作战以及建造与破坏机制等元素。",
+      "releaseText": "2026 年 9 月 10 日",
+      "release": "2026-09-10",
+      "comingSoon": false,
+      "developers": [
+        "BULKHEAD"
+      ],
+      "publishers": [
+        "Team17"
+      ],
+      "genres": [
+        "动作",
+        "独立",
+        "大型多人在线",
+        "模拟",
+        "抢先体验"
+      ],
+      "categories": [
+        "多人",
+        "玩家对战",
+        "线上玩家对战",
+        "Steam 成就",
+        "视角舒适度",
+        "自定义音量控制",
+        "立体声",
+        "环绕声"
+      ],
+      "priceUsd": 39.99,
+      "priceInitial": 39.99,
+      "discount": 0,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/1867240/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 93905,
+        "positive": 71659,
+        "negative": 22246,
+        "score": "多半好评",
+        "positivePct": 76
+      },
+      "days": 18,
+      "burst": {
+        "score": 4069.22,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 2065910,
+        "low": 1239546,
+        "high": 3305456,
+        "basis": "Boxleiter 法 · 评论数 × 22（$39.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 4737,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Military」全站 4,737 款"
+        },
+        "niche": "Military"
+      },
+      "tags": [
+        {
+          "name": "Military",
+          "total": 4737,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Tactical",
+          "total": 10131,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "FPS",
+          "total": 10505,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Early Access",
+          "total": 14321,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "PvP",
+          "total": 14637,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Realistic",
+          "total": 15252,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Multiplayer",
+          "total": 26683,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action",
+          "total": 89511,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 175642,
+      "analysis": null
+    },
     {
       "appid": "4019220",
       "name": "针影裁梦",
@@ -45,23 +194,23 @@
       "url": "https://store.steampowered.com/app/4019220/",
       "requiredAge": 0,
       "reviews": {
-        "total": 4421,
-        "positive": 4314,
-        "negative": 107,
+        "total": 4994,
+        "positive": 4883,
+        "negative": 111,
         "score": "好评如潮",
         "positivePct": 98
       },
       "days": 7,
       "burst": {
-        "score": 615.78,
+        "score": 695.59,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 132630,
-        "low": 79578,
-        "high": 212208,
+        "mid": 149820,
+        "low": 89892,
+        "high": 239712,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -91,7 +240,7 @@
         },
         {
           "name": "Cozy",
-          "total": 4458,
+          "total": 4468,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -100,7 +249,7 @@
         },
         {
           "name": "Design & Illustration",
-          "total": 5519,
+          "total": 5523,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -109,7 +258,7 @@
         },
         {
           "name": "Life Sim",
-          "total": 5995,
+          "total": 5999,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -118,7 +267,7 @@
         },
         {
           "name": "Crafting",
-          "total": 8311,
+          "total": 8316,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -127,7 +276,7 @@
         },
         {
           "name": "Management",
-          "total": 11767,
+          "total": 11773,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -136,7 +285,7 @@
         },
         {
           "name": "Relaxing",
-          "total": 24901,
+          "total": 24918,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -145,7 +294,7 @@
         },
         {
           "name": "Simulation",
-          "total": 52635,
+          "total": 52655,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -153,7 +302,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 29850,
+      "playersCurrent": 26323,
       "analysis": {
         "officialSales": "官方未公布具体数字（Cozy Lives 公告：上市 24 小时内回收开发成本）",
         "teamSize": "Cozy Lives（Free Lives 旗下休闲品牌）",
@@ -210,21 +359,167 @@
       }
     },
     {
-      "appid": "4173620",
-      "name": "I Know a Guy: Shady Life Simulator",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4173620/40f0d33c6acce88b1eaa63939a53d1068ed7d848/header_alt_assets_2.jpg?t=1790433103",
-      "desc": "Run your pizza shop up front and handle shady business out back. Help hand-crafted NPCs with favors that never go as planned. Play solo or online co-op with up to four players and expand your operation across Hobarey Town. In this darkly comedic management sim - become that guy everyone knows.",
-      "releaseText": "2026 年 9 月 25 日",
-      "release": "2026-09-25",
+      "appid": "2873060",
+      "name": "永铃回响",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2873060/c1d53edc1a81d43b2209d968783329563a827dc4/header.jpg?t=1790560807",
+      "desc": "《永铃回响》是一款剧情驱动的战棋肉鸽游戏。与性格迥异的伙伴并肩深入“污染之地”，在险象环生的战斗中击败强敌，收集回响与记忆碎片，逐步揭开角色与世界的真相。",
+      "releaseText": "2026 年 9 月 27 日",
+      "release": "2026-09-27",
       "comingSoon": false,
       "developers": [
-        " Bunch'o'Nerds"
+        "七颗枚"
       ],
       "publishers": [
-        " Bunch'o'Nerds"
+        "七颗枚",
+        "WeKnowGame"
       ],
       "genres": [
-        "模拟"
+        "角色扮演",
+        "策略"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 12.59,
+      "priceInitial": 13.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/2873060/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 126,
+        "positive": 120,
+        "negative": 6,
+        "score": "特别好评",
+        "positivePct": 95
+      },
+      "days": 1,
+      "burst": {
+        "score": 122.85,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": 3780,
+        "low": 2268,
+        "high": 6048,
+        "basis": "Boxleiter 法 · 评论数 × 30（$12.59 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "RPG",
+        "label": "角色扮演",
+        "saturation": {
+          "total": 5059,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Board Game」全站 5,059 款"
+        },
+        "niche": "Board Game"
+      },
+      "tags": [
+        {
+          "name": "Board Game",
+          "total": 5059,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Tactical RPG",
+          "total": 5193,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Strategy RPG",
+          "total": 8305,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Turn-Based Tactics",
+          "total": 8846,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Turn-Based Combat",
+          "total": 12465,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Turn-Based Strategy",
+          "total": 12956,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Roguelite",
+          "total": 13816,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Story Rich",
+          "total": 35069,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 74,
+      "analysis": null
+    },
+    {
+      "appid": "1172710",
+      "name": "Dune: Awakening 沙丘：觉醒",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1172710/4f2e53fcf023c9821d408e1d293f15c6221ef153/header_alt_assets_9_schinese.jpg?t=1790078722",
+      "desc": "《Dune: Awakening 沙丘：觉醒》支持单人及多人模式，是一款开放世界生存游戏，融合了沉浸式冒险和角色扮演玩法。探索、建造、制作，在宇宙最传奇的星球上，从求生崛起为传奇，一步步揭开一段电影级别的沙丘故事。 记住：沙虫从不缺席。",
+      "releaseText": "2025 年 6 月 10 日",
+      "release": "2025-06-10",
+      "comingSoon": false,
+      "developers": [
+        "Funcom"
+      ],
+      "publishers": [
+        "Funcom"
+      ],
+      "genres": [
+        "动作",
+        "冒险",
+        "大型多人在线",
+        "角色扮演"
       ],
       "categories": [
         "单人",
@@ -232,453 +527,50 @@
         "合作",
         "在线合作",
         "Steam 成就",
+        "完全支持控制器",
+        "可调整文字大小",
         "视角舒适度",
+        "可选颜色",
+        "自定义音量控制",
         "无需应对快速反应事件",
         "随时保存",
         "立体声",
+        "字幕选项",
+        "环绕声",
         "Steam 云",
         "家庭共享"
       ],
-      "priceUsd": 9.74,
-      "priceInitial": 12.99,
-      "discount": 25,
+      "priceUsd": 24.99,
+      "priceInitial": 49.99,
+      "discount": 50,
       "isFree": false,
-      "url": "https://store.steampowered.com/app/4173620/",
-      "requiredAge": 0,
+      "url": "https://store.steampowered.com/app/1172710/",
+      "requiredAge": "17",
       "reviews": {
-        "total": 506,
-        "positive": 453,
-        "negative": 53,
-        "score": "特别好评",
-        "positivePct": 90
+        "total": 79484,
+        "positive": 56608,
+        "negative": 22876,
+        "score": "多半好评",
+        "positivePct": 71
       },
-      "days": 3,
+      "days": 475,
       "burst": {
-        "score": 197.34,
+        "score": 100.4,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 19228,
-        "low": 11537,
-        "high": 30765,
-        "basis": "Boxleiter 法 · 评论数 × 38（$9.74 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 2158,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Cooking」全站 2,158 款"
-        },
-        "niche": "Cooking"
-      },
-      "tags": [
-        {
-          "name": "Cooking",
-          "total": 2158,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Crime",
-          "total": 2667,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Economy",
-          "total": 6059,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Character Customization",
-          "total": 12052,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Co-op",
-          "total": 16336,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "First-Person",
-          "total": 28513,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 52635,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 119001,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 968,
-      "analysis": {
-        "officialSales": "官方未公布",
-        "peakOnline": 260,
-        "peakOnlineSrc": "PureGameStats 第三方追踪（2026-05-25 历史峰值）",
-        "teamSize": "Bunch'o'Nerds（独立团队，Steam 旗下共 2 款作品）",
-        "devTime": "EA 2026-04-01 → 1.0 于 2026-09-25，约 6 个月",
-        "revenue": "第三方估算区间 54.2 万 – 66.6 万美元（毛收入，非官方）",
-        "toolchain": {
-          "engine": "未公开披露",
-          "src": "开发方未公布引擎信息",
-          "inferred": false
-        },
-        "burstFactors": [
-          {
-            "f": "Steam 节庆曝光",
-            "ev": "House & Home Fest 8 天带来 18,555 愿望单，是常态增速的 9.3 倍",
-            "src": "PureGameStats 第三方追踪"
-          },
-          {
-            "f": "题材反差",
-            "ev": "前台经营披萨店 + 后厨处理黑帮脏活的「双面人生」",
-            "src": "官方商店页描述"
-          },
-          {
-            "f": "多人合作",
-            "ev": "支持 1–4 人在线合作，可用于分摊双线任务",
-            "src": "官方商店页"
-          },
-          {
-            "f": "EA 长跑沉淀",
-            "ev": "EA 期约 6 个月积累 420+ 条评测、90% 好评后转 1.0",
-            "src": "Steam 评测数据"
-          }
-        ],
-        "timeline": [
-          {
-            "d": "2026-04-01",
-            "x": "Early Access 上线"
-          },
-          {
-            "d": "2026-04 上旬",
-            "x": "Steam House & Home Fest 节庆窗口，8 天涨 18,555 愿望单"
-          },
-          {
-            "d": "2026-05-25",
-            "x": "历史峰值同时在线 260"
-          },
-          {
-            "d": "2026-09-25",
-            "x": "1.0 正式版发布"
-          }
-        ],
-        "difficulty": {
-          "art": 3,
-          "tech": 3,
-          "content": 4,
-          "note": "内容量大（数十个手写 NPC 与剧情线）；技术量中上（4 人联机同步）；美术量中等"
-        },
-        "lesson": "从 EA 起步、蹭一次 Steam 主题节庆（House & Home Fest），是零预算团队最可复制的一条曝光路径 —— 前提是题材能对上节庆主题。"
-      }
-    },
-    {
-      "appid": "4072240",
-      "name": "Woman Simulator",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4072240/ce30d61b72088ab181c23b4ed5a6f8063492cc5d/header_schinese.jpg?t=1790507859",
-      "desc": "这款游戏让你体验做女性的感觉：打扫、洗衣、做饭，没有片刻安宁。完全沉浸在女性烦恼的世界中.",
-      "releaseText": "2026 年 9 月 25 日",
-      "release": "2026-09-25",
-      "comingSoon": false,
-      "developers": [
-        "Sebasa Games"
-      ],
-      "publishers": [
-        "Sebasa Games"
-      ],
-      "genres": [
-        "动作",
-        "冒险",
-        "休闲",
-        "独立",
-        "角色扮演",
-        "模拟",
-        "体育"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "完全支持控制器",
-        "视角舒适度",
-        "自定义音量控制",
-        "立体声",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 6.39,
-      "priceInitial": 7.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4072240/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 211,
-        "positive": 147,
-        "negative": 64,
-        "score": "褒贬不一",
-        "positivePct": 70
-      },
-      "days": 3,
-      "burst": {
-        "score": 82.29,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 8018,
-        "low": 4811,
-        "high": 12829,
-        "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
+        "mid": 1748648,
+        "low": 1049189,
+        "high": 2797837,
+        "basis": "Boxleiter 法 · 评论数 × 22（$24.99 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
       },
       "track": {
         "primary": "Action",
         "label": "动作",
-        "saturation": {
-          "total": 5995,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Life Sim」全站 5,995 款"
-        },
-        "niche": "Life Sim"
-      },
-      "tags": [
-        {
-          "name": "Memes",
-          "total": 2853,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Life Sim",
-          "total": 5995,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Funny",
-          "total": 22709,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Relaxing",
-          "total": 24901,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "RPG",
-          "total": 47889,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 52635,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Adventure",
-          "total": 82891,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 119001,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 674,
-      "analysis": {
-        "officialSales": "官方未公布",
-        "teamSize": "Sebasa Games",
-        "devTime": "多次跳票，原定 2026-03-08，实际 2026-09-25 上线",
-        "toolchain": {
-          "engine": "未公开披露",
-          "src": "开发方未公布引擎信息",
-          "inferred": false
-        },
-        "burstFactors": [
-          {
-            "f": "争议即流量",
-            "ev": "原定国际妇女节发售并配文调侃，引发全网抵制与请愿下架，被迫延期后仍持续获得媒体关注",
-            "src": "搜狐 / 33游戏网 2026-09 报道"
-          },
-          {
-            "f": "立场反转叙事",
-            "ev": "玩家需讨好丈夫换取手提包、变卖攒钱以逃离家庭，形成「打工赎身」循环",
-            "src": "官方商店页 / 新闻报道"
-          },
-          {
-            "f": "本地化投入",
-            "ev": "支持 11 种语言（含简中），首发即全覆盖",
-            "src": "Datahumble 商店数据"
-          }
-        ],
-        "timeline": [
-          {
-            "d": "2026-03 上旬",
-            "x": "定档 3 月 8 日国际妇女节并配文调侃 → 引发抵制与请愿下架"
-          },
-          {
-            "d": "2026-03",
-            "x": "宣布延期，商店页下架"
-          },
-          {
-            "d": "2026-07",
-            "x": "Valve 完成内容审核，商店页重新开放，窗口改为 2026 Q3"
-          },
-          {
-            "d": "2026-09-25",
-            "x": "正式上线，同步支持简体中文"
-          }
-        ],
-        "difficulty": {
-          "art": 2,
-          "tech": 2,
-          "content": 2,
-          "note": "三轴均偏低：第一人称家务交互、清单式任务、场景集中"
-        },
-        "lesson": "「争议营销」确实能换来免费流量，但代价是口碑从上线第一天就分裂。这条路能博一次曝光，换不来复购和长尾 —— 对做长期作品的人不是好模型。"
-      }
-    },
-    {
-      "appid": "3116730",
-      "name": "BIG LOOT",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3116730/5a6190ba3117755748b3aff1eb5beb3df8dfb773/header.jpg?t=1790341227",
-      "desc": "款关于商队、贸易与生存的Roguelike冒险。探索世界，明智选择装备与路线——前往下个城镇的道路充满惊喜。",
-      "releaseText": "2026 年 9 月 25 日",
-      "release": "2026-09-25",
-      "comingSoon": false,
-      "developers": [
-        "Reverie Clouds"
-      ],
-      "publishers": [
-        "Reverie Clouds"
-      ],
-      "genres": [
-        "冒险",
-        "独立",
-        "角色扮演"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "完全支持控制器",
-        "DUALSHOCK 控制器支持",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 13.59,
-      "priceInitial": 15.99,
-      "discount": 15,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/3116730/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 93,
-        "positive": 65,
-        "negative": 28,
-        "score": "褒贬不一",
-        "positivePct": 70
-      },
-      "days": 3,
-      "burst": {
-        "score": 30.23,
-        "key": "dark",
-        "label": "⚡ 黑马",
-        "rank": 2
-      },
-      "sales": {
-        "mid": 2790,
-        "low": 1674,
-        "high": 4464,
-        "basis": "Boxleiter 法 · 评论数 × 30（$13.59 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Adventure",
-        "label": "冒险",
         "saturation": {
           "total": 1067,
           "verdict": {
@@ -700,8 +592,8 @@
           "idKnown": true
         },
         {
-          "name": "Loot",
-          "total": 3880,
+          "name": "Base Building",
+          "total": 6216,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -709,26 +601,8 @@
           "idKnown": true
         },
         {
-          "name": "Crafting",
-          "total": 8311,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Cartoon",
-          "total": 8651,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Roguelike",
-          "total": 14278,
+          "name": "Open World",
+          "total": 13165,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -736,8 +610,8 @@
           "idKnown": true
         },
         {
-          "name": "Exploration",
-          "total": 32449,
+          "name": "Survival",
+          "total": 13427,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -745,8 +619,26 @@
           "idKnown": true
         },
         {
-          "name": "3D",
-          "total": 47309,
+          "name": "PvP",
+          "total": 14637,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Multiplayer",
+          "total": 26683,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "RPG",
+          "total": 47896,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -755,7 +647,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82891,
+          "total": 82904,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -763,58 +655,1482 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 24,
-      "analysis": {
-        "officialSales": "官方未公布（EA 期，第三方估约 6.0k 份）",
-        "peakOnline": 69,
-        "peakOnlineSrc": "SteamBase 第三方追踪（2025-08-21 历史峰值）",
-        "teamSize": "Reverie Clouds（单人开发）",
-        "devTime": "正职工作之外业余开发约 1.5 年",
-        "revenue": "第三方估算毛收入 3.2 万 – 6.4 万美元（非官方）",
-        "toolchain": {
-          "engine": "GDevelop",
-          "src": "作品提交于 itch.io「GDevelop Big Game Jam 7」",
-          "inferred": true
+      "playersCurrent": 10050,
+      "analysis": null
+    },
+    {
+      "appid": "4976640",
+      "name": "封神归来",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4976640/82772865288feb3058176532a3286c087eacba48/header.jpg?t=1790560887",
+      "desc": "《封神归来》是以商周之战为背景的一款大型多人在线角色扮演游戏，玩家可以在各种系统中提升自己，养灵宠，强化装备，炼法宝，还有更多系统提供玩家发掘和游玩。",
+      "releaseText": "2026 年 9 月 27 日",
+      "release": "2026-09-27",
+      "comingSoon": false,
+      "developers": [
+        "ruirui"
+      ],
+      "publishers": [
+        "ruirui"
+      ],
+      "genres": [
+        "角色扮演",
+        "免费开玩"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "玩家对战",
+        "线上玩家对战",
+        "合作",
+        "在线合作",
+        "应用内购买",
+        "家庭共享"
+      ],
+      "priceUsd": 0,
+      "priceInitial": null,
+      "discount": 0,
+      "isFree": true,
+      "url": "https://store.steampowered.com/app/4976640/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 57,
+        "positive": 51,
+        "negative": 6,
+        "score": "特别好评",
+        "positivePct": 89
+      },
+      "days": 1,
+      "burst": {
+        "score": 88.92,
+        "key": "burst",
+        "label": "🔥 现象级",
+        "rank": 3
+      },
+      "sales": {
+        "mid": null,
+        "low": null,
+        "high": null,
+        "basis": "免费游戏（F2P），不适用评论数反推",
+        "confidence": 1
+      },
+      "track": {
+        "primary": "RPG",
+        "label": "角色扮演",
+        "saturation": {
+          "total": 5193,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Tactical RPG」全站 5,193 款"
         },
-        "burstFactors": [
-          {
-            "f": "单人副业完成度",
-            "ev": "作者自述：在正职工作之外熬夜开发了 1.5 年才拿出可玩版本",
-            "src": "itch.io GDevelop Big Game Jam 7 提交页"
+        "niche": "Tactical RPG"
+      },
+      "tags": [
+        {
+          "name": "Tactical RPG",
+          "total": 5193,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
           },
-          {
-            "f": "低门槛引擎起步",
-            "ev": "作品提交于 GDevelop Big Game Jam 7，引擎为 GDevelop",
-            "src": "itch.io jam 页面"
-          },
-          {
-            "f": "风险即机制",
-            "ev": "背包会随拾取物理膨胀、变重并拖慢移动，把「贪心」做成可感知的负担",
-            "src": "官方描述 / Steam 评测"
-          }
-        ],
-        "timeline": [
-          {
-            "d": "开发期",
-            "x": "正职之余开发约 1.5 年，先发布免费 Demo 收集反馈"
-          },
-          {
-            "d": "2025-08-21",
-            "x": "Steam Early Access 上线，峰值同时在线 69"
-          },
-          {
-            "d": "2026-09",
-            "x": "持续更新中，Steam Deck 可玩、支持 14 种语言"
-          }
-        ],
-        "difficulty": {
-          "art": 2,
-          "tech": 3,
-          "content": 3,
-          "note": "美术量低（风格化卡通）；技术量中等（程序化路线 + 背包物理）；内容量中等（每次 run 随机）"
+          "idKnown": true
         },
-        "lesson": "五款里最贴近你现状的一个：白天有正职、用低门槛引擎、靠业余时间熬 1.5 年做出可玩版本。它没有爆，但完整走完了「jam → Demo → EA → 持续更新」的全流程 —— 这条路本身就是可执行的。"
-      }
+        {
+          "name": "Strategy RPG",
+          "total": 8305,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "RPG",
+          "total": 47896,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Adventure",
+          "total": 82904,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action RPG",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "Exploration",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "3D",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        },
+        {
+          "name": "Xianxia",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 3,
+      "analysis": null
+    },
+    {
+      "appid": "5148990",
+      "name": "Scratch Tickets With Your Friends 🎰",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5148990/22573bb64b820535f3546f486ea1cfbd6fe6bdc1/header.jpg?t=1790500100",
+      "desc": "一款混乱的模拟游戏：房租不断上涨，钱却不断消失。刮彩票、分类垃圾、升级设备，并做出各种离谱决定，只为再撑过一天。🎰💸",
+      "releaseText": "2026 年 9 月 26 日",
+      "release": "2026-09-26",
+      "comingSoon": false,
+      "developers": [
+        "Yet Another Publisher"
+      ],
+      "publishers": [
+        "Yet Another Publisher"
+      ],
+      "genres": [
+        "休闲",
+        "角色扮演",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "家庭共享"
+      ],
+      "priceUsd": 4.82,
+      "priceInitial": 6.99,
+      "discount": 31,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/5148990/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 75,
+        "positive": 48,
+        "negative": 27,
+        "score": "褒贬不一",
+        "positivePct": 64
+      },
+      "days": 2,
+      "burst": {
+        "score": 48.75,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 3375,
+        "low": 2025,
+        "high": 5400,
+        "basis": "Boxleiter 法 · 评论数 × 45（$4.82 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "RPG",
+        "label": "角色扮演",
+        "saturation": {
+          "total": 1217,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Gambling」全站 1,217 款"
+        },
+        "niche": "Gambling"
+      },
+      "tags": [
+        {
+          "name": "Gambling",
+          "total": 1217,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Economy",
+          "total": 6068,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Resource Management",
+          "total": 10091,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Management",
+          "total": 11773,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Stylized",
+          "total": 20840,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52655,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119047,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "3D",
+          "total": null,
+          "verdict": null,
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 163,
+      "analysis": null
+    },
+    {
+      "appid": "3303790",
+      "name": "Death Delivery",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3303790/f0fd4a0f9d223da765e1431a5f11f7ef47793904/header.jpg?t=1790540028",
+      "desc": "Death Delivery 是一款残酷、令人满意、快节奏的第一人称射击游戏，灵感来自香港电影，具有 80 年代风格的慢动作、音乐、动作和老式的试错难度。",
+      "releaseText": "2026 年 9 月 27 日",
+      "release": "2026-09-27",
+      "comingSoon": false,
+      "developers": [
+        "GogaGames."
+      ],
+      "publishers": [
+        "GogaGames."
+      ],
+      "genres": [
+        "动作",
+        "休闲",
+        "独立"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "可调整难度",
+        "可以仅用键盘",
+        "无需应对快速反应事件",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "立体声",
+        "部分支持控制器",
+        "Steam 云",
+        "远程同乐",
+        "家庭共享"
+      ],
+      "priceUsd": 2.99,
+      "priceInitial": 4.99,
+      "discount": 40,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/3303790/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 34,
+        "positive": 25,
+        "negative": 9,
+        "score": "多半好评",
+        "positivePct": 74
+      },
+      "days": 1,
+      "burst": {
+        "score": 44.2,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 1530,
+        "low": 918,
+        "high": 2448,
+        "basis": "Boxleiter 法 · 评论数 × 45（$2.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 1223,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Boomer Shooter」全站 1,223 款"
+        },
+        "niche": "Boomer Shooter"
+      },
+      "tags": [
+        {
+          "name": "Boomer Shooter",
+          "total": 1223,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Bullet Hell",
+          "total": 8541,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "FPS",
+          "total": 10505,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Arcade",
+          "total": 26208,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action",
+          "total": 89511,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119047,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "1990's",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Cyberpunk",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 0,
+      "analysis": null
+    },
+    {
+      "appid": "4964580",
+      "name": "Museologist: Tidy Up the Museum!",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4964580/987d8641136eb6096f04a68c8bda9224a61db993/header.jpg?t=1790447613",
+      "desc": "Museologist: Tidy Up the Museum! 一款单人模拟游戏。整个藏品已经支离破碎。找到每个碎片的归属，像拼图一样将它们拼凑起来，用3513块散落的碎片修复543件物品。",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Tobo Games"
+      ],
+      "publishers": [
+        "Tobo Games"
+      ],
+      "genres": [
+        "休闲",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "完全支持控制器",
+        "视角舒适度",
+        "自定义音量控制",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "随时保存",
+        "立体声",
+        "环绕声",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 5.39,
+      "priceInitial": 5.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4964580/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 69,
+        "positive": 61,
+        "negative": 8,
+        "score": "特别好评",
+        "positivePct": 88
+      },
+      "days": 3,
+      "burst": {
+        "score": 26.91,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 2622,
+        "low": 1573,
+        "high": 4195,
+        "basis": "Boxleiter 法 · 评论数 × 38（$5.39 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 52655,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "basis": "细分标签「Simulation」全站 52,655 款"
+        },
+        "niche": "Simulation"
+      },
+      "tags": [
+        {
+          "name": "Relaxing",
+          "total": 24918,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52655,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119047,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Casual",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Organizing",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Puzzle",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Collectathon",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Hidden Object",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 565,
+      "analysis": null
+    },
+    {
+      "appid": "3557370",
+      "name": "魅力暴动",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3557370/7b65e05564aab74979f062776736e31cfc426530/header_schinese.jpg?t=1790485147",
+      "desc": "这是一个荒诞幽默的动作游戏，你将扮演一位选美女明星，靠一张天真无邪的精致面孔、性感惹火的身材和各种见不得光的肮脏手段，赢得胜利、财富和名声。",
+      "releaseText": "2026 年 9 月 26 日",
+      "release": "2026-09-26",
+      "comingSoon": false,
+      "developers": [
+        "AquaStudio",
+        "ValarFerys"
+      ],
+      "publishers": [
+        "LotusPlay",
+        "ValarFerys"
+      ],
+      "genres": [
+        "动作"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "完全支持控制器",
+        "推荐使用手柄",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 9.99,
+      "priceInitial": 9.99,
+      "discount": 0,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/3557370/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 35,
+        "positive": 27,
+        "negative": 8,
+        "score": "多半好评",
+        "positivePct": 77
+      },
+      "days": 2,
+      "burst": {
+        "score": 20.48,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 1330,
+        "low": 798,
+        "high": 2128,
+        "basis": "Boxleiter 法 · 评论数 × 38（$9.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 5999,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Life Sim」全站 5,999 款"
+        },
+        "niche": "Life Sim"
+      },
+      "tags": [
+        {
+          "name": "Life Sim",
+          "total": 5999,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Female Protagonist",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "3D Fighter",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Character Customization",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Dark Humor",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Spectacle fighter",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Controller",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Horses",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 0,
+      "analysis": null
+    },
+    {
+      "appid": "3115490",
+      "name": "Lunar Drifter",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3115490/18dddce0e530739a362124d08dba19f2b4466fec/header.jpg?t=1790348432",
+      "desc": "Lunar Drifter is an Arcade First Person Shooter, your mission is to tear, blast, and crush an entire legion as fast as possible within the time limit. Featuring 4 playable characters with their own gimmicks and arsenal, more than 15 unique hand-crafted levels, and includes online Co-Op!",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "RoseHoodGames"
+      ],
+      "publishers": [
+        "RoseHoodGames"
+      ],
+      "genres": [
+        "动作",
+        "独立"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "玩家对战",
+        "线上玩家对战",
+        "局域网玩家对战",
+        "合作",
+        "在线合作",
+        "局域网合作",
+        "Steam 成就",
+        "完全支持控制器",
+        "视角舒适度",
+        "无需应对快速反应事件",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "立体声",
+        "Steam 云",
+        "Steam 排行榜",
+        "家庭共享"
+      ],
+      "priceUsd": 13.49,
+      "priceInitial": 14.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/3115490/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 60,
+        "positive": 52,
+        "negative": 8,
+        "score": "特别好评",
+        "positivePct": 87
+      },
+      "days": 3,
+      "burst": {
+        "score": 19.5,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 1800,
+        "low": 1080,
+        "high": 2880,
+        "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 10505,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "basis": "细分标签「FPS」全站 10,505 款"
+        },
+        "niche": "FPS"
+      },
+      "tags": [
+        {
+          "name": "FPS",
+          "total": 10505,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Arcade",
+          "total": 26208,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action",
+          "total": 89511,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Shooter",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Arena Shooter",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Female Protagonist",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "First-Person",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Anime",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 26,
+      "analysis": null
+    },
+    {
+      "appid": "4892910",
+      "name": "Hyperboard Extreme",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4892910/c7e432c52bda72657f19de1a9c05461637e25367/header.jpg?t=1790445895",
+      "desc": "Hyperboard Extreme combines PS2-era arcade style racing with cool girls, crazy powerups, and intense, speedy action! This is a free vertical slice as a complete proof-of-concept for the next generation of indie racers!",
+      "releaseText": "2026 年 9 月 26 日",
+      "release": "2026-09-26",
+      "comingSoon": false,
+      "developers": [
+        "SlyBalto"
+      ],
+      "publishers": [
+        "SlyBalto"
+      ],
+      "genres": [
+        "动作",
+        "独立",
+        "竞速",
+        "免费开玩"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "玩家对战",
+        "同屏/分屏玩家对战",
+        "同屏/分屏",
+        "Steam 成就",
+        "完全支持控制器",
+        "可选颜色",
+        "推荐使用手柄",
+        "可以仅用键盘",
+        "无需应对快速反应事件",
+        "立体声",
+        "远程同乐",
+        "家庭共享"
+      ],
+      "priceUsd": 0,
+      "priceInitial": null,
+      "discount": 0,
+      "isFree": true,
+      "url": "https://store.steampowered.com/app/4892910/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 24,
+        "positive": 24,
+        "negative": 0,
+        "score": "好评",
+        "positivePct": 100
+      },
+      "days": 2,
+      "burst": {
+        "score": 18.72,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": null,
+        "low": null,
+        "high": null,
+        "basis": "免费游戏（F2P），不适用评论数反推",
+        "confidence": 1
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 26208,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "basis": "细分标签「Arcade」全站 26,208 款"
+        },
+        "niche": "Arcade"
+      },
+      "tags": [
+        {
+          "name": "Arcade",
+          "total": 26208,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action",
+          "total": 89511,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Racing",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Combat Racing",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Sci-fi",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Vehicular Combat",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Futuristic",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Driving",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 10,
+      "analysis": null
+    },
+    {
+      "appid": "5043180",
+      "name": "CoasterWorks",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5043180/87f0835489e04bf304e1af1eec8b74d928021e10/header.jpg?t=1790367678",
+      "desc": "Design, simulate, ride and render your own realistic roller coasters in a 3D theme-park editor.",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "CoasterWorks"
+      ],
+      "publishers": [
+        "Coasterworks"
+      ],
+      "genres": [
+        "模拟",
+        "免费开玩"
+      ],
+      "categories": [
+        "单人",
+        "#category_contrast_controls",
+        "自定义音量控制",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "随时保存",
+        "立体声",
+        "包含关卡编辑器",
+        "家庭共享"
+      ],
+      "priceUsd": 0,
+      "priceInitial": null,
+      "discount": 0,
+      "isFree": true,
+      "url": "https://store.steampowered.com/app/5043180/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 34,
+        "positive": 17,
+        "negative": 17,
+        "score": "褒贬不一",
+        "positivePct": 50
+      },
+      "days": 3,
+      "burst": {
+        "score": 17.68,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": null,
+        "low": null,
+        "high": null,
+        "basis": "免费游戏（F2P），不适用评论数反推",
+        "confidence": 1
+      },
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 5523,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Design & Illustration」全站 5,523 款"
+        },
+        "niche": "Design & Illustration"
+      },
+      "tags": [
+        {
+          "name": "Design & Illustration",
+          "total": 5523,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52655,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Level Editor",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Building",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Sandbox",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Physics",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Transportation",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Utilities",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 6,
+      "analysis": null
+    },
+    {
+      "appid": "1172730",
+      "name": "The Handler of Dragons",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1172730/987ddc6e3da192aa34155468e1fc942293dab493/header.jpg?t=1790402878",
+      "desc": "In the RPG game The Handler of Dragons you play as a warrior who can speak to the dragons. How did it happen? What will be the consequences? Are you going to protect dragons at all costs? How far will you go to obtain their power? The adventure begins...",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Hi-Quality Jerzy Calinski"
+      ],
+      "publishers": [
+        "Spirit Games Studio"
+      ],
+      "genres": [
+        "动作",
+        "角色扮演"
+      ],
+      "categories": [
+        "单人",
+        "家庭共享"
+      ],
+      "priceUsd": 4.99,
+      "priceInitial": 4.99,
+      "discount": 0,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/1172730/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 33,
+        "positive": 24,
+        "negative": 9,
+        "score": "多半好评",
+        "positivePct": 73
+      },
+      "days": 3,
+      "burst": {
+        "score": 14.3,
+        "key": "watch",
+        "label": "🌱 值得蹲",
+        "rank": 1
+      },
+      "sales": {
+        "mid": 1485,
+        "low": 891,
+        "high": 2376,
+        "basis": "Boxleiter 法 · 评论数 × 45（$4.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Action",
+        "label": "动作",
+        "saturation": {
+          "total": 47896,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "basis": "细分标签「RPG」全站 47,896 款"
+        },
+        "niche": "RPG"
+      },
+      "tags": [
+        {
+          "name": "RPG",
+          "total": 47896,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Action",
+          "total": 89511,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Singleplayer",
+          "total": 119047,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Dragons",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Fantasy",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Third Person",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Magic",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Gothic",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 0,
+      "analysis": null
+    },
+    {
+      "appid": "4466710",
+      "name": "女装百合岚",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4466710/33092e343e27dc420ef41acb0c782edb90983074/header_schinese.jpg?t=1790380402",
+      "desc": "全是伪娘的大小姐学园，恋爱热潮引发大混乱！王子系伪娘×不良伪娘，八字不和的两人被迫成为恋人！最后雌堕的究竟会是谁呢？！——粉碎你的价值观，女装百合视觉小说。一浪高过一浪的《岚之章》！",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "No Strike"
+      ],
+      "publishers": [
+        "Eroge Japan",
+        "Sanuk Inc."
+      ],
+      "genres": [
+        "冒险",
+        "休闲",
+        "独立"
+      ],
+      "categories": [
+        "单人",
+        "自定义音量控制",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "立体声",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 11.99,
+      "priceInitial": 14.99,
+      "discount": 20,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4466710/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 36,
+        "positive": 34,
+        "negative": 2,
+        "score": "好评",
+        "positivePct": 94
+      },
+      "days": 3,
+      "burst": {
+        "score": 11.7,
+        "key": "watch",
+        "label": "🌱 值得蹲",
+        "rank": 1
+      },
+      "sales": {
+        "mid": 1080,
+        "low": 648,
+        "high": 1728,
+        "basis": "Boxleiter 法 · 评论数 × 30（$11.99 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Adventure",
+        "label": "冒险",
+        "saturation": {
+          "total": 82904,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "basis": "细分标签「Adventure」全站 82,904 款"
+        },
+        "niche": "Adventure"
+      },
+      "tags": [
+        {
+          "name": "Adventure",
+          "total": 82904,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Anime",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Visual Novel",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Casual",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Dating Sim",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "LGBTQ+",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Cute",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Comedy",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 13,
+      "analysis": null
+    },
+    {
+      "appid": "4244040",
+      "name": "Sector 13: Haunted Woods",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4244040/4b397752a47953c44692b2c2290e674de04e676d/header.jpg?t=1790396109",
+      "desc": "《13号区：诅咒之林》是一款支持 1-4 人联机的开放世界恐怖生存游戏。你的目标是在这片充满未知的土地上寻找异象 (Anomalies)。 探索神秘区域，回收禁忌文物，并在阴森的森林中生存下来。请务必小心——你的麦克风可能会暴露你的位置导致死亡，但也可能是你和队友击退步步逼近的敌人的唯一武器。💀",
+      "releaseText": "2026 年 9 月 25 日",
+      "release": "2026-09-25",
+      "comingSoon": false,
+      "developers": [
+        "Game Inside Studio"
+      ],
+      "publishers": [
+        "Game Inside Studio"
+      ],
+      "genres": [
+        "冒险",
+        "独立",
+        "角色扮演",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "合作",
+        "在线合作",
+        "Steam 成就",
+        "自定义音量控制",
+        "可调整难度",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "立体声",
+        "环绕声",
+        "Steam 云",
+        "家庭共享"
+      ],
+      "priceUsd": 7.19,
+      "priceInitial": 7.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4244040/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 25,
+        "positive": 14,
+        "negative": 11,
+        "score": "褒贬不一",
+        "positivePct": 56
+      },
+      "days": 3,
+      "burst": {
+        "score": 9.75,
+        "key": "watch",
+        "label": "🌱 值得蹲",
+        "rank": 1
+      },
+      "sales": {
+        "mid": 950,
+        "low": 570,
+        "high": 1520,
+        "basis": "Boxleiter 法 · 评论数 × 38（$7.19 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Adventure",
+        "label": "冒险",
+        "saturation": {
+          "total": 82904,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "basis": "细分标签「Adventure」全站 82,904 款"
+        },
+        "niche": "Adventure"
+      },
+      "tags": [
+        {
+          "name": "Multiplayer",
+          "total": 26683,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Adventure",
+          "total": 82904,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Psychological Horror",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Jump Scare",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Online Co-Op",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Walking Simulator",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Horror",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Co-op",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 9,
+      "analysis": null
     }
   ]
 }
