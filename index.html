@@ -3353,6 +3353,15 @@
         body.dark-mode .task-desc-line {
             color: #94a3b8;
         }
+        /* 产能标记校验提示（2026-09-28）：解析出的 C/D 与项目名「n迭m」不符时亮一下 */
+        .task-meta-tag.tbl-cap-warn {
+            color: #d97706;
+            font-weight: 600;
+            cursor: help;
+        }
+        body.dark-mode .task-meta-tag.tbl-cap-warn {
+            color: #fbbf24;
+        }
         body.dark-mode .task-row-main .task-title {
             color: #e5e7eb;
         }
@@ -21251,8 +21260,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     prefix: filled.slice(0, Math.max(0, n - 4)).map(function (rr2) { return rr2[i]; }).filter(function (x) { return x && String(x).trim(); })
                 });
             }
-            var d = { filled: filled, leaves: leaves };
-            var rqs = tblGroupReqs(leaves);
+            var d = { filled: filled, leaves: leaves, unitRow: unitRow, projRow: projRow, typeRow: typeRow };
+            var rqs = tblGroupReqs(leaves, { unitRow: unitRow, projRow: projRow, typeRow: typeRow });
             // 用户在需求卡上的改动（游戏名 / 地区 / 素材类型）→ 跨重渲染保住
             rqs.forEach(function (rq) {
                 var o = TBL.ovr[rq.k];
@@ -21283,44 +21292,179 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         // 节日储备标记：（国庆储备）/（中秋储备）→ 从游戏名剥出标签提到条数码前：
         // 同色连线（国庆储备）-1C3D → 同色连线-国庆1C3D（2026-09-18 用户定版）
+        // 节日储备标记：（国庆储备）/（中秋储备）→ 从游戏名剥出标签提到条数码前
+        // ⚠️ 2026-09-28 修：只认「真节日」——「小游戏测试（按照双周储备）」这种
+        //    「双周/产能」类储备不是节日，剥出来会得到「按照双周」这种垃圾标签（用户截图踩到）。
+        //    规则：括号里的词必须包含一个已知节日名，才当节日储备。
+        var TBL_FEST_WORDS = ['元旦', '春节', '清明', '劳动', '五一', '端午', '中秋', '国庆', '新年', '元宵'];
         function tblReserveOf(name) {
-            var s = String(name || ''), m = s.match(/[（(]\s*([^（）()]{1,8}?)\s*储备\s*[）)]/);
+            var s = String(name || ''), m = s.match(/[（(]\s*([^（）()]{1,10}?)\s*储备\s*[）)]/);
             if (!m) return { name: s, label: '' };
+            var isFest = TBL_FEST_WORDS.some(function (w) { return m[1].indexOf(w) >= 0; });
+            if (!isFest) return { name: s, label: '' };   // 非节日储备 → 原样保留（不剥）
             return { name: s.replace(m[0], ''), label: m[1] };
         }
         function tblNormGame(g) { return tblReserveOf(String(g || '')).name.replace(/\s+/g, ''); }
+
+        // ---- 产能标记「n迭m」/「n选m」解析（2026-09-28）----
+        // 1迭5 = 1 条 C + 5 条迭代 D；3迭6 = 3 个 A 面 + 每个再混剪 2 条（3+6）。
+        // 用途：当「校验基准」——解析出的 D 数与标记不符时在卡片上提示，**不静默改数**。
+        function tblCapMark(raw) {
+            var s = String(raw || '');
+            var m = s.match(/[（(]?\s*(\d+)\s*[迭选]\s*(\d+)\s*[）)]?/);
+            if (!m) return null;
+            var n = parseInt(m[1], 10), mm = parseInt(m[2], 10);
+            if (!(n > 0) || !(mm > 0)) return null;
+            return { c: n, d: mm, text: n + '迭' + mm };
+        }
         function tblTitle(rq) { return (rq.game || '（未识别）') + '-' + (rq.pfx || '') + rq.code; }
 
         // ---- 合并成「需求」：一个 地区 × 项目 × 素材类型 × 工种 = 一条需求 ----
         // 2026-09-18 用户定版（截图）：同一素材类型下 D=5 / C=1 / 改工程=2 →
         //   拆成两条：`蜜蜂-1C5D` + `蜜蜂-改工程2D`。
         //   即：C 后面的 D 只数它左边那一格的 D；「改工程」单独成条，不并进同一个 D 里。
-        function tblGroupReqs(leaves) {
+        // ★★ 2026-09-28 关键修复（用户截图：`1C5D` + 独立 5D 被并成 `1C10D`）：
+        //   旧实现把「同一 项目×素材类型×地区」下**所有** D 列求和 → 1C5D 的 5D 和
+        //   旁边的独立 5D 加在一起变 10D。现改为按**列**分组：
+        //     · 每个 C 独立成组，只吸收**紧邻它左边那一格**的 D；
+        //     · 没被 C 吃掉的 D（独立 D 段）各自成组；同一段连续 D 合并计数。
+        //   注：列上判断「紧邻左边」用 leaf.col（网格展开后的真实列号）。
+        //   ctx（可选）= { unitRow, projRow, typeRow } 前向填充后的网格行 —— 用来判断
+        //   「这个素材类型格在**表里**到底有没有 C 这一列」（空数量的 C 列不产 leaf，
+        //   光看 leaves 判不出来，会把「蜜蜂1迭3 纯 D=5」误拆成 1C3D + 2D）。
+        function tblGroupReqs(leaves, ctx) {
+            ctx = ctx || {};
             var order = [], map = {};
+            function grp(key, L) {
+                if (!map[key]) {
+                    // key 形如「项目||素材类型||地区||改工程||C2」→ 从中还原 wl（工种标签）
+                    var wl = (key.split('||')[3] === '改工程') ? '改工程' : '';
+                    map[key] = { key: key, project: L.project || '', mtype: L.mtype || '', region: L.region || '', cCount: 0, dCount: 0, realCount: 0, wl: wl, col: L.col };
+                    order.push(key);
+                }
+                return map[key];
+            }
+            // 先按「地区|项目|素材类型|工种」聚成**列段**，保留 col 顺序
+            var segs = {}, segOrder = [];
             leaves.forEach(function (L) {
                 var u0 = String(L.unit || '').trim();
                 var isWl = /改工程/.test(u0) || /改工程/.test(String(L.mtype || ''));   // 改工程 → 独立一条需求（不混进主 D）
                 var u = u0.replace(/改工程/g, '').trim();   // 剥掉工种词后看剩下什么：C / D / 真人（空 = 照 D 计）
-                var key = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '') + '||' + (isWl ? '改工程' : '');
-                if (!map[key]) {
-                    map[key] = { key: key, project: L.project || '', mtype: L.mtype || '', region: L.region || '', cCount: 0, dCount: 0, realCount: 0, wl: isWl ? '改工程' : '' };
-                    order.push(key);
+                var kind = /真人/.test(u) ? 'real' : (/^C$/i.test(u) ? 'C' : 'D');
+                var sk = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '') + '||' + (isWl ? '改工程' : '');
+                if (!segs[sk]) { segs[sk] = []; segOrder.push(sk); }
+                segs[sk].push({ col: (L.col == null ? -1 : L.col), kind: kind, qty: L.qty, L: L, wl: isWl ? '改工程' : '' });
+            });
+            // ★ 配对：C 吃**紧邻它的那一格** D（列号严格相差 1；左右都认）。
+            //   用户真实表里两种顺序都出现过：`D | C | 真人`（②段夹具 / 改工程夹具）
+            //   和 `C | D`（②.5 夹具 / 用户 2026-09-28 截图）。铁律 §8.7 说的
+            //   「C 后面的 D 只需要看他左边的 D」是业务含义（D 属于同一条需求），
+            //   落到实现上就是「同一素材类型格里、与 C 相邻的那一格 D」。
+            segOrder.forEach(function (sk) {
+                var arr = segs[sk].slice().sort(function (a, b) { return a.col - b.col; });
+                var used = {};   // 已被 C 吃掉的叶子下标
+                arr.forEach(function (it, i) {
+                    if (it.kind !== 'C') return;
+                    // 该 C 自己的分组（有多个 C 时各自独立）
+                    var g = grp(sk + '||C' + it.col, it.L);
+                    g.cCount += it.qty;
+                    // 相邻的 D：先看左边那格，再看右边那格（col 必须严格相差 1）
+                    var left = (i > 0 && arr[i - 1].kind === 'D' && arr[i - 1].col === it.col - 1) ? i - 1 : -1;
+                    var right = (i + 1 < arr.length && arr[i + 1].kind === 'D' && arr[i + 1].col === it.col + 1) ? i + 1 : -1;
+                    var pick = left >= 0 ? left : right;
+                    if (pick >= 0) { g.dCount += arr[pick].qty; used[pick] = 1; }
+                });
+                // 没被吃掉的 D：按「连续列段」合并成组
+                arr.forEach(function (it, i) {
+                    if (used[i] || it.kind !== 'D') return;
+                    // 找连续段起点
+                    var startCol = it.col;
+                    var g = grp(sk + '||D' + startCol, it.L);
+                    g.dCount += it.qty;
+                    used[i] = 1;
+                    // 向后吸收连续列上的 D
+                    for (var j = i + 1; j < arr.length; j++) {
+                        if (used[j]) continue;
+                        if (arr[j].kind === 'D' && arr[j].col === arr[j - 1].col + 1) { g.dCount += arr[j].qty; used[j] = 1; }
+                        else break;
+                    }
+                });
+            });
+            // 真人：与 C/D 分开算，独立成条（沿用旧口径）
+            leaves.forEach(function (L) {
+                var u0 = String(L.unit || '').trim();
+                var isWl = /改工程/.test(u0) || /改工程/.test(String(L.mtype || ''));
+                var u = u0.replace(/改工程/g, '').trim();
+                if (!/真人/.test(u)) return;
+                var sk = (L.project || '') + '||' + (L.mtype || '') + '||' + (L.region || '') + '||' + (isWl ? '改工程' : '');
+                var g = grp(sk + '||R', L);
+                g.realCount += L.qty;
+            });
+            map = map;   // (map/order 已就地填充)
+            // 标记：每个组所属的「素材类型格」下**表里是否存在 C 这一列**。
+            // 优先用网格行 ctx.unitRow 精准判定（空数量的 C 列也在）；没有 ctx 时退回 segs。
+            var skHasC = {};
+            Object.keys(segs).forEach(function (sk) {
+                skHasC[sk] = segs[sk].some(function (x) { return x.kind === 'C'; });
+            });
+            var gridHasC = {};   // 项目串 → 该项目的列段里是否有单位 = C 的列
+            if (ctx.unitRow && ctx.projRow) {
+                for (var gc = 0; gc < ctx.unitRow.length; gc++) {
+                    var pj = String(ctx.projRow[gc] || '').trim();
+                    if (!pj) continue;
+                    var uu = String(ctx.unitRow[gc] || '').replace(/改工程/g, '').trim();
+                    if (/^C$/i.test(uu)) gridHasC[pj] = true;
                 }
-                var g = map[key];
-                if (/真人/.test(u)) g.realCount += L.qty;
-                else if (/^C$/i.test(u)) g.cCount += L.qty;
-                else g.dCount += L.qty;   // D 或认不出的单位一律按迭代计
+            }
+            order.forEach(function (k) {
+                var parts = k.split('||');            // 项目|素材类型|地区|工种|组标识
+                var sk = parts.slice(0, 4).join('||');
+                var pj = parts[0] || '';
+                map[k].hasCCol = !!skHasC[sk] || !!gridHasC[pj];
             });
             var out = [];
+            // 输出顺序按「列位置」排（2026-09-28）：C 组用 C 的 col、D 组用段起点 col、
+            // 真人组用真人自己的 col → 保证「主条 + 它旁边的真人条」相邻，
+            // 与用户表里的从左到右顺序一致（旧实现真人恒排最后，测试与用户直觉都不符）。
+            order.sort(function (a, b) {
+                var ca = (map[a].col == null ? 1e9 : map[a].col), cb = (map[b].col == null ? 1e9 : map[b].col);
+                return ca - cb;
+            });
             order.forEach(function (k) {
                 var g = map[k], rv = tblReserveOf(g.project);
                 var base = tblStripMarker(rv.name) || '（未识别）';
                 var pfx = rv.label || '';   // 节日储备标签（国庆 / 中秋…）
                 var wl = g.wl || '';
+                // 产能标记（从项目原文解析，如 1迭5）→ 校验基准；无 C 列时还当拆分母版（见下）
+                var cap = tblCapMark(g.project) || tblCapMark(g.mtype);
+                // ★★ 2026-09-28 用户定版：**该素材类型格下「没有 C 列」、但项目名带「n迭m」时，
+                //   拿标记当分母版拆分**。
+                //   场景（用户截图）：单位行只有一个 D、数量 10，项目名标「1迭5」
+                //   → 这 10 个 D 里，n 个 C + m 个 D 属同一条需求（合写 1C5D），
+                //     余下的 D 是单独迭代 → 另成一条 5D。
+                //   ⚠️ 判据必须用「**表里该格有没有 C 这一列**」（hasCCol），不能用「算出来 cCount>0」——
+                //     后者在「蜜蜂1迭3 纯 D=5」上也为 0，会把正确的 5D 误拆成 1C3D + 2D（踩过）。
+                //   有 C 列时以 C 列为准（上面已按列配对），此处不触发。
+                if (!g.hasCCol && g.cCount === 0 && g.dCount > 0 && cap && cap.d < g.dCount && !wl) {
+                    out.push({
+                        game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
+                        cCount: cap.c, dCount: cap.d, realCount: 0, pfx: pfx, wl: '',
+                        cap: cap, capNote: '',
+                        code: tblReqCode(cap.c, cap.d, 0), kind: 'main', col: g.col
+                    });
+                    out.push({
+                        game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
+                        cCount: 0, dCount: g.dCount - cap.d, realCount: 0, pfx: pfx, wl: '',
+                        cap: cap, capNote: '',
+                        code: tblReqCode(0, g.dCount - cap.d, 0), kind: 'main', col: g.col + 0.5
+                    });
+                    return;
+                }
                 if (g.cCount > 0 || g.dCount > 0) {
                     out.push({
                         game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
                         cCount: g.cCount, dCount: g.dCount, realCount: 0, pfx: pfx, wl: wl,
+                        cap: cap, capNote: '',
                         code: wl + tblReqCode(g.cCount, g.dCount, 0), kind: 'main'
                     });
                 }
@@ -21328,9 +21472,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     out.push({
                         game: base, rawProject: g.project, mtype: g.mtype, region: g.region,
                         cCount: 0, dCount: 0, realCount: g.realCount, pfx: pfx, wl: wl,
+                        cap: cap, capNote: '',
                         code: wl + '真人' + g.realCount + 'D', kind: 'real'
                     });
                 }
+            });
+            // 产能标记校验：解析出的 C/D 与「n迭m」不符 → 记一句提示（只在卡片上提醒，不改数）
+            // ⚠️ 只校验**含 C 的组**：纯 D 段（独立迭代 / 改工程 / 同项目另一条需求）本来就没有 C，
+            //    拿它的 cCount=0 去比标记的 n 会全表刷噪音；这种「同项目另一条」由用户自己看标题判断。
+            out.forEach(function (rq) {
+                if (!rq.cap || rq.kind !== 'main') return;
+                if (!(rq.cCount > 0)) return;
+                var a = [], b = [];
+                if (rq.cCount !== rq.cap.c) a.push('C ' + rq.cCount + '≠' + rq.cap.c);
+                if (rq.dCount !== rq.cap.d) b.push('D ' + rq.dCount + '≠' + rq.cap.d);
+                if (a.length || b.length) rq.capNote = '表里标 ' + rq.cap.text + '，实际解析出 ' + rq.code + '（' + a.concat(b).join(' · ') + '）';
             });
             // 稳定 key（表里的原始归属）→ 用户改过的游戏名 / 地区 / 素材能跨重渲染保住
             out.forEach(function (rq) { rq.k = (rq.rawProject || '') + '|' + (rq.region || '') + '|' + (rq.mtype || '') + '|' + rq.code; });
@@ -21622,7 +21778,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 + escapeHtml(pj.name) + '</span>'
                 + '<span class="task-meta-tag">📅 ' + escapeHtml(date) + '</span>'
                 + (rq.code ? '<span class="task-meta-tag">' + escapeHtml((rq.pfx || '') + rq.code) + '</span>' : '')
-                + (rq.mtype ? '<span class="task-meta-tag">' + escapeHtml(rq.mtype) + '</span>' : '');
+                + (rq.mtype ? '<span class="task-meta-tag">' + escapeHtml(rq.mtype) + '</span>' : '')
+                + (rq.capNote ? '<span class="task-meta-tag tbl-cap-warn" title="' + escapeHtml(rq.capNote) + '">⚠ ' + escapeHtml(rq.cap.text || '') + '</span>' : '');
             return '<div class="day-task-item status-todo' + (skip ? ' tbl-bar-skip' : '') + '" style="background-color:' + hexToRgba(col, 0.18) + ';border-left:4px solid ' + col + ';">'
                 + '<div class="task-check">✓</div>'
                 + '<div class="task-content">'
@@ -39770,7 +39927,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609272354";
+        window.NIKO_VERSION = "202609280923";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
