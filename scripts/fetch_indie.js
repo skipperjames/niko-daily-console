@@ -43,7 +43,7 @@ const MIN_REVIEWS = 20;       // 进榜门槛：评论数下限（太冷门的�
 const MAX_TEAM = 3;
 // 体量上限：评论数 > MAX_REVIEWS 判为大制作（18 个月窗口内，1-3 人团队几乎堆不到 6 万评论）。
 //   点名剔除过：WARDOGS（9.4 万 · 发行 Team17）/ 沙丘：觉醒（7.9 万 · Funcom）—— 对「独立游戏怎么打」无参考价值。
-//   ⚠️ 豁免（本轮新增）：**个人制作**（开发商仅 1 家 + 无发行商）不受此上限约束 ——
+//   ⚠️ 豁免（本轮新增）：**个人制作**（开发商仅 1 家 + 自研自发）不受此上限约束 ——
 //      一个人/两个人做出来的爆款恰恰最值得看（「我也能做到，而且它爆了」），绝不能被体量门槛误杀。
 const MAX_REVIEWS = 60000;
 // 粗筛上限：第一轮先砍掉明显的大厂巨制（避免为它们多抓一遍详情，纯省流量）；
@@ -372,7 +372,7 @@ function isAAA(g) {
 //     ① 没有发行商（publishers 为空）→ 自己发；
 //     ② 发行商与开发商同名 → 自己发（小工作室常见，大厂会把发行独立成实体）；
 //   再叠加「开发商 ≤ MAX_TEAM(3) 家」（多家联合开发通常体量更大）。
-//   solo = 开发商仅 1 家且无发行商 → 真·个人制作（享体量豁免）。
+//   solo = 开发商仅 1 家且自研自发 → 真·个人制作（享体量豁免）。
 //   tier 0 = 最像 1-3 人小团队，tier 1 = 自研自发但开发商偏多，tier 2 = 有独立发行商。仅用于排序优先级。
 function teamSignal(g) {
     const devs = (g.developers || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
@@ -389,11 +389,12 @@ function inTeamScope(g) {
     const t = teamSignal(g);
     return t.selfPub || t.devCount <= MAX_TEAM;
 }
-// 个人制作（1 家开发商 + 无发行商）→ 体量上限豁免。
+// 个人制作（开发商仅 1 家 + 自研自发）→ 体量上限豁免。
+//   ⚠️ 判据不能要求「publishers 为空」：Steam 上个人开发者常把 publisher 也填成自己（publishers == developers），
+//   2026-09-28 实测「无发行商」这条 20 款里命中 0 款 —— 豁免等于没写。改用 teamSignal().selfPub（无发行商 或 发行==开发）。
 function isSoloDev(g) {
-    const devs = (g.developers || []).filter(Boolean);
-    const pubs = (g.publishers || []).filter(Boolean);
-    return devs.length === 1 && pubs.length === 0;
+    const t = teamSignal(g);
+    return t.selfPub && (g.developers || []).filter(Boolean).length === 1;
 }
 
 async function fetchTagTable() {
@@ -505,7 +506,7 @@ async function main() {
     console.log(`✅ 详情抓取成功: ${detailed.length} 款`);
 
     // ★ 2026-09-28 三改（核心）：拿到 developers / publishers 之后再定「体量 + 团队范围」
-    //   ① 体量上限：评论 > MAX_REVIEWS 判为大制作 → 剔除；**个人制作豁免**（1 家开发商 + 无发行商）。
+    //   ① 体量上限：评论 > MAX_REVIEWS 判为大制作 → 剔除；**个人制作豁免**（1 家开发商 + 自研自发）。
     //   ② 团队范围：只保留「1-3 人可做」（自研自发，或开发商 ≤ MAX_TEAM 家）。
     //   顺序：先判体量（信息更硬），再判范围（兜底挡掉「发行商 + 多开发商」的大体量组合）。
     let tooBigTeam = 0, outScope = 0;
@@ -524,7 +525,7 @@ async function main() {
         return true;
     });
     console.log(`✅ 体量 + 1-3 人范围过滤后: ${detailedKept.length} 款（剔：大体量 ${tooBigTeam} · 超范围 ${outScope}）`);
-    console.log(`   ↳ 其中个人制作（1 家开发商 + 无发行商）${detailedKept.filter(isSoloDev).length} 款 —— 已豁免体量上限`);
+    console.log(`   ↳ 其中个人制作（1 家开发商 + 自研自发）${detailedKept.filter(isSoloDev).length} 款 —— 已豁免体量上限`);
 
     // 计算爆款指数 + 销量估算 + 排序
     const scoredAll = detailedKept.map(g => {
