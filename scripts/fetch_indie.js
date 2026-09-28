@@ -35,12 +35,19 @@ const path = require('path');
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 const OUTPUT = path.join(__dirname, '..', 'indie.json');
 
-const MAX_CANDIDATES = 400;   // 候选池上限（最近发行的游戏）220→400（2026-09-27：首跑只出 4 款，扩池）
-const MIN_REVIEWS = 20;       // 进榜门槛：评论数下限 120→80→20（2026-09-28：候选池都是「最近发行」的新游，80 条把 400 款直接砍到 17 款，是凑不满的主因）
-const TOP_N = 20;             // 最终保留款数（2026-09-28：8→20 —— 用户要求雷达墙展示 20 款）
-const MIN_BURST = 1.5;        // 爆款指数下限（2026-09-28：原判据是 rank>=1 即 score>=4，过严；放宽到 1.5，靠下面的次优池兜底）
-const SEARCH_PAGES = 4;       // 搜索翻页数（每页 100）2→4
-const CONCURRENCY = 3;        // 并发数（8→3：2026-09-27 扩池后触发 Steam 限流、详情抓取全灭，主动降速）
+const MAX_CANDIDATES = 1000;  // 候选池上限 220→400→1000（2026-09-28 二改：用户要「多搜点独立游戏」）
+const MIN_REVIEWS = 20;       // 进榜门槛：评论数下限（太冷门的没有参考价值）
+// ★ 体量上限（2026-09-28 新增，本轮核心）：超过此评论数 = 大制作，直接剔除。
+//   用户原话：「两到三人开发的，别给我整大体量的游戏，这些都是无效信息了」
+//   点名剔除：WARDOGS（9.4 万评论）/ 沙丘：觉醒（7.9 万）—— 那类作品对「独立游戏怎么打」没有参考价值。
+//   定 6 万的理由：18 个月窗口内，2-3 人小团队几乎不可能堆到 6 万评论（≈ 180 万份销量）；能破线的基本是大厂大制作。
+//   注意：这是「体量」代理指标，不是「团队人数」。真正区分小团队靠下面的 teamSignal()（自研自发 + 开发商 ≤2 家）。
+const MAX_REVIEWS = 60000;
+const TOP_N = 20;             // 最终保留款数（用户要求雷达墙展示 20 款）
+const MIN_BURST = 1.5;        // 爆款指数下限
+const SEARCH_PAGES = 6;       // 全站新作倒序翻页数 4→6
+const INDIE_PAGES = 6;        // ★ 新增：Indie 标签（tag 492）倒序翻页数 —— 直接搜独立游戏，而不是全站新游
+const CONCURRENCY = 3;        // 并发数（8→3：扩池后触发 Steam 限流，主动降速）
 const REQ_GAP = 320;          // 单请求之间的主动间隔（ms），标签总数这类串行请求用
 
 // ---------- 通用工具 ----------
@@ -147,6 +154,34 @@ async function fetchFromSearch() {
     return ids;
 }
 
+// ★ 2026-09-28 新增：直接按 Steam「Indie」标签搜索 —— 这才是「独立游戏候选池」的正解。
+//   旧逻辑只搜全站新游（Released_DESC），独立游戏只占其中一小部分，还会被大制作稀释。
+//   tag 492 = Steam 官方固定 Indie 标签（先动态从 tagdata 取，取不到回退 492）。
+let INDIE_TAG_ID = 492;
+async function resolveIndieTagId() {
+    try {
+        const d = await getJSON('https://store.steampowered.com/tagdata/populartags/english');
+        if (Array.isArray(d)) {
+            const hit = d.find(x => x && /^indie$/i.test(String(x.name || '').trim()));
+            if (hit && hit.tagid) return hit.tagid;
+        }
+    } catch (e) { console.warn('⚠️ Indie 标签 id 解析失败，回退 492: ' + e.message); }
+    return 492;
+}
+
+async function fetchFromIndieTag(tagId) {
+    const ids = [];
+    for (let p = 0; p < INDIE_PAGES; p++) {
+        const url = `https://store.steampowered.com/search/results/?query&start=${p * 100}&count=100&sort_by=Released_DESC&tags=${tagId}&infinite=1&cc=us&l=english`;
+        try {
+            const d = await getJSON(url);
+            ids.push(...parseAppIds(d && d.results_html));
+        } catch (e) { console.warn(`⚠️ Indie 标签第 ${p + 1} 页失败: ${e.message}`); }
+        await sleep(400);
+    }
+    return ids;
+}
+
 async function collectCandidates() {
     const bag = [];
     try { const a = await fetchFromFeatured(); console.log(`✅ 商店榜单候选: ${a.length}`); bag.push(...a); }
@@ -154,6 +189,10 @@ async function collectCandidates() {
     const b = await fetchFromSearch();
     console.log(`✅ 搜索倒序候选: ${b.length}`);
     bag.push(...b);
+    INDIE_TAG_ID = await resolveIndieTagId();
+    const c = await fetchFromIndieTag(INDIE_TAG_ID);
+    console.log(`✅ Indie 标签候选(tag ${INDIE_TAG_ID}): ${c.length}`);
+    bag.push(...c);
     const seen = new Set();
     const uniq = [];
     for (const id of bag) {
@@ -310,10 +349,30 @@ const AAA_PUBLISHERS = [
     'electronic arts', 'ea games', 'ubisoft', 'activision', 'blizzard', 'take-two', 'take 2',
     '2k games', 'rockstar', 'bethesda', 'zenimax', 'capcom', 'bandai namco', 'square enix',
     'sega', 'konami', 'warner bros', 'wb games', 'epic games', 'tencent', 'netease', 'miHoYo',
+    // ★ 2026-09-28 第二批：不是第一方，但属于「中大体量发行商」—— 发的是几十人团队的商业制作，
+    //   不属于「2-3 人小团队」范畴。只收最明确的，避免误杀 Devolver / Annapurna / Raw Fury 这类专发小独立游戏的厂牌。
+    '505 games', 'focus entertainment', 'nacon', 'prime matter', 'deep silver',
+    'saber interactive', 'embracer', 'thq nordic', 'koch media', 'private division',
+    'gearbox publishing', 'krafton', 'pearl abyss', 'nexon', 'smilegate', 'platinumgames',
+    'team17', 'curve games', 'no more robots', 'tinybuild', 'paradox interactive',
 ];
 function isAAA(g) {
     const names = [].concat(g.publishers || [], g.developers || []).join(' ').toLowerCase();
     return AAA_PUBLISHERS.some(k => names.includes(k));
+}
+
+// ★ 2026-09-28 新增：小团队信号（这是「2-3 人开发」的可查证代理）
+//   Steam 公开接口拿不到员工人数，但「自研自发」是小团队最强的结构性特征：
+//     ① 没有发行商（publishers 为空）→ 自己发；
+//     ② 发行商与开发商同名 → 自己发（小工作室常见，大厂会把发行独立成实体）；
+//   再叠加「开发商 ≤ 2 家」（多家联合开发通常意味着体量更大）。
+//   tier 0 = 最像 2-3 人小团队，tier 2 = 有独立发行商、体量可能更大。仅用于「排序优先级」，不硬砍（避免误杀有发行商的独立佳作）。
+function teamSignal(g) {
+    const devs = (g.developers || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
+    const pubs = (g.publishers || []).map(s => String(s).toLowerCase().trim()).filter(Boolean);
+    const devCount = devs.length || 1;
+    const selfPub = pubs.length === 0 || pubs.some(p => devs.includes(p));
+    return { selfPub, devCount, tier: (selfPub && devCount <= 2) ? 0 : (selfPub ? 1 : 2) };
 }
 
 async function fetchTagTable() {
@@ -397,8 +456,17 @@ async function main() {
         const r = await fetchReviews(appid);
         return r ? { appid, reviews: r } : null;
     }, 3, 120);
-    revResults.forEach(x => { if (x && x.reviews && x.reviews.total >= MIN_REVIEWS) withReviews.push(x); });
-    console.log(`✅ 评论数 ≥ ${MIN_REVIEWS} 的: ${withReviews.length} 款`);
+    let tooBig = 0, tooSmall = 0;
+    revResults.forEach(x => {
+        if (!x || !x.reviews) return;
+        const n = x.reviews.total;
+        // 双门槛：低于 MIN_REVIEWS（太冷门没参考价值）或高于 MAX_REVIEWS（大制作，无效信息）都剔除
+        if (n > MAX_REVIEWS) { tooBig++; return; }
+        if (n < MIN_REVIEWS) { tooSmall++; return; }
+        withReviews.push(x);
+    });
+    console.log(`✅ 评论数 ${MIN_REVIEWS} ~ ${MAX_REVIEWS} 的: ${withReviews.length} 款`);
+    console.log(`   ↳ 剔除：体量过大 ${tooBig} 款（评论 > ${MAX_REVIEWS}，大制作）· 过于冷门 ${tooSmall} 款（< ${MIN_REVIEWS}）`);
 
     if (!withReviews.length) {
         console.error('❌ 没有抓到任何达标游戏，保留旧文件不覆盖');
@@ -421,6 +489,7 @@ async function main() {
         return {
             ...g,
             days,
+            team: teamSignal(g),   // ★ 小团队信号（自研自发 + 开发商数），用于排序优先级
             burst: { score, ...tierOf(score) },
             sales: estimateSales(g.reviews, g.priceUsd, g.isFree),
             track: { primary: pickTrackGenre(g.genres), label: trackLabel(pickTrackGenre(g.genres)), saturation: null, niche: null },
@@ -439,23 +508,28 @@ async function main() {
         }
     });
 
+    // ★ 排序口径（2026-09-28 二改）：小团队优先级 > 爆款指数。
+    //   用户要的是「2-3 人小团队作品」，所以 tier 0（自研自发 + 开发商 ≤2 家）排最前，同 tier 内再比爆款指数。
+    const rankCmp = (a, b) => ((a.team ? a.team.tier : 2) - (b.team ? b.team.tier : 2)) || ((b.burst.score || 0) - (a.burst.score || 0));
+
     // 再只保留近 18 个月内发行、且爆款指数达标的
     const scored = scoredAll
         .filter(g => !aaaHit.has(g.appid) && g.days != null && g.days <= 550 && (g.burst.score || 0) >= MIN_BURST)
-        .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+        .sort(rankCmp);
 
-    // 2026-09-28 兜底：达标款数不足 TOP_N 时，从次优池（指数 >0 但没过 MIN_BURST）按指数补足 ——
+    // 2026-09-28 兜底：达标款数不足 TOP_N 时，从次优池（指数 >0 但没过 MIN_BURST）按同一排序口径补足 ——
     // 保证雷达墙尽量凑满 TOP_N，而不是被门槛卡死只剩个位数。
     if (scored.length < TOP_N) {
         const taken = new Set(scored.map(g => g.appid));
         const extra = scoredAll
             .filter(g => !aaaHit.has(g.appid) && !taken.has(g.appid) && g.days != null && g.days <= 550 && (g.burst.score || 0) > 0)
-            .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+            .sort(rankCmp);
         const need = TOP_N - scored.length;
         console.log(`ℹ️ 达标仅 ${scored.length} 款（< ${TOP_N}），从次优池补 ${Math.min(extra.length, need)} 款`);
         scored.push(...extra.slice(0, need));
-        scored.sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+        scored.sort(rankCmp);
     }
+    console.log(`ℹ️ 排序后前 ${Math.min(scored.length, TOP_N)} 款中「自研自发小团队」${scored.slice(0, TOP_N).filter(g => g.team && g.team.tier === 0).length} 款`);
     console.log(`✅ 进榜候选: ${scored.length} 款（目标 ${TOP_N}）`);
 
     // ★ 保护：抓取异常（限流导致详情全灭）时绝不覆盖线上数据。
@@ -557,7 +631,11 @@ async function main() {
             candidates: candidates.length,
             passedReviews: withReviews.length,
             detailed: detailed.length,
-            picked: picked.length
+            picked: picked.length,
+            minReviews: MIN_REVIEWS,
+            maxReviews: MAX_REVIEWS,
+            selfPublished: picked.filter(g => g.team && g.team.selfPub).length,
+            indieTagId: INDIE_TAG_ID
         },
         games: picked
     };
@@ -565,7 +643,9 @@ async function main() {
     fs.writeFileSync(OUTPUT, JSON.stringify(next, null, 2), 'utf-8');
     console.log(`\n📦 已写入 indie.json：${picked.length} 款`);
     picked.forEach((g, i) => {
-        console.log(`  ${i + 1}. [${g.burst.label}] ${g.name} | 评论 ${g.reviews.total} | 估算 ${g.sales && g.sales.mid ? g.sales.mid.toLocaleString() : '—'} 份 | ${g.release}`);
+        const t = g.team || {};
+        const who = t.selfPub ? `自研自发(${t.devCount}家)` : `发行:${(g.publishers || []).join('/') || '—'}`;
+        console.log(`  ${i + 1}. [${g.burst.label}] ${g.name} | 评论 ${g.reviews.total} | ${who} | 开发商 ${(g.developers || []).join('/') || '—'} | 估算 ${g.sales && g.sales.mid ? g.sales.mid.toLocaleString() : '—'} 份 | ${g.release}`);
     });
     console.log('📅 日期:', next.date, '| 抓取时间:', next.fetchedAt);
 }
