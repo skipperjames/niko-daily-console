@@ -22955,6 +22955,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             var cmd = '请帮我补齐【独立游戏雷达】的 AI 分析字段。数据源 = 仓库根目录 indie.json 的 games[]。'
                 + '逐款补齐（按 appid 对齐，已有值不许覆盖，官方抓取数据一律不动）：'
                 + '① teamN（团队人数·数字）+ devMonths（工期·月数）'
+                + '①-b ★买量视角五块（弹窗最前面那组）：sells 主要卖点 + hooks 爽点 + pains 解决的痛点（各 2-3 条，可写字符串或 {t 标题, d 说明}）；flow 游戏流程·玩家第一小时（[{s 阶段, d 说明}] 约 4 条）；loop 最小循环（{core 循环一句话, steps [步骤], mins 单轮分钟, note 买量素材该剪哪几秒}）'
                 + '② f7 七维归因打分：niche 题材缺口 / hook 玩法钩子 / visual 视觉冲击 / price 价格锚点 / publisher 发行背书 / festival 平台节庆 / viral 病毒传播，每项 0–5 整数'
                 + '③ ue5Fit（green/yellow/red）+ ue5FitWhy（一句话理由）'
                 + '④ artScale：{chars 角色数, scenes 场景数, anims 动画条数, fx 特效量, level 1–5, note}'
@@ -24806,7 +24807,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             { key:'ai', icon:'🤖', name:'AI 行业快报', storeKey:'niko_ai_updated_at', desc:'模型发布 / 工具月活 / 6大细分领域TOP',
               cmd:'请帮我刷新【AI行业快报】数据：搜索最新发布的AI模型、工具月活排行榜、以及 AI视频生成/AI图片生成/AI编程/AI配音/AI 3D/AI UI设计 六个细分领域的TOP榜，更新预置数据后重新合并交付。' },
             { key:'indie', icon:'🎮', name:'独立游戏雷达 · AI 分析', storeKey:'niko_indie_analysis_updated_at', desc:'爆款因子 / 曝光时间线 / 工具链 / 难度（原始数据每周自动抓，此处只补分析）',
-              cmd:'请帮我刷新【独立游戏雷达】的 AI 分析字段：读取仓库根目录 indie.json，为 games[] 每款（按 appid 对齐）补齐 analysis 里的：teamN 团队人数 + devMonths 工期月数 / f7 七维归因打分（niche 题材缺口, hook 玩法钩子, visual 视觉冲击, price 价格锚点, publisher 发行背书, festival 平台节庆, viral 病毒传播，各 0–5）/ ue5Fit 与 ue5FitWhy / artScale 美术量（chars, scenes, anims, fx, level, note）/ mvp 最小可玩底线 / ue5 翻译（pick 能白捡, build 要自己写, vs 与原作引擎差异, learn 学习清单带官方文档链接）/ timeline 每条加 cost（free 零成本, low 花小钱, paid 砸钱）/ videoEdge 与 trailerImpact（片子对曝光的贡献）/ action 本周一条可执行动作 / pricing 价格折扣节奏 / soloFit 与 soloWhy / 反面案例写 flop / wishlist 公开愿望单数据 / partner 同赛道对照组。每条结论必须挂可查证来源，查不到就留空，不许编；官方抓取数据与 appid 一律不动，已有值不覆盖，更新后提交。' }
+              cmd:'请帮我刷新【独立游戏雷达】的 AI 分析字段：读取仓库根目录 indie.json，为 games[] 每款（按 appid 对齐）补齐 analysis 里的：teamN 团队人数 + devMonths 工期月数 / sells 主要卖点 + hooks 爽点 + pains 解决的痛点（各 2-3 条，字符串或 {t 标题, d 说明} 两种形态都行）/ flow 游戏流程·玩家第一小时（[{s 阶段, d 说明}]，4 条左右）/ loop 最小循环逻辑（{core 核心循环一句话, steps 步骤数组, mins 单轮分钟数, note 买量素材该剪哪几秒}）/ f7 七维归因打分（niche 题材缺口, hook 玩法钩子, visual 视觉冲击, price 价格锚点, publisher 发行背书, festival 平台节庆, viral 病毒传播，各 0–5）/ ue5Fit 与 ue5FitWhy / artScale 美术量（chars, scenes, anims, fx, level, note）/ mvp 最小可玩底线 / ue5 翻译（pick 能白捡, build 要自己写, vs 与原作引擎差异, learn 学习清单带官方文档链接）/ timeline 每条加 cost（free 零成本, low 花小钱, paid 砸钱）/ videoEdge 与 trailerImpact（片子对曝光的贡献）/ action 本周一条可执行动作 / pricing 价格折扣节奏 / soloFit 与 soloWhy / 反面案例写 flop / wishlist 公开愿望单数据 / partner 同赛道对照组。每条结论必须挂可查证来源，查不到就留空，不许编；官方抓取数据与 appid 一律不动，已有值不覆盖，更新后提交。' }
         ];
 
         let aiMyTools = safeStorage.get('niko_ai_mytools', []);
@@ -40306,7 +40307,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609281316";
+        window.NIKO_VERSION = "202609281330";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
