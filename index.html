@@ -22132,8 +22132,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             version: 1, date: '2026-09-26', fetchedAt: '2026-09-26T23:40:00+08:00', seed: true,
             games: [
                 {
-                    appid: '', name: 'MECCHA CHAMELEON', nameCn: '超级变色龙',
-                    header: '', url: 'https://store.steampowered.com/search/?term=MECCHA%20CHAMELEON',
+                    appid: '4704690', name: 'MECCHA CHAMELEON', nameCn: '超级变色龙',
+                    header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4704690/163e2a742e5fb8e1f5d1e3a890da98f04ab809d4/header.jpg?t=1789464996', url: 'https://store.steampowered.com/app/4704690/',
                     release: '2026-06-10', releaseText: '2026年6月10日',
                     developers: ['lemorion_1224', 'Haganeiro'], publishers: ['lemorion_1224', 'Haganeiro'],
                     genres: ['休闲', '独立', '动作'], categories: ['多人', '联机合作', '创意工坊'],
@@ -22186,8 +22186,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     }
                 },
                 {
-                    appid: '', name: 'Mewgenics', nameCn: '喵基因',
-                    header: '', url: 'https://store.steampowered.com/search/?term=Mewgenics',
+                    appid: '686060', name: 'Mewgenics', nameCn: '喵基因',
+                    header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/686060/aa8075d11165fef4d4d0d09c156f0da0623b5da1/header.jpg?t=1788661023', url: 'https://store.steampowered.com/app/686060/',
                     release: '2026-02', releaseText: '2026年2月',
                     developers: ['Edmund McMillen', 'Tyler Glaiel'], publishers: [],
                     genres: ['角色扮演', '策略', '独立'], categories: ['单人'],
@@ -22214,8 +22214,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     }
                 },
                 {
-                    appid: '', name: 'Slay the Spire II', nameCn: '杀戮尖塔 2',
-                    header: '', url: 'https://store.steampowered.com/search/?term=Slay%20the%20Spire%20II',
+                    appid: '2868840', name: 'Slay the Spire II', nameCn: '杀戮尖塔 2',
+                    header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2868840/b0958d387dc366211e0f353443710cfcf9fdb020/header.jpg?t=1787169309', url: 'https://store.steampowered.com/app/2868840/',
                     release: '2026-03', releaseText: '2026年3月（抢先体验）',
                     developers: ['Mega Crit'], publishers: ['Mega Crit'],
                     genres: ['策略', '角色扮演', '独立'], categories: ['单人'],
@@ -22242,8 +22242,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     }
                 },
                 {
-                    appid: '', name: 'Mixtape', nameCn: '混音带',
-                    header: '', url: 'https://store.steampowered.com/search/?term=Mixtape',
+                    appid: '2582320', name: 'Mixtape', nameCn: '混音带',
+                    header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2582320/95bbf1097b6f66f39b56f6388250c97a2f43b59e/header.jpg?t=1785424305', url: 'https://store.steampowered.com/app/2582320/',
                     release: '2026-03', releaseText: '2026年3月',
                     developers: [], publishers: ['Annapurna Interactive'],
                     genres: ['冒险', '独立'], categories: ['单人'],
@@ -22268,8 +22268,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     }
                 },
                 {
-                    appid: '', name: 'Mina the Hollower', nameCn: '鼹鼠米娜',
-                    header: '', url: 'https://store.steampowered.com/search/?term=Mina%20the%20Hollower',
+                    appid: '1875580', name: 'Mina the Hollower', nameCn: '鼹鼠米娜',
+                    header: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1875580/368fcff2cd8f5ef01c5a89060a49f9a333076a87/header.jpg?t=1784215061', url: 'https://store.steampowered.com/app/1875580/',
                     release: '', releaseText: '2026 年（多年延期后发售）',
                     developers: ['Yacht Club Games'], publishers: ['Yacht Club Games'],
                     genres: ['动作', '冒险', '独立'], categories: ['单人'],
@@ -23515,7 +23515,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
                 h += '</div>';
             } else {
-                h += '<div class="indie-tags"><span class="indie-tag unknown" title="内置长效案例，没有真实 appid 因而抓不到 Steam 社区标签">🗿 长效案例</span>';
+                h += '<div class="indie-tags"><span class="indie-tag unknown" title="内置长效案例；已补 appid，等抓取侧下一轮跑过就有 Steam 社区标签了">🗿 长效案例</span>';
                 if (sat.verdict) {
                     h += '<span class="indie-tag ' + (sat.verdict.key || 'unknown') + '" title="' + escapeHtml(sat.basis || '') + '">'
                         + escapeHtml(tr.label || '未归类') + ' <b>' + escapeHtml(sat.verdict.label) + '</b></span>';
@@ -23949,7 +23949,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!g.reviews || !g.reviews.total) out.push('评测数<b>未抓到</b>（Steam 未公开，或抓取被限流）');
             if (!g.sales || g.sales.mid == null) out.push('估算销量<b>未抓到</b>（无评测数可反推）');
             if (!g.analysis) out.push('AI 分析<b>未补</b>（打开「🩺 数据体检」复制补分析指令）');
-            if (!indieTagNames(g).length) out.push('社区标签<b>未抓到</b>（长效案例没有真实 appid）');
+            if (!indieTagNames(g).length) out.push('社区标签<b>未抓到</b>（长效案例已补 appid，等抓取侧下一轮跑过即可）');
             if (!out.length) return '';
             return '<div class="indie-miss"><span>⚠️ 本轮缺：</span>'
                 + out.map(function (x) { return '<span>· ' + x + '</span>'; }).join('') + '</div>';
@@ -24041,7 +24041,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 return a.name < b.name ? -1 : 1;
             });
             var h = '<div class="indie-panel"><div class="pt">🏷 标签字典治理台 <span class="hint">' + rows.length + ' 个标签 · 细分定位（🎯）选得准不准全看这张表</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
-            var _tagEmpty = rows.length ? '' : '<div class="indie-health-lack">库里还没有社区标签数据（长效案例没有真实 appid，抓不到标签）。等云端抓取跑过一轮再看 —— 下面的忽略清单仍然可用。</div>';
+            var _tagEmpty = rows.length ? '' : '<div class="indie-health-lack">库里还没有社区标签数据（长效案例已补 appid，等抓取侧下一轮跑过就有了）。下面的忽略清单仍然可用。</div>';
             h += '<div class="indie-factor" style="margin-bottom:7px;"><span class="dot">▸</span><span>按 <b>全站总数升序</b>排（越靠上越窄）。'
                 + '<code>Memes / Loot / Hentai</code> 这类噪声标签会把真正的细分定位挤掉 —— 点「忽略」把它从你的推送里去掉。<br>'
                 + '<span class="indie-name-cn">这套黑名单的权威版本在抓取脚本里（<code>NON_TRACK_TAGS</code>）；你在这里改的只影响本机显示，改完点右边按钮复制清单发我，才算真的改到位。</span></span></div>';
@@ -39958,7 +39958,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609280944";
+        window.NIKO_VERSION = "202609281101";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
