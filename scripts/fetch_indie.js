@@ -36,8 +36,9 @@ const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 const OUTPUT = path.join(__dirname, '..', 'indie.json');
 
 const MAX_CANDIDATES = 400;   // 候选池上限（最近发行的游戏）220→400（2026-09-27：首跑只出 4 款，扩池）
-const MIN_REVIEWS = 80;       // 进榜门槛：评论数下限 120→80（同上，保证能凑满 TOP_N）
-const TOP_N = 8;              // 最终保留款数
+const MIN_REVIEWS = 20;       // 进榜门槛：评论数下限 120→80→20（2026-09-28：候选池都是「最近发行」的新游，80 条把 400 款直接砍到 17 款，是凑不满的主因）
+const TOP_N = 20;             // 最终保留款数（2026-09-28：8→20 —— 用户要求雷达墙展示 20 款）
+const MIN_BURST = 1.5;        // 爆款指数下限（2026-09-28：原判据是 rank>=1 即 score>=4，过严；放宽到 1.5，靠下面的次优池兜底）
 const SEARCH_PAGES = 4;       // 搜索翻页数（每页 100）2→4
 const CONCURRENCY = 3;        // 并发数（8→3：2026-09-27 扩池后触发 Steam 限流、详情抓取全灭，主动降速）
 const REQ_GAP = 320;          // 单请求之间的主动间隔（ms），标签总数这类串行请求用
@@ -410,11 +411,11 @@ async function main() {
         const d = await fetchDetails(item.appid);
         if (!d) return null;
         return { ...d, reviews: item.reviews };
-    }, 3, 150)).filter(Boolean);
+    }, 2, 400)).filter(Boolean);   // 2026-09-28：并发 3→2、间隔 150→400ms —— 上一轮 17 款详情挂了 9 款，是限流
     console.log(`✅ 详情抓取成功: ${detailed.length} 款`);
 
     // 计算爆款指数 + 销量估算 + 排序
-    const scored = detailed.map(g => {
+    const scoredAll = detailed.map(g => {
         const days = daysSince(g.release);
         const score = burstScore(g.reviews, days, g.priceUsd, g.isFree);
         return {
@@ -427,22 +428,41 @@ async function main() {
             playersCurrent: null,
             analysis: (oldByAppid[g.appid] && oldByAppid[g.appid].analysis) || null
         };
-    })
-        // 先排掉 AAA / 大厂（可查证的发行商黑名单），再只保留近 18 个月内发行、且指数达标的
-        .filter(g => {
-            if (isAAA(g)) {
-                console.log(`   ⛔ 排除大厂作品: ${g.name}（${(g.publishers || g.developers || []).join(' / ') || '—'}）`);
-                return false;
-            }
-            return g.days != null && g.days <= 550 && g.burst.rank >= 1;
-        })
+    });
+
+    // 先排掉 AAA / 大厂（可查证的发行商黑名单）—— AAA 判定只跑一次，日志不重复打
+    const aaaHit = new Set();
+    scoredAll.forEach(g => {
+        if (isAAA(g)) {
+            aaaHit.add(g.appid);
+            console.log(`   ⛔ 排除大厂作品: ${g.name}（${(g.publishers || g.developers || []).join(' / ') || '—'}）`);
+        }
+    });
+
+    // 再只保留近 18 个月内发行、且爆款指数达标的
+    const scored = scoredAll
+        .filter(g => !aaaHit.has(g.appid) && g.days != null && g.days <= 550 && (g.burst.score || 0) >= MIN_BURST)
         .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+
+    // 2026-09-28 兜底：达标款数不足 TOP_N 时，从次优池（指数 >0 但没过 MIN_BURST）按指数补足 ——
+    // 保证雷达墙尽量凑满 TOP_N，而不是被门槛卡死只剩个位数。
+    if (scored.length < TOP_N) {
+        const taken = new Set(scored.map(g => g.appid));
+        const extra = scoredAll
+            .filter(g => !aaaHit.has(g.appid) && !taken.has(g.appid) && g.days != null && g.days <= 550 && (g.burst.score || 0) > 0)
+            .sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+        const need = TOP_N - scored.length;
+        console.log(`ℹ️ 达标仅 ${scored.length} 款（< ${TOP_N}），从次优池补 ${Math.min(extra.length, need)} 款`);
+        scored.push(...extra.slice(0, need));
+        scored.sort((a, b) => (b.burst.score || 0) - (a.burst.score || 0));
+    }
+    console.log(`✅ 进榜候选: ${scored.length} 款（目标 ${TOP_N}）`);
 
     // ★ 保护：抓取异常（限流导致详情全灭）时绝不覆盖线上数据。
     // 2026-09-27 教训：候选池扩到 400 触发 Steam 限流 → detailed=0 → 空 games 被写进 indie.json，线上雷达被清空。
     const MIN_KEEP = 3;
     // 2026-09-27：多取 5 个候选 —— 因为要等抓到社区标签后才能剔掉成人内容，剔完再取前 TOP_N
-    const pre = scored.slice(0, TOP_N + 5);
+    const pre = scored.slice(0, TOP_N + 15);
     if (pre.length < MIN_KEEP) {
         console.error(`❌ 上榜仅 ${pre.length} 款（< ${MIN_KEEP}），判定为抓取异常 / 被限流，保留旧文件不覆盖`);
         process.exit(1);
