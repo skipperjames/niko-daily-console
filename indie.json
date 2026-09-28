@@ -1,16 +1,19 @@
 {
   "version": 1,
-  "fetchedAt": "2026-09-28T12:19:52+08:00",
+  "fetchedAt": "2026-09-28T13:31:44+08:00",
   "date": "2026-09-28",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
   "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
   "stats": {
-    "candidates": 869,
-    "passedReviews": 48,
-    "detailed": 48,
+    "candidates": 871,
+    "passedReviews": 54,
+    "detailed": 54,
     "picked": 20,
     "minReviews": 20,
     "maxReviews": 60000,
+    "maxReviewsPrefilter": 250000,
+    "maxTeam": 3,
+    "soloDev": 0,
     "selfPublished": 20,
     "indieTagId": 492
   },
@@ -58,8 +61,8 @@
       "url": "https://store.steampowered.com/app/5064340/",
       "requiredAge": 0,
       "reviews": {
-        "total": 450,
-        "positive": 419,
+        "total": 459,
+        "positive": 428,
         "negative": 31,
         "score": "特别好评",
         "positivePct": 93
@@ -68,18 +71,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 175.5,
+        "score": 179.01,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 17100,
-        "low": 10260,
-        "high": 27360,
+        "mid": 17442,
+        "low": 10465,
+        "high": 27907,
         "basis": "Boxleiter 法 · 评论数 × 38（$5.39 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -109,7 +113,7 @@
         },
         {
           "name": "Job Simulator",
-          "total": 817,
+          "total": 818,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -127,7 +131,7 @@
         },
         {
           "name": "Physics",
-          "total": 14321,
+          "total": 14320,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -136,7 +140,7 @@
         },
         {
           "name": "Relaxing",
-          "total": 24918,
+          "total": 24924,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -145,7 +149,7 @@
         },
         {
           "name": "Puzzle",
-          "total": 33882,
+          "total": 33885,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -163,7 +167,7 @@
         },
         {
           "name": "Casual",
-          "total": 89421,
+          "total": 89427,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -171,7 +175,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 525,
+      "playersCurrent": 451,
       "analysis": null
     },
     {
@@ -211,8 +215,8 @@
       "url": "https://store.steampowered.com/app/4753960/",
       "requiredAge": 0,
       "reviews": {
-        "total": 486,
-        "positive": 445,
+        "total": 489,
+        "positive": 448,
         "negative": 41,
         "score": "特别好评",
         "positivePct": 92
@@ -221,18 +225,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 126.36,
+        "score": 127.14,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 21870,
-        "low": 13122,
-        "high": 34992,
+        "mid": 22005,
+        "low": 13203,
+        "high": 35208,
         "basis": "Boxleiter 法 · 评论数 × 45（$4.49 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -271,7 +276,7 @@
         },
         {
           "name": "Incremental",
-          "total": 7778,
+          "total": 7779,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -289,7 +294,7 @@
         },
         {
           "name": "Arcade",
-          "total": 26207,
+          "total": 26208,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -316,7 +321,7 @@
         },
         {
           "name": "Casual",
-          "total": 89421,
+          "total": 89427,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -324,7 +329,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 36,
+      "playersCurrent": 33,
       "analysis": null
     },
     {
@@ -359,8 +364,8 @@
       "url": "https://store.steampowered.com/app/2873060/",
       "requiredAge": 0,
       "reviews": {
-        "total": 126,
-        "positive": 120,
+        "total": 127,
+        "positive": 121,
         "negative": 6,
         "score": "特别好评",
         "positivePct": 95
@@ -369,18 +374,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 122.85,
+        "score": 123.83,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 3780,
-        "low": 2268,
-        "high": 6048,
+        "mid": 3810,
+        "low": 2286,
+        "high": 6096,
         "basis": "Boxleiter 法 · 评论数 × 30（$12.59 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -410,7 +416,7 @@
         },
         {
           "name": "Tactical RPG",
-          "total": 5193,
+          "total": 5192,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -419,7 +425,7 @@
         },
         {
           "name": "Strategy RPG",
-          "total": 8305,
+          "total": 8304,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -437,7 +443,7 @@
         },
         {
           "name": "Turn-Based Combat",
-          "total": 12465,
+          "total": 12464,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -446,7 +452,7 @@
         },
         {
           "name": "Turn-Based Strategy",
-          "total": 12956,
+          "total": 12955,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -455,7 +461,7 @@
         },
         {
           "name": "Roguelite",
-          "total": 13816,
+          "total": 13818,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -464,7 +470,7 @@
         },
         {
           "name": "Story Rich",
-          "total": 35069,
+          "total": 35070,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -472,7 +478,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 78,
+      "playersCurrent": 107,
       "analysis": null
     },
     {
@@ -515,9 +521,9 @@
       "url": "https://store.steampowered.com/app/4072240/",
       "requiredAge": 0,
       "reviews": {
-        "total": 242,
-        "positive": 168,
-        "negative": 74,
+        "total": 246,
+        "positive": 170,
+        "negative": 76,
         "score": "褒贬不一",
         "positivePct": 69
       },
@@ -525,18 +531,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 94.38,
+        "score": 95.94,
         "key": "burst",
         "label": "🔥 现象级",
         "rank": 3
       },
       "sales": {
-        "mid": 9196,
-        "low": 5518,
-        "high": 14714,
+        "mid": 9348,
+        "low": 5609,
+        "high": 14957,
         "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -545,12 +552,12 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 5999,
+          "total": 5998,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
           },
-          "basis": "细分标签「Life Sim」全站 5,999 款"
+          "basis": "细分标签「Life Sim」全站 5,998 款"
         },
         "niche": "Life Sim"
       },
@@ -566,7 +573,7 @@
         },
         {
           "name": "Life Sim",
-          "total": 5999,
+          "total": 5998,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -575,7 +582,7 @@
         },
         {
           "name": "Funny",
-          "total": 22714,
+          "total": 22715,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -584,7 +591,7 @@
         },
         {
           "name": "Relaxing",
-          "total": 24918,
+          "total": 24924,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -611,7 +618,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -620,7 +627,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -628,7 +635,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 202,
+      "playersCurrent": 184,
       "analysis": null
     },
     {
@@ -676,6 +683,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -695,19 +703,19 @@
         "primary": "RPG",
         "label": "角色扮演",
         "saturation": {
-          "total": 5193,
+          "total": 5192,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
           },
-          "basis": "细分标签「Tactical RPG」全站 5,193 款"
+          "basis": "细分标签「Tactical RPG」全站 5,192 款"
         },
         "niche": "Tactical RPG"
       },
       "tags": [
         {
           "name": "Tactical RPG",
-          "total": 5193,
+          "total": 5192,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -716,7 +724,7 @@
         },
         {
           "name": "Strategy RPG",
-          "total": 8305,
+          "total": 8304,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -743,7 +751,7 @@
         },
         {
           "name": "3D",
-          "total": 47321,
+          "total": 47322,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -761,7 +769,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -821,6 +829,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -871,7 +880,7 @@
         },
         {
           "name": "Physics",
-          "total": 14321,
+          "total": 14320,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -889,7 +898,7 @@
         },
         {
           "name": "Indie",
-          "total": 116071,
+          "total": 116076,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -915,167 +924,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 54,
-      "analysis": null
-    },
-    {
-      "appid": "4981570",
-      "name": "Wand & Order: Tidy up the magic shop!",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4981570/220cdaf5171fb86917cd0f288c4fd551d89f24f9/header.jpg?t=1790501148",
-      "desc": "温馨的第一人称合作整理清洁模拟游戏!整理魔杖、塔罗牌和药水,把店铺收拾得井井有条来赚取积分,解锁强大法术,赶在炼金术士回来之前恢复秩序!",
-      "releaseText": "2026 年 9 月 23 日",
-      "release": "2026-09-23",
-      "comingSoon": false,
-      "developers": [
-        "OnSkull Games"
-      ],
-      "publishers": [
-        "OnSkull Games"
-      ],
-      "genres": [
-        "休闲",
-        "独立",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "多人",
-        "合作",
-        "在线合作",
-        "Steam 成就",
-        "完全支持控制器",
-        "自定义音量控制",
-        "#category_playable_at_your_own_pace",
-        "无需应对快速反应事件",
-        "DUALSHOCK 控制器支持",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "随时保存",
-        "立体声",
-        "家庭共享"
-      ],
-      "priceUsd": 4.97,
-      "priceInitial": 5.99,
-      "discount": 17,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4981570/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 193,
-        "positive": 175,
-        "negative": 18,
-        "score": "特别好评",
-        "positivePct": 91
-      },
-      "days": 5,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "tier": 0
-      },
-      "burst": {
-        "score": 50.18,
-        "key": "dark",
-        "label": "⚡ 黑马",
-        "rank": 2
-      },
-      "sales": {
-        "mid": 8685,
-        "low": 5211,
-        "high": 13896,
-        "basis": "Boxleiter 法 · 评论数 × 45（$4.97 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 334,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Organizing」全站 334 款"
-        },
-        "niche": "Organizing"
-      },
-      "tags": [
-        {
-          "name": "Organizing",
-          "total": 334,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Collectathon",
-          "total": 5178,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Relaxing",
-          "total": 24918,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Fantasy",
-          "total": 32865,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Puzzle",
-          "total": 33882,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 52654,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Casual",
-          "total": 89421,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Indie",
-          "total": 116071,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 647,
+      "playersCurrent": 50,
       "analysis": null
     },
     {
@@ -1109,28 +958,29 @@
       "url": "https://store.steampowered.com/app/5148990/",
       "requiredAge": 0,
       "reviews": {
-        "total": 75,
+        "total": 81,
         "positive": 48,
-        "negative": 27,
+        "negative": 33,
         "score": "褒贬不一",
-        "positivePct": 64
+        "positivePct": 59
       },
       "days": 2,
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 48.75,
+        "score": 52.65,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 3375,
-        "low": 2025,
-        "high": 5400,
+        "mid": 3645,
+        "low": 2187,
+        "high": 5832,
         "basis": "Boxleiter 法 · 评论数 × 45（$4.82 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -1187,7 +1037,7 @@
         },
         {
           "name": "Stylized",
-          "total": 20839,
+          "total": 20840,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1196,7 +1046,7 @@
         },
         {
           "name": "3D",
-          "total": 47321,
+          "total": 47322,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1214,7 +1064,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1222,7 +1072,168 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 137,
+      "playersCurrent": 75,
+      "analysis": null
+    },
+    {
+      "appid": "4981570",
+      "name": "Wand & Order: Tidy up the magic shop!",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4981570/220cdaf5171fb86917cd0f288c4fd551d89f24f9/header.jpg?t=1790501148",
+      "desc": "温馨的第一人称合作整理清洁模拟游戏!整理魔杖、塔罗牌和药水,把店铺收拾得井井有条来赚取积分,解锁强大法术,赶在炼金术士回来之前恢复秩序!",
+      "releaseText": "2026 年 9 月 23 日",
+      "release": "2026-09-23",
+      "comingSoon": false,
+      "developers": [
+        "OnSkull Games"
+      ],
+      "publishers": [
+        "OnSkull Games"
+      ],
+      "genres": [
+        "休闲",
+        "独立",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "多人",
+        "合作",
+        "在线合作",
+        "Steam 成就",
+        "完全支持控制器",
+        "自定义音量控制",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "DUALSHOCK 控制器支持",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "DualSense 控制器支持",
+        "随时保存",
+        "立体声",
+        "家庭共享"
+      ],
+      "priceUsd": 4.97,
+      "priceInitial": 5.99,
+      "discount": 17,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4981570/",
+      "requiredAge": 0,
+      "reviews": {
+        "total": 194,
+        "positive": 176,
+        "negative": 18,
+        "score": "特别好评",
+        "positivePct": 91
+      },
+      "days": 5,
+      "team": {
+        "selfPub": true,
+        "devCount": 1,
+        "solo": false,
+        "tier": 0
+      },
+      "burst": {
+        "score": 50.44,
+        "key": "dark",
+        "label": "⚡ 黑马",
+        "rank": 2
+      },
+      "sales": {
+        "mid": 8730,
+        "low": 5238,
+        "high": 13968,
+        "basis": "Boxleiter 法 · 评论数 × 45（$4.97 价格带）",
+        "confidence": 2,
+        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+      },
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 334,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Organizing」全站 334 款"
+        },
+        "niche": "Organizing"
+      },
+      "tags": [
+        {
+          "name": "Organizing",
+          "total": 334,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Collectathon",
+          "total": 5178,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Relaxing",
+          "total": 24924,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Fantasy",
+          "total": 32866,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Puzzle",
+          "total": 33885,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 52654,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Casual",
+          "total": 89427,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Indie",
+          "total": 116076,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        }
+      ],
+      "playersCurrent": 509,
       "analysis": null
     },
     {
@@ -1257,28 +1268,29 @@
       "url": "https://store.steampowered.com/app/4366980/",
       "requiredAge": 0,
       "reviews": {
-        "total": 140,
-        "positive": 97,
+        "total": 141,
+        "positive": 98,
         "negative": 43,
         "score": "褒贬不一",
-        "positivePct": 69
+        "positivePct": 70
       },
       "days": 4,
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 45.5,
+        "score": 45.83,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 6300,
-        "low": 3780,
-        "high": 10080,
+        "mid": 6345,
+        "low": 3807,
+        "high": 10152,
         "basis": "Boxleiter 法 · 评论数 × 45（$2.54 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -1287,19 +1299,19 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "细分标签「Adventure」全站 82,904 款"
+          "basis": "细分标签「Adventure」全站 82,905 款"
         },
         "niche": "Adventure"
       },
       "tags": [
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1308,7 +1320,7 @@
         },
         {
           "name": "Indie",
-          "total": 116071,
+          "total": 116076,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1317,7 +1329,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1355,7 +1367,7 @@
           "idKnown": true
         }
       ],
-      "playersCurrent": 24,
+      "playersCurrent": 28,
       "analysis": null
     },
     {
@@ -1403,6 +1415,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -1529,6 +1542,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -1549,19 +1563,19 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 26207,
+          "total": 26208,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
           },
-          "basis": "细分标签「Arcade」全站 26,207 款"
+          "basis": "细分标签「Arcade」全站 26,208 款"
         },
         "niche": "Arcade"
       },
       "tags": [
         {
           "name": "Arcade",
-          "total": 26207,
+          "total": 26208,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1570,7 +1584,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1663,6 +1677,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -1683,19 +1698,19 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 13816,
+          "total": 13818,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
           },
-          "basis": "细分标签「Roguelite」全站 13,816 款"
+          "basis": "细分标签「Roguelite」全站 13,818 款"
         },
         "niche": "Roguelite"
       },
       "tags": [
         {
           "name": "Roguelite",
-          "total": 13816,
+          "total": 13818,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1713,7 +1728,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1722,7 +1737,7 @@
         },
         {
           "name": "Casual",
-          "total": 89421,
+          "total": 89427,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1754,7 +1769,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 2093,
+      "playersCurrent": 2151,
       "analysis": null
     },
     {
@@ -1799,8 +1814,8 @@
       "url": "https://store.steampowered.com/app/3861710/",
       "requiredAge": 0,
       "reviews": {
-        "total": 158,
-        "positive": 157,
+        "total": 159,
+        "positive": 158,
         "negative": 1,
         "score": "特别好评",
         "positivePct": 99
@@ -1809,18 +1824,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 30.81,
+        "score": 31.01,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 4740,
-        "low": 2844,
-        "high": 7584,
+        "mid": 4770,
+        "low": 2862,
+        "high": 7632,
         "basis": "Boxleiter 法 · 评论数 × 30（$15.29 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -1841,7 +1857,7 @@
       "tags": [
         {
           "name": "Relaxing",
-          "total": 24918,
+          "total": 24924,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1859,7 +1875,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1897,7 +1913,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 57,
+      "playersCurrent": 44,
       "analysis": null
     },
     {
@@ -1937,28 +1953,29 @@
       "url": "https://store.steampowered.com/app/3116730/",
       "requiredAge": 0,
       "reviews": {
-        "total": 93,
-        "positive": 65,
+        "total": 94,
+        "positive": 66,
         "negative": 28,
-        "score": "褒贬不一",
+        "score": "多半好评",
         "positivePct": 70
       },
       "days": 3,
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 30.23,
+        "score": 30.55,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 2790,
-        "low": 1674,
-        "high": 4464,
+        "mid": 2820,
+        "low": 1692,
+        "high": 4512,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.59 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -1988,7 +2005,7 @@
         },
         {
           "name": "3D",
-          "total": 47321,
+          "total": 47322,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1997,7 +2014,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2035,7 +2052,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 10,
+      "playersCurrent": 12,
       "analysis": null
     },
     {
@@ -2081,28 +2098,29 @@
       "url": "https://store.steampowered.com/app/4964580/",
       "requiredAge": 0,
       "reviews": {
-        "total": 69,
-        "positive": 61,
+        "total": 70,
+        "positive": 62,
         "negative": 8,
         "score": "特别好评",
-        "positivePct": 88
+        "positivePct": 89
       },
       "days": 3,
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 26.91,
+        "score": 27.3,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 2622,
-        "low": 1573,
-        "high": 4195,
+        "mid": 2660,
+        "low": 1596,
+        "high": 4256,
         "basis": "Boxleiter 法 · 评论数 × 38（$5.39 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -2141,7 +2159,7 @@
         },
         {
           "name": "Relaxing",
-          "total": 24918,
+          "total": 24924,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2150,7 +2168,7 @@
         },
         {
           "name": "Puzzle",
-          "total": 33882,
+          "total": 33885,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2168,7 +2186,7 @@
         },
         {
           "name": "Casual",
-          "total": 89421,
+          "total": 89427,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2177,7 +2195,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2191,7 +2209,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 560,
+      "playersCurrent": 468,
       "analysis": null
     },
     {
@@ -2225,8 +2243,8 @@
       "url": "https://store.steampowered.com/app/5086560/",
       "requiredAge": 0,
       "reviews": {
-        "total": 82,
-        "positive": 72,
+        "total": 83,
+        "positive": 73,
         "negative": 10,
         "score": "特别好评",
         "positivePct": 88
@@ -2235,18 +2253,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 23.98,
+        "score": 24.28,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 3116,
-        "low": 1870,
-        "high": 4986,
+        "mid": 3154,
+        "low": 1892,
+        "high": 5046,
         "basis": "Boxleiter 法 · 评论数 × 38（$6.99 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -2317,7 +2336,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 15,
+      "playersCurrent": 19,
       "analysis": null
     },
     {
@@ -2368,6 +2387,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -2388,19 +2408,19 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 14321,
+          "total": 14320,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
           },
-          "basis": "细分标签「Physics」全站 14,321 款"
+          "basis": "细分标签「Physics」全站 14,320 款"
         },
         "niche": "Physics"
       },
       "tags": [
         {
           "name": "Physics",
-          "total": 14321,
+          "total": 14320,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2409,7 +2429,7 @@
         },
         {
           "name": "Funny",
-          "total": 22714,
+          "total": 22715,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2418,7 +2438,7 @@
         },
         {
           "name": "Adventure",
-          "total": 82904,
+          "total": 82905,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2427,7 +2447,7 @@
         },
         {
           "name": "Singleplayer",
-          "total": 119047,
+          "total": 119051,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2459,7 +2479,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 20,
+      "playersCurrent": 16,
       "analysis": null
     },
     {
@@ -2504,6 +2524,7 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -2589,7 +2610,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 58,
+      "playersCurrent": 85,
       "analysis": null
     },
     {
@@ -2636,6 +2657,7 @@
       "team": {
         "selfPub": true,
         "devCount": 2,
+        "solo": false,
         "tier": 0
       },
       "burst": {
@@ -2656,19 +2678,19 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 5999,
+          "total": 5998,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
           },
-          "basis": "细分标签「Life Sim」全站 5,999 款"
+          "basis": "细分标签「Life Sim」全站 5,998 款"
         },
         "niche": "Life Sim"
       },
       "tags": [
         {
           "name": "Life Sim",
-          "total": 5999,
+          "total": 5998,
           "verdict": {
             "key": "empty",
             "label": "🐟 空旷"
@@ -2768,8 +2790,8 @@
       "url": "https://store.steampowered.com/app/3115490/",
       "requiredAge": 0,
       "reviews": {
-        "total": 60,
-        "positive": 52,
+        "total": 61,
+        "positive": 53,
         "negative": 8,
         "score": "特别好评",
         "positivePct": 87
@@ -2778,18 +2800,19 @@
       "team": {
         "selfPub": true,
         "devCount": 1,
+        "solo": false,
         "tier": 0
       },
       "burst": {
-        "score": 19.5,
+        "score": 19.82,
         "key": "dark",
         "label": "⚡ 黑马",
         "rank": 2
       },
       "sales": {
-        "mid": 1800,
-        "low": 1080,
-        "high": 2880,
+        "mid": 1830,
+        "low": 1098,
+        "high": 2928,
         "basis": "Boxleiter 法 · 评论数 × 30（$13.49 价格带）",
         "confidence": 2,
         "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
@@ -2798,19 +2821,19 @@
         "primary": "Action",
         "label": "动作",
         "saturation": {
-          "total": 26207,
+          "total": 26208,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
           },
-          "basis": "细分标签「Arcade」全站 26,207 款"
+          "basis": "细分标签「Arcade」全站 26,208 款"
         },
         "niche": "Arcade"
       },
       "tags": [
         {
           "name": "Arcade",
-          "total": 26207,
+          "total": 26208,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2860,7 +2883,7 @@
           "idKnown": false
         }
       ],
-      "playersCurrent": 24,
+      "playersCurrent": 16,
       "analysis": null
     }
   ]
