@@ -19036,12 +19036,16 @@ function workAddFig() {
     if (!t) { inp.focus(); return; }
     const st = workState();
     st.figs.unshift({ id: workUid(), n: t, r: '待改 · ' + workDateLabel(), e: '🧑' });
+    // 2026-09-29 用户定：画画不是打卡，是「给游戏画角色」—— 本来就是推进，顺带记一格（不设连续天数）
+    workRollPeriod(st);
+    if (st.today < st.cap) st.today++;
+    st.week++;
     workSave(st);
     inp.value = '';
     inp.focus();
     workRenderLib();
     workRenderStrip();
-    if (typeof showToast === 'function') showToast('🎨 图鉴 +1');
+    if (typeof showToast === 'function') showToast('🎨 图鉴 +1 · 顺带记一格（本周期 ' + st.week + ' 格）');
 }
 /* ---------- 版本日志录入（2026-09-29 重做：一版一次录完，对齐用户的开发日记）---------- */
 let workPendingShots = [];      // 提交前暂存的截图（压缩后的 dataURL）
@@ -41190,7 +41194,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291118";
+        window.NIKO_VERSION = "202609291121";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
