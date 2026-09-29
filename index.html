@@ -2442,7 +2442,7 @@
             0%, 86%, 100% { transform: rotate(0); }
             89% { transform: rotate(-2.5deg); } 92% { transform: rotate(2deg); } 95% { transform: rotate(-1.2deg); }
         }
-        .today-habits-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+        .today-habits-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 7px; }
         /* 每日地下城：习惯打卡 Boss 血条（视觉与计划页「本周副本」同源：绿→黄→红随剩余血量变化） */
         .habit-dg {
             grid-column: 1 / -1;
@@ -2480,14 +2480,20 @@
         body.dark-mode .habit-dg { border-color: #333345; background: rgba(128, 138, 158, 0.08); }
         body.dark-mode .habit-dg-hp { color: #99a; }
         /* 习惯卡片 v2：瓷砖图标 + 两行标题 + 周进度细条 + 弱化奖励文本，去徽章杂讯 */
+        /* 2026-09-29 紧凑化（用户反馈「习惯卡片太大了」）：三行 → 两行。
+           - 结构：display:flex 纵排 → grid，top 占整行，progress 与 foot 并排在同一行
+           - 尺寸：内边距 11/12/10→8/10/7，间距 8→4，图标 30→24，名字 13→12px/行高 1.28，
+             进度条 5→4px，完成徽章 20→17
+           - 网格：卡片最小宽 150→196px（名字一行放得下，第二行的进度/奖励/连击/水晶链不打架）
+           信息一条不减：第一行「图标 + 名字」、第二行「进度条 + 0/5 + 奖励 + 连击 + 水晶链」。 */
         .habit-card {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 11px 12px 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 4px 6px;
+            padding: 8px 10px 7px;
             background: linear-gradient(180deg, #fff, #faf9f7);
             border: 1px solid #eeece8;
-            border-radius: 14px;
+            border-radius: 11px;
             position: relative;
             cursor: pointer;
             transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
@@ -2508,45 +2514,47 @@
         .habit-card.done-card .habit-name { text-decoration: line-through; color: #9aa5a0; }
         body.dark-mode .habit-card.done-card .habit-name { color: #6b7d75; }
         .habit-done-badge {
-            position: absolute; top: 9px; right: 9px;
-            width: 20px; height: 20px; border-radius: 50%;
+            position: absolute; top: 6px; right: 6px;
+            width: 17px; height: 17px; border-radius: 50%;
             background: #10b981; color: #fff;
             display: flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 700;
-            box-shadow: 0 0 0 3px rgba(16,185,129,0.15);
+            font-size: 10px; font-weight: 700;
+            box-shadow: 0 0 0 2px rgba(16,185,129,0.15);
         }
         /* Q4 全勤徽章（sec-badge.all-done 见统一区头） */
-        .habit-card-top { display: flex; align-items: flex-start; gap: 8px; width: 100%; padding-right: 6px; }
+        .habit-card-top { display: flex; align-items: center; gap: 7px; width: 100%; padding-right: 6px; grid-column: 1 / -1; }
         /* v2.11.1：完成徽章占位只在完成时预留，平时把空间还给习惯名 */
-        .habit-card.done-card .habit-card-top { padding-right: 22px; }
+        .habit-card.done-card .habit-card-top { padding-right: 20px; }
         .habit-card .habit-icon {
-            width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
+            width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center;
-            font-size: 16px;
+            font-size: 13px;
             background: rgba(124,58,237,0.08);
         }
         body.dark-mode .habit-card .habit-icon { background: rgba(139,92,246,0.14); }
         /* 习惯名支持两行换行（长描述不再被截成 3 个字） */
         .habit-card .habit-name {
-            font-size: 13px; font-weight: 600; flex: 1; min-width: 0;
+            font-size: 12px; font-weight: 600; flex: 1; min-width: 0;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-            overflow: hidden; word-break: break-all; line-height: 1.35;
+            overflow: hidden; word-break: break-all; line-height: 1.28;
         }
         /* 周进度细条：视觉化替代纯文字 */
-        .habit-progress { display: flex; align-items: center; gap: 7px; width: 100%; }
-        .habit-progress-bar { flex: 1; height: 5px; border-radius: 999px; background: rgba(124,58,237,0.10); overflow: hidden; }
+        .habit-progress { display: flex; align-items: center; gap: 6px; width: auto; min-width: 0; }
+        .habit-progress-bar { flex: 1; height: 4px; border-radius: 999px; background: rgba(124,58,237,0.10); overflow: hidden; }
         body.dark-mode .habit-progress-bar { background: rgba(139,92,246,0.14); }
         .habit-progress-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #6366f1, #8b5cf6); transition: width 0.4s ease; }
         .habit-card.done-card .habit-progress-fill { background: linear-gradient(90deg, #10b981, #34d399); }
-        .habit-progress-num { font-size: 10.5px; color: #8a8a96; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        /* 2026-09-29：进度数字挪到第一行（名字右侧）——把第二行整行让给进度条，
+           否则 reward+连击+水晶链 会把 bar 挤到几乎看不见。 */
+        .habit-progress-num { font-size: 10px; color: #8a8a96; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
         body.dark-mode .habit-progress-num { color: #8f8fa3; }
-        .habit-card-foot { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px; min-height: 16px; }
+        .habit-card-foot { display: flex; align-items: center; justify-content: flex-end; width: auto; gap: 5px; min-height: 0; }
         .habit-card-foot .hcl { margin-left: auto; }
-        .habit-card .habit-reward { font-size: 10.5px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
+        .habit-card .habit-reward { font-size: 10px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
         body.dark-mode .habit-card .habit-reward { color: #a89bd6; }
         /* 连击：只保留小火苗数字，弱化为文字 */
         .habit-streak-chip {
-            font-size: 10.5px; font-weight: 700; flex-shrink: 0;
+            font-size: 10px; font-weight: 700; flex-shrink: 0;
             color: #d97706; white-space: nowrap;
         }
         body.dark-mode .habit-streak-chip { color: #fbbf24; }
@@ -2893,6 +2901,7 @@
                 gap: 6px;
             }
             .habit-card {
+                display: flex;
                 flex-direction: row;
                 align-items: center;
                 gap: 6px;
@@ -3085,6 +3094,141 @@
             .weekly-chip, .garden-feed-chip { padding: 7px 11px; }
             .sec-badge { padding: 3px 9px; }
         }
+/* 🎮 作品主线（融入今日看板 · 2026-09-29）
+   设计前提：零新增导航入口 —— 它长在今日看板里，不是新板块。*/
+.work-sec[hidden] { display: none !important; }
+.work-main { display: flex; flex-direction: column; gap: 6px; }
+.work-row1 { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.work-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.16); flex-shrink: 0; }
+.work-name { font-size: 14px; font-weight: 700; letter-spacing: .2px; }
+.work-meta { font-size: 11.5px; color: #8a8a96; }
+body.dark-mode .work-meta { color: #8f8fa3; }
+.work-goal { font-size: 12px; color: #6b7280; background: #faf9f7; border-left: 3px solid #ddd6fe; border-radius: 0 7px 7px 0; padding: 4px 10px; }
+body.dark-mode .work-goal { color: #9aa0b4; background: #26263a; border-left-color: #4c4470; }
+.work-miles { display: flex; gap: 6px; flex-wrap: wrap; }
+.work-mile { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: #8a8a96;
+  border: 1px solid #e8e6e1; border-radius: 999px; padding: 2px 9px; white-space: nowrap;
+  cursor: pointer; user-select: none; transition: border-color .15s, color .15s; }
+.work-mile:hover { border-color: #c4b5fd; }
+body.dark-mode .work-mile { color: #8f8fa3; border-color: #333345; }
+.work-mile b { font-weight: 700; }
+.work-mile.now { color: #7c3aed; border-color: #ddd6fe; background: #f5f3ff; font-weight: 600; }
+body.dark-mode .work-mile.now { color: #a78bfa; border-color: #4c4470; background: #2a2440; }
+.work-mile.done { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
+body.dark-mode .work-mile.done { color: #34d399; border-color: #2d5a4a; background: #1c2b26; }
+.work-today { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.work-cells { font-size: 13px; letter-spacing: 1.5px; color: #7c3aed; font-family: ui-monospace, Menlo, monospace; }
+body.dark-mode .work-cells { color: #a78bfa; }
+.work-num { font-size: 11.5px; color: #8a8a96; }
+body.dark-mode .work-num { color: #8f8fa3; }
+.work-num b { color: #333; font-size: 12.5px; }
+body.dark-mode .work-num b { color: #e5e5e5; }
+.work-add { margin-left: auto; font-family: inherit; font-size: 12px; cursor: pointer; border: 0;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border-radius: 9px; padding: 6px 14px;
+  transition: transform .12s, filter .15s; white-space: nowrap; }
+.work-add:hover { filter: brightness(1.08); }
+.work-add:active { transform: scale(.96); }
+.work-add.work-pop { animation: workPop .35s ease; }
+@keyframes workPop { 0%{transform:scale(1)} 40%{transform:scale(1.14)} 100%{transform:scale(1)} }
+
+/* ---- 作品库弹窗 ---- */
+.work-mask { position: fixed; inset: 0; background: rgba(20,20,32,.48); display: none;
+  align-items: center; justify-content: center; padding: 20px; z-index: 3200; }
+.work-mask.show { display: flex; }
+.work-modal { width: 100%; max-width: 640px; max-height: 82vh; display: flex; flex-direction: column;
+  background: #fff; border-radius: 16px; box-shadow: 0 18px 50px rgba(20,20,40,.3); overflow: hidden; }
+body.dark-mode .work-modal { background: #1f1f2e; }
+.work-mhead { display: flex; align-items: center; gap: 9px; padding: 12px 15px; border-bottom: 1px solid #eeece8; }
+body.dark-mode .work-mhead { border-bottom-color: #2c2c3d; }
+.work-mhead b { font-size: 14px; }
+.work-mline { font-size: 11.5px; color: #8a8a96; }
+.work-mx { margin-left: auto; background: transparent; border: 0; color: #8a8a96; font-size: 15px;
+  cursor: pointer; font-family: inherit; padding: 2px 7px; border-radius: 6px; }
+.work-mx:hover { background: #f3f2f0; color: #333; }
+body.dark-mode .work-mx:hover { background: #2a2a3a; color: #eee; }
+.work-tabs { display: flex; gap: 2px; padding: 8px 12px 0; border-bottom: 1px solid #eeece8; flex-wrap: wrap; }
+body.dark-mode .work-tabs { border-bottom-color: #2c2c3d; }
+.work-tab { font-family: inherit; font-size: 12.5px; background: transparent; border: 0; cursor: pointer;
+  color: #8a8a96; padding: 7px 11px; border-bottom: 2px solid transparent; border-radius: 7px 7px 0 0; }
+.work-tab i { font-style: normal; font-size: 10.5px; opacity: .7; margin-left: 3px; }
+.work-tab:hover { color: #333; background: #f7f6f4; }
+body.dark-mode .work-tab:hover { color: #eee; background: #26263a; }
+.work-tab.on { color: #7c3aed; border-bottom-color: #7c3aed; font-weight: 600; }
+body.dark-mode .work-tab.on { color: #a78bfa; border-bottom-color: #a78bfa; }
+.work-mbody { padding: 13px 15px 16px; overflow: auto; flex: 1; }
+.work-pane { display: none; }
+.work-pane.on { display: block; }
+.work-addbar { display: flex; gap: 7px; margin-bottom: 11px; }
+.work-inp { flex: 1; min-width: 0; font-family: inherit; font-size: 12.5px; padding: 8px 11px;
+  border: 1px solid #e2e0db; border-radius: 9px; background: #faf9f7; color: #333; }
+.work-inp:focus { outline: none; border-color: #c4b5fd; background: #fff; }
+body.dark-mode .work-inp { background: #26263a; border-color: #3a3a50; color: #e5e5e5; }
+body.dark-mode .work-inp:focus { border-color: #6d5aa8; background: #2c2c42; }
+.work-addbtn { font-family: inherit; font-size: 13px; cursor: pointer; border: 0; border-radius: 9px;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; padding: 0 16px; flex-shrink: 0; }
+.work-addbtn:hover { filter: brightness(1.08); }
+.work-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 11px; }
+.work-chip { font-size: 11.5px; border: 1px solid #e2e0db; border-radius: 999px; padding: 3px 10px;
+  cursor: pointer; color: #8a8a96; white-space: nowrap; user-select: none; }
+.work-chip:hover { color: #333; }
+body.dark-mode .work-chip { border-color: #3a3a50; color: #8f8fa3; }
+.work-chip.on { background: #7c3aed; border-color: #7c3aed; color: #fff; font-weight: 600; }
+.work-mats { display: grid; grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: 9px; }
+.work-mat { border: 1px solid #e8e6e1; border-radius: 11px; padding: 9px 11px; display: flex;
+  flex-direction: column; gap: 5px; position: relative; }
+body.dark-mode .work-mat { border-color: #333345; }
+.work-mat-t { font-size: 12.5px; font-weight: 600; line-height: 1.45; word-break: break-word; padding-right: 12px; }
+.work-mat-b { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #8a8a96; }
+.work-mat-s { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+.work-mat-s::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #b9b9c4; }
+.work-mat-s.ok::before { background: #10b981; }
+.work-mat-s.todo::before { background: #f59e0b; }
+.work-mat-s.try::before { background: #7c3aed; }
+.work-del { position: absolute; top: 5px; right: 6px; border: 0; background: transparent; color: #c9c9d2;
+  font-size: 12px; cursor: pointer; padding: 2px 4px; border-radius: 5px; line-height: 1; }
+.work-del:hover { color: #ef4444; background: rgba(239,68,68,.08); }
+.work-empty { grid-column: 1 / -1; text-align: center; color: #8a8a96; font-size: 12.5px;
+  border: 1px dashed #e2e0db; border-radius: 11px; padding: 22px 0; }
+body.dark-mode .work-empty { border-color: #3a3a50; color: #8f8fa3; }
+.work-figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 9px; }
+.work-fig { border: 1px solid #e8e6e1; border-radius: 11px; overflow: hidden; position: relative; }
+body.dark-mode .work-fig { border-color: #333345; }
+.work-fig-img { height: 68px; display: flex; align-items: center; justify-content: center; font-size: 24px;
+  background: linear-gradient(135deg, #f5f3ff, #eeece8); }
+body.dark-mode .work-fig-img { background: linear-gradient(135deg, #2a2440, #26263a); }
+.work-fig-n { font-size: 12px; font-weight: 600; padding: 6px 9px 2px; word-break: break-word; }
+.work-fig-r { font-size: 10.5px; color: #8a8a96; padding: 0 9px 8px; }
+body.dark-mode .work-fig-r { color: #8f8fa3; }
+.work-logs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.work-logs li { border-left: 2px solid #ddd6fe; padding: 2px 0 2px 11px; position: relative; }
+body.dark-mode .work-logs li { border-left-color: #4c4470; }
+.work-lg-h { display: flex; gap: 7px; align-items: baseline; }
+.work-lg-v { font-size: 11px; color: #7c3aed; font-weight: 700; font-family: ui-monospace, Menlo, monospace; }
+body.dark-mode .work-lg-v { color: #a78bfa; }
+.work-lg-d { font-size: 11px; color: #8a8a96; }
+.work-lg-t { font-size: 12.5px; margin-top: 1px; word-break: break-word; }
+.work-lg-p { font-size: 11.5px; color: #6b7280; margin-top: 2px; }
+body.dark-mode .work-lg-p { color: #9aa0b4; }
+.work-lg-p b { color: #059669; font-weight: 600; }
+body.dark-mode .work-lg-p b { color: #34d399; }
+.work-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 12px; }
+.work-stat { border: 1px solid #e8e6e1; border-radius: 11px; padding: 9px 10px; text-align: center; }
+body.dark-mode .work-stat { border-color: #333345; }
+.work-stat b { display: block; font-size: 19px; letter-spacing: -.5px; }
+.work-stat span { font-size: 11px; color: #8a8a96; }
+.work-note { border: 1px solid #ddd6fe; background: #f5f3ff; border-radius: 11px; padding: 10px 12px;
+  font-size: 12.5px; line-height: 1.65; }
+body.dark-mode .work-note { border-color: #4c4470; background: #262238; }
+.work-note b { color: #7c3aed; }
+body.dark-mode .work-note b { color: #a78bfa; }
+
+@media (max-width: 768px) {
+  .work-add { margin-left: 0; width: 100%; text-align: center; padding: 9px 0; font-size: 13px; }
+  .work-stats { grid-template-columns: repeat(2, 1fr); }
+  .work-mats { grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); }
+  .work-tabs { padding: 8px 8px 0; }
+  .work-tab { padding: 7px 9px; font-size: 12px; }
+}
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
                    计划页面 (日历 + 看板)
@@ -12321,6 +12465,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 <div class="cmd-brief" id="cmdBrief"></div>
             <div class="clear-settle" id="clearSettle" style="display:none;"></div>
             <div class="today-board">
+                <!-- 🎮 作品主线（2026-09-29 融入今日看板）：内容由 parts/作品.html 的 workRenderStrip() 渲染。
+                     刻意不加侧栏/手机导航入口 —— 零新增入口是本条的设计前提。
+                     板块若下线（或 work_js 未加载），容器保持 hidden，不会留下空白段。 -->
+                <section class="today-sec work-sec" id="workStrip" hidden></section>
                 <section class="today-sec" id="todayHabits">
                     <div class="today-sec-head">
                         <span class="today-sec-title">🎯 今日习惯</span>
@@ -12330,6 +12478,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                     <div class="today-habits-list" id="todayHabitsList"></div>
                 </section>
+                <!-- ===== 2026-09-29 下线：六树庭院（用户反馈使用率 0）。源码保留，删掉这行与下面的收尾行即可原样回归 =====
                 <section class="today-sec" id="gardenStrip">
                     <div class="today-sec-head">
                         <span class="today-sec-title">🌱 六树庭院</span>
@@ -12344,6 +12493,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                     <div class="garden-trees" id="gardenTrees"></div>
                 </section>
+                ===== 六树庭院 下线结束 ===== -->
+
+                <!-- ===== 2026-09-29 下线：本周底片（用户反馈使用率 0）。源码保留，删掉这行与下面的收尾行即可原样回归 =====
                 <section class="today-sec" id="filmStrip">
                     <div class="today-sec-head">
                         <span class="today-sec-title">🎞️ 本周底片</span>
@@ -12352,6 +12504,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                     <div class="film-strip" id="filmStripRow"></div>
                 </section>
+                ===== 本周底片 下线结束 ===== -->
             </div>
 
             <!-- ===== 投喂设置弹窗（庭院自动驾驶） ===== -->
@@ -12454,6 +12607,49 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     </div>
                 </div>
             </div>
+<div class="work-mask" id="workMask" onclick="if(event.target===this)workCloseLib()">
+    <div class="work-modal">
+        <div class="work-mhead">
+            <b>🎮 作品库</b>
+            <span class="work-mline" id="workMline"></span>
+            <button class="work-mx" onclick="workCloseLib()" title="关闭">✕</button>
+        </div>
+        <div class="work-tabs">
+            <button class="work-tab on" data-tab="mats" onclick="workLibTab('mats')">素材库 <i id="workTabMats">0</i></button>
+            <button class="work-tab" data-tab="figs" onclick="workLibTab('figs')">角色图鉴 <i id="workTabFigs">0</i></button>
+            <button class="work-tab" data-tab="logs" onclick="workLibTab('logs')">Build 日志 <i id="workTabLogs">0</i></button>
+            <button class="work-tab" data-tab="week" onclick="workLibTab('week')">每周汇总</button>
+        </div>
+        <div class="work-mbody">
+            <div class="work-pane on" id="workPane-mats">
+                <div class="work-addbar">
+                    <input class="work-inp" id="workMatInp" placeholder="想到什么就丢进来 —— 不用挑分类，回车即可" onkeydown="if(event.key==='Enter')workAddMat()">
+                    <button class="work-addbtn" onclick="workAddMat()" title="加入素材库">＋</button>
+                </div>
+                <div class="work-chips" id="workChips"></div>
+                <div class="work-mats" id="workMats"></div>
+            </div>
+            <div class="work-pane" id="workPane-figs">
+                <div class="work-addbar">
+                    <input class="work-inp" id="workFigInp" placeholder="画完一个角色？写个名字进来（画画唯一的出口）" onkeydown="if(event.key==='Enter')workAddFig()">
+                    <button class="work-addbtn" onclick="workAddFig()" title="加入角色图鉴">＋</button>
+                </div>
+                <div class="work-figs" id="workFigs"></div>
+            </div>
+            <div class="work-pane" id="workPane-logs">
+                <div class="work-addbar">
+                    <input class="work-inp" id="workLogInp" placeholder="今天做到什么？现在能玩什么？" onkeydown="if(event.key==='Enter')workAddLog()">
+                    <button class="work-addbtn" onclick="workAddLog()" title="记一条 Build 日志">＋</button>
+                </div>
+                <ul class="work-logs" id="workLogs"></ul>
+            </div>
+            <div class="work-pane" id="workPane-week">
+                <div class="work-stats" id="workStats"></div>
+                <div class="work-note" id="workNote"></div>
+            </div>
+        </div>
+    </div>
+</div>
         </div>
         <div class="page" id="planPage">
 <div class="top-bar">
@@ -16411,6 +16607,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderCommandBrief();
             renderClearSettle();
             renderBuddy();
+            if (typeof workRenderStrip === 'function') workRenderStrip();   // 🎮 作品主线（parts/作品.html）
             renderGarden();
             renderFilmStrip();
             boardIgnition();
@@ -17859,11 +18056,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
                         <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
+                        <span class="habit-progress-num">${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
                         ${habitPetBadge(h, streak, burnt, isActive, d)}
                     </div>
                     <div class="habit-progress">
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
-                        <span class="habit-progress-num">${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
                     </div>
                     <div class="habit-card-foot">
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
@@ -18365,6 +18562,339 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 _ct = setTimeout(function () { if (typeof habitChainDraw === 'function') habitChainDraw(); }, 200);
             });
         })();
+// ===== 🎮 作品主线（融入今日看板 · 2026-09-29）=====
+// 设计前提：零新增导航入口。它长在今日看板的第一段，完整内容住「作品库」弹窗。
+// 三条产品口径（写死在代码里，别改回去）：
+//   1. 钢琴不给 KPI —— 消遣不是产出项，给它设指标会毁掉它。
+//   2. 画画只开「角色图鉴」这一个出口 —— 课程进度会断，图鉴只会变厚。
+//   3. 记一格是零输入 —— 点一下就好，不要弹表单让人选标签。
+
+const WORK_KEY = 'niko_work_v1';
+const WORK_MAT_CATS = ['设定', '角色', '场景', '玩法', 'BGM', 'UI', 'SFX'];
+const WORK_MAT_STATES = [['ok', '可用'], ['todo', '待改'], ['try', '可试']];
+const WORK_KW = {
+    '角色': ['角色', '人物', '立绘', '三视图', '主角', 'npc', '脸', '表情'],
+    '场景': ['场景', '背景', '房间', '地图', '关卡', '走廊', '楼'],
+    '玩法': ['玩法', '机制', '循环', '数值', '手感', '操作', '跳跃', '开门'],
+    'BGM': ['bgm', '音乐', '配乐', '曲子', '旋律', '主题曲'],
+    'UI': ['ui', '界面', '按钮', '图标', '菜单', 'hud', '提示'],
+    'SFX': ['音效', 'sfx', '声音', '脚步', '打击', '环境音'],
+    '设定': ['设定', '世界观', '剧情', '故事', '文本', '名字', '标题', '草图']
+};
+let workFilterCat = 'all';
+
+function workDefault() {
+    return {
+        name: '呼吸的房子',
+        goal: '做一个让人玩 10 分钟就记住的房子',
+        meta: '两人开发',
+        miles: [
+            { t: '可玩原型', st: 'now' },
+            { t: '首次 playtest', st: '' },
+            { t: '上架页', st: '' }
+        ],
+        cap: 3,
+        today: 0,
+        week: 0,
+        dayKey: '',
+        periodKey: '',
+        mats: [],
+        figs: [],
+        logs: []
+    };
+}
+function workState() {
+    let v = null;
+    try { v = safeStorage.get(WORK_KEY, null); } catch (e) { v = null; }
+    if (!v || typeof v !== 'object') return workDefault();
+    const d = workDefault();
+    for (const k in d) { if (!(k in v) || v[k] == null) v[k] = d[k]; }
+    if (!Array.isArray(v.miles) || !v.miles.length) v.miles = d.miles;
+    if (!Array.isArray(v.mats)) v.mats = [];
+    if (!Array.isArray(v.figs)) v.figs = [];
+    if (!Array.isArray(v.logs)) v.logs = [];
+    return v;
+}
+function workSave(st) {
+    try { safeStorage.set(WORK_KEY, st); } catch (e) {}
+}
+function workPeriodKey() {
+    const d = new Date();
+    const diff = (d.getDay() - 5 + 7) % 7;          // 流程周期 = 周五 → 下周四
+    const fri = new Date(d.getFullYear(), d.getMonth(), d.getDate() - diff);
+    return fri.getFullYear() + '-' + (fri.getMonth() + 1) + '-' + fri.getDate();
+}
+function workDayKey() {
+    try { return formatDate(new Date()); } catch (e) {}
+    const d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+}
+function workRollPeriod(st) {
+    let changed = false;
+    const dk = workDayKey();
+    if (st.dayKey !== dk) { st.dayKey = dk; st.today = 0; changed = true; }
+    const pk = workPeriodKey();
+    if (st.periodKey !== pk) { st.periodKey = pk; st.week = 0; changed = true; }
+    if (changed) workSave(st);
+}
+function workAutoCat(text) {
+    // 取「命中的最长关键词」那一类 —— 更长 = 更具体，压过泛词
+    // （例：「走廊循环 BGM 一段」里 '走廊'(场景) 与 'bgm'(BGM) 都命中，应归 BGM。）
+    const lo = String(text || '').toLowerCase();
+    let best = '', bestLen = 0;
+    for (const cat in WORK_KW) {
+        for (const kw of WORK_KW[cat]) {
+            if (lo.indexOf(kw) >= 0 && kw.length > bestLen) { best = cat; bestLen = kw.length; }
+        }
+    }
+    return best || '设定';
+}
+function workUid() { return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+/* ---------- 今日看板里的那一段 ---------- */
+function workRenderStrip() {
+    const box = document.getElementById('workStrip');
+    if (!box) return;
+    const st = workState();
+    workRollPeriod(st);
+    const cells = Array.from({ length: st.cap }, (_, i) => (i < st.today ? '■' : '□')).join('');
+    const miles = st.miles.map((m, i) => {
+        const cls = m.st === 'done' ? ' done' : (m.st === 'now' ? ' now' : '');
+        const mk = m.st === '' ? '□' : '■';
+        return '<span class="work-mile' + cls + '" onclick="workTapMile(' + i + ')" title="点一下切换：未开始 → 进行中 → 已完成">' +
+            '<b>' + mk + '</b> ' + escapeHtml(m.t) + '</span>';
+    }).join('');
+    box.innerHTML =
+        '<div class="today-sec-head">' +
+            '<span class="today-sec-title">🎮 我的作品</span>' +
+            '<span class="sec-badge">今天 ' + st.today + '/' + st.cap + ' 格</span>' +
+            '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / Build 日志 / 每周汇总">作品库 →</span>' +
+        '</div>' +
+        '<div class="work-main">' +
+            '<div class="work-row1">' +
+                '<span class="work-dot"></span>' +
+                '<span class="work-name">' + escapeHtml(st.name) + '</span>' +
+                '<span class="work-meta">' + escapeHtml(st.meta) + '</span>' +
+            '</div>' +
+            '<div class="work-goal">' + escapeHtml(st.goal) + '</div>' +
+            '<div class="work-miles">' + miles + '</div>' +
+            '<div class="work-today">' +
+                '<span class="work-cells">' + cells + '</span>' +
+                '<span class="work-num">今天 <b>' + st.today + '</b> 格</span>' +
+                '<span class="work-num">本周 <b>' + st.week + '</b> 格</span>' +
+                '<button class="work-add" onclick="workAddCell()" title="点一下就好，不用填任何东西">＋ 记一格</button>' +
+            '</div>' +
+        '</div>';
+    box.hidden = false;
+}
+function workAddCell() {
+    const st = workState();
+    workRollPeriod(st);
+    if (st.today < st.cap) st.today++;
+    st.week++;
+    workSave(st);
+    workRenderStrip();
+    const btn = document.querySelector('#workStrip .work-add');
+    if (btn) { btn.classList.remove('work-pop'); void btn.offsetWidth; btn.classList.add('work-pop'); }
+    if (typeof showToast === 'function') showToast('🎮 记了一格 · 本周 ' + st.week + ' 格');
+}
+function workTapMile(i) {
+    const st = workState();
+    const m = st.miles[i];
+    if (!m) return;
+    m.st = m.st === '' ? 'now' : (m.st === 'now' ? 'done' : '');
+    workSave(st);
+    workRenderStrip();
+    if (typeof showToast === 'function') {
+        showToast('「' + m.t + '」→ ' + (m.st === 'done' ? '已完成 ✅' : (m.st === 'now' ? '进行中' : '未开始')));
+    }
+}
+
+/* ---------- 作品库弹窗 ---------- */
+function workOpenLib(tab) {
+    workRenderLib();
+    const mask = document.getElementById('workMask');
+    if (mask) mask.classList.add('show');
+    if (tab) workLibTab(tab);
+}
+function workCloseLib() {
+    const mask = document.getElementById('workMask');
+    if (mask) mask.classList.remove('show');
+}
+function workLibTab(t) {
+    document.querySelectorAll('.work-tab').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+    document.querySelectorAll('.work-pane').forEach(p => p.classList.toggle('on', p.id === 'workPane-' + t));
+}
+function workRenderLib() {
+    const st = workState();
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    set('workMline', st.name);
+    set('workTabMats', st.mats.length);
+    set('workTabFigs', st.figs.length);
+    set('workTabLogs', st.logs.length);
+
+    /* 素材分类 chips */
+    const chips = document.getElementById('workChips');
+    if (chips) {
+        chips.innerHTML = ['全部'].concat(WORK_MAT_CATS).map(c => {
+            const key = c === '全部' ? 'all' : c;
+            return '<span class="work-chip' + (workFilterCat === key ? ' on' : '') + '" onclick="workFilter(\'' + key + '\')">' + c + '</span>';
+        }).join('');
+    }
+    /* 素材卡 */
+    const mg = document.getElementById('workMats');
+    if (mg) {
+        const list = st.mats.filter(m => workFilterCat === 'all' || m.c === workFilterCat);
+        if (!list.length) {
+            mg.innerHTML = '<div class="work-empty">' + (st.mats.length ? '这一类还没有素材' : '把想到的角色 / 场景 / 灵感丢进来 —— 不用分类，我来归') + '</div>';
+        } else {
+            mg.innerHTML = list.map(m => {
+                const si = WORK_MAT_STATES.findIndex(x => x[0] === m.s);
+                const cur = WORK_MAT_STATES[si < 0 ? 0 : si];
+                return '<div class="work-mat">' +
+                    '<button class="work-del" onclick="workDelMat(\'' + m.id + '\')" title="删除">✕</button>' +
+                    '<div class="work-mat-t">' + escapeHtml(m.t) + '</div>' +
+                    '<div class="work-mat-b"><span>' + escapeHtml(m.c) + '</span>' +
+                    '<span class="work-mat-s ' + cur[0] + '" onclick="workCycleMat(\'' + m.id + '\')" title="点一下切换状态">' + cur[1] + '</span></div>' +
+                '</div>';
+            }).join('');
+        }
+    }
+    /* 角色图鉴 */
+    const fg = document.getElementById('workFigs');
+    if (fg) {
+        if (!st.figs.length) {
+            fg.innerHTML = '<div class="work-empty">画完一个角色，就写个名字进来 —— 这是画画唯一的出口</div>';
+        } else {
+            fg.innerHTML = st.figs.map(f =>
+                '<div class="work-fig">' +
+                    '<button class="work-del" onclick="workDelFig(\'' + f.id + '\')" title="删除">✕</button>' +
+                    '<div class="work-fig-img">' + (f.e || '🧑') + '</div>' +
+                    '<div class="work-fig-n">' + escapeHtml(f.n) + '</div>' +
+                    '<div class="work-fig-r">' + escapeHtml(f.r || '') + '</div>' +
+                '</div>'
+            ).join('');
+        }
+    }
+    /* Build 日志（只增不改，最新在上） */
+    const lg = document.getElementById('workLogs');
+    if (lg) {
+        if (!st.logs.length) {
+            lg.innerHTML = '<li class="work-empty" style="border:0;text-align:center;color:#8a8a96;padding:18px 0">还没有日志。写下「现在能玩什么」—— 这是你反驳「我什么都没做」的证据</li>';
+        } else {
+            lg.innerHTML = st.logs.map(l =>
+                '<li><button class="work-del" onclick="workDelLog(\'' + l.id + '\')" title="删除">✕</button>' +
+                '<div class="work-lg-h"><span class="work-lg-v">#' + l.v + '</span><span class="work-lg-d">' + escapeHtml(l.d) + '</span></div>' +
+                '<div class="work-lg-t">' + escapeHtml(l.t) + '</div>' +
+                '<div class="work-lg-p">现在能玩：<b>' + escapeHtml(l.p) + '</b></div></li>'
+            ).join('');
+        }
+    }
+    /* 每周汇总（自己长出来，只读） */
+    const ws = document.getElementById('workStats');
+    if (ws) {
+        const doneMiles = st.miles.filter(m => m.st === 'done').length;
+        const stats = [
+            [st.week, '本周期格子'],
+            [doneMiles + '/' + st.miles.length, '里程碑'],
+            [st.mats.length, '素材'],
+            [st.logs.length, 'Build 日志']
+        ];
+        ws.innerHTML = stats.map(s => '<div class="work-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>').join('');
+    }
+    const note = document.getElementById('workNote');
+    if (note) {
+        const parts = [];
+        if (st.week > 0) parts.push('本周期推了 <b>' + st.week + ' 格</b>');
+        const doneMiles = st.miles.filter(m => m.st === 'done').length;
+        if (doneMiles) parts.push('里程碑达成 <b>' + doneMiles + '/' + st.miles.length + '</b>');
+        if (st.logs.length) parts.push('最近能玩：<b>' + escapeHtml(st.logs[0].t) + '</b>');
+        note.innerHTML = parts.length
+            ? parts.join(' · ') + '。<br>每一格都是真的在往前 —— 进度存在作品里，不存在你的记忆里。'
+            : '这一周期还没有记录。没关系 —— 回今日看板点一下「＋ 记一格」就是开始。';
+    }
+}
+
+/* ---------- 输入（零输入原则：一个框 + 回车） ---------- */
+function workAddMat() {
+    const inp = document.getElementById('workMatInp');
+    if (!inp) return;
+    const t = inp.value.trim();
+    if (!t) { inp.focus(); return; }
+    const st = workState();
+    st.mats.unshift({ id: workUid(), t: t, c: workAutoCat(t), s: 'ok', d: workDateLabel() });
+    workSave(st);
+    inp.value = '';
+    inp.focus();
+    workFilterCat = 'all';
+    workRenderLib();
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('已归类到「' + workAutoCat(t) + '」');
+}
+function workAddFig() {
+    const inp = document.getElementById('workFigInp');
+    if (!inp) return;
+    const t = inp.value.trim();
+    if (!t) { inp.focus(); return; }
+    const st = workState();
+    st.figs.unshift({ id: workUid(), n: t, r: '待改 · ' + workDateLabel(), e: '🧑' });
+    workSave(st);
+    inp.value = '';
+    inp.focus();
+    workRenderLib();
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('🎨 图鉴 +1');
+}
+function workAddLog() {
+    const inp = document.getElementById('workLogInp');
+    if (!inp) return;
+    const t = inp.value.trim();
+    if (!t) { inp.focus(); return; }
+    const st = workState();
+    const v = (st.logs.length ? (Number(String(st.logs[0].v).replace('#', '')) || 0) : 0) + 1;
+    st.logs.unshift({ id: workUid(), v: v, d: workDateLabel(), t: t, p: t });
+    workSave(st);
+    inp.value = '';
+    inp.focus();
+    workRenderLib();
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('📓 Build #' + v + ' 已记');
+}
+function workDateLabel() {
+    const now = new Date(), today = workDayKey();
+    const y = new Date(now.getTime() - 86400000);
+    const yk = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate();
+    if (today === yk) return '昨天';
+    return (now.getMonth() + 1) + '月' + now.getDate() + '日';
+}
+
+/* ---------- 删除 / 状态切换 ---------- */
+function workDelMat(id) { const st = workState(); st.mats = st.mats.filter(m => m.id !== id); workSave(st); workRenderLib(); workRenderStrip(); }
+function workDelFig(id) { const st = workState(); st.figs = st.figs.filter(f => f.id !== id); workSave(st); workRenderLib(); workRenderStrip(); }
+function workDelLog(id) { const st = workState(); st.logs = st.logs.filter(l => l.id !== id); workSave(st); workRenderLib(); workRenderStrip(); }
+function workCycleMat(id) {
+    const st = workState();
+    const m = st.mats.find(x => x.id === id);
+    if (!m) return;
+    const i = WORK_MAT_STATES.findIndex(x => x[0] === m.s);
+    m.s = WORK_MAT_STATES[(i + 1) % WORK_MAT_STATES.length][0];
+    workSave(st);
+    workRenderLib();
+}
+function workFilter(c) { workFilterCat = c || 'all'; workRenderLib(); }
+
+/* ---------- 初始化 ---------- */
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        const mask = document.getElementById('workMask');
+        if (mask && mask.classList.contains('show')) workCloseLib();
+    }
+});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', workRenderStrip);
+} else {
+    workRenderStrip();
+}
 // ===== 计划看板专属JS =====
 
         // ===== 右侧「当天任务」栏 收起/展开（2026-09-18 用户要求：核心只看日历，右栏可关）=====
@@ -40307,7 +40837,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609281330";
+        window.NIKO_VERSION = "202609291028";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
