@@ -2550,6 +2550,15 @@
         body.dark-mode .habit-progress-num { color: #8f8fa3; }
         .habit-card-foot { display: flex; align-items: center; justify-content: flex-end; width: auto; gap: 5px; min-height: 0; }
         .habit-card-foot .hcl { margin-left: auto; }
+        /* B7（2026-09-29）：习惯 → 作品联动。只在「今天已打卡」且该习惯标了联动时出现，
+           没打卡时完全不渲染 —— 平时零占位。
+           口径：复用用户已经验证过能坚持的固定容器（每周末游泳回家后那 30 分钟），
+           不新增任何入口、不给消遣加指标。 */
+        .habit-work-link { font-size: 10px; border: 1px dashed #ddd6fe; background: #faf9ff; color: #7c3aed;
+            border-radius: 6px; padding: 0 6px; cursor: pointer; font-family: inherit; line-height: 16px;
+            white-space: nowrap; flex-shrink: 0; }
+        .habit-work-link:hover { background: #f0ebff; }
+        body.dark-mode .habit-work-link { background: #221f36; border-color: #4c4470; color: #c4b5fd; }
         .habit-card .habit-reward { font-size: 10px; color: #8b7bb8; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
         body.dark-mode .habit-card .habit-reward { color: #a89bd6; }
         /* 连击：只保留小火苗数字，弱化为文字 */
@@ -3095,36 +3104,110 @@
             .sec-badge { padding: 3px 9px; }
         }
 /* 🎮 作品主线（融入今日看板 · 2026-09-29）
-   设计前提：零新增导航入口 —— 它长在今日看板里，不是新板块。*/
+   设计前提：零新增导航入口 —— 它长在今日看板里，不是新板块。
+   2026-09-29 紧凑化 v2（起因：用户框出这一段「好丑，而且又开始占用一大行」）：
+     旧版 4 行 ≈140px → 新版标准档 2 行 ≈87px / 极简档 1 行 ≈52px。
+     九项能力（四级尺度 / 累计格 / 版本时间轴 / 倒计时 / 微启动 / 尺度切档 /
+     阶段制 / 习惯联动）全部塞进已有的两行，不新增任何入口。 */
 .work-sec[hidden] { display: none !important; }
-.work-main { display: flex; flex-direction: column; gap: 6px; }
-.work-row1 { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.work-head { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.work-head .sp { flex: 1 1 auto; min-width: 6px; }
 .work-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.16); flex-shrink: 0; }
 .work-name { font-size: 14px; font-weight: 700; letter-spacing: .2px; }
 .work-meta { font-size: 11.5px; color: #8a8a96; }
 body.dark-mode .work-meta { color: #8f8fa3; }
-.work-goal { font-size: 12px; color: #6b7280; background: #faf9f7; border-left: 3px solid #ddd6fe; border-radius: 0 7px 7px 0; padding: 4px 10px; }
-body.dark-mode .work-goal { color: #9aa0b4; background: #26263a; border-left-color: #4c4470; }
-.work-miles { display: flex; gap: 6px; flex-wrap: wrap; }
-.work-mile { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: #8a8a96;
+/* 四级尺度阶梯条（A1 + A2）：三档刻度同屏 + 累计进度条，
+   顶替旧版那个独占一整行的 □□□ 格子串。点任一档 = 切当前口径。 */
+.work-scale { display: inline-flex; align-items: center; gap: 2px; background: #f7f6f4;
+  border: 1px solid #eeece8; border-radius: 9px; padding: 2px; flex-shrink: 0; }
+body.dark-mode .work-scale { background: #26263a; border-color: #333345; }
+.work-sc { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; color: #8a8a96;
+  padding: 3px 8px; border-radius: 7px; cursor: pointer; white-space: nowrap; user-select: none; transition: .13s; }
+.work-sc b { font-size: 12.5px; color: #333; font-variant-numeric: tabular-nums; }
+body.dark-mode .work-sc b { color: #e5e5e5; }
+.work-sc:hover { background: #eeece8; }
+body.dark-mode .work-sc:hover { background: #2f2f45; }
+.work-sc.on { background: #fff; box-shadow: 0 1px 3px rgba(20,20,40,.10); color: #7c3aed; font-weight: 600; }
+.work-sc.on b { color: #7c3aed; }
+body.dark-mode .work-sc.on { background: #3a3358; color: #c4b5fd; }
+body.dark-mode .work-sc.on b { color: #c4b5fd; }
+.work-sc i { font-style: normal; font-size: 10.5px; color: #b0b0bc; }
+.work-bar { width: 54px; height: 5px; border-radius: 99px; background: #e8e6e1; overflow: hidden;
+  flex-shrink: 0; margin: 0 6px 0 3px; }
+body.dark-mode .work-bar { background: #333345; }
+.work-bar i { display: block; height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, #7c3aed, #4f46e5); transition: width .35s ease; }
+/* 行2（A4 版本时间轴 + A5 阶段倒计时 + A7 尺度切档 + C1 阶段制） */
+.work-row2 { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-top: 7px; }
+.work-stages { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+.work-stage { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: #8a8a96;
   border: 1px solid #e8e6e1; border-radius: 999px; padding: 2px 9px; white-space: nowrap;
   cursor: pointer; user-select: none; transition: border-color .15s, color .15s; }
-.work-mile:hover { border-color: #c4b5fd; }
-body.dark-mode .work-mile { color: #8f8fa3; border-color: #333345; }
-.work-mile b { font-weight: 700; }
-.work-mile.now { color: #7c3aed; border-color: #ddd6fe; background: #f5f3ff; font-weight: 600; }
-body.dark-mode .work-mile.now { color: #a78bfa; border-color: #4c4470; background: #2a2440; }
-.work-mile.done { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
-body.dark-mode .work-mile.done { color: #34d399; border-color: #2d5a4a; background: #1c2b26; }
-.work-today { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-.work-cells { font-size: 13px; letter-spacing: 1.5px; color: #7c3aed; font-family: ui-monospace, Menlo, monospace; }
-body.dark-mode .work-cells { color: #a78bfa; }
-.work-num { font-size: 11.5px; color: #8a8a96; }
-body.dark-mode .work-num { color: #8f8fa3; }
-.work-num b { color: #333; font-size: 12.5px; }
-body.dark-mode .work-num b { color: #e5e5e5; }
-.work-add { margin-left: auto; font-family: inherit; font-size: 12px; cursor: pointer; border: 0;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border-radius: 9px; padding: 6px 14px;
+.work-stage:hover { border-color: #c4b5fd; }
+body.dark-mode .work-stage { color: #8f8fa3; border-color: #333345; }
+.work-stage b { font-weight: 700; font-size: 11px; }
+.work-stage i { font-style: normal; font-size: 10px; color: #b0b0bc; padding-left: 3px;
+  border-left: 1px solid #eeece8; margin-left: 2px; }
+body.dark-mode .work-stage i { border-left-color: #333345; }
+.work-stage.now { color: #7c3aed; border-color: #ddd6fe; background: #f5f3ff; font-weight: 600; }
+.work-stage.now i { color: #9b86e8; border-left-color: #ddd6fe; }
+body.dark-mode .work-stage.now { color: #a78bfa; border-color: #4c4470; background: #2a2440; }
+body.dark-mode .work-stage.now i { color: #9b86e8; border-left-color: #4c4470; }
+.work-stage.now i.warn { color: #d97706; }
+.work-stage.done { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
+body.dark-mode .work-stage.done { color: #34d399; border-color: #2d5a4a; background: #1c2b26; }
+.work-stages .arw { color: #d5d2cc; font-size: 10px; padding: 0 2px; }
+body.dark-mode .work-stages .arw { color: #3a3a50; }
+.work-tl { display: inline-flex; align-items: center; gap: 0; flex-shrink: 0; }
+.work-ver { font-size: 10.5px; font-family: ui-monospace, Menlo, monospace; color: #8a8a96;
+  padding: 1px 6px; border-radius: 99px; cursor: pointer; white-space: nowrap; }
+.work-ver:hover { background: #f3f2f0; color: #7c3aed; }
+body.dark-mode .work-ver { color: #8f8fa3; }
+body.dark-mode .work-ver:hover { background: #2a2a3a; color: #a78bfa; }
+.work-ver.cur { color: #7c3aed; font-weight: 700; background: #f5f3ff; }
+body.dark-mode .work-ver.cur { color: #a78bfa; background: #2a2440; }
+.work-tl .ln { width: 9px; height: 1px; background: #ddd6fe; flex-shrink: 0; }
+body.dark-mode .work-tl .ln { background: #4c4470; }
+.work-seg { display: inline-flex; background: #f7f6f4; border: 1px solid #eeece8; border-radius: 8px; padding: 2px; flex-shrink: 0; }
+body.dark-mode .work-seg { background: #26263a; border-color: #333345; }
+.work-seg span { font-size: 11px; color: #8a8a96; padding: 2px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.work-seg span.on { background: #fff; color: #7c3aed; font-weight: 600; box-shadow: 0 1px 3px rgba(20,20,40,.10); }
+body.dark-mode .work-seg span.on { background: #3a3358; color: #c4b5fd; }
+/* 微启动条（A6 记一格补一句 + B4 15 分钟微启动）—— 默认隐藏，点了才出现 */
+.work-kick { margin-top: 7px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: #faf9ff; border: 1px dashed #ddd6fe; border-radius: 9px; padding: 6px 10px;
+  font-size: 12px; color: #5b5470; }
+/* ★ 坑（2026-09-29 实测抓到）：CSS 里的 display:flex 会盖掉 HTML hidden 属性
+   （hidden 只是 UA 的 display:none，特异性最低）→ 凡「默认隐藏、点了才出现」的
+   自定义元素，必须自己补 [hidden] 规则，否则它一直白占着高度。
+   旧版 .work-kick 就因为这个坑一直在偷占 14px + 7px margin。 */
+.work-kick[hidden] { display: none !important; }
+.work-goal[hidden] { display: none !important; }
+.work-help[hidden] { display: none !important; }
+body.dark-mode .work-kick { background: #221f36; border-color: #4c4470; color: #b9bdd0; }
+.work-kick b { color: #7c3aed; }
+body.dark-mode .work-kick b { color: #a78bfa; }
+.work-kick .kx { margin-left: auto; cursor: pointer; color: #a0a0ad; font-size: 12px; }
+.work-kick .mini { font-size: 11px; border: 1px solid #ddd6fe; border-radius: 7px; padding: 2px 9px;
+  background: #fff; color: #7c3aed; cursor: pointer; font-family: inherit; flex-shrink: 0; }
+body.dark-mode .work-kick .mini { background: #2a2440; border-color: #4c4470; color: #c4b5fd; }
+/* 极简档（1 行）：折叠行2，只留一个 ▾ 可以展开回来 */
+.work-sec.mini1 .work-row2 { display: none; }
+.work-unfold { display: none; flex-shrink: 0; width: 19px; height: 19px; line-height: 17px; text-align: center;
+  border: 1px solid #eeece8; border-radius: 6px; color: #a0a0ad; cursor: pointer; font-size: 10px; }
+.work-sec.mini1 .work-unfold { display: inline-block; }
+.work-unfold:hover { border-color: #c4b5fd; color: #7c3aed; }
+body.dark-mode .work-unfold { border-color: #333345; color: #8f8fa3; }
+.work-goal { font-size: 12px; color: #6b7280; background: #faf9f7; border-left: 3px solid #ddd6fe;
+  border-radius: 0 7px 7px 0; padding: 4px 10px; margin-top: 7px; }
+body.dark-mode .work-goal { color: #9aa0b4; background: #26263a; border-left-color: #4c4470; }
+/* 记录一格旁的小笔（A6）：点了才展开微启动条，不破坏零输入 */
+.work-pen { margin-left: -4px; flex-shrink: 0; border: 1px solid #eeece8; background: transparent; color: #a0a0ad;
+  width: 23px; height: 23px; border-radius: 7px; cursor: pointer; font-size: 11px; line-height: 1; padding: 0; }
+.work-pen:hover { border-color: #c4b5fd; color: #7c3aed; }
+body.dark-mode .work-pen { border-color: #333345; color: #8f8fa3; }
+.work-add { font-family: inherit; font-size: 12px; cursor: pointer; border: 0; flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border-radius: 9px; padding: 5px 13px;
   transition: transform .12s, filter .15s; white-space: nowrap; }
 .work-add:hover { filter: brightness(1.08); }
 .work-add:active { transform: scale(.96); }
@@ -3292,9 +3375,44 @@ body.dark-mode .work-mtip { color: #8f8fa3; }
 .work-frow { display: flex; align-items: center; gap: 9px; }
 .work-fl { width: 64px; flex-shrink: 0; font-size: 12px; color: #8a8a96; text-align: right; }
 body.dark-mode .work-fl { color: #8f8fa3; }
+/* 🪜 阶段编辑器（C1 · 2026-09-29）：替代旧版三个写死的里程碑输入框。
+   阶段带 进入/完成 状态、截止日、主要产出 —— 今日看板那一段直接读它（含倒计时）。 */
+.work-stagelist { display: flex; flex-direction: column; gap: 7px; margin: 2px 0 0; }
+.work-stagerow { display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+  border: 1px solid #e8e6e1; border-radius: 10px; padding: 6px 8px; background: #fbfaf8; }
+body.dark-mode .work-stagerow { border-color: #333345; background: #23232f; }
+.work-stagerow .st { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 1px solid #e2e0db;
+  background: #fff; color: #b0b0bc; cursor: pointer; font-size: 11px; line-height: 1; padding: 0; font-family: inherit; }
+body.dark-mode .work-stagerow .st { background: #2c2c42; border-color: #3a3a50; color: #8f8fa3; }
+.work-stagerow .st.now { color: #7c3aed; border-color: #c4b5fd; background: #f5f3ff; }
+body.dark-mode .work-stagerow .st.now { color: #c4b5fd; border-color: #6d5aa8; background: #2a2440; }
+.work-stagerow .st.done { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
+body.dark-mode .work-stagerow .st.done { color: #34d399; border-color: #2d5a4a; background: #1c2b26; }
+.work-sg-name { flex: 1 1 130px; min-width: 90px; }
+.work-sg-due { flex: 0 0 118px; font-size: 11.5px; padding: 7px 9px; }
+.work-sg-out { flex: 1 1 120px; min-width: 90px; }
+.work-sg-del { flex-shrink: 0; border: 0; background: transparent; color: #c9c9d2; font-size: 12px;
+  cursor: pointer; padding: 3px 6px; border-radius: 6px; line-height: 1; }
+.work-sg-del:hover { color: #ef4444; background: rgba(239,68,68,.08); }
+.work-stage-add { font-family: inherit; font-size: 12px; cursor: pointer; border: 1px dashed #d9d6ce;
+  background: transparent; color: #8a8a96; border-radius: 9px; padding: 6px 12px; }
+.work-stage-add:hover { border-color: #c4b5fd; color: #7c3aed; }
+body.dark-mode .work-stage-add { border-color: #3a3a50; color: #8f8fa3; }
+body.dark-mode .work-stage-add:hover { border-color: #6d5aa8; color: #c4b5fd; }
 
 @media (max-width: 768px) {
-  .work-add { margin-left: 0; width: 100%; text-align: center; padding: 9px 0; font-size: 13px; }
+  /* 手机端：「作品库 →」不再被挤掉行（把 meta 收进 title，scale 独占第二行） */
+  /* 触控目标：＋ 记一格 必须 ≥36px（门禁卡的），其余保持紧凑 */
+  .work-add { padding: 9px 14px; font-size: 12px; min-height: 36px;
+    display: inline-flex; align-items: center; }
+  .work-head { gap: 6px; }
+  .work-sec .work-meta { display: none; }
+  .work-scale { order: 3; width: 100%; margin-top: 2px; }
+  .work-sc { padding: 3px 7px; font-size: 11px; }
+  .work-stage { font-size: 11px; padding: 2px 7px; }
+  .work-stage i { font-size: 9.5px; padding-left: 2px; margin-left: 1px; }
+  .work-ver { font-size: 10px; padding: 1px 4px; }
+  .work-seg span { font-size: 10.5px; padding: 2px 6px; }
   .work-stats { grid-template-columns: repeat(2, 1fr); }
   .work-mats { grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); }
   .work-tabs { padding: 8px 8px 0; }
@@ -12875,9 +12993,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <div class="work-frow"><span class="work-fl">项目名</span><input class="work-inp" id="workMFName" placeholder="例：呼吸的房子"></div>
                     <div class="work-frow"><span class="work-fl">开发方式</span><input class="work-inp" id="workMFMeta" placeholder="例：两人开发"></div>
                     <div class="work-frow"><span class="work-fl">一句话目标</span><input class="work-inp" id="workMFGoal" placeholder="做完什么算成功？"></div>
-                    <div class="work-frow"><span class="work-fl">里程碑 1</span><input class="work-inp" id="workMFM0" placeholder="例：可玩原型"></div>
-                    <div class="work-frow"><span class="work-fl">里程碑 2</span><input class="work-inp" id="workMFM1" placeholder="例：首次 playtest"></div>
-                    <div class="work-frow"><span class="work-fl">里程碑 3</span><input class="work-inp" id="workMFM2" placeholder="例：上架页"></div>
+                </div>
+                <p class="work-mtip" style="margin:12px 0 7px">🪜 <b>阶段</b>（替代旧版三个里程碑）—— 点左边那个圈切「未开始 → 进行中 → 已完成」；填了截止日，今日看板那段会自动显示「还差 N 天」，≤7 天变橙。</p>
+                <div class="work-stagelist" id="workMFStages"></div>
+                <div class="work-addbar" style="margin:9px 0 0">
+                    <button class="work-stage-add" onclick="workStageAdd()">＋ 加一个阶段</button>
                 </div>
                 <div class="work-addbar" style="margin:12px 0 0">
                     <button class="work-addbtn" style="padding:8px 18px" onclick="workSaveMain()">保存主线</button>
@@ -18353,6 +18473,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                         <div class="habit-progress-bar"><div class="habit-progress-fill" style="width:${pct}%"></div></div>
                     </div>
                     <div class="habit-card-foot">
+                        ${(d && isActive && typeof workToWorkEnabled === 'function' && workToWorkEnabled(h)) ? `<span class="habit-work-link" onclick="event.stopPropagation();workFromHabit('${h.id}')" title="复用你已经能坚持的那件事：做完之后的 30 分钟就是开发时间块">→ 推一格</span>` : ''}
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                         ${!isActive ? `<span style="font-size:10px;color:#9ca3af;">🌙 今天休息</span>` : ''}
@@ -18878,14 +18999,21 @@ function workDefault() {
         name: '呼吸的房子',
         goal: '做一个让人玩 10 分钟就记住的房子',
         meta: '两人开发',
-        miles: [
-            { t: '可玩原型', st: 'now' },
-            { t: '首次 playtest', st: '' },
-            { t: '上架页', st: '' }
+        /* C1（2026-09-29）：里程碑 → 阶段。带 进入/完成 状态 + 截止日 + 主要产出，
+           截止日让今日看板那段能显示倒计时。旧 miles 会在 workState() 里自动迁移过来。 */
+        stages: [
+            { t: '可玩原型', st: 'now', due: '', out: '能玩通一局' },
+            { t: '首次 playtest', st: '', due: '', out: '3 个真人试玩' },
+            { t: '上架页', st: '', due: '', out: 'Steam 页面过审' }
         ],
         cap: 3,
         today: 0,
         week: 0,
+        total: 0,          // A2 累计格数（永不随日/周期归零）
+        weekCap: 21,       // 本周期目标格数（默认 7 天 × 3 格）
+        totalCap: 200,     // 总格预估
+        scale: 'today',    // A7 当前尺度口径：today | week | all
+        mini: false,       // 极简档（1 行）开关
         dayKey: '',
         periodKey: '',
         mats: [],
@@ -18899,7 +19027,17 @@ function workState() {
     if (!v || typeof v !== 'object') return workDefault();
     const d = workDefault();
     for (const k in d) { if (!(k in v) || v[k] == null) v[k] = d[k]; }
-    if (!Array.isArray(v.miles) || !v.miles.length) v.miles = d.miles;
+    /* 旧数据迁移（C1 阶段制替代里程碑 · 2026-09-29）：
+       miles[{t,st}] → stages[{t,st,due,out}]，老用户的进度不会丢。 */
+    if ((!Array.isArray(v.stages) || !v.stages.length) && Array.isArray(v.miles) && v.miles.length) {
+        v.stages = v.miles.map(function (m) {
+            return { t: (m && m.t) || '未命名阶段', st: (m && m.st) || '', due: '', out: '' };
+        });
+    }
+    if (v.miles !== undefined) { try { delete v.miles; } catch (e) {} }
+    /* 累计格数是本轮新增字段：老数据没有，用本周期格数兜底，免得一上来显示「累计 0」 */
+    if (!v.total && !v.__totalInit) { v.total = Number(v.week) || 0; v.__totalInit = 1; }
+    if (!Array.isArray(v.stages)) v.stages = [];
     if (!Array.isArray(v.mats)) v.mats = [];
     if (!Array.isArray(v.figs)) v.figs = [];
     if (!Array.isArray(v.logs)) v.logs = [];
@@ -18941,47 +19079,103 @@ function workAutoCat(text) {
 }
 function workUid() { return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
-/* ---------- 今日看板里的那一段 ---------- */
+/* ---------- 今日看板里的那一段（2026-09-29 紧凑化 v2）----------
+   旧版 4 行 ≈140px；新版标准档 2 行 ≈87px、极简档 1 行 ≈52px。
+   九项能力全塞进已有的两行，一个导航入口都不新增：
+   行1 ●名字·开发方式 | 今天/本周期/累计 三档刻度 + 进度条 | ＋记一格 ✎ ? 作品库→ ▾
+   行2 阶段胶囊（含倒计时） → 版本时间轴 → 今天|本周期|全部 */
+function workStripPct(st) {
+    const k = st.scale === 'week' ? 'week' : (st.scale === 'all' ? 'total' : 'today');
+    const cur = k === 'today' ? (Number(st.today) || 0) : (k === 'week' ? (Number(st.week) || 0) : (Number(st.total) || 0));
+    const cap = k === 'today' ? (Number(st.cap) || 1) : (k === 'week' ? (Number(st.weekCap) || 7) : (Number(st.totalCap) || 1));
+    return Math.max(0, Math.min(100, Math.round(cur / Math.max(1, cap) * 100)));
+}
+function workTapScale(k) {
+    const st = workState();
+    st.scale = (k === 'week' || k === 'all') ? k : 'today';
+    workSave(st);
+    workRenderStrip();
+}
+function workTapMini() {
+    const st = workState();
+    st.mini = !st.mini;
+    workSave(st);
+    workRenderStrip();
+}
+function workDaysTo(due) {
+    if (!due) return null;
+    const p = String(due).split('-');
+    if (p.length !== 3) return null;
+    const t = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+    if (isNaN(t.getTime())) return null;
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    return Math.round((t - now) / 86400000);
+}
+function workStageChip(s, i) {
+    const cls = s.st === 'done' ? ' done' : (s.st === 'now' ? ' now' : '');
+    const mk = s.st === 'done' ? '●' : (s.st === 'now' ? '◐' : '○');
+    const d = workDaysTo(s.due);
+    let dtxt;
+    if (s.st === 'done') dtxt = '<i>已完成</i>';
+    else if (d === null) dtxt = '<i>未排期</i>';
+    else dtxt = '<i' + (d <= 7 ? ' class="warn"' : '') + '>' + (d < 0 ? '超期 ' + Math.abs(d) + ' 天' : '还差 ' + d + ' 天') + '</i>';
+    return '<span class="work-stage' + cls + '" onclick="workTapStage(' + i + ')" title="' +
+        escapeHtml(s.out ? ('主要产出：' + s.out) : '点一下切换：未开始 → 进行中 → 已完成') + '">' +
+        '<b>' + mk + '</b> ' + escapeHtml(s.t) + dtxt + '</span>';
+}
 function workRenderStrip() {
     const box = document.getElementById('workStrip');
     if (!box) return;
     const st = workState();
     workRollPeriod(st);
-    const cells = Array.from({ length: st.cap }, (_, i) => (i < st.today ? '■' : '□')).join('');
-    const miles = st.miles.map((m, i) => {
-        const cls = m.st === 'done' ? ' done' : (m.st === 'now' ? ' now' : '');
-        const mk = m.st === '' ? '□' : '■';
-        return '<span class="work-mile' + cls + '" onclick="workTapMile(' + i + ')" title="点一下切换：未开始 → 进行中 → 已完成">' +
-            '<b>' + mk + '</b> ' + escapeHtml(m.t) + '</span>';
+    box.className = 'today-sec work-sec' + (st.mini ? ' mini1' : '');
+    const pct = workStripPct(st);
+    const scCls = k => 'work-sc' + (st.scale === k ? ' on' : '');
+    const stages = (st.stages || []).map(workStageChip).join('<span class="arw">▸</span>');
+    const logs = st.logs || [];
+    const tls = logs.slice(0, 4).reverse().map(function (raw, idx, arr) {
+        const l = workNormLog(raw) || {};
+        const cur = idx === arr.length - 1;
+        return (idx ? '<span class="ln"></span>' : '') +
+            '<span class="work-ver' + (cur ? ' cur' : '') + '" onclick="workOpenLib(\'logs\')" title="' +
+            escapeHtml((l.ver || '') + ' · ' + (l.d || '') + '（点一下打开版本日志）') + '">' + escapeHtml(l.ver || '') + '</span>';
     }).join('');
     const helpOpen = !!workHelpOpen;
     box.innerHTML =
-        '<div class="today-sec-head">' +
-            '<span class="today-sec-title">🎮 我的作品</span>' +
-            '<span class="sec-badge">今天 ' + st.today + '/' + st.cap + ' 格</span>' +
+        '<div class="work-head">' +
+            '<span class="work-dot"></span>' +
+            '<span class="work-name" onclick="workEditField(\'name\')" title="点一下改项目名">' + escapeHtml(st.name) + '</span>' +
+            '<span class="work-meta" onclick="workEditField(\'meta\')" title="点一下改（几人开发）">' + escapeHtml(st.meta) + '</span>' +
+            '<span class="sp"></span>' +
+            '<span class="work-scale" title="同一件事的三个时间尺度 · 点一下就切当前口径">' +
+                '<span class="' + scCls('today') + '" onclick="workTapScale(\'today\')">今天 <b>' + st.today + '/' + st.cap + '</b></span>' +
+                '<span class="' + scCls('week') + '" onclick="workTapScale(\'week\')">本周期 <b>' + st.week + '</b><i>/' + st.weekCap + '</i></span>' +
+                '<span class="' + scCls('all') + '" onclick="workTapScale(\'all\')">累计 <b>' + st.total + '</b><i>/' + st.totalCap + '</i></span>' +
+                '<span class="work-bar" title="' + (st.scale === 'today' ? '今天' : (st.scale === 'week' ? '本周期' : '累计')) + '进度 ' + pct + '%"><i style="width:' + pct + '%"></i></span>' +
+            '</span>' +
+            '<button class="work-add" onclick="workAddCell()" title="一格 = 一次 15 分钟的推进，点一下就好">＋ 记一格</button>' +
+            '<button class="work-pen" onclick="workKick()" title="不知道从哪开始？点这里，我从素材库替你挑一条">✎</button>' +
             '<span class="work-q" onclick="workToggleHelp()" title="这一段怎么用？点一下看说明">?</span>' +
-            '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / Build 日志 / 每周汇总 / 主线设置">作品库 →</span>' +
+            '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / 版本日志 / 每周汇总 / 主线设置">作品库 →</span>' +
+            '<span class="work-unfold" onclick="workTapMini()" title="展开阶段 / 版本 / 尺度切档">▾</span>' +
         '</div>' +
-        '<div class="work-main">' +
-            '<div class="work-row1">' +
-                '<span class="work-dot"></span>' +
-                '<span class="work-name" onclick="workEditField(\'name\')" title="点一下改项目名">' + escapeHtml(st.name) + '</span>' +
-                '<span class="work-meta" onclick="workEditField(\'meta\')" title="点一下改（几人开发）">' + escapeHtml(st.meta) + '</span>' +
-            '</div>' +
-            '<div class="work-goal" onclick="workEditField(\'goal\')" title="点一下改目标">' + escapeHtml(st.goal) + '</div>' +
-            '<div class="work-miles">' + miles + '</div>' +
-            '<div class="work-today">' +
-                '<span class="work-cells">' + cells + '</span>' +
-                '<span class="work-num">今天 <b>' + st.today + '</b> 格</span>' +
-                '<span class="work-num">本周 <b>' + st.week + '</b> 格</span>' +
-                '<button class="work-add" onclick="workAddCell()" title="一格 = 一次 15 分钟的推进，点一下就好">＋ 记一格</button>' +
-            '</div>' +
+        '<div class="work-row2">' +
+            '<span class="work-stages">' + stages + '</span>' +
+            '<span class="sp" style="flex:1 1 auto; min-width:6px"></span>' +
+            '<span class="work-tl" title="版本时间轴（最近 4 版，点一下看那一版记了什么）">' + tls + '</span>' +
+            '<span class="work-seg">' +
+                '<span class="' + (st.scale === 'today' ? 'on' : '') + '" onclick="workTapScale(\'today\')">今天</span>' +
+                '<span class="' + (st.scale === 'week' ? 'on' : '') + '" onclick="workTapScale(\'week\')">本周期</span>' +
+                '<span class="' + (st.scale === 'all' ? 'on' : '') + '" onclick="workTapScale(\'all\')">全部</span>' +
+            '</span>' +
         '</div>' +
+        '<div class="work-kick" id="workKick" hidden></div>' +
         '<div class="work-help" id="workHelp"' + (helpOpen ? '' : ' hidden') + '>' +
+            '<div class="work-goal" style="margin:0 0 6px" onclick="workEditField(\'goal\')" title="点一下改目标">🎯 ' + escapeHtml(st.goal) + '</div>' +
             '<div class="wh-t">这一段的用法 · 就四件事</div>' +
             '<p>① 点 <em>＋ 记一格</em> —— 一格 = 一次 15 分钟的推进。被孩子/家务打断也不归零，因为你推的是「一格」，不是「一整天」。</p>' +
-            '<p>② 点左边的<em>里程碑胶囊</em> —— 未开始 → 进行中 → 已完成，点一下切一格。</p>' +
-            '<p>③ 点<em>项目名 / 目标</em>就能直接改（默认是示例，改成你自己的）；改里程碑名字去「作品库 → ⚙ 主线」。</p>' +
+            '<p>② 点 <em>阶段胶囊</em> —— 未开始 → 进行中 → 已完成。填了截止日会出现「还差 N 天」，≤7 天变橙。</p>' +
+            '<p>③ 点 <em>项目名 / 目标</em>就能直接改；阶段和开发方式去「作品库 → ⚙ 主线」。</p>' +
             '<p>④ 点 <em>作品库 →</em> —— 想到什么丢进去（不用挑分类，自动归）· 画完的角色 · 版本日志（贴截图也行）。</p>' +
         '</div>';
     box.hidden = false;
@@ -18991,22 +19185,95 @@ function workAddCell() {
     workRollPeriod(st);
     if (st.today < st.cap) st.today++;
     st.week++;
+    st.total++;
     workSave(st);
     workRenderStrip();
     const btn = document.querySelector('#workStrip .work-add');
     if (btn) { btn.classList.remove('work-pop'); void btn.offsetWidth; btn.classList.add('work-pop'); }
-    if (typeof showToast === 'function') showToast('🎮 记了一格 · 本周 ' + st.week + ' 格');
+    if (typeof showToast === 'function') showToast('🎮 记了一格 · 累计 ' + st.total + '/' + st.totalCap);
 }
-function workTapMile(i) {
+function workTapStage(i) {
     const st = workState();
-    const m = st.miles[i];
-    if (!m) return;
-    m.st = m.st === '' ? 'now' : (m.st === 'now' ? 'done' : '');
+    const s = (st.stages || [])[i];
+    if (!s) return;
+    s.st = s.st === '' ? 'now' : (s.st === 'now' ? 'done' : '');
     workSave(st);
     workRenderStrip();
     if (typeof showToast === 'function') {
-        showToast('「' + m.t + '」→ ' + (m.st === 'done' ? '已完成 ✅' : (m.st === 'now' ? '进行中' : '未开始')));
+        showToast('「' + s.t + '」→ ' + (s.st === 'done' ? '已完成 ✅' : (s.st === 'now' ? '进行中' : '未开始')));
     }
+}
+
+/* ---------- 微启动（A6 记一格补一句 + B4 15 分钟微启动）----------
+   ✎ 点了才出现，默认零占位 —— 替你从素材库挑好起点，不破坏「零输入」原则。 */
+function workKickHide() {
+    const k = document.getElementById('workKick');
+    if (k) k.hidden = true;
+}
+function workKick() {
+    const st = workState();
+    const k = document.getElementById('workKick');
+    if (!k) return;
+    const pool = (st.mats || []).filter(function (m) { return m.s !== 'ok'; });
+    k.hidden = false;
+    if (!pool.length) {
+        k.innerHTML = '⏱ 素材库里还没有「待改 / 可试」的条目 —— 先去 <b>作品库 →</b> 丢一条进来，下次我就能替你挑。' +
+            '<span class="kx" onclick="workKickHide()">✕</span>';
+        return;
+    }
+    const m = pool[Math.floor(Math.random() * pool.length)];
+    k.innerHTML = '⏱ 就推这一格：<b>' + escapeHtml(m.t) + '</b>（' + escapeHtml(m.c) + ' · ' + (m.s === 'todo' ? '待改' : '可试') + '）' +
+        '<button class="mini" onclick="workKickPush()">推一格</button>' +
+        '<button class="mini" onclick="workKickNote()">写一句</button>' +
+        '<span class="kx" onclick="workKickHide()">✕</span>';
+}
+function workKickPush() {
+    workAddCell();
+    workKickHide();
+}
+function workKickNote() {
+    const v = prompt('这一格干了什么？（会追加进今天的版本日志）', '');
+    if (v === null) return;
+    const t = String(v).trim().slice(0, 140);
+    if (!t) return;
+    const st = workState();
+    const dk = workDateShort();
+    const first = workNormLog(st.logs[0]);
+    if (first && first.d === dk) {
+        first.items.push(t);
+    } else {
+        st.logs.unshift({ id: workUid(), ver: workNextVer(), d: dk, items: [t], imgs: [], p: '' });
+    }
+    workSave(st);
+    workKickHide();
+    workRenderStrip();
+    workRenderLib();
+    if (typeof showToast === 'function') showToast('📝 已记进今天的版本日志');
+}
+/* ---------- B7：习惯 → 作品联动 ----------
+   复用用户「已经验证过能坚持」的固定容器（每周末游泳回家后那 30 分钟），
+   不从零要求自律。哪些习惯该挂：他现有的是「游泳」；以后要给别的习惯挂，
+   编辑那个习惯时开 toWork 就行。 */
+function workToWorkEnabled(h) {
+    if (!h) return false;
+    if (h.toWork === true) return true;
+    return /游泳/.test(String(h.name || ''));
+}
+function workFromHabit(id) {
+    let name = '';
+    try {
+        const hs = (typeof habitList === 'function') ? habitList() : [];
+        const h = (hs || []).filter(function (x) { return x && x.id === id; })[0];
+        if (h) name = h.name;
+    } catch (e) {}
+    const st = workState();
+    workRollPeriod(st);
+    if (st.today < st.cap) st.today++;
+    st.week++;
+    st.total++;
+    workSave(st);
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('🛠 ' + (name || '习惯') + ' → 顺带推了一格 · 累计 ' + st.total);
 }
 
 /* ---------- 自解释 + 字段编辑（2026-09-29 加） ----------
@@ -19036,20 +19303,8 @@ function workEditField(f) {
     workRenderLib();
     if (typeof showToast === 'function') showToast('已更新' + conf[0]);
 }
-function workEditMileName(i) {
-    const st = workState();
-    const m = st.miles[i];
-    if (!m) return;
-    const v = prompt('里程碑 ' + (i + 1) + ' 的名字', m.t);
-    if (v === null) return;
-    const t = String(v).trim().slice(0, 20);
-    if (!t) return;
-    m.t = t;
-    workSave(st);
-    workRenderStrip();
-    workRenderLib();
-    if (typeof showToast === 'function') showToast('里程碑已改名');
-}
+/* 注：旧版 workEditMileName() 已随 C1 阶段制下线 —— 阶段改名现在在
+   「作品库 → ⚙ 主线」的阶段编辑器里直接改（每个阶段一行，改完即时生效）。 */
 
 /* ---------- 作品库弹窗 ---------- */
 function workOpenLib(tab) {
@@ -19150,10 +19405,10 @@ function workRenderLib() {
     /* 每周汇总（自己长出来，只读） */
     const ws = document.getElementById('workStats');
     if (ws) {
-        const doneMiles = st.miles.filter(m => m.st === 'done').length;
+        const doneStages = (st.stages || []).filter(s => s.st === 'done').length;
         const stats = [
             [st.week, '本周期格子'],
-            [doneMiles + '/' + st.miles.length, '里程碑'],
+            [doneStages + '/' + (st.stages || []).length, '阶段'],
             [st.mats.length, '素材'],
             [st.logs.length, '版本日志']
         ];
@@ -19163,8 +19418,8 @@ function workRenderLib() {
     if (note) {
         const parts = [];
         if (st.week > 0) parts.push('本周期推了 <b>' + st.week + ' 格</b>');
-        const doneMiles = st.miles.filter(m => m.st === 'done').length;
-        if (doneMiles) parts.push('里程碑达成 <b>' + doneMiles + '/' + st.miles.length + '</b>');
+        const doneStages = (st.stages || []).filter(s => s.st === 'done').length;
+        if (doneStages) parts.push('阶段完成 <b>' + doneStages + '/' + (st.stages || []).length + '</b>');
         if (st.logs.length) {
             const l0 = workNormLog(st.logs[0]);
             if (l0 && l0.items && l0.items.length) {
@@ -19178,14 +19433,78 @@ function workRenderLib() {
     workRenderMainForm();
 }
 
-/* ---------- ⚙ 主线设置（2026-09-29 加） ---------- */
+/* ---------- ⚙ 主线设置（2026-09-29 加 · 同日升级为阶段编辑器 C1） ---------- */
 function workRenderMainForm() {
     const st = workState();
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v == null ? '' : v; };
     set('workMFName', st.name);
     set('workMFMeta', st.meta);
     set('workMFGoal', st.goal);
-    for (let i = 0; i < 3; i++) set('workMFM' + i, (st.miles[i] || {}).t || '');
+    workRenderStageEditor();
+}
+function workRenderStageEditor() {
+    const box = document.getElementById('workMFStages');
+    if (!box) return;
+    const st = workState();
+    const list = st.stages || [];
+    if (!list.length) {
+        box.innerHTML = '<div class="work-empty" style="padding:14px 0;border-style:dashed">还没有阶段 —— 点下面的「＋ 加一个阶段」。</div>';
+        return;
+    }
+    box.innerHTML = list.map(function (s, i) {
+        const cls = s.st === 'done' ? ' done' : (s.st === 'now' ? ' now' : '');
+        const mk = s.st === 'done' ? '●' : (s.st === 'now' ? '◐' : '○');
+        const tip = s.st === 'done' ? '已完成（点一下回到未开始）' : (s.st === 'now' ? '进行中（点一下标完成）' : '未开始（点一下开始）');
+        return '<div class="work-stagerow">' +
+            '<button class="st' + cls + '" onclick="workStageCycle(' + i + ')" title="' + tip + '">' + mk + '</button>' +
+            '<input class="work-inp work-sg-name" value="' + escapeHtml(s.t) + '" placeholder="阶段名，例：可玩原型" onchange="workStageField(' + i + ',\'t\',this.value)">' +
+            '<input class="work-inp work-sg-due" type="date" value="' + escapeHtml(s.due || '') + '" title="截止日（填了才会在今日看板显示倒计时）" onchange="workStageField(' + i + ',\'due\',this.value)">' +
+            '<input class="work-inp work-sg-out" value="' + escapeHtml(s.out || '') + '" placeholder="主要产出，例：能玩通一局" onchange="workStageField(' + i + ',\'out\',this.value)">' +
+            '<button class="work-sg-del" onclick="workStageDel(' + i + ')" title="删掉这个阶段">✕</button>' +
+            '</div>';
+    }).join('');
+}
+function workStageField(i, k, v) {
+    const st = workState();
+    const s = (st.stages || [])[i];
+    if (!s) return;
+    s[k] = String(v == null ? '' : v).slice(0, k === 'due' ? 10 : 40);
+    workSave(st);
+    workRenderStrip();
+}
+function workStageCycle(i) {
+    const st = workState();
+    const s = (st.stages || [])[i];
+    if (!s) return;
+    s.st = s.st === '' ? 'now' : (s.st === 'now' ? 'done' : '');
+    workSave(st);
+    workRenderStageEditor();
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('「' + s.t + '」→ ' + (s.st === 'done' ? '已完成 ✅' : (s.st === 'now' ? '进行中' : '未开始')));
+}
+function workStageDel(i) {
+    const st = workState();
+    if (!Array.isArray(st.stages) || !st.stages[i]) return;
+    const name = st.stages[i].t || '这个阶段';
+    st.stages.splice(i, 1);
+    workSave(st);
+    workRenderStageEditor();
+    workRenderStrip();
+    if (typeof showToast === 'function') showToast('已删掉「' + name + '」');
+}
+function workStageAdd() {
+    const st = workState();
+    if (!Array.isArray(st.stages)) st.stages = [];
+    if (st.stages.length >= 8) {
+        if (typeof showToast === 'function') showToast('最多 8 个阶段 —— 再拆就没人看了');
+        return;
+    }
+    st.stages.push({ t: '新阶段', st: '', due: '', out: '' });
+    workSave(st);
+    workRenderStageEditor();
+    workRenderStrip();
+    const rows = document.querySelectorAll('#workMFStages .work-sg-name');
+    if (rows.length) rows[rows.length - 1].focus();
 }
 function workSaveMain() {
     const st = workState();
@@ -19193,10 +19512,6 @@ function workSaveMain() {
     if (val('workMFName')) st.name = val('workMFName').slice(0, 24);
     if (val('workMFMeta')) st.meta = val('workMFMeta').slice(0, 16);
     if (val('workMFGoal')) st.goal = val('workMFGoal').slice(0, 60);
-    for (let i = 0; i < 3; i++) {
-        const t = val('workMFM' + i);
-        if (t && st.miles[i]) st.miles[i].t = t.slice(0, 20);
-    }
     workSave(st);
     workRenderStrip();
     workRenderLib();
@@ -41633,7 +41948,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291221";
+        window.NIKO_VERSION = "202609291312";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
