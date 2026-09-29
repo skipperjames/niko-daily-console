@@ -3130,6 +3130,30 @@ body.dark-mode .work-num b { color: #e5e5e5; }
 .work-add:active { transform: scale(.96); }
 .work-add.work-pop { animation: workPop .35s ease; }
 @keyframes workPop { 0%{transform:scale(1)} 40%{transform:scale(1.14)} 100%{transform:scale(1)} }
+/* 2026-09-29 加「怎么用」自解释：? 图标 + 内联说明块（不弹窗、不新增导航）
+   起因：用户反馈「看不懂这个我的作品怎么用」—— 段里全是名词、没有动词，
+   且项目名/目标是写死的示例，用户没有编辑入口。 */
+.work-q { flex-shrink: 0; font-size: 11px; font-weight: 700; width: 15px; height: 15px; line-height: 13px;
+  text-align: center; border: 1px solid #ddd6fe; border-radius: 50%; color: #7c3aed;
+  cursor: pointer; user-select: none; }
+.work-q:hover { background: #f5f3ff; }
+body.dark-mode .work-q { border-color: #4c4470; color: #a78bfa; }
+body.dark-mode .work-q:hover { background: #2a2440; }
+.work-help { margin-top: 8px; border: 1px dashed #ddd6fe; background: #faf9ff; border-radius: 10px;
+  padding: 9px 12px; font-size: 12px; line-height: 1.8; color: #4b5563; }
+body.dark-mode .work-help { border-color: #4c4470; background: #24203a; color: #b9bdd0; }
+.work-help[hidden] { display: none !important; }
+.work-help .wh-t { font-weight: 700; color: #7c3aed; margin-bottom: 3px; }
+body.dark-mode .work-help .wh-t { color: #a78bfa; }
+.work-help p { margin: 0 0 2px; }
+.work-help p:last-child { margin-bottom: 0; }
+.work-help em { font-style: normal; font-weight: 700; color: #6d28d9; }
+body.dark-mode .work-help em { color: #c4b5fd; }
+/* 可编辑提示：名字 / 目标 / 里程碑 都要看得出「能点」 */
+.work-name, .work-goal { cursor: pointer; }
+.work-name:hover { color: #6d28d9; }
+.work-goal:hover { border-left-color: #a78bfa; color: #4b5563; }
+body.dark-mode .work-name:hover { color: #c4b5fd; }
 
 /* ---- 作品库弹窗 ---- */
 .work-mask { position: fixed; inset: 0; background: rgba(20,20,32,.48); display: none;
@@ -3221,6 +3245,13 @@ body.dark-mode .work-stat { border-color: #333345; }
 body.dark-mode .work-note { border-color: #4c4470; background: #262238; }
 .work-note b { color: #7c3aed; }
 body.dark-mode .work-note b { color: #a78bfa; }
+/* ⚙ 主线设置表单（2026-09-29 加：让用户能改成自己的项目） */
+.work-mtip { font-size: 12px; color: #8a8a96; margin: 0 0 10px; line-height: 1.6; }
+body.dark-mode .work-mtip { color: #8f8fa3; }
+.work-form { display: flex; flex-direction: column; gap: 7px; }
+.work-frow { display: flex; align-items: center; gap: 9px; }
+.work-fl { width: 64px; flex-shrink: 0; font-size: 12px; color: #8a8a96; text-align: right; }
+body.dark-mode .work-fl { color: #8f8fa3; }
 
 @media (max-width: 768px) {
   .work-add { margin-left: 0; width: 100%; text-align: center; padding: 9px 0; font-size: 13px; }
@@ -12619,6 +12650,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <button class="work-tab" data-tab="figs" onclick="workLibTab('figs')">角色图鉴 <i id="workTabFigs">0</i></button>
             <button class="work-tab" data-tab="logs" onclick="workLibTab('logs')">Build 日志 <i id="workTabLogs">0</i></button>
             <button class="work-tab" data-tab="week" onclick="workLibTab('week')">每周汇总</button>
+            <button class="work-tab" data-tab="main" onclick="workLibTab('main')">⚙ 主线</button>
         </div>
         <div class="work-mbody">
             <div class="work-pane on" id="workPane-mats">
@@ -12646,6 +12678,20 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="work-pane" id="workPane-week">
                 <div class="work-stats" id="workStats"></div>
                 <div class="work-note" id="workNote"></div>
+            </div>
+            <div class="work-pane" id="workPane-main">
+                <p class="work-mtip">这里改你自己的主线 —— 默认那套是示例，直接覆盖掉。改完点「保存主线」，今日看板那一段会同步变。</p>
+                <div class="work-form">
+                    <div class="work-frow"><span class="work-fl">项目名</span><input class="work-inp" id="workMFName" placeholder="例：呼吸的房子"></div>
+                    <div class="work-frow"><span class="work-fl">开发方式</span><input class="work-inp" id="workMFMeta" placeholder="例：两人开发"></div>
+                    <div class="work-frow"><span class="work-fl">一句话目标</span><input class="work-inp" id="workMFGoal" placeholder="做完什么算成功？"></div>
+                    <div class="work-frow"><span class="work-fl">里程碑 1</span><input class="work-inp" id="workMFM0" placeholder="例：可玩原型"></div>
+                    <div class="work-frow"><span class="work-fl">里程碑 2</span><input class="work-inp" id="workMFM1" placeholder="例：首次 playtest"></div>
+                    <div class="work-frow"><span class="work-fl">里程碑 3</span><input class="work-inp" id="workMFM2" placeholder="例：上架页"></div>
+                </div>
+                <div class="work-addbar" style="margin:12px 0 0">
+                    <button class="work-addbtn" style="padding:8px 18px" onclick="workSaveMain()">保存主线</button>
+                </div>
             </div>
         </div>
     </div>
@@ -18664,26 +18710,35 @@ function workRenderStrip() {
         return '<span class="work-mile' + cls + '" onclick="workTapMile(' + i + ')" title="点一下切换：未开始 → 进行中 → 已完成">' +
             '<b>' + mk + '</b> ' + escapeHtml(m.t) + '</span>';
     }).join('');
+    const helpOpen = !!workHelpOpen;
     box.innerHTML =
         '<div class="today-sec-head">' +
             '<span class="today-sec-title">🎮 我的作品</span>' +
             '<span class="sec-badge">今天 ' + st.today + '/' + st.cap + ' 格</span>' +
-            '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / Build 日志 / 每周汇总">作品库 →</span>' +
+            '<span class="work-q" onclick="workToggleHelp()" title="这一段怎么用？点一下看说明">?</span>' +
+            '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / Build 日志 / 每周汇总 / 主线设置">作品库 →</span>' +
         '</div>' +
         '<div class="work-main">' +
             '<div class="work-row1">' +
                 '<span class="work-dot"></span>' +
-                '<span class="work-name">' + escapeHtml(st.name) + '</span>' +
-                '<span class="work-meta">' + escapeHtml(st.meta) + '</span>' +
+                '<span class="work-name" onclick="workEditField(\'name\')" title="点一下改项目名">' + escapeHtml(st.name) + '</span>' +
+                '<span class="work-meta" onclick="workEditField(\'meta\')" title="点一下改（几人开发）">' + escapeHtml(st.meta) + '</span>' +
             '</div>' +
-            '<div class="work-goal">' + escapeHtml(st.goal) + '</div>' +
+            '<div class="work-goal" onclick="workEditField(\'goal\')" title="点一下改目标">' + escapeHtml(st.goal) + '</div>' +
             '<div class="work-miles">' + miles + '</div>' +
             '<div class="work-today">' +
                 '<span class="work-cells">' + cells + '</span>' +
                 '<span class="work-num">今天 <b>' + st.today + '</b> 格</span>' +
                 '<span class="work-num">本周 <b>' + st.week + '</b> 格</span>' +
-                '<button class="work-add" onclick="workAddCell()" title="点一下就好，不用填任何东西">＋ 记一格</button>' +
+                '<button class="work-add" onclick="workAddCell()" title="一格 = 一次 15 分钟的推进，点一下就好">＋ 记一格</button>' +
             '</div>' +
+        '</div>' +
+        '<div class="work-help" id="workHelp"' + (helpOpen ? '' : ' hidden') + '>' +
+            '<div class="wh-t">这一段的用法 · 就四件事</div>' +
+            '<p>① 点 <em>＋ 记一格</em> —— 一格 = 一次 15 分钟的推进。被孩子/家务打断也不归零，因为你推的是「一格」，不是「一整天」。</p>' +
+            '<p>② 点左边的<em>里程碑胶囊</em> —— 未开始 → 进行中 → 已完成，点一下切一格。</p>' +
+            '<p>③ 点<em>项目名 / 目标</em>就能直接改（默认是示例，改成你自己的）；改里程碑名字去「作品库 → ⚙ 主线」。</p>' +
+            '<p>④ 点 <em>作品库 →</em> —— 想到什么丢进去（不用挑分类，自动归）· 画完的角色 · Build 日志。</p>' +
         '</div>';
     box.hidden = false;
 }
@@ -18708,6 +18763,48 @@ function workTapMile(i) {
     if (typeof showToast === 'function') {
         showToast('「' + m.t + '」→ ' + (m.st === 'done' ? '已完成 ✅' : (m.st === 'now' ? '进行中' : '未开始')));
     }
+}
+
+/* ---------- 自解释 + 字段编辑（2026-09-29 加） ----------
+   用户反馈「看不懂这个我的作品怎么用」：段里全是名词、没有动词，且项目名/目标是写死的示例。
+   对策：① 标题行加 ? 内联说明（不弹窗）；② 名字/目标/开发方式 点一下直接改。 */
+let workHelpOpen = false;
+function workToggleHelp() {
+    workHelpOpen = !workHelpOpen;
+    const el = document.getElementById('workHelp');
+    if (el) el.hidden = !workHelpOpen;
+}
+function workEditField(f) {
+    const st = workState();
+    const conf = {
+        name: ['项目名', st.name, 24],
+        goal: ['一句话目标（做完什么算成功）', st.goal, 60],
+        meta: ['开发方式', st.meta, 16]
+    }[f];
+    if (!conf) return;
+    const v = prompt(conf[0], conf[1]);
+    if (v === null) return;                 // 取消 = 不动
+    const t = String(v).trim().slice(0, conf[2]);
+    if (!t) return;
+    st[f] = t;
+    workSave(st);
+    workRenderStrip();
+    workRenderLib();
+    if (typeof showToast === 'function') showToast('已更新' + conf[0]);
+}
+function workEditMileName(i) {
+    const st = workState();
+    const m = st.miles[i];
+    if (!m) return;
+    const v = prompt('里程碑 ' + (i + 1) + ' 的名字', m.t);
+    if (v === null) return;
+    const t = String(v).trim().slice(0, 20);
+    if (!t) return;
+    m.t = t;
+    workSave(st);
+    workRenderStrip();
+    workRenderLib();
+    if (typeof showToast === 'function') showToast('里程碑已改名');
 }
 
 /* ---------- 作品库弹窗 ---------- */
@@ -18813,6 +18910,32 @@ function workRenderLib() {
             ? parts.join(' · ') + '。<br>每一格都是真的在往前 —— 进度存在作品里，不存在你的记忆里。'
             : '这一周期还没有记录。没关系 —— 回今日看板点一下「＋ 记一格」就是开始。';
     }
+    workRenderMainForm();
+}
+
+/* ---------- ⚙ 主线设置（2026-09-29 加） ---------- */
+function workRenderMainForm() {
+    const st = workState();
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v == null ? '' : v; };
+    set('workMFName', st.name);
+    set('workMFMeta', st.meta);
+    set('workMFGoal', st.goal);
+    for (let i = 0; i < 3; i++) set('workMFM' + i, (st.miles[i] || {}).t || '');
+}
+function workSaveMain() {
+    const st = workState();
+    const val = id => { const e = document.getElementById(id); return e ? String(e.value).trim() : ''; };
+    if (val('workMFName')) st.name = val('workMFName').slice(0, 24);
+    if (val('workMFMeta')) st.meta = val('workMFMeta').slice(0, 16);
+    if (val('workMFGoal')) st.goal = val('workMFGoal').slice(0, 60);
+    for (let i = 0; i < 3; i++) {
+        const t = val('workMFM' + i);
+        if (t && st.miles[i]) st.miles[i].t = t.slice(0, 20);
+    }
+    workSave(st);
+    workRenderStrip();
+    workRenderLib();
+    if (typeof showToast === 'function') showToast('✅ 主线已保存');
 }
 
 /* ---------- 输入（零输入原则：一个框 + 回车） ---------- */
@@ -40837,7 +40960,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291028";
+        window.NIKO_VERSION = "202609291037";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
