@@ -3300,6 +3300,139 @@ body.dark-mode .work-fl { color: #8f8fa3; }
   .work-tabs { padding: 8px 8px 0; }
   .work-tab { padding: 7px 9px; font-size: 12px; }
 }
+/* ===== 💰 攒钱闸（融入今日看板 · 2026-09-29）=====
+   设计前提：一行摘要常显在今日看板里、零新增导航入口、全程不需要日常输入。
+   本模块变量统一加 wal- 前缀，避免与本体（硬编码色值体系）冲突。 */
+:root{
+  --wal-card:#ffffff; --wal-line:#e8e6e1; --wal-line2:#f4f3f0;
+  --wal-text:#333340; --wal-muted:#8a8a96; --wal-sub:#68708a;
+  --wal-money:#0d9488; --wal-moneySoft:#e6f7f4; --wal-moneyLine:#8fd9d0;
+  --wal-accent:#6366f1; --wal-accentLine:#c7cbfa;
+  --wal-danger:#ef4444; --wal-warn:#f59e0b;
+  --wal-shadow2:0 12px 40px rgba(16,20,40,.22);
+}
+body.dark-mode{
+  --wal-card:#1f1f2e; --wal-line:#333345; --wal-line2:#26263a;
+  --wal-text:#e5e5e5; --wal-muted:#8f8fa3; --wal-sub:#9aa3b8;
+  --wal-money:#2dd4bf; --wal-moneySoft:#1a3331; --wal-moneyLine:#2f5b57;
+  --wal-accent:#818cf8; --wal-accentLine:#3b4470;
+  --wal-shadow2:0 12px 40px rgba(0,0,0,.6);
+}
+/* ---- 一行摘要（段内容） ---- */
+.wl-line{display:flex;align-items:center;gap:9px;flex-wrap:wrap;min-width:0}
+.wl-title{font-size:13px;font-weight:600;white-space:nowrap;flex:0 0 auto}
+.wl-body{display:flex;align-items:center;gap:9px;flex-wrap:wrap;flex:1;min-width:0}
+.wl-name{font-size:12.5px;font-weight:600;white-space:nowrap;color:var(--wal-text)}
+.wl-num{font-size:11.5px;color:var(--wal-muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.wl-bar{width:110px;height:6px;border-radius:999px;background:var(--wal-line2);overflow:hidden;flex:0 0 auto}
+.wl-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#0d9488,#2dd4bf);transition:width .45s ease}
+.wl-pct{font-size:11.5px;font-weight:700;color:var(--wal-money);white-space:nowrap;font-variant-numeric:tabular-nums}
+.wl-chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;
+  border-radius:999px;padding:2px 9px;cursor:pointer;border:1px solid transparent}
+.wl-chip.cool{background:rgba(99,102,241,.12);color:var(--wal-accent);border-color:var(--wal-accentLine)}
+body.dark-mode .wl-chip.cool{background:rgba(129,140,248,.14)}
+.wl-cta{margin-left:auto;font-family:inherit;font-size:11.5px;cursor:pointer;white-space:nowrap;
+  background:var(--wal-money);color:#fff;border:0;border-radius:8px;padding:5px 12px;
+  transition:filter .15s,transform .12s}
+body.dark-mode .wl-cta{background:#14b8a6;color:#0b2b28}
+.wl-cta:hover{filter:brightness(1.08)}
+.wl-cta:active{transform:scale(.96)}
+.wl-empty{font-size:12px;color:var(--wal-muted);flex:1;min-width:0}
+.wl-empty b{color:var(--wal-money)}
+/* ---- 说明块（默认收起：不占空间、不弹窗、不新增导航） ---- */
+.wal-help{display:none;margin-top:9px;font-size:11.5px;color:var(--wal-sub);
+  background:var(--wal-line2);border-radius:10px;padding:10px 12px;line-height:1.75}
+.wal-help.show{display:block}
+.wal-help b{color:var(--wal-money)}
+.wal-qbtn{width:17px;height:17px;border-radius:50%;border:1px solid var(--wal-line);
+  background:var(--wal-card);color:var(--wal-muted);font-size:11px;line-height:1;
+  cursor:pointer;font-family:inherit;padding:0;flex:0 0 auto}
+.wal-qbtn:hover{color:var(--wal-text);border-color:var(--wal-muted)}
+/* ---- 弹窗 ---- */
+.wal-mask{position:fixed;inset:0;background:rgba(16,20,40,.45);display:none;
+  align-items:center;justify-content:center;padding:18px;z-index:3250}
+.wal-mask.show{display:flex}
+.wal-modal{width:100%;max-width:520px;max-height:88vh;overflow:auto;
+  background:var(--wal-card);border:1px solid var(--wal-line);border-radius:16px;box-shadow:var(--wal-shadow2)}
+.wal-mhead{display:flex;align-items:center;gap:8px;padding:12px 15px;
+  border-bottom:1px solid var(--wal-line2);position:sticky;top:0;background:var(--wal-card);z-index:2}
+.wal-mhead b{font-size:14px}
+.wal-mx{margin-left:auto;background:transparent;border:0;font-size:16px;color:var(--wal-muted);
+  cursor:pointer;line-height:1;padding:2px 6px}
+.wal-mx:hover{color:var(--wal-text)}
+.wal-mbody{padding:14px 15px 18px;display:flex;flex-direction:column;gap:14px}
+/* 目标块 */
+.wal-goal{border:1px solid var(--wal-moneyLine);background:var(--wal-moneySoft);border-radius:12px;padding:11px 13px}
+.wal-goal-top{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+.wal-goal-name{font-size:14px;font-weight:700}
+.wal-goal-amt{font-size:12px;color:var(--wal-sub);margin-left:auto;font-variant-numeric:tabular-nums}
+.wal-goal-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.6);overflow:hidden;margin:9px 0 6px}
+body.dark-mode .wal-goal-bar{background:rgba(255,255,255,.09)}
+.wal-goal-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#0d9488,#2dd4bf);transition:width .5s ease}
+.wal-goal-foot{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--wal-sub);flex-wrap:wrap}
+.wal-goal-foot b{color:var(--wal-money);font-size:13px;font-variant-numeric:tabular-nums}
+/* 闸：想花钱，先过闸 */
+.wal-gate{border:1px solid var(--wal-line);border-radius:12px;padding:12px 13px}
+.wal-gate h4{margin:0 0 3px;font-size:12.5px;font-weight:700}
+.wal-gate .wal-hint{font-size:11.5px;color:var(--wal-muted);margin-bottom:10px}
+.wal-inrow{display:flex;gap:8px;align-items:center}
+.wal-inp{flex:1;min-width:0;font-family:inherit;font-size:14px;font-weight:600;
+  padding:8px 11px;border:1px solid var(--wal-line);border-radius:9px;
+  background:#fff;color:var(--wal-text);font-variant-numeric:tabular-nums}
+body.dark-mode .wal-inp{background:#14141c}
+.wal-inp:focus{outline:2px solid var(--wal-moneyLine);outline-offset:0;border-color:var(--wal-moneyLine)}
+.wal-btn{font-family:inherit;font-size:12px;cursor:pointer;border-radius:9px;padding:8px 14px;
+  border:1px solid var(--wal-line);background:var(--wal-card);color:var(--wal-text);
+  white-space:nowrap;min-height:36px;transition:filter .15s,transform .12s}
+.wal-btn:hover{filter:brightness(.97)}
+.wal-btn.primary{background:var(--wal-money);color:#fff;border-color:var(--wal-money)}
+body.dark-mode .wal-btn.primary{background:#14b8a6;color:#0b2b28;border-color:#14b8a6}
+.wal-btn.primary:hover{filter:brightness(1.08)}
+.wal-btn:active{transform:scale(.97)}
+.wal-conv{margin-top:11px;display:flex;flex-direction:column;gap:6px}
+.wal-conv-item{display:flex;align-items:center;gap:8px;font-size:12.5px;
+  background:var(--wal-line2);border-radius:9px;padding:7px 11px}
+.wal-conv-item .ic{font-size:14px;flex:0 0 auto}
+.wal-conv-item .tx{flex:1;min-width:0}
+.wal-conv-item b{color:var(--wal-money);font-variant-numeric:tabular-nums}
+.wal-conv-item.back b{color:var(--wal-danger)}
+.wal-conv-empty{font-size:11.5px;color:var(--wal-muted)}
+.wal-warn{font-size:11.5px;color:var(--wal-warn);margin-top:8px}
+/* 冷却列表 */
+.wal-cool-h{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;margin-bottom:8px}
+.wal-cool-h .n{font-size:11px;font-weight:600;color:var(--wal-muted);background:var(--wal-line2);border-radius:999px;padding:1px 8px}
+.wal-cool{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.wal-cool-item{display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  border:1px solid var(--wal-line);border-radius:10px;padding:9px 11px}
+.wal-cool-item.ready{border-color:var(--wal-moneyLine);background:var(--wal-moneySoft)}
+.wal-ci-amt{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.wal-ci-left{font-size:11.5px;color:var(--wal-muted)}
+.wal-ci-left.rd{color:var(--wal-money);font-weight:700}
+.wal-ci-btns{margin-left:auto;display:flex;gap:6px}
+.wal-ci-btns button{font-family:inherit;font-size:11.5px;cursor:pointer;border-radius:8px;
+  padding:5px 10px;border:1px solid var(--wal-line);background:var(--wal-card);color:var(--wal-text);min-height:32px}
+.wal-ci-btns button.buy{border-color:var(--wal-moneyLine);color:var(--wal-money);font-weight:600}
+.wal-ci-btns button.buy:disabled{opacity:.4;cursor:not-allowed}
+.wal-ci-btns button.drop:hover{background:var(--wal-line2)}
+.wal-empty-tip{font-size:11.5px;color:var(--wal-muted);padding:10px 0 2px}
+/* 设置 */
+.wal-set{border-top:1px dashed var(--wal-line);padding-top:12px;display:flex;flex-direction:column;gap:9px}
+.wal-set h4{margin:0;font-size:12.5px;font-weight:700;color:var(--wal-muted)}
+.wal-set-row{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.wal-set-row label{flex:0 0 92px;color:var(--wal-sub)}
+.wal-set-row input{flex:1;min-width:0;font-family:inherit;font-size:12.5px;padding:6px 10px;
+  border:1px solid var(--wal-line);border-radius:8px;background:#fff;color:var(--wal-text)}
+body.dark-mode .wal-set-row input{background:#14141c}
+.wal-set-save{font-family:inherit;font-size:12px;cursor:pointer;border:0;border-radius:9px;
+  padding:8px 0;background:var(--wal-line2);color:var(--wal-text);font-weight:600;min-height:36px}
+.wal-set-save:hover{filter:brightness(.97)}
+@media (max-width:560px){
+  .wl-cta{margin-left:0;width:100%;text-align:center;padding:8px 0;min-height:36px}
+  .wal-ci-btns{margin-left:0;width:100%}
+  .wal-ci-btns button{flex:1;padding:8px 0;min-height:36px}
+  .wal-set-row{flex-wrap:wrap}
+  .wal-set-row label{flex:0 0 100%}
+}
 /* ===== 计划看板专属CSS ===== */
         /* ============================================================
                    计划页面 (日历 + 看板)
@@ -12540,6 +12673,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                      刻意不加侧栏/手机导航入口 —— 零新增入口是本条的设计前提。
                      板块若下线（或 work_js 未加载），容器保持 hidden，不会留下空白段。 -->
                 <section class="today-sec work-sec" id="workStrip" hidden></section>
+                <!-- 💰 攒钱闸（2026-09-29 融入今日看板）：内容由 parts/钱包.html 的 walRenderStrip() 渲染。
+                     一行摘要常显、零新增导航入口。板块若下线（或 wal_js 未加载），容器保持 hidden，不留空白段。 -->
+                <section class="today-sec wal-sec" id="walletStrip" hidden></section>
                 <section class="today-sec" id="todayHabits">
                     <div class="today-sec-head">
                         <span class="today-sec-title">🎯 今日习惯</span>
@@ -12747,6 +12883,59 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <button class="work-addbtn" style="padding:8px 18px" onclick="workSaveMain()">保存主线</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="wal-mask" id="walMask" onclick="if(event.target===this)walClose()">
+    <div class="wal-modal">
+        <div class="wal-mhead">
+            <b>💰 攒钱 · 想花钱先过闸</b>
+            <button class="wal-mx" onclick="walClose()" title="关闭">✕</button>
+        </div>
+        <div class="wal-mbody">
+
+            <div class="wal-goal">
+                <div class="wal-goal-top">
+                    <span class="wal-goal-name" id="walGoalName">还没有目标</span>
+                    <span class="wal-goal-amt" id="walGoalAmt"></span>
+                </div>
+                <div class="wal-goal-bar"><div class="wal-goal-fill" id="walGoalFill" style="width:0%"></div></div>
+                <div class="wal-goal-foot">
+                    <span>已攒 <b id="walSaved">¥0</b></span>
+                    <span>·</span>
+                    <span id="walPctTxt">目标 0%</span>
+                </div>
+            </div>
+
+            <div class="wal-gate">
+                <h4>① 想买什么？先填个金额</h4>
+                <div class="wal-hint" id="walHint">低于阈值不用过闸，直接买就行。</div>
+                <div class="wal-inrow">
+                    <input class="wal-inp" id="walInp" type="number" inputmode="decimal" placeholder="金额"
+                           oninput="walCalc()" onkeydown="if(event.key==='Enter')walFreeze()">
+                    <button class="wal-btn primary" onclick="walFreeze()">进冷却 24h</button>
+                </div>
+                <div class="wal-conv" id="walConv"></div>
+            </div>
+
+            <div>
+                <div class="wal-cool-h">
+                    <span>② 冷却中</span>
+                    <span class="n" id="walCoolN">0</span>
+                </div>
+                <ul class="wal-cool" id="walCool"></ul>
+            </div>
+
+            <div class="wal-set">
+                <h4>③ 设置</h4>
+                <div class="wal-set-row"><label>目标名字</label><input id="setName" placeholder="比如：相机"></div>
+                <div class="wal-set-row"><label>目标金额</label><input id="setTarget" type="number" inputmode="decimal" placeholder="比如 3200"></div>
+                <div class="wal-set-row"><label>已攒金额</label><input id="setSaved" type="number" inputmode="decimal" placeholder="当前已经攒了多少"></div>
+                <div class="wal-set-row"><label>一天饭钱</label><input id="setRice" type="number" inputmode="decimal" placeholder="默认 30"></div>
+                <div class="wal-set-row"><label>大额阈值</label><input id="setThreshold" type="number" inputmode="decimal" placeholder="默认 500"></div>
+                <button class="wal-set-save" onclick="walSaveSet()">保存设置</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -16708,6 +16897,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             renderClearSettle();
             renderBuddy();
             if (typeof workRenderStrip === 'function') workRenderStrip();   // 🎮 作品主线（parts/作品.html）
+            if (typeof walRenderStrip === 'function') walRenderStrip();     // 💰 攒钱闸（parts/钱包.html）
             renderGarden();
             renderFilmStrip();
             boardIgnition();
@@ -19251,6 +19441,255 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', workInit);
 } else {
     workInit();
+}
+// ===== 💰 攒钱闸（融入今日看板 · 2026-09-29）=====
+// 设计前提：一行摘要常显在今日看板里（零新增导航入口），完整内容住弹窗。
+// 三条产品口径（写死在代码里，别改回去）：
+//   1. 不做记账 —— 记账治不了"无感"，只会在事后多一份负担。
+//   2. 摩擦加在"花之前" —— 大额强制冷却 24h，冲动消费活不过 24 小时。
+//   3. 小额完全不管 —— 奶茶/打车不记，用最小的动作撬动最大的省钱。
+// 默认必须是空态：绝不许拿示例数据当默认值（用户看到"相机"会觉得这不是他的东西）。
+
+const WAL_KEY = 'niko_wallet_v1';
+var walState = { name: '', target: 0, saved: 0, rice: 30, threshold: 500, cools: [] };
+
+function walUid() { return 'w' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function walFmt(n) { n = Number(n) || 0; return n.toLocaleString('zh-CN', { maximumFractionDigits: 2 }); }
+function walDays(n) { return Math.round((Number(n) || 0) / (walState.rice || 30) * 10) / 10; }
+function walEsc(s) { return (typeof escapeHtml === 'function') ? escapeHtml(s) : String(s == null ? '' : s); }
+function walToast(t) { if (typeof showToast === 'function') showToast(t); }
+
+function walLoad() {
+    try {
+        var raw = (typeof safeStorage !== 'undefined' && safeStorage && safeStorage.get)
+            ? safeStorage.get(WAL_KEY, null)
+            : JSON.parse(localStorage.getItem(WAL_KEY) || 'null');
+        if (raw && typeof raw === 'object') {
+            walState.name = raw.name || '';
+            walState.target = Number(raw.target) || 0;
+            walState.saved = Number(raw.saved) || 0;
+            walState.rice = Number(raw.rice) || 30;
+            walState.threshold = Number(raw.threshold) || 500;
+            walState.cools = Array.isArray(raw.cools) ? raw.cools : [];
+        }
+    } catch (e) { }
+}
+function walSave() {
+    try {
+        if (typeof safeStorage !== 'undefined' && safeStorage && safeStorage.set) safeStorage.set(WAL_KEY, walState);
+        else localStorage.setItem(WAL_KEY, JSON.stringify(walState));
+    } catch (e) { }
+}
+
+/* ================= 一行摘要（写进 #walletStrip） ================= */
+function walRenderStrip() {
+    var box = document.getElementById('walletStrip');
+    if (!box) return;
+    walLoad();   // 铁律：面板渲染前重读 localStorage（多标签页同步）
+
+    var host = document.getElementById('walLine');
+    if (!host) {
+        box.innerHTML =
+            '<div class="wl-line">' +
+                '<span class="wl-title">💰 攒钱</span>' +
+                '<button class="wal-qbtn" id="walHelpBtn" onclick="walToggleHelp()" title="这是什么？点一下看说明">?</button>' +
+                '<span class="wl-body" id="walLine"></span>' +
+            '</div>' +
+            '<div class="wal-help" id="walHelp">' +
+                '<b>这里只干三件事，都不用你每天记：</b><br>' +
+                '① <b>攒钱目标</b> —— 给一个具体的东西（相机 / 显卡 / 一趟旅行）。抽象的数字没有「买不起」的实感，具体的东西有。<br>' +
+                '② <b>大额过闸</b> —— 想花一笔大的，先在这儿算一算：等于多少天饭钱、目标要倒退多少。然后<b>强制冷却 24 小时</b>。冲动消费 90% 活不过 24 小时。<br>' +
+                '③ <b>小额不管</b> —— 奶茶、打车不记。用最小的动作撬动最大的省钱。' +
+            '</div>';
+        host = document.getElementById('walLine');
+    }
+
+    if (!walState.target || walState.target <= 0) {
+        host.innerHTML =
+            '<span class="wl-empty">还没有目标 —— 给一个具体的东西攒钱（相机 / 显卡 / 一趟旅行），抽象的数字没有「买不起」的实感</span>' +
+            '<button class="wl-cta" onclick="walOpen()">设个目标 →</button>';
+        box.hidden = false;
+        return;
+    }
+
+    var pct = Math.max(0, Math.min(100, walState.saved / walState.target * 100));
+    var cooling = walState.cools.length;
+    host.innerHTML =
+        '<span class="wl-name">' + walEsc(walState.name || '目标') + '</span>' +
+        '<span class="wl-bar"><span class="wl-fill" style="width:' + pct.toFixed(1) + '%"></span></span>' +
+        '<span class="wl-pct">' + pct.toFixed(0) + '%</span>' +
+        '<span class="wl-num">¥' + walFmt(walState.saved) + ' / ¥' + walFmt(walState.target) + '</span>' +
+        (cooling ? '<span class="wl-chip cool" onclick="walOpen()" title="有 ' + cooling + ' 笔正在冷却">❄ 冷却中 ' + cooling + ' 笔</span>' : '') +
+        '<button class="wl-cta" onclick="walOpen()">想花钱 →</button>';
+    box.hidden = false;
+}
+
+function walToggleHelp() {
+    var h = document.getElementById('walHelp');
+    if (h) h.classList.toggle('show');
+}
+
+/* ================= 弹窗 ================= */
+function walOpen() {
+    var m = document.getElementById('walMask');
+    if (!m) return;
+    m.classList.add('show');
+    walRenderModal();
+    var focusId = (walState.target > 0) ? 'walInp' : 'setName';
+    setTimeout(function () { var i = document.getElementById(focusId); if (i) i.focus(); }, 60);
+}
+function walClose() {
+    var m = document.getElementById('walMask');
+    if (m) m.classList.remove('show');
+}
+
+function walRenderModal() {
+    var el;
+    if (!walState.target || walState.target <= 0) {
+        document.getElementById('walGoalName').textContent = '还没有目标';
+        document.getElementById('walGoalAmt').textContent = '↓↓ 到下面 ③ 填名字和金额';
+        document.getElementById('walGoalFill').style.width = '0%';
+        document.getElementById('walSaved').textContent = '¥0';
+        document.getElementById('walPctTxt').textContent = '目标 0%';
+    } else {
+        var pct = Math.max(0, Math.min(100, walState.saved / walState.target * 100));
+        document.getElementById('walGoalName').textContent = walState.name || '未命名目标';
+        document.getElementById('walGoalAmt').textContent = '¥' + walFmt(walState.saved) + ' / ¥' + walFmt(walState.target);
+        document.getElementById('walGoalFill').style.width = pct.toFixed(1) + '%';
+        document.getElementById('walSaved').textContent = '¥' + walFmt(walState.saved);
+        document.getElementById('walPctTxt').textContent = '目标 ' + pct.toFixed(0) + '%';
+    }
+
+    document.getElementById('walHint').textContent = '低于阈值 ¥' + walFmt(walState.threshold) + ' 不用过闸，直接买就行。';
+
+    el = document.getElementById('setName'); if (el) el.value = walState.name || '';
+    el = document.getElementById('setTarget'); if (el) el.value = walState.target || '';
+    el = document.getElementById('setSaved'); if (el) el.value = (walState.saved || walState.saved === 0) ? walState.saved : '';
+    el = document.getElementById('setRice'); if (el) el.value = walState.rice || '';
+    el = document.getElementById('setThreshold'); if (el) el.value = walState.threshold || '';
+
+    walRenderCool();
+    walCalc();
+}
+
+function walRenderCool() {
+    var ul = document.getElementById('walCool');
+    if (!ul) return;
+    document.getElementById('walCoolN').textContent = walState.cools.length;
+    if (!walState.cools.length) {
+        ul.innerHTML = '<li class="wal-empty-tip">还没有在冷却的东西 —— 挺好的。</li>';
+        return;
+    }
+    ul.innerHTML = walState.cools.map(function (c) {
+        var left = c.t - Date.now();
+        var ready = left <= 0;
+        var leftTxt = ready ? '可以决定了' : ('还剩 ' + walLeft(left));
+        return '<li class="wal-cool-item' + (ready ? ' ready' : '') + '">' +
+            '<span class="wal-ci-amt">¥' + walFmt(c.amt) + '</span>' +
+            '<span class="wal-ci-left' + (ready ? ' rd' : '') + '">' + leftTxt + '</span>' +
+            '<span class="wal-ci-btns">' +
+                '<button class="buy" ' + (ready ? '' : 'disabled') + ' onclick="walConfirm(\'' + c.id + '\')" title="' +
+                    (ready ? '确认花掉，从已攒里扣' : '必须冷却满 24 小时才能确认') + '">确认花掉</button>' +
+                '<button class="drop" onclick="walDrop(\'' + c.id + '\')">算了，省下</button>' +
+            '</span></li>';
+    }).join('');
+}
+function walLeft(ms) {
+    var h = Math.floor(ms / 3600000), m = Math.floor(ms % 3600000 / 60000);
+    if (h >= 1) return h + ' 小时 ' + m + ' 分';
+    return m + ' 分钟';
+}
+
+/* ================= 痛感换算（花之前的摩擦） ================= */
+function walCalc() {
+    var box = document.getElementById('walConv');
+    var inp = document.getElementById('walInp');
+    if (!box || !inp) return;
+    var amt = Number(inp.value);
+    if (!amt || amt <= 0) {
+        box.innerHTML = '<div class="wal-conv-empty">填了金额，这里立刻告诉你它等于什么。</div>';
+        return;
+    }
+
+    var dd = walDays(amt);
+    var backPct = walState.target > 0 ? amt / walState.target * 100 : 0;
+    var nowPct = walState.target > 0 ? walState.saved / walState.target * 100 : 0;
+    var afterPct = walState.target > 0 ? (walState.saved - amt) / walState.target * 100 : 0;
+    if (afterPct < 0) afterPct = 0;
+
+    var html = '';
+    html += '<div class="wal-conv-item"><span class="ic">🍚</span><span class="tx">这笔 ¥' + walFmt(amt) +
+        ' = 你 <b>' + dd + ' 天</b>饭钱</span></div>';
+    if (walState.target > 0) {
+        html += '<div class="wal-conv-item back"><span class="ic">📉</span><span class="tx">攒钱目标倒退 <b>' +
+            backPct.toFixed(0) + '%</b> —— ' + nowPct.toFixed(0) + '% 会掉回 ' + afterPct.toFixed(0) + '%</span></div>';
+    }
+    if (amt < (walState.threshold || 500)) {
+        html += '<div class="wal-warn">⚠️ 低于阈值 ¥' + walFmt(walState.threshold) + ' —— 小额不用过闸，直接买。</div>';
+    }
+    box.innerHTML = html;
+}
+
+/* ================= 过闸 ================= */
+function walFreeze() {
+    var inp = document.getElementById('walInp');
+    if (!inp) return;
+    var amt = Number(inp.value);
+    if (!amt || amt <= 0) { inp.focus(); return; }
+    if (amt < (walState.threshold || 500)) {
+        walToast('低于阈值 ¥' + walFmt(walState.threshold) + ' —— 小额不用过闸');
+        return;
+    }
+    walState.cools.unshift({ id: walUid(), amt: amt, t: Date.now() + 24 * 3600 * 1000 });
+    walSave();
+    inp.value = '';
+    walRenderModal(); walRenderStrip();
+    walToast('❄ 已进冷却 24 小时 —— 明天还想买，再说');
+}
+function walConfirm(id) {
+    var i, c = null;
+    for (i = 0; i < walState.cools.length; i++) { if (walState.cools[i].id === id) { c = walState.cools[i]; break; } }
+    if (!c) return;
+    if (Date.now() < c.t) { walToast('还在冷却中，不能确认'); return; }
+    walState.saved = Math.max(0, walState.saved - c.amt);
+    walState.cools.splice(i, 1);
+    walSave();
+    walRenderModal(); walRenderStrip();
+    walToast('💸 已花掉 ¥' + walFmt(c.amt) + ' —— 已攒降回 ¥' + walFmt(walState.saved));
+}
+function walDrop(id) {
+    var i, c = null;
+    for (i = 0; i < walState.cools.length; i++) { if (walState.cools[i].id === id) { c = walState.cools[i]; break; } }
+    if (!c) return;
+    walState.cools.splice(i, 1);
+    walSave();
+    walRenderModal(); walRenderStrip();
+    walToast('🎉 省下 ¥' + walFmt(c.amt) + ' —— 目标没倒退');
+}
+
+/* ================= 设置 ================= */
+function walSaveSet() {
+    var n = document.getElementById('setName').value.trim();
+    var t = Number(document.getElementById('setTarget').value);
+    var s = Number(document.getElementById('setSaved').value);
+    var r = Number(document.getElementById('setRice').value);
+    var th = Number(document.getElementById('setThreshold').value);
+    if (!n && !(t > 0)) { walToast('至少填个目标名字或金额'); return; }
+    if (n) walState.name = n;
+    if (t > 0) walState.target = t;
+    if (!isNaN(s) && s >= 0) walState.saved = s;
+    if (r > 0) walState.rice = r;
+    if (th > 0) walState.threshold = th;
+    walSave();
+    walRenderModal(); walRenderStrip();
+    walToast('✅ 设置已保存');
+}
+
+/* 容器就绪后先渲染一次（今日看板 renderTodayPage() 也会调） */
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', walRenderStrip);
+} else {
+    walRenderStrip();
 }
 // ===== 计划看板专属JS =====
 
@@ -41194,7 +41633,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291121";
+        window.NIKO_VERSION = "202609291221";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
