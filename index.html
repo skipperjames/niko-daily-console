@@ -3235,6 +3235,46 @@ body.dark-mode .work-lg-v { color: #a78bfa; }
 body.dark-mode .work-lg-p { color: #9aa0b4; }
 .work-lg-p b { color: #059669; font-weight: 600; }
 body.dark-mode .work-lg-p b { color: #34d399; }
+/* ---- 版本日志 v2（2026-09-29：对齐用户自己的开发日记 V0.1.7 + 日期 + 编号条目 + 截图）---- */
+.work-lg-i { font-size: 12.5px; line-height: 1.62; word-break: break-word; margin-top: 3px; display: flex; gap: 5px; }
+.work-lg-i i { font-style: normal; color: #7c3aed; font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+body.dark-mode .work-lg-i i { color: #a78bfa; }
+.work-lg-imgs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 7px; }
+.work-lg-imgs img { width: 104px; height: 68px; object-fit: cover; border-radius: 7px; border: 1px solid #e8e6e1;
+  display: block; cursor: zoom-in; }
+body.dark-mode .work-lg-imgs img { border-color: #333345; }
+/* 点开的截图查看层（用户主动触发，不是干扰浮层） */
+.work-shotview { position: fixed; inset: 0; background: rgba(12,12,20,.86); z-index: 3400; display: flex;
+  align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+.work-shotview img { max-width: 100%; max-height: 100%; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.55); }
+/* 录入表单：一版一次录完 */
+.work-logform { border: 1px solid #e8e6e1; border-radius: 12px; padding: 10px 11px; margin-bottom: 13px;
+  display: flex; flex-direction: column; gap: 8px; background: #fbfaf8; }
+body.dark-mode .work-logform { border-color: #333345; background: #23232f; }
+.work-lf-row { display: flex; align-items: center; gap: 9px; }
+.work-lf-date { font-size: 11.5px; color: #8a8a96; font-family: ui-monospace, Menlo, monospace; white-space: nowrap; }
+body.dark-mode .work-lf-date { color: #8f8fa3; }
+.work-ta { resize: vertical; min-height: 78px; line-height: 1.62; font-family: inherit; }
+.work-shotbox { border: 1px dashed #d9d6ce; border-radius: 10px; padding: 8px 10px; cursor: pointer;
+  font-size: 12px; color: #8a8a96; display: flex; flex-direction: column; gap: 7px; }
+.work-shotbox:hover { border-color: #c4b5fd; }
+.work-shotbox:focus { outline: none; border-color: #a78bfa; background: #faf9ff; }
+body.dark-mode .work-shotbox { border-color: #3a3a50; color: #8f8fa3; }
+body.dark-mode .work-shotbox:focus { border-color: #6d5aa8; background: #26263a; }
+.work-shots { display: flex; gap: 7px; flex-wrap: wrap; }
+.work-shot-th { position: relative; }
+.work-shot-th img { width: 84px; height: 56px; object-fit: cover; border-radius: 7px; border: 1px solid #e8e6e1; display: block; }
+body.dark-mode .work-shot-th img { border-color: #333345; }
+.work-shot-x { position: absolute; top: -6px; right: -6px; width: 17px; height: 17px; border-radius: 50%; border: 0;
+  background: rgba(20,20,32,.72); color: #fff; font-size: 10px; line-height: 17px; text-align: center;
+  cursor: pointer; padding: 0; }
+.work-shot-x:hover { background: #ef4444; }
+.work-submit { align-self: flex-start; padding: 8px 18px; }
+@media (max-width: 768px) {
+  .work-ta { min-height: 96px; }
+  .work-submit { align-self: stretch; text-align: center; padding: 11px 18px; }
+  .work-lg-imgs img { width: 92px; height: 62px; }
+}
 .work-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 12px; }
 .work-stat { border: 1px solid #e8e6e1; border-radius: 11px; padding: 9px 10px; text-align: center; }
 body.dark-mode .work-stat { border-color: #333345; }
@@ -12648,7 +12688,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="work-tabs">
             <button class="work-tab on" data-tab="mats" onclick="workLibTab('mats')">素材库 <i id="workTabMats">0</i></button>
             <button class="work-tab" data-tab="figs" onclick="workLibTab('figs')">角色图鉴 <i id="workTabFigs">0</i></button>
-            <button class="work-tab" data-tab="logs" onclick="workLibTab('logs')">Build 日志 <i id="workTabLogs">0</i></button>
+            <button class="work-tab" data-tab="logs" onclick="workLibTab('logs')">版本日志 <i id="workTabLogs">0</i></button>
             <button class="work-tab" data-tab="week" onclick="workLibTab('week')">每周汇总</button>
             <button class="work-tab" data-tab="main" onclick="workLibTab('main')">⚙ 主线</button>
         </div>
@@ -12669,9 +12709,23 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div class="work-figs" id="workFigs"></div>
             </div>
             <div class="work-pane" id="workPane-logs">
-                <div class="work-addbar">
-                    <input class="work-inp" id="workLogInp" placeholder="今天做到什么？现在能玩什么？" onkeydown="if(event.key==='Enter')workAddLog()">
-                    <button class="work-addbtn" onclick="workAddLog()" title="记一条 Build 日志">＋</button>
+                <div class="work-logform">
+                    <div class="work-lf-row">
+                        <span class="work-fl">版本号</span>
+                        <input class="work-inp" id="workLogVer" placeholder="V0.1.8">
+                        <span class="work-lf-date" id="workLogDate"></span>
+                    </div>
+                    <textarea class="work-inp work-ta" id="workLogItems" rows="4" placeholder="每行一条 —— 例：放入正确抽屉后，左上角的任务条自动刷新"></textarea>
+                    <div class="work-lf-row">
+                        <span class="work-fl">玩家可见</span>
+                        <input class="work-inp" id="workLogPlayer" placeholder="可选：这一版玩家能感觉到什么">
+                    </div>
+                    <div class="work-shotbox" id="workShotBox" tabindex="0" title="按 Ctrl+V 粘贴截图，或点击选文件。图片会自动压缩后存本地">
+                        <span id="workShotTip">📎 贴截图：按 Ctrl+V，或点这里选文件（自动压缩，最多 2 张）</span>
+                        <div class="work-shots" id="workShots"></div>
+                    </div>
+                    <input type="file" id="workShotFile" accept="image/*" multiple hidden>
+                    <button class="work-addbtn work-submit" onclick="workAddLog()">记下这一版</button>
                 </div>
                 <ul class="work-logs" id="workLogs"></ul>
             </div>
@@ -18662,7 +18716,7 @@ function workState() {
     return v;
 }
 function workSave(st) {
-    try { safeStorage.set(WORK_KEY, st); } catch (e) {}
+    try { safeStorage.set(WORK_KEY, st); return true; } catch (e) { return false; }
 }
 function workPeriodKey() {
     const d = new Date();
@@ -18738,7 +18792,7 @@ function workRenderStrip() {
             '<p>① 点 <em>＋ 记一格</em> —— 一格 = 一次 15 分钟的推进。被孩子/家务打断也不归零，因为你推的是「一格」，不是「一整天」。</p>' +
             '<p>② 点左边的<em>里程碑胶囊</em> —— 未开始 → 进行中 → 已完成，点一下切一格。</p>' +
             '<p>③ 点<em>项目名 / 目标</em>就能直接改（默认是示例，改成你自己的）；改里程碑名字去「作品库 → ⚙ 主线」。</p>' +
-            '<p>④ 点 <em>作品库 →</em> —— 想到什么丢进去（不用挑分类，自动归）· 画完的角色 · Build 日志。</p>' +
+            '<p>④ 点 <em>作品库 →</em> —— 想到什么丢进去（不用挑分类，自动归）· 画完的角色 · 版本日志（贴截图也行）。</p>' +
         '</div>';
     box.hidden = false;
 }
@@ -18829,6 +18883,12 @@ function workRenderLib() {
     set('workTabMats', st.mats.length);
     set('workTabFigs', st.figs.length);
     set('workTabLogs', st.logs.length);
+    /* 版本日志录入区：版本号默认自动 +1、日期今天、截图区复位 */
+    const verEl = document.getElementById('workLogVer');
+    if (verEl && !verEl.value) verEl.value = workNextVer();
+    const dateEl = document.getElementById('workLogDate');
+    if (dateEl) dateEl.textContent = workDateShort();
+    workRenderShots();
 
     /* 素材分类 chips */
     const chips = document.getElementById('workChips');
@@ -18877,14 +18937,24 @@ function workRenderLib() {
     const lg = document.getElementById('workLogs');
     if (lg) {
         if (!st.logs.length) {
-            lg.innerHTML = '<li class="work-empty" style="border:0;text-align:center;color:#8a8a96;padding:18px 0">还没有日志。写下「现在能玩什么」—— 这是你反驳「我什么都没做」的证据</li>';
+            lg.innerHTML = '<li class="work-empty" style="border:0;text-align:center;color:#8a8a96;padding:18px 0">还没有版本记录。就按你写开发日记那样，一版一条 —— 这是你反驳「我什么都没做」的证据</li>';
         } else {
-            lg.innerHTML = st.logs.map(l =>
-                '<li><button class="work-del" onclick="workDelLog(\'' + l.id + '\')" title="删除">✕</button>' +
-                '<div class="work-lg-h"><span class="work-lg-v">#' + l.v + '</span><span class="work-lg-d">' + escapeHtml(l.d) + '</span></div>' +
-                '<div class="work-lg-t">' + escapeHtml(l.t) + '</div>' +
-                '<div class="work-lg-p">现在能玩：<b>' + escapeHtml(l.p) + '</b></div></li>'
-            ).join('');
+            lg.innerHTML = st.logs.map(function (raw) {
+                const l = workNormLog(raw) || {};
+                const items = (l.items || []).map(function (t, i) {
+                    return '<div class="work-lg-i"><i>' + (i + 1) + '、</i><span>' + escapeHtml(t) + '</span></div>';
+                }).join('');
+                const imgs = (l.imgs && l.imgs.length)
+                    ? '<div class="work-lg-imgs">' + l.imgs.map(function (s, i) {
+                        return '<img src="' + s + '" onclick="workViewShot(\'' + l.id + '\',' + i + ')" title="点开放大">';
+                    }).join('') + '</div>'
+                    : '';
+                const player = l.p ? '<div class="work-lg-p">玩家可见：<b>' + escapeHtml(l.p) + '</b></div>' : '';
+                return '<li><button class="work-del" onclick="workDelLog(\'' + l.id + '\')" title="删除">✕</button>' +
+                    '<div class="work-lg-h"><span class="work-lg-v">' + escapeHtml(l.ver) + '</span>' +
+                    '<span class="work-lg-d">' + escapeHtml(l.d) + '</span></div>' +
+                    items + imgs + player + '</li>';
+            }).join('');
         }
     }
     /* 每周汇总（自己长出来，只读） */
@@ -18895,7 +18965,7 @@ function workRenderLib() {
             [st.week, '本周期格子'],
             [doneMiles + '/' + st.miles.length, '里程碑'],
             [st.mats.length, '素材'],
-            [st.logs.length, 'Build 日志']
+            [st.logs.length, '版本日志']
         ];
         ws.innerHTML = stats.map(s => '<div class="work-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>').join('');
     }
@@ -18905,7 +18975,12 @@ function workRenderLib() {
         if (st.week > 0) parts.push('本周期推了 <b>' + st.week + ' 格</b>');
         const doneMiles = st.miles.filter(m => m.st === 'done').length;
         if (doneMiles) parts.push('里程碑达成 <b>' + doneMiles + '/' + st.miles.length + '</b>');
-        if (st.logs.length) parts.push('最近能玩：<b>' + escapeHtml(st.logs[0].t) + '</b>');
+        if (st.logs.length) {
+            const l0 = workNormLog(st.logs[0]);
+            if (l0 && l0.items && l0.items.length) {
+                parts.push('最新版本 <b>' + escapeHtml(l0.ver) + '</b>：' + escapeHtml(l0.items[0]));
+            }
+        }
         note.innerHTML = parts.length
             ? parts.join(' · ') + '。<br>每一格都是真的在往前 —— 进度存在作品里，不存在你的记忆里。'
             : '这一周期还没有记录。没关系 —— 回今日看板点一下「＋ 记一格」就是开始。';
@@ -18968,20 +19043,147 @@ function workAddFig() {
     workRenderStrip();
     if (typeof showToast === 'function') showToast('🎨 图鉴 +1');
 }
+/* ---------- 版本日志录入（2026-09-29 重做：一版一次录完，对齐用户的开发日记）---------- */
+let workPendingShots = [];      // 提交前暂存的截图（压缩后的 dataURL）
+
 function workAddLog() {
-    const inp = document.getElementById('workLogInp');
-    if (!inp) return;
-    const t = inp.value.trim();
-    if (!t) { inp.focus(); return; }
+    const ta = document.getElementById('workLogItems');
+    if (!ta) return;
+    const items = String(ta.value || '').split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (!items.length) {
+        ta.focus();
+        if (typeof showToast === 'function') showToast('至少写一条 —— 每行一条');
+        return;
+    }
     const st = workState();
-    const v = (st.logs.length ? (Number(String(st.logs[0].v).replace('#', '')) || 0) : 0) + 1;
-    st.logs.unshift({ id: workUid(), v: v, d: workDateLabel(), t: t, p: t });
-    workSave(st);
-    inp.value = '';
-    inp.focus();
+    const verEl = document.getElementById('workLogVer');
+    let ver = (verEl && verEl.value.trim()) || workNextVer();
+    if (!/^V/i.test(ver)) ver = 'V' + ver;
+    const playerEl = document.getElementById('workLogPlayer');
+    st.logs.unshift({
+        id: workUid(),
+        ver: ver.slice(0, 12),
+        d: workDateShort(),
+        items: items.slice(0, 40).map(function (s) { return s.slice(0, 140); }),
+        imgs: workPendingShots.slice(0, 2),
+        p: playerEl ? playerEl.value.trim().slice(0, 140) : ''
+    });
+    // 体积保护：截图存 localStorage（一般 5MB 上限），超了就拒绝并回滚
+    if (JSON.stringify(st).length > 4.2e6) {
+        st.logs.shift();
+        if (typeof showToast === 'function') showToast('⚠️ 本地快满了 —— 删掉几条旧日志的截图再记');
+        return;
+    }
+    if (!workSave(st)) {
+        st.logs.shift();
+        if (typeof showToast === 'function') showToast('⚠️ 保存失败（本地空间不足）');
+        return;
+    }
+    ta.value = '';
+    if (playerEl) playerEl.value = '';
+    workPendingShots = [];
+    if (verEl) verEl.value = workNextVer();
+    workRenderShots();
     workRenderLib();
     workRenderStrip();
-    if (typeof showToast === 'function') showToast('📓 Build #' + v + ' 已记');
+    if (typeof showToast === 'function') showToast('📓 ' + ver + ' 已记 · ' + items.length + ' 条');
+}
+
+/* ---------- 截图：粘贴 / 选文件 / 压缩 / 查看 ---------- */
+function workCompressImg(file) {
+    // 压到最长边 900px 的 jpeg（约 30~80KB），否则 localStorage 撑不住
+    return new Promise(function (resolve) {
+        try {
+            const fr = new FileReader();
+            fr.onload = function () {
+                const img = new Image();
+                img.onload = function () {
+                    try {
+                        const MAX = 900;
+                        const sc = Math.min(1, MAX / Math.max(img.width || 1, img.height || 1));
+                        const cv = document.createElement('canvas');
+                        cv.width = Math.max(1, Math.round((img.width || 1) * sc));
+                        cv.height = Math.max(1, Math.round((img.height || 1) * sc));
+                        cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+                        let out = cv.toDataURL('image/jpeg', 0.72);
+                        if (out.length > 260000) out = cv.toDataURL('image/jpeg', 0.5);
+                        resolve(out);
+                    } catch (e) { resolve(''); }
+                };
+                img.onerror = function () { resolve(''); };
+                img.src = fr.result;
+            };
+            fr.onerror = function () { resolve(''); };
+            fr.readAsDataURL(file);
+        } catch (e) { resolve(''); }
+    });
+}
+function workRenderShots() {
+    const tip = document.getElementById('workShotTip');
+    const box = document.getElementById('workShots');
+    if (tip) tip.style.display = workPendingShots.length ? 'none' : '';
+    if (!box) return;
+    box.innerHTML = workPendingShots.map(function (s, i) {
+        return '<div class="work-shot-th"><img src="' + s + '">' +
+            '<button class="work-shot-x" onclick="event.stopPropagation();workDelShot(' + i + ')" title="移除">✕</button></div>';
+    }).join('');
+}
+function workDelShot(i) { workPendingShots.splice(i, 1); workRenderShots(); }
+function workAddShotFiles(files) {
+    const list = Array.prototype.slice.call(files || []).filter(function (f) { return /^image\//.test(f.type || ''); });
+    if (!list.length) return;
+    const room = 2 - workPendingShots.length;
+    if (room <= 0) {
+        if (typeof showToast === 'function') showToast('最多 2 张（一份 Excel + 一张蓝图就够了）');
+        return;
+    }
+    Promise.all(list.slice(0, room).map(workCompressImg)).then(function (arr) {
+        arr.filter(Boolean).forEach(function (s) { if (workPendingShots.length < 2) workPendingShots.push(s); });
+        workRenderShots();
+        if (typeof showToast === 'function') showToast('📎 已贴 ' + workPendingShots.length + '/2 张');
+    });
+}
+function workViewShot(id, i) {
+    const st = workState();
+    const raw = (st.logs || []).find(function (x) { return x.id === id; });
+    const l = workNormLog(raw);
+    if (!l || !l.imgs || !l.imgs[i]) return;
+    let box = document.getElementById('workShotView');
+    if (!box) {
+        box = document.createElement('div');
+        box.id = 'workShotView';
+        box.className = 'work-shotview';
+        box.onclick = function () { box.remove(); };
+        document.body.appendChild(box);
+    }
+    box.innerHTML = '<img src="' + l.imgs[i] + '" alt="截图">';
+}
+function workBindShots() {
+    const box = document.getElementById('workShotBox');
+    const fi = document.getElementById('workShotFile');
+    if (box && fi) {
+        box.addEventListener('click', function (e) {
+            if (e.target && e.target.closest && e.target.closest('.work-shot-x')) return;
+            fi.click();
+        });
+        fi.addEventListener('change', function () { workAddShotFiles(fi.files); fi.value = ''; });
+    }
+    // 全局粘贴：只在「作品库 → Build 日志」打开时接管
+    document.addEventListener('paste', function (e) {
+        const mask = document.getElementById('workMask');
+        const pane = document.getElementById('workPane-logs');
+        if (!mask || !mask.classList.contains('show')) return;
+        if (!pane || !pane.classList.contains('on')) return;
+        const items = (e.clipboardData && e.clipboardData.items) || [];
+        const files = [];
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].kind === 'file' && /^image\//.test(items[i].type || '')) {
+                const f = items[i].getAsFile();
+                if (f) files.push(f);
+            }
+        }
+        if (files.length) { e.preventDefault(); workAddShotFiles(files); }
+    });
 }
 function workDateLabel() {
     const now = new Date(), today = workDayKey();
@@ -18989,6 +19191,33 @@ function workDateLabel() {
     const yk = y.getFullYear() + '-' + (y.getMonth() + 1) + '-' + y.getDate();
     if (today === yk) return '昨天';
     return (now.getMonth() + 1) + '月' + now.getDate() + '日';
+}
+
+/* ---------- 版本日志工具（2026-09-29 · 对齐用户自己的开发日记）----------
+   用户日记形状：`V0.1.7（26-09-27）` + 编号条目（1、2、3、4） + 截图。
+   所以：版本号手填（默认自动 +1）、日期 YY-MM-DD、条目按行拆成编号列表、可贴截图。 */
+function workDateShort(d) {
+    const x = d || new Date();
+    return String(x.getFullYear()).slice(2) + '-' +
+        String(x.getMonth() + 1).padStart(2, '0') + '-' +
+        String(x.getDate()).padStart(2, '0');
+}
+function workNormLog(l) {
+    // 兼容旧格式（v / t / p）→ 新格式（ver / items[] / imgs[]）
+    if (!l || typeof l !== 'object') return null;
+    if (!l.ver) l.ver = l.v ? ('V0.1.' + l.v) : 'V0.1.1';
+    if (!Array.isArray(l.items)) l.items = l.t ? [l.t] : [];
+    if (!Array.isArray(l.imgs)) l.imgs = [];
+    if (l.p == null) l.p = '';
+    return l;
+}
+function workNextVer() {
+    const st = workState();
+    if (!st.logs.length) return 'V0.1.1';
+    const first = workNormLog(st.logs[0]);
+    const m = first ? String(first.ver).match(/^V?(\d+)\.(\d+)\.(\d+)$/) : null;
+    if (!m) return 'V0.1.1';
+    return 'V' + m[1] + '.' + m[2] + '.' + (Number(m[3]) + 1);
 }
 
 /* ---------- 删除 / 状态切换 ---------- */
@@ -19013,10 +19242,11 @@ document.addEventListener('keydown', function (e) {
         if (mask && mask.classList.contains('show')) workCloseLib();
     }
 });
+function workInit() { workBindShots(); workRenderStrip(); }
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', workRenderStrip);
+    document.addEventListener('DOMContentLoaded', workInit);
 } else {
-    workRenderStrip();
+    workInit();
 }
 // ===== 计划看板专属JS =====
 
@@ -40960,7 +41190,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291039";
+        window.NIKO_VERSION = "202609291118";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
