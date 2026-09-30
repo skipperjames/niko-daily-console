@@ -3114,8 +3114,7 @@
 .work-head .sp { flex: 1 1 auto; min-width: 6px; }
 .work-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,.16); flex-shrink: 0; }
 .work-name { font-size: 14px; font-weight: 700; letter-spacing: .2px; }
-.work-meta { font-size: 11.5px; color: #8a8a96; }
-body.dark-mode .work-meta { color: #8f8fa3; }
+/* 行1 只留：名字 + 三档刻度 + 按钮（名字后面原来还挂一个小灰字，2026-09-30 整条下线） */
 /* 四级尺度阶梯条（A1 + A2）：三档刻度同屏 + 累计进度条，
    顶替旧版那个独占一整行的 □□□ 格子串。点任一档 = 切当前口径。 */
 .work-scale { display: inline-flex; align-items: center; gap: 2px; background: #f7f6f4;
@@ -3406,7 +3405,6 @@ body.dark-mode .work-stage-add:hover { border-color: #6d5aa8; color: #c4b5fd; }
   .work-add { padding: 9px 14px; font-size: 12px; min-height: 36px;
     display: inline-flex; align-items: center; }
   .work-head { gap: 6px; }
-  .work-sec .work-meta { display: none; }
   .work-scale { order: 3; width: 100%; margin-top: 2px; }
   .work-sc { padding: 3px 7px; font-size: 11px; }
   .work-stage { font-size: 11px; padding: 2px 7px; }
@@ -13030,7 +13028,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <p class="work-mtip">这里改你自己的主线 —— 默认那套是示例，直接覆盖掉。改完点「保存主线」，今日看板那一段会同步变。</p>
                 <div class="work-form">
                     <div class="work-frow"><span class="work-fl">项目名</span><input class="work-inp" id="workMFName" placeholder="例：呼吸的房子"></div>
-                    <div class="work-frow"><span class="work-fl">开发方式</span><input class="work-inp" id="workMFMeta" placeholder="例：两人开发"></div>
                     <div class="work-frow"><span class="work-fl">一句话目标</span><input class="work-inp" id="workMFGoal" placeholder="做完什么算成功？"></div>
                 </div>
                 <p class="work-mtip" style="margin:12px 0 7px">🪜 <b>阶段</b>（替代旧版三个里程碑）—— 点左边那个圈切「未开始 → 进行中 → 已完成」；填了截止日，今日看板那段会自动显示「还差 N 天」，≤7 天变橙。</p>
@@ -19037,7 +19034,9 @@ function workDefault() {
     return {
         name: '呼吸的房子',
         goal: '做一个让人玩 10 分钟就记住的房子',
-        meta: '两人开发',
+        /* 2026-09-30：名字后面那个「几人开发」的小灰字整条下线（用户原话「看不懂怎么用啊」→ 指着它让删）。
+           st.meta 只做后向兼容 —— UI / 迁移 / 保存都不再读它，老数据里留着也不显示。 */
+        workV: 2,          // 状态结构版本（一次性迁移用，见 workState）
         /* C1（2026-09-29）：里程碑 → 阶段。带 进入/完成 状态 + 截止日 + 主要产出，
            截止日让今日看板那段能显示倒计时。旧 miles 会在 workState() 里自动迁移过来。 */
         stages: [
@@ -19067,6 +19066,30 @@ function workState() {
     let v = null;
     try { v = safeStorage.get(WORK_KEY, null); } catch (e) { v = null; }
     if (!v || typeof v !== 'object') return workDefault();
+    /* ★★ 2026-09-30 五件套迁移（重要 · 不迁就等于整个设计没生效）
+       cap / weekCap / bigCap 这三个值**从不在 UI 里暴露**，但旧版把它们（3 / 21 / 无）一起写进了
+       localStorage。老数据一加载，下面的 `for (const k in d)` 只补「缺失」的键 → 已存在的
+       cap:3 / weekCap:21 会**整段盖掉新配额**。
+       症状（用户 2026-09-30 真机截图实测）：行1 显示「今天 2/3 · 本周期 3 /21」且**永远转黄**
+       （21 次根本凑不到），跟说明块写的「今天 1 格 / 本周期 5 次」对不上 → 他反馈「看不懂怎么用啊」。
+       ⇒ 用 workV 做一次性迁移：只在「还没迁过」时覆盖，迁完写回，之后永不再动。
+
+       ⚠️⚠️ **这段必须在「补默认值」之前跑**（下面那行 `for (const k in d)`）。
+          踩过的坑：workV 本身就在 workDefault() 里 → 先补默认值的话，老数据会被回填成 workV:2，
+          迁移判断当场失效、整段不执行（门禁第一跑就抓到了 9 条红）。
+          判据形态：**「读到什么就是什么」的迁移，永远放在任何补默认值 / 归一化之前。** */
+    if (Number(v.workV) !== 2) {
+        v.cap = 1;
+        v.weekCap = 5;
+        v.bigCap = 1;
+        v.todayBig = Number(v.todayBig) || 0;
+        v.weekBig = Number(v.weekBig) || 0;
+        /* 旧 cap=3 时「今天」可能已经记到 2 格 → 夹到新 cap，免得显示「今天 2/1」 */
+        if (Number(v.today) > v.cap) v.today = v.cap;
+        v.workV = 2;
+        try { window.__workJustMigrated = true; } catch (e) {}   // 只此一次：让说明块自动展开一次（内存标志，不落库）
+        try { safeStorage.set(WORK_KEY, v); } catch (e) {}
+    }
     const d = workDefault();
     for (const k in d) { if (!(k in v) || v[k] == null) v[k] = d[k]; }
     /* 旧数据迁移（C1 阶段制替代里程碑 · 2026-09-29）：
@@ -19126,7 +19149,7 @@ function workUid() { return 'w' + Date.now().toString(36) + Math.random().toStri
 /* ---------- 今日看板里的那一段（2026-09-29 紧凑化 v2）----------
    旧版 4 行 ≈140px；新版标准档 2 行 ≈87px、极简档 1 行 ≈52px。
    九项能力全塞进已有的两行，一个导航入口都不新增：
-   行1 ●名字·开发方式 | 今天/本周期/累计 三档刻度 + 进度条 | ＋记一格 ✎ ? 作品库→ ▾
+   行1 ●节奏点 名字 | 今天/本周期/累计 三档刻度 + 进度条 | ＋记一格 ▲ ✎ ? 作品库→ ▾
    行2 阶段胶囊（含倒计时） → 版本时间轴 → 今天|本周期|全部 */
 /* ---------- 容器：时间感知（2026-09-30 定版）----------
    用户亲述作息：工作日吃完晚饭才回家（约 19:30）→ 带娃到 21:00 多娃洗澡睡觉 → 才有自己的时间；
@@ -19225,17 +19248,19 @@ function workRenderStrip() {
             '<span class="work-ver' + (cur ? ' cur' : '') + '" onclick="workOpenLib(\'logs\')" title="' +
             escapeHtml((l.ver || '') + ' · ' + (l.d || '') + '（点一下打开版本日志）') + '">' + escapeHtml(l.ver || '') + '</span>';
     }).join('');
+    /* 结构迁移后的第一次渲染：自动把说明块展开一次 —— 用户原话「看不懂怎么用啊」，
+       别再指望他自己去找那个小小的 ?（一次性，内存标志，关掉后不再弹）。 */
+    if (window.__workJustMigrated) { workHelpOpen = true; window.__workJustMigrated = false; }
     const helpOpen = !!workHelpOpen;
     box.innerHTML =
         '<div class="work-head">' +
             workRhythmHtml() +
             '<span class="work-name" onclick="workEditField(\'name\')" title="点一下改项目名">' + escapeHtml(st.name) + '</span>' +
-            '<span class="work-meta" onclick="workEditField(\'meta\')" title="点一下改（几人开发）">' + escapeHtml(st.meta) + '</span>' +
             '<span class="sp"></span>' +
             '<span class="work-scale" title="同一件事的三个时间尺度 · 点一下就切当前口径">' +
-                '<span class="' + scCls('today') + '" onclick="workTapScale(\'today\')" title="今天 1 格就够 —— 15 分钟的最小那一步">今天 <b>' + st.today + '/' + st.cap + '</b></span>' +
-                '<span class="' + scCls('week') + qCls + '" onclick="workTapScale(\'week\')" title="' + escapeHtml(workQuotaTip(st)) + '">本周期 <b>' + st.week + '</b><i>/' + st.weekCap + '</i><span class="bg' + (bOk ? ' on' : '') + '" title="本周期至少 1 次大格">▲</span></span>' +
-                '<span class="' + scCls('all') + '" onclick="workTapScale(\'all\')">累计 <b>' + st.total + '</b><i>/' + st.totalCap + '</i></span>' +
+                '<span class="' + scCls('today') + '" onclick="workTapScale(\'today\')" title="今天 1 格就够 —— 15 分钟的最小那一步">今天 <b>' + st.today + '</b><i>/' + st.cap + ' 格</i></span>' +
+                '<span class="' + scCls('week') + qCls + '" onclick="workTapScale(\'week\')" title="' + escapeHtml(workQuotaTip(st)) + '">本周期 <b>' + st.week + '</b><i>/' + st.weekCap + ' 次</i><span class="bg' + (bOk ? ' on' : '') + '" title="本周期至少 1 次大格">▲</span></span>' +
+                '<span class="' + scCls('all') + '" onclick="workTapScale(\'all\')">累计 <b>' + st.total + '</b><i>/' + st.totalCap + ' 格</i></span>' +
                 '<span class="work-bar" title="' + (st.scale === 'today' ? '今天' : (st.scale === 'week' ? '本周期' : '累计')) + '进度 ' + pct + '%"><i style="width:' + pct + '%"></i></span>' +
             '</span>' +
             '<button class="work-add" onclick="workAddCell(false)" title="一格 = 让一个功能在游戏里跑起来 · 15 分钟，点一下就好">＋ 记一格</button>' +
@@ -19375,7 +19400,7 @@ function workFromHabit(id) {
 
 /* ---------- 自解释 + 字段编辑（2026-09-29 加） ----------
    用户反馈「看不懂这个我的作品怎么用」：段里全是名词、没有动词，且项目名/目标是写死的示例。
-   对策：① 标题行加 ? 内联说明（不弹窗）；② 名字/目标/开发方式 点一下直接改。 */
+   对策：① 标题行加 ? 内联说明（不弹窗）；② 名字 / 目标 点一下直接改。 */
 let workHelpOpen = false;
 function workToggleHelp() {
     workHelpOpen = !workHelpOpen;
@@ -19386,8 +19411,7 @@ function workEditField(f) {
     const st = workState();
     const conf = {
         name: ['项目名', st.name, 24],
-        goal: ['一句话目标（做完什么算成功）', st.goal, 60],
-        meta: ['开发方式', st.meta, 16]
+        goal: ['一句话目标（做完什么算成功）', st.goal, 60]
     }[f];
     if (!conf) return;
     const v = prompt(conf[0], conf[1]);
@@ -19565,7 +19589,6 @@ function workRenderMainForm() {
     const st = workState();
     const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v == null ? '' : v; };
     set('workMFName', st.name);
-    set('workMFMeta', st.meta);
     set('workMFGoal', st.goal);
     workRenderStageEditor();
 }
@@ -19637,7 +19660,6 @@ function workSaveMain() {
     const st = workState();
     const val = id => { const e = document.getElementById(id); return e ? String(e.value).trim() : ''; };
     if (val('workMFName')) st.name = val('workMFName').slice(0, 24);
-    if (val('workMFMeta')) st.meta = val('workMFMeta').slice(0, 16);
     if (val('workMFGoal')) st.goal = val('workMFGoal').slice(0, 60);
     workSave(st);
     workRenderStrip();
@@ -42075,7 +42097,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609301315";
+        window.NIKO_VERSION = "202609301518";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
