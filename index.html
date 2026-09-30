@@ -3418,6 +3418,42 @@ body.dark-mode .work-stage-add:hover { border-color: #6d5aa8; color: #c4b5fd; }
   .work-tabs { padding: 8px 8px 0; }
   .work-tab { padding: 7px 9px; font-size: 12px; }
 }
+/* ---- 容器 & 抗断（2026-09-30 五件套落地） ----
+   ① 节奏徽章：替换左边那个 6px 小圆点，只在「该做的窗口」展开 —— 平时仍是点，零新增占位。
+      窗口口径来自用户亲述作息：周末 13:00–15:00 孩子午睡 = 主战场（大格）；
+      21:00 之后 = 副战场（工作日只做 15 分钟收尾格）。
+   ② 配额状态：本周期刻度自己染色 —— 绿=达标 / 黄=周期末还没凑够（不清零、不欠账）。
+   ⚠️ 必须以 .work-sc.on 之后的位置出现：同特异性时「后写覆盖先写」。 */
+.work-rhythm { font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap;
+  border: 1px solid transparent; font-weight: 600; flex-shrink: 0; cursor: default; }
+.work-rhythm.rh-nap { background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe; }
+.work-rhythm.rh-night { background: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+.work-rhythm.rh-finish { background: #fffbeb; color: #b45309; border-color: #fde68a; }
+body.dark-mode .work-rhythm.rh-nap { background: #2a2440; color: #c4b5fd; border-color: #4c4470; }
+body.dark-mode .work-rhythm.rh-night { background: #232a45; color: #a5b4fc; border-color: #3d4a75; }
+body.dark-mode .work-rhythm.rh-finish { background: #3a2f16; color: #fcd34d; border-color: #6b5520; }
+.work-sc.ok, .work-sc.ok b { color: #059669; }
+.work-sc.warn, .work-sc.warn b { color: #b45309; }
+body.dark-mode .work-sc.ok, body.dark-mode .work-sc.ok b { color: #34d399; }
+body.dark-mode .work-sc.warn, body.dark-mode .work-sc.warn b { color: #fcd34d; }
+.work-sc .bg { font-size: 9.5px; color: #c9c9d2; padding-left: 1px; }
+body.dark-mode .work-sc .bg { color: #55556e; }
+.work-sc .bg.on { color: #059669; }
+body.dark-mode .work-sc .bg.on { color: #34d399; }
+.work-big { flex-shrink: 0; border: 1px solid #ddd6fe; background: #f5f3ff; color: #7c3aed;
+  width: 23px; height: 23px; border-radius: 7px; cursor: pointer; font-size: 10px; line-height: 1;
+  padding: 0; font-family: inherit; }
+.work-big:hover { border-color: #a78bfa; background: #ede9fe; }
+.work-big.work-pop { animation: workPop .35s ease; }
+body.dark-mode .work-big { border-color: #4c4470; background: #2a2440; color: #c4b5fd; }
+.work-copy { font-family: inherit; font-size: 12.5px; cursor: pointer; border: 1px solid #ddd6fe;
+  background: #f5f3ff; color: #6d28d9; border-radius: 9px; padding: 7px 14px; }
+.work-copy:hover { border-color: #a78bfa; }
+body.dark-mode .work-copy { border-color: #4c4470; background: #2a2440; color: #c4b5fd; }
+@media (max-width: 768px) {
+  .work-big { width: 36px; height: 36px; font-size: 12px; }
+  .work-copy { width: 100%; text-align: center; padding: 11px 14px; }
+}
 /* ===== 💰 攒钱闸（融入今日看板 · 2026-09-29）=====
    设计前提：一行摘要常显在今日看板里、零新增导航入口、全程不需要日常输入。
    本模块变量统一加 wal- 前缀，避免与本体（硬编码色值体系）冲突。 */
@@ -12986,6 +13022,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="work-pane" id="workPane-week">
                 <div class="work-stats" id="workStats"></div>
                 <div class="work-note" id="workNote"></div>
+                <div class="work-addbar" style="margin:11px 0 0">
+                    <button class="work-copy" onclick="workCopyWeek()" title="把本周期小结复制成一句话，发给搭档 —— 这就是五件套里「有人等」那一条">📋 复制本周期小结 · 发搭档</button>
+                </div>
             </div>
             <div class="work-pane" id="workPane-main">
                 <p class="work-mtip">这里改你自己的主线 —— 默认那套是示例，直接覆盖掉。改完点「保存主线」，今日看板那一段会同步变。</p>
@@ -19006,11 +19045,14 @@ function workDefault() {
             { t: '首次 playtest', st: '', due: '', out: '3 个真人试玩' },
             { t: '上架页', st: '', due: '', out: 'Steam 页面过审' }
         ],
-        cap: 3,
+        cap: 1,            // 今天目标：工作日 21 点后只有 15 分钟 → 一格就够（别逼自己）
         today: 0,
         week: 0,
+        weekBig: 0,        // 本周期大格次数（90 分钟，周末午睡档 / 孩子睡后）
+        todayBig: 0,
         total: 0,          // A2 累计格数（永不随日/周期归零）
-        weekCap: 21,       // 本周期目标格数（默认 7 天 × 3 格）
+        weekCap: 5,        // 本周期目标「次数」（每周 3–4 晚 + 周末 1 大格 ≈ 5）
+        bigCap: 1,         // 本周期至少 1 次大格 —— 没有大格 = 整周都在打补丁，没真往前推
         totalCap: 200,     // 总格预估
         scale: 'today',    // A7 当前尺度口径：today | week | all
         mini: false,       // 极简档（1 行）开关
@@ -19060,9 +19102,11 @@ function workDayKey() {
 function workRollPeriod(st) {
     let changed = false;
     const dk = workDayKey();
-    if (st.dayKey !== dk) { st.dayKey = dk; st.today = 0; changed = true; }
+    if (st.dayKey !== dk) { st.dayKey = dk; st.today = 0; st.todayBig = 0; changed = true; }
     const pk = workPeriodKey();
-    if (st.periodKey !== pk) { st.periodKey = pk; st.week = 0; changed = true; }
+    /* E3 抗断：周期一换就归零，不把上个周期欠的搬进下一个。
+       注意这是「清零本周计数」，不是「清零累计」—— 这正是「允许断，不允许归零」。*/
+    if (st.periodKey !== pk) { st.periodKey = pk; st.week = 0; st.weekBig = 0; changed = true; }
     if (changed) workSave(st);
 }
 function workAutoCat(text) {
@@ -19084,10 +19128,49 @@ function workUid() { return 'w' + Date.now().toString(36) + Math.random().toStri
    九项能力全塞进已有的两行，一个导航入口都不新增：
    行1 ●名字·开发方式 | 今天/本周期/累计 三档刻度 + 进度条 | ＋记一格 ✎ ? 作品库→ ▾
    行2 阶段胶囊（含倒计时） → 版本时间轴 → 今天|本周期|全部 */
+/* ---------- 容器：时间感知（2026-09-30 定版）----------
+   用户亲述作息：工作日吃完晚饭才回家（约 19:30）→ 带娃到 21:00 多娃洗澡睡觉 → 才有自己的时间；
+   周末双休，空闲是 13:00–15:00（孩子午睡）+ 孩子睡后；游泳只在周末。
+   ⇒ 容器 = 周末午睡档（主，做大格 90 分钟）+ 21:00 之后（副，15 分钟收尾格）。
+   ★ 工作日 21 点后**不许把整段给开发**：19:30 到家 + 带娃 + 次日早起，21–23 全给开发
+     = 一天没留白 → 两三周必反弹。那 15 分钟是「收尾格」，不是「再上一班」。 */
+function workRhythm() {
+    const d = new Date();
+    const day = d.getDay();
+    const mins = d.getHours() * 60 + d.getMinutes();
+    const weekend = (day === 0 || day === 6);
+    if (weekend && mins >= 13 * 60 && mins < 15 * 60) {
+        return { k: 'nap', t: '午睡档 90′', tip: '孩子的午睡时间 —— 这是全周质量最高的两小时（清醒、连续、安静），推一大格（▲）' };
+    }
+    if (mins >= 21 * 60) {
+        return weekend
+            ? { k: 'night', t: '夜档', tip: '孩子睡了，明天不上班 —— 大格（▲）或一格都行' }
+            : { k: 'finish', t: '收尾档 15′', tip: '15 分钟，做最小那一步就收工。别把整晚给开发 —— 留白才走得久' };
+    }
+    return null;
+}
+function workRhythmHtml() {
+    const r = workRhythm();
+    if (!r) return '<span class="work-dot"></span>';
+    return '<span class="work-rhythm rh-' + r.k + '" title="' + escapeHtml(r.tip) + '">' + escapeHtml(r.t) + '</span>';
+}
+/* 配额状态（E3 抗断的可视化）：' ok' 达标 / ' warn' 周期末还没凑够 / '' 进行中。
+   只在周期末两天（周三、周四 —— 周期是周五 → 下周四）才转黄，平时不催。 */
+function workQuotaCls(st) {
+    const nOk = (Number(st.week) || 0) >= (Number(st.weekCap) || 5);
+    const bOk = (Number(st.weekBig) || 0) >= (Number(st.bigCap) || 1);
+    if (nOk && bOk) return ' ok';
+    const diff = (new Date().getDay() - 5 + 7) % 7;   // 0=周五 … 5=周三 6=周四
+    return diff >= 5 ? ' warn' : '';
+}
+function workQuotaTip(st) {
+    return '本周期 ' + (st.week || 0) + ' 次推进（大格 ' + (st.weekBig || 0) + '/' + (st.bigCap || 1) + '）· 目标 '
+        + (st.weekCap || 5) + ' 次 + 至少 1 次大格。没凑够也不清零、不欠账 —— 下个周期从 0 开始。';
+}
 function workStripPct(st) {
     const k = st.scale === 'week' ? 'week' : (st.scale === 'all' ? 'total' : 'today');
     const cur = k === 'today' ? (Number(st.today) || 0) : (k === 'week' ? (Number(st.week) || 0) : (Number(st.total) || 0));
-    const cap = k === 'today' ? (Number(st.cap) || 1) : (k === 'week' ? (Number(st.weekCap) || 7) : (Number(st.totalCap) || 1));
+    const cap = k === 'today' ? (Number(st.cap) || 1) : (k === 'week' ? (Number(st.weekCap) || 5) : (Number(st.totalCap) || 1));
     return Math.max(0, Math.min(100, Math.round(cur / Math.max(1, cap) * 100)));
 }
 function workTapScale(k) {
@@ -19131,6 +19214,8 @@ function workRenderStrip() {
     box.className = 'today-sec work-sec' + (st.mini ? ' mini1' : '');
     const pct = workStripPct(st);
     const scCls = k => 'work-sc' + (st.scale === k ? ' on' : '');
+    const qCls = workQuotaCls(st);      // '' 进行中 / ' ok' 达标 / ' warn' 周期末没凑够
+    const bOk = (Number(st.weekBig) || 0) >= (Number(st.bigCap) || 1);
     const stages = (st.stages || []).map(workStageChip).join('<span class="arw">▸</span>');
     const logs = st.logs || [];
     const tls = logs.slice(0, 4).reverse().map(function (raw, idx, arr) {
@@ -19143,17 +19228,18 @@ function workRenderStrip() {
     const helpOpen = !!workHelpOpen;
     box.innerHTML =
         '<div class="work-head">' +
-            '<span class="work-dot"></span>' +
+            workRhythmHtml() +
             '<span class="work-name" onclick="workEditField(\'name\')" title="点一下改项目名">' + escapeHtml(st.name) + '</span>' +
             '<span class="work-meta" onclick="workEditField(\'meta\')" title="点一下改（几人开发）">' + escapeHtml(st.meta) + '</span>' +
             '<span class="sp"></span>' +
             '<span class="work-scale" title="同一件事的三个时间尺度 · 点一下就切当前口径">' +
-                '<span class="' + scCls('today') + '" onclick="workTapScale(\'today\')">今天 <b>' + st.today + '/' + st.cap + '</b></span>' +
-                '<span class="' + scCls('week') + '" onclick="workTapScale(\'week\')">本周期 <b>' + st.week + '</b><i>/' + st.weekCap + '</i></span>' +
+                '<span class="' + scCls('today') + '" onclick="workTapScale(\'today\')" title="今天 1 格就够 —— 15 分钟的最小那一步">今天 <b>' + st.today + '/' + st.cap + '</b></span>' +
+                '<span class="' + scCls('week') + qCls + '" onclick="workTapScale(\'week\')" title="' + escapeHtml(workQuotaTip(st)) + '">本周期 <b>' + st.week + '</b><i>/' + st.weekCap + '</i><span class="bg' + (bOk ? ' on' : '') + '" title="本周期至少 1 次大格">▲</span></span>' +
                 '<span class="' + scCls('all') + '" onclick="workTapScale(\'all\')">累计 <b>' + st.total + '</b><i>/' + st.totalCap + '</i></span>' +
                 '<span class="work-bar" title="' + (st.scale === 'today' ? '今天' : (st.scale === 'week' ? '本周期' : '累计')) + '进度 ' + pct + '%"><i style="width:' + pct + '%"></i></span>' +
             '</span>' +
-            '<button class="work-add" onclick="workAddCell()" title="一格 = 一次 15 分钟的推进，点一下就好">＋ 记一格</button>' +
+            '<button class="work-add" onclick="workAddCell(false)" title="一格 = 让一个功能在游戏里跑起来 · 15 分钟，点一下就好">＋ 记一格</button>' +
+            '<button class="work-big" onclick="workAddCell(true)" title="大格 = 90 分钟深度推进 —— 放周末午睡档（13:00–15:00）或孩子睡后">▲</button>' +
             '<button class="work-pen" onclick="workKick()" title="不知道从哪开始？点这里，我从素材库替你挑一条">✎</button>' +
             '<span class="work-q" onclick="workToggleHelp()" title="这一段怎么用？点一下看说明">?</span>' +
             '<span class="today-sec-more" onclick="workOpenLib(\'mats\')" title="素材库 / 角色图鉴 / 版本日志 / 每周汇总 / 主线设置">作品库 →</span>' +
@@ -19172,25 +19258,36 @@ function workRenderStrip() {
         '<div class="work-kick" id="workKick" hidden></div>' +
         '<div class="work-help" id="workHelp"' + (helpOpen ? '' : ' hidden') + '>' +
             '<div class="work-goal" style="margin:0 0 6px" onclick="workEditField(\'goal\')" title="点一下改目标">🎯 ' + escapeHtml(st.goal) + '</div>' +
-            '<div class="wh-t">这一段的用法 · 就四件事</div>' +
-            '<p>① 点 <em>＋ 记一格</em> —— 一格 = 一次 15 分钟的推进。被孩子/家务打断也不归零，因为你推的是「一格」，不是「一整天」。</p>' +
-            '<p>② 点 <em>阶段胶囊</em> —— 未开始 → 进行中 → 已完成。填了截止日会出现「还差 N 天」，≤7 天变橙。</p>' +
-            '<p>③ 点 <em>项目名 / 目标</em>就能直接改；阶段和开发方式去「作品库 → ⚙ 主线」。</p>' +
-            '<p>④ 点 <em>作品库 →</em> —— 想到什么丢进去（不用挑分类，自动归）· 画完的角色 · 版本日志（贴截图也行）。</p>' +
+            '<div class="wh-t">这一段的用法 · 就五件事</div>' +
+            '<p>① <em>按你的真实作息排的</em>：周末 13:00–15:00 孩子午睡 = 做大格（▲ 90 分钟）；工作日 21:00 之后 = 15 分钟收尾格。到了窗口，左边那个点会自己变成提示。</p>' +
+            '<p>② 点 <em>＋ 记一格</em>（15 分钟）或 <em>▲</em>（90 分钟大格）—— 一格 = 让一个功能在游戏里跑起来。两者都只算 1 次，不用纠结「只做 15 分钟算不算」。</p>' +
+            '<p>③ 目标是 <em>本周期 5 次 + 至少 1 次大格</em>。达标变绿；周期末还没凑够变黄 —— 但<em>不清零、不欠账</em>，下个周期从 0 再开始。</p>' +
+            '<p>④ 点 <em>阶段胶囊</em>切 未开始 → 进行中 → 已完成；填了截止日会出现「还差 N 天」，≤7 天变橙。</p>' +
+            '<p>⑤ 想让人「等」你？<em>作品库 → 每周汇总 → 复制本周期小结</em>，发给搭档。这一条最不起眼，但最管用。</p>' +
         '</div>';
     box.hidden = false;
 }
-function workAddCell() {
+/* D16 单位：一格 = 让一个功能在游戏里跑起来。
+   ★ 大格（90 分钟）与微格（15 分钟）**刻意等权，都只算 1 次**：
+     一加权就会出现「我今天只做了 15 分钟，算不算？」—— 那种纠结正是知行分裂的入口。
+     大格只多一个 ▲ 标记，让「这周到底有没有真往前推」一眼可见。 */
+function workAddCell(big) {
     const st = workState();
     workRollPeriod(st);
     if (st.today < st.cap) st.today++;
     st.week++;
     st.total++;
+    if (big) { st.todayBig = (Number(st.todayBig) || 0) + 1; st.weekBig = (Number(st.weekBig) || 0) + 1; }
     workSave(st);
     workRenderStrip();
-    const btn = document.querySelector('#workStrip .work-add');
+    const btn = document.querySelector('#workStrip ' + (big ? '.work-big' : '.work-add'));
     if (btn) { btn.classList.remove('work-pop'); void btn.offsetWidth; btn.classList.add('work-pop'); }
-    if (typeof showToast === 'function') showToast('🎮 记了一格 · 累计 ' + st.total + '/' + st.totalCap);
+    if (typeof showToast === 'function') {
+        const nOk = st.week >= (Number(st.weekCap) || 5);
+        const bOk = (Number(st.weekBig) || 0) >= (Number(st.bigCap) || 1);
+        showToast((big ? '▲ 大格已记' : '🎮 记了一格') + ' · 本周期 ' + st.week + '/' + st.weekCap +
+            (nOk && bOk ? ' —— 本周期配额达成' : '') + ' · 累计 ' + st.total);
+    }
 }
 function workTapStage(i) {
     const st = workState();
@@ -19228,7 +19325,7 @@ function workKick() {
         '<span class="kx" onclick="workKickHide()">✕</span>';
 }
 function workKickPush() {
-    workAddCell();
+    workAddCell(false);
     workKickHide();
 }
 function workKickNote() {
@@ -19407,9 +19504,9 @@ function workRenderLib() {
     if (ws) {
         const doneStages = (st.stages || []).filter(s => s.st === 'done').length;
         const stats = [
-            [st.week, '本周期格子'],
+            [st.week + '/' + (st.weekCap || 5), '本周期推进'],
+            [(st.weekBig || 0) + '/' + (st.bigCap || 1), '大格'],
             [doneStages + '/' + (st.stages || []).length, '阶段'],
-            [st.mats.length, '素材'],
             [st.logs.length, '版本日志']
         ];
         ws.innerHTML = stats.map(s => '<div class="work-stat"><b>' + s[0] + '</b><span>' + s[1] + '</span></div>').join('');
@@ -19417,7 +19514,7 @@ function workRenderLib() {
     const note = document.getElementById('workNote');
     if (note) {
         const parts = [];
-        if (st.week > 0) parts.push('本周期推了 <b>' + st.week + ' 格</b>');
+        if (st.week > 0) parts.push('本周期推了 <b>' + st.week + '/' + (st.weekCap || 5) + ' 次</b>' + ((st.weekBig || 0) ? '（含大格 <b>' + st.weekBig + '</b>）' : ''));
         const doneStages = (st.stages || []).filter(s => s.st === 'done').length;
         if (doneStages) parts.push('阶段完成 <b>' + doneStages + '/' + (st.stages || []).length + '</b>');
         if (st.logs.length) {
@@ -19431,6 +19528,36 @@ function workRenderLib() {
             : '这一周期还没有记录。没关系 —— 回今日看板点一下「＋ 记一格」就是开始。';
     }
     workRenderMainForm();
+}
+
+/* ---------- D1「有人等」：本周期小结 → 一键发搭档 ----------
+   五件套里最不起眼、但最管用的一条：不是你记得做，而是有人等你做。
+   这是纯文本场景（不经过公众号编辑器），所以 writeText 是对的。 */
+function workWeekSummary() {
+    const st = workState();
+    workRollPeriod(st);
+    const stages = st.stages || [];
+    const done = stages.filter(function (s) { return s.st === 'done'; }).length;
+    const now = stages.filter(function (s) { return s.st === 'now'; })[0];
+    const l0 = workNormLog((st.logs || [])[0]);
+    const d = now ? workDaysTo(now.due) : null;
+    const lines = [];
+    lines.push('【' + st.name + ' · 本周期小结】');
+    lines.push('推进 ' + (st.week || 0) + '/' + (st.weekCap || 5) + ' 次（大格 ' + (st.weekBig || 0) + '/' + (st.bigCap || 1) + '）· 累计 ' + (st.total || 0) + ' 次');
+    lines.push('阶段 ' + done + '/' + stages.length + (now ? (' · 当前：' + now.t + (d !== null ? '（还差 ' + d + ' 天）' : '')) : ''));
+    if (l0 && l0.ver) lines.push('最新 ' + l0.ver + '：' + ((l0.items || [])[0] || ''));
+    return lines.join('\n');
+}
+function workCopyWeek() {
+    const txt = workWeekSummary();
+    window.__workLastCopy = txt;                 // 门禁探针
+    const okc = function () { if (typeof showToast === 'function') showToast('📋 已复制 —— 发给搭档，这周就有人等你了'); };
+    const bad = function () { try { prompt('复制失败，手动复制这段发给搭档：', txt); } catch (e) {} };
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(txt).then(okc, bad);
+        } else { bad(); }
+    } catch (e) { bad(); }
 }
 
 /* ---------- ⚙ 主线设置（2026-09-29 加 · 同日升级为阶段编辑器 C1） ---------- */
@@ -41948,7 +42075,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609291312";
+        window.NIKO_VERSION = "202609301315";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
