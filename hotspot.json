@@ -1,289 +1,289 @@
 {
   "version": 2,
-  "fetchedAt": "2026-09-29T13:58:25+08:00",
-  "date": "2026-09-29",
-  "summary": "今日热点：微博热搜「英语才是普通人的终极杠杆」；百度热搜「习近平给四川大学全体师生回信」；B站热搜「UP主手搓动画猫和老鼠」；百度热点「国家反诈AI App正式上线」；腾讯热点「中美恢复战区层级对话」；抖音热榜「AI短剧72小时登顶抖音热榜」；B站热门「离婚逆袭短剧B站走红」。",
+  "fetchedAt": "2026-09-30T13:48:02+08:00",
+  "date": "2026-09-30",
+  "summary": "今日热点：微博热搜「怪不得小诊所看病好得快」；百度热搜「习近平出席向人民英雄敬献花篮仪式」；B站热搜「给阿嬷的情书」；百度热点「国家反诈AI App正式上线」；腾讯热点「中美恢复战区层级对话」；抖音热榜「AI短剧72小时登顶抖音热榜」；B站热门「离婚逆袭短剧B站走红」。",
   "regions": {
     "国内": [
       {
-        "title": "英语才是普通人的终极杠杆",
+        "title": "怪不得小诊所看病好得快",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "252.5万",
-        "link": "https://s.weibo.com/weibo?q=%E8%8B%B1%E8%AF%AD%E6%89%8D%E6%98%AF%E6%99%AE%E9%80%9A%E4%BA%BA%E7%9A%84%E7%BB%88%E6%9E%81%E6%9D%A0%E6%9D%86&Refer=top"
+        "hot": "114.7万",
+        "link": "https://s.weibo.com/weibo?q=%E6%80%AA%E4%B8%8D%E5%BE%97%E5%B0%8F%E8%AF%8A%E6%89%80%E7%9C%8B%E7%97%85%E5%A5%BD%E5%BE%97%E5%BF%AB&Refer=top"
       },
       {
-        "title": "Tiffany月饼",
+        "title": "沙玥儿妈妈发长文道歉",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "146.6万",
-        "link": "https://s.weibo.com/weibo?q=Tiffany%E6%9C%88%E9%A5%BC&Refer=top"
+        "hot": "85.9万",
+        "link": "https://s.weibo.com/weibo?q=%E6%B2%99%E7%8E%A5%E5%84%BF%E5%A6%88%E5%A6%88%E5%8F%91%E9%95%BF%E6%96%87%E9%81%93%E6%AD%89&Refer=top"
       },
       {
-        "title": "平安是民之所安国之所立",
+        "title": "英烈盼望的明天正是我们的今天",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "115.5万",
-        "link": "https://s.weibo.com/weibo?q=%E5%B9%B3%E5%AE%89%E6%98%AF%E6%B0%91%E4%B9%8B%E6%89%80%E5%AE%89%E5%9B%BD%E4%B9%8B%E6%89%80%E7%AB%8B&Refer=top"
+        "hot": "64.2万",
+        "link": "https://s.weibo.com/weibo?q=%E8%8B%B1%E7%83%88%E7%9B%BC%E6%9C%9B%E7%9A%84%E6%98%8E%E5%A4%A9%E6%AD%A3%E6%98%AF%E6%88%91%E4%BB%AC%E7%9A%84%E4%BB%8A%E5%A4%A9&Refer=top"
       },
       {
-        "title": "红魔12 电竞之光",
+        "title": "龚俊李乃文要强双拼夯爆了",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "114.4万",
-        "link": "https://s.weibo.com/weibo?q=%E7%BA%A2%E9%AD%9412%20%E7%94%B5%E7%AB%9E%E4%B9%8B%E5%85%89&Refer=top"
+        "hot": "64万",
+        "link": "https://s.weibo.com/weibo?q=%E9%BE%9A%E4%BF%8A%E6%9D%8E%E4%B9%83%E6%96%87%E8%A6%81%E5%BC%BA%E5%8F%8C%E6%8B%BC%E5%A4%AF%E7%88%86%E4%BA%86&Refer=top"
       },
       {
-        "title": "仅退款把商家逼成什么程度了",
+        "title": "董子健看孙怡获奖的眼神",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "105.4万",
-        "link": "https://s.weibo.com/weibo?q=%E4%BB%85%E9%80%80%E6%AC%BE%E6%8A%8A%E5%95%86%E5%AE%B6%E9%80%BC%E6%88%90%E4%BB%80%E4%B9%88%E7%A8%8B%E5%BA%A6%E4%BA%86&Refer=top"
+        "hot": "55.4万",
+        "link": "https://s.weibo.com/weibo?q=%E8%91%A3%E5%AD%90%E5%81%A5%E7%9C%8B%E5%AD%99%E6%80%A1%E8%8E%B7%E5%A5%96%E7%9A%84%E7%9C%BC%E7%A5%9E&Refer=top"
       },
       {
-        "title": "水谷隼直言国乒过度依赖王楚钦",
+        "title": "康奈尔大学禁止遭轮奸女生离校治疗",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "72.2万",
-        "link": "https://s.weibo.com/weibo?q=%E6%B0%B4%E8%B0%B7%E9%9A%BC%E7%9B%B4%E8%A8%80%E5%9B%BD%E4%B9%92%E8%BF%87%E5%BA%A6%E4%BE%9D%E8%B5%96%E7%8E%8B%E6%A5%9A%E9%92%A6&Refer=top"
+        "hot": "38.2万",
+        "link": "https://s.weibo.com/weibo?q=%E5%BA%B7%E5%A5%88%E5%B0%94%E5%A4%A7%E5%AD%A6%E7%A6%81%E6%AD%A2%E9%81%AD%E8%BD%AE%E5%A5%B8%E5%A5%B3%E7%94%9F%E7%A6%BB%E6%A0%A1%E6%B2%BB%E7%96%97&Refer=top"
       },
       {
-        "title": "那英演唱会致敬刘欢不该一罚了之",
+        "title": "邓亚萍回应樊振东奥运参赛可能性",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "70.5万",
-        "link": "https://s.weibo.com/weibo?q=%E9%82%A3%E8%8B%B1%E6%BC%94%E5%94%B1%E4%BC%9A%E8%87%B4%E6%95%AC%E5%88%98%E6%AC%A2%E4%B8%8D%E8%AF%A5%E4%B8%80%E7%BD%9A%E4%BA%86%E4%B9%8B&Refer=top"
+        "hot": "38万",
+        "link": "https://s.weibo.com/weibo?q=%E9%82%93%E4%BA%9A%E8%90%8D%E5%9B%9E%E5%BA%94%E6%A8%8A%E6%8C%AF%E4%B8%9C%E5%A5%A5%E8%BF%90%E5%8F%82%E8%B5%9B%E5%8F%AF%E8%83%BD%E6%80%A7&Refer=top"
       },
       {
-        "title": "iQOO16京东重磅上新",
+        "title": "感觉现在的大学和以前不一样了",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "62.7万",
-        "link": "https://s.weibo.com/weibo?q=iQOO16%E4%BA%AC%E4%B8%9C%E9%87%8D%E7%A3%85%E4%B8%8A%E6%96%B0&Refer=top"
+        "hot": "35.5万",
+        "link": "https://s.weibo.com/weibo?q=%E6%84%9F%E8%A7%89%E7%8E%B0%E5%9C%A8%E7%9A%84%E5%A4%A7%E5%AD%A6%E5%92%8C%E4%BB%A5%E5%89%8D%E4%B8%8D%E4%B8%80%E6%A0%B7%E4%BA%86&Refer=top"
       },
       {
-        "title": "亚运会羽毛球",
+        "title": "Faker亚运会被单杀",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "55.1万",
-        "link": "https://s.weibo.com/weibo?q=%E4%BA%9A%E8%BF%90%E4%BC%9A%E7%BE%BD%E6%AF%9B%E7%90%83&Refer=top"
+        "hot": "35.4万",
+        "link": "https://s.weibo.com/weibo?q=Faker%E4%BA%9A%E8%BF%90%E4%BC%9A%E8%A2%AB%E5%8D%95%E6%9D%80&Refer=top"
       },
       {
-        "title": "福原爱说王楚钦更想拿冠军",
+        "title": "油价 黄金",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "53.5万",
-        "link": "https://s.weibo.com/weibo?q=%E7%A6%8F%E5%8E%9F%E7%88%B1%E8%AF%B4%E7%8E%8B%E6%A5%9A%E9%92%A6%E6%9B%B4%E6%83%B3%E6%8B%BF%E5%86%A0%E5%86%9B&Refer=top"
+        "hot": "35.4万",
+        "link": "https://s.weibo.com/weibo?q=%E6%B2%B9%E4%BB%B7%20%E9%BB%84%E9%87%91&Refer=top"
       },
       {
-        "title": "仅退款被拒男子900家店下单2700次",
+        "title": "东航空姐称类似情况有sop流程",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "52.2万",
-        "link": "https://s.weibo.com/weibo?q=%E4%BB%85%E9%80%80%E6%AC%BE%E8%A2%AB%E6%8B%92%E7%94%B7%E5%AD%90900%E5%AE%B6%E5%BA%97%E4%B8%8B%E5%8D%952700%E6%AC%A1&Refer=top"
+        "hot": "35.3万",
+        "link": "https://s.weibo.com/weibo?q=%E4%B8%9C%E8%88%AA%E7%A9%BA%E5%A7%90%E7%A7%B0%E7%B1%BB%E4%BC%BC%E6%83%85%E5%86%B5%E6%9C%89sop%E6%B5%81%E7%A8%8B&Refer=top"
       },
       {
-        "title": "水谷隼称中国曾有五六个王楚钦",
+        "title": "东航空姐下跪道歉",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "49万",
-        "link": "https://s.weibo.com/weibo?q=%E6%B0%B4%E8%B0%B7%E9%9A%BC%E7%A7%B0%E4%B8%AD%E5%9B%BD%E6%9B%BE%E6%9C%89%E4%BA%94%E5%85%AD%E4%B8%AA%E7%8E%8B%E6%A5%9A%E9%92%A6&Refer=top"
+        "hot": "1333.7万",
+        "link": "https://s.weibo.com/weibo?q=%E4%B8%9C%E8%88%AA%E7%A9%BA%E5%A7%90%E4%B8%8B%E8%B7%AA%E9%81%93%E6%AD%89&Refer=top"
       },
       {
-        "title": "Tiffany中国区负责人致歉",
+        "title": "陈芋汐长高十厘米一斤肉没长",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "47.6万",
-        "link": "https://s.weibo.com/weibo?q=Tiffany%E4%B8%AD%E5%9B%BD%E5%8C%BA%E8%B4%9F%E8%B4%A3%E4%BA%BA%E8%87%B4%E6%AD%89&Refer=top"
+        "hot": "35.2万",
+        "link": "https://s.weibo.com/weibo?q=%E9%99%88%E8%8A%8B%E6%B1%90%E9%95%BF%E9%AB%98%E5%8D%81%E5%8E%98%E7%B1%B3%E4%B8%80%E6%96%A4%E8%82%89%E6%B2%A1%E9%95%BF&Refer=top"
       },
       {
-        "title": "Tiffany 捂嘴",
+        "title": "这居然是林志玲",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "47万",
-        "link": "https://s.weibo.com/weibo?q=Tiffany%20%E6%8D%82%E5%98%B4&Refer=top"
+        "hot": "35.1万",
+        "link": "https://s.weibo.com/weibo?q=%E8%BF%99%E5%B1%85%E7%84%B6%E6%98%AF%E6%9E%97%E5%BF%97%E7%8E%B2&Refer=top"
       },
       {
-        "title": "瑞幸联名表情包 像尿",
+        "title": "金智秀和已故总监女儿相拥而泣",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "46.1万",
-        "link": "https://s.weibo.com/weibo?q=%E7%91%9E%E5%B9%B8%E8%81%94%E5%90%8D%E8%A1%A8%E6%83%85%E5%8C%85%20%E5%83%8F%E5%B0%BF&Refer=top"
+        "hot": "35.1万",
+        "link": "https://s.weibo.com/weibo?q=%E9%87%91%E6%99%BA%E7%A7%80%E5%92%8C%E5%B7%B2%E6%95%85%E6%80%BB%E7%9B%91%E5%A5%B3%E5%84%BF%E7%9B%B8%E6%8B%A5%E8%80%8C%E6%B3%A3&Refer=top"
       },
       {
-        "title": "习近平给四川大学全体师生回信",
+        "title": "习近平出席向人民英雄敬献花篮仪式",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E4%B9%A0%E8%BF%91%E5%B9%B3%E7%BB%99%E5%9B%9B%E5%B7%9D%E5%A4%A7%E5%AD%A6%E5%85%A8%E4%BD%93%E5%B8%88%E7%94%9F%E5%9B%9E%E4%BF%A1&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E4%B9%A0%E8%BF%91%E5%B9%B3%E5%87%BA%E5%B8%AD%E5%90%91%E4%BA%BA%E6%B0%91%E8%8B%B1%E9%9B%84%E6%95%AC%E7%8C%AE%E8%8A%B1%E7%AF%AE%E4%BB%AA%E5%BC%8F&sa=fyb_news"
       },
       {
-        "title": "成都文旅通报那英唱《弯弯的月亮》",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "新",
-        "link": "https://m.baidu.com/s?word=%E6%88%90%E9%83%BD%E6%96%87%E6%97%85%E9%80%9A%E6%8A%A5%E9%82%A3%E8%8B%B1%E5%94%B1%E3%80%8A%E5%BC%AF%E5%BC%AF%E7%9A%84%E6%9C%88%E4%BA%AE%E3%80%8B&sa=fyb_news"
-      },
-      {
-        "title": "张本智和看到妹妹输球仰天翻白眼",
+        "title": "“免费试用”被扣738元",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%BC%A0%E6%9C%AC%E6%99%BA%E5%92%8C%E7%9C%8B%E5%88%B0%E5%A6%B9%E5%A6%B9%E8%BE%93%E7%90%83%E4%BB%B0%E5%A4%A9%E7%BF%BB%E7%99%BD%E7%9C%BC&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E2%80%9C%E5%85%8D%E8%B4%B9%E8%AF%95%E7%94%A8%E2%80%9D%E8%A2%AB%E6%89%A3738%E5%85%83&sa=fyb_news"
       },
       {
-        "title": "中国制图将还原火星前世今生",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E4%B8%AD%E5%9B%BD%E5%88%B6%E5%9B%BE%E5%B0%86%E8%BF%98%E5%8E%9F%E7%81%AB%E6%98%9F%E5%89%8D%E4%B8%96%E4%BB%8A%E7%94%9F&sa=fyb_news"
-      },
-      {
-        "title": "“男足 替咱们三大球走个面儿”",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E2%80%9C%E7%94%B7%E8%B6%B3+%E6%9B%BF%E5%92%B1%E4%BB%AC%E4%B8%89%E5%A4%A7%E7%90%83%E8%B5%B0%E4%B8%AA%E9%9D%A2%E5%84%BF%E2%80%9D&sa=fyb_news"
-      },
-      {
-        "title": "66岁大爷考入大学 大一绩点全班前三",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=66%E5%B2%81%E5%A4%A7%E7%88%B7%E8%80%83%E5%85%A5%E5%A4%A7%E5%AD%A6+%E5%A4%A7%E4%B8%80%E7%BB%A9%E7%82%B9%E5%85%A8%E7%8F%AD%E5%89%8D%E4%B8%89&sa=fyb_news"
-      },
-      {
-        "title": "华为Mate90系列国庆当天开售",
+        "title": "广州楼市新政",
         "desc": "",
         "platform": "百度热搜",
         "hot": "新",
-        "link": "https://m.baidu.com/s?word=%E5%8D%8E%E4%B8%BAMate90%E7%B3%BB%E5%88%97%E5%9B%BD%E5%BA%86%E5%BD%93%E5%A4%A9%E5%BC%80%E5%94%AE&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%B9%BF%E5%B7%9E%E6%A5%BC%E5%B8%82%E6%96%B0%E6%94%BF&sa=fyb_news"
       },
       {
-        "title": "买开心果只有外包装展示的第一层",
+        "title": "山河永念 我们从未忘记",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E4%B9%B0%E5%BC%80%E5%BF%83%E6%9E%9C%E5%8F%AA%E6%9C%89%E5%A4%96%E5%8C%85%E8%A3%85%E5%B1%95%E7%A4%BA%E7%9A%84%E7%AC%AC%E4%B8%80%E5%B1%82&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%B1%B1%E6%B2%B3%E6%B0%B8%E5%BF%B5+%E6%88%91%E4%BB%AC%E4%BB%8E%E6%9C%AA%E5%BF%98%E8%AE%B0&sa=fyb_news"
       },
       {
-        "title": "演员万千惠在巴黎相机30秒被偷",
+        "title": "蒂芙尼被一盒月饼绊倒了",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E8%92%82%E8%8A%99%E5%B0%BC%E8%A2%AB%E4%B8%80%E7%9B%92%E6%9C%88%E9%A5%BC%E7%BB%8A%E5%80%92%E4%BA%86&sa=fyb_news"
+      },
+      {
+        "title": "多次求张雪救命？凯越机车回应",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%BC%94%E5%91%98%E4%B8%87%E5%8D%83%E6%83%A0%E5%9C%A8%E5%B7%B4%E9%BB%8E%E7%9B%B8%E6%9C%BA30%E7%A7%92%E8%A2%AB%E5%81%B7&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%A4%9A%E6%AC%A1%E6%B1%82%E5%BC%A0%E9%9B%AA%E6%95%91%E5%91%BD%EF%BC%9F%E5%87%AF%E8%B6%8A%E6%9C%BA%E8%BD%A6%E5%9B%9E%E5%BA%94&sa=fyb_news"
       },
       {
-        "title": "披床单长大的人在横店各自入戏",
+        "title": "台湾以东海域地震",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E5%8F%B0%E6%B9%BE%E4%BB%A5%E4%B8%9C%E6%B5%B7%E5%9F%9F%E5%9C%B0%E9%9C%87&sa=fyb_news"
+      },
+      {
+        "title": "目击者称东航空姐向乘客跪了两三次",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%8A%AB%E5%BA%8A%E5%8D%95%E9%95%BF%E5%A4%A7%E7%9A%84%E4%BA%BA%E5%9C%A8%E6%A8%AA%E5%BA%97%E5%90%84%E8%87%AA%E5%85%A5%E6%88%8F&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E7%9B%AE%E5%87%BB%E8%80%85%E7%A7%B0%E4%B8%9C%E8%88%AA%E7%A9%BA%E5%A7%90%E5%90%91%E4%B9%98%E5%AE%A2%E8%B7%AA%E4%BA%86%E4%B8%A4%E4%B8%89%E6%AC%A1&sa=fyb_news"
       },
       {
-        "title": "李亚鹏回应息影真实原因",
+        "title": "游本昌告别仪式",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%9D%8E%E4%BA%9A%E9%B9%8F%E5%9B%9E%E5%BA%94%E6%81%AF%E5%BD%B1%E7%9C%9F%E5%AE%9E%E5%8E%9F%E5%9B%A0&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E6%B8%B8%E6%9C%AC%E6%98%8C%E5%91%8A%E5%88%AB%E4%BB%AA%E5%BC%8F&sa=fyb_news"
       },
       {
-        "title": "“火车票候补妙招”是假的",
+        "title": "缅甸妙瓦底电诈园公开招募成员",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E2%80%9C%E7%81%AB%E8%BD%A6%E7%A5%A8%E5%80%99%E8%A1%A5%E5%A6%99%E6%8B%9B%E2%80%9D%E6%98%AF%E5%81%87%E7%9A%84&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E7%BC%85%E7%94%B8%E5%A6%99%E7%93%A6%E5%BA%95%E7%94%B5%E8%AF%88%E5%9B%AD%E5%85%AC%E5%BC%80%E6%8B%9B%E5%8B%9F%E6%88%90%E5%91%98&sa=fyb_news"
       },
       {
-        "title": "游本昌女儿：收到的帛金将全部捐出",
+        "title": "胡歌现身游本昌告别仪式不时擦泪",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%B8%B8%E6%9C%AC%E6%98%8C%E5%A5%B3%E5%84%BF%EF%BC%9A%E6%94%B6%E5%88%B0%E7%9A%84%E5%B8%9B%E9%87%91%E5%B0%86%E5%85%A8%E9%83%A8%E6%8D%90%E5%87%BA&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E8%83%A1%E6%AD%8C%E7%8E%B0%E8%BA%AB%E6%B8%B8%E6%9C%AC%E6%98%8C%E5%91%8A%E5%88%AB%E4%BB%AA%E5%BC%8F%E4%B8%8D%E6%97%B6%E6%93%A6%E6%B3%AA&sa=fyb_news"
       },
       {
-        "title": "老年人越来越多 养老床位却连降3年",
+        "title": "弹力袜是静脉曲张治疗神器？系夸大",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E8%80%81%E5%B9%B4%E4%BA%BA%E8%B6%8A%E6%9D%A5%E8%B6%8A%E5%A4%9A+%E5%85%BB%E8%80%81%E5%BA%8A%E4%BD%8D%E5%8D%B4%E8%BF%9E%E9%99%8D3%E5%B9%B4&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%BC%B9%E5%8A%9B%E8%A2%9C%E6%98%AF%E9%9D%99%E8%84%89%E6%9B%B2%E5%BC%A0%E6%B2%BB%E7%96%97%E7%A5%9E%E5%99%A8%EF%BC%9F%E7%B3%BB%E5%A4%B8%E5%A4%A7&sa=fyb_news"
       },
       {
-        "title": "文旅局回应那英临时加唱《弯弯的月亮》",
+        "title": "家中漏水 维修人员灌了50多斤胶水",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%96%87%E6%97%85%E5%B1%80%E5%9B%9E%E5%BA%94%E9%82%A3%E8%8B%B1%E4%B8%B4%E6%97%B6%E5%8A%A0%E5%94%B1%E3%80%8A%E5%BC%AF%E5%BC%AF%E7%9A%84%E6%9C%88%E4%BA%AE%E3%80%8B&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%AE%B6%E4%B8%AD%E6%BC%8F%E6%B0%B4+%E7%BB%B4%E4%BF%AE%E4%BA%BA%E5%91%98%E7%81%8C%E4%BA%8650%E5%A4%9A%E6%96%A4%E8%83%B6%E6%B0%B4&sa=fyb_news"
       },
       {
-        "title": "UP主手搓动画猫和老鼠",
+        "title": "日本与那国岛附近海域6.0级地震",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "新",
+        "link": "https://m.baidu.com/s?word=%E6%97%A5%E6%9C%AC%E4%B8%8E%E9%82%A3%E5%9B%BD%E5%B2%9B%E9%99%84%E8%BF%91%E6%B5%B7%E5%9F%9F6.0%E7%BA%A7%E5%9C%B0%E9%9C%87&sa=fyb_news"
+      },
+      {
+        "title": "邓亚萍输给小山智丽收到死亡威胁",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E9%82%93%E4%BA%9A%E8%90%8D%E8%BE%93%E7%BB%99%E5%B0%8F%E5%B1%B1%E6%99%BA%E4%B8%BD%E6%94%B6%E5%88%B0%E6%AD%BB%E4%BA%A1%E5%A8%81%E8%83%81&sa=fyb_news"
+      },
+      {
+        "title": "给阿嬷的情书",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "给阿嬷的情书B站上线",
+        "link": "https://search.bilibili.com/all?keyword=%E7%BB%99%E9%98%BF%E5%AC%B7%E7%9A%84%E6%83%85%E4%B9%A6"
+      },
+      {
+        "title": "最强厄尔尼诺会带来什么影响",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=UP%E4%B8%BB%E6%89%8B%E6%90%93%E5%8A%A8%E7%94%BB%E7%8C%AB%E5%92%8C%E8%80%81%E9%BC%A0"
+        "link": "https://search.bilibili.com/all?keyword=%E6%9C%80%E5%BC%BA%E5%8E%84%E5%B0%94%E5%B0%BC%E8%AF%BA%E4%BC%9A%E5%B8%A6%E6%9D%A5%E4%BB%80%E4%B9%88%E5%BD%B1%E5%93%8D"
       },
       {
-        "title": "美航母发生舰载机着舰事故",
+        "title": "今天是烈士纪念日",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%BE%8E%E8%88%AA%E6%AF%8D%E5%8F%91%E7%94%9F%E8%88%B0%E8%BD%BD%E6%9C%BA%E7%9D%80%E8%88%B0%E4%BA%8B%E6%95%85"
+        "link": "https://search.bilibili.com/all?keyword=%E4%BB%8A%E5%A4%A9%E6%98%AF%E7%83%88%E5%A3%AB%E7%BA%AA%E5%BF%B5%E6%97%A5"
       },
       {
-        "title": "我国将绘制完成新一代全火星地质图",
+        "title": "NRG Ethan冠军赛专访",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E6%88%91%E5%9B%BD%E5%B0%86%E7%BB%98%E5%88%B6%E5%AE%8C%E6%88%90%E6%96%B0%E4%B8%80%E4%BB%A3%E5%85%A8%E7%81%AB%E6%98%9F%E5%9C%B0%E8%B4%A8%E5%9B%BE"
+        "link": "https://search.bilibili.com/all?keyword=NRG%20Ethan%E5%86%A0%E5%86%9B%E8%B5%9B%E4%B8%93%E8%AE%BF"
       },
       {
-        "title": "爆肝465张手绘自制EVA定格动画",
+        "title": "COD23最新预告片",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%88%86%E8%82%9D465%E5%BC%A0%E6%89%8B%E7%BB%98%E8%87%AA%E5%88%B6EVA%E5%AE%9A%E6%A0%BC%E5%8A%A8%E7%94%BB"
+        "link": "https://search.bilibili.com/all?keyword=COD23%E6%9C%80%E6%96%B0%E9%A2%84%E5%91%8A%E7%89%87"
       },
       {
-        "title": "AI在物理领域能走多远",
+        "title": "门捷列夫世界巡演",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=AI%E5%9C%A8%E7%89%A9%E7%90%86%E9%A2%86%E5%9F%9F%E8%83%BD%E8%B5%B0%E5%A4%9A%E8%BF%9C"
+        "link": "https://search.bilibili.com/all?keyword=%E9%97%A8%E6%8D%B7%E5%88%97%E5%A4%AB%E4%B8%96%E7%95%8C%E5%B7%A1%E6%BC%94"
       },
       {
-        "title": "76人定妆照詹姆斯稳居C位",
+        "title": "有兽焉",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "有兽焉小山雀带娃开工",
+        "link": "https://search.bilibili.com/all?keyword=%E6%9C%89%E5%85%BD%E7%84%89"
+      },
+      {
+        "title": "国内景区审美为何总被诟病",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=76%E4%BA%BA%E5%AE%9A%E5%A6%86%E7%85%A7%E8%A9%B9%E5%A7%86%E6%96%AF%E7%A8%B3%E5%B1%85C%E4%BD%8D"
+        "link": "https://search.bilibili.com/all?keyword=%E5%9B%BD%E5%86%85%E6%99%AF%E5%8C%BA%E5%AE%A1%E7%BE%8E%E4%B8%BA%E4%BD%95%E6%80%BB%E8%A2%AB%E8%AF%9F%E7%97%85"
       },
       {
-        "title": "KPL系列团综巴黎篇章上线",
+        "title": "冰冰冰是啥梗",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=KPL%E7%B3%BB%E5%88%97%E5%9B%A2%E7%BB%BC%E5%B7%B4%E9%BB%8E%E7%AF%87%E7%AB%A0%E4%B8%8A%E7%BA%BF"
+        "link": "https://search.bilibili.com/all?keyword=%E5%86%B0%E5%86%B0%E5%86%B0%E6%98%AF%E5%95%A5%E6%A2%97"
       },
       {
-        "title": "复联4新彩蛋讲了什么",
+        "title": "平陆运河背后的温情故事",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%A4%8D%E8%81%944%E6%96%B0%E5%BD%A9%E8%9B%8B%E8%AE%B2%E4%BA%86%E4%BB%80%E4%B9%88"
-      },
-      {
-        "title": "假如将植物大战僵尸做成短片",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%81%87%E5%A6%82%E5%B0%86%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%E5%81%9A%E6%88%90%E7%9F%AD%E7%89%87"
-      },
-      {
-        "title": "沉浸式体验修家电师傅",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "沉浸式体验修家电师傅的一天",
-        "link": "https://search.bilibili.com/all?keyword=%E6%B2%89%E6%B5%B8%E5%BC%8F%E4%BD%93%E9%AA%8C%E4%BF%AE%E5%AE%B6%E7%94%B5%E5%B8%88%E5%82%85"
+        "link": "https://search.bilibili.com/all?keyword=%E5%B9%B3%E9%99%86%E8%BF%90%E6%B2%B3%E8%83%8C%E5%90%8E%E7%9A%84%E6%B8%A9%E6%83%85%E6%95%85%E4%BA%8B"
       },
       {
         "title": "国家反诈AI App正式上线",
