@@ -1,289 +1,289 @@
 {
   "version": 2,
-  "fetchedAt": "2026-10-02T13:58:18+08:00",
-  "date": "2026-10-02",
-  "summary": "今日热点：微博热搜「在国外被中国男演员救了一命」；百度热搜「实干为笔 书写时代答卷」；B站热搜「章鱼哥 快乐去哪了」；百度热点「国家反诈AI App正式上线」；腾讯热点「中美恢复战区层级对话」；抖音热榜「AI短剧72小时登顶抖音热榜」；B站热门「离婚逆袭短剧B站走红」。",
+  "fetchedAt": "2026-10-03T13:33:25+08:00",
+  "date": "2026-10-03",
+  "summary": "今日热点：微博热搜「高速充电80%强制离场引争议」；百度热搜「迈步新征程 我们自信而笃行」；B站热搜「凡人」；百度热点「国家反诈AI App正式上线」；腾讯热点「中美恢复战区层级对话」；抖音热榜「AI短剧72小时登顶抖音热榜」；B站热门「离婚逆袭短剧B站走红」。",
   "regions": {
     "国内": [
       {
-        "title": "在国外被中国男演员救了一命",
+        "title": "高速充电80%强制离场引争议",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "141.2万",
-        "link": "https://s.weibo.com/weibo?q=%E5%9C%A8%E5%9B%BD%E5%A4%96%E8%A2%AB%E4%B8%AD%E5%9B%BD%E7%94%B7%E6%BC%94%E5%91%98%E6%95%91%E4%BA%86%E4%B8%80%E5%91%BD&Refer=top"
+        "hot": "109.6万",
+        "link": "https://s.weibo.com/weibo?q=%E9%AB%98%E9%80%9F%E5%85%85%E7%94%B580%25%E5%BC%BA%E5%88%B6%E7%A6%BB%E5%9C%BA%E5%BC%95%E4%BA%89%E8%AE%AE&Refer=top"
       },
       {
-        "title": "电视剧喜剧之王定档",
+        "title": "原来出餐快也不一定就是预制菜",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "86.2万",
-        "link": "https://s.weibo.com/weibo?q=%E7%94%B5%E8%A7%86%E5%89%A7%E5%96%9C%E5%89%A7%E4%B9%8B%E7%8E%8B%E5%AE%9A%E6%A1%A3&Refer=top"
+        "hot": "79.7万",
+        "link": "https://s.weibo.com/weibo?q=%E5%8E%9F%E6%9D%A5%E5%87%BA%E9%A4%90%E5%BF%AB%E4%B9%9F%E4%B8%8D%E4%B8%80%E5%AE%9A%E5%B0%B1%E6%98%AF%E9%A2%84%E5%88%B6%E8%8F%9C&Refer=top"
       },
       {
-        "title": "国庆黄金周文旅消费火热可期",
+        "title": "晚辈合力托举老人看升国旗",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "73.4万",
-        "link": "https://s.weibo.com/weibo?q=%E5%9B%BD%E5%BA%86%E9%BB%84%E9%87%91%E5%91%A8%E6%96%87%E6%97%85%E6%B6%88%E8%B4%B9%E7%81%AB%E7%83%AD%E5%8F%AF%E6%9C%9F&Refer=top"
+        "hot": "78.9万",
+        "link": "https://s.weibo.com/weibo?q=%E6%99%9A%E8%BE%88%E5%90%88%E5%8A%9B%E6%89%98%E4%B8%BE%E8%80%81%E4%BA%BA%E7%9C%8B%E5%8D%87%E5%9B%BD%E6%97%97&Refer=top"
       },
       {
-        "title": "莫氏鸡煲总店员工从180人减至30多人",
+        "title": "张继科杯球迷大骂发球遮挡",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "42.9万",
-        "link": "https://s.weibo.com/weibo?q=%E8%8E%AB%E6%B0%8F%E9%B8%A1%E7%85%B2%E6%80%BB%E5%BA%97%E5%91%98%E5%B7%A5%E4%BB%8E180%E4%BA%BA%E5%87%8F%E8%87%B330%E5%A4%9A%E4%BA%BA&Refer=top"
+        "hot": "78.8万",
+        "link": "https://s.weibo.com/weibo?q=%E5%BC%A0%E7%BB%A7%E7%A7%91%E6%9D%AF%E7%90%83%E8%BF%B7%E5%A4%A7%E9%AA%82%E5%8F%91%E7%90%83%E9%81%AE%E6%8C%A1&Refer=top"
       },
       {
-        "title": "莫氏鸡煲国庆假期首日上座约六成",
+        "title": "小沈阳夫妇逆袭成国庆档票房黑马",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "42.5万",
-        "link": "https://s.weibo.com/weibo?q=%E8%8E%AB%E6%B0%8F%E9%B8%A1%E7%85%B2%E5%9B%BD%E5%BA%86%E5%81%87%E6%9C%9F%E9%A6%96%E6%97%A5%E4%B8%8A%E5%BA%A7%E7%BA%A6%E5%85%AD%E6%88%90&Refer=top"
+        "hot": "78.5万",
+        "link": "https://s.weibo.com/weibo?q=%E5%B0%8F%E6%B2%88%E9%98%B3%E5%A4%AB%E5%A6%87%E9%80%86%E8%A2%AD%E6%88%90%E5%9B%BD%E5%BA%86%E6%A1%A3%E7%A5%A8%E6%88%BF%E9%BB%91%E9%A9%AC&Refer=top"
       },
       {
-        "title": "电视剧名 奶茶名",
+        "title": "范丞丞新歌制作公司发声",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "41.8万",
-        "link": "https://s.weibo.com/weibo?q=%E7%94%B5%E8%A7%86%E5%89%A7%E5%90%8D%20%E5%A5%B6%E8%8C%B6%E5%90%8D&Refer=top"
+        "hot": "72.3万",
+        "link": "https://s.weibo.com/weibo?q=%E8%8C%83%E4%B8%9E%E4%B8%9E%E6%96%B0%E6%AD%8C%E5%88%B6%E4%BD%9C%E5%85%AC%E5%8F%B8%E5%8F%91%E5%A3%B0&Refer=top"
       },
       {
-        "title": "网传马鞍山地震视频系特效伪造",
+        "title": "棕熊搭人肩膀抢食视频为AI生成",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "41.6万",
-        "link": "https://s.weibo.com/weibo?q=%E7%BD%91%E4%BC%A0%E9%A9%AC%E9%9E%8D%E5%B1%B1%E5%9C%B0%E9%9C%87%E8%A7%86%E9%A2%91%E7%B3%BB%E7%89%B9%E6%95%88%E4%BC%AA%E9%80%A0&Refer=top"
+        "hot": "71.8万",
+        "link": "https://s.weibo.com/weibo?q=%E6%A3%95%E7%86%8A%E6%90%AD%E4%BA%BA%E8%82%A9%E8%86%80%E6%8A%A2%E9%A3%9F%E8%A7%86%E9%A2%91%E4%B8%BAAI%E7%94%9F%E6%88%90&Refer=top"
       },
       {
-        "title": "林锦岐认出许兰香先烧证据",
+        "title": "深圳走应急车道被罚三千",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "41.6万",
-        "link": "https://s.weibo.com/weibo?q=%E6%9E%97%E9%94%A6%E5%B2%90%E8%AE%A4%E5%87%BA%E8%AE%B8%E5%85%B0%E9%A6%99%E5%85%88%E7%83%A7%E8%AF%81%E6%8D%AE&Refer=top"
+        "hot": "70万",
+        "link": "https://s.weibo.com/weibo?q=%E6%B7%B1%E5%9C%B3%E8%B5%B0%E5%BA%94%E6%80%A5%E8%BD%A6%E9%81%93%E8%A2%AB%E7%BD%9A%E4%B8%89%E5%8D%83&Refer=top"
       },
       {
-        "title": "亚运会",
+        "title": "极客湾揭秘麒麟9050Pro",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "41.4万",
-        "link": "https://s.weibo.com/weibo?q=%E4%BA%9A%E8%BF%90%E4%BC%9A&Refer=top"
+        "hot": "67.9万",
+        "link": "https://s.weibo.com/weibo?q=%E6%9E%81%E5%AE%A2%E6%B9%BE%E6%8F%AD%E7%A7%98%E9%BA%92%E9%BA%9F9050Pro&Refer=top"
       },
       {
-        "title": "高速堵车悬挂免费WiFi司机发声",
+        "title": "谁撑起了国庆3.5亿票房",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "41.1万",
-        "link": "https://s.weibo.com/weibo?q=%E9%AB%98%E9%80%9F%E5%A0%B5%E8%BD%A6%E6%82%AC%E6%8C%82%E5%85%8D%E8%B4%B9WiFi%E5%8F%B8%E6%9C%BA%E5%8F%91%E5%A3%B0&Refer=top"
+        "hot": "67.2万",
+        "link": "https://s.weibo.com/weibo?q=%E8%B0%81%E6%92%91%E8%B5%B7%E4%BA%86%E5%9B%BD%E5%BA%863.5%E4%BA%BF%E7%A5%A8%E6%88%BF&Refer=top"
       },
       {
-        "title": "华为Mate90ProMax顶配版成销售主力",
+        "title": "黄泽林夺亚运金牌",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "40.9万",
-        "link": "https://s.weibo.com/weibo?q=%E5%8D%8E%E4%B8%BAMate90ProMax%E9%A1%B6%E9%85%8D%E7%89%88%E6%88%90%E9%94%80%E5%94%AE%E4%B8%BB%E5%8A%9B&Refer=top"
+        "hot": "63.1万",
+        "link": "https://s.weibo.com/weibo?q=%E9%BB%84%E6%B3%BD%E6%9E%97%E5%A4%BA%E4%BA%9A%E8%BF%90%E9%87%91%E7%89%8C&Refer=top"
       },
       {
-        "title": "TFBOYS亲签 350万",
+        "title": "田馥甄曾因立场争议作品下架",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "40.8万",
-        "link": "https://s.weibo.com/weibo?q=TFBOYS%E4%BA%B2%E7%AD%BE%20350%E4%B8%87&Refer=top"
+        "hot": "60.8万",
+        "link": "https://s.weibo.com/weibo?q=%E7%94%B0%E9%A6%A5%E7%94%84%E6%9B%BE%E5%9B%A0%E7%AB%8B%E5%9C%BA%E4%BA%89%E8%AE%AE%E4%BD%9C%E5%93%81%E4%B8%8B%E6%9E%B6&Refer=top"
       },
       {
-        "title": "TOP林珍娜承认恋情",
+        "title": "国足连自我尊重都不愿意很可怕",
         "desc": "",
         "platform": "微博热搜",
-        "hot": "40.4万",
-        "link": "https://s.weibo.com/weibo?q=TOP%E6%9E%97%E7%8F%8D%E5%A8%9C%E6%89%BF%E8%AE%A4%E6%81%8B%E6%83%85&Refer=top"
+        "hot": "60.2万",
+        "link": "https://s.weibo.com/weibo?q=%E5%9B%BD%E8%B6%B3%E8%BF%9E%E8%87%AA%E6%88%91%E5%B0%8A%E9%87%8D%E9%83%BD%E4%B8%8D%E6%84%BF%E6%84%8F%E5%BE%88%E5%8F%AF%E6%80%95&Refer=top"
       },
       {
-        "title": "农村的消亡可能远超预期",
+        "title": "徐明浩 范丞丞",
+        "desc": "",
+        "platform": "微博热搜",
+        "hot": "48.6万",
+        "link": "https://s.weibo.com/weibo?q=%E5%BE%90%E6%98%8E%E6%B5%A9%20%E8%8C%83%E4%B8%9E%E4%B8%9E&Refer=top"
+      },
+      {
+        "title": "包贝尔 冷处理",
         "desc": "",
         "platform": "微博热搜",
         "hot": "40.2万",
-        "link": "https://s.weibo.com/weibo?q=%E5%86%9C%E6%9D%91%E7%9A%84%E6%B6%88%E4%BA%A1%E5%8F%AF%E8%83%BD%E8%BF%9C%E8%B6%85%E9%A2%84%E6%9C%9F&Refer=top"
+        "link": "https://s.weibo.com/weibo?q=%E5%8C%85%E8%B4%9D%E5%B0%94%20%E5%86%B7%E5%A4%84%E7%90%86&Refer=top"
       },
       {
-        "title": "难怪那么多艺人最后和经纪人结婚了",
-        "desc": "",
-        "platform": "微博热搜",
-        "hot": "39.9万",
-        "link": "https://s.weibo.com/weibo?q=%E9%9A%BE%E6%80%AA%E9%82%A3%E4%B9%88%E5%A4%9A%E8%89%BA%E4%BA%BA%E6%9C%80%E5%90%8E%E5%92%8C%E7%BB%8F%E7%BA%AA%E4%BA%BA%E7%BB%93%E5%A9%9A%E4%BA%86&Refer=top"
-      },
-      {
-        "title": "实干为笔 书写时代答卷",
+        "title": "迈步新征程 我们自信而笃行",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%AE%9E%E5%B9%B2%E4%B8%BA%E7%AC%94+%E4%B9%A6%E5%86%99%E6%97%B6%E4%BB%A3%E7%AD%94%E5%8D%B7&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E8%BF%88%E6%AD%A5%E6%96%B0%E5%BE%81%E7%A8%8B+%E6%88%91%E4%BB%AC%E8%87%AA%E4%BF%A1%E8%80%8C%E7%AC%83%E8%A1%8C&sa=fyb_news"
       },
       {
-        "title": "退伍军人办国旗工厂 地面擦到反光",
+        "title": "中国第一高铁站客流又“爆”了",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E9%80%80%E4%BC%8D%E5%86%9B%E4%BA%BA%E5%8A%9E%E5%9B%BD%E6%97%97%E5%B7%A5%E5%8E%82+%E5%9C%B0%E9%9D%A2%E6%93%A6%E5%88%B0%E5%8F%8D%E5%85%89&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E4%B8%AD%E5%9B%BD%E7%AC%AC%E4%B8%80%E9%AB%98%E9%93%81%E7%AB%99%E5%AE%A2%E6%B5%81%E5%8F%88%E2%80%9C%E7%88%86%E2%80%9D%E4%BA%86&sa=fyb_news"
       },
       {
-        "title": "普京：买吧 中国汽车又便宜又好",
+        "title": "飞十几个小时落地听到的都是中国话",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%99%AE%E4%BA%AC%EF%BC%9A%E4%B9%B0%E5%90%A7+%E4%B8%AD%E5%9B%BD%E6%B1%BD%E8%BD%A6%E5%8F%88%E4%BE%BF%E5%AE%9C%E5%8F%88%E5%A5%BD&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E9%A3%9E%E5%8D%81%E5%87%A0%E4%B8%AA%E5%B0%8F%E6%97%B6%E8%90%BD%E5%9C%B0%E5%90%AC%E5%88%B0%E7%9A%84%E9%83%BD%E6%98%AF%E4%B8%AD%E5%9B%BD%E8%AF%9D&sa=fyb_news"
       },
       {
-        "title": "到祖国大江南北邂逅山河盛景",
+        "title": "这份长途出行防护指南请收好",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%88%B0%E7%A5%96%E5%9B%BD%E5%A4%A7%E6%B1%9F%E5%8D%97%E5%8C%97%E9%82%82%E9%80%85%E5%B1%B1%E6%B2%B3%E7%9B%9B%E6%99%AF&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E8%BF%99%E4%BB%BD%E9%95%BF%E9%80%94%E5%87%BA%E8%A1%8C%E9%98%B2%E6%8A%A4%E6%8C%87%E5%8D%97%E8%AF%B7%E6%94%B6%E5%A5%BD&sa=fyb_news"
       },
       {
-        "title": "“充电至80%必须离场”",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E2%80%9C%E5%85%85%E7%94%B5%E8%87%B380%25%E5%BF%85%E9%A1%BB%E7%A6%BB%E5%9C%BA%E2%80%9D&sa=fyb_news"
-      },
-      {
-        "title": "国庆偶遇“白衬衫”安全感拉满",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%9B%BD%E5%BA%86%E5%81%B6%E9%81%87%E2%80%9C%E7%99%BD%E8%A1%AC%E8%A1%AB%E2%80%9D%E5%AE%89%E5%85%A8%E6%84%9F%E6%8B%89%E6%BB%A1&sa=fyb_news"
-      },
-      {
-        "title": "房贷贴息落地 客户房东都坐不住了",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%88%BF%E8%B4%B7%E8%B4%B4%E6%81%AF%E8%90%BD%E5%9C%B0+%E5%AE%A2%E6%88%B7%E6%88%BF%E4%B8%9C%E9%83%BD%E5%9D%90%E4%B8%8D%E4%BD%8F%E4%BA%86&sa=fyb_news"
-      },
-      {
-        "title": "机器人进店卖锅 3天业绩超200万元",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%9C%BA%E5%99%A8%E4%BA%BA%E8%BF%9B%E5%BA%97%E5%8D%96%E9%94%85+3%E5%A4%A9%E4%B8%9A%E7%BB%A9%E8%B6%85200%E4%B8%87%E5%85%83&sa=fyb_news"
-      },
-      {
-        "title": "李在明：若乌拒不道歉 将采取措施",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E6%9D%8E%E5%9C%A8%E6%98%8E%EF%BC%9A%E8%8B%A5%E4%B9%8C%E6%8B%92%E4%B8%8D%E9%81%93%E6%AD%89+%E5%B0%86%E9%87%87%E5%8F%96%E6%8E%AA%E6%96%BD&sa=fyb_news"
-      },
-      {
-        "title": "女子在国外被中国男演员救了一命",
-        "desc": "",
-        "platform": "百度热搜",
-        "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E5%A5%B3%E5%AD%90%E5%9C%A8%E5%9B%BD%E5%A4%96%E8%A2%AB%E4%B8%AD%E5%9B%BD%E7%94%B7%E6%BC%94%E5%91%98%E6%95%91%E4%BA%86%E4%B8%80%E5%91%BD&sa=fyb_news"
-      },
-      {
-        "title": "美国退伍女兵原定截右腿醒来左腿没了",
+        "title": "小沈阳夫妇 国庆档黑马",
         "desc": "",
         "platform": "百度热搜",
         "hot": "新",
-        "link": "https://m.baidu.com/s?word=%E7%BE%8E%E5%9B%BD%E9%80%80%E4%BC%8D%E5%A5%B3%E5%85%B5%E5%8E%9F%E5%AE%9A%E6%88%AA%E5%8F%B3%E8%85%BF%E9%86%92%E6%9D%A5%E5%B7%A6%E8%85%BF%E6%B2%A1%E4%BA%86&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%B0%8F%E6%B2%88%E9%98%B3%E5%A4%AB%E5%A6%87+%E5%9B%BD%E5%BA%86%E6%A1%A3%E9%BB%91%E9%A9%AC&sa=fyb_news"
       },
       {
-        "title": "12306：购票无网传捷径和妙招",
+        "title": "现在的酒店为什么都不查房了",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=12306%EF%BC%9A%E8%B4%AD%E7%A5%A8%E6%97%A0%E7%BD%91%E4%BC%A0%E6%8D%B7%E5%BE%84%E5%92%8C%E5%A6%99%E6%8B%9B&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E7%8E%B0%E5%9C%A8%E7%9A%84%E9%85%92%E5%BA%97%E4%B8%BA%E4%BB%80%E4%B9%88%E9%83%BD%E4%B8%8D%E6%9F%A5%E6%88%BF%E4%BA%86&sa=fyb_news"
       },
       {
-        "title": "电影《食神》演员怒斥周星驰",
+        "title": "国足开球踢给巴勒斯坦 解说懵圈",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E7%94%B5%E5%BD%B1%E3%80%8A%E9%A3%9F%E7%A5%9E%E3%80%8B%E6%BC%94%E5%91%98%E6%80%92%E6%96%A5%E5%91%A8%E6%98%9F%E9%A9%B0&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%9B%BD%E8%B6%B3%E5%BC%80%E7%90%83%E8%B8%A2%E7%BB%99%E5%B7%B4%E5%8B%92%E6%96%AF%E5%9D%A6+%E8%A7%A3%E8%AF%B4%E6%87%B5%E5%9C%88&sa=fyb_news"
       },
       {
-        "title": "华为赛力斯 分手15天后闪电复合",
+        "title": "老外逛华强北空手来拖箱走",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E8%80%81%E5%A4%96%E9%80%9B%E5%8D%8E%E5%BC%BA%E5%8C%97%E7%A9%BA%E6%89%8B%E6%9D%A5%E6%8B%96%E7%AE%B1%E8%B5%B0&sa=fyb_news"
+      },
+      {
+        "title": "王楚钦：我需要好好想想接下来的路",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E7%8E%8B%E6%A5%9A%E9%92%A6%EF%BC%9A%E6%88%91%E9%9C%80%E8%A6%81%E5%A5%BD%E5%A5%BD%E6%83%B3%E6%83%B3%E6%8E%A5%E4%B8%8B%E6%9D%A5%E7%9A%84%E8%B7%AF&sa=fyb_news"
+      },
+      {
+        "title": "诺贝尔奖奖金上涨",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E8%AF%BA%E8%B4%9D%E5%B0%94%E5%A5%96%E5%A5%96%E9%87%91%E4%B8%8A%E6%B6%A8&sa=fyb_news"
+      },
+      {
+        "title": "一家三口吃清洗过的鸡蛋后集体中毒",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E4%B8%80%E5%AE%B6%E4%B8%89%E5%8F%A3%E5%90%83%E6%B8%85%E6%B4%97%E8%BF%87%E7%9A%84%E9%B8%A1%E8%9B%8B%E5%90%8E%E9%9B%86%E4%BD%93%E4%B8%AD%E6%AF%92&sa=fyb_news"
+      },
+      {
+        "title": "四川一公司国庆节不放假被举报不实",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%9B%9B%E5%B7%9D%E4%B8%80%E5%85%AC%E5%8F%B8%E5%9B%BD%E5%BA%86%E8%8A%82%E4%B8%8D%E6%94%BE%E5%81%87%E8%A2%AB%E4%B8%BE%E6%8A%A5%E4%B8%8D%E5%AE%9E&sa=fyb_news"
+      },
+      {
+        "title": "女子查出癌症花光积蓄旅游肿瘤变小",
+        "desc": "",
+        "platform": "百度热搜",
+        "hot": "热",
+        "link": "https://m.baidu.com/s?word=%E5%A5%B3%E5%AD%90%E6%9F%A5%E5%87%BA%E7%99%8C%E7%97%87%E8%8A%B1%E5%85%89%E7%A7%AF%E8%93%84%E6%97%85%E6%B8%B8%E8%82%BF%E7%98%A4%E5%8F%98%E5%B0%8F&sa=fyb_news"
+      },
+      {
+        "title": "刘建宏：国足现在在亚洲二三流之间",
         "desc": "",
         "platform": "百度热搜",
         "hot": "新",
-        "link": "https://m.baidu.com/s?word=%E5%8D%8E%E4%B8%BA%E8%B5%9B%E5%8A%9B%E6%96%AF+%E5%88%86%E6%89%8B15%E5%A4%A9%E5%90%8E%E9%97%AA%E7%94%B5%E5%A4%8D%E5%90%88&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E5%88%98%E5%BB%BA%E5%AE%8F%EF%BC%9A%E5%9B%BD%E8%B6%B3%E7%8E%B0%E5%9C%A8%E5%9C%A8%E4%BA%9A%E6%B4%B2%E4%BA%8C%E4%B8%89%E6%B5%81%E4%B9%8B%E9%97%B4&sa=fyb_news"
       },
       {
-        "title": "“大哥你不丑”感动全网",
+        "title": "马斯克与高管女友分手 两人育有4孩",
         "desc": "",
         "platform": "百度热搜",
         "hot": "热",
-        "link": "https://m.baidu.com/s?word=%E2%80%9C%E5%A4%A7%E5%93%A5%E4%BD%A0%E4%B8%8D%E4%B8%91%E2%80%9D%E6%84%9F%E5%8A%A8%E5%85%A8%E7%BD%91&sa=fyb_news"
+        "link": "https://m.baidu.com/s?word=%E9%A9%AC%E6%96%AF%E5%85%8B%E4%B8%8E%E9%AB%98%E7%AE%A1%E5%A5%B3%E5%8F%8B%E5%88%86%E6%89%8B+%E4%B8%A4%E4%BA%BA%E8%82%B2%E6%9C%894%E5%AD%A9&sa=fyb_news"
       },
       {
-        "title": "章鱼哥 快乐去哪了",
+        "title": "凡人",
+        "desc": "",
+        "platform": "B站热搜",
+        "hot": "韩立对战乐上师",
+        "link": "https://search.bilibili.com/all?keyword=%E5%87%A1%E4%BA%BA"
+      },
+      {
+        "title": "国内景区审美降级有多严重",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%AB%A0%E9%B1%BC%E5%93%A5%20%E5%BF%AB%E4%B9%90%E5%8E%BB%E5%93%AA%E4%BA%86"
+        "link": "https://search.bilibili.com/all?keyword=%E5%9B%BD%E5%86%85%E6%99%AF%E5%8C%BA%E5%AE%A1%E7%BE%8E%E9%99%8D%E7%BA%A7%E6%9C%89%E5%A4%9A%E4%B8%A5%E9%87%8D"
       },
       {
-        "title": "TheShy 拯救IG于涅槃",
+        "title": "熊出没13电影片名揭秘",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=TheShy%20%E6%8B%AF%E6%95%91IG%E4%BA%8E%E6%B6%85%E6%A7%83"
+        "link": "https://search.bilibili.com/all?keyword=%E7%86%8A%E5%87%BA%E6%B2%A113%E7%94%B5%E5%BD%B1%E7%89%87%E5%90%8D%E6%8F%AD%E7%A7%98"
       },
       {
-        "title": "OK哥太平洋赶海抓巨型砗磲",
+        "title": "BC已经正式计入亚洲赛区",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=OK%E5%93%A5%E5%A4%AA%E5%B9%B3%E6%B4%8B%E8%B5%B6%E6%B5%B7%E6%8A%93%E5%B7%A8%E5%9E%8B%E7%A0%97%E7%A3%B2"
+        "link": "https://search.bilibili.com/all?keyword=BC%E5%B7%B2%E7%BB%8F%E6%AD%A3%E5%BC%8F%E8%AE%A1%E5%85%A5%E4%BA%9A%E6%B4%B2%E8%B5%9B%E5%8C%BA"
       },
       {
-        "title": "我军新装备似电影机甲",
+        "title": "日本亚运会出了哪些状况",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E6%88%91%E5%86%9B%E6%96%B0%E8%A3%85%E5%A4%87%E4%BC%BC%E7%94%B5%E5%BD%B1%E6%9C%BA%E7%94%B2"
+        "link": "https://search.bilibili.com/all?keyword=%E6%97%A5%E6%9C%AC%E4%BA%9A%E8%BF%90%E4%BC%9A%E5%87%BA%E4%BA%86%E5%93%AA%E4%BA%9B%E7%8A%B6%E5%86%B5"
       },
       {
-        "title": "霍尔木兹梗阻如何影响全球经济",
+        "title": "国足不敌巴勒斯坦差距出在哪",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E9%9C%8D%E5%B0%94%E6%9C%A8%E5%85%B9%E6%A2%97%E9%98%BB%E5%A6%82%E4%BD%95%E5%BD%B1%E5%93%8D%E5%85%A8%E7%90%83%E7%BB%8F%E6%B5%8E"
+        "link": "https://search.bilibili.com/all?keyword=%E5%9B%BD%E8%B6%B3%E4%B8%8D%E6%95%8C%E5%B7%B4%E5%8B%92%E6%96%AF%E5%9D%A6%E5%B7%AE%E8%B7%9D%E5%87%BA%E5%9C%A8%E5%93%AA"
       },
       {
-        "title": "时光代理人",
-        "desc": "",
-        "platform": "B站热搜",
-        "hot": "时光代理人陆光坦白局",
-        "link": "https://search.bilibili.com/all?keyword=%E6%97%B6%E5%85%89%E4%BB%A3%E7%90%86%E4%BA%BA"
-      },
-      {
-        "title": "五条坤vs两面宗主",
+        "title": "怎么看VCTCN四队全部淘汰",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E4%BA%94%E6%9D%A1%E5%9D%A4vs%E4%B8%A4%E9%9D%A2%E5%AE%97%E4%B8%BB"
+        "link": "https://search.bilibili.com/all?keyword=%E6%80%8E%E4%B9%88%E7%9C%8BVCTCN%E5%9B%9B%E9%98%9F%E5%85%A8%E9%83%A8%E6%B7%98%E6%B1%B0"
       },
       {
-        "title": "神探之痕迹诚实观后感",
+        "title": "央视带你解锁国庆假日新场景",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E7%A5%9E%E6%8E%A2%E4%B9%8B%E7%97%95%E8%BF%B9%E8%AF%9A%E5%AE%9E%E8%A7%82%E5%90%8E%E6%84%9F"
+        "link": "https://search.bilibili.com/all?keyword=%E5%A4%AE%E8%A7%86%E5%B8%A6%E4%BD%A0%E8%A7%A3%E9%94%81%E5%9B%BD%E5%BA%86%E5%81%87%E6%97%A5%E6%96%B0%E5%9C%BA%E6%99%AF"
       },
       {
-        "title": "弹棉花版华强买瓜",
+        "title": "哪部电影是国庆档黑马",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%BC%B9%E6%A3%89%E8%8A%B1%E7%89%88%E5%8D%8E%E5%BC%BA%E4%B9%B0%E7%93%9C"
+        "link": "https://search.bilibili.com/all?keyword=%E5%93%AA%E9%83%A8%E7%94%B5%E5%BD%B1%E6%98%AF%E5%9B%BD%E5%BA%86%E6%A1%A3%E9%BB%91%E9%A9%AC"
       },
       {
-        "title": "天禄XLG为何惨遭淘汰",
+        "title": "老师用砍价套路布置国庆作业",
         "desc": "",
         "platform": "B站热搜",
         "hot": "热",
-        "link": "https://search.bilibili.com/all?keyword=%E5%A4%A9%E7%A6%84XLG%E4%B8%BA%E4%BD%95%E6%83%A8%E9%81%AD%E6%B7%98%E6%B1%B0"
+        "link": "https://search.bilibili.com/all?keyword=%E8%80%81%E5%B8%88%E7%94%A8%E7%A0%8D%E4%BB%B7%E5%A5%97%E8%B7%AF%E5%B8%83%E7%BD%AE%E5%9B%BD%E5%BA%86%E4%BD%9C%E4%B8%9A"
       },
       {
         "title": "国家反诈AI App正式上线",
