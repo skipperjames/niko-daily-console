@@ -11417,6 +11417,110 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
 
 #healthPage{--bp:#dfe2ea;--bp-stroke:#c3c8d4}
+/* ===================== v11 改版（2026-10-09）=====================
+   今天 / 身体地图(侧栏) / 复诊 三视图的专属样式。
+   一律走主题变量，跟随全站明暗 —— 不写死颜色。 */
+.hpv11-today{display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--shadow);padding:18px 20px}
+.hpv11-ring{position:relative;flex:0 0 auto;width:86px;height:86px}
+.hpv11-ring svg{transform:rotate(-90deg)}
+.hpv11-ring .mid{position:absolute;inset:0;display:flex;align-items:baseline;justify-content:center;gap:2px}
+.hpv11-ring .mid b{font-size:24px;font-weight:800;color:var(--text);line-height:86px}
+.hpv11-ring .mid span{font-size:12px;color:var(--muted);line-height:86px}
+.hpv11-today .txt{flex:1;min-width:200px}
+.hpv11-today .txt .v{font-size:19px;font-weight:700;color:var(--text);line-height:1.4}
+.hpv11-today .txt .s{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.6}
+
+.hpv11-g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:14px}
+
+.hpv11-tk{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg-2);margin-bottom:8px;cursor:pointer;transition:all .16s}
+.hpv11-tk:hover{border-color:var(--accent)}
+.hpv11-tk.on{background:var(--soft);border-color:var(--accent)}
+.hpv11-tk .bx{flex:0 0 auto;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:transparent;transition:all .16s}
+.hpv11-tk.on .bx{background:var(--accent);border-color:var(--accent);color:#fff}
+.hpv11-tk .tx{flex:1;min-width:0;font-size:13px;color:var(--text);line-height:1.45}
+.hpv11-tk.on .tx{color:var(--muted);text-decoration:line-through}
+.hpv11-tk .fr{flex:0 0 auto;font-size:10.5px;color:var(--warn);font-weight:700;white-space:nowrap}
+
+.hpv11-rx{padding:9px 0;border-bottom:1px dashed var(--card-border);font-size:12.5px;line-height:1.65;color:var(--text)}
+.hpv11-rx:last-child{border-bottom:0;padding-bottom:0}
+.hpv11-rx em{font-style:normal;color:var(--accent);font-weight:700;margin-right:6px}
+
+.hpv11-tl{position:relative;padding-left:20px}
+.hpv11-tl::before{content:'';position:absolute;left:5px;top:5px;bottom:5px;width:2px;background:var(--card-border)}
+.hpv11-ev{position:relative;padding:0 0 14px 0;font-size:12.5px;line-height:1.6}
+.hpv11-ev:last-child{padding-bottom:0}
+.hpv11-ev::before{content:'';position:absolute;left:-19px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--card-bg)}
+.hpv11-ev .dt{font-size:11px;color:var(--muted);margin-bottom:2px}
+.hpv11-ev .bd{color:var(--text)}
+.hpv11-ev .bd em{font-style:normal;font-weight:800;color:var(--accent);margin-right:6px}
+.hpv11-ev .sb{font-size:11.5px;color:var(--muted);margin-top:2px}
+.hpv11-ev.ex{opacity:.62}
+
+/* 地图左右两栏：左 = 图，右 = 点击弹出的侧栏 */
+.hpv11-mapwrap{display:grid!important;grid-template-columns:minmax(0,19fr) minmax(0,43fr) minmax(0,38fr);gap:12px;align-items:start}
+.hpv11-side{display:none}
+.hpv11-mapwrap.side-on .hpv11-side{display:block}
+@media (max-width:1180px){
+  .hpv11-mapwrap{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hpv11-side{grid-column:1/-1}
+}
+@media (max-width:880px){
+  .hpv11-mapwrap{grid-template-columns:1fr}
+  .hpv11-g2{grid-template-columns:1fr}
+}
+.hpv11-side .scn-card{position:sticky;top:12px}
+.hpv11-sd-hd{display:flex;align-items:center;gap:9px;margin-bottom:10px;flex-wrap:wrap}
+.hpv11-sd-hd b{font-size:15px;font-weight:800;color:var(--text)}
+.hpv11-sd-hd .cls{margin-left:auto;cursor:pointer;font-size:16px;color:var(--muted);line-height:1;padding:2px 6px;border-radius:7px}
+.hpv11-sd-hd .cls:hover{color:var(--text);background:var(--card-bg-2)}
+.hpv11-sd-empty{padding:26px 10px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.9}
+.hpv11-sd-empty .big{display:block;font-size:30px;margin-bottom:8px;opacity:.55}
+.hpv11-sd-list{display:flex;flex-direction:column;gap:10px;max-height:min(70vh,720px);overflow-y:auto}
+.hpv11-sd-card{border:1px solid var(--card-border);border-radius:11px;background:var(--card-bg-2);padding:11px 12px}
+.hpv11-sd-card .r1{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px}
+.hpv11-sd-card .r1 b{font-size:13.5px;font-weight:700;color:var(--text)}
+.hpv11-sd-card .tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;border:1px solid currentColor;line-height:1.4}
+.hpv11-sd-card .r2{font-size:11.5px;color:var(--muted);line-height:1.7}
+.hpv11-sd-card .r2 .k{color:var(--accent);font-weight:700}
+.hpv11-sd-card .ck{margin-top:8px;padding-top:8px;border-top:1px dashed var(--card-border);display:flex;flex-direction:column;gap:5px}
+.hpv11-sd-card .ck .it{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--text);cursor:pointer}
+.hpv11-sd-card .ck .bx{flex:0 0 auto;width:15px;height:15px;border-radius:4px;border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:800;color:transparent}
+.hpv11-sd-card .ck .it.on .bx{background:var(--ok);border-color:var(--ok);color:#fff}
+.hpv11-sd-card .ck .it.on{color:var(--muted);text-decoration:line-through}
+.hpv11-sd-ft{margin-top:10px;padding-top:9px;border-top:1px solid var(--card-border);display:flex;gap:7px;flex-wrap:wrap}
+
+/* 复诊模式 */
+.hpv11-doc{border:1.5px solid var(--card-border)}
+.hpv11-dochead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.hpv11-dochead .t{font-size:15px;font-weight:800;color:var(--text)}
+.hpv11-dochead .h{font-size:11.5px;color:var(--muted);margin-top:3px}
+.hpv11-kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 13px;font-size:12.5px;line-height:1.7}
+.hpv11-kv .k{color:var(--muted);white-space:nowrap;font-weight:600}
+.hpv11-kv .v{color:var(--text)}
+.hpv11-ask{display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px dashed var(--card-border);font-size:12.5px;line-height:1.6}
+.hpv11-ask:last-child{border-bottom:0}
+.hpv11-ask .no{flex:0 0 auto;color:var(--accent);font-weight:800}
+.hpv11-ask .tx{flex:1;min-width:0;color:var(--text)}
+.hpv11-ask .dl{flex:0 0 auto;cursor:pointer;color:var(--muted);font-size:12px;padding:0 4px;border-radius:5px}
+.hpv11-ask .dl:hover{color:var(--danger)}
+.hpv11-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:11px}
+.hpv11-stat{background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:11px;padding:11px 13px}
+.hpv11-stat .n{font-size:20px;font-weight:800;color:var(--text);line-height:1.2}
+.hpv11-stat .n small{font-size:11.5px;font-weight:600;color:var(--muted)}
+.hpv11-stat .l{font-size:11px;color:var(--muted);margin-top:3px}
+.hpv11-stat .bar{height:5px;border-radius:99px;background:var(--card-border);margin-top:7px;overflow:hidden}
+.hpv11-stat .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+
+/* 复盘模式：把动画/装饰收掉，给医生看的是内容 */
+#healthPage.hpv11-focus .hp-head-hint,
+#healthPage.hpv11-focus .hpv11-sci-off{opacity:.5}
+@media print{
+  #healthPage .hp-head-acts,#healthPage .tabs,#healthPage .hp-head-hint{display:none!important}
+  #healthPage .panel:not(#p-doc){display:none!important}
+  #healthPage #p-doc{display:block!important}
+  #healthPage .card{break-inside:avoid;box-shadow:none}
+}
+
 
 .hp-wrap{max-width:1140px;margin:0 auto;padding:0 20px}
 
@@ -14769,16 +14873,66 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <h1>🩺 健康档案</h1>
     <div class="tabs" id="tabs"></div>
     <div class="hp-head-acts">
+      <button class="hp-btn" id="hpv11DocBtn" onclick="hpv11ToggleDoc()" title="切到给医生看的版面">🩺 复诊模式</button>
       <button class="hp-btn primary" onclick="pvAdd()" title="添加一条病史">＋</button>
       <button class="hp-btn" onclick="hpClearDemo()" title="清除示例数据（只删带「示例」标记的条目，你自己的记录不动）">🧹</button>
     </div>
-    <div class="hp-head-hint">病史 · 用药 · 小病复发 · 每日打卡 · 手表 · 科普 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 鼠标停在「＋ / 🧹」上有说明</div>
+    <div class="hp-head-hint">今天 · 身体地图 · 复诊 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 鼠标停在「＋ / 🧹」上有说明</div>
   </div>
 
-  <div class="panel on" id="p-map">
+
+  <!-- ===== v11 视图一：今天（方案 01） ===== -->
+  <div class="panel on" id="p-today">
+    <div class="sec">
+      <div class="hpv11-today">
+        <div class="hpv11-ring">
+          <svg width="86" height="86" viewBox="0 0 86 86">
+            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--card-border)" stroke-width="8"></circle>
+            <circle id="hpv11Arc" cx="43" cy="43" r="36" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="226.2"></circle>
+          </svg>
+          <div class="mid"><b id="hpv11Ck">0</b><span id="hpv11CkTot">/ 0</span></div>
+        </div>
+        <div class="txt">
+          <div class="v" id="hpv11Verdict">—</div>
+          <div class="s" id="hpv11Why"></div>
+        </div>
+      </div>
+
+      <div class="hpv11-g2">
+        <div class="card">
+          <div class="ov-ck-hd"><b>✅ 今天要做的 3 件事</b><span class="sub">点一下就勾 · 全部打卡项在身体地图里</span></div>
+          <div id="hpv11Tasks"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:11px">
+            <button class="btn p" onclick="pvExStart()">▶ 开始 2 分钟跟练</button>
+            <button class="btn" onclick="pvTab('map')">看全部打卡项 →</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ov-ck-hd"><b>📌 核心医嘱</b><span class="sub" id="hpv11RxFrom"></span></div>
+          <div id="hpv11Rx"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="ov-ck-hd"><b>🧭 病程时间线</b><span class="sub">就诊 · 医嘱 · 用药 · 依从 —— 一条线看下来</span></div>
+        <div id="hpv11Tl"></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="ov-ck-hd"><b>⚠️ 现在不舒服？</b><span class="sub">点一下预填好，确认进档案 —— 发作周期越记越准</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="hp-btn p" onclick="mnQuick('肩胛骨痛',['肩胛骨'],['开车','久坐'])">⚡ 肩胛骨痛</button>
+          <button class="hp-btn" onclick="mnQuick('落枕',['颈部'],['睡姿'])">😴 落枕</button>
+          <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="p-map">
     <div class="sec">
       <div class="pv7-top">
-        <div class="t"><h2>🫀 健康总览</h2><p>身体地图 · 今日打卡 · 核心医嘱 · 科普 —— 一屏看完</p></div>
+        <div class="t"><h2>🧍 身体地图</h2><p>点身上任意部位 → 右侧看该部位的完整病史 · 图钉与病史库联动</p></div>
         <div class="pv7-stats" id="ovStats"></div>
       </div>
       <div class="pv7-rx" id="ovRx"></div>
@@ -14790,10 +14944,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
         </div>
       </div>
-      <div class="ov-hero">
+      <div class="ov-hero hpv11-mapwrap">
       <div class="scn-card">
         <div class="scn-hd"><span>🧍 身体地图</span><span class="bdg" id="hpBpCount">0 处记录</span>
           <span class="lg"><i class="l-active">治疗中</i><i class="l-watch">需关注</i><i class="l-old">已稳定</i></span></div>
+        <div id="hpv11Side" class="hpv11-side"></div>
         <div id="scnBox"></div>
         <div id="scnList" class="scn-list"></div>
         <div class="scn-ft">图钉 = 按部位在身体上的大致解剖定位（背面部位镜像到正面）· 与病史库联动：加一条病史，这里就自动长出图钉</div>
@@ -14906,6 +15061,54 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <div class="sec">
       <div class="sec-hd"><span>🩺 我的方案</span><span class="sub">按你的病症逐条查证 · 每条都标证据等级和出处</span></div>
       <div id="planBody"></div>
+    </div>
+  </div>
+
+
+  <!-- ===== v11 视图三：复诊（方案 04） ===== -->
+  <div class="panel" id="p-doc">
+    <div class="sec">
+      <div class="sec-hd"><span>🩺 复诊模式</span><span class="sub">给医生看的一屏 · 无装饰 · 可直接打印</span></div>
+      <div class="card hpv11-doc">
+        <div class="hpv11-dochead">
+          <div>
+            <div class="t">复诊摘要 · 自动生成</div>
+            <div class="h" id="hpv11DocH">—</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn p" onclick="hpv11CopyDoc(this)">📋 复制给医生</button>
+            <button class="btn" onclick="window.print()">🖨 打印 / 存 PDF</button>
+          </div>
+        </div>
+        <div class="rxbox" id="hpv11DocSum"></div>
+      </div>
+
+      <div class="hpv11-g2" style="margin-top:14px">
+        <div class="card">
+          <div class="ov-ck-hd"><b>📋 病情要点</b></div>
+          <div id="hpv11DocKv"></div>
+        </div>
+        <div class="card">
+          <div class="ov-ck-hd"><b>❓ 这次想问医生的</b><span class="sub">复诊前先写好，现场不容易忘</span></div>
+          <div id="hpv11Ask"></div>
+          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+            <input id="hpv11AskIn" type="text" placeholder="例：药吃完了还疼，要不要接着吃？"
+              style="flex:1;min-width:180px;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:8px;padding:7px 11px;color:var(--text);font-size:12.5px"
+              onkeydown="if(event.key==='Enter')hpv11AskAdd()">
+            <button class="btn p" onclick="hpv11AskAdd()">＋ 加一条</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="ov-ck-hd"><b>📊 近 14 天依从性</b><span class="sub" id="hpv11Adh"></span></div>
+        <div class="hpv11-stat-row" id="hpv11DocStat"></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="ov-ck-hd"><b>🩺 相关发作记录</b><span class="sub" id="hpv11DocMinorSub"></span></div>
+        <div id="hpv11DocMinor"></div>
+      </div>
     </div>
   </div>
 
@@ -35409,7 +35612,7 @@ if (document.readyState === 'loading') {
    裸 function/var 会静默互相覆盖；只把 HTML onclick 真正引用到的函数挂到 window。 */
 
 /* ===================== 状态 ===================== */
-var S = { tab:'map', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
+var S = { tab:'today', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
 
 /* ===================== 人体图 v5 · 几何（由 _v5_geo.py 程序化生成） =====================
    单一闭合解剖轮廓（人体模型算出来 + Catmull-Rom 平滑）｜51 条肌纤维（裁在轮廓内）｜
@@ -35580,10 +35783,9 @@ function pvTheme(){ /* no-op：并入本体后主题跟随全站，不再由本�
 /* 2026-09-20 用户要求：删掉「手表数据 / 我的方案 / 好转推断」三块，并把「用药记录」挪到「总览」右边。
    面板 HTML 与渲染函数仍保留（休眠、无入口）——避免动到复诊摘要/总览脚注里对「好转推断」的文字引用。 */
 var TABS=[
-  {k:'map',   ic:'🫀', t:'总览'},
-  {k:'med',   ic:'💊', t:'用药记录', cnt:function(){return MEDS.length;}},
-  {k:'hist',  ic:'📁', t:'病史库',   cnt:function(){return HIST.length;}},
-  {k:'minor', ic:'🤒', t:'小病复发', cnt:function(){return MINOR.length;}}
+  {k:'today', ic:'📌', t:'今天'},
+  {k:'map',   ic:'🧍', t:'身体地图'},
+  {k:'doc',   ic:'🩺', t:'复诊'}
 ];
 function renderTabs(){
   document.getElementById('tabs').innerHTML=TABS.map(function(x){
@@ -35593,11 +35795,14 @@ function renderTabs(){
 }
 function pvTab(k){
   S.tab=k;
-  ['map','hist','med','minor','watch','plan','trend'].forEach(function(x){
+  ['today','map','hist','med','minor','watch','plan','trend','doc'].forEach(function(x){
     var p=document.getElementById('p-'+x); if(p) p.classList.toggle('on', x===k);
   });
   renderTabs();
-  if(k==='map'){ renderBodyMap(); renderCheck(); }
+  hpv11DocMode(k==='doc');
+  if(k==='today'){ hpv11Today(); }
+  if(k==='doc'){ hpv11Doc(); }
+  if(k==='map'){ renderBodyMap(); renderCheck(); try{ hpv11Side(S.sel||null); }catch(e){} }
   if(k==='hist')  renderHist();
   if(k==='med')   renderMed();
   if(k==='minor') renderMinor();
@@ -35797,7 +36002,15 @@ function renderBodyMap(){
   }
   svg.innerHTML=out.join('');
   Array.prototype.forEach.call(svg.querySelectorAll('.scn-pin'), function(el){
-    el.addEventListener('click', function(){ pvGoZone(el.getAttribute('data-zone')); });
+    el.addEventListener('click', function(){
+      var z = el.getAttribute('data-zone');
+      /* v11 方案 05：点击 → 右侧弹出该部位的完整记录；图钉保留不消失 */
+      S.sel = z;
+      try { hpv11Side(z); } catch(e) { pvGoZone(z); }
+      Array.prototype.forEach.call(svg.querySelectorAll('.scn-pin'), function(g){
+        g.classList.toggle('hpv11-on', g.getAttribute('data-zone') === z);
+      });
+    });
   });
   if(list){
     var lh='';
@@ -35963,7 +36176,15 @@ var RS='A';
 var RS_TXT={A:'右下角小胶囊 · 不挡内容',B:'到点压暗整屏 · 做完才关得掉',C:'不弹窗不响铃 · 回到本页才看到'};
 function pvRS(k){ RS=k; ['A','B','C'].forEach(function(x){ var el=document.getElementById('rs'+x); if(el) el.classList.toggle('on',x===k); }); renderRS(); }
 function renderRS(){ var t=document.getElementById('rsTxt'); if(t) t.textContent=RS_TXT[RS]||''; }
-function pvCk(id){ CK_DONE[id]=!CK_DONE[id]; HSAVE(); renderCheck(); }
+function pvCk(id){
+  CK_DONE[id]=!CK_DONE[id]; HSAVE();
+  /* v11：勾完要按当前所在视图刷新 —— 否则「今天」面板的环/数字会停在旧值，
+     身体地图侧栏的勾选态也不会跟着走（用户看到的是一处动了、别处没动）。
+     renderCheck 只在「身体地图」页签长住那一屏才需要（它要刷打卡列表 + 跟练卡）。 */
+  if(S.tab==='map'){ try { renderCheck(); } catch(e){} }
+  if(S.tab==='today'){ try { hpv11Today(); } catch(e){} }
+  if(S.tab==='map' && S.sel){ try { hpv11Side(S.sel); } catch(e){} }
+}
 function pvCkAll(){
   var items=ckAll(), all=items.every(function(x){ return CK_DONE[x.id]; });
   items.forEach(function(x){ CK_DONE[x.id]=!all; }); HSAVE();
@@ -37422,6 +37643,337 @@ function pvToast(m){
 }
 function num(v){ var n=parseFloat(v); return isNaN(n)?null:n; }
 
+/* ================================================================
+ * v11 改版函数体（2026-10-09）· 方案 01 今天 + 05 地图侧栏 + 04 复诊 + 09 可信度
+ * 全部包在既有 IIFE 内；仅 HTML onclick 引用的函数挂 window。
+ * ================================================================ */
+var HP_DOC = { on:false, ask:[] };
+hpv11AskLoad();
+
+/* ---- 通用小工具 ---- */
+function hpv11El(id){ return document.getElementById(id); }
+function hpv11StatusMeta(st){ return ST[st] || { t:st, c:'t-old', col:'#8a8fa3' }; }
+
+/* ---------- 视图一：今天 ---------- */
+function hpv11Today(){
+  var items = ckAll();
+  var done  = items.filter(function(x){ return CK_DONE[x.id]; }).length;
+  var tot   = items.length;
+  var pct   = tot ? (done/tot) : 0;
+
+  /* 环 */
+  var arc = hpv11El('hpv11Arc');
+  if(arc){
+    var C = 2*Math.PI*36;                       /* r=36 */
+    arc.setAttribute('stroke-dasharray', C.toFixed(1));
+    arc.setAttribute('stroke-dashoffset', (C*(1-pct)).toFixed(1));
+    arc.setAttribute('stroke', pct>=0.8?'var(--ok)':(pct>=0.4?'var(--accent)':'var(--warn)'));
+  }
+  var ck = hpv11El('hpv11Ck'); if(ck) ck.textContent = String(done);
+  var ckt = hpv11El('hpv11CkTot'); if(ckt) ckt.textContent = '/ ' + tot;
+
+  /* 一句话结论 + 依据（方案 09：每个判断都摊开它是怎么算的） */
+  var v = hpv11El('hpv11Verdict'), why = hpv11El('hpv11Why');
+  if(!tot){
+    if(v) v.textContent = '还没有打卡项';
+    if(why) why.textContent = '在「身体地图 → 病史」里给一条病史写上「每天要打卡的事」，这里就会自动长出今天要做的事。';
+  } else {
+    var txt, sub;
+    if(done === tot){ txt='今天全部做完了 ✓'; sub='共 '+tot+' 项，已全部打卡。'; }
+    else if(done === 0){ txt='今天还没开始'; sub='共 '+tot+' 项待做 —— 最小的一步是「每 30 分钟起身活动 2 分钟」。'; }
+    else { txt='今天做了 '+done+' / '+tot+' 项'; sub='还差 '+(tot-done)+' 项。一天不用全做完，做一项就算一天没断。'; }
+    if(v) v.textContent = txt;
+    if(why) why.textContent = sub;
+  }
+
+  /* 3 件事：优先展示未完成 + 最要紧的 */
+  var box = hpv11El('hpv11Tasks');
+  if(box){
+    if(!tot){
+      box.innerHTML = '<div class="hx-empty" style="padding:12px 0">还没有打卡项。<button class="btn p" style="margin-top:9px" onclick="pvAdd()">＋ 加一条病史</button></div>';
+    } else {
+      /* v11 选 3 条的口径（实测三轮才定下来，别再改回去）：
+         真正要保证的是「点一下就勾」+「点完那条不跑」——
+         所以这 3 条的**顺序与成员在勾选前后必须完全不变**，勾选只改样式。
+         做法：按原始顺序取前 3 条，只在**首次进入这一屏**时把「活动类」提到最前；
+         一旦已经画过（hpv11Today.order 有缓存），就永远按第一次算好的 id 顺序渲染。
+         这样一来下标是稳定的，用户点第 N 个，动的就是第 N 个。 */
+      if (!hpv11Today._order) {
+        var act = items.filter(function(x){ return x.t.indexOf('活动')>=0; });
+        var rest0 = items.filter(function(x){ return act.indexOf(x) < 0; });
+        hpv11Today._order = act.concat(rest0).slice(0,3).map(function(x){ return x.id; });
+      }
+      var byId = {};
+      items.forEach(function(x){ byId[x.id]=x; });
+      /* 缓存里的 id 若已不存在（删了打卡项），剔除后补位，保证仍是 3 条 */
+      var ids = hpv11Today._order.filter(function(id){ return byId[id]; });
+      items.forEach(function(x){ if (ids.length < 3 && ids.indexOf(x.id) < 0) ids.push(x.id); });
+      hpv11Today._order = ids;
+      var top = ids.map(function(id){ return byId[id]; });
+      box.innerHTML = top.map(function(x){
+        var on = !!CK_DONE[x.id], fr = FR[x.id] || '';
+        return '<div class="hpv11-tk'+(on?' on':'')+'" onclick="pvCk(\''+x.id+'\')">'
+          + '<span class="bx">✓</span>'
+          + '<span class="tx">'+esc(x.t)+'</span>'
+          + (fr?'<span class="fr">'+fr+'</span>':'')
+          + '</div>';
+      }).join('')
+      + (tot>3 ? '<div style="font-size:11.5px;color:var(--muted);margin-top:4px">还有 '+(tot-3)+' 项 —— 点「看全部打卡项」进身体地图</div>' : '');
+    }
+  }
+
+  /* 核心医嘱 */
+  var rx = hpv11El('hpv11Rx'), rxFrom = hpv11El('hpv11RxFrom');
+  var act = hpfActive();
+  if(rx){
+    if(act){
+      var rows = [];
+      if(act.rx) rows.push({k:'核心', t:act.rx});
+      (act.rx2||[]).forEach(function(t){ rows.push({k:'细则', t:t}); });
+      if((act.avoid||[]).length) rows.push({k:'忌口', t:act.avoid.join('、')});
+      rx.innerHTML = rows.length
+        ? rows.map(function(r){ return '<div class="hpv11-rx"><em>'+esc(r.k)+'</em>'+esc(r.t)+'</div>'; }).join('')
+        : '<div class="hx-empty" style="padding:10px 0">这条病史还没填医嘱 —— 点「✏️ 编辑」补上，复诊摘要也会自动变全。</div>';
+      if(rxFrom) rxFrom.textContent = '来自：' + shortName(act.name);
+    } else {
+      rx.innerHTML = '<div class="hx-empty" style="padding:10px 0">还没有「治疗中」的病史。在病史里把一条标成治疗中并填上医嘱，就会置顶在这里。</div>';
+      if(rxFrom) rxFrom.textContent = '';
+    }
+  }
+
+  /* 病程时间线（复用 hpfEvents，最多 8 条） */
+  var tl = hpv11El('hpv11Tl');
+  if(tl){
+    var evs = hpfEvents().slice(0,8);
+    tl.innerHTML = evs.length
+      ? '<div class="hpv11-tl">' + evs.map(function(e){
+          return '<div class="hpv11-ev'+(e.ex?' ex':'')+'">'
+            + '<div class="dt">'+(e.d||'—')+(e.ex?' · <span style="color:var(--warn)">示例</span>':'')+'</div>'
+            + '<div class="bd"><em>'+esc(e.k)+'</em>'+esc(e.t)+'</div>'
+            + (e.s?'<div class="sb">'+esc(e.s)+'</div>':'')
+            + '</div>';
+        }).join('') + '</div>'
+        + '<div style="margin-top:10px"><button class="btn sm" onclick="pvTab(\'doc\')">🩺 看完整复诊摘要 →</button></div>'
+      : '<div class="hx-empty" style="padding:12px 0">还没有任何事件。加一条病史，这条线就自动生长 —— 不需要你手工维护。</div>';
+  }
+}
+
+/* ---------- 视图三：复诊 ---------- */
+function hpv11Doc(){
+  var act = hpfActive();
+  var d = act ? scnDays(act.date) : null;
+
+  var hd = hpv11El('hpv11DocH');
+  if(hd) hd.textContent = '生成时间：' + todayStr() + (act ? (' · 主诉：'+shortName(act.name)) : ' · 暂无治疗中病史');
+
+  var sum = hpv11El('hpv11DocSum');
+  if(sum) sum.textContent = hpfSummary();
+
+  /* 病情要点 */
+  var kv = hpv11El('hpv11DocKv');
+  if(kv){
+    if(!act){
+      kv.innerHTML = '<div class="hx-empty" style="padding:10px 0;grid-column:1/-1">还没有「治疗中」的病史，无法生成病情要点。</div>';
+    } else {
+      var rows = [];
+      rows.push(['主诉 / 诊断', act.dx || act.name || '—']);
+      rows.push(['就诊日期', (act.date||'—') + (d!=null ? '（已 '+d+' 天）' : '')]);
+      rows.push(['就诊机构', act.hosp || '—']);
+      rows.push(['受累部位', (act.zones||[]).map(zLabel).join(' · ') || '—']);
+      if(act.sym) rows.push(['主诉症状', act.sym]);
+      if(act.rx) rows.push(['核心医嘱', act.rx]);
+      if((act.avoid||[]).length) rows.push(['忌口', act.avoid.join('、')]);
+      var items = ckAll();
+      var done = items.filter(function(x){ return CK_DONE[x.id]; }).length;
+      rows.push(['今日打卡', done + ' / ' + items.length + ' 项']);
+      kv.innerHTML = rows.map(function(r){
+        return '<div class="k">'+esc(r[0])+'</div><div class="v">'+esc(r[1])+'</div>';
+      }).join('');
+    }
+  }
+
+  /* 想问医生的问题（本地存 localStorage，跟 HSAVE 同一个 key 下另开字段没必要 —— 用独立 key 更干净） */
+  var ask = hpv11El('hpv11Ask');
+  if(ask){
+    if(!HP_DOC.ask.length){
+      ask.innerHTML = '<div style="font-size:11.5px;color:var(--muted);padding:6px 0">还没有问题。想到就写一条 —— 复诊现场最容易忘的就是这些。</div>';
+    } else {
+      ask.innerHTML = HP_DOC.ask.map(function(q,i){
+        return '<div class="hpv11-ask"><span class="no">'+(i+1)+'.</span><span class="tx">'+esc(q)+'</span>'
+          + '<span class="dl" onclick="hpv11AskDel('+i+')" title="删除">✕</span></div>';
+      }).join('');
+    }
+  }
+
+  /* 近 14 天依从性（方案 09：数据来源写清楚，不补假） */
+  var stat = hpv11El('hpv11DocStat'), adh = hpv11El('hpv11Adh');
+  if(stat){
+    var av  = Math.round(avg(DONE14));
+    var okN = DONE14.filter(function(x){ return x>=GOAL; }).length;
+    var rate= Math.round(av/GOAL*100);
+    var nMedReal = MEDS.filter(function(m){ return m.st==='active' && m.real; }).length;
+    stat.innerHTML =
+      '<div class="hpv11-stat"><div class="n">'+av+'<small> 次 / 天</small></div><div class="l">活动均值（目标 '+GOAL+'）</div>'
+      + '<div class="bar"><i style="width:'+Math.min(100,rate)+'%"></i></div></div>'
+      + '<div class="hpv11-stat"><div class="n">'+okN+'<small> / 14</small></div><div class="l">达标天数</div></div>'
+      + '<div class="hpv11-stat"><div class="n">'+rate+'<small> %</small></div><div class="l">活动依从度</div></div>'
+      + '<div class="hpv11-stat"><div class="n">'+nMedReal+'<small> 种</small></div><div class="l">在服药物（真实记录）</div></div>';
+    if(adh) adh.textContent = '区间 '+DAYS[0]+' – '+DAYS[DAYS.length-1]+' · 数据来自本机记录';
+  }
+
+  /* 相关发作记录 */
+  var mn = hpv11El('hpv11DocMinor'), mns = hpv11El('hpv11DocMinorSub');
+  if(mn){
+    var list = MINOR.slice().sort(function(a,b){ return String(b.start).localeCompare(String(a.start)); }).slice(0,6);
+    if(!list.length){
+      mn.innerHTML = '<div class="hx-empty" style="padding:12px 0">还没有发作记录。</div>';
+    } else {
+      mn.innerHTML = '<div class="hpv11-tl">' + list.map(function(e){
+        var dur = dDiff(e.start, e.end) + 1;
+        return '<div class="hpv11-ev'+(e.real?'':' ex')+'">'
+          + '<div class="dt">'+esc(e.start)+' → '+esc(e.end)+' · 持续 '+dur+' 天'+(e.real?'':' · 示例')+'</div>'
+          + '<div class="bd"><em>发作</em>'+esc(e.name)+'</div>'
+          + '<div class="sb">'+[(e.sites||[]).join(' / '),(e.trig||[]).length?('诱因：'+e.trig.join('、')):'',(e.care||[]).length?('处理：'+e.care.join('、')):''].filter(Boolean).join(' · ')+'</div>'
+          + '</div>';
+      }).join('') + '</div>';
+    }
+    if(mns) mns.textContent = MINOR.length + ' 条记录 · 按时间倒序';
+  }
+}
+
+/* 复诊模式开关：切视图 + 给 #healthPage 打标记（打印时只留 p-doc） */
+function hpv11ToggleDoc(){
+  if(S.tab === 'doc'){ pvTab('today'); }
+  else { pvTab('doc'); }
+}
+function hpv11DocMode(on){
+  HP_DOC.on = !!on;
+  var page = document.getElementById('healthPage');
+  if(page) page.classList.toggle('hpv11-focus', !!on);
+  var btn = hpv11El('hpv11DocBtn');
+  if(btn){
+    btn.classList.toggle('p', !!on);
+    btn.textContent = on ? '📌 回到今天' : '🩺 复诊模式';
+  }
+}
+
+/* 复制复诊摘要：在 hpfSummary 基础上，把「想问医生的」也带上 */
+function hpv11DocText(){
+  var t = hpfSummary();
+  if(HP_DOC.ask.length) t += '\n复诊想确认的问题：\n' + HP_DOC.ask.map(function(q,i){ return '  '+(i+1)+'. '+q; }).join('\n');
+  return t;
+}
+function hpv11CopyDoc(btn){
+  var go = function(ok){
+    if(btn) btn.textContent = ok ? '✅ 已复制' : '⚠ 复制失败';
+    try { pvToast(ok ? '复诊摘要已复制到剪贴板 ✅' : '复制失败，请手动选中文本'); } catch(e){}
+    setTimeout(function(){ if(btn) btn.textContent = '📋 复制给医生'; }, 1800);
+  };
+  try {
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(hpv11DocText()).then(function(){ go(true); }, function(){ go(false); });
+      return;
+    }
+  } catch(e){}
+  go(false);
+}
+
+/* 想问医生的问题：增 / 删 */
+function hpv11AskAdd(){
+  var inp = hpv11El('hpv11AskIn'); if(!inp) return;
+  var v = String(inp.value||'').trim();
+  if(!v){ pvToast('先写一句想问的'); return; }
+  HP_DOC.ask.push(v); inp.value='';
+  hpv11AskSave(); hpv11Doc();
+}
+function hpv11AskDel(i){
+  HP_DOC.ask.splice(i,1); hpv11AskSave(); hpv11Doc();
+}
+function hpv11AskSave(){
+  try { safeStorage.set('niko_health_docask_v1', HP_DOC.ask); } catch(e){}
+}
+function hpv11AskLoad(){
+  try { var a = safeStorage.get('niko_health_docask_v1', []); if(Array.isArray(a)) HP_DOC.ask = a; } catch(e){}
+}
+
+/* ---------- 视图二：地图侧栏（方案 05）----------
+   ★★ 铁律：绝对不画人形 —— 侧栏只读 HIST / ZIMG 数据，人形图继续用 BODY_URI 位图。 */
+function hpv11Side(z){
+  var side = hpv11El('hpv11Side'), wrap = document.querySelector('.hpv11-mapwrap');
+  if(!side) return;
+  if(!z){
+    if(wrap) wrap.classList.remove('side-on');
+    side.innerHTML = '';
+    return;
+  }
+  var hits = HIST.filter(function(h){ return (h.zones||[]).indexOf(z) >= 0; });
+  var out = '<div class="scn-card">'
+    + '<div class="hpv11-sd-hd"><b>📍 '+esc(zLabel(z))+'</b>'
+    + '<span class="bdg">'+hits.length+' 条记录</span>'
+    + '<span class="cls" onclick="hpv11Side(null)" title="收起">✕</span></div>';
+
+  if(!hits.length){
+    out += '<div class="hpv11-sd-empty"><span class="big">＋</span>'
+      + '这个部位目前没有就诊记录。<br>如果这里看过医生、受过伤、或者一直有点不舒服 ——<br>'
+      + '<button class="hp-btn p" style="margin-top:12px" onclick="pvAdd(\''+z+'\')">＋ 给「'+esc(zLabel(z))+'」加一条</button>'
+      + '</div></div>';
+    side.innerHTML = out;
+    if(wrap) wrap.classList.add('side-on');
+    return;
+  }
+
+  out += '<div class="hpv11-sd-list">';
+  hits.forEach(function(h){
+    var st = hpv11StatusMeta(h.status);
+    var d  = scnDays(h.date);
+    var items = (h.checks||[]).map(function(c,i){ return {id:h.id+'#'+i, t:c}; });
+    var dn = items.filter(function(x){ return CK_DONE[x.id]; }).length;
+    out += '<div class="hpv11-sd-card">'
+      + '<div class="r1"><b>'+esc(h.name)+'</b>'
+      + '<span class="tag" style="color:'+st.col+'">'+esc(st.t)+'</span>'
+      + (h.real?'':'<span class="tag" style="color:var(--warn)">示例</span>')
+      + '</div>'
+      + '<div class="r2">'
+      + '<div>📅 '+esc(h.date||'—')+(d!=null?(' · <span class="k">已 '+d+' 天</span>'):'')+'</div>'
+      + (h.hosp?('<div>🏥 '+esc(h.hosp)+'</div>'):'')
+      + (h.dx?('<div>🔍 '+esc(h.dx)+'</div>'):'')
+      + (h.rx?('<div>📌 核心医嘱：<span class="k">'+esc(h.rx)+'</span></div>'):'')
+      + '</div>';
+    if(items.length){
+      out += '<div class="ck">'
+        + '<div style="font-size:11px;color:var(--muted)">✅ 今日打卡 '+dn+' / '+items.length+'</div>'
+        + items.map(function(x){
+            var on = !!CK_DONE[x.id];
+            return '<div class="it'+(on?' on':'')+'" onclick="hpv11SideCk(\''+x.id+'\',\''+z+'\')">'
+              + '<span class="bx">✓</span>'+esc(x.t)+'</div>';
+          }).join('')
+        + '</div>';
+    }
+    out += '</div>';
+  });
+  out += '</div>';
+  out += '<div class="hpv11-sd-ft">'
+    + '<button class="hp-btn" onclick="pvAdd(\''+z+'\')">＋ 加记录</button>'
+    + '<button class="hp-btn" onclick="pvTab(\'hist\')">📁 去病史库</button>'
+    + '</div></div>';
+  side.innerHTML = out;
+  if(wrap) wrap.classList.add('side-on');
+}
+function hpv11SideCk(id, z){ CK_DONE[id] = !CK_DONE[id]; HSAVE(); hpv11Side(z); try{ renderCheck(); }catch(e){} }
+
+/* 导出给 HTML onclick 用（IIFE 隔离：不挂 window 点不到） */
+window.hpv11Today     = hpv11Today;
+window.hpv11Doc       = hpv11Doc;
+window.hpv11ToggleDoc = hpv11ToggleDoc;
+window.hpv11DocMode   = hpv11DocMode;
+window.hpv11CopyDoc   = hpv11CopyDoc;
+window.hpv11DocText   = hpv11DocText;
+window.hpv11AskAdd    = hpv11AskAdd;
+window.hpv11AskDel    = hpv11AskDel;
+window.hpv11Side      = hpv11Side;
+window.hpv11SideCk    = hpv11SideCk;
+
+
 /* ---------- 手表数据 ---------- */
 var WATCH=[
   {d:'8/29',sleep:5.9,deep:1.0,rhr:66,hrv:38,steps:4100,ex:12,spo2:96,note:'加班到 11 点'},
@@ -37852,9 +38404,12 @@ function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
   if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
-  var k = S.tab || 'map';
+  var k = S.tab || 'today';
   try {
-    if (k === 'map')        { renderBodyMap(); renderCheck(); renderCkLink(); }
+    hpv11DocMode(k === 'doc');
+    if (k === 'today')     hpv11Today();
+    else if (k === 'map')  { renderBodyMap(); renderCheck(); renderCkLink(); try{ hpv11Side(S.sel||null); }catch(e){} }
+    else if (k === 'doc')  hpv11Doc();
     else if (k === 'hist')  renderHist();
     else if (k === 'med')   renderMed();
     else if (k === 'minor') renderMinor();
@@ -43357,7 +43912,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610091022";
+        window.NIKO_VERSION = "202610091114";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
