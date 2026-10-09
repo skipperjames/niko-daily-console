@@ -4573,6 +4573,69 @@ body.dark-mode .wal-set-row input{background:#14141c}
         body.dark-mode .cal-habit-dots .chd.miss { background: transparent; box-shadow: inset 0 0 0 1.2px rgba(251,191,36,.7); }
         /* 窄屏不显示（点阵挤压 7 天列表） */
         @media (max-width: 768px) { .cal-habit-dots { display: none; } }
+        /* ===== 18 计划页今日习惯折叠区块（2026-10-09，方案06）=====
+           面板宽仅 320px（内容区约 294px），装不下今日看板的习惯卡（信息密度太高）。
+           所以这里只保留：图标 + 名称 + 整数进度 + 最小操作胶囊，且默认收起。
+           数据与今日看板 / 日历点阵同源（niko_habit_logs），打卡走 habitToggle()，
+           三处自动联动。反自责口径：不出现「漏」字。 */
+        .pd-habit { border: 1px solid #e9ebf2; border-radius: 9px; overflow: hidden; margin-bottom: 10px; flex-shrink: 0; }
+        body.dark-mode .pd-habit { border-color: #313747; }
+        .pd-habit-head {
+            display: flex; align-items: center; gap: 7px; padding: 8px 11px;
+            background: #f8f9fc; cursor: pointer; font-size: 12px; font-weight: 600;
+            user-select: none; -webkit-user-select: none; transition: background .15s;
+        }
+        .pd-habit-head:hover { background: #f1f2f8; }
+        body.dark-mode .pd-habit-head { background: #232838; }
+        body.dark-mode .pd-habit-head:hover { background: #2a3040; }
+        .pd-habit-head .pd-h-ico { font-size: 13px; line-height: 1; flex-shrink: 0; }
+        .pd-habit-head .pd-h-num { font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; color: #10b981; flex-shrink: 0; }
+        .pd-habit-head .pd-h-num.partial { color: #f59e0b; }
+        .pd-habit-head .pd-h-hint { font-size: 10px; color: #9a9ab0; font-weight: 400; }
+        .pd-habit-head .pd-h-arw { margin-left: auto; font-size: 10px; color: #9a9ab0; transition: transform .2s; flex-shrink: 0; }
+        .pd-habit.open .pd-habit-head .pd-h-arw { transform: rotate(90deg); }
+        .pd-habit-body { display: none; padding: 7px 9px 9px; }
+        .pd-habit.open .pd-habit-body { display: block; }
+        /* 紧凑名册行：一行一个习惯，点整行打卡 */
+        .pd-hrow {
+            display: flex; align-items: center; gap: 8px; padding: 6px 7px;
+            border-radius: 7px; margin-bottom: 3px; cursor: pointer;
+            border: 1px solid transparent; transition: .15s; font-size: 11.5px;
+        }
+        .pd-hrow:last-child { margin-bottom: 0; }
+        .pd-hrow:hover { background: #f8f9fc; border-color: #e9ebf2; }
+        body.dark-mode .pd-hrow:hover { background: #232838; border-color: #313747; }
+        .pd-hrow.done { background: rgba(16,185,129,.08); border-color: rgba(16,185,129,.22); }
+        body.dark-mode .pd-hrow.done { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.28); }
+        .pd-hrow.rest { opacity: .5; cursor: not-allowed; }
+        .pd-hrow-ck {
+            width: 16px; height: 16px; border-radius: 50%; border: 1.8px solid #d8dae6;
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 9.5px; color: #fff; transition: .15s; line-height: 1;
+        }
+        body.dark-mode .pd-hrow-ck { border-color: #4a4a60; }
+        .pd-hrow.done .pd-hrow-ck { background: #10b981; border-color: #10b981; }
+        .pd-hrow-ico { font-size: 12.5px; flex-shrink: 0; line-height: 1; }
+        .pd-hrow-nm { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pd-hrow.done .pd-hrow-nm { color: #9a9ab0; text-decoration: line-through; }
+        .pd-hrow-k { font-size: 9.5px; color: #9a9ab0; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+        .pd-hrow-chip {
+            font-size: 9px; border-radius: 5px; padding: 0 5px; line-height: 15px;
+            flex-shrink: 0; white-space: nowrap; font-variant-numeric: tabular-nums;
+        }
+        .pd-hrow-chip.c-dur { border: 1px dashed #d9d2f0; color: #8b7bb8; background: #faf9ff; }
+        body.dark-mode .pd-hrow-chip.c-dur { background: #221f36; border-color: #4c4470; color: #a89bd6; }
+        .pd-hrow-chip.c-mk { border: 1px dashed #f0d9b8; color: #b8863f; background: #fffbf5; }
+        body.dark-mode .pd-hrow-chip.c-mk { background: #2a2418; border-color: #574a2c; color: #d9b06a; }
+        .pd-habit-foot { display: flex; align-items: center; gap: 6px; margin-top: 7px; padding-top: 7px; border-top: 1px dashed #e9ebf2; }
+        body.dark-mode .pd-habit-foot { border-top-color: #313747; }
+        .pd-habit-foot .pd-h-more {
+            margin-left: auto; font-size: 10px; color: #7c3aed; cursor: pointer;
+            background: none; border: none; font-family: inherit; padding: 2px 4px;
+        }
+        .pd-habit-foot .pd-h-more:hover { text-decoration: underline; }
+        body.dark-mode .pd-habit-foot .pd-h-more { color: #a78bfa; }
+        .pd-habit-foot .pd-h-rest { font-size: 10px; color: #9a9ab0; }
         .events-container {
             flex: 1;
             display: flex;
@@ -13470,6 +13533,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button class="btn-small danger" onclick="batchDelete()">🗑 删除</button>
                         <button class="btn-small danger" id="batchSeriesBtn" onclick="batchDeleteSeries()" style="display:none;" title="连带删除选中任务所属的整个重复系列">🗑 整个系列</button>
                     </div>
+                    <!-- ===== 18 计划页今日习惯折叠区块（2026-10-09，方案06）：内容由 renderPdHabitBlock() 渲染 ===== -->
+                    <div class="pd-habit" id="pdHabitBlock" style="display:none;"></div>
                     <div class="day-task-list" id="dayTaskList"></div>
                 </div>
                 <div id="detailPanelHandle" class="detail-panel-handle" onclick="toggleDayDetailPanel()" title="展开右侧「当天任务」栏">详情</div>
@@ -22139,6 +22204,179 @@ if (document.readyState === 'loading') {
             } catch (e) { return ''; }
         }
 
+        /* ===== 18 计划页今日习惯折叠区块（2026-10-09，方案06）=====
+           展开状态记忆在 niko_plan_habit_open；「今天还没打完」时自动展开一次。
+           打卡统一走今日看板的 habitToggle()，它内部会 renderTodayHabits()；
+           这里再加 renderFourWeekGrid() 让日历格点阵同步刷新（三处同源联动）。 */
+        const PD_HABIT_OPEN_KEY = 'niko_plan_habit_open';
+
+        // 读该日应打卡/已打卡（与 calHabitDotsHtml 同一套判定，避免两处口径分叉）
+        function pdHabitTodayData(dateStr) {
+            const habits = safeStorage.get('niko_habits', []) || [];
+            const logs = safeStorage.get('niko_habit_logs', []) || [];
+            const norm = (d) => {
+                let s = String(d || '').slice(0, 10);
+                const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                if (m) s = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+                return s;
+            };
+            const doneSet = {};
+            logs.forEach(l => { if (norm(l.date) === dateStr) doneSet[l.habitId] = l; });
+            const isActiveOn = (h, ds) => {
+                const freq = h.frequency || 'daily';
+                if (freq === 'weekdays') {
+                    const days = Array.isArray(h.weekDays) ? h.weekDays : [];
+                    return days.includes(new Date(ds + 'T00:00:00').getDay());
+                }
+                return true;
+            };
+            return {
+                habits: habits,
+                doneSet: doneSet,
+                actives: habits.filter(h => isActiveOn(h, dateStr)),
+                rests: habits.filter(h => !isActiveOn(h, dateStr)),
+                isActiveOn: isActiveOn
+            };
+        }
+
+        // 该习惯在本周期（复用今日看板的 weeklyRange）还差几次到 goal
+        function pdHabitWeekGap(h, dateStr) {
+            try {
+                let range = null;
+                if (typeof weeklyRange === 'function') range = weeklyRange(0);
+                if (!range) return 0;
+                const logs = safeStorage.get('niko_habit_logs', []) || [];
+                const norm = (d) => {
+                    let s = String(d || '').slice(0, 10);
+                    const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                    if (m) s = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+                    return s;
+                };
+                const n = logs.filter(l => l.habitId === h.id).filter(l => {
+                    const d = norm(l.date);
+                    return d >= range.start && d <= range.end;
+                }).length;
+                const goal = Number(h.goal) || 7;
+                return Math.max(0, goal - n);
+            } catch (e) { return 0; }
+        }
+
+        function pdHabitIsOpen() {
+            try {
+                const v = safeStorage.get(PD_HABIT_OPEN_KEY, null);
+                if (v === null) return null;      // 用户还没表态
+                return !!v;
+            } catch (e) { return null; }
+        }
+        function pdHabitSetOpen(v) {
+            try { safeStorage.set(PD_HABIT_OPEN_KEY, !!v); } catch (e) {}
+        }
+        function pdHabitToggle() {
+            const box = document.getElementById('pdHabitBlock');
+            if (!box) return;
+            const next = !box.classList.contains('open');
+            box.classList.toggle('open', next);
+            pdHabitSetOpen(next);
+        }
+        // 点习惯行 → 打卡（复用今日看板的 habitToggle）+ 同步日历点阵
+        function pdHabitCheck(habitId, isActive, ev) {
+            if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+            if (!isActive) {
+                if (typeof showToast === 'function') showToast('🌙 今天不是打卡日，休息就好');
+                return;
+            }
+            if (typeof habitToggle !== 'function') {
+                if (typeof showToast === 'function') showToast('⚠️ 习惯模块没加载，稍后再试');
+                return;
+            }
+            habitToggle(habitId);
+            // 三处同源联动：今日看板已被 habitToggle 内部刷新，这里补日历点阵 + 本区块
+            try { renderPdHabitBlock(); } catch (e) {}
+            try { if (typeof renderFourWeekGrid === 'function') renderFourWeekGrid(); } catch (e) {}
+        }
+
+        function renderPdHabitBlock() {
+            const box = document.getElementById('pdHabitBlock');
+            if (!box) return;
+            const dateStr = formatDate(selectedDate);
+            const d = pdHabitTodayData(dateStr);
+            if (!d.habits.length) { box.style.display = 'none'; return; }
+            box.style.display = '';
+
+            const doneN = d.actives.filter(h => d.doneSet[h.id]).length;
+            const totalN = d.actives.length;
+            const allDone = totalN > 0 && doneN === totalN;
+            // 状态：已全打 / 部分
+            const numCls = allDone ? '' : 'partial';
+            const hint = totalN === 0
+                ? `今天 ${d.rests.length} 个都在休息`
+                : (allDone ? '今天全打完了 🎉' : `还差 ${totalN - doneN} 个`);
+
+            // 展开规则：用户没表态过 → 今天没打完就自动展开；表态过 → 听用户的
+            const remembered = pdHabitIsOpen();
+            const shouldOpen = (remembered === null) ? !allDone : remembered;
+            box.classList.toggle('open', shouldOpen);
+
+            const rows = d.habits.map(h => {
+                const isActive = d.isActiveOn(h, dateStr);
+                const isDone = !!d.doneSet[h.id];
+                const goal = Number(h.goal) || 7;
+                // 进度用「本周期次数/目标」，与今日看板卡片一致
+                let wc = 0;
+                try { if (typeof habitWeekCount === 'function') wc = habitWeekCount(h.id); } catch (e) {}
+                if (!wc) {
+                    // 兜底：自己算（避免依赖今日看板是否已初始化）
+                    try {
+                        let range = (typeof weeklyRange === 'function') ? weeklyRange(0) : null;
+                        if (range) {
+                            const logs = safeStorage.get('niko_habit_logs', []) || [];
+                            const norm = (x) => {
+                                let s = String(x || '').slice(0, 10);
+                                const m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                                if (m) s = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+                                return s;
+                            };
+                            wc = logs.filter(l => l.habitId === h.id && norm(l.date) >= range.start && norm(l.date) <= range.end).length;
+                        }
+                    } catch (e) {}
+                }
+                // 时长胶囊：只在已打卡且有时长时显示
+                const durMin = isDone ? (Number(d.doneSet[h.id].duration) || 0) : 0;
+                const durChip = durMin > 0 ? `<span class="pd-hrow-chip c-dur">⏱ ${durMin >= 60 ? Math.floor(durMin / 60) + 'h' + (durMin % 60 ? (durMin % 60) + '′' : '') : durMin + '′'}</span>` : '';
+                // 补卡胶囊：未打卡且本周期还差次数时提示（中性文案，不带「漏」）
+                const gap = (!isDone && isActive) ? pdHabitWeekGap(h, dateStr) : 0;
+                const mkChip = gap > 0 ? `<span class="pd-hrow-chip c-mk">补卡·差${gap}</span>` : '';
+                const cls = 'pd-hrow' + (isDone ? ' done' : '') + (isActive ? '' : ' rest');
+                const title = isActive
+                    ? (isDone ? '点击取消打卡' : '点击打卡：' + h.name)
+                    : `今天不是打卡日（${h.freqLabelText || ''}），休息就好`;
+                return `<div class="${cls}" onclick="pdHabitCheck('${h.id}',${isActive},event)" title="${escapeHtml(title)}">
+                    <span class="pd-hrow-ck">${isDone ? '✓' : ''}</span>
+                    <span class="pd-hrow-ico">${h.icon || '🎯'}</span>
+                    <span class="pd-hrow-nm">${escapeHtml(h.name)}</span>
+                    ${durChip}${mkChip}
+                    <span class="pd-hrow-k">${wc}/${goal}</span>
+                </div>`;
+            }).join('');
+
+            box.innerHTML = `
+                <div class="pd-habit-head" onclick="pdHabitToggle()" title="展开 / 收起今日习惯">
+                    <span class="pd-h-ico">🎯</span>
+                    <span>今日习惯</span>
+                    <span class="pd-h-num ${numCls}">${doneN}/${totalN}</span>
+                    <span class="pd-h-hint">${hint}</span>
+                    <span class="pd-h-arw">›</span>
+                </div>
+                <div class="pd-habit-body">
+                    ${rows}
+                    <div class="pd-habit-foot">
+                        ${d.rests.length ? `<span class="pd-h-rest">🌙 ${d.rests.length} 个今天休息</span>` : '<span></span>'}
+                        <button class="pd-h-more" onclick="event.stopPropagation(); if(typeof openHabits==='function') openHabits();" title="打开习惯管理（含补卡、成就墙、30天热度）">管理 / 补卡 →</button>
+                    </div>
+                </div>`;
+        }
+        /* ===== 18 END ===== */
+
         function renderFourWeekGrid() {
             const grid = document.getElementById('fourWeekGrid');
             // 周数切换按钮文案与当前状态同步（含刷新后从 localStorage 恢复的情况）
@@ -22669,6 +22907,8 @@ if (document.readyState === 'loading') {
             const doneCount = dayEvents.filter(e => e.status === 'done').length;
             document.getElementById('detailStats').innerHTML = `<span>共 <strong>${dayEvents.length}</strong> 项</span><span>已完成 <strong>${doneCount}</strong> 项</span>`;
             const list = document.getElementById('dayTaskList');
+            // 18 今日习惯折叠区块：独立于任务列表渲染（没有任务时也要显示习惯）
+            try { renderPdHabitBlock(); } catch (e) { console.warn('[18] 计划页习惯区块渲染失败', e); }
             if (dayEvents.length === 0) {
                 list.innerHTML = '<div class="empty-state"><div>📭</div><p>这一天没有活跃任务</p><p style="font-size:11px;">双击日历格子或点击上方按钮新建</p></div>';
                 return;
@@ -43117,7 +43357,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610091002";
+        window.NIKO_VERSION = "202610091022";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
