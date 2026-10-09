@@ -2442,8 +2442,7 @@
             0%, 86%, 100% { transform: rotate(0); }
             89% { transform: rotate(-2.5deg); } 92% { transform: rotate(2deg); } 95% { transform: rotate(-1.2deg); }
         }
-        .today-habits-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 7px; }
-        /* 每日地下城：习惯打卡 Boss 血条（视觉与计划页「本周副本」同源：绿→黄→红随剩余血量变化） */
+        .today-habits-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(238px, 1fr)); gap: 7px; }        /* 每日地下城：习惯打卡 Boss 血条（视觉与计划页「本周副本」同源：绿→黄→红随剩余血量变化） */
         .habit-dg {
             grid-column: 1 / -1;
             padding: 8px 10px;
@@ -2548,7 +2547,7 @@
            否则 reward+连击+水晶链 会把 bar 挤到几乎看不见。 */
         .habit-progress-num { font-size: 10px; color: #8a8a96; white-space: nowrap; font-variant-numeric: tabular-nums; flex-shrink: 0; }
         body.dark-mode .habit-progress-num { color: #8f8fa3; }
-        .habit-card-foot { display: flex; align-items: center; justify-content: flex-end; width: auto; gap: 5px; min-height: 0; }
+        .habit-card-foot { display: flex; align-items: center; justify-content: flex-end; width: auto; gap: 5px; min-height: 0; flex-wrap: wrap; row-gap: 3px; }
         .habit-card-foot .hcl { margin-left: auto; }
         /* B7（2026-09-29）：习惯 → 作品联动。只在「今天已打卡」且该习惯标了联动时出现，
            没打卡时完全不渲染 —— 平时零占位。
@@ -2569,6 +2568,152 @@
         body.dark-mode .habit-streak-chip { color: #fbbf24; }
         .habit-empty { font-size: 11px; color: #aaa; padding: 4px 0; }
         body.dark-mode .habit-empty { color: #777; }
+        /* ===== 01 打卡时长徽章（2026-10-09）：习惯卡底部可点时长胶囊 =====
+           口径：时长只做「记录」，不换算奖励分钟（避免「读书2小时」变成刷游戏时间的漏洞）。
+           不填不影响打卡 —— 默认不渲染徽章，打完卡才出现，点开选档位。
+           数据落点：niko_habit_logs[i].duration（分钟，数字）。 */
+        .habit-dur-chip {
+            font-size: 10px; flex-shrink: 0; white-space: nowrap;
+            border: 1px dashed #d9d2f0; background: #faf9ff; color: #8b7bb8;
+            border-radius: 6px; padding: 0 6px; line-height: 16px;
+            cursor: pointer; font-family: inherit; transition: .15s;
+        }
+        .habit-dur-chip:hover { background: #f0ebff; color: #7c3aed; border-color: #c4b5fd; }
+        .habit-dur-chip.has-dur { border-style: solid; border-color: rgba(16,185,129,.45); background: rgba(16,185,129,.09); color: #059669; font-weight: 600; }
+        body.dark-mode .habit-dur-chip { background: #221f36; border-color: #4c4470; color: #a89bd6; }
+        body.dark-mode .habit-dur-chip:hover { background: #2a2545; color: #c4b5fd; }
+        body.dark-mode .habit-dur-chip.has-dur { background: rgba(16,185,129,.14); border-color: rgba(16,185,129,.4); color: #34d399; }
+        /* 档位选择浮层（点开时长徽章时出现，点空白关闭） */
+        .habit-dur-pop {
+            position: absolute; z-index: 40; display: none;
+            background: #fff; border: 1px solid #e4e0f5; border-radius: 10px;
+            box-shadow: 0 8px 26px rgba(60,50,120,.16); padding: 7px;
+            display: none; gap: 4px; align-items: center; white-space: nowrap;
+        }
+        body.dark-mode .habit-dur-pop { background: #262637; border-color: #4a4668; box-shadow: 0 8px 26px rgba(0,0,0,.5); }
+        .habit-dur-pop button {
+            font-family: inherit; font-size: 11px; cursor: pointer;
+            border: 1px solid #e0ded9; background: #faf9f7; color: #555;
+            border-radius: 7px; padding: 4px 9px; transition: .15s;
+        }
+        .habit-dur-pop button:hover { border-color: #8b5cf6; color: #7c3aed; background: #f5f3ff; }
+        .habit-dur-pop button.clear { color: #d64545; border-color: #f0d5d5; background: #fdf7f7; }
+        body.dark-mode .habit-dur-pop button { background: #2f2f42; border-color: #4a4668; color: #b9b9cc; }
+        body.dark-mode .habit-dur-pop button:hover { border-color: #8b5cf6; color: #c4b5fd; background: #332b52; }
+        body.dark-mode .habit-dur-pop button.clear { color: #ff8a8a; border-color: #5c3a3a; background: #33262a; }
+        .habit-dur-pop .dp-lbl { font-size: 10.5px; color: #9a96ad; padding: 0 3px 0 1px; }
+        body.dark-mode .habit-dur-pop .dp-lbl { color: #8f8fa3; }
+        /* 习惯卡片本身要能当浮层定位锚点 */
+        .habit-card { position: relative; }
+        /* ===== 05 习惯详情历史抽屉（2026-10-09） ===== */
+        .hdr-mask { position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 1200; display: none; }
+        .hdr-panel {
+            position: fixed; top: 0; right: 0; bottom: 0; z-index: 1201;
+            width: min(400px, 92vw); display: none; overflow-y: auto;
+            background: #fff; border-left: 1px solid #e6e2f2;
+            box-shadow: -10px 0 34px rgba(50,40,110,.16);
+            padding: 18px 18px 26px;
+        }
+        body.dark-mode .hdr-panel { background: #1b1f2a; border-left-color: #313747; box-shadow: -10px 0 34px rgba(0,0,0,.55); }
+        .hdr-head { display: flex; align-items: center; gap: 9px; margin-bottom: 14px; }
+        .hdr-head .hdr-icon { font-size: 21px; line-height: 1; }
+        .hdr-head .hdr-name { font-size: 15px; font-weight: 700; flex: 1; min-width: 0; word-break: break-all; }
+        .hdr-close { width: 26px; height: 26px; border-radius: 8px; border: 1px solid #e3e6ed; background: transparent;
+            color: #888; cursor: pointer; font-family: inherit; font-size: 13px; flex-shrink: 0; }
+        .hdr-close:hover { border-color: #8b5cf6; color: #7c3aed; }
+        body.dark-mode .hdr-close { border-color: #313747; color: #9a9ab0; }
+        .hdr-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 15px; }
+        .hdr-kpi { background: #f8f9fc; border: 1px solid #e9ebf2; border-radius: 9px; padding: 7px 6px; text-align: center; min-width: 0; }
+        body.dark-mode .hdr-kpi { background: #232838; border-color: #313747; }
+        .hdr-kpi b { display: block; font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .hdr-kpi span { font-size: 10px; color: #9a9ab0; white-space: nowrap; }
+        .hdr-sec { font-size: 11.5px; color: #8a8a96; margin: 0 0 7px; font-weight: 600; }
+        body.dark-mode .hdr-sec { color: #8f8fa3; }
+        .hdr-heat { display: grid; grid-template-columns: 26px repeat(7, 1fr); gap: 3px; margin-bottom: 16px; }
+        .hdr-heat .hh-lbl { font-size: 9.5px; color: #9a9ab0; line-height: 15px; }
+        .hdr-heat .hh-top { font-size: 9.5px; color: #9a9ab0; text-align: center; }
+        .hdr-heat .hh-cell { height: 15px; border-radius: 3px; background: rgba(124,58,237,.08); }
+        body.dark-mode .hdr-heat .hh-cell { background: rgba(139,92,246,.12); }
+        .hdr-heat .hh-cell.s1 { background: rgba(16,185,129,.32); }
+        .hdr-heat .hh-cell.s2 { background: rgba(16,185,129,.6); }
+        .hdr-heat .hh-cell.s3 { background: #10b981; }
+        .hdr-heat .hh-cell.rest { background: repeating-linear-gradient(45deg, rgba(127,127,127,.14), rgba(127,127,127,.14) 3px, transparent 3px, transparent 6px); }
+        .hdr-heat .hh-cell.future { background: transparent; border: 1px dashed rgba(127,127,127,.25); }
+        .hdr-list { border-top: 1px solid #eef0f5; }
+        body.dark-mode .hdr-list { border-top-color: #2a3040; }
+        .hdr-row { display: flex; align-items: center; gap: 8px; padding: 7px 2px; border-bottom: 1px solid #eef0f5; font-size: 12px; }
+        body.dark-mode .hdr-row { border-bottom-color: #2a3040; }
+        .hdr-row .hr-date { font-variant-numeric: tabular-nums; color: #555; min-width: 78px; }
+        body.dark-mode .hdr-row .hr-date { color: #b9b9cc; }
+        .hdr-row .hr-wd { color: #9a9ab0; font-size: 10.5px; min-width: 26px; }
+        .hdr-row .hr-sp { flex: 1; }
+        .hdr-row .hr-dur { font-size: 10.5px; color: #059669; font-weight: 600; }
+        .hdr-row .hr-time { font-size: 10.5px; color: #9a9ab0; }
+        .hdr-empty { font-size: 11.5px; color: #9a9ab0; padding: 14px 2px; text-align: center; }
+        .hdr-tip { font-size: 11px; color: #8a8a96; background: #f8f9fc; border: 1px solid #e9ebf2;
+            border-radius: 9px; padding: 9px 11px; margin-top: 14px; line-height: 1.7; }
+        body.dark-mode .hdr-tip { background: #232838; border-color: #313747; color: #8f8fa3; }
+        /* 习惯名可点（提示可查看历史） */
+        .habit-name.clickable:hover { color: #7c3aed; text-decoration: underline dotted; }
+        body.dark-mode .habit-name.clickable:hover { color: #c4b5fd; }
+        /* ===== 01 时长徽章 END ===== */
+        /* ===== 07 习惯统计排行表（2026-10-09）===== */
+        .wr-habit-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 8px; }
+        .wr-habit-tbl th { color: #9a9ab0; font-weight: 600; font-size: 10.5px; text-align: left; padding: 4px 6px; border-bottom: 1px solid rgba(127,127,127,.2); }
+        .wr-habit-tbl td { padding: 5px 6px; border-bottom: 1px solid rgba(127,127,127,.12); }
+        .wr-habit-tbl td.num, .wr-habit-tbl th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .wr-habit-tbl .wr-up { color: #10b981; font-weight: 700; }
+        .wr-habit-tbl .wr-down { color: #ef4444; font-weight: 700; }
+        .wr-habit-tbl .wr-flat { color: #9a9ab0; }
+        .wr-habit-tbl .wr-dur { color: #059669; font-weight: 600; }
+        /* ===== 08 成就墙（2026-10-09）===== */
+        .ach-wall { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 9px; margin-top: 9px; }
+        .ach-card { background: #f8f9fc; border: 1px solid #e9ebf2; border-radius: 10px; padding: 10px 8px; text-align: center; }
+        body.dark-mode .ach-card { background: #232838; border-color: #313747; }
+        .ach-card .ach-ico { font-size: 19px; line-height: 1.3; }
+        .ach-card .ach-num { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.2px; }
+        .ach-card .ach-lbl { font-size: 10px; color: #9a9ab0; margin-top: 1px; line-height: 1.35; }
+        .ach-card.lit { border-color: rgba(16,185,129,.42); background: rgba(16,185,129,.06); }
+        body.dark-mode .ach-card.lit { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.34); }
+        .ach-sec { font-size: 11.5px; color: #8a8a96; margin: 14px 0 0; font-weight: 600; }
+        body.dark-mode .ach-sec { color: #8f8fa3; }
+        /* ===== 13/15/16 习惯→日记 · 询问条（2026-10-09）=====
+           设计前提：用户带娃时被弹窗拦住 → 这功能就废了。所以是「底部轻条」不是弹窗，
+           且每一档都必须能一键拒绝、拒绝不产生任何后果。
+           三档共用一个组件，只换文案与按钮：
+             13 当晚 21:30 「今天习惯 X/Y，要写进日记吗」
+             15 次日晨间 「昨天习惯 X/Y，但没写日记」
+             16 周末午睡档「本周习惯要不要一次性入册」 */
+        .hb-ask {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding: 10px 13px; margin: 10px 0 2px; border-radius: 11px;
+            border: 1px solid rgba(106,169,255,.42); background: rgba(106,169,255,.10);
+            animation: hbAskIn .3s ease;
+        }
+        @keyframes hbAskIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+        .hb-ask.hb-warn { border-color: rgba(245,166,35,.45); background: rgba(245,166,35,.10); }
+        .hb-ask.hb-week { border-color: rgba(192,140,255,.45); background: rgba(192,140,255,.10); }
+        .hb-ask .hb-ico { font-size: 17px; line-height: 1; flex-shrink: 0; }
+        .hb-ask .hb-txt { flex: 1; min-width: 190px; font-size: 12.5px; line-height: 1.6; }
+        .hb-ask .hb-txt b { color: #667eea; }
+        body.dark-mode .hb-ask .hb-txt b { color: #a5b4fc; }
+        .hb-ask .hb-act { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+        .hb-ask .hb-btn {
+            font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer;
+            border-radius: 7px; padding: 5px 11px; border: 1px solid transparent;
+            background: #667eea; color: #fff; transition: .15s;
+        }
+        .hb-ask .hb-btn:hover { filter: brightness(1.08); }
+        .hb-ask .hb-btn.ghost { background: transparent; color: #6b7280; border-color: #d8dbe4; font-weight: 600; }
+        .hb-ask .hb-btn.ghost:hover { border-color: #667eea; color: #667eea; }
+        body.dark-mode .hb-ask .hb-btn.ghost { color: #9a9ab0; border-color: #3a4050; }
+        body.dark-mode .hb-ask .hb-btn.ghost:hover { border-color: #818cf8; color: #a5b4fc; }
+        /* 16 批量入册的迷你习惯表 */
+        .hb-mini-tbl { width: 100%; border-collapse: collapse; font-size: 11.5px; margin: 7px 0 3px; }
+        .hb-mini-tbl th { color: #9a9ab0; font-size: 10.5px; font-weight: 600; text-align: left; padding: 3px 5px; }
+        .hb-mini-tbl td { padding: 4px 5px; border-top: 1px solid rgba(127,127,127,.14); }
+        .hb-mini-tbl td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .hb-mini-tbl td.dur { color: #059669; font-weight: 600; }
         /* ===== 习惯频率选择器（2026-09-02 智能打卡） ===== */
         .habit-freq { display:flex; align-items:center; gap:6px; flex-wrap:wrap; width:100%; padding:4px 0; }
         .habit-freq-label { font-size:11.5px; color:#888; padding:0 4px; }
@@ -2601,7 +2746,7 @@
         /* ===== v2.11.2 习惯水晶链：近7天打卡结晶 ===== */
         /* v2.11.2 修复：链移到卡底行右侧——名字行零竞争，桌面/手机常显（此前窄卡整条隐身=功能消失）；
            同时移除 container-type: inline-size（容器查询已删，遗留该属性会使 flex 基准尺寸=0，手机端卡片被挤成 28px） */
-        .hcl { display: inline-flex; align-items: flex-end; gap: 2px; margin-left: auto; flex-shrink: 0; padding-bottom: 1px; min-width: 0; }
+        .hcl { display: inline-flex; align-items: flex-end; gap: 2px; margin-left: auto; flex-shrink: 1; padding-bottom: 1px; min-width: 0; }
         /* 2026-09-10：星期标签列——用户反馈看不出哪天打卡哪天没打 */
         .hcl-col { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; }
         .hcl-lbl { font-size: 8px; line-height: 1; color: #9ca3af; opacity: .8; font-weight: 600; }
@@ -4361,6 +4506,27 @@ body.dark-mode .wal-set-row input{background:#14141c}
             margin-left: 2px;
             filter: drop-shadow(0 0 3px rgba(217, 119, 6, 0.55));
         }
+        /* ===== 09 日历格内嵌习惯点阵（2026-10-09）=====
+           最小侵入：只在格子底部加一行 5px 小圆点，不改日历主结构。
+           满绿=全部应打卡习惯已完成 · 黄=部分 · 灰=有漏 · 斜纹=当天休息
+           悬停给一行小签，说明「应打几个 / 打了几个 / 哪个漏了」。 */
+        .cal-habit-dots {
+            display: flex; align-items: center; gap: 2px;
+            margin-top: auto; padding-top: 2px;
+            height: 7px; flex-shrink: 0;
+        }
+        .cal-habit-dots .chd {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: rgba(127,127,127,.28); flex-shrink: 0;
+        }
+        .cal-habit-dots .chd.on { background: #10b981; box-shadow: 0 0 3px rgba(16,185,129,.5); }
+        .cal-habit-dots .chd.miss { background: transparent; box-shadow: inset 0 0 0 1.2px rgba(245,158,11,.75); }
+        .cal-habit-dots .chd.rest { background: repeating-linear-gradient(45deg, rgba(127,127,127,.22), rgba(127,127,127,.22) 1.5px, transparent 1.5px, transparent 3px); }
+        .cal-habit-dots .chd.more { background: transparent; box-shadow: none; color: #9a9ab0; font-size: 8px; line-height: 5px; width: auto; height: 7px; border-radius: 0; }
+        body.dark-mode .cal-habit-dots .chd { background: rgba(255,255,255,.18); }
+        body.dark-mode .cal-habit-dots .chd.miss { background: transparent; box-shadow: inset 0 0 0 1.2px rgba(251,191,36,.7); }
+        /* 窄屏不显示（点阵挤压 7 天列表） */
+        @media (max-width: 768px) { .cal-habit-dots { display: none; } }
         .events-container {
             flex: 1;
             display: flex;
@@ -12820,6 +12986,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="page active" id="todayPage">
 <div class="cmd-brief" id="cmdBrief"></div>
             <div class="clear-settle" id="clearSettle" style="display:none;"></div>
+            <!-- ===== 13/15/16 习惯→日记询问条（2026-10-09，底部轻条，非弹窗） ===== -->
+            <div id="habitAskBar"></div>
             <div class="today-board">
                 <!-- 🎮 作品主线（2026-09-29 融入今日看板）：内容由 parts/作品.html 的 workRenderStrip() 渲染。
                      刻意不加侧栏/手机导航入口 —— 零新增入口是本条的设计前提。
@@ -12960,12 +13128,34 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <div class="habit-heat" id="habitHeat"></div>
                             <div class="habit-heat-label"><span id="habitHeatLabel"></span><span>格子越深打卡越多</span></div>
                         </div>
+                        <!-- ===== 08 成就墙（2026-10-09）：全量 niko_habit_logs 回算，纯展示不给新指标 ===== -->
+                        <div class="ach-sec">🏅 累计成就（从有记录算起）</div>
+                        <div class="ach-wall" id="habitAchWall"></div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn" onclick="closeHabits()">关闭</button>
                     </div>
                 </div>
             </div>
+
+            <!-- ===== 05 习惯详情历史抽屉（2026-10-09） ===== -->
+            <div class="hdr-mask" id="habitDrawerMask" onclick="closeHabitDrawer()"></div>
+            <div class="hdr-panel" id="habitDrawer">
+                <div class="hdr-head">
+                    <span class="hdr-icon" id="hdrIcon">🎯</span>
+                    <span class="hdr-name" id="hdrName">习惯</span>
+                    <button class="hdr-close" onclick="closeHabitDrawer()" title="关闭">✕</button>
+                </div>
+                <div class="hdr-kpis" id="hdrKpis"></div>
+                <div class="hdr-sec">📆 最近 30 天（深浅 = 打卡；斜纹 = 休息日）</div>
+                <div class="hdr-heat" id="hdrHeat"></div>
+                <div class="hdr-sec">📜 最近记录</div>
+                <div class="hdr-list" id="hdrList"></div>
+                <div class="hdr-tip" id="hdrTip"></div>
+            </div>
+
+            <!-- ===== 01 时长档位浮层（挂在 body 上，绝对定位到卡片旁） ===== -->
+            <div class="habit-dur-pop" id="habitDurPop"></div>
 <div class="work-mask" id="workMask" onclick="if(event.target===this)workCloseLib()">
     <div class="work-modal">
         <div class="work-mhead">
@@ -17936,6 +18126,44 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 });
             }
             if (!habitHtml) habitHtml = '<div class="wr-empty">本周没有习惯打卡</div>';
+            // ===== 07 习惯统计排行（2026-10-09）：打卡率排序 + 环比箭头 + 时长列 =====
+            // 口径：红色只标「环比下滑」，不标「绝对值低」——统计页不该变成自责工具。
+            // 注意：collectWeekly 的 habits/weekHabitLogs 是它的局部变量，这里必须自己读库。
+            try {
+                const allHabits = safeStorage.get('niko_habits', []) || [];
+                const allLogs = safeStorage.get('niko_habit_logs', []) || [];
+                const prev = weeklyRange((weeklyReviewOffset || 0) + 1);
+                const curLogs = allLogs.filter(l => wrInRange(habitLogDate(l), d.range));
+                const prevLogs = allLogs.filter(l => wrInRange(habitLogDate(l), prev));
+                // 只列「本周有打卡 或 上周有打卡」的习惯，避免一堆 0/7 噪音
+                const rows = allHabits.map(h => {
+                    const cur = curLogs.filter(l => l.habitId === h.id);
+                    const pre = prevLogs.filter(l => l.habitId === h.id);
+                    let should = 7;
+                    if ((h.frequency || 'daily') === 'weekdays') should = (Array.isArray(h.weekDays) ? h.weekDays.length : 0) || 7;
+                    const goal = Number(h.goal) || should;
+                    const denom = Math.max(1, Math.min(7, should));
+                    const pct = Math.min(100, Math.round(cur.length / denom * 100));
+                    const durs = cur.reduce((s, l) => s + (Number(l.duration) || 0), 0);
+                    return { h, n: cur.length, pn: pre.length, pct, goal, durs };
+                }).filter(r => r.n > 0 || r.pn > 0).sort((a, b) => b.pct - a.pct || b.n - a.n);
+                if (rows.length) {
+                    let tbl = '<table class="wr-habit-tbl"><tr><th>习惯</th><th class="num">本周期</th><th class="num">上周</th><th class="num">完成率</th><th class="num">时长</th></tr>';
+                    rows.forEach(r => {
+                        const diff = r.n - r.pn;
+                        const arrow = diff > 0 ? `<span class="wr-up">↑${diff}</span>`
+                            : diff < 0 ? `<span class="wr-down">↓${Math.abs(diff)}</span>` : '<span class="wr-flat">→</span>';
+                        const durTxt = r.durs > 0 ? habitFmtDur(r.durs) : '—';
+                        tbl += `<tr><td>${r.h.icon || '🎯'} ${escapeHtml(r.h.name)}</td>` +
+                            `<td class="num">${r.n}/${r.goal}</td>` +
+                            `<td class="num">${r.pn}/${r.goal} ${arrow}</td>` +
+                            `<td class="num">${r.pct}%</td>` +
+                            `<td class="num wr-dur">${durTxt}</td></tr>`;
+                    });
+                    tbl += '</table>';
+                    habitHtml += tbl;
+                }
+            } catch (e) { if (typeof console !== 'undefined') console.warn('[07] 习惯排行渲染失败', e); }
             sections.push(wrSectionHtml('🎯', '本周习惯', d.habitDays, habitHtml));
             // 任务
             let taskHtml = '';
@@ -18208,6 +18436,178 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function habitLogs() { return safeStorage.get('niko_habit_logs', []); }
         function habitSaveList(list) { safeStorage.set('niko_habits', list); }
         function habitSaveLogs(list) { safeStorage.set('niko_habit_logs', list); }
+
+        /* ===== 01 打卡时长徽章（2026-10-09）=====
+           口径：时长只做「记录」，不换算奖励分钟。仅当打卡记录里存在 duration 才渲染徽章内容。
+           读取一律走 habitLogDate() 归一化，避免历史非补零日期匹配不上。 */
+        function habitDurOf(habitId, date) {
+            const l = habitLogs().find(x => x.habitId === habitId && habitLogDate(x) === date);
+            const n = l ? Number(l.duration) : 0;
+            return n > 0 ? n : 0;
+        }
+        // 今日已打卡记录里时长之和（供日记/统计吸收）
+        function habitDurTotalOn(date) {
+            return habitLogs().filter(l => habitLogDate(l) === date)
+                .reduce((s, l) => s + (Number(l.duration) || 0), 0);
+        }
+        function habitFmtDur(min) {
+            const n = Number(min) || 0;
+            if (n <= 0) return '';
+            if (n < 60) return n + '′';
+            const h = Math.floor(n / 60), m = n % 60;
+            return h + 'h' + (m ? m + '′' : '');
+        }
+        // 写时长（0 = 清除）。不触碰 rewardMin / 游戏时间 —— 时长是记录，不是奖励。
+        function habitSetDuration(habitId, date, min) {
+            const logs = habitLogs();
+            const idx = logs.findIndex(l => l.habitId === habitId && habitLogDate(l) === date);
+            if (idx < 0) return false;                       // 没打卡就不给记时长
+            const v = Math.max(0, Math.round(Number(min) || 0));
+            if (v > 0) logs[idx].duration = v; else delete logs[idx].duration;
+            habitSaveLogs(logs);
+            return true;
+        }
+        // 档位浮层开关
+        let habitDurTarget = null;
+        function habitDurOpen(ev, habitId) {
+            if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+            const card = document.querySelector('.habit-card[data-hid="' + habitId + '"]');
+            const pop = document.getElementById('habitDurPop');
+            if (!card || !pop) return;
+            const h = habitList().find(x => x.id === habitId);
+            const today = formatDate(new Date());
+            const cur = habitDurOf(habitId, today);
+            const opts = (h && Array.isArray(h.durPresets) && h.durPresets.length)
+                ? h.durPresets : [5, 15, 30, 60, 90, 120];
+            pop.innerHTML = '<span class="dp-lbl">记时长</span>' +
+                opts.map(m => `<button onclick="habitDurPick('${habitId}',${m})">${habitFmtDur(m)}</button>`).join('') +
+                (cur > 0 ? `<button class="clear" onclick="habitDurPick('${habitId}',0)">清除</button>` : '');
+            habitDurTarget = habitId;
+            // 定位：优先卡片左下方，贴近卡片不被遮挡；超出视口则回收到右缘
+            pop.style.display = 'flex';
+            const r = card.getBoundingClientRect();
+            const pw = pop.offsetWidth, ph = pop.offsetHeight;
+            let left = r.left + (window.scrollX || 0);
+            let top = r.bottom + (window.scrollY || 0) + 5;
+            if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10 + (window.scrollX || 0);
+            if (left < 6) left = 6;
+            pop.style.left = left + 'px';
+            pop.style.top = Math.min(top, window.innerHeight - ph - 8 + (window.scrollY || 0)) + 'px';
+        }
+        function habitDurPick(habitId, min) {
+            const today = formatDate(new Date());
+            if (!habitSetDuration(habitId, today, min)) {
+                if (typeof showToast === 'function') showToast('先打卡，再记时长');
+            } else if (min > 0) {
+                if (typeof showToast === 'function') showToast('🕐 ' + habitFmtDur(min) + ' 已记录');
+            } else {
+                if (typeof showToast === 'function') showToast('已清除时长');
+            }
+            habitDurClose();
+            renderTodayHabits();
+        }
+        function habitDurClose() {
+            const pop = document.getElementById('habitDurPop');
+            if (pop) pop.style.display = 'none';
+            habitDurTarget = null;
+        }
+        document.addEventListener('click', function (e) {
+            if (habitDurTarget && !e.target.closest('#habitDurPop') && !e.target.closest('.habit-dur-chip')) habitDurClose();
+        });
+        window.addEventListener('resize', habitDurClose);
+        /* ===== 01 END ===== */
+
+        /* ===== 05 习惯详情历史抽屉（2026-10-09）=====
+           纯读 niko_habit_logs，零迁移。复用 habitLogDate() 归一化 + habitActiveOnDate() 判休息日。 */
+        let habitDrawerId = null;
+        function openHabitDrawer(habitId, ev) {
+            if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+            const h = habitList().find(x => x.id === habitId);
+            if (!h) return;
+            habitDrawerId = habitId;
+            const today = formatDate(new Date());
+            const logs = habitLogs().filter(l => l.habitId === habitId);
+
+            // ---- KPI 三格 ----
+            const monthPrefix = today.slice(0, 7);
+            const monthDays = new Set(logs.filter(l => habitLogDate(l).startsWith(monthPrefix)).map(habitLogDate)).size;
+            const total = new Set(logs.map(habitLogDate)).size;
+            const durs = logs.map(l => Number(l.duration) || 0).filter(n => n > 0);
+            const durSum = durs.reduce((a, b) => a + b, 0);
+            const curStreak = habitStreak(habitId);
+            document.getElementById('hdrIcon').textContent = h.icon || '🎯';
+            document.getElementById('hdrName').textContent = h.name || '习惯';
+            document.getElementById('hdrKpis').innerHTML =
+                `<div class="hdr-kpi"><b>${monthDays}</b><span>本月打卡</span></div>` +
+                `<div class="hdr-kpi"><b>${curStreak}</b><span>当前连续</span></div>` +
+                `<div class="hdr-kpi"><b>${durSum > 0 ? habitFmtDur(durSum) : '—'}</b><span>累计时长</span></div>`;
+
+            // ---- 30 天热力（含休息日斜纹 / 未到虚线），按周一行对齐 ----
+            const WD = ['一', '二', '三', '四', '五', '六', '日'];
+            let heat = '<span class="hh-lbl"></span>' + WD.map(w => `<span class="hh-top">${w}</span>`).join('');
+            const doneSet = new Set(logs.map(habitLogDate));
+            const perDay = {};
+            logs.forEach(l => { const d = habitLogDate(l); (perDay[d] = perDay[d] || []).push(l); });
+            // 从 29 天前那天所在的周一起铺 5 行
+            const start = new Date(); start.setDate(start.getDate() - 29);
+            const off = (start.getDay() + 6) % 7;            // 周一=0
+            start.setDate(start.getDate() - off);
+            for (let w = 0; w < 5; w++) {
+                heat += `<span class="hh-lbl">${w + 1}周</span>`;
+                for (let d = 0; d < 7; d++) {
+                    const dt = new Date(start); dt.setDate(start.getDate() + w * 7 + d);
+                    const ds = formatDate(dt);
+                    const future = ds > today;
+                    const active = habitActiveOnDate(h, ds);
+                    const cnt = (perDay[ds] || []).length;
+                    let cls = 'hh-cell';
+                    if (future) cls += ' future';
+                    else if (cnt >= 2) cls += ' s3';
+                    else if (cnt === 1) cls += ' s2';
+                    else if (!active) cls += ' rest';
+                    else if (doneSet.has(ds)) cls += ' s1';
+                    const tip = `${ds}${future ? ' · 未到' : ''}${!active && !future ? ' · 休息日' : ''}${cnt ? ' · 已打卡' + (perDay[ds][0].duration ? ' ' + habitFmtDur(perDay[ds][0].duration) : '') : ''}`;
+                    heat += `<span class="${cls}" title="${tip}"></span>`;
+                }
+            }
+            document.getElementById('hdrHeat').innerHTML = heat;
+
+            // ---- 最近记录流水（按日期倒序，最多 14 条）----
+            const recent = logs.filter(l => habitLogDate(l)).sort((a, b) => habitLogDate(b).localeCompare(habitLogDate(a))).slice(0, 14);
+            const WDF = ['日', '一', '二', '三', '四', '五', '六'];
+            document.getElementById('hdrList').innerHTML = recent.length
+                ? recent.map(l => {
+                    const ds = habitLogDate(l);
+                    const wd = WDF[new Date(ds + 'T00:00:00').getDay()];
+                    const t = l.doneAt ? new Date(l.doneAt) : null;
+                    const tstr = (t && !isNaN(t)) ? String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0') : '';
+                    const dur = Number(l.duration) > 0 ? habitFmtDur(l.duration) : '';
+                    return `<div class="hdr-row"><span class="hr-date">${ds}</span><span class="hr-wd">周${wd}</span><span class="hr-sp"></span>` +
+                        (dur ? `<span class="hr-dur">⏱ ${dur}</span>` : '') +
+                        (tstr ? `<span class="hr-time">${tstr}</span>` : '') + `</div>`;
+                }).join('')
+                : '<div class="hdr-empty">还没有打卡记录 —— 今天打一次卡，这里就活了</div>';
+
+            const freq = habitFreqLabel(h);
+            const goal = h.goal || 7;
+            document.getElementById('hdrTip').innerHTML =
+                `共打卡 <b>${total}</b> 天 · 频率「${freq}」· 每周目标 ${goal} 次` +
+                (Number(h.rewardMin) > 0 ? ` · 每次奖励 +${h.rewardMin} 分` : '') +
+                `<br>时长只是记录，不换算游戏分钟。`;
+
+            document.getElementById('habitDrawerMask').style.display = 'block';
+            document.getElementById('habitDrawer').style.display = 'block';
+        }
+        function closeHabitDrawer() {
+            habitDrawerId = null;
+            const m = document.getElementById('habitDrawerMask'), p = document.getElementById('habitDrawer');
+            if (m) m.style.display = 'none';
+            if (p) p.style.display = 'none';
+        }
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { closeHabitDrawer(); habitDurClose(); }
+        });
+        /* ===== 05 END ===== */
 
         // 2026-09-10 兼容修复：历史/他端写入的日志日期可能是 ISO 带时间或非补零格式（如 2026-9-9），
         // 打卡判断此前全靠字符串精确比对 → 差一位就永远匹配不上（统计 0、水晶链全灰、取消打卡失效产生重复记录）。
@@ -18498,10 +18898,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const burnt = isActive && typeof habitBurntYesterday === 'function' && habitBurntYesterday(h.id);
                 const chargeTier = streak >= 21 ? 3 : (streak >= 7 ? 2 : (streak >= 3 ? 1 : 0));   // 方案2 卡片充能档位
                 const chargeCls = (isActive && chargeTier) ? ` charge-${chargeTier}` : '';
+                // 01 时长徽章：只在「今天已打卡」时出现；已记时长显示实心绿胶囊
+                const durMin = d ? habitDurOf(h.id, today) : 0;
+                const durChip = d
+                    ? `<span class="habit-dur-chip${durMin > 0 ? ' has-dur' : ''}" onclick="habitDurOpen(event,'${h.id}')" title="记录这次花了多久（只做记录，不换算游戏分钟）">${durMin > 0 ? '⏱ ' + habitFmtDur(durMin) : '⏱ 记时长'}</span>`
+                    : '';
                 return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}${chargeCls}"${clickAttr} data-hid="${h.id}" title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
-                        <span class="habit-name">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
+                        <span class="habit-name clickable" onclick="openHabitDrawer('${h.id}',event)" title="查看「${escapeHtml(h.name)}」的打卡历史">${escapeHtml(h.name)}${isActive ? '' : `<span class="habit-rest-tag">${freqLabel}</span>`}</span>
                         <span class="habit-progress-num">${wc}/${goal}${pct >= 100 ? ' ✅' : ''}</span>
                         ${habitPetBadge(h, streak, burnt, isActive, d)}
                     </div>
@@ -18510,6 +18915,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                     <div class="habit-card-foot">
                         ${(d && isActive && typeof workToWorkEnabled === 'function' && workToWorkEnabled(h)) ? `<span class="habit-work-link" onclick="event.stopPropagation();workFromHabit('${h.id}')" title="复用你已经能坚持的那件事：做完之后的 30 分钟就是开发时间块">→ 推一格</span>` : ''}
+                        ${durChip}
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                         ${!isActive ? `<span style="font-size:10px;color:#9ca3af;">🌙 今天休息</span>` : ''}
@@ -18797,10 +19203,293 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 }).join('');
             }
             renderHabitHeat();
+            renderHabitAchWall();
             const todayDone = Object.keys(habitDoneSet(formatDate(new Date()))).length;
             const head = document.getElementById('habitStatsHead');
             if (head) head.textContent = `🎯 习惯打卡（今日 ${todayDone}/${habits.length} · 共 ${habits.length} 个）`;
         }
+
+        /* ===== 08 成就墙（2026-10-09）=====
+           全量 niko_habit_logs 回算（几百条无性能压力）。这是「回顾」不是「新指标」——
+           它只把已经发生的事说清楚，不给你增加任何要背的数字。 */
+        function renderHabitAchWall() {
+            const box = document.getElementById('habitAchWall');
+            if (!box) return;
+            const habits = habitList();
+            const logs = habitLogs().filter(l => habitLogDate(l));
+            if (!logs.length || !habits.length) {
+                box.innerHTML = '<div class="ach-card" style="grid-column:1/-1"><div class="ach-lbl">还没有打卡记录 —— 打几次卡，这里就有东西了</div></div>';
+                return;
+            }
+            const totalCnt = logs.length;
+            const totalDays = new Set(logs.map(habitLogDate)).size;
+            const durSum = logs.reduce((s, l) => s + (Number(l.duration) || 0), 0);
+            // 最长连续（跨全部习惯取最大）
+            let bestStreak = 0, bestName = '';
+            habits.forEach(h => {
+                const s = habitStreak(h.id);
+                if (s > bestStreak) { bestStreak = s; bestName = h.name; }
+            });
+            // 全勤满月：某自然月内该习惯每天都有记录
+            const monthMap = {};
+            logs.forEach(l => {
+                const m = habitLogDate(l).slice(0, 7);
+                (monthMap[m] = monthMap[m] || {})[l.habitId] = (monthMap[m][l.habitId] || 0) + 1;
+            });
+            let perfectMonths = 0;
+            Object.keys(monthMap).forEach(m => {
+                const [y, mo] = m.split('-').map(Number);
+                const daysInMonth = new Date(y, mo, 0).getDate();
+                Object.keys(monthMap[m]).forEach(hid => { if (monthMap[m][hid] >= daysInMonth) perfectMonths++; });
+            });
+            const cards = [
+                { ico: '🏅', num: totalCnt, lbl: '累计打卡次数', lit: totalCnt >= 100 },
+                { ico: '📅', num: totalDays, lbl: '打卡过的天数', lit: totalDays >= 30 },
+                { ico: '🔥', num: bestStreak, lbl: bestName ? ('最长连续 · ' + bestName.slice(0, 6)) : '最长连续', lit: bestStreak >= 7 },
+                { ico: '⏱', num: durSum > 0 ? habitFmtDur(durSum) : '—', lbl: '记录到的总时长', lit: durSum >= 600 },
+                { ico: '🫡', num: perfectMonths, lbl: '全勤满月', lit: perfectMonths > 0 }
+            ];
+            box.innerHTML = cards.map(c =>
+                `<div class="ach-card${c.lit ? ' lit' : ''}"><div class="ach-ico">${c.ico}</div>` +
+                `<div class="ach-num">${c.num}</div><div class="ach-lbl">${c.lbl}</div></div>`
+            ).join('');
+        }
+
+        /* ===== 13/15/16 习惯→日记 询问条（2026-10-09）=====
+           用户原话诉求：每晚询问是否记录到日记 / 次日提醒昨日未记录 / 周末批量入册。
+           铁律前提：不从休息里抠时间、不打扰带娃时段、拒绝必须零后果。
+           落点只有两个窗口：工作日 21:30 后（收尾档）+ 周末 13:00-15:00（午睡档）。
+           状态存 localStorage：niko_habit_ask
+             { snoozeUntil, dismissedOn: {date: mode}, weekMuteUntil }
+           —— 版本号变更时这些键不存在，等于自动开启，不需要迁移。 */
+        const HABIT_ASK_KEY = 'niko_habit_ask';
+        function habitAskState() {
+            let s = null;
+            try { s = safeStorage.get(HABIT_ASK_KEY, null); } catch (e) {}
+            if (!s || typeof s !== 'object') s = {};
+            if (!s.dismissedOn || typeof s.dismissedOn !== 'object') s.dismissedOn = {};
+            return s;
+        }
+        function habitAskSave(s) { try { safeStorage.set(HABIT_ASK_KEY, s); } catch (e) {} }
+        function habitAskIsMuted() {
+            const s = habitAskState();
+            if (s.weekMuteUntil) {
+                const t = String(s.weekMuteUntil).slice(0, 10);
+                if (t >= formatDate(new Date())) return true;
+            }
+            return false;
+        }
+        function habitAskHide() {
+            const bar = document.getElementById('habitAskBar');
+            if (bar) bar.innerHTML = '';
+        }
+        // 该日习惯应打/已打
+        function habitAskCounts(date) {
+            const habits = habitList();
+            const actives = habits.filter(h => habitActiveOnDate(h, date));
+            const done = habitDoneSet(date);
+            const doneN = actives.filter(h => done[h.id]).length;
+            const missNames = actives.filter(h => !done[h.id]).map(h => h.name);
+            const durMin = habitDurTotalOn(date);
+            return { total: actives.length, doneN, missNames, durMin };
+        }
+        // 决定当前该显示哪一档。返回 null = 不打扰。
+        function habitAskDecide() {
+            if (habitAskIsMuted()) return null;
+            const now = new Date();
+            const today = formatDate(now);
+            const s = habitAskState();
+            // 稍后：到点前不弹
+            if (s.snoozeUntil) {
+                const su = new Date(s.snoozeUntil);
+                if (!isNaN(su) && now < su) return null;
+            }
+            const hour = now.getHours(), mins = now.getMinutes();
+            const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+            const todayCount = habitAskCounts(today);
+            // 16 周末午睡档（13:00-15:00）：本周批量入册，优先级最高但只在周末这个窗口
+            if (isWeekend && hour >= 13 && hour < 15 && s.dismissedOn[today] !== 'week') {
+                const wk = habitWeekAskData();
+                if (wk.items.length) return { mode: 'week', data: wk };
+            }
+            // 15 次日晨间（08:00-11:00）：昨天习惯有记录但日记空
+            if (hour >= 8 && hour < 11) {
+                const y = new Date(now); y.setDate(y.getDate() - 1);
+                const ys = formatDate(y);
+                if (s.dismissedOn[ys] !== 'morning') {
+                    const yc = habitAskCounts(ys);
+                    if (yc.doneN > 0 && !habitDiaryHasEntry(ys)) {
+                        return { mode: 'morning', date: ys, data: yc };
+                    }
+                }
+            }
+            // 13 当晚（21:30 之后）：今天习惯有记录、日记还没写
+            if ((hour > 21 || (hour === 21 && mins >= 30)) && s.dismissedOn[today] !== 'night') {
+                if (todayCount.doneN > 0 && !habitDiaryHasEntry(today)) {
+                    return { mode: 'night', date: today, data: todayCount };
+                }
+            }
+            return null;
+        }
+        // 该日是否已有日记条目（非空正文）
+        function habitDiaryHasEntry(date) {
+            try {
+                const list = safeStorage.get('niko_diary_entries', []) || [];
+                const e = list.find(x => x && x.date === date);
+                return !!(e && String(e.content || '').trim());
+            } catch (err) { return false; }
+        }
+        // 16 本周入册数据（流程周期 = 周五 → 下周四）
+        function habitWeekAskData() {
+            let range;
+            try {
+                if (typeof weeklyRange === 'function') range = weeklyRange(0);
+            } catch (e) {}
+            if (!range) {
+                const now = new Date();
+                const diff = (now.getDay() - 5 + 7) % 7;
+                const fri = new Date(now.getFullYear(), now.getMonth(), now.getDate() - diff);
+                const thu = new Date(fri); thu.setDate(fri.getDate() + 6);
+                range = { start: formatDate(fri), end: formatDate(thu) };
+            }
+            const habits = habitList();
+            const logs = habitLogs();
+            const inR = (d) => d >= range.start && d <= range.end;
+            const items = habits.map(h => {
+                const cur = logs.filter(l => l.habitId === h.id && inR(habitLogDate(l)));
+                const durs = cur.reduce((s, l) => s + (Number(l.duration) || 0), 0);
+                return { h, n: cur.length, durs };
+            }).filter(x => x.n > 0).sort((a, b) => b.n - a.n);
+            return { range, items };
+        }
+        // 渲染询问条
+        function renderHabitAsk() {
+            const bar = document.getElementById('habitAskBar');
+            if (!bar) return;
+            const dec = habitAskDecide();
+            if (!dec) { bar.innerHTML = ''; return; }
+            if (dec.mode === 'night') {
+                const d = dec.data;
+                bar.innerHTML = `<div class="hb-ask">
+                    <span class="hb-ico">🌙</span>
+                    <span class="hb-txt">今天习惯打卡 <b>${d.doneN}/${d.total}</b>${d.durMin > 0 ? `（共 ${habitFmtDur(d.durMin)}）` : ''}，要不要把这些写进今天的日记？</span>
+                    <span class="hb-act">
+                        <button class="hb-btn" onclick="habitAskCarry('night')">带进日记</button>
+                        <button class="hb-btn ghost" onclick="habitAskRefuse('night',${JSON.stringify(dec.date)})">今天不写</button>
+                        <button class="hb-btn ghost" onclick="habitAskSnooze()">稍后</button>
+                    </span>
+                </div>`;
+                return;
+            }
+            if (dec.mode === 'morning') {
+                const d = dec.data;
+                bar.innerHTML = `<div class="hb-ask hb-warn">
+                    <span class="hb-ico">☀️</span>
+                    <span class="hb-txt">昨天（${String(dec.date).slice(5)}）习惯 <b>${d.doneN}/${d.total}</b>，但<b>没写日记</b>。要现在补一句吗？</span>
+                    <span class="hb-act">
+                        <button class="hb-btn" onclick="habitAskCarry('morning',${JSON.stringify(dec.date)})">补一句</button>
+                        <button class="hb-btn ghost" onclick="habitAskRefuse('morning',${JSON.stringify(dec.date)})">知道了</button>
+                        <button class="hb-btn ghost" onclick="habitAskMuteWeek()">本周别再提</button>
+                    </span>
+                </div>`;
+                return;
+            }
+            // week
+            const wk = dec.data;
+            const rows = wk.items.map(x =>
+                `<tr><td>${x.h.icon || '🎯'} ${escapeHtml(x.h.name)}</td><td class="num">${x.n}/${x.h.goal || 7}</td><td class="num dur">${x.durs > 0 ? habitFmtDur(x.durs) : '—'}</td></tr>`
+            ).join('');
+            bar.innerHTML = `<div class="hb-ask hb-week">
+                <span class="hb-ico">🃏</span>
+                <span class="hb-txt">本周期习惯要不要一次性入册？<span style="color:var(--mut,#9a9ab0);font-size:11px">（${String(wk.range.start).slice(5)} → ${String(wk.range.end).slice(5)}）</span>
+                    <table class="hb-mini-tbl"><tr><th>习惯</th><th class="num">次数</th><th class="num">时长</th></tr>${rows}</table>
+                </span>
+                <span class="hb-act">
+                    <button class="hb-btn" onclick="habitAskCarry('week')">带进本期日记</button>
+                    <button class="hb-btn ghost" onclick="habitAskWeekToKb()">存入知识库</button>
+                    <button class="hb-btn ghost" onclick="habitAskRefuse('week')">不用</button>
+                </span>
+            </div>`;
+        }
+        // 「带进日记」：跳到日记页 + 预填（13/15 复用日记模块的 diaryPrefillHabit）
+        function habitAskCarry(mode, date) {
+            try {
+                if (mode === 'week') {
+                    if (typeof habitAskWeekToKb === 'function') { /* 由下方实现写入知识库 */ }
+                }
+                if (typeof switchPage === 'function') switchPage('diary');
+                setTimeout(function () {
+                    // 15 补写昨天：先切到昨天，再预填那天的习惯
+                    try {
+                        const target = (mode === 'morning' && date) ? date : null;
+                        if (typeof selectDiaryDate === 'function') selectDiaryDate(target || formatDate(new Date()));
+                    } catch (e) {}
+                    if (typeof diaryPrefillHabitRaw === 'function') diaryPrefillHabitRaw(date || null, true);
+                    else if (typeof diaryPrefillHabit === 'function') diaryPrefillHabit(true);
+                    if (typeof showToast === 'function') showToast('📝 已把习惯摘要带进日记，补一句吧');
+                }, 300);
+            } catch (e) {}
+            habitAskDismiss(mode, date);
+            habitAskHide();
+        }
+        function habitAskRefuse(mode, date) {
+            habitAskDismiss(mode, date);
+            habitAskHide();
+            if (typeof showToast === 'function') showToast(mode === 'night' ? '🌙 好，那今天就不写' : '👌 知道了');
+        }
+        function habitAskSnooze() {
+            const s = habitAskState();
+            const t = new Date(Date.now() + 60 * 60 * 1000);   // 1 小时后再问
+            s.snoozeUntil = t.toISOString();
+            habitAskSave(s);
+            habitAskHide();
+            if (typeof showToast === 'function') showToast('⏰ 一小时后再说');
+        }
+        function habitAskMuteWeek() {
+            const s = habitAskState();
+            const t = new Date(); t.setDate(t.getDate() + 7);
+            s.weekMuteUntil = formatDate(t);
+            habitAskSave(s);
+            habitAskHide();
+            if (typeof showToast === 'function') showToast('🔇 本周不再提醒');
+        }
+        // 记录「已处理过」，同一天同一档不再重复问
+        function habitAskDismiss(mode, date) {
+            const s = habitAskState();
+            const key = date || formatDate(new Date());
+            // 同一档已处理过就不覆盖（'night' 已拒过，'morning' 处理时不能把 night 抹掉——
+            // 两档分别管今天/昨天，混写会导致其中一档反复出现）
+            if (!s.dismissedOn[key]) { s.dismissedOn[key] = mode; habitAskSave(s); }
+            else if (s.snoozeUntil) { s.snoozeUntil = null; habitAskSave(s); }
+        }
+        // 16 存入知识库（复用已有的 upsertKnowledge 通道）
+        function habitAskWeekToKb() {
+            try {
+                const wk = habitWeekAskData();
+                if (!wk.items.length) return;
+                const body = '本周期 ' + wk.range.start + ' → ' + wk.range.end + '\n\n' +
+                    wk.items.map(x => `${x.h.icon || '🎯'} ${x.h.name}：${x.n}/${x.h.goal || 7} 次` + (x.durs > 0 ? `，${habitFmtDur(x.durs)}` : '')).join('\n');
+                if (typeof upsertKnowledge === 'function') {
+                    upsertKnowledge('习惯周期小结 ' + wk.range.start, '习惯', {
+                        body: body, para: '02-Areas', category: '生活',
+                        tags: ['习惯', '复盘'], date: wk.range.start
+                    });
+                    if (typeof showToast === 'function') showToast('📥 已存入知识库（02-Areas）');
+                } else if (typeof showToast === 'function') {
+                    showToast('⚠️ 知识库模块没加载，稍后再试');
+                }
+            } catch (e) {}
+            habitAskDismiss('week');
+            habitAskHide();
+        }
+        // 初始化：DOM ready 后算一次 + 每 5 分钟复查（跨过 21:30 边界时自动出现）
+        (function initHabitAsk() {
+            function tick() { try { renderHabitAsk(); } catch (e) {} }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tick);
+            else setTimeout(tick, 900);
+            setInterval(tick, 5 * 60 * 1000);
+        })();
+        /* ===== 13/15/16 END ===== */
 
         // 习惯打卡初始化（内置「读书」习惯幂等补建，保证读书板块联动可用）
         // ===== 习惯兽孵化（2026-09-06）：每个习惯一只小生物，随连续天数进化 =====
@@ -21233,6 +21922,50 @@ if (document.readyState === 'loading') {
             if (val >= 1 && val <= 20) { MAX_EVENTS_PER_DAY = val; render(); }
         }
 
+        /* ===== 09 日历格内嵌习惯点阵（2026-10-09）=====
+           读 niko_habits / niko_habit_logs，与习惯面板同源。
+           这一层只是「让日历看得见习惯」，不改任何习惯数据。 */
+        function calHabitDotsHtml(dateStr) {
+            try {
+                const habits = safeStorage.get('niko_habits', []) || [];
+                if (!habits.length) return '';
+                const logs = safeStorage.get('niko_habit_logs', []) || [];
+                const doneSet = {};
+                logs.forEach(l => {
+                    let d = String(l.date || '').slice(0, 10);
+                    const m = d.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+                    if (m) d = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+                    if (d === dateStr) doneSet[l.habitId] = true;
+                });
+                // 该日应打卡的习惯（频率判定复用今日看板的 habitActiveOnDate 语义）
+                const isActiveOn = (h, ds) => {
+                    const freq = h.frequency || 'daily';
+                    if (freq === 'weekdays') {
+                        const days = Array.isArray(h.weekDays) ? h.weekDays : [];
+                        return days.includes(new Date(ds + 'T00:00:00').getDay());
+                    }
+                    return true;   // daily / weekly 都视为可打卡
+                };
+                const actives = habits.filter(h => isActiveOn(h, dateStr));
+                const rests = habits.filter(h => !isActiveOn(h, dateStr));
+                if (!actives.length && !rests.length) return '';
+                const doneN = actives.filter(h => doneSet[h.id]).length;
+                const missNames = actives.filter(h => !doneSet[h.id]).map(h => h.name);
+                const parts = [];
+                actives.slice(0, 6).forEach(h => {
+                    parts.push(`<span class="chd ${doneSet[h.id] ? 'on' : 'miss'}"></span>`);
+                });
+                if (actives.length > 6) {
+                    parts.push(`<span class="chd more" title="还有 ${actives.length - 6} 个">+${actives.length - 6}</span>`);
+                }
+                rests.slice(0, 2).forEach(() => parts.push('<span class="chd rest"></span>'));
+                const tip = `习惯 ${doneN}/${actives.length}`
+                    + (missNames.length ? ' · 漏：' + missNames.slice(0, 3).join('、') + (missNames.length > 3 ? '…' : '') : '')
+                    + (rests.length ? ` · ${rests.length} 个休息` : '');
+                return `<div class="cal-habit-dots" title="${escapeHtml(tip)}">${parts.join('')}</div>`;
+            } catch (e) { return ''; }
+        }
+
         function renderFourWeekGrid() {
             const grid = document.getElementById('fourWeekGrid');
             // 周数切换按钮文案与当前状态同步（含刷新后从 localStorage 恢复的情况）
@@ -21442,6 +22175,17 @@ if (document.readyState === 'loading') {
                     eventsContainer.appendChild(item);
                 });
                 cell.appendChild(eventsContainer);
+                // 09 习惯点阵：只在桌面 2/4 周视图挂；格底一行，不抢任务空间
+                if (!isNarrow) {
+                    const dotsHtml = calHabitDotsHtml(dateStr);
+                    if (dotsHtml) {
+                        const dotsWrap = document.createElement('div');
+                        dotsWrap.innerHTML = dotsHtml;
+                        const dots = dotsWrap.firstChild;
+                        dots.addEventListener('click', (e) => { e.stopPropagation(); selectedDate = new Date(date); render(); });
+                        cell.appendChild(dots);
+                    }
+                }
                 cell.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; cell.classList.add('drag-over'); });
                 cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
                 cell.addEventListener('drop', (e) => { e.preventDefault(); cell.classList.remove('drag-over'); if (draggedEventId && draggedEventId.startsWith('backlog:')) scheduleBacklogItem(draggedEventId.slice(8), dateStr); else if (draggedEventId) { moveEventToDate(draggedEventId, dateStr); if (typeof nikoDustBurst === 'function') nikoDustBurst(e.clientX, e.clientY); } });   // 方案5 落定溅尘
@@ -31217,6 +31961,91 @@ if (document.readyState === 'loading') {
             try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
         }
 
+        // ===== 14 习惯快照（2026-10-09）=====
+        // 供「写日记静默吸收当天习惯」用。日期一律归一化为 YYYY-MM-DD（历史数据可能是
+        // ISO 带时间或非补零格式，直接字符串比对会永远匹配不上——这是习惯模块踩过的坑）。
+        function diaryNormDate(v) {
+            let d = String(v || '').slice(0, 10);
+            const m = d.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+            if (m) d = m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0');
+            return d;
+        }
+        // 返回该日习惯快照：{done, total, minutes, items:[{icon,name,duration,doneAt}]}
+        // items 只含「当天打了卡的」，按打卡时间排序；未打卡的习惯不进 items（避免日记被 0 值噪音填满）。
+        function diaryHabitSnapshot(dateStr) {
+            try {
+                const hs = safeStorage.get('niko_habits', []) || [];
+                const logs = safeStorage.get('niko_habit_logs', []) || [];
+                const dayLogs = logs.filter(l => diaryNormDate(l.date) === dateStr);
+                const items = dayLogs.map(l => {
+                    const h = hs.find(x => x.id === l.habitId);
+                    return {
+                        icon: (h && h.icon) || '🎯',
+                        name: (h && h.name) || '习惯',
+                        duration: Number(l.duration) || 0,
+                        doneAt: l.doneAt || ''
+                    };
+                });
+                return {
+                    done: items.length,
+                    total: hs.length,
+                    minutes: items.reduce((s, i) => s + i.duration, 0),
+                    items
+                };
+            } catch (e) { return { done: 0, total: 0, minutes: 0, items: [] }; }
+        }
+        function diaryHabitFmtDur(min) {
+            const n = Number(min) || 0;
+            if (n <= 0) return '';
+            if (n < 60) return n + '′';
+            const h = Math.floor(n / 60), m = n % 60;
+            return h + 'h' + (m ? m + '′' : '');
+        }
+        // 拼成日记正文尾部的「今日习惯」附录（纯文本，可被知识库/AI 回信复用）
+        function diaryHabitAppendix(dateStr) {
+            const snap = diaryHabitSnapshot(dateStr);
+            if (!snap.items.length) return '';
+            const lines = snap.items.map(i => {
+                const t = i.doneAt ? (function () {
+                    const d = new Date(i.doneAt);
+                    return isNaN(d) ? '' : String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+                })() : '';
+                const dur = diaryHabitFmtDur(i.duration);
+                const extra = [t, dur].filter(Boolean).join(' · ');
+                return `${i.icon} ${i.name} ✓${extra ? '（' + extra + '）' : ''}`;
+            });
+            return '—— 今日习惯 ——\n' + lines.join('\n');
+        }
+        // 剥掉正文里上一次追加的习惯附录（幂等：反复保存不会叠加）
+        function stripHabitAppendix(text) {
+            const t = String(text || '');
+            const i = t.indexOf('—— 今日习惯 ——');
+            if (i < 0) return t.replace(/\s+$/, '');
+            return t.slice(0, i).replace(/\s+$/, '');
+        }
+        // 13 用：把当天习惯附录预填进编辑器（光标停在正文末尾，等用户补一句）
+        function diaryPrefillHabit(quiet) {
+            return diaryPrefillHabitRaw(diarySelectedDate || diaryTodayStr(), quiet);
+        }
+        // 15 用：可指定任意日期（次日晨间提醒要补写「昨天」）
+        function diaryPrefillHabitRaw(dateStr, quiet) {
+            const ds = dateStr || diarySelectedDate || diaryTodayStr();
+            const input = document.getElementById('diaryEditorInput');
+            if (!input) return false;
+            const appx = diaryHabitAppendix(ds);
+            if (!appx) {
+                if (!quiet && typeof showToast === 'function') showToast('那天还没有习惯打卡记录');
+                return false;
+            }
+            const base = stripHabitAppendix(input.value);
+            input.value = base ? (base + '\n\n' + appx) : appx;
+            try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
+            input.focus();
+            if (!quiet && typeof showToast === 'function') showToast('📝 已把习惯预填进来，再补一句吧');
+            return true;
+        }
+        // ===== 14 END =====
+
         // ===== 今日战报（自动数据切片）=====
         function diaryBattleStats(dateStr) {
             let tasksDone = 0, tasksTotal = 0, habitDone = 0, habitTotal = 0, gameMin = 0;
@@ -31579,26 +32408,37 @@ if (document.readyState === 'loading') {
             const firstLine = content.split(/\n/)[0].trim().slice(0, 30);   // 首行金句：只记第一句，最多 30 字
             const idx = diaryEntries.findIndex(x => x.date === ds);
             const isNew = idx < 0;
+            // ===== 14 静默吸收当天习惯（2026-10-09）=====
+            // 零交互：你落笔的那一刻，习惯数据自动作为快照写进日记条目 + 正文尾部附录。
+            // 这是 13（当晚询问）的保底 —— 就算你从不点「带进日记」，也不会漏。
+            // 正文追加幂等：先剥掉上一次的附录再拼，反复保存不会叠加。
+            const _snap = diaryHabitSnapshot(ds);
+            const _bodyBase = stripHabitAppendix(content);
+            const _appx = diaryHabitAppendix(ds);
+            const _finalBody = _appx ? (_bodyBase + '\n\n' + _appx) : _bodyBase;
             if (!isNew) {
-                diaryEntries[idx].content = content;
+                diaryEntries[idx].content = _finalBody;
                 diaryEntries[idx].mood = diaryMood;
                 diaryEntries[idx].firstLine = firstLine;
+                diaryEntries[idx].habitsSnapshot = _snap;
                 diaryEntries[idx].updatedAt = new Date().toISOString();
             } else {
                 diaryEntries.unshift({
                     id: 'diary_' + Date.now(),
-                    date: ds, content: content, mood: diaryMood, firstLine: firstLine,
+                    date: ds, content: _finalBody, mood: diaryMood, firstLine: firstLine,
+                    habitsSnapshot: _snap,
                     createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
                 });
             }
             diarySaveEntries();
             if (typeof nikoEcoEmit === 'function') nikoEcoEmit('diary');
             // 阶段二：日记同步存入知识库（同日期已有条目则更新正文，保持同步）
+            // 14：正文带上习惯附录 → 知识库/复习队列/AI 回信自动继承，零额外成本。
             upsertKnowledge('日记 ' + ds, '日记', {
-                body: content + (diaryMood && diaryMood !== 'ok' ? '\n\n（心情：' + diaryMoodName(diaryMood) + '）' : ''),
+                body: _finalBody + (diaryMood && diaryMood !== 'ok' ? '\n\n（心情：' + diaryMoodName(diaryMood) + '）' : ''),
                 para: '02-Areas',
                 category: '生活',
-                tags: ['日记'],
+                tags: _snap.items.length ? ['日记', '习惯'] : ['日记'],
                 date: ds
             });
             diaryAutoCheckHabit(ds);
@@ -33490,7 +34330,14 @@ if (document.readyState === 'loading') {
         const GT_MAX_HISTORY = 100;
 
         function gtData() {
-            return safeStorage.get('niko_game_time', { balance: 0, totalEarned: 0, totalUsed: 0, history: [] });
+            const d = safeStorage.get('niko_game_time', { balance: 0, totalEarned: 0, totalUsed: 0, history: [] });
+            // 容错：旧数据/种子数据可能只有 balance，缺 history 会让 gtEarn 直接抛错
+            if (!d || typeof d !== 'object') return { balance: 0, totalEarned: 0, totalUsed: 0, history: [] };
+            if (!Array.isArray(d.history)) d.history = [];
+            if (typeof d.balance !== 'number') d.balance = Number(d.balance) || 0;
+            if (typeof d.totalEarned !== 'number') d.totalEarned = Number(d.totalEarned) || 0;
+            if (typeof d.totalUsed !== 'number') d.totalUsed = Number(d.totalUsed) || 0;
+            return d;
         }
         function gtSave(d) { safeStorage.set('niko_game_time', d); }
 
@@ -42097,7 +42944,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202609301518";
+        window.NIKO_VERSION = "202610090933";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
