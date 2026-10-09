@@ -2603,6 +2603,40 @@
         body.dark-mode .habit-dur-pop button.clear { color: #ff8a8a; border-color: #5c3a3a; background: #33262a; }
         .habit-dur-pop .dp-lbl { font-size: 10.5px; color: #9a96ad; padding: 0 3px 0 1px; }
         body.dark-mode .habit-dur-pop .dp-lbl { color: #8f8fa3; }
+        /* ===== 17 快捷补卡（2026-10-09）：习惯卡底部一键补卡入口 =====
+           口径：只在「本周还差 N 次」或「昨天断签可补」时出现，纯提示不催命；
+           按钮文案给「补卡」不给「你漏了」——反自责。点开浮层直接选日期，一键补。
+           复用已有 habitConfirmMakeUp()，不另造一套写入逻辑。 */
+        .habit-mk-chip {
+            font-size: 10px; flex-shrink: 0; white-space: nowrap;
+            border: 1px dashed #f0d9b8; background: #fffbf5; color: #b8863f;
+            border-radius: 6px; padding: 0 6px; line-height: 16px;
+            cursor: pointer; font-family: inherit; transition: .15s;
+        }
+        .habit-mk-chip:hover { background: #fff4e4; color: #a06a1f; border-color: #e8c48a; }
+        body.dark-mode .habit-mk-chip { background: #2a2418; border-color: #574a2c; color: #d9b06a; }
+        body.dark-mode .habit-mk-chip:hover { background: #332b1c; color: #ecc582; }
+        /* 补卡浮层：列最近可补日期，每行一键补 */
+        .habit-mk-pop {
+            position: absolute; z-index: 41; display: none;
+            background: #fff; border: 1px solid #eadfc9; border-radius: 10px;
+            box-shadow: 0 8px 26px rgba(90,70,30,.16); padding: 7px;
+            gap: 4px; align-items: center; flex-wrap: wrap; max-width: min(340px, 88vw); white-space: nowrap;
+        }
+        body.dark-mode .habit-mk-pop { background: #262637; border-color: #574a2c; box-shadow: 0 8px 26px rgba(0,0,0,.5); }
+        .habit-mk-pop button {
+            font-family: inherit; font-size: 11px; cursor: pointer;
+            border: 1px solid #ece3d3; background: #fdfbf7; color: #66573f;
+            border-radius: 7px; padding: 4px 9px; transition: .15s; font-variant-numeric: tabular-nums;
+        }
+        .habit-mk-pop button:hover { border-color: #d9a94f; color: #a06a1f; background: #fff7ea; }
+        body.dark-mode .habit-mk-pop button { background: #2f2f42; border-color: #574a2c; color: #d9c7a3; }
+        body.dark-mode .habit-mk-pop button:hover { border-color: #d9a94f; color: #ecc582; background: #332b1c; }
+        .habit-mk-pop .mp-lbl { font-size: 10.5px; color: #b0a48d; padding: 0 3px 0 1px; }
+        body.dark-mode .habit-mk-pop .mp-lbl { color: #8f8fa3; }
+        .habit-mk-pop .mp-none { font-size: 10.5px; color: #9a96ad; padding: 3px 5px; }
+        .habit-mk-pop .mp-more { font-size: 10.5px; color: #a06a1f; background: none; border: none; text-decoration: underline; padding: 4px 4px; }
+        body.dark-mode .habit-mk-pop .mp-more { color: #d9b06a; }
         /* 习惯卡片本身要能当浮层定位锚点 */
         .habit-card { position: relative; }
         /* ===== 05 习惯详情历史抽屉（2026-10-09） ===== */
@@ -2653,6 +2687,18 @@
         .hdr-tip { font-size: 11px; color: #8a8a96; background: #f8f9fc; border: 1px solid #e9ebf2;
             border-radius: 9px; padding: 9px 11px; margin-top: 14px; line-height: 1.7; }
         body.dark-mode .hdr-tip { background: #232838; border-color: #313747; color: #8f8fa3; }
+        /* 17 抽屉里的快捷补卡行（2026-10-09） */
+        .hdr-mk-hint { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .hdr-mk-btn {
+            font-family: inherit; font-size: 10.5px; cursor: pointer; font-variant-numeric: tabular-nums;
+            border: 1px solid #ecdcc0; background: #fffdf8; color: #8a6a2f;
+            border-radius: 6px; padding: 1px 7px; line-height: 16px; transition: .15s;
+        }
+        .hdr-mk-btn:hover { border-color: #d9a94f; color: #a06a1f; background: #fff6e6; }
+        .hdr-mk-btn.more { border-style: dashed; color: #9a8c70; }
+        body.dark-mode .hdr-mk-btn { background: #2c2718; border-color: #574a2c; color: #d9b06a; }
+        body.dark-mode .hdr-mk-btn:hover { border-color: #d9a94f; color: #ecc582; background: #332b1c; }
+        body.dark-mode .hdr-mk-btn.more { color: #a99a7d; }
         /* 习惯名可点（提示可查看历史） */
         .habit-name.clickable:hover { color: #7c3aed; text-decoration: underline dotted; }
         body.dark-mode .habit-name.clickable:hover { color: #c4b5fd; }
@@ -13156,6 +13202,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
             <!-- ===== 01 时长档位浮层（挂在 body 上，绝对定位到卡片旁） ===== -->
             <div class="habit-dur-pop" id="habitDurPop"></div>
+
+            <!-- ===== 17 快捷补卡浮层（同上，点卡片上的「补卡」胶囊时出现） ===== -->
+            <div class="habit-mk-pop" id="habitMkPop"></div>
 <div class="work-mask" id="workMask" onclick="if(event.target===this)workCloseLib()">
     <div class="work-modal">
         <div class="work-mhead">
@@ -18517,6 +18566,116 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         window.addEventListener('resize', habitDurClose);
         /* ===== 01 END ===== */
 
+        /* ===== 17 快捷补卡（2026-10-09）=====
+           补卡逻辑复用已有 habitConfirmMakeUp()（走同一写入 + 奖励入账 + 联动路径）。
+           这里只做两件事：① 算出「该补哪些日期」；② 在卡片底部渲染一个轻量入口。
+           反自责口径：只算「本周期还差几次能达标」，不显示「你漏了 N 天」。 */
+        // 该习惯在最近 N 天内「应打卡但没打」的日期（倒序，最多取 limit 个）
+        function habitMissedDates(habitId, days, limit) {
+            const h = habitList().find(x => x.id === habitId);
+            if (!h) return [];
+            const done = new Set(habitLogs().filter(l => l.habitId === habitId).map(habitLogDate));
+            const today = formatDate(new Date());
+            const out = [];
+            const span = days || 14;
+            for (let i = 1; i <= span; i++) {                 // 从昨天往前找，不含今天（今天直接打卡就行）
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const ds = formatDate(d);
+                if (ds > today) continue;
+                if (!habitActiveOnDate(h, ds)) continue;       // 休息日不算漏
+                if (done.has(ds)) continue;
+                out.push(ds);
+                if (limit && out.length >= limit) break;
+            }
+            return out;
+        }
+        // 本周期（周五→下周四）还差几次到 goal
+        function habitWeekGap(habitId) {
+            const h = habitList().find(x => x.id === habitId);
+            if (!h) return 0;
+            const goal = Number(h.goal) || 7;
+            return Math.max(0, goal - habitWeekCount(habitId));
+        }
+        // 是否值得给这个习惯显示补卡入口：有漏打日期 且 （本周还差次数 或 昨天断签）
+        function habitMakeUpNeed(habitId) {
+            const missed = habitMissedDates(habitId, 14, 1);
+            if (!missed.length) return null;
+            const y = new Date(); y.setDate(y.getDate() - 1);
+            const ys = formatDate(y);
+            const h = habitList().find(x => x.id === habitId);
+            const yActive = h ? habitActiveOnDate(h, ys) : true;
+            const gap = habitWeekGap(habitId);
+            const brokeYesterday = yActive && missed[0] === ys;
+            if (gap <= 0 && !brokeYesterday) return null;
+            return { gap: gap, missed: habitMissedDates(habitId, 14, 4), brokeYesterday: brokeYesterday };
+        }
+        let habitMkTarget = null;
+        function habitMkOpen(ev, habitId) {
+            if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+            const card = document.querySelector('.habit-card[data-hid="' + habitId + '"]');
+            const pop = document.getElementById('habitMkPop');
+            if (!card || !pop) return;
+            const dates = habitMissedDates(habitId, 14, 5);
+            const WD = ['日', '一', '二', '三', '四', '五', '六'];
+            const body = dates.length
+                ? dates.map(ds => {
+                    const wd = WD[new Date(ds + 'T00:00:00').getDay()];
+                    return `<button onclick="habitMkPick('${habitId}','${ds}')">${String(ds).slice(5)} 周${wd}</button>`;
+                }).join('')
+                : '<span class="mp-none">最近两周没有可补的日期 👍</span>';
+            pop.innerHTML = `<span class="mp-lbl">补哪天</span>` + body +
+                `<button class="mp-more" onclick="habitMkMore('${habitId}')">选其他日期…</button>`;
+            habitMkTarget = habitId;
+            pop.style.display = 'flex';
+            // 定位：贴卡片左下方；右/下越界时回收
+            const r = card.getBoundingClientRect();
+            const pw = pop.offsetWidth, ph = pop.offsetHeight;
+            let left = r.left + (window.scrollX || 0);
+            let top = r.bottom + (window.scrollY || 0) + 5;
+            if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10 + (window.scrollX || 0);
+            if (left < 6) left = 6;
+            pop.style.left = left + 'px';
+            pop.style.top = Math.min(top, window.innerHeight - ph - 8 + (window.scrollY || 0)) + 'px';
+        }
+        // 一键补某天：直接复用 habitConfirmMakeUp 的写入路径
+        function habitMkPick(habitId, date) {
+            const h = habitList().find(x => x.id === habitId);
+            const today = formatDate(new Date());
+            if (date > today) { if (typeof showToast === 'function') showToast('不能补未来的卡'); return; }
+            const logs = habitLogs();
+            if (logs.some(l => l.habitId === habitId && habitLogDate(l) === date)) {
+                if (typeof showToast === 'function') showToast('这天已经打过卡了');
+                habitMkClose(); return;
+            }
+            logs.push({ id: 'hl_' + Date.now(), habitId: habitId, date: date, doneAt: new Date().toISOString() });
+            habitSaveLogs(logs);
+            const rewardMin = h ? (Number(h.rewardMin) || 0) : 0;
+            if (rewardMin > 0 && typeof window.gameTimeEarn === 'function') {
+                try { window.gameTimeEarn(habitId, rewardMin, h.name, date); } catch (e) {}
+            }
+            if (habitId === HABIT_BOOK_ID) bookHabitLinkApply(date);
+            habitMkClose();
+            renderTodayHabits();
+            if (typeof renderHabitStats === 'function') { try { renderHabitStats(); } catch (e) {} }
+            if (typeof showToast === 'function') showToast(`✅ 已补卡 ${String(date).slice(5)}`);
+        }
+        // 「选其他日期…」：打开管理弹窗并定位到该习惯的补卡表单（保留完整日期选择器）
+        function habitMkMore(habitId) {
+            habitMkClose();
+            if (typeof openHabits === 'function') openHabits();
+            setTimeout(function () { try { habitMakeUp(habitId); } catch (e) {} }, 120);
+        }
+        function habitMkClose() {
+            const pop = document.getElementById('habitMkPop');
+            if (pop) pop.style.display = 'none';
+            habitMkTarget = null;
+        }
+        document.addEventListener('click', function (e) {
+            if (habitMkTarget && !e.target.closest('#habitMkPop') && !e.target.closest('.habit-mk-chip')) habitMkClose();
+        });
+        window.addEventListener('resize', habitMkClose);
+        /* ===== 17 END ===== */
+
         /* ===== 05 习惯详情历史抽屉（2026-10-09）=====
            纯读 niko_habit_logs，零迁移。复用 habitLogDate() 归一化 + habitActiveOnDate() 判休息日。 */
         let habitDrawerId = null;
@@ -18590,10 +18749,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
             const freq = habitFreqLabel(h);
             const goal = h.goal || 7;
+            const mkMissed = habitMissedDates(habitId, 14, 3);
+            const mkGap = habitWeekGap(habitId);
             document.getElementById('hdrTip').innerHTML =
                 `共打卡 <b>${total}</b> 天 · 频率「${freq}」· 每周目标 ${goal} 次` +
                 (Number(h.rewardMin) > 0 ? ` · 每次奖励 +${h.rewardMin} 分` : '') +
-                `<br>时长只是记录，不换算游戏分钟。`;
+                `<br>时长只是记录，不换算游戏分钟。` +
+                (mkMissed.length
+                    ? `<br><span class="hdr-mk-hint">本周期还差 <b>${mkGap}</b> 次 · 最近可补：` +
+                      mkMissed.map(ds => `<button class="hdr-mk-btn" onclick="habitMkPick('${habitId}','${ds}')" title="一键补卡 ${ds}">${String(ds).slice(5)}</button>`).join('') +
+                      `<button class="hdr-mk-btn more" onclick="habitMkMore('${habitId}')">其他…</button></span>`
+                    : `<br><span class="hdr-mk-hint">最近两周没有漏打 👍</span>`);
 
             document.getElementById('habitDrawerMask').style.display = 'block';
             document.getElementById('habitDrawer').style.display = 'block';
@@ -18605,7 +18771,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (p) p.style.display = 'none';
         }
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') { closeHabitDrawer(); habitDurClose(); }
+            if (e.key === 'Escape') { closeHabitDrawer(); habitDurClose(); if (typeof habitMkClose === 'function') habitMkClose(); }
         });
         /* ===== 05 END ===== */
 
@@ -18903,6 +19069,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const durChip = d
                     ? `<span class="habit-dur-chip${durMin > 0 ? ' has-dur' : ''}" onclick="habitDurOpen(event,'${h.id}')" title="记录这次花了多久（只做记录，不换算游戏分钟）">${durMin > 0 ? '⏱ ' + habitFmtDur(durMin) : '⏱ 记时长'}</span>`
                     : '';
+                // 17 快捷补卡：只在「本周还差次数」或「昨天断签」时出现（未打卡 + 有漏打日期）
+                // 今天已打的不显示（今天不叫补卡）；文案中性，不带「你漏了」字样
+                const mkNeed = (!d && isActive) ? habitMakeUpNeed(h.id) : null;
+                const mkChip = mkNeed
+                    ? `<span class="habit-mk-chip" onclick="habitMkOpen(event,'${h.id}')" title="补上漏掉的打卡日（本周期还差 ${mkNeed.gap} 次）">📝 补卡${mkNeed.brokeYesterday ? '' : (mkNeed.gap > 0 ? ' · 差' + mkNeed.gap : '')}</span>`
+                    : '';
                 return `<div class="habit-card${d ? ' done-card' : ''}${restCls}${restDoneCls}${chargeCls}"${clickAttr} data-hid="${h.id}" title="${cardTitle}" style="${isActive ? '' : 'cursor:not-allowed;'}">
                     <div class="habit-card-top">
                         <span class="habit-icon">${h.icon || '🎯'}</span>
@@ -18916,6 +19088,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     <div class="habit-card-foot">
                         ${(d && isActive && typeof workToWorkEnabled === 'function' && workToWorkEnabled(h)) ? `<span class="habit-work-link" onclick="event.stopPropagation();workFromHabit('${h.id}')" title="复用你已经能坚持的那件事：做完之后的 30 分钟就是开发时间块">→ 推一格</span>` : ''}
                         ${durChip}
+                        ${mkChip}
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
                         ${!isActive ? `<span style="font-size:10px;color:#9ca3af;">🌙 今天休息</span>` : ''}
@@ -42944,7 +43117,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610090933";
+        window.NIKO_VERSION = "202610091002";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
