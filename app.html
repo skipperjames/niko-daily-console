@@ -2603,6 +2603,84 @@
         body.dark-mode .habit-dur-pop button.clear { color: #ff8a8a; border-color: #5c3a3a; background: #33262a; }
         .habit-dur-pop .dp-lbl { font-size: 10.5px; color: #9a96ad; padding: 0 3px 0 1px; }
         body.dark-mode .habit-dur-pop .dp-lbl { color: #8f8fa3; }
+
+        /* ===== 03 自动计时习惯（2026-10-09）=====
+
+           口径：给习惯标 timed → 打卡后出现「▶ 计时」；点「结束」把时长累加进 duration。
+
+           只记录、不换算游戏分钟（与 01 同一落点：niko_habit_logs[i].duration）。
+
+           忘了结束不脏数据：跨天自动封顶到「开始那天 24:00」。 */
+
+        .habit-timed-chip {
+
+            font-size: 10px; flex-shrink: 0; white-space: nowrap;
+
+            border: 1px solid rgba(139,92,246,.45); background: #f5f3ff; color: #7c3aed;
+
+            border-radius: 6px; padding: 0 6px; line-height: 16px;
+
+            cursor: pointer; font-family: inherit; transition: .15s;
+
+        }
+
+        .habit-timed-chip:hover { background: #ede9fe; border-color: #8b5cf6; }
+
+        body.dark-mode .habit-timed-chip { background: #2a2545; border-color: #4c4470; color: #c4b5fd; }
+
+        body.dark-mode .habit-timed-chip:hover { background: #332b52; border-color: #8b5cf6; }
+
+        .habit-timer-bar {
+
+            display: inline-flex; align-items: center; gap: 5px;
+
+            border: 1px solid rgba(16,185,129,.45); background: rgba(16,185,129,.10);
+
+            border-radius: 7px; padding: 0 5px; font-size: 10.5px; line-height: 18px;
+
+            flex-shrink: 0;
+
+        }
+
+        body.dark-mode .habit-timer-bar { background: rgba(16,185,129,.16); border-color: rgba(16,185,129,.42); }
+
+        .habit-timer-bar .ht-dot {
+
+            width: 6px; height: 6px; border-radius: 50%; background: #10b981; flex-shrink: 0;
+
+            animation: htPulse 1.4s ease-in-out infinite;
+
+        }
+
+        @keyframes htPulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+        .habit-timer-bar .ht-txt { color: #059669; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+        body.dark-mode .habit-timer-bar .ht-txt { color: #34d399; }
+
+        .habit-timer-bar button {
+
+            font-family: inherit; font-size: 10px; cursor: pointer; border-radius: 5px;
+
+            padding: 0 6px; line-height: 15px; border: 1px solid transparent; transition: .15s;
+
+        }
+
+        .habit-timer-bar .ht-stop { background: #10b981; color: #fff; }
+
+        .habit-timer-bar .ht-stop:hover { background: #059669; }
+
+        .habit-timer-bar .ht-cancel { background: transparent; color: #9ca3af; border-color: rgba(127,127,127,.32); }
+
+        .habit-timer-bar .ht-cancel:hover { color: #ef4444; border-color: rgba(239,68,68,.5); }
+
+        .habit-timed-wrap { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: #555; cursor: pointer; white-space: nowrap; }
+
+        body.dark-mode .habit-timed-wrap { color: #b9b9cc; }
+
+        .habit-timed-wrap input { width: 15px; height: 15px; accent-color: #8b5cf6; cursor: pointer; }
+
+        @media (max-width: 768px) { .habit-timer-bar { font-size: 10px; } }
         /* ===== 17 快捷补卡（2026-10-09）：习惯卡底部一键补卡入口 =====
            口径：只在「本周还差 N 次」或「昨天断签可补」时出现，纯提示不催命；
            按钮文案给「补卡」不给「你漏了」——反自责。点开浮层直接选日期，一键补。
@@ -4596,6 +4674,23 @@ body.dark-mode .wal-set-row input{background:#14141c}
         .pd-habit.open .pd-habit-head .pd-h-arw { transform: rotate(90deg); }
         .pd-habit-body { display: none; padding: 7px 9px 9px; }
         .pd-habit.open .pd-habit-body { display: block; }
+        /* ===== 20 一键回看摘要条（2026-10-09）：任务 / 习惯 / 时长 / 日记 一行看完 ===== */
+        .pd-recap { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+        .pd-rc-pill {
+            font-size: 11px; line-height: 18px; padding: 0 9px; border-radius: 9px;
+            background: #f4f5f9; border: 1px solid #e6e8f0; color: #6b7280;
+            font-variant-numeric: tabular-nums; white-space: nowrap;
+        }
+        body.dark-mode .pd-rc-pill { background: #232838; border-color: #313747; color: #9aa3b8; }
+        .pd-rc-pill.ok { background: rgba(16,185,129,.10); border-color: rgba(16,185,129,.35); color: #059669; font-weight: 700; }
+        body.dark-mode .pd-rc-pill.ok { background: rgba(16,185,129,.16); border-color: rgba(16,185,129,.4); color: #34d399; }
+        .pd-rc-pill.dur { background: rgba(99,102,241,.10); border-color: rgba(99,102,241,.3); color: #4f46e5; }
+        body.dark-mode .pd-rc-pill.dur { background: rgba(99,102,241,.16); border-color: rgba(99,102,241,.38); color: #a5b4fc; }
+        .pd-rc-pill.diary { color: #b45309; border-style: dashed; }
+        body.dark-mode .pd-rc-pill.diary { color: #fbbf24; }
+        .pd-rc-pill.diary.ok { color: #059669; border-style: solid; }
+        body.dark-mode .pd-rc-pill.diary.ok { color: #34d399; }
+        @media (max-width: 768px) { .pd-recap { padding: 0 10px 7px; } .pd-rc-pill { font-size: 10.5px; } }
         /* 紧凑名册行：一行一个习惯，点整行打卡 */
         .pd-hrow {
             display: flex; align-items: center; gap: 8px; padding: 6px 7px;
@@ -13331,7 +13426,17 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <input type="number" class="habit-goal" id="habitRewardInput" min="0" max="480" step="1" value="0" title="每次打卡奖励的游戏分钟数（0=不奖励），去「游戏时间」看板可随时修改">
                             <span class="habit-goal-unit">分钟/次</span>
                         </span>
-                        <button class="btn primary" id="habitAddBtn" onclick="addHabit()">＋ 添加</button>
+                                                <span class="habit-goal-wrap">
+
+                            <label class="habit-timed-wrap" title="开启后：这张习惯卡打卡后会出现「▶ 计时」，干完点「结束」把时长自动记进这个习惯（只记录，不换算游戏分钟）">
+
+                                <input type="checkbox" id="habitTimedInput"> ⏱ 计时类
+
+                            </label>
+
+                        </span>
+
+<button class="btn primary" id="habitAddBtn" onclick="addHabit()">＋ 添加</button>
                         <button class="btn" id="habitEditCancel" onclick="cancelEditHabit()" style="display:none;">取消编辑</button>
                     </div>
                     <div class="modal-body">
@@ -13624,7 +13729,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <h3 id="detailDateTitle">选中日期</h3>
                         <div class="panel-stats" id="detailStats"><span>共 <strong>0</strong> 项</span><span>已完成 <strong>0</strong> 项</span></div>
                     </div>
-                    <div class="panel-actions">
+                                        <!-- ===== 20 一键回看摘要条（2026-10-09）：任务 / 习惯 / 时长 / 日记 一行看完 ===== -->
+                    <div class="pd-recap" id="pdRecap" style="display:none;"></div>
+<div class="panel-actions">
                         <button class="btn-small primary" onclick="openEventModal(null, selectedDate)">+ 新建任务</button>
                         <button class="btn-small" onclick="goToToday()">回到今天</button>
                         <button class="btn-small" id="batchToggleBtn" onclick="toggleBatchMode()" title="批量勾选：全选 / 批量完成 / 批量删除（重复任务可连带整个系列删）">☑ 批量</button>
@@ -18834,6 +18941,168 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         window.addEventListener('resize', habitDurClose);
         /* ===== 01 END ===== */
 
+        /* ===== 03 自动计时习惯（2026-10-09）=====
+
+           timed 习惯打卡后出现「▶ 计时」；点开始 → 卡片底部转计时条；点「结束」→ 时长累加进 duration。
+
+           只记录不换算游戏分钟（与 01 同一落点）。
+
+           忘了结束不脏数据：跨天自动封顶到「开始那天 24:00」。
+
+           状态落 niko_habit_timer = {habitId, startAt, date}，刷新 / 切页自动恢复。 */
+
+        const HABIT_TIMER_KEY = 'niko_habit_timer';
+
+        function habitTimerGet() {
+
+            try {
+
+                const v = safeStorage.get(HABIT_TIMER_KEY, null);
+
+                return (v && v.habitId && v.startAt) ? v : null;
+
+            } catch (e) { return null; }
+
+        }
+
+        function habitTimerSave(v) {
+
+            try { safeStorage.set(HABIT_TIMER_KEY, v || null); } catch (e) {}
+
+        }
+
+        // 本次已计秒数（跨天时封顶到开始日的 24:00）
+
+        function habitTimerElapsedSec(t) {
+
+            const s = t || habitTimerGet();
+
+            if (!s) return 0;
+
+            const cap = new Date(s.startAt);
+
+            cap.setHours(24, 0, 0, 0);
+
+            const end = Math.min(Date.now(), cap.getTime());
+
+            return Math.max(0, Math.floor((end - s.startAt) / 1000));
+
+        }
+
+        function habitTimerFmt(sec) {
+
+            const n = Math.max(0, Math.floor(Number(sec) || 0));
+
+            const h = Math.floor(n / 3600), m = Math.floor(n % 3600 / 60), s = n % 60;
+
+            const p = function (x) { return String(x).padStart(2, '0'); };
+
+            return (h > 0 ? h + ':' : '') + p(m) + ':' + p(s);
+
+        }
+
+        function habitTimerStart(id) {
+
+            const h = habitList().find(function (x) { return x.id === id; });
+
+            if (!h) return;
+
+            if (!h.timed) { if (typeof showToast === 'function') showToast('这个习惯没开「计时类」'); return; }
+
+            const today = formatDate(new Date());
+
+            const logs = habitLogs();
+
+            if (!logs.some(function (l) { return l.habitId === id && habitLogDate(l) === today; })) {
+
+                if (typeof showToast === 'function') showToast('先打卡，再计时');
+
+                return;
+
+            }
+
+            const cur = habitTimerGet();
+
+            if (cur && cur.habitId !== id) habitTimerStop(true);   // 一次只计一个：先把上一个结算掉
+
+            habitTimerSave({ habitId: id, startAt: Date.now(), date: today });
+
+            renderTodayHabits();
+
+            if (typeof showToast === 'function') showToast('⏱ 开始计时 · ' + (h.name || ''));
+
+        }
+
+        // save=true：结算并累加时长；false：直接丢弃
+
+        function habitTimerStop(save) {
+
+            const t = habitTimerGet();
+
+            if (!t) return 0;
+
+            const sec = habitTimerElapsedSec(t);
+
+            const min = Math.floor(sec / 60);
+
+            habitTimerSave(null);
+
+            if (save && t.habitId) {
+
+                const date = t.date || formatDate(new Date());
+
+                const prev = habitDurOf(t.habitId, date);
+
+                if (min >= 1) {
+
+                    habitSetDuration(t.habitId, date, prev + min);
+
+                    if (typeof showToast === 'function') showToast('🕐 +' + habitFmtDur(min) + ' 已记入（当天共 ' + habitFmtDur(prev + min) + '）');
+
+                } else if (typeof showToast === 'function') {
+
+                    showToast('不足 1 分钟，没记');
+
+                }
+
+            }
+
+            renderTodayHabits();
+
+            return sec;
+
+        }
+
+        function habitTimerCancel() {
+
+            if (!habitTimerGet()) return;
+
+            habitTimerSave(null);
+
+            renderTodayHabits();
+
+            if (typeof showToast === 'function') showToast('已取消计时（未记录）');
+
+        }
+
+        // 每 10 秒只刷计时文本，不重渲染整卡（避免闪烁）
+
+        function habitTimerTick() {
+
+            const t = habitTimerGet();
+
+            if (!t) return;
+
+            const el = document.getElementById('habitTimerTxt');
+
+            if (el) el.textContent = habitTimerFmt(habitTimerElapsedSec(t));
+
+        }
+
+        setInterval(function () { try { habitTimerTick(); } catch (e) {} }, 10000);
+
+        /* ===== 03 END ===== */
+
         /* ===== 17 快捷补卡（2026-10-09）=====
            补卡逻辑复用已有 habitConfirmMakeUp()（走同一写入 + 奖励入账 + 联动路径）。
            这里只做两件事：① 算出「该补哪些日期」；② 在卡片底部渲染一个轻量入口。
@@ -19108,6 +19377,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     try { window.gameTimeRefund(id, today); } catch (e) {}
                 }
                 if (id === HABIT_BOOK_ID) bookHabitLinkRollback(today);
+                // 03：取消打卡 → 同步清掉这个习惯正在跑的计时（时长必须挂在打卡记录上，否则写不进去）
+                try { const _t = habitTimerGet(); if (_t && _t.habitId === id) habitTimerSave(null); } catch (e) {}
                 if (typeof showToast === 'function') showToast('已取消今日打卡');
             } else {
                 // 新增打卡前检查频率（2026-09-02 智能打卡）
@@ -19334,8 +19605,19 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 const chargeCls = (isActive && chargeTier) ? ` charge-${chargeTier}` : '';
                 // 01 时长徽章：只在「今天已打卡」时出现；已记时长显示实心绿胶囊
                 const durMin = d ? habitDurOf(h.id, today) : 0;
-                const durChip = d
+                // 03 自动计时：计时中就用计时条顶掉时长徽章（同一张卡不给两个时长入口）
+                const _tm = habitTimerGet();
+                const _timing = !!(_tm && _tm.habitId === h.id);
+                const durChip = (d && !_timing)
                     ? `<span class="habit-dur-chip${durMin > 0 ? ' has-dur' : ''}" onclick="habitDurOpen(event,'${h.id}')" title="记录这次花了多久（只做记录，不换算游戏分钟）">${durMin > 0 ? '⏱ ' + habitFmtDur(durMin) : '⏱ 记时长'}</span>`
+                    : '';
+                // 03：打卡后给「▶ 计时」入口（timed 习惯专属）
+                const timerChip = (d && isActive && h.timed && !_timing)
+                    ? `<span class="habit-timed-chip" onclick="event.stopPropagation();habitTimerStart('${h.id}')" title="开始计时：干完点「结束」，时长自动记进这个习惯">▶ 计时</span>`
+                    : '';
+                // 03：正在计时 → 计时条
+                const timerBar = _timing
+                    ? `<span class="habit-timer-bar" onclick="event.stopPropagation()"><span class="ht-dot"></span><span class="ht-txt" id="habitTimerTxt">${habitTimerFmt(habitTimerElapsedSec(_tm))}</span><button class="ht-stop" onclick="habitTimerStop(true)">■ 结束</button><button class="ht-cancel" onclick="habitTimerCancel()">✕</button></span>`
                     : '';
                 // 17 快捷补卡：只在「本周还差次数」或「昨天断签」时出现（未打卡 + 有漏打日期）
                 // 今天已打的不显示（今天不叫补卡）；文案中性，不带「你漏了」字样
@@ -19355,7 +19637,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     </div>
                     <div class="habit-card-foot">
                         ${(d && isActive && typeof workToWorkEnabled === 'function' && workToWorkEnabled(h)) ? `<span class="habit-work-link" onclick="event.stopPropagation();workFromHabit('${h.id}')" title="复用你已经能坚持的那件事：做完之后的 30 分钟就是开发时间块">→ 推一格</span>` : ''}
-                        ${durChip}
+                        ${timerBar}${timerChip}${durChip}
                         ${mkChip}
                         <span class="habit-reward">${(Number(h.rewardMin) || 0) > 0 ? `✦ +${Number(h.rewardMin)}分` : ''}</span>
                         ${streak >= 2 ? `<span class="habit-streak-chip" title="连续打卡 ${streak} 天">🔥${streak}</span>` : ''}
@@ -19471,6 +19753,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (goalInput) goalInput.value = '7';
             const rewardInput = document.getElementById('habitRewardInput');
             if (rewardInput) rewardInput.value = '0';
+            const timedInputR = document.getElementById('habitTimedInput');
+            if (timedInputR) timedInputR.checked = false;
             const btn = document.getElementById('habitAddBtn');
             if (btn) { btn.textContent = '＋ 添加'; btn.classList.add('primary'); }
             const cancel = document.getElementById('habitEditCancel');
@@ -19500,6 +19784,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (goalInput) goalInput.value = String(h.goal || 7);
             const rewardInput = document.getElementById('habitRewardInput');
             if (rewardInput) rewardInput.value = String(Number(h.rewardMin) || 0);
+            const timedInputE = document.getElementById('habitTimedInput');
+            if (timedInputE) timedInputE.checked = !!h.timed;
             // 加载频率（向后兼容：缺省视为 daily）
             const freq = h.frequency || 'daily';
             habitWeekdays = Array.isArray(h.weekDays) ? h.weekDays.slice() : [];
@@ -19535,6 +19821,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (rewardMin < 0) rewardMin = 0;
             if (rewardMin > 480) rewardMin = 480;
 
+            // 03：是否计时类
+            const timedInput = document.getElementById('habitTimedInput');
+            const isTimed = !!(timedInput && timedInput.checked);
             // 频率处理
             const freq = habitFrequency || 'daily';
             let weekDays = [];
@@ -19554,14 +19843,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (idx < 0) { if (typeof showToast === 'function') showToast('未找到要编辑的习惯'); return; }
                 const dup = habits.find(h => h.name === name && h.id !== habitEditId);
                 if (dup) { if (typeof showToast === 'function') showToast('这个习惯已经存在'); return; }
-                habits[idx] = { ...habits[idx], name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined };
+                habits[idx] = { ...habits[idx], name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined, timed: isTimed };
                 habitSaveList(habits);
                 if (typeof showToast === 'function') showToast('✏️ 习惯已更新');
                 resetHabitForm();
             } else {
                 // 新增模式
                 if (habits.some(h => h.name === name)) { if (typeof showToast === 'function') showToast('这个习惯已经存在'); return; }
-                habits.push({ id: 'hb_' + Date.now(), name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined, createdAt: new Date().toISOString() });
+                habits.push({ id: 'hb_' + Date.now(), name, icon: habitIconPick, goal, rewardMin, frequency: freq, weekDays: freq === 'weekdays' ? weekDays : undefined, timed: isTimed, createdAt: new Date().toISOString() });
                 habitSaveList(habits);
                 if (typeof showToast === 'function') showToast(rewardMin > 0 ? `🎯 习惯已添加，打卡奖励 ${rewardMin} 分钟游戏时间` : '🎯 习惯已添加');
                 if (nameInput) nameInput.value = '';
@@ -23101,7 +23390,47 @@ if (document.readyState === 'loading') {
             render();
         }
 
-        function renderDayDetail() {
+                /* ===== 20 一键回看 · 习惯 × 任务 × 日记 全联动（2026-10-09）=====
+           点日历任意一天 → 右栏顶部一行看完：任务 N/M · 习惯 K/L · ⏱ 时长 · 📖 日记。
+           纯读现有 localStorage（work_calendar_events / niko_habit_logs / niko_diary_entries），零新数据。 */
+        function renderPdRecap(dayEvents, doneCount) {
+            const box = document.getElementById('pdRecap');
+            if (!box) return;
+            const dateStr = formatDate(selectedDate);
+            // 习惯 + 当天累计时长
+            let habitDone = 0, habitTotal = 0, durSum = 0;
+            try {
+                const d = pdHabitTodayData(dateStr);
+                habitTotal = d.actives.length;
+                habitDone = d.actives.filter(function (h) { return d.doneSet[h.id]; }).length;
+                Object.keys(d.doneSet).forEach(function (k) { durSum += Number(d.doneSet[k].duration) || 0; });
+            } catch (e) {}
+            // 日记
+            let hasDiary = false, diaryFirst = '';
+            try {
+                const de = (safeStorage.get('niko_diary_entries', []) || []).find(function (x) { return x && x.date === dateStr; });
+                if (de) {
+                    hasDiary = true;
+                    diaryFirst = String(de.firstLine || de.content || '').split('\n')[0].slice(0, 22);
+                }
+            } catch (e) {}
+            const fmtDur = function (m) {
+                if (!m) return '';
+                if (typeof habitFmtDur === 'function') return habitFmtDur(m);
+                return m >= 60 ? Math.floor(m / 60) + 'h' + (m % 60 ? (m % 60) + '′' : '') : m + '′';
+            };
+            const tCls = (dayEvents.length > 0 && doneCount === dayEvents.length) ? ' ok' : '';
+            const hCls = (habitTotal > 0 && habitDone === habitTotal) ? ' ok' : '';
+            box.innerHTML =
+                '<span class="pd-rc-pill' + tCls + '" title="当天任务完成情况">⚔️ ' + doneCount + '/' + dayEvents.length + '</span>' +
+                '<span class="pd-rc-pill' + hCls + '" title="当天习惯打卡">🎯 ' + habitDone + '/' + habitTotal + '</span>' +
+                (durSum > 0 ? '<span class="pd-rc-pill dur" title="当天习惯记录的时长（只记录，不换算游戏分钟）">⏱ ' + fmtDur(durSum) + '</span>' : '') +
+                (hasDiary
+                    ? '<span class="pd-rc-pill diary ok" title="当天日记：' + escapeHtml(diaryFirst) + '">📖 日记 ✓</span>'
+                    : '<span class="pd-rc-pill diary" style="cursor:pointer" onclick="switchPage(&quot;diary&quot;)" title="这天还没写日记，点去写">📖 未写</span>');
+            box.style.display = '';
+        }
+function renderDayDetail() {
             const weekdays = ['周日','周一','周二','周三','周四','周五','周六'];
             const dateStr = formatDate(selectedDate);
             document.getElementById('detailDateTitle').textContent = `${selectedDate.getFullYear()}年${selectedDate.getMonth()+1}月${selectedDate.getDate()}日 ${weekdays[selectedDate.getDay()]}${isSameDay(selectedDate, new Date()) ? ' · 今天' : ''}`;
@@ -23112,6 +23441,8 @@ if (document.readyState === 'loading') {
             const list = document.getElementById('dayTaskList');
             // 18 今日习惯折叠区块：独立于任务列表渲染（没有任务时也要显示习惯）
             try { renderPdHabitBlock(); } catch (e) { console.warn('[18] 计划页习惯区块渲染失败', e); }
+            // 20 一键回看摘要条：任务 / 习惯 / 时长 / 日记
+            try { renderPdRecap(dayEvents, doneCount); } catch (e) { console.warn('[20] 回看摘要渲染失败', e); }
             if (dayEvents.length === 0) {
                 list.innerHTML = '<div class="empty-state"><div>📭</div><p>这一天没有活跃任务</p><p style="font-size:11px;">双击日历格子或点击上方按钮新建</p></div>';
                 return;
@@ -43912,7 +44243,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610091114";
+        window.NIKO_VERSION = "202610091559";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
