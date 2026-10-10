@@ -9684,6 +9684,69 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-tbl { border-collapse: collapse; width: 100%; font-size: 13px; }
         .nb-tbl th, .nb-tbl td { border: 1px solid rgba(127,127,127,.28); padding: 5px 9px; text-align: left; }
         .nb-tbl th { background: rgba(127,127,127,.10); font-weight: 600; }
+        /* ===== 2026-10-10 UE 蓝图笔记台账 · 43 索引表 / 90 命名自查：表格单元格语义着色（全表格通用）===== */
+        .nb-sem { display: inline-block; padding: 1px 7px; border-radius: 9px; font-size: 11.5px; line-height: 1.6; white-space: nowrap; }
+        .nb-sem.ok { background: rgba(46,158,91,.13); color: #2e9e5b; }
+        .nb-sem.wip { background: rgba(199,125,42,.16); color: #c77d2a; }
+        .nb-sem.todo { background: rgba(37,99,235,.12); color: #2563eb; }
+        .nb-sem.warn { background: rgba(220,38,38,.12); color: #dc2626; }
+        .nb-sem.hi { background: rgba(220,38,38,.13); color: #dc2626; font-weight: 600; }
+        .nb-sem.mid { background: rgba(199,125,42,.16); color: #c77d2a; font-weight: 600; }
+        .nb-sem.lo { background: rgba(46,158,91,.13); color: #2e9e5b; font-weight: 600; }
+        body.dark-mode .nb-sem.ok, body.dark-mode .nb-sem.lo { background: rgba(46,158,91,.20); color: #7ddc9a; }
+        body.dark-mode .nb-sem.wip, body.dark-mode .nb-sem.mid { background: rgba(199,125,42,.22); color: #e0c48a; }
+        body.dark-mode .nb-sem.todo { background: rgba(37,99,235,.22); color: #9db8f5; }
+        body.dark-mode .nb-sem.warn, body.dark-mode .nb-sem.hi { background: rgba(220,38,38,.22); color: #f09a9a; }
+        .nb-sem.mark { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-weight: 700; }
+        .nb-sem.mark.w { color: #dc2626; }
+        .nb-sem.mark.r { color: #2563eb; }
+        body.dark-mode .nb-sem.mark.w { color: #f09a9a; }
+        body.dark-mode .nb-sem.mark.r { color: #9db8f5; }
+        .nb-sem.dot { color: #2e9e5b; font-weight: 700; }
+        .nb-sem.none { color: #c2bcb2; }
+        body.dark-mode .nb-sem.dot { color: #7ddc9a; }
+        body.dark-mode .nb-sem.none { color: #5a5868; }
+        .nb-sem-bar { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .nb-sem-bar .bw { width: 52px; height: 7px; border-radius: 4px; background: rgba(127,127,127,.22); overflow: hidden; }
+        .nb-sem-bar .bw i { display: block; height: 100%; border-radius: 4px; }
+        .nb-sem-bar em { font-style: normal; font-size: 11.5px; color: #6b6878; font-variant-numeric: tabular-nums; }
+        body.dark-mode .nb-sem-bar em { color: #a8a5b8; }
+        /* ===== 2026-10-10 UE 蓝图笔记台账 · 50 按系统 / 80 按负责人：```group 分组卡 ===== */
+        .nb-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 9px; margin: 0 0 11px; }
+        .nb-group-g { border: 1px solid rgba(127,127,127,.28); border-radius: 8px; overflow: hidden; }
+        .nb-group-hd { display: flex; align-items: center; gap: 6px; padding: 4px 9px; background: rgba(127,127,127,.10); border-bottom: 1px solid rgba(127,127,127,.15); font-size: 11.5px; }
+        .nb-group-hd b { font-weight: 600; }
+        .nb-group-hd .sub { font-size: 10.5px; color: #9a96a8; }
+        .nb-group-hd .n { margin-left: auto; font-size: 10.5px; color: #667eea; font-weight: 600; font-variant-numeric: tabular-nums; }
+        body.dark-mode .nb-group-hd .n { color: #8ab4ff; }
+        .nb-group-bd { padding: 5px 6px; display: flex; flex-direction: column; gap: 3px; }
+        .nb-group-i { display: flex; align-items: baseline; gap: 6px; font-size: 11.5px; padding: 2px 4px; border-radius: 5px; background: rgba(127,127,127,.07); }
+        .nb-group-i .nm { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        .nb-group-i .ds { font-size: 10.5px; color: #9a96a8; }
+        body.dark-mode .nb-group-i .ds { color: #8a8798; }
+        .nb-group-i.empty { color: #b9b3a9; justify-content: center; }
+        /* ===== 2026-10-10 UE 蓝图笔记台账 · 38 接口矩阵 / 61 分发器矩阵：```matrix 自动统计行列 ===== */
+        .nb-mx-sum { background: rgba(127,127,127,.06); color: #8a8798; text-align: center; font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .nb-mx-sum.big { color: #667eea; font-weight: 600; }
+        body.dark-mode .nb-mx-sum.big { color: #8ab4ff; }
+        .nb-mx-sum.zero { color: #dc2626; font-weight: 600; }
+        body.dark-mode .nb-mx-sum.zero { color: #f09a9a; }
+        .nb-mx-hd0 { background: rgba(102,126,234,.10); font-weight: 600; }
+        body.dark-mode .nb-mx-hd0 { background: rgba(102,126,234,.18); }
+        /* ===== 2026-10-10 UE 蓝图笔记台账 · 33 跨蓝图时序图：```seq 生命线 ===== */
+        .nb-seq { margin: 0 0 11px; border: 1px solid rgba(127,127,127,.28); border-radius: 8px; overflow: hidden; }
+        .nb-seq-hd { padding: 4px 10px; font-size: 11px; color: #667eea; background: rgba(127,127,127,.10); border-bottom: 1px solid rgba(127,127,127,.15); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        body.dark-mode .nb-seq-hd { color: #7fb0ff; }
+        .nb-seq svg { display: block; width: 100%; height: auto; }
+        .nb-seq-actor { fill: rgba(127,127,127,.12); stroke: rgba(127,127,127,.35); }
+        .nb-seq-life { stroke: rgba(127,127,127,.42); stroke-width: 1; stroke-dasharray: 4 3; }
+        .nb-seq-arr { stroke: #667eea; stroke-width: 1.4; fill: none; }
+        body.dark-mode .nb-seq-arr { stroke: #8ab4ff; }
+        .nb-seq-arrh { fill: #667eea; }
+        body.dark-mode .nb-seq-arrh { fill: #8ab4ff; }
+        .nb-seq-t { fill: #4a4a5c; font-size: 10.5px; text-anchor: middle; }
+        .nb-seq-lb { fill: #8a8798; font-size: 9.5px; text-anchor: middle; }
+        body.dark-mode .nb-seq-t { fill: #c9c6d8; }
         .be-pvfoot { flex: 0 0 auto; font-size: 10.5px; color: #9a96a8; padding: 0 16px 12px; line-height: 1.6; }
         /* 2026-10-10：编辑副本浮层（🕘 历史）。挂在 #noteModal 内部，不牵扯框架 modal 体系。 */
         .nb-hist-mask { position: absolute; inset: 0; z-index: 12; display: none; align-items: center; justify-content: center; background: rgba(20,20,28,.44); padding: 40px 16px; }
@@ -30287,6 +30350,10 @@ function renderDayDetail() {
             const langRaw = parts[0] || '';
             const lang = langRaw.toLowerCase();
             const rest = f.slice(langRaw.length).trim();
+            // 2026-10-10 台账类围栏优先路由（避免围栏参数里的点号被误判成文件路径）
+            if (lang === 'seq' || lang === 'sequence' || lang === '时序') return nbSeqHtml(code, rest);
+            if (lang === 'matrix' || lang === 'mx' || lang === '矩阵') return nbMatrixHtml(code);
+            if (lang === 'group' || lang === 'groups' || lang === '分组') return nbGroupHtml(code);
             // 21 代码引用：语言后面带「路径 / 路径#L行号」（含路径特征即可）
             if (rest && /[#/\\]|\.\w+|^[A-Za-z]:/.test(rest)) {
                 return nbCodeRefBlock(lang, rest, code, ci);
@@ -30890,6 +30957,9 @@ function renderDayDetail() {
             { k: 'cfg', ic: '⚙️', nm: '配置项对照表', sb: '```cfg', tpl: '```cfg\norder.timeout = 1000 -> 3000\npool.maxSize = 20 -> 50\n```', caret: 'inside' },
             { k: 'cmd', ic: '🖥', nm: '命令清单', sb: '```cmd 危险分级', tpl: '```cmd\nkubectl get pods -n prod\nflushdb\n```', caret: 'inside' },
             { k: 'bp', ic: '🎮', nm: 'UE 节点卡', sb: '```bp 蓝图节点', tpl: '```bp\n节点名 | 分类\nIN: 执行, 参数(类型)\nOUT: 执行, 返回值(类型)\n一句话说明\n```', caret: 'inside' },
+            { k: 'group', ic: '🧩', nm: '分组总览', sb: '```group 按系统分组', tpl: '```group\n## 玩家系统\nBP_Player\nBP_Weapon\n## 敌人系统\nBP_Enemy\n```', caret: 'inside' },
+            { k: 'matrix', ic: '▦', nm: '矩阵（自动统计）', sb: '```matrix 接口实现', tpl: '```matrix 接口实现\n| 接口 \\ 蓝图 | BP_Player | BP_Enemy | BP_Box |\n| TakeDamage(量) | ● | ● | ● |\n| IsDead() | ● | ● | — |\n```', caret: 'inside' },
+            { k: 'seq', ic: '⏱', nm: '时序图（跨蓝图）', sb: '```seq 开火流程', tpl: '```seq 开火流程\n玩家 → 武器 : 开火\n武器 → 敌人 : 结算伤害\n敌人 → HUD : 血量变化\n```', caret: 'inside' },
             { k: 'term', ic: '📖', nm: '术语卡', sb: '```term 中英对照', tpl: '```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\n```', caret: 'inside' },
             { k: 'table', ic: '▦', nm: '参数表 / 对比表', sb: '| 参数 | 类型 | 说明 |', tpl: '| 参数 | 类型 | 说明 |\n| --- | --- | --- |\n|  |  |  |' },
             { k: 'todo', ic: '☑', nm: '待办清单', sb: '- [ ] 条目', tpl: '- [ ] ' },
@@ -31015,6 +31085,154 @@ function renderDayDetail() {
         function nbMdTableSplit(ln) {
             return String(ln).replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (x) { return x.trim(); });
         }
+        // ===== 2026-10-10 UE 蓝图笔记台账：单元格语义着色（43 索引表 / 90 命名自查；全表格通用）=====
+        // 识别：✅/🟡/🔵/⚠️ 状态 · ● / — 勾选 · W/R 读写 · 高/中/低 风险 · 80% 进度条
+        const NB_SEM_RISK_H = /风险|优先|严重|等级|重要|程度|级别/;
+        function nbSemBar(pct) {
+            const p = Math.max(0, Math.min(100, parseInt(pct, 10) || 0));
+            const col = p >= 80 ? '#2e9e5b' : (p >= 40 ? '#c77d2a' : '#dc2626');
+            return '<span class="nb-sem-bar"><span class="bw"><i style="width:' + p + '%;background:' + col + '"></i></span><em>' + p + '%</em></span>';
+        }
+        function nbTdCell(txt, head) {
+            const raw = String(txt == null ? '' : txt).trim();
+            if (!raw) return '';
+            const pm = raw.match(/^(\d{1,3})\s*%$/);
+            if (pm) return nbSemBar(pm[1]);
+            if (raw.length <= 14 && raw.indexOf('✅') >= 0) return '<span class="nb-sem ok">' + nbEdEsc(raw) + '</span>';
+            if (raw.length <= 14 && raw.indexOf('🟡') >= 0) return '<span class="nb-sem wip">' + nbEdEsc(raw) + '</span>';
+            if (raw.length <= 14 && raw.indexOf('🔵') >= 0) return '<span class="nb-sem todo">' + nbEdEsc(raw) + '</span>';
+            if (raw.length <= 16 && (raw.indexOf('⚠') >= 0 || raw.indexOf('❌') >= 0)) return '<span class="nb-sem warn">' + nbEdEsc(raw) + '</span>';
+            if (raw === '●' || raw === '✔' || raw === '✓') return '<span class="nb-sem dot">' + nbEdEsc(raw) + '</span>';
+            if (raw === '—' || raw === '–' || raw === '-' || raw === '✗' || raw === '×') return '<span class="nb-sem none">' + nbEdEsc(raw) + '</span>';
+            if (/^(W|R|RW|WR)$/.test(raw)) return '<span class="nb-sem mark ' + (raw.indexOf('W') >= 0 ? 'w' : 'r') + '">' + raw + '</span>';
+            if (raw === '写') return '<span class="nb-sem mark w">写</span>';
+            if (raw === '读') return '<span class="nb-sem mark r">读</span>';
+            const hm = raw.match(/^(高|中|低)(风险|优先|严重|级)?$/);
+            if (hm && (hm[2] || NB_SEM_RISK_H.test(String(head || '')))) {
+                return '<span class="nb-sem ' + (hm[1] === '高' ? 'hi' : (hm[1] === '中' ? 'mid' : 'lo')) + '">' + nbEdEsc(raw) + '</span>';
+            }
+            return nbEdInline(txt);
+        }
+        // ===== 2026-10-10 UE 蓝图笔记台账：```group 分组卡（50 按系统分组 / 80 按负责人分组）=====
+        // 格式：`## 组名 | 备注` 起一组；成员行「名称 | 备注」；组计数自动算
+        function nbGroupHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            const groups = [];
+            let cur = null;
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln) return;
+                const gm = ln.match(/^#{1,3}\s*(.+)$/);
+                if (gm) {
+                    const p = gm[1].split('|');
+                    cur = { name: p[0].trim(), sub: (p[1] || '').trim(), items: [] };
+                    groups.push(cur);
+                    return;
+                }
+                if (!cur) { cur = { name: '未分组', sub: '', items: [] }; groups.push(cur); }
+                const p = ln.split('|');
+                cur.items.push({ nm: p[0].trim(), ds: (p[1] || '').trim() });
+            });
+            if (!groups.length) return '<div class="nb-group"><div class="nb-group-g"><div class="nb-group-hd"><b>（空）</b><span class="n">0</span></div></div></div>';
+            let h = '<div class="nb-group">';
+            groups.forEach(function (g) {
+                h += '<div class="nb-group-g"><div class="nb-group-hd"><b>' + nbEdEsc(g.name) + '</b>'
+                    + (g.sub ? '<span class="sub">' + nbEdInline(g.sub) + '</span>' : '')
+                    + '<span class="n">' + g.items.length + '</span></div><div class="nb-group-bd">';
+                if (g.items.length) {
+                    g.items.forEach(function (it) {
+                        h += '<div class="nb-group-i"><span class="nm">' + nbEdEsc(it.nm) + '</span>'
+                            + (it.ds ? '<span class="ds">' + nbEdInline(it.ds) + '</span>' : '') + '</div>';
+                    });
+                } else {
+                    h += '<div class="nb-group-i empty">（空）</div>';
+                }
+                h += '</div></div>';
+            });
+            return h + '</div>';
+        }
+        // ===== 2026-10-10 UE 蓝图笔记台账：```matrix 矩阵（38 接口实现 / 61 分发器监听）=====
+        // 首行 = 表头（第一格是「行标题 \ 列标题」）；数据格 ● / ✔ / ✓ 表示有，— / - 表示无
+        // 自动在末列加「Σ」行合计、在末行加「Σ 合计」列合计；0 标红
+        function nbMxIsOn(s) { return /^(●|✔|✓|√|是|有|YES|Y|ON)$/i.test(String(s == null ? '' : s).trim()); }
+        function nbMatrixHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n')
+                .map(function (x) { return x.trim(); })
+                .filter(function (x) { return x && x.charAt(0) === '|'; });
+            if (lines.length < 2) return nbMdTableHtml('| （空） |', '| --- |', []);
+            const hs = nbMdTableSplit(lines[0]);
+            const rows = lines.slice(1).map(nbMdTableSplit);
+            const nCol = hs.length - 1;
+            let h = '<div class="nb-tblwrap"><table class="nb-tbl"><thead><tr>';
+            hs.forEach(function (c, i) { h += '<th' + (i === 0 ? ' class="nb-mx-hd0"' : '') + '>' + nbEdInline(c) + '</th>'; });
+            h += '<th class="nb-mx-sum">Σ</th></tr></thead><tbody>';
+            const colSum = [];
+            for (let k = 0; k < nCol; k++) colSum.push(0);
+            rows.forEach(function (cs2) {
+                let rowSum = 0;
+                h += '<tr><td>' + nbEdInline(cs2[0] || '') + '</td>';
+                for (let i = 1; i <= nCol; i++) {
+                    const v = cs2[i] || '';
+                    if (nbMxIsOn(v)) { rowSum++; colSum[i - 1]++; }
+                    h += '<td style="text-align:center">' + nbTdCell(v, hs[i]) + '</td>';
+                }
+                h += '<td class="nb-mx-sum' + (rowSum ? ' big' : ' zero') + '">' + rowSum + '</td></tr>';
+            });
+            h += '<tr><td class="nb-mx-sum">Σ 合计</td>';
+            colSum.forEach(function (n) { h += '<td class="nb-mx-sum' + (n ? ' big' : ' zero') + '">' + n + '</td>'; });
+            const total = colSum.reduce(function (a, b) { return a + b; }, 0);
+            h += '<td class="nb-mx-sum big">' + total + '</td></tr>';
+            return h + '</tbody></table></div>';
+        }
+        // ===== 2026-10-10 UE 蓝图笔记台账：```seq 跨蓝图时序图（33）=====
+        // 格式：`A → B : 说明`（支持 -> / --> / =>）；围栏参数作标题；角色按首次出现排序
+        let NB_SEQ_ID = 0;
+        function nbSeqHtml(code, title) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            const msgs = [], acts = [];
+            let sub = '';
+            function ai(nm) { const i = acts.indexOf(nm); if (i >= 0) return i; acts.push(nm); return acts.length - 1; }
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln || /^#/.test(ln)) return;
+                const m = ln.match(/^(.+?)\s*(?:→|->|-->|=>)\s*(.+?)\s*[:：]\s*(.*)$/);
+                if (m) { ai(m[1].trim()); ai(m[2].trim()); msgs.push({ f: m[1].trim(), t: m[2].trim(), x: m[3].trim() }); return; }
+                const m2 = ln.match(/^(.+?)\s*(?:→|->|-->|=>)\s*(.+)$/);
+                if (m2) { ai(m2[1].trim()); ai(m2[2].trim()); msgs.push({ f: m2[1].trim(), t: m2[2].trim(), x: '' }); return; }
+                if (!sub) { sub = ln; return; }
+                if (msgs.length) msgs[msgs.length - 1].x += (' ' + ln);
+            });
+            const ttl = String(title || sub || '跨蓝图时序');
+            if (!acts.length) return '<div class="nb-seq"><div class="nb-seq-hd">⏱ ' + nbEdEsc(ttl) + '</div><div style="padding:10px;font-size:12px;color:#8a8798">（空）</div></div>';
+            const n = acts.length;
+            const W = Math.max(360, 110 + (n - 1) * 98);
+            const rowH = 34, headY = 8, lifeTop = headY + 34;
+            const H = lifeTop + (msgs.length + 1) * rowH + 8;
+            const xOf = function (i) { return n === 1 ? W / 2 : 58 + i * ((W - 116) / (n - 1)); };
+            NB_SEQ_ID++;
+            const mid = 'nbSeqArr' + NB_SEQ_ID;
+            let s = '<div class="nb-seq"><div class="nb-seq-hd">⏱ ' + nbEdEsc(ttl) + '</div>';
+            s += '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img">';
+            s += '<defs><marker id="' + mid + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path class="nb-seq-arrh" d="M0,0 L10,5 L0,10 z"/></marker></defs>';
+            acts.forEach(function (a, i) {
+                const x = xOf(i);
+                const disp = a.length > 10 ? a.slice(0, 9) + '…' : a;
+                const w = Math.min(100, Math.max(48, disp.length * 7.4 + 18));
+                s += '<rect class="nb-seq-actor" x="' + (x - w / 2).toFixed(1) + '" y="' + headY + '" width="' + w.toFixed(1) + '" height="24" rx="6"/>';
+                s += '<text class="nb-seq-t" x="' + x.toFixed(1) + '" y="' + (headY + 16) + '">' + nbEdEsc(disp) + '</text>';
+                s += '<line class="nb-seq-life" x1="' + x.toFixed(1) + '" y1="' + (headY + 26) + '" x2="' + x.toFixed(1) + '" y2="' + (H - 10) + '"/>';
+            });
+            msgs.forEach(function (m, i) {
+                const y = lifeTop + 22 + i * rowH;
+                const i1 = acts.indexOf(m.f), i2 = acts.indexOf(m.t);
+                const x1 = xOf(i1), x2 = xOf(i2);
+                const dir = x2 >= x1 ? 1 : -1;
+                s += '<line class="nb-seq-arr" x1="' + (x1 + dir * 3).toFixed(1) + '" y1="' + y + '" x2="' + (x2 - dir * 7).toFixed(1) + '" y2="' + y + '" marker-end="url(#' + mid + ')"/>';
+                const lb = (i + 1) + (m.x ? ' ' + m.x : '');
+                s += '<text class="nb-seq-lb" x="' + ((x1 + x2) / 2).toFixed(1) + '" y="' + (y - 6) + '">' + nbEdEsc(lb) + '</text>';
+            });
+            return s + '</svg></div>';
+        }
         function nbMdTableHtml(head, sep, rows) {
             const hs = nbMdTableSplit(head);
             const al = nbMdTableSplit(sep).map(function (s) {
@@ -31027,7 +31245,7 @@ function renderDayDetail() {
             rows.forEach(function (r) {
                 const cs2 = nbMdTableSplit(r);
                 h += '<tr>';
-                hs.forEach(function (_, i) { h += '<td' + (al[i] ? ' style="text-align:' + al[i] + '"' : '') + '>' + nbEdInline(cs2[i] || '') + '</td>'; });
+                hs.forEach(function (_, i) { h += '<td' + (al[i] ? ' style="text-align:' + al[i] + '"' : '') + '>' + nbTdCell(cs2[i] || '', hs[i]) + '</td>'; });
                 h += '</tr>';
             });
             return h + '</tbody></table></div>';
@@ -31181,7 +31399,11 @@ function renderDayDetail() {
         const NB_TUT_ITEMS = [
             { g: '🎮 UE 蓝图', items: [
                 { k: 'bp', ic: '🎮', nm: 'UE 节点卡', ds: '节点名 + 分类 + 输入/输出引脚（类型配色）+ 说明', fn: '```bp', demo: "```bp\nSpawn Actor from Class | 生成\nIN: 执行, Class(类), Spawn Transform(位置)\nOUT: 执行, Return Value(对象)\n给定类+位置在关卡里实例化，返回引用\n```" },
-                { k: 'term', ic: '📖', nm: '术语卡', ds: 'UE 术语中英对照，一行一条', fn: '```term', demo: "```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\nEvent Dispatcher | 事件分发器（一对多广播）\n```" }
+                { k: 'term', ic: '📖', nm: '术语卡', ds: 'UE 术语中英对照，一行一条', fn: '```term', demo: "```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\nEvent Dispatcher | 事件分发器（一对多广播）\n```" },
+                { k: 'group', ic: '🧩', nm: '分组总览', ds: '按系统 / 负责人分组列蓝图，组计数自动算', fn: '```group', demo: "```group\n## 玩家系统\nBP_Player\nBP_Weapon\n## 敌人系统\nBP_Enemy\nBT_Enemy\n```" },
+                { k: 'ledger', ic: '📋', nm: '台账表（自动上色）', ds: '普通表格自动上色：✅ 状态徽章 · 80% 进度条 · 高/中/低 风险 · W/R 读写', fn: '| 蓝图 | 职责 | 完成度 | 状态 |', demo: "| 蓝图 | 职责 | 完成度 | 状态 |\n| --- | --- | --- | --- |\n| BP_Player | 玩家输入 | 100% | ✅ 完成 |\n| BP_Enemy | 敌人 AI | 45% | 🟡 进行中 |\n| BP_Save | 存档序列化 | 10% | 🔵 待做 |" },
+                { k: 'matrix', ic: '▦', nm: '矩阵表（自动统计）', ds: '行×列打勾，自动算每行「Σ」每列合计，0 标红', fn: '```matrix', demo: "```matrix 接口实现\n| 接口 \\ 蓝图 | BP_Player | BP_Enemy | BP_Box |\n| TakeDamage(量) | ● | ● | ● |\n| IsDead() | ● | ● | — |\n```" },
+                { k: 'seq', ic: '⏱', nm: '跨蓝图时序图', ds: 'A → B : 说明，画成生命线图，跨蓝图调用顺序一眼看清', fn: '```seq', demo: "```seq 开火流程\n玩家 → 武器 : 开火\n武器 → 敌人 : 结算伤害\n敌人 → HUD : 血量变化\n```" }
             ] },
             { g: 'B 组 · 代码与逻辑', items: [
                 { k: 'ref', ic: '📄', nm: '代码引用块', ds: '代码块带「文件路径 + 行号」，路径可复制', fn: '```java OrderService.java#L42-L58', demo: "```java src/main/java/com/order/OrderService.java#L42-L58\npublic BigDecimal calc(Order o) {\n    if (o == null) throw new BizException(\"order.null\");\n    return o.amount.multiply(rate);\n}\n```" },
@@ -46011,7 +46233,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101709";
+        window.NIKO_VERSION = "202610101805";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
