@@ -2603,83 +2603,44 @@
         body.dark-mode .habit-dur-pop button.clear { color: #ff8a8a; border-color: #5c3a3a; background: #33262a; }
         .habit-dur-pop .dp-lbl { font-size: 10.5px; color: #9a96ad; padding: 0 3px 0 1px; }
         body.dark-mode .habit-dur-pop .dp-lbl { color: #8f8fa3; }
-
         /* ===== 03 自动计时习惯（2026-10-09）=====
-
            口径：给习惯标 timed → 打卡后出现「▶ 计时」；点「结束」把时长累加进 duration。
-
            只记录、不换算游戏分钟（与 01 同一落点：niko_habit_logs[i].duration）。
-
            忘了结束不脏数据：跨天自动封顶到「开始那天 24:00」。 */
-
         .habit-timed-chip {
-
             font-size: 10px; flex-shrink: 0; white-space: nowrap;
-
             border: 1px solid rgba(139,92,246,.45); background: #f5f3ff; color: #7c3aed;
-
             border-radius: 6px; padding: 0 6px; line-height: 16px;
-
             cursor: pointer; font-family: inherit; transition: .15s;
-
         }
-
         .habit-timed-chip:hover { background: #ede9fe; border-color: #8b5cf6; }
-
         body.dark-mode .habit-timed-chip { background: #2a2545; border-color: #4c4470; color: #c4b5fd; }
-
         body.dark-mode .habit-timed-chip:hover { background: #332b52; border-color: #8b5cf6; }
-
         .habit-timer-bar {
-
             display: inline-flex; align-items: center; gap: 5px;
-
             border: 1px solid rgba(16,185,129,.45); background: rgba(16,185,129,.10);
-
             border-radius: 7px; padding: 0 5px; font-size: 10.5px; line-height: 18px;
-
             flex-shrink: 0;
-
         }
-
         body.dark-mode .habit-timer-bar { background: rgba(16,185,129,.16); border-color: rgba(16,185,129,.42); }
-
         .habit-timer-bar .ht-dot {
-
             width: 6px; height: 6px; border-radius: 50%; background: #10b981; flex-shrink: 0;
-
             animation: htPulse 1.4s ease-in-out infinite;
-
         }
-
         @keyframes htPulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-
         .habit-timer-bar .ht-txt { color: #059669; font-weight: 700; font-variant-numeric: tabular-nums; }
-
         body.dark-mode .habit-timer-bar .ht-txt { color: #34d399; }
-
         .habit-timer-bar button {
-
             font-family: inherit; font-size: 10px; cursor: pointer; border-radius: 5px;
-
             padding: 0 6px; line-height: 15px; border: 1px solid transparent; transition: .15s;
-
         }
-
         .habit-timer-bar .ht-stop { background: #10b981; color: #fff; }
-
         .habit-timer-bar .ht-stop:hover { background: #059669; }
-
         .habit-timer-bar .ht-cancel { background: transparent; color: #9ca3af; border-color: rgba(127,127,127,.32); }
-
         .habit-timer-bar .ht-cancel:hover { color: #ef4444; border-color: rgba(239,68,68,.5); }
-
         .habit-timed-wrap { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: #555; cursor: pointer; white-space: nowrap; }
-
         body.dark-mode .habit-timed-wrap { color: #b9b9cc; }
-
         .habit-timed-wrap input { width: 15px; height: 15px; accent-color: #8b5cf6; cursor: pointer; }
-
         @media (max-width: 768px) { .habit-timer-bar { font-size: 10px; } }
         /* ===== 17 快捷补卡（2026-10-09）：习惯卡底部一键补卡入口 =====
            口径：只在「本周还差 N 次」或「昨天断签可补」时出现，纯提示不催命；
@@ -2715,6 +2676,20 @@
         .habit-mk-pop .mp-none { font-size: 10.5px; color: #9a96ad; padding: 3px 5px; }
         .habit-mk-pop .mp-more { font-size: 10.5px; color: #a06a1f; background: none; border: none; text-decoration: underline; padding: 4px 4px; }
         body.dark-mode .habit-mk-pop .mp-more { color: #d9b06a; }
+        /* ===== 21 补卡·两行式（2026-10-10 方案 03）=====
+           第一行只选日期、第二行只设时长，中间虚线分隔 —— 切分清楚，永远不会点错时长。
+           时长与「⏱ 记时长」浮层同一套档位口径（durPresets / habitFmtDur）。 */
+        .habit-mk-pop { flex-direction: column; align-items: stretch; gap: 0; }
+        .habit-mk-pop .mp-row { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+        .habit-mk-pop .mp-row + .mp-row { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #ece3d3; }
+        body.dark-mode .habit-mk-pop .mp-row + .mp-row { border-top-color: #574a2c; }
+        .habit-mk-pop button.on-dur {
+            border-color: #d9a94f; color: #a06a1f; background: #fff7ea; font-weight: 700;
+        }
+        body.dark-mode .habit-mk-pop button.on-dur { border-color: #d9a94f; color: #ecc582; background: #3a2f18; }
+        .habit-mk-pop button.mp-clr { color: #9a96ad; }
+        .habit-mk-pop .mp-durhint { font-size: 9.5px; color: #b6b0a4; margin-top: 6px; padding: 0 2px; }
+        body.dark-mode .habit-mk-pop .mp-durhint { color: #6f6f85; }
         /* 习惯卡片本身要能当浮层定位锚点 */
         .habit-card { position: relative; }
         /* ===== 05 习惯详情历史抽屉（2026-10-09） ===== */
@@ -2978,8 +2953,32 @@
         .habit-goal::-webkit-outer-spin-button, .habit-goal::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         body.dark-mode .habit-goal { background: #1f1f2e; border-color: #444; color: #eee; }
         .habit-stats { display: flex; flex-direction: column; gap: 10px; }
+        /* 21 统计表居中（2026-10-10）：习惯卡列表不再铺满 520px 左对齐，
+           收窄成居中的一栏（max 460px），进出对称、视线落在中间。 */
+        #habitStatsList { width: 100%; max-width: 460px; margin: 0 auto; }
         .habit-stats .habit-card { border: 1px solid #e8e6e1; border-radius: 10px; padding: 10px 12px; }
         body.dark-mode .habit-stats .habit-card { border-color: #333345; }
+        /* 时长分列：正常打卡时长 / 补卡时长 分开显示，一眼看出补了多少 */
+        .habit-dursplit {
+            margin-top: 5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+            font-size: 10.5px; color: #9a96ad;
+        }
+        body.dark-mode .habit-dursplit { color: #8f8fa3; }
+        .habit-dursplit .hds-item {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 1px 7px; border-radius: 999px;
+            background: #f4f6f9; border: 1px solid #e9ebf2;
+        }
+        body.dark-mode .habit-dursplit .hds-item { background: #232838; border-color: #313747; }
+        .habit-dursplit .hds-item b { font-variant-numeric: tabular-nums; font-weight: 700; color: #555; }
+        body.dark-mode .habit-dursplit .hds-item b { color: #c5c5d5; }
+        .habit-dursplit .hds-item.normal b { color: #059669; }
+        body.dark-mode .habit-dursplit .hds-item.normal b { color: #34d399; }
+        .habit-dursplit .hds-item.makeup { background: #fff7ea; border-color: #f0dfc0; }
+        body.dark-mode .habit-dursplit .hds-item.makeup { background: #2a2418; border-color: #574a2c; }
+        .habit-dursplit .hds-item.makeup b { color: #a06a1f; }
+        body.dark-mode .habit-dursplit .hds-item.makeup b { color: #d9b06a; }
+        .habit-dursplit .hds-none { color: #b6b0a4; font-size: 10.5px; }
         .habit-card-head { display: flex; align-items: center; gap: 8px; }
         .habit-card-head .habit-icon { font-size: 18px; }
         .habit-card-head .habit-name { font-size: 14px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -3008,11 +3007,26 @@
             border: 1px solid #bbf7d0;
             border-radius: 8px;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0;
         }
         body.dark-mode .habit-makeup-form { background: #064e3b33; border-color: #059669; }
+        /* 21 补卡·两行式（方案 03）：管理弹窗里的补卡表单同口径 */
+        .habit-mk-form-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .habit-mk-form-row + .habit-mk-form-row {
+            margin-top: 8px; padding-top: 8px; border-top: 1px dashed #bbf7d0;
+        }
+        body.dark-mode .habit-mk-form-row + .habit-mk-form-row { border-top-color: #059669; }
+        .habit-mk-dur-btn {
+            font-family: inherit; font-size: 11px; cursor: pointer;
+            border: 1px solid #bbf7d0; background: #fff; color: #3f6657;
+            border-radius: 6px; padding: 3px 9px; transition: .15s; font-variant-numeric: tabular-nums;
+        }
+        .habit-mk-dur-btn:hover { border-color: #10b981; color: #047857; }
+        .habit-mk-dur-btn.on-dur { border-color: #10b981; background: #d1fae5; color: #047857; font-weight: 700; }
+        body.dark-mode .habit-mk-dur-btn { background: #1f1f2e; border-color: #059669; color: #9fd8c0; }
+        body.dark-mode .habit-mk-dur-btn.on-dur { background: #064e3b; border-color: #10b981; color: #6ee7b7; }
         .habit-makeup-form label { font-size: 12px; color: #555; }
         body.dark-mode .habit-makeup-form label { color: #ccc; }
         .habit-makeup-form input[type="date"] {
@@ -3034,6 +3048,20 @@
             gap: 8px;
         }
         body.dark-mode .habit-stats .habit-card .habit-progress { color: #999; }
+        /* 21 统计表卡片布局修复（2026-10-10）：
+           习惯卡基础样式是给「今日看板 2 列网格」写的（grid-template-columns: 1fr auto +
+           .habit-card-foot{justify-content:flex-end}），搬到单列 460px 的管理弹窗里会整块右倾、
+           左边空一大片。这里把管理弹窗里的卡片改回单列流式、内容左对齐。 */
+        .habit-stats .habit-card {
+            display: flex; flex-direction: column; align-items: stretch; gap: 0;
+        }
+        .habit-stats .habit-card .habit-card-top { grid-column: auto; }
+        .habit-stats .habit-card .habit-progress { width: 100%; }
+        .habit-stats .habit-card .habit-progress-bar { flex: 1; }
+        .habit-stats .habit-card .habit-card-foot {
+            justify-content: flex-start; width: 100%; margin-top: 5px;
+        }
+        .habit-stats .habit-card .habit-card-foot .hcl { margin-left: auto; }
         .habit-bar { flex: 1; height: 6px; border-radius: 3px; background: #eee; overflow: hidden; }
         body.dark-mode .habit-bar { background: #333345; }
         .habit-bar i { display: block; height: 100%; border-radius: 3px; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.3s; }
@@ -13427,15 +13455,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <span class="habit-goal-unit">分钟/次</span>
                         </span>
                                                 <span class="habit-goal-wrap">
-
                             <label class="habit-timed-wrap" title="开启后：这张习惯卡打卡后会出现「▶ 计时」，干完点「结束」把时长自动记进这个习惯（只记录，不换算游戏分钟）">
-
                                 <input type="checkbox" id="habitTimedInput"> ⏱ 计时类
-
                             </label>
-
                         </span>
-
 <button class="btn primary" id="habitAddBtn" onclick="addHabit()">＋ 添加</button>
                         <button class="btn" id="habitEditCancel" onclick="cancelEditHabit()" style="display:none;">取消编辑</button>
                     </div>
@@ -18940,167 +18963,86 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         });
         window.addEventListener('resize', habitDurClose);
         /* ===== 01 END ===== */
-
         /* ===== 03 自动计时习惯（2026-10-09）=====
-
            timed 习惯打卡后出现「▶ 计时」；点开始 → 卡片底部转计时条；点「结束」→ 时长累加进 duration。
-
            只记录不换算游戏分钟（与 01 同一落点）。
-
            忘了结束不脏数据：跨天自动封顶到「开始那天 24:00」。
-
            状态落 niko_habit_timer = {habitId, startAt, date}，刷新 / 切页自动恢复。 */
-
         const HABIT_TIMER_KEY = 'niko_habit_timer';
-
         function habitTimerGet() {
-
             try {
-
                 const v = safeStorage.get(HABIT_TIMER_KEY, null);
-
                 return (v && v.habitId && v.startAt) ? v : null;
-
             } catch (e) { return null; }
-
         }
-
         function habitTimerSave(v) {
-
             try { safeStorage.set(HABIT_TIMER_KEY, v || null); } catch (e) {}
-
         }
-
         // 本次已计秒数（跨天时封顶到开始日的 24:00）
-
         function habitTimerElapsedSec(t) {
-
             const s = t || habitTimerGet();
-
             if (!s) return 0;
-
             const cap = new Date(s.startAt);
-
             cap.setHours(24, 0, 0, 0);
-
             const end = Math.min(Date.now(), cap.getTime());
-
             return Math.max(0, Math.floor((end - s.startAt) / 1000));
-
         }
-
         function habitTimerFmt(sec) {
-
             const n = Math.max(0, Math.floor(Number(sec) || 0));
-
             const h = Math.floor(n / 3600), m = Math.floor(n % 3600 / 60), s = n % 60;
-
             const p = function (x) { return String(x).padStart(2, '0'); };
-
             return (h > 0 ? h + ':' : '') + p(m) + ':' + p(s);
-
         }
-
         function habitTimerStart(id) {
-
             const h = habitList().find(function (x) { return x.id === id; });
-
             if (!h) return;
-
             if (!h.timed) { if (typeof showToast === 'function') showToast('这个习惯没开「计时类」'); return; }
-
             const today = formatDate(new Date());
-
             const logs = habitLogs();
-
             if (!logs.some(function (l) { return l.habitId === id && habitLogDate(l) === today; })) {
-
                 if (typeof showToast === 'function') showToast('先打卡，再计时');
-
                 return;
-
             }
-
             const cur = habitTimerGet();
-
             if (cur && cur.habitId !== id) habitTimerStop(true);   // 一次只计一个：先把上一个结算掉
-
             habitTimerSave({ habitId: id, startAt: Date.now(), date: today });
-
             renderTodayHabits();
-
             if (typeof showToast === 'function') showToast('⏱ 开始计时 · ' + (h.name || ''));
-
         }
-
         // save=true：结算并累加时长；false：直接丢弃
-
         function habitTimerStop(save) {
-
             const t = habitTimerGet();
-
             if (!t) return 0;
-
             const sec = habitTimerElapsedSec(t);
-
             const min = Math.floor(sec / 60);
-
             habitTimerSave(null);
-
             if (save && t.habitId) {
-
                 const date = t.date || formatDate(new Date());
-
                 const prev = habitDurOf(t.habitId, date);
-
                 if (min >= 1) {
-
                     habitSetDuration(t.habitId, date, prev + min);
-
                     if (typeof showToast === 'function') showToast('🕐 +' + habitFmtDur(min) + ' 已记入（当天共 ' + habitFmtDur(prev + min) + '）');
-
                 } else if (typeof showToast === 'function') {
-
                     showToast('不足 1 分钟，没记');
-
                 }
-
             }
-
             renderTodayHabits();
-
             return sec;
-
         }
-
         function habitTimerCancel() {
-
             if (!habitTimerGet()) return;
-
             habitTimerSave(null);
-
             renderTodayHabits();
-
             if (typeof showToast === 'function') showToast('已取消计时（未记录）');
-
         }
-
         // 每 10 秒只刷计时文本，不重渲染整卡（避免闪烁）
-
         function habitTimerTick() {
-
             const t = habitTimerGet();
-
             if (!t) return;
-
             const el = document.getElementById('habitTimerTxt');
-
             if (el) el.textContent = habitTimerFmt(habitTimerElapsedSec(t));
-
         }
-
         setInterval(function () { try { habitTimerTick(); } catch (e) {} }, 10000);
-
         /* ===== 03 END ===== */
 
         /* ===== 17 快捷补卡（2026-10-09）=====
@@ -19147,6 +19089,47 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             return { gap: gap, missed: habitMissedDates(habitId, 14, 4), brokeYesterday: brokeYesterday };
         }
         let habitMkTarget = null;
+        let habitMkDur = null;          // 本次补卡要记的时长（null = 上次用过的档位 / 默认 60）
+        // 补卡浮层可选的时长档位：优先用该习惯自己的 durPresets，否则给一套通用档
+        function habitMkDurOpts(habitId) {
+            const h = habitList().find(x => x.id === habitId);
+            return (h && Array.isArray(h.durPresets) && h.durPresets.length)
+                ? h.durPresets.slice(0, 5) : [15, 30, 60, 90];
+        }
+        // 该习惯「最近一次记录到时长」的那次用了多久 —— 作为补卡默认值（智能预填）
+        function habitMkLastDur(habitId) {
+            const logs = habitLogs().filter(l => l.habitId === habitId && Number(l.duration) > 0);
+            if (!logs.length) return 0;
+            logs.sort((a, b) => String(habitLogDate(b)).localeCompare(String(habitLogDate(a))));
+            return Number(logs[0].duration) || 0;
+        }
+        // 记忆用户上次为这个习惯选的时长（跨会话），保证第二次补卡零犹豫
+        const HABIT_MKDUR_KEY = 'niko_habit_mkdur';
+        function habitMkDurPref(habitId) {
+            const all = safeStorage.get(HABIT_MKDUR_KEY, {}) || {};
+            return Number(all[habitId]) || 0;
+        }
+        function habitMkDurPrefSet(habitId, min) {
+            const v = Number(min) || 0;
+            if (v <= 0) return;      // 「不记」不写记忆：偶尔不记一次，不该把常用档位冲掉
+            const all = safeStorage.get(HABIT_MKDUR_KEY, {}) || {};
+            all[habitId] = v;
+            try { safeStorage.set(HABIT_MKDUR_KEY, all); } catch (e) {}
+        }
+        // 进浮层时定默认档：记忆值 → 该习惯最近一次时长 → 第一个档位
+        function habitMkDurDefault(habitId) {
+            const saved = habitMkDurPref(habitId);
+            const opts = habitMkDurOpts(habitId);
+            if (saved && opts.indexOf(saved) >= 0) return saved;
+            const last = habitMkLastDur(habitId);
+            if (last > 0) {
+                // 取最接近的历史档位
+                let best = opts[0], bd = Infinity;
+                opts.forEach(m => { const d = Math.abs(m - last); if (d < bd) { bd = d; best = m; } });
+                return best;
+            }
+            return opts.includes(60) ? 60 : opts[0];
+        }
         function habitMkOpen(ev, habitId) {
             if (ev) { ev.stopPropagation(); ev.preventDefault(); }
             const card = document.querySelector('.habit-card[data-hid="' + habitId + '"]');
@@ -19154,14 +19137,24 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!card || !pop) return;
             const dates = habitMissedDates(habitId, 14, 5);
             const WD = ['日', '一', '二', '三', '四', '五', '六'];
-            const body = dates.length
+            // 第一行：只选日期
+            const dateRow = dates.length
                 ? dates.map(ds => {
                     const wd = WD[new Date(ds + 'T00:00:00').getDay()];
                     return `<button onclick="habitMkPick('${habitId}','${ds}')">${String(ds).slice(5)} 周${wd}</button>`;
                 }).join('')
                 : '<span class="mp-none">最近两周没有可补的日期 👍</span>';
-            pop.innerHTML = `<span class="mp-lbl">补哪天</span>` + body +
-                `<button class="mp-more" onclick="habitMkMore('${habitId}')">选其他日期…</button>`;
+            // 第二行：只设时长（与「⏱ 记时长」同一套档位口径）
+            habitMkDur = habitMkDurDefault(habitId);
+            const opts = habitMkDurOpts(habitId);
+            const durRow = '<span class="mp-lbl">本次时长</span>' +
+                `<button data-mkmin="0" class="mp-clr${habitMkDur === 0 ? ' on-dur' : ''}" onclick="habitMkDurSet(0)">不记</button>` +
+                opts.map(m => `<button data-mkmin="${m}" class="${habitMkDur === m ? 'on-dur' : ''}" onclick="habitMkDurSet(${m})">${habitFmtDur(m)}</button>`).join('');
+            pop.innerHTML =
+                `<div class="mp-row"><span class="mp-lbl">补哪天</span>${dateRow}</div>` +
+                `<div class="mp-row">${durRow}</div>` +
+                `<div class="mp-durhint">↑ 时长只做记录，不换算游戏分钟</div>` +
+                `<div class="mp-row"><button class="mp-more" onclick="habitMkMore('${habitId}')">选其他日期…</button></div>`;
             habitMkTarget = habitId;
             pop.style.display = 'flex';
             // 定位：贴卡片左下方；右/下越界时回收
@@ -19174,6 +19167,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             pop.style.left = left + 'px';
             pop.style.top = Math.min(top, window.innerHeight - ph - 8 + (window.scrollY || 0)) + 'px';
         }
+        // 切换本次补卡要记的时长（0 = 只补打卡，不记时长）
+        function habitMkDurSet(min) {
+            habitMkDur = Number(min) || 0;
+            document.querySelectorAll('#habitMkPop .mp-row button').forEach(b => {
+                const m = b.getAttribute('data-mkmin');
+                if (m === null) return;
+                b.classList.toggle('on-dur', Number(m) === habitMkDur);
+            });
+        }
         // 一键补某天：直接复用 habitConfirmMakeUp 的写入路径
         function habitMkPick(habitId, date) {
             const h = habitList().find(x => x.id === habitId);
@@ -19184,17 +19186,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 if (typeof showToast === 'function') showToast('这天已经打过卡了');
                 habitMkClose(); return;
             }
-            logs.push({ id: 'hl_' + Date.now(), habitId: habitId, date: date, doneAt: new Date().toISOString() });
+            const dur = Number(habitMkDur) || 0;
+            const rec = { id: 'hl_' + Date.now(), habitId: habitId, date: date, doneAt: new Date().toISOString(), madeUp: true };
+            if (dur > 0) rec.duration = dur;
+            logs.push(rec);
             habitSaveLogs(logs);
             const rewardMin = h ? (Number(h.rewardMin) || 0) : 0;
             if (rewardMin > 0 && typeof window.gameTimeEarn === 'function') {
                 try { window.gameTimeEarn(habitId, rewardMin, h.name, date); } catch (e) {}
             }
             if (habitId === HABIT_BOOK_ID) bookHabitLinkApply(date);
+            habitMkDurPrefSet(habitId, dur);       // 记住这次的选择，下次进来直接预选
             habitMkClose();
             renderTodayHabits();
             if (typeof renderHabitStats === 'function') { try { renderHabitStats(); } catch (e) {} }
-            if (typeof showToast === 'function') showToast(`✅ 已补卡 ${String(date).slice(5)}`);
+            if (typeof showToast === 'function') {
+                showToast(dur > 0
+                    ? `✅ 已补卡 ${String(date).slice(5)} · 记 ${habitFmtDur(dur)}`
+                    : `✅ 已补卡 ${String(date).slice(5)}`);
+            }
         }
         // 「选其他日期…」：打开管理弹窗并定位到该习惯的补卡表单（保留完整日期选择器）
         function habitMkMore(habitId) {
@@ -19458,13 +19468,25 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
 
         let habitMakeUpId = null;
+        let habitMakeUpDur = null;      // 管理弹窗补卡表单里选的时长（0 = 只补打卡）
         function habitMakeUp(id) {
             habitMakeUpId = id;
+            habitMakeUpDur = habitMkDurDefault(id);   // 与快捷补卡同一套默认档（记忆 → 最近一次 → 60）
             renderHabitStats();
         }
         function habitCancelMakeUp() {
             habitMakeUpId = null;
+            habitMakeUpDur = null;
             renderHabitStats();
+        }
+        // 管理弹窗补卡表单：切换「本次时长」档位
+        function habitMkFormDur(min) {
+            habitMakeUpDur = Number(min) || 0;
+            document.querySelectorAll('#habitStatsList .habit-mk-dur-btn').forEach(b => {
+                const m = b.getAttribute('data-mkmin');
+                if (m === null) return;
+                b.classList.toggle('on-dur', Number(m) === habitMakeUpDur);
+            });
         }
         function habitConfirmMakeUp(id) {
             const dateInput = document.getElementById('habitMakeUpDate_' + id);
@@ -19473,8 +19495,11 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (!date) { if (typeof showToast === 'function') showToast('请选择补卡日期'); return; }
             if (date > today) { if (typeof showToast === 'function') showToast('不能补未来的卡'); return; }
             const logs = habitLogs();
-            if (logs.some(l => l.habitId === id && l.date === date)) { if (typeof showToast === 'function') showToast('该日期已经打卡'); return; }
-            logs.push({ id: 'hl_' + Date.now(), habitId: id, date: date, doneAt: new Date().toISOString() });
+            if (logs.some(l => l.habitId === id && habitLogDate(l) === date)) { if (typeof showToast === 'function') showToast('该日期已经打卡'); return; }
+            const dur = (habitMakeUpId === id && Number(habitMakeUpDur) > 0) ? Number(habitMakeUpDur) : 0;
+            const rec = { id: 'hl_' + Date.now(), habitId: id, date: date, doneAt: new Date().toISOString(), madeUp: true };
+            if (dur > 0) rec.duration = dur;
+            logs.push(rec);
             habitSaveLogs(logs);
             const h = habitList().find(x => x.id === id);
             const rewardMin = h ? (Number(h.rewardMin) || 0) : 0;
@@ -19482,11 +19507,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 try { window.gameTimeEarn(id, rewardMin, h.name, date); } catch (e) {}
             }
             if (id === HABIT_BOOK_ID) bookHabitLinkApply(date);
+            if (dur > 0) habitMkDurPrefSet(id, dur);   // 记住这次的选择
             habitMakeUpId = null;
+            habitMakeUpDur = null;
             renderHabitStats();
             renderTodayHabits();
             renderHabitHeat();
-            if (typeof showToast === 'function') showToast(`✅ 已补卡 ${date}`);
+            if (typeof showToast === 'function') {
+                showToast(dur > 0 ? `✅ 已补卡 ${date} · 记 ${habitFmtDur(dur)}` : `✅ 已补卡 ${date}`);
+            }
         }
 
         // ===== v2.11 习惯水晶链 / Boss 进化 =====
@@ -19895,6 +19924,34 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (label) label.textContent = heat[0].date + ' — ' + heat[heat.length - 1].date;
         }
 
+        /* ===== 21 时长分列（2026-10-10）=====
+           用户诉求：统计表要体现时长，且「补卡时长」必须和「正常打卡时长」分开看 ——
+           一眼知道自己补了多少，而不是被补卡把总时长灌水。
+           判定：记录里带 madeUp=true 或 id 前缀 mk_ 才算补卡。 */
+        function habitDurSplit(habitId) {
+            const logs = habitLogs().filter(l => l.habitId === habitId);
+            let normal = 0, makeup = 0, nMk = 0;
+            logs.forEach(l => {
+                const d = Number(l.duration) || 0;
+                const isMk = l.madeUp === true || (l.id && String(l.id).indexOf('mk_') === 0);
+                if (isMk) { nMk++; if (d > 0) makeup += d; }
+                else if (d > 0) normal += d;
+            });
+            // 兼容老记录：本月/本周补卡的时长也算进「补卡时长」（老数据没打 madeUp 标记）
+            return { normal: normal, makeup: makeup, nMk: nMk, total: normal + makeup };
+        }
+        function habitDurSplitHtml(habitId) {
+            const s = habitDurSplit(habitId);
+            if (s.total <= 0 && s.nMk <= 0) return '';
+            const parts = [];
+            if (s.normal > 0) parts.push(`<span class="hds-item normal">⏱ 打卡 <b>${habitFmtDur(s.normal)}</b></span>`);
+            if (s.makeup > 0 || s.nMk > 0) {
+                parts.push(`<span class="hds-item makeup">📝 补卡 <b>${s.makeup > 0 ? habitFmtDur(s.makeup) : '—'}</b>${s.nMk ? ' · ' + s.nMk + ' 次' : ''}</span>`);
+            }
+            if (!parts.length) return '';
+            return `<div class="habit-dursplit">${parts.join('')}</div>`;
+        }
+
         function renderHabitStats() {
             const habits = habitList();
             const listBox = document.getElementById('habitStatsList');
@@ -19908,11 +19965,21 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     const pct = Math.min(100, Math.round(wc / goal * 100));
                     const streak = habitStreak(h.id);
                     const isMakeUp = habitMakeUpId === h.id;
+                    // 21 补卡·两行式（方案 03）：第一行日期、第二行时长，与快捷补卡浮层同口径
+                    const mkOpts = habitMkDurOpts(h.id);
+                    const mkDur = isMakeUp ? (Number(habitMakeUpDur) || 0) : 0;
                     const makeUpForm = isMakeUp ? `<div class="habit-makeup-form">
-                        <label>补卡日期：</label>
-                        <input type="date" id="habitMakeUpDate_${h.id}" value="${yesterday}" max="${formatDate(new Date())}" />
-                        <button class="btn primary" onclick="habitConfirmMakeUp('${h.id}')">确认补卡</button>
-                        <button class="btn" onclick="habitCancelMakeUp()">取消</button>
+                        <div class="habit-mk-form-row">
+                            <label>补卡日期：</label>
+                            <input type="date" id="habitMakeUpDate_${h.id}" value="${yesterday}" max="${formatDate(new Date())}" />
+                            <button class="btn primary" onclick="habitConfirmMakeUp('${h.id}')">确认补卡</button>
+                            <button class="btn" onclick="habitCancelMakeUp()">取消</button>
+                        </div>
+                        <div class="habit-mk-form-row">
+                            <label>本次时长：</label>
+                            <button class="habit-mk-dur-btn${mkDur === 0 ? ' on-dur' : ''}" data-mkmin="0" onclick="habitMkFormDur(0)">不记</button>
+                            ${mkOpts.map(m => `<button class="habit-mk-dur-btn${mkDur === m ? ' on-dur' : ''}" data-mkmin="${m}" onclick="habitMkFormDur(${m})">${habitFmtDur(m)}</button>`).join('')}
+                        </div>
                     </div>` : '';
                     return `<div class="habit-card">
                         <div class="habit-card-head">
@@ -19928,6 +19995,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                             <div class="habit-bar"><i style="width:${pct}%"></i></div>
                             <span>${pct}%</span>
                         </div>
+                        ${habitDurSplitHtml(h.id)}
                         ${makeUpForm}
                     </div>`;
                 }).join('');
@@ -44243,7 +44311,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610091559";
+        window.NIKO_VERSION = "202610100930";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
