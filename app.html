@@ -9437,7 +9437,7 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
 
         /* ===== v2.26 便签全屏编辑器（2026-09-19 用户点名：新建/编辑那个小弹窗太小，要全屏写长文）
            入口仍是 openNoteModal()，一共 4 个：顶栏「＋ 新建」/ 列头「＋ 添加」/ 卡片 ✏️ / 详情卡里的「✏️ 编辑」。
-           ⚠️ 浏览卡片 #nbDetailModal（双击弹出的那张）完全没动，一行都没碰。
+           2026-10-10 起浏览卡片 #nbDetailModal 的正文也改走 Markdown 渲染（见 .nb-md 一段）。
            样式语言沿用推文工坊：细边框 + 小圆角 + 11.5px 辅助字 + 工具行小按钮 + 底部统计行。 ===== */
         /* z-index 2900：必须压过浮动 dock（2600），但不能盖住 toast（3000） */
         #noteModal.be-mask { position: fixed; inset: 0; z-index: 2900; display: none; flex-direction: column; background: #fff; }
@@ -9511,7 +9511,51 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .be-paper hr { border-top-color: #3a3a4d; }
         .be-paper strong { font-weight: 600; }
         .be-paper .ph { color: #9a96a8; font-size: 12.5px; }
+        /* 2026-10-10：预览纸补齐新增的 Markdown 元素（有序 / 代码 / 高亮 / 删除线 / 链接 / 待办） */
+        .be-paper ol { margin: 0 0 11px; padding-left: 20px; }
+        .be-paper ul.nb-tasks { list-style: none; padding-left: 2px; }
+        .be-paper ul.nb-tasks li::before { content: '☐'; margin-right: 6px; opacity: .6; }
+        .be-paper ul.nb-tasks li.on::before { content: '☑'; opacity: 1; }
+        .be-paper ul.nb-tasks li.on { opacity: .6; text-decoration: line-through; }
+        .be-paper code { background: rgba(127,127,127,.17); border-radius: 4px; padding: 1px 5px; font-size: .92em; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        .be-paper pre { background: rgba(127,127,127,.13); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin: 0 0 11px; }
+        .be-paper pre code { background: none; padding: 0; font-size: 12.5px; line-height: 1.7; }
+        .be-paper mark { background: rgba(255,213,79,.5); color: inherit; border-radius: 3px; padding: 0 2px; }
+        body.dark-mode .be-paper mark { background: rgba(255,213,79,.28); }
+        .be-paper del { opacity: .5; }
+        .be-paper a { color: #667eea; text-decoration: underline; text-underline-offset: 2px; }
+        .be-paper em { font-style: italic; }
         .be-pvfoot { flex: 0 0 auto; font-size: 10.5px; color: #9a96a8; padding: 0 16px 12px; line-height: 1.6; }
+        /* 2026-10-10：编辑副本浮层（🕘 历史）。挂在 #noteModal 内部，不牵扯框架 modal 体系。 */
+        .nb-hist-mask { position: absolute; inset: 0; z-index: 12; display: none; align-items: center; justify-content: center; background: rgba(20,20,28,.44); padding: 40px 16px; }
+        .nb-hist-mask.show { display: flex; }
+        .nb-hist-box { width: 100%; max-width: 460px; max-height: 100%; display: flex; flex-direction: column; background: #fff; border-radius: 12px; box-shadow: 0 18px 50px rgba(0,0,0,.28); overflow: hidden; }
+        body.dark-mode .nb-hist-box { background: #1e1e28; }
+        .nb-hist-hd { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid #e5e2dc; }
+        body.dark-mode .nb-hist-hd { border-color: #3a3a4d; }
+        .nb-hist-hd b { font-size: 13.5px; color: #2b2b3a; }
+        body.dark-mode .nb-hist-hd b { color: #e3e1ef; }
+        .nb-hist-hd #nbHistSub { font-size: 11px; color: #9a96a8; }
+        .nb-hist-x { margin-left: auto; border: none; background: transparent; color: #9a96a8; font-size: 14px; cursor: pointer; padding: 2px 6px; border-radius: 6px; }
+        .nb-hist-x:hover { color: #2b2b3a; background: #f2f0ec; }
+        .nb-hist-list { flex: 1; min-height: 0; overflow-y: auto; padding: 8px 10px; }
+        .nb-hist-empty { font-size: 12px; color: #9a96a8; line-height: 1.8; padding: 16px 6px; text-align: center; }
+        .nb-hist-item { border: 1px solid #ece9e3; border-radius: 9px; padding: 9px 11px; margin-bottom: 8px; }
+        body.dark-mode .nb-hist-item { border-color: #33333f; }
+        .nb-hist-item.cur { border-color: #667eea; background: rgba(102,126,234,.06); }
+        .nb-hist-t { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: #6b6878; margin-bottom: 4px; }
+        body.dark-mode .nb-hist-t { color: #a8a5b8; }
+        .nb-hist-t .w { color: #9a96a8; }
+        .nb-hist-t .cur-tag { color: #667eea; background: rgba(102,126,234,.12); border-radius: 4px; padding: 0 5px; font-size: 10px; }
+        .nb-hist-s { font-size: 12px; color: #8a8798; line-height: 1.6; margin-bottom: 7px; word-break: break-word; }
+        body.dark-mode .nb-hist-s { color: #8f8ca0; }
+        .nb-hist-btn { border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 6px; padding: 3px 10px; font-size: 11.5px; cursor: pointer; font-family: inherit; }
+        .nb-hist-btn:hover { color: #2b2b3a; border-color: #667eea; }
+        body.dark-mode .nb-hist-btn { border-color: #3a3a4d; color: #c9c6d8; }
+        .nb-hist-foot { flex: 0 0 auto; font-size: 10.5px; color: #9a96a8; line-height: 1.7; padding: 9px 14px; border-top: 1px solid #e5e2dc; }
+        body.dark-mode .nb-hist-foot { border-color: #3a3a4d; }
+        .be-trow button.hl { color: #b8860b; }
+        body.dark-mode .be-trow button.hl { color: #e0b341; }
         .be-foot { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-top: 1px solid #e5e2dc; }
         body.dark-mode .be-foot { border-color: #3a3a4d; }
         .be-foot .sp { margin-left: auto; display: flex; gap: 8px; }
@@ -9592,6 +9636,32 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-detail-close { border-color: #3a3a4d; color: #aaa; }
         .nb-detail-text { font-size: 14.5px; line-height: 1.9; white-space: pre-wrap; word-break: break-word; color: #2b2b3a; max-height: 52vh; overflow-y: auto; padding: 4px 2px; user-select: text; -webkit-user-select: text; }
         body.dark-mode .nb-detail-text { color: #e3e1ef; }
+        /* 2026-10-10：浏览卡片正文改走 Markdown 渲染（此前走 escapeHtml，**加粗** / ==高亮== 原样露出）。
+           颜色一律 currentColor / inherit —— 因为正文有米黄 / 浅灰 / 深色三种纸色，写死颜色会瞎。 */
+        .nb-detail-text.nb-md { white-space: normal; }
+        .nb-md > *:first-child { margin-top: 0 !important; }
+        .nb-md > *:last-child { margin-bottom: 0 !important; }
+        .nb-md h1 { font-size: 19px; font-weight: 700; margin: 14px 0 8px; }
+        .nb-md h2 { font-size: 16.5px; font-weight: 700; margin: 13px 0 7px; }
+        .nb-md h3 { font-size: 15px; font-weight: 700; margin: 12px 0 6px; }
+        .nb-md h4, .nb-md h5, .nb-md h6 { font-size: 14.5px; font-weight: 700; margin: 11px 0 6px; }
+        .nb-md p { margin: 0 0 10px; }
+        .nb-md ul, .nb-md ol { margin: 0 0 10px; padding-left: 22px; }
+        .nb-md li { margin-bottom: 4px; }
+        .nb-md ul.nb-tasks { list-style: none; padding-left: 2px; }
+        .nb-md ul.nb-tasks li::before { content: '☐'; margin-right: 6px; opacity: .6; }
+        .nb-md ul.nb-tasks li.on::before { content: '☑'; opacity: 1; }
+        .nb-md ul.nb-tasks li.on { opacity: .6; text-decoration: line-through; }
+        .nb-md blockquote { border-left: 3px solid currentColor; opacity: .8; margin: 0 0 10px; padding: 2px 0 2px 11px; }
+        .nb-md hr { border: none; border-top: 1px solid currentColor; opacity: .26; margin: 14px 0; }
+        .nb-md code { background: rgba(127,127,127,.17); border-radius: 4px; padding: 1px 5px; font-size: .92em; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        .nb-md pre { background: rgba(127,127,127,.13); border-radius: 8px; padding: 10px 12px; overflow-x: auto; margin: 0 0 10px; }
+        .nb-md pre code { background: none; padding: 0; font-size: 12.5px; line-height: 1.7; }
+        .nb-md mark { background: rgba(255,213,79,.5); color: inherit; border-radius: 3px; padding: 0 2px; }
+        body.dark-mode .nb-md mark { background: rgba(255,213,79,.28); }
+        .nb-md del { opacity: .5; }
+        .nb-md a { color: #667eea; text-decoration: underline; text-underline-offset: 2px; }
+        .nb-md strong { font-weight: 700; }
         .nb-detail-meta { font-size: 11px; color: #9a96a8; padding: 10px 2px 0; border-top: 1px dashed rgba(128,128,128,.3); margin-top: 12px; }
         .nb-detail-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
         .nb-detail-actions button { min-height: 44px; border: 1px solid #e5e2dc; background: #faf9f6; border-radius: 10px; font-size: 12.5px; cursor: pointer; color: #555; transition: all .15s; }
@@ -15754,14 +15824,21 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <section class="be-col be-ed" id="nbEdColBody">
                 <div class="be-edin">
                     <div class="be-trow">
-                        <button type="button" onclick="nbEdIns('## ')">H2</button>
-                        <button type="button" onclick="nbEdIns('- ')">列表</button>
-                        <button type="button" onclick="nbEdIns('&gt; ')">引用</button>
-                        <button type="button" onclick="nbEdIns('\n---\n')">分割线</button>
-                        <button type="button" onclick="nbEdIns('**加粗**')">加粗</button>
-                        <span class="sp"><button type="button" onclick="nbEdToKnowledge()" title="把正文存进知识库 03-Resources（便签本身不受影响）">📥 存进知识库</button></span>
+                        <button type="button" onclick="nbEdIns('## ', '', '小标题', 1)" title="小标题">H2</button>
+                        <button type="button" onclick="nbEdIns('**', '**', '加粗文字')" title="加粗（Ctrl+B）"><b>加粗</b></button>
+                        <button type="button" onclick="nbEdIns('*', '*', '斜体文字')" title="斜体（Ctrl+I）"><i>斜体</i></button>
+                        <button type="button" onclick="nbEdIns('~~', '~~', '划掉的文字')" title="删除线"><s>删除</s></button>
+                        <button type="button" class="hl" onclick="nbEdIns('==', '==', '要突出的重点')" title="高亮（Ctrl+U）">🖍 高亮</button>
+                        <button type="button" onclick="nbEdIns('`', '`', '代码')" title="行内代码">&lt;/&gt; 代码</button>
+                        <button type="button" onclick="nbEdIns('&gt; ', '', '引用内容', 1)" title="引用">引用</button>
+                        <button type="button" onclick="nbEdIns('- ', '', '列表项', 1)" title="无序列表">• 列表</button>
+                        <button type="button" onclick="nbEdIns('1. ', '', '列表项', 1)" title="有序列表">1. 有序</button>
+                        <button type="button" onclick="nbEdIns('- [ ] ', '', '待办事项', 1)" title="待办清单">☑ 待办</button>
+                        <button type="button" onclick="nbEdIns('\n---\n', '', '')" title="分割线">分割线</button>
+                        <button type="button" onclick="nbEdIns('[', '](https://)', '链接文字')" title="链接">🔗 链接</button>
+                        <span class="sp"><button type="button" onclick="openNbHist()" title="编辑时每 2 分钟自动留一张副本，可随时退回">🕘 历史</button><button type="button" onclick="nbEdToKnowledge()" title="把正文存进知识库 03-Resources（便签本身不受影响）">📥 存进知识库</button></span>
                     </div>
-                    <textarea id="noteModalContent" placeholder="记录一闪而过的灵感…支持 Markdown（## 标题 / - 列表 / &gt; 引用 / --- 分割线 / **加粗**）"></textarea>
+                    <textarea id="noteModalContent" placeholder="记录一闪而过的灵感…支持 Markdown（## 标题 / **加粗** / ==高亮== / - 列表 / &gt; 引用 / `代码` / --- 分割线）"></textarea>
                     <div class="be-stat">
                         <span>字数 <b id="nbEdStW">0</b></span>
                         <span>段落 <b id="nbEdStP">0</b></span>
@@ -15780,6 +15857,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="sp">
                 <button class="be-b" type="button" onclick="closeNoteModal()">取消</button>
                 <button class="be-b pri" type="button" onclick="saveNoteModal()">保存便签</button>
+            </div>
+        </div>
+        <!-- 2026-10-10：编辑副本浮层（每 2 分钟一张，可随时退回；挂在编辑器内部，不牵扯框架 modal 体系） -->
+        <div class="nb-hist-mask" id="nbHistPop" onclick="if(event.target===this)closeNbHist()">
+            <div class="nb-hist-box">
+                <div class="nb-hist-hd">
+                    <b>🕘 编辑副本</b>
+                    <span id="nbHistSub"></span>
+                    <button type="button" class="nb-hist-x" onclick="closeNbHist()" title="关闭">✕</button>
+                </div>
+                <div class="nb-hist-list" id="nbHistList"></div>
+                <div class="nb-hist-foot">编辑期间每 2 分钟自动留一张副本（关闭弹窗前也会补一张），最多 24 张、7 天过期。退回只是把内容填回编辑器，点「保存便签」才真正生效。</div>
             </div>
         </div>
     </div>
@@ -29519,6 +29608,116 @@ function renderDayDetail() {
             nbDrafts[nbDraftSlot()] = { content, tag: nbEditingTag, capsulePick, savedAt: new Date().toISOString() };
             safeStorage.set(NB_DRAFT_KEY, nbDrafts);
         }
+        // ===== 2026-10-10 自动存档（用户点名）=====
+        // ① 草稿：编辑期间输入只打「脏」标记，最多每 3s 落一次盘（原先每次按键都写 localStorage）；
+        //    关闭弹窗前强制补一次 —— 3s 节流绝不会丢最后几个字。
+        // ② 副本：每 2 分钟留一张内容快照（内容没变就不留），最多 24 张 / 7 天过期，可随时退回。
+        const NB_HIST_KEY = 'niko_note_hist';
+        const NB_AUTOSAVE_MS = 3000;
+        const NB_SNAP_MS = 120000;
+        const NB_HIST_MAX = 24;
+        let nbHist = safeStorage.get(NB_HIST_KEY, {});
+        let nbAutoTimer = null, nbSnapTimer = null, nbDraftDirty = false;
+        (function nbPruneHist() {
+            const cut = Date.now() - 7 * 86400000;
+            let changed = false;
+            Object.keys(nbHist).forEach(k => {
+                const arr = Array.isArray(nbHist[k]) ? nbHist[k] : [];
+                const keep = arr.filter(x => x && x.at && new Date(x.at).getTime() >= cut).slice(-NB_HIST_MAX);
+                if (keep.length !== arr.length) { nbHist[k] = keep; changed = true; }
+                if (!keep.length) { delete nbHist[k]; changed = true; }
+            });
+            if (changed) safeStorage.set(NB_HIST_KEY, nbHist);
+        })();
+        function nbAutoStart() {
+            nbAutoStop();
+            nbDraftDirty = false;
+            nbAutoTimer = setInterval(nbAutoTick, NB_AUTOSAVE_MS);
+            nbSnapTimer = setInterval(() => nbSnapshot(), NB_SNAP_MS);
+            nbSnapshot();                       // 打开就留一张基线，改坏了也能退回来
+        }
+        function nbAutoStop() {
+            if (nbAutoTimer) { clearInterval(nbAutoTimer); nbAutoTimer = null; }
+            if (nbSnapTimer) { clearInterval(nbSnapTimer); nbSnapTimer = null; }
+        }
+        // 输入与工具行改动都走这里：只打标记，真正写盘交给 3s 定时器
+        function nbDraftTouch() {
+            nbDraftDirty = true;
+            const st = document.getElementById('nbEdSaveTxt');
+            if (st) st.textContent = '待存档…';
+        }
+        function nbAutoTick() {
+            const m = document.getElementById('noteModal');
+            if (!m || !m.classList.contains('show')) return;
+            if (!nbDraftDirty) return;
+            nbDraftDirty = false;
+            nbDraftSave();
+            const st = document.getElementById('nbEdSaveTxt');
+            if (st) st.textContent = '已保存 ' + new Date().toLocaleTimeString('zh-CN', { hour12: false });
+        }
+        // ---- 编辑副本（每 2 分钟一张，可随时退回）----
+        function nbHistSlot() { return nbEditingId || '__new'; }
+        function nbSnapshot() {
+            const m = document.getElementById('noteModal');
+            if (!m || !m.classList.contains('show')) return;
+            const ta = document.getElementById('noteModalContent');
+            if (!ta) return;
+            const content = ta.value;
+            if (!content.trim()) return;
+            const slot = nbHistSlot();
+            const arr = nbHist[slot] || (nbHist[slot] = []);
+            if (arr.some(x => x.content === content)) return;   // 这版已经留过，不重复占地方
+            arr.push({ at: new Date().toISOString(), content, tag: nbEditingTag, capsulePick });
+            while (arr.length > NB_HIST_MAX) arr.shift();
+            safeStorage.set(NB_HIST_KEY, nbHist);
+        }
+        function nbHistVersions() {
+            return (nbHist[nbHistSlot()] || []).slice().sort((a, b) => String(b.at).localeCompare(String(a.at)));
+        }
+        function openNbHist() {
+            const pop = document.getElementById('nbHistPop');
+            if (!pop) return;
+            renderNbHist();
+            pop.classList.add('show');
+        }
+        function closeNbHist() { const pop = document.getElementById('nbHistPop'); if (pop) pop.classList.remove('show'); }
+        function renderNbHist() {
+            const box = document.getElementById('nbHistList');
+            if (!box) return;
+            const arr = nbHistVersions();
+            const cur = (document.getElementById('noteModalContent') || {}).value || '';
+            const sub = document.getElementById('nbHistSub');
+            if (sub) sub.textContent = arr.length ? ('共 ' + arr.length + ' 张 · 当前 ' + cur.replace(/\s/g, '').length + ' 字') : '';
+            if (!arr.length) {
+                box.innerHTML = '<div class="nb-hist-empty">还没留过副本 —— 编辑满 2 分钟会自动留一张，关闭弹窗前也会补一张。</div>';
+                return;
+            }
+            box.innerHTML = arr.map(h => {
+                const w = String(h.content || '').replace(/\s/g, '').length;
+                const sum = String(h.content || '').replace(/\s+/g, ' ').trim().slice(0, 46);
+                const same = (h.content === cur);
+                return `<div class="nb-hist-item${same ? ' cur' : ''}">
+                    <div class="nb-hist-t">${formatNoteTime(h.at)}<span class="w">${w} 字</span>${same ? '<span class="cur-tag">与当前相同</span>' : ''}</div>
+                    <div class="nb-hist-s">${escapeHtml(sum)}${sum.length >= 46 ? '…' : ''}</div>
+                    <button type="button" class="nb-hist-btn" onclick="nbHistRestore('${h.at}')">↩ 退回这版</button>
+                </div>`;
+            }).join('');
+        }
+        function nbHistRestore(at) {
+            const h = (nbHist[nbHistSlot()] || []).find(x => x.at === at);
+            if (!h) return;
+            const ta = document.getElementById('noteModalContent');
+            if (!ta) return;
+            nbSnapshot();                       // 退回前先把当前内容留一张，免得退了回不来
+            ta.value = h.content;
+            if (h.tag && noteTagDict()[h.tag]) { nbEditingTag = h.tag; renderModalTagPicker(); }
+            if (h.capsulePick && CAPSULE_SPANS[h.capsulePick]) { capsulePick = h.capsulePick; updateCapsuleChips(); }
+            nbEdRefresh();
+            nbDraftSave();
+            closeNbHist();
+            if (typeof showToast === 'function') showToast('🕘 已退回 ' + formatNoteTime(h.at) + ' 的副本 · 确认后点「保存便签」');
+        }
+
         function nbDraftClear(k) {
             k = k || nbDraftSlot();
             if (nbDrafts[k]) { delete nbDrafts[k]; safeStorage.set(NB_DRAFT_KEY, nbDrafts); }
@@ -29568,12 +29767,16 @@ function renderDayDetail() {
             document.getElementById('noteModal').classList.add('show');
             nbEdTab('body');        // 窄屏默认落在「正文」页签
             nbEdRefresh();
+            nbAutoStart();          // 2026-10-10：3s 自动存档 + 每 2 分钟留副本
             setTimeout(() => document.getElementById('noteModalContent').focus(), 50);
         }
         function closeNoteModal() {
-            // v2.21 草稿保护：内容被清空再关闭 = 主动放弃草稿
+            // 2026-10-10：关窗前把最后几个字补进草稿和副本 —— 3s 节流窗口内打的字不该白打
             const content = document.getElementById('noteModalContent').value;
-            if (!content.trim()) nbDraftClear();
+            if (content.trim()) { nbDraftSave(); nbSnapshot(); }
+            else nbDraftClear();    // v2.21 草稿保护：内容被清空再关闭 = 主动放弃草稿
+            nbAutoStop();
+            closeNbHist();
             document.getElementById('noteModal').classList.remove('show');
             nbEditingId = null;
         }
@@ -29672,15 +29875,37 @@ function renderDayDetail() {
             });
         }
         // 工具行：在光标处插入 Markdown 片段，不动已输入内容
-        function nbEdIns(txt) {
+        // 工具行插入（2026-10-10 升级）：
+        //   有选区 → 用标记把选区包起来（**加粗** / ==高亮== / `代码`）
+        //   无选区 → 插入占位文字并选中它，直接打字就覆盖（不会再留下「加粗文字」这种占位垃圾）
+        //   第 4 个参数 lineStart=true 表示「行首标记」类（标题/列表/引用/待办），
+        //   会给选中的每一行都加上前缀 —— 多行一次成型。
+        function nbEdIns(pre, suf, ph, lineStart) {
             const ta = document.getElementById('noteModalContent');
-            const s = ta.selectionStart, e2 = ta.selectionEnd, v = ta.value;
-            const pre = (s > 0 && v[s - 1] !== '\n' && txt.charAt(0) === '#') ? '\n' : '';
-            ta.value = v.slice(0, s) + pre + txt + v.slice(e2);
-            ta.focus();
-            ta.selectionStart = ta.selectionEnd = s + pre.length + txt.length;
+            if (!ta) return;
+            suf = suf || ''; ph = ph || '';
+            const v = ta.value, s = ta.selectionStart, e2 = ta.selectionEnd;
+            if (lineStart) {
+                const from = v.lastIndexOf('\n', Math.max(0, s - 1)) + 1;
+                let to = v.indexOf('\n', e2); if (to < 0) to = v.length;
+                const lines = v.slice(from, to).split('\n');
+                const multi = lines.length > 1;
+                const out = lines.map(x => (multi && !x.trim()) ? x : pre + x).join('\n');
+                ta.value = v.slice(0, from) + out + v.slice(to);
+                ta.focus();
+                ta.selectionStart = from; ta.selectionEnd = from + out.length;
+            } else if (s !== e2) {
+                const sel = v.slice(s, e2);
+                ta.value = v.slice(0, s) + pre + sel + suf + v.slice(e2);
+                ta.focus();
+                ta.selectionStart = s + pre.length; ta.selectionEnd = s + pre.length + sel.length;
+            } else {
+                ta.value = v.slice(0, s) + pre + ph + suf + v.slice(e2);
+                ta.focus();
+                ta.selectionStart = s + pre.length; ta.selectionEnd = s + pre.length + ph.length;
+            }
             nbEdRefresh();
-            nbDraftSave();
+            nbDraftTouch();
         }
         // 底部一行：这张便签要落哪儿（标签 / 置顶 / 密语）
         function nbEdFootHint() {
@@ -29706,41 +29931,69 @@ function renderDayDetail() {
             const paper = document.getElementById('nbEdPaper');
             if (paper) paper.innerHTML = nbEdMd(v) || '<div class="ph">左边开始写，这里会实时变成排好版的样子。</div>';
             nbEdFootHint();
-            try {
-                const st = document.getElementById('nbEdSaveTxt');
-                if (st) { st.textContent = '草稿已存档'; }
-            } catch (e) {}
         }
         // Markdown 轻渲染（只读展示用；便签本体仍按纯文本原样保存）
+        // 2026-10-10：从「只认 **加粗**」升级为完整轻量渲染 —— 编辑弹窗右侧预览 #nbEdPaper
+        // 与浏览卡片 #nbDetailModal 共用本函数（此前卡片走 escapeHtml，加粗原样露出）。
         function nbEdEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+        // 行内渲染。顺序不能乱：先转义 → 抽出代码（免得代码里的 * 被当标记）→ 其余标记 → 还原代码。
+        // 链接只认 http(s)，堵住 javascript: 注入。
+        function nbEdInline(s) {
+            let t = nbEdEsc(String(s == null ? '' : s));
+            const codes = [];
+            t = t.replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return '\u0001C' + (codes.length - 1) + '\u0001'; });
+            t = t.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+            t = t.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+            t = t.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
+            t = t.replace(/(^|[^*\w])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+            t = t.replace(/(^|[^_\w])_([^_\n]+)_(?!_)/g, '$1<em>$2</em>');
+            t = t.replace(/~~([^~\n]+)~~/g, '<del>$1</del>');
+            t = t.replace(/==([^=\n]+)==/g, '<mark>$1</mark>');
+            t = t.replace(/\u0001C(\d+)\u0001/g, (m, i) => '<code>' + codes[+i] + '</code>');
+            return t;
+        }
         function nbEdMd(t) {
-            const lines = String(t || '').split('\n');
-            const out = []; let i = 0, inUl = false;
-            const inline = s => nbEdEsc(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-            const closeUl = () => { if (inUl) { out.push('</ul>'); inUl = false; } };
+            const lines = String(t == null ? '' : t).replace(/\r\n?/g, '\n').split('\n');
+            const out = []; let i = 0, list = null;
+            const closeList = () => { if (list) { out.push('</' + (list === 'ol' ? 'ol' : 'ul') + '>'); list = null; } };
+            const openList = k => { if (list !== k) { closeList(); out.push(k === 'task' ? '<ul class="nb-tasks">' : '<' + k + '>'); list = k; } };
+            const brk = s => nbEdInline(s).replace(/\n/g, '<br>');
             while (i < lines.length) {
-                const ln = lines[i];
-                if (/^\s*$/.test(ln)) { closeUl(); i++; continue; }
-                if (/^---+\s*$/.test(ln)) { closeUl(); out.push('<hr>'); i++; continue; }
-                const m = ln.match(/^(#{1,3})\s+(.*)$/);
-                if (m) { closeUl(); out.push('<h' + m[1].length + '>' + inline(m[2]) + '</h' + m[1].length + '>'); i++; continue; }
-                if (/^>\s?/.test(ln)) {
-                    closeUl(); const buf = [];
-                    while (i < lines.length && /^>\s?/.test(lines[i])) { buf.push(lines[i].replace(/^>\s?/, '')); i++; }
-                    out.push('<blockquote>' + inline(buf.join(' ')) + '</blockquote>');
+                const ln = lines[i], tr = ln.trim();
+                if (/^```/.test(tr)) {                       // ``` 代码块
+                    closeList(); const buf = []; i++;
+                    while (i < lines.length && !/^```/.test(lines[i].trim())) { buf.push(lines[i]); i++; }
+                    i++;
+                    out.push('<pre><code>' + nbEdEsc(buf.join('\n')) + '</code></pre>');
                     continue;
                 }
-                if (/^[-*]\s+/.test(ln)) {
-                    if (!inUl) { out.push('<ul>'); inUl = true; }
-                    out.push('<li>' + inline(ln.replace(/^[-*]\s+/, '')) + '</li>');
-                    i++; continue;
+                if (!tr) { closeList(); i++; continue; }
+                if (/^(-{3,}|\*{3,}|_{3,})$/.test(tr)) { closeList(); out.push('<hr>'); i++; continue; }
+                const h = tr.match(/^(#{1,6})\s+(.*)$/);
+                if (h) { closeList(); out.push('<h' + h[1].length + '>' + nbEdInline(h[2]) + '</h' + h[1].length + '>'); i++; continue; }
+                if (/^>/.test(tr)) {                          // > 引用（连续行合成一块）
+                    closeList(); const buf = [];
+                    while (i < lines.length && /^\s*>/.test(lines[i])) { buf.push(lines[i].replace(/^\s*>\s?/, '')); i++; }
+                    out.push('<blockquote>' + brk(buf.join('\n')) + '</blockquote>');
+                    continue;
                 }
-                closeUl();
+                const tk = tr.match(/^[-*+]\s+\[([ xX])\]\s*(.*)$/);
+                if (tk) { openList('task'); out.push('<li' + (tk[1].toLowerCase() === 'x' ? ' class="on"' : '') + '>' + nbEdInline(tk[2]) + '</li>'); i++; continue; }
+                const ol = tr.match(/^\d+[.)]\s+(.*)$/);
+                if (ol) { openList('ol'); out.push('<li>' + nbEdInline(ol[1]) + '</li>'); i++; continue; }
+                const ul = tr.match(/^[-*+]\s+(.*)$/);
+                if (ul) { openList('ul'); out.push('<li>' + nbEdInline(ul[1]) + '</li>'); i++; continue; }
+                closeList();                                  // 普通段落
                 const p = [];
-                while (i < lines.length && !/^\s*$/.test(lines[i]) && !/^(#{1,3}\s|>\s?|[-*]\s|---+\s*$)/.test(lines[i])) { p.push(lines[i]); i++; }
-                out.push('<p>' + inline(p.join('\n')) + '</p>');
+                while (i < lines.length) {
+                    const t2 = lines[i];
+                    if (!t2.trim() || /^```/.test(t2.trim())) break;
+                    if (/^(#{1,6}\s|\s*>|\s*[-*+]\s|\s*\d+[.)]\s|-{3,}$|\*{3,}$|_{3,}$)/.test(t2)) break;
+                    p.push(t2); i++;
+                }
+                if (p.length) out.push('<p>' + brk(p.join('\n')) + '</p>'); else i++;
             }
-            closeUl();
+            closeList();
             return out.join('');
         }
         // 把正文存进知识库（便签本身不受影响；和保存便签时的自动入库同一套）
@@ -29892,7 +30145,7 @@ function renderDayDetail() {
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button></div>
-                <div class="nb-detail-text ${nbPaperClass()}">${escapeHtml(n.content)}</div>
+                <div class="nb-detail-text nb-md ${nbPaperClass()}">${nbEdMd(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
@@ -30345,12 +30598,8 @@ function renderDayDetail() {
         // v2.26：输入同时驱动「草稿存档 + 字数/段落/阅读时长 + 右侧实时预览」
         try {
             document.getElementById('noteModalContent').addEventListener('input', () => {
-                nbDraftSave();
+                nbDraftTouch();     // 2026-10-10：只打「待存档」标记，真正的写盘交给 3s 定时器
                 nbEdRefresh();
-                try {
-                    const st = document.getElementById('nbEdSaveTxt');
-                    if (st) { st.textContent = '正在存档…'; setTimeout(() => { st.textContent = '草稿已存档'; }, 500); }
-                } catch (e) {}
             });
         } catch (e) {}
         // v2.26：全屏编辑器 ESC 关闭（框架的 ✕ 注入只认 .modal-mask，本编辑器不适用，故自己接管）
@@ -30358,7 +30607,21 @@ function renderDayDetail() {
             document.addEventListener('keydown', (e) => {
                 const m = document.getElementById('noteModal');
                 if (!m || !m.classList.contains('show')) return;
-                if (e.key === 'Escape') { e.preventDefault(); closeNoteModal(); }
+                // 历史浮层开着时 ESC 先关浮层，别一下把整个编辑器关了
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    const pop = document.getElementById('nbHistPop');
+                    if (pop && pop.classList.contains('show')) closeNbHist(); else closeNoteModal();
+                    return;
+                }
+                // 2026-10-10：笔记常用快捷键（Ctrl/⌘ + B 加粗 / I 斜体 / U 高亮），对选区直接生效
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); saveNoteModal(); return; }
+                if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+                    const k = e.key.toLowerCase();
+                    if (k === 'b') { e.preventDefault(); nbEdIns('**', '**', '加粗文字'); }
+                    else if (k === 'i') { e.preventDefault(); nbEdIns('*', '*', '斜体文字'); }
+                    else if (k === 'u') { e.preventDefault(); nbEdIns('==', '==', '要突出的重点'); }
+                }
             });
         } catch (e) {}
         nbApplyDensity();
@@ -44437,7 +44700,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101048";
+        window.NIKO_VERSION = "202610101127";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
