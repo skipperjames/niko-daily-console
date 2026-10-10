@@ -9468,6 +9468,11 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .be-tg:hover { border-color: #667eea; }
         .be-tg.on { color: #fff; font-weight: 600; }
         body.dark-mode .be-tg { background: #26263a; color: #c9c6d8; }
+        /* 2026-10-10 #3：弹窗信息栏窄，用途按钮收紧一点才好排 */
+        #nbEdUseRow { gap: 5px; }
+        #nbEdUseRow .tag-use-btn { font-size: 11px; padding: 3px 8px; }
+        #nbEdUseTag { color: #b0a9c0; font-weight: 400; }
+        body.dark-mode #nbEdUseTag { color: #7d7791; }
         .be-tog { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; padding: 8px 0; border-bottom: 1px dashed rgba(128,128,128,.28); }
         .be-tog:last-child { border-bottom: none; }
         .be-tog .k { color: #2b2b3a; }
@@ -15725,6 +15730,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <div class="be-sec">
                         <div class="be-lbl">所属标签</div>
                         <div class="be-tags" id="noteModalTagPicker"></div>
+                    </div>
+                    <!-- 2026-10-10 #3：新建/编辑便签时可直接改「所属标签的用途类型」——
+                         此前要绕到标签总览 → 管理 → 换图标 才能改，路径太深。
+                         口径与标签总览完全一致（同一份 TAG_USE_OPTIONS + 同一个 niko_tags 落点）。 -->
+                    <div class="be-sec" id="nbEdUseSec">
+                        <div class="be-lbl">标签用途 <span id="nbEdUseTag"></span></div>
+                        <div class="tag-use-row" id="nbEdUseRow"></div>
+                        <div id="nbEdUseHint" style="font-size:11px;color:#9aa0b4;line-height:1.5;margin:2px 0 0;"></div>
                     </div>
                     <div class="be-sec">
                         <div class="be-tog"><span class="k">📌 置顶</span><span class="be-sw" id="nbEdPin" onclick="nbEdTogglePin()"></span></div>
@@ -28883,6 +28896,34 @@ function renderDayDetail() {
             if (changed) safeStorage.set('niko_inspiration_notes', notes);
         })();
 
+        // 新建便签的默认标签：**第一个可见标签**（2026-10-10 修 BUG）
+        // 此前硬编码 'creative'，用户把「创意灵感」隐藏后，新建时第一个仍默认选中它 —— 自相矛盾。
+        // 口径：无 presetTag 时取 tagVisibleList() 的第一个；若它不可用再退回 noteTagDict() 首个可见项。
+        function nbDefaultTag() {
+            try {
+                if (typeof tagVisibleList === 'function') {
+                    const vl = tagVisibleList();
+                    if (vl && vl.length) return vl[0].id;
+                }
+            } catch (e) {}
+            try {
+                const d = noteTagDict();
+                const k = Object.keys(d).find(k => !(typeof tagIsHidden === 'function' && tagIsHidden(k)));
+                if (k) return k;
+                const all = Object.keys(d);
+                if (all.length) return all[0];
+            } catch (e) {}
+            return 'creative';
+        }
+        // 当前选中的标签是否已失效（被隐藏 / 被删除）—— 失效就得换成默认
+        function nbTagValid(tag) {
+            if (!tag) return false;
+            try {
+                if (typeof tagIsHidden === 'function' && tagIsHidden(tag)) return false;
+                return !!noteTagDict()[tag];
+            } catch (e) { return true; }
+        }
+
         // 从存储重新同步便签数据（热点转灵感等其他面板写入后，切回便签能看到最新）
         function syncNotes() {
             const fresh = safeStorage.get('niko_inspiration_notes', []);
@@ -29507,7 +29548,11 @@ function renderDayDetail() {
             e && e.stopPropagation();
             nbEditingId = id || null;
             const n = id ? notes.find(x => x.id === id) : null;
-            nbEditingTag = n ? n.tag : (presetTag || 'creative');
+            // 2026-10-10 修 BUG：此前无脑 (presetTag || 'creative')，隐藏了「创意灵感」还会默认选它。
+            // 口径：编辑 → 用原标签；有 presetTag 且有效 → 用它；否则 → 第一个可见标签。
+            if (n) nbEditingTag = n.tag;
+            else if (presetTag && nbTagValid(presetTag)) nbEditingTag = presetTag;
+            else nbEditingTag = nbDefaultTag();
             nbEditingPinned = n ? !!n.pinned : false;
             nbEditingNoRev = (n && n.noReview === true) ? "off" : (n && n.noReview === false) ? "on" : "inherit";
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
@@ -29537,7 +29582,61 @@ function renderDayDetail() {
             // 隐藏标签不进选择器（当前选中的那个例外，否则改完标签就找不回来了）
             const list = Object.entries(d).filter(([k]) => k === nbEditingTag || !(typeof tagIsHidden === 'function' && tagIsHidden(k)));
             document.getElementById('noteModalTagPicker').innerHTML = list.map(([k, t]) =>
-                `<span class="be-tg ${nbEditingTag === k ? 'on' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbEditingTag='${k}';renderModalTagPicker();nbEdRefresh();" title="${escapeHtml(t.name)}">${t.icon} ${escapeHtml(t.name)}</span>`).join('');
+                `<span class="be-tg ${nbEditingTag === k ? 'on' : ''}" style="${nbEditingTag === k ? `background:${t.chipBg};` : ''}" onclick="nbPickTag('${k}')" title="${escapeHtml(t.name)}">${t.icon} ${escapeHtml(t.name)}</span>`).join('');
+            renderNbEdUseRow();
+        }
+        // 换标签时：重绘选择器 + 用途行 + 复习提示（2026-10-10：此前没同步 nbEdSyncRev，
+        // 换完标签「参与复习」那行还写着上一个标签的名字）
+        function nbPickTag(k) {
+            nbEditingTag = k;
+            renderModalTagPicker();
+            try { nbEdSyncRev(); } catch (e) {}
+            nbEdRefresh();
+        }
+
+        // ===== 2026-10-10 #3：新建/编辑弹窗里直接改「标签用途类型」=====
+        // 与标签总览共用 TAG_USE_OPTIONS / niko_tags，改完立刻广播给各面板。
+        function renderNbEdUseRow() {
+            const host = document.getElementById('nbEdUseRow');
+            const sec = document.getElementById('nbEdUseSec');
+            const tagLbl = document.getElementById('nbEdUseTag');
+            const hint = document.getElementById('nbEdUseHint');
+            if (!host || !sec) return;
+            // 独立运行（单文件开发版）没有标签总览 → 这一节整体隐藏
+            const hasUse = (typeof TAG_USE_OPTIONS !== 'undefined' && Array.isArray(TAG_USE_OPTIONS));
+            if (!hasUse) { sec.style.display = 'none'; return; }
+            const d = noteTagDict();
+            const t = d[nbEditingTag];
+            if (!t) { sec.style.display = 'none'; return; }
+            sec.style.display = '';
+            const cur = t.use || 'review';
+            if (tagLbl) tagLbl.textContent = '· ' + (t.icon || '') + ' ' + (t.name || '');
+            host.innerHTML = TAG_USE_OPTIONS.map(o =>
+                `<span class="tag-use-btn${cur === o.k ? ' on' : ''}" title="${o.tip}" onclick="nbEdSetTagUse('${o.k}')">${o.icon} ${o.name}</span>`
+            ).join('');
+            if (hint) {
+                const o = TAG_USE_OPTIONS.find(x => x.k === cur);
+                hint.textContent = '改的是「' + (t.name || '') + '」这个标签本身 · ' + (o ? o.tip : '');
+            }
+        }
+        // 落点：niko_tags[tag].use —— 与标签总览 tagMgSaveEdit() 完全同一份数据
+        function nbEdSetTagUse(k) {
+            if (typeof TAG_USE_OPTIONS === 'undefined') return;
+            const all = safeStorage.get('niko_tags', {}) || {};
+            if (!all[nbEditingTag]) return;
+            all[nbEditingTag].use = k;
+            safeStorage.set('niko_tags', all);
+            renderNbEdUseRow();
+            const o = TAG_USE_OPTIONS.find(x => x.k === k);
+            // 同步便签卡上的复习标记 + 通知其他面板
+            try { if (typeof nbSyncTagSelects === 'function') nbSyncTagSelects(); } catch (e) {}
+            try { if (typeof tagRefreshAll === 'function') tagRefreshAll(); } catch (e) {}
+            try { if (typeof tagNotifyModules === 'function') tagNotifyModules(); } catch (e) {}
+            nbEdSyncRev();
+            nbEdRefresh();
+            if (typeof showToast === 'function') {
+                showToast('🏷 「' + (all[nbEditingTag].name || '') + '」已设为 ' + (o ? o.icon + ' ' + o.name : k));
+            }
         }
         function nbEdSyncPin() { const el = document.getElementById('nbEdPin'); if (el) el.classList.toggle('on', nbEditingPinned); }
         // 2026-09-23 #2：单条便签「参与复习」三态（inherit 跟随标签 / on / off）
@@ -44127,11 +44226,34 @@ function hpClearDemo(){
             if (el) el.classList.add('active');
         }
         // 改完整套标签后，通知其他面板重读
+        // ⚠️ 2026-10-10 修 BUG：此前无条件调 renderCopyPage()。
+        //    文案库/梗文化已被 verify_merge.py 列入 DISABLED_BOARDS 临时下线，
+        //    合并产物里它们的 render 函数被替换成「误入则回今日」的空实现 ——
+        //    结果：在便签页打开标签总览、点「隐藏/删除/改图标」时会被硬拽到今日看板。
+        //    修法：调用前先确认该面板**真的在线上**（有容器 + 渲染函数不是兜底空实现），
+        //    再顺手把弹窗的打开态恢复回去，双保险。
+        function tagPanelLive(pageId, fnName) {
+            if (typeof window[fnName] !== 'function') return false;
+            // 兜底空实现是 try{switchPage('today')}catch{}，源码里带这个特征
+            try { if (String(window[fnName]).indexOf("switchPage('today')") >= 0) return false; } catch (e) {}
+            return !!document.getElementById(pageId + 'Page');
+        }
         function tagNotifyModules() {
+            const pageBefore = (typeof currentPage !== 'undefined') ? currentPage : null;
             try { if (typeof nbSyncTagSelects === 'function') nbSyncTagSelects(); } catch (e) {}
             try { if (typeof renderNotesPage === 'function') renderNotesPage(); } catch (e) {}
-            try { if (typeof renderCopyPage === 'function') renderCopyPage(); } catch (e) {}
+            if (tagPanelLive('copy', 'renderCopyPage')) { try { renderCopyPage(); } catch (e) {} }
+            if (tagPanelLive('meme', 'renderMemePage')) { try { renderMemePage(); } catch (e) {} }
+            // 兜底：万一某个面板还是把页面拽走了，恢复回标签总览打开前的页面
+            if (pageBefore && typeof currentPage !== 'undefined' && currentPage !== pageBefore) {
+                try { switchPage(pageBefore); } catch (e) {}
+            }
+            // 渲染面板可能把当前弹窗关掉，重新亮起标签总览
+            const ov = document.getElementById('tagOverviewModal');
+            if (ov && !ov.classList.contains('show') && tagOverviewWasOpen) ov.classList.add('show');
         }
+        // 标签总览打开态标记（用于上面「被别的面板关掉后重新亮起」）
+        let tagOverviewWasOpen = false;
         function tagRefreshAll() { renderTagCloud(); renderTagResult(); renderTagManage(); }
         function tagRowCount(id) { return tagCounts()[id] || 0; }
 
@@ -44271,13 +44393,17 @@ function hpClearDemo(){
                 cp.innerHTML = TAG_CUSTOM_COLORS.map(c => `<span class="tag-color-dot ${c === tagPickColor ? 'active' : ''}" style="background:${c}" onclick="tagPickColorDot('${c}', this)"></span>`).join('');
             }
             document.getElementById('tagOverviewModal').classList.add('show');
+            tagOverviewWasOpen = true;
             tagActiveId = null;
             tagMgEditId = null;
             tagIconPopClose();
             tagSyncIconBtn();
             tagSwitchSeg('tags');
         }
-        function closeTagOverview() { document.getElementById('tagOverviewModal').classList.remove('show'); }
+        function closeTagOverview() {
+            tagOverviewWasOpen = false;
+            document.getElementById('tagOverviewModal').classList.remove('show');
+        }
         // 初始化：预置字典就绪 + 弹窗遮罩点击关闭
         try { tagDict(); } catch (e) {}
         document.getElementById('tagOverviewModal').addEventListener('click', (e) => { if (e.target.id === 'tagOverviewModal') closeTagOverview(); });
@@ -44311,7 +44437,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610100930";
+        window.NIKO_VERSION = "202610101048";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
