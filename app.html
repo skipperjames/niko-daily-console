@@ -9602,6 +9602,32 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-tut-ins:hover { background: rgba(102,126,234,.12); }
         body.dark-mode .nb-tut-ins { color: #8ab4ff; border-color: rgba(122,144,255,.5); }
         .nb-tut-sec { font-size: 10.5px; color: #9a96a8; padding: 7px 9px 3px; letter-spacing: .02em; }
+        /* ===== 2026-10-10 UE 蓝图：节点卡（```bp）+ 术语卡（```term）===== */
+        .nb-bpnode { margin: 0 0 11px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(127,127,127,.28); }
+        .nb-bpnode-hd { display: flex; align-items: center; gap: 8px; padding: 4px 10px; background: linear-gradient(180deg,#4d4d6b,#3a3a52); color: #fff; font-size: 12px; }
+        .nb-bpnode-hd b { font-weight: 600; }
+        .nb-bpnode-hd .cat { font-size: 10px; background: rgba(255,255,255,.18); border-radius: 5px; padding: 1px 6px; }
+        .nb-bpnode-body { display: flex; justify-content: space-between; gap: 12px; padding: 8px 10px; background: rgba(127,127,127,.10); }
+        .nb-bpnode-body .col { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+        .nb-bpnode-body .pin { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6b6878; }
+        body.dark-mode .nb-bpnode-body .pin { color: #c9c6d8; }
+        .nb-bpnode-body .pin i { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #9aa0b4; }
+        .nb-bpnode-body .pin.out { flex-direction: row-reverse; text-align: right; }
+        .nb-bpnode-body .pin.ex i { background: #fff; border-radius: 0 3px 3px 0; width: 6px; height: 8px; clip-path: polygon(0 0,100% 50%,0 100%); }
+        .nb-bpnode-body .pin em { font-style: normal; opacity: .6; font-size: 10px; }
+        .nb-bpnode .t-bool i { background: #e14a4a; } .nb-bpnode .t-int i { background: #2bb5c4; }
+        .nb-bpnode .t-float i { background: #8dd35f; } .nb-bpnode .t-string i { background: #f26ec4; }
+        .nb-bpnode .t-name i { background: #27c4b0; } .nb-bpnode .t-object i { background: #4d8eff; }
+        .nb-bpnode .t-struct i { background: #27c4b0; } .nb-bpnode .t-vector i { background: #ffd75e; }
+        .nb-bpnode .t-enum i { background: #b07cff; }
+        .nb-bpnode-desc { padding: 6px 10px; font-size: 11.5px; color: #8a857a; border-top: 1px solid rgba(127,127,127,.15); line-height: 1.6; }
+        body.dark-mode .nb-bpnode-desc { color: #9a98a8; }
+        .nb-terms { margin: 0 0 11px; display: flex; flex-direction: column; gap: 4px; }
+        .nb-term { display: flex; align-items: baseline; gap: 10px; background: rgba(127,127,127,.10); border: 1px solid rgba(127,127,127,.20); border-radius: 7px; padding: 5px 10px; flex-wrap: wrap; }
+        .nb-term .en { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-weight: 600; color: #2563eb; font-size: 12.5px; }
+        body.dark-mode .nb-term .en { color: #7fb0ff; }
+        .nb-term .zh { font-size: 11.5px; color: #6b6878; }
+        body.dark-mode .nb-term .zh { color: #b0aec0; }
         /* ===== 2026-10-10 方案 09：任务清单可点（预览纸 / 浏览卡片里直接勾，回写原文）===== */
         .be-paper ul.nb-tasks li.nb-tk-item, .nb-md ul.nb-tasks li.nb-tk-item { cursor: pointer; border-radius: 4px; }
         .be-paper ul.nb-tasks li.nb-tk-item:hover, .nb-md ul.nb-tasks li.nb-tk-item:hover { background: rgba(102,126,234,.10); }
@@ -30268,6 +30294,8 @@ function renderDayDetail() {
             if (lang === 'trace' || lang === 'traceid' || lang === '调用链') return nbTraceHtml(code);
             if (lang === 'cfg' || lang === 'config' || lang === '配置') return nbCfgHtml(code);
             if (lang === 'cmd' || lang === 'ops' || lang === '命令') return nbCmdHtml(code);
+            if (lang === 'bp' || lang === 'node' || lang === '节点') return nbBpHtml(code);
+            if (lang === 'term' || lang === '术语') return nbTermHtml(code);
             if (lang === 'pseudo' || lang === '伪代码') return nbCodeBlock(code, 'pseudo', ci);
             return nbCodeBlock(code, lang, ci);
         }
@@ -30394,6 +30422,72 @@ function renderDayDetail() {
             const row = btn && btn.closest ? btn.closest('.nb-cmd-row') : null;
             const code = row ? row.querySelector('code') : null;
             nbCopyStr(code ? code.textContent : '', '⧉ 已复制命令');
+        }
+        // ===== 2026-10-10 UE 蓝图：节点卡（```bp）/ 术语卡（```term）=====
+        // bp 格式：首行「节点名 | 分类」；IN:/OUT: 行引脚「名称(类型)」逗号分隔；其余行 = 说明
+        function nbBpTypeCls(ty) {
+            const t = String(ty || '').toLowerCase();
+            if (!t) return '';
+            if (t.indexOf('bool') >= 0 || t.indexOf('布尔') >= 0) return 't-bool';
+            if (t.indexOf('int') >= 0 || t.indexOf('整数') >= 0) return 't-int';
+            if (t.indexOf('float') >= 0 || t.indexOf('浮点') >= 0) return 't-float';
+            if (t.indexOf('string') >= 0 || t.indexOf('字符串') >= 0) return 't-string';
+            if (t.indexOf('name') >= 0) return 't-name';
+            if (t.indexOf('vector') >= 0 || t.indexOf('向量') >= 0 || t.indexOf('位置') >= 0 || t.indexOf('旋转') >= 0 || t.indexOf('transform') >= 0) return 't-vector';
+            if (t.indexOf('enum') >= 0 || t.indexOf('枚举') >= 0) return 't-enum';
+            if (t.indexOf('object') >= 0 || t.indexOf('对象') >= 0 || t.indexOf('引用') >= 0 || t.indexOf('actor') >= 0 || t.indexOf('class') >= 0 || t.indexOf('类') >= 0 || t.indexOf('controller') >= 0 || t.indexOf('pawn') >= 0) return 't-object';
+            if (t.indexOf('struct') >= 0 || t.indexOf('结构') >= 0) return 't-struct';
+            return '';
+        }
+        function nbBpPinsHtml(str, isOut) {
+            const pins = String(str || '').split(/[,，、]/).map(function (s) { return s.trim(); }).filter(Boolean);
+            return pins.map(function (pin) {
+                const pm = pin.match(/^(.*?)[(（](.*?)[\)）]\s*$/);
+                const nm = pm ? pm[1].trim() : pin;
+                const ty = pm ? pm[2].trim() : '';
+                const ex = (/^(执行|exec)$/i.test(nm) || /^(执行|exec)$/i.test(ty)) ? ' ex' : '';
+                const tc = ty ? (' ' + nbBpTypeCls(ty)) : '';
+                return '<div class="pin' + ex + tc + (isOut ? ' out' : '') + '"><i></i><span>' + nbEdEsc(nm)
+                    + (ty ? ' <em>' + nbEdEsc(ty) + '</em>' : '') + '</span></div>';
+            }).join('');
+        }
+        function nbBpHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            let name = '', cat = '', ins = '', outs = '';
+            const desc = [];
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln) return;
+                const fm = ln.match(/^(IN|OUT)\s*[:：]\s*(.*)$/i);
+                if (fm) { if (fm[1].toUpperCase() === 'IN') ins = fm[2]; else outs = fm[2]; return; }
+                if (!name && ln.indexOf('|') >= 0) {
+                    const p = ln.split('|');
+                    name = p[0].trim(); cat = (p[1] || '').trim(); return;
+                }
+                desc.push(ln);
+            });
+            let h = '<div class="nb-bpnode"><div class="nb-bpnode-hd"><b>' + nbEdEsc(name || '蓝图节点') + '</b>'
+                + (cat ? '<span class="cat">' + nbEdEsc(cat) + '</span>' : '') + '</div>';
+            h += '<div class="nb-bpnode-body"><div class="col">' + nbBpPinsHtml(ins, false) + '</div>'
+                + '<div class="col">' + nbBpPinsHtml(outs, true) + '</div></div>';
+            if (desc.length) h += '<div class="nb-bpnode-desc">' + nbEdInline(desc.join('\n')) + '</div>';
+            return h + '</div>';
+        }
+        // term 格式：每行「英文 | 中文」
+        function nbTermHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            let h = '<div class="nb-terms">';
+            let n = 0;
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln) return;
+                const p = ln.split('|');
+                n++;
+                h += '<div class="nb-term"><span class="en">' + nbEdEsc((p[0] || '').trim()) + '</span>'
+                    + '<span class="zh">' + nbEdInline((p[1] || '').trim()) + '</span></div>';
+            });
+            if (!n) h += '<div class="nb-term"><span class="zh">（空）</span></div>';
+            return h + '</div>';
         }
         function nbEdMd(t) {
             const lines = String(t == null ? '' : t).replace(/\r\n?/g, '\n').split('\n');
@@ -30795,6 +30889,8 @@ function renderDayDetail() {
             { k: 'trace', ic: '🔍', nm: 'Trace 调用链', sb: '```trace', tpl: '```trace\ntraceId: \ngateway 路由 8ms\norder-svc createOrder 45ms\n```', caret: 'inside' },
             { k: 'cfg', ic: '⚙️', nm: '配置项对照表', sb: '```cfg', tpl: '```cfg\norder.timeout = 1000 -> 3000\npool.maxSize = 20 -> 50\n```', caret: 'inside' },
             { k: 'cmd', ic: '🖥', nm: '命令清单', sb: '```cmd 危险分级', tpl: '```cmd\nkubectl get pods -n prod\nflushdb\n```', caret: 'inside' },
+            { k: 'bp', ic: '🎮', nm: 'UE 节点卡', sb: '```bp 蓝图节点', tpl: '```bp\n节点名 | 分类\nIN: 执行, 参数(类型)\nOUT: 执行, 返回值(类型)\n一句话说明\n```', caret: 'inside' },
+            { k: 'term', ic: '📖', nm: '术语卡', sb: '```term 中英对照', tpl: '```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\n```', caret: 'inside' },
             { k: 'table', ic: '▦', nm: '参数表 / 对比表', sb: '| 参数 | 类型 | 说明 |', tpl: '| 参数 | 类型 | 说明 |\n| --- | --- | --- |\n|  |  |  |' },
             { k: 'todo', ic: '☑', nm: '待办清单', sb: '- [ ] 条目', tpl: '- [ ] ' },
             { k: 'time', ic: '🕐', nm: '时间戳行', sb: '[当前时间]', tpl: function () { return '[' + nbHM() + '] '; } }
@@ -30946,7 +31042,14 @@ function renderDayDetail() {
             { k: 'api', ic: '🔌', name: '接口文档骨架', body: "### `GET /api/xxx` · 接口名\n\n- **入参**：\n- **出参**：\n- **说明**：" },
             { k: 'trace', ic: '🔍', name: 'Trace 调用链记录', body: "```trace\ntraceId: \ngateway 路由 8ms\norder-svc createOrder 45ms\ninventory-svc deduct 1280ms\nmysql UPDATE 12ms\n```" },
             { k: 'cfg', ic: '⚙️', name: '配置项对照表', body: "```cfg\norder.timeout = 1000 -> 3000  # 说明\npool.maxSize = 20 -> 50\nretry.times = 3\n```" },
-            { k: 'cmd', ic: '🖥', name: '排查命令清单', body: "```cmd\nkubectl get pods -n prod\nkubectl logs -f deploy/order-svc\nkubectl rollout restart deploy/order-svc\nflushdb\n```" }
+            { k: 'cmd', ic: '🖥', name: '排查命令清单', body: "```cmd\nkubectl get pods -n prod\nkubectl logs -f deploy/order-svc\nkubectl rollout restart deploy/order-svc\nflushdb\n```" },
+            { k: 'ue_branch', ic: '🌿', name: 'UE Branch 分支', body: "```bp\nBranch | 流程\nIN: 执行, Condition(bool)\nOUT: True, False\n条件分支：True 走真、False 走假\n```" },
+            { k: 'ue_delay', ic: '⏱', name: 'UE Delay 延迟', body: "```bp\nDelay | 流程\nIN: 执行, Duration(float)\nOUT: Completed\n延迟指定秒数后继续执行 Completed\n```" },
+            { k: 'ue_foreach', ic: '🔁', name: 'UE ForEachLoop 遍历', body: "```bp\nForEachLoop | 流程\nIN: 执行, Array(数组)\nOUT: Loop Body, Completed, Array Element(对象), Array Index(int)\n每个元素执行一次 Loop Body，遍历完触发 Completed\n```" },
+            { k: 'ue_spawn', ic: '🥚', name: 'UE SpawnActor 生成', body: "```bp\nSpawn Actor from Class | 生成\nIN: 执行, Class(类), Spawn Transform(位置)\nOUT: 执行, Return Value(对象)\n给定类+位置在关卡里实例化，返回引用\n```" },
+            { k: 'ue_cast', ic: '🎯', name: 'UE Cast To 强转', body: "```bp\nCast To | 转换\nIN: 执行, Object(对象)\nOUT: 执行(成功), Failed(失败), As 目标类(对象)\n类型不符走 Failed 分支，成功返回强转后的引用\n```" },
+            { k: 'ue_getpc', ic: '🕹', name: 'UE 获取玩家控制器', body: "```bp\nGet Player Controller | 获取\nIN: World Context(对象)\nOUT: Return Value(控制器)\n纯函数：拿玩家控制器引用，常接 Cast To\n```" },
+            { k: 'ue_print', ic: '🖨', name: 'UE PrintString 打印', body: "```bp\nPrint String | 调试\nIN: 执行, In String(字符串)\nOUT: 执行\n调试输出到屏幕左上角和输出日志\n```" }
         ];
         function nbUserSnips() {
             try {
@@ -31076,6 +31179,10 @@ function renderDayDetail() {
 
         // ---------- 教程浮层（2026-10-10 B 组：演示所有新功能，一键插入示例） ----------
         const NB_TUT_ITEMS = [
+            { g: '🎮 UE 蓝图', items: [
+                { k: 'bp', ic: '🎮', nm: 'UE 节点卡', ds: '节点名 + 分类 + 输入/输出引脚（类型配色）+ 说明', fn: '```bp', demo: "```bp\nSpawn Actor from Class | 生成\nIN: 执行, Class(类), Spawn Transform(位置)\nOUT: 执行, Return Value(对象)\n给定类+位置在关卡里实例化，返回引用\n```" },
+                { k: 'term', ic: '📖', nm: '术语卡', ds: 'UE 术语中英对照，一行一条', fn: '```term', demo: "```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\nEvent Dispatcher | 事件分发器（一对多广播）\n```" }
+            ] },
             { g: 'B 组 · 代码与逻辑', items: [
                 { k: 'ref', ic: '📄', nm: '代码引用块', ds: '代码块带「文件路径 + 行号」，路径可复制', fn: '```java OrderService.java#L42-L58', demo: "```java src/main/java/com/order/OrderService.java#L42-L58\npublic BigDecimal calc(Order o) {\n    if (o == null) throw new BizException(\"order.null\");\n    return o.amount.multiply(rate);\n}\n```" },
                 { k: 'pseudo', ic: '🧠', nm: '伪代码块', ds: '还没写、先想清楚；IF / LOOP / RETURN 轻高亮', fn: '```pseudo', demo: "```pseudo\nFOR each 过期订单:\n  IF 支付超时 30min:\n    关单()  // 释放库存\n  ELSE IF 已支付:\n    发货()\n```" },
@@ -45904,7 +46011,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101501";
+        window.NIKO_VERSION = "202610101709";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
