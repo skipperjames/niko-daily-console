@@ -9547,6 +9547,61 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-code .c-num { color: #f0b46a; }
         body.dark-mode .nb-code .c-cm { color: #8a8798; }
         body.dark-mode .nb-code .c-fn { color: #7fb0ff; }
+        /* ===== 2026-10-10 B 组方案 21：代码引用块（文件路径 + 行号锚点，路径可复制）===== */
+        .nb-ref-path { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; color: #667eea; font-size: 10.5px; text-transform: none; letter-spacing: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        body.dark-mode .nb-ref-path { color: #7fb0ff; }
+        .nb-ref-ln { color: #9a96a8; margin-left: 2px; }
+        /* ===== 2026-10-10 B 组方案 26：Trace 调用链表（超阈值行标红）===== */
+        .nb-trace { margin: 0 0 11px; border: 1px solid rgba(127,127,127,.28); border-radius: 8px; overflow: hidden; }
+        .nb-trace-hd { display: flex; align-items: center; gap: 8px; padding: 4px 10px; font-size: 11px; color: #667eea; background: rgba(127,127,127,.10); border-bottom: 1px solid rgba(127,127,127,.15); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        body.dark-mode .nb-trace-hd { color: #7fb0ff; }
+        .nb-trace .nb-tbl { margin: 0; border: none; }
+        .nb-trace .nb-tbl td { border-width: 0 0 1px 0; }
+        .nb-trace .nb-tbl tr:last-child td { border-bottom: none; }
+        .nb-trace tr.slow td { background: rgba(220,38,38,.09); color: #dc2626; }
+        body.dark-mode .nb-trace tr.slow td { background: rgba(220,38,38,.16); color: #f87171; }
+        .nb-trace .ms { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+        .nb-trace .ms.big { font-weight: 700; }
+        /* ===== 2026-10-10 B 组方案 28：配置项对照表（默认值 → 线上值）===== */
+        .nb-cfg { margin: 0 0 11px; border: 1px solid rgba(127,127,127,.28); border-radius: 8px; overflow: hidden; }
+        .nb-cfg-hd { padding: 4px 10px; font-size: 11px; color: #9a96a8; background: rgba(127,127,127,.10); border-bottom: 1px solid rgba(127,127,127,.15); }
+        .nb-cfg .nb-tbl { margin: 0; border: none; }
+        .nb-cfg .nb-tbl th, .nb-cfg .nb-tbl td { border-width: 0 0 1px 0; }
+        .nb-cfg .nb-tbl tr:last-child td { border-bottom: none; }
+        .nb-cfg code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12.5px; }
+        .nb-cfg .cdef { color: #9a96a8; }
+        .nb-cfg .clive { color: #2e9e5b; font-weight: 600; }
+        body.dark-mode .nb-cfg .clive { color: #7ddc9a; }
+        /* ===== 2026-10-10 B 组方案 29：运维 / 排查命令清单（危险分级着色 + 每行复制）===== */
+        .nb-cmd { margin: 0 0 11px; border: 1px solid rgba(127,127,127,.28); border-radius: 8px; overflow: hidden; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12.5px; }
+        .nb-cmd-row { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-bottom: 1px solid rgba(127,127,127,.12); }
+        .nb-cmd-row:last-child { border-bottom: none; }
+        .nb-cmd-row code { background: none; padding: 0; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+        .nb-cmd-row.safe { background: rgba(46,158,91,.08); }
+        .nb-cmd-row.warn { background: rgba(217,119,6,.08); }
+        .nb-cmd-row.danger { background: rgba(220,38,38,.10); }
+        body.dark-mode .nb-cmd-row.safe { background: rgba(46,158,91,.14); }
+        body.dark-mode .nb-cmd-row.warn { background: rgba(217,119,6,.14); }
+        body.dark-mode .nb-cmd-row.danger { background: rgba(220,38,38,.18); }
+        .nb-cmd-tag { flex: 0 0 auto; font-size: 10px; color: #9a96a8; font-family: inherit; }
+        .nb-cmd-row.danger .nb-cmd-tag { color: #dc2626; font-weight: 700; }
+        .nb-cmd-row.warn .nb-cmd-tag { color: #d97706; }
+        .nb-cmd-row.safe .nb-cmd-tag { color: #2e9e5b; }
+        /* ===== 2026-10-10 教程浮层：演示所有编辑器功能，每项带「插入示例」===== */
+        .nb-pop.nb-tut { max-width: min(420px, calc(100% - 24px)); max-height: min(460px, calc(100vh - 80px)); }
+        .nb-tut-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 9px; border-radius: 7px; }
+        .nb-tut-item:hover { background: rgba(102,126,234,.08); }
+        .nb-tut-ic { flex: 0 0 auto; min-width: 22px; text-align: center; font-size: 14px; line-height: 1.4; }
+        .nb-tut-bd { flex: 1 1 auto; min-width: 0; }
+        .nb-tut-nm { font-size: 12.5px; color: #2b2b3a; font-weight: 600; }
+        body.dark-mode .nb-tut-nm { color: #e3e1ef; }
+        .nb-tut-ds { font-size: 10.5px; color: #9a96a8; line-height: 1.5; margin-top: 1px; }
+        .nb-tut-fn { font-size: 10px; color: #7c3aed; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; margin-top: 2px; }
+        body.dark-mode .nb-tut-fn { color: #c4a2ff; }
+        .nb-tut-ins { flex: 0 0 auto; border: 1px solid rgba(102,126,234,.45); background: transparent; color: #667eea; border-radius: 5px; font-size: 10.5px; padding: 1px 8px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+        .nb-tut-ins:hover { background: rgba(102,126,234,.12); }
+        body.dark-mode .nb-tut-ins { color: #8ab4ff; border-color: rgba(122,144,255,.5); }
+        .nb-tut-sec { font-size: 10.5px; color: #9a96a8; padding: 7px 9px 3px; letter-spacing: .02em; }
         /* ===== 2026-10-10 方案 09：任务清单可点（预览纸 / 浏览卡片里直接勾，回写原文）===== */
         .be-paper ul.nb-tasks li.nb-tk-item, .nb-md ul.nb-tasks li.nb-tk-item { cursor: pointer; border-radius: 4px; }
         .be-paper ul.nb-tasks li.nb-tk-item:hover, .nb-md ul.nb-tasks li.nb-tk-item:hover { background: rgba(102,126,234,.10); }
@@ -15920,6 +15975,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button type="button" onclick="nbEdIns('\n---\n', '', '')" title="分割线">分割线</button>
                         <button type="button" onclick="nbEdIns('[', '](https://)', '链接文字')" title="链接">🔗 链接</button>
                         <button type="button" onclick="nbEdIns('```\n', '\n```', '在这里贴代码', 0)" title="代码块（可写 ```sql / ```java / ```json 指定语言）">{ } 代码块</button>
+                        <button type="button" onclick="nbTutOpen(this)" title="教程：演示所有新功能（代码引用 / 伪代码 / Trace / 配置对照 / 命令清单…），点开一键插入示例">📖 教程</button>
                         <button type="button" onclick="nbSnipOpen(this)" title="片段库：常用代码模板一键插入，也能把自己的选中内容存成片段">📎 片段</button>
                         <button type="button" onclick="nbTimeOpen(this)" title="插入当前时间戳 / 排障日志骨架">🕐 时间</button>
                         <button type="button" onclick="nbFindOpen(false)" title="查找（Ctrl+F）">🔍 查找</button>
@@ -15945,6 +16001,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     <div class="nb-slash" id="nbSlashMenu"></div>
                     <div class="nb-pop" id="nbSnipPop"></div>
                     <div class="nb-pop" id="nbTimePop"></div>
+                    <div class="nb-pop nb-tut" id="nbTutPop"></div>
                     <div class="be-stat">
                         <span>字数 <b id="nbEdStW">0</b></span>
                         <span>段落 <b id="nbEdStP">0</b></span>
@@ -30093,7 +30150,7 @@ function renderDayDetail() {
             ruby: 'alias and begin break case class def defined do else elsif end ensure false for if in module next nil not or redo rescue retry return self super then true undef unless until when while yield puts require attr',
             php: 'abstract and array as break case catch class clone const continue declare default do echo else elseif empty endfor endforeach endif endswitch endwhile extends final finally fn for foreach function global if implements include instanceof interface isset list namespace new or print private protected public require return static switch throw trait try unset use var while xor yield true false null',
             c: 'auto break case char const continue default do double else enum extern float for goto if int long register return short signed sizeof static struct switch typedef union unsigned void volatile while include define true false null',
-            pseudo: 'if else elseif endif end endfor endwhile for while do return function set begin loop break continue and or not input output then call exit',
+            pseudo: 'if else elseif endif end endfor endwhile for each while until repeat do return function set begin loop break continue and or not input output then call exit',
             markdown: ''
         };
         // 该语言族用哪种注释符
@@ -30184,6 +30241,160 @@ function renderDayDetail() {
                 done && done();
             } catch (e) { showToast('⚠️ 复制失败，请手动选中'); }
         }
+        // 通用复制：先 clipboard API，失败回退 execCommand
+        function nbCopyStr(txt, okMsg) {
+            if (!txt) { showToast('⚠️ 没有可复制的内容'); return; }
+            const done = function () { showToast(okMsg || '⧉ 已复制'); };
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(txt).then(done, function () { nbCodeCopyFallback(txt, done); });
+                } else nbCodeCopyFallback(txt, done);
+            } catch (e) { nbCodeCopyFallback(txt, done); }
+        }
+        // ===== 2026-10-10 B 组：代码 / 逻辑记录围栏路由 =====
+        // ``` 语言行按内容路由到专门渲染器：
+        //   21 代码引用（语言 + 文件路径#L行号）· 25 伪代码 · 26 Trace 调用链 · 28 配置对照 · 29 命令清单
+        function nbFenceRender(fence, code, ci) {
+            const f = String(fence || '').trim();
+            if (!f) return nbCodeBlock(code, '', ci);
+            const parts = f.split(/\s+/);
+            const langRaw = parts[0] || '';
+            const lang = langRaw.toLowerCase();
+            const rest = f.slice(langRaw.length).trim();
+            // 21 代码引用：语言后面带「路径 / 路径#L行号」（含路径特征即可）
+            if (rest && /[#/\\]|\.\w+|^[A-Za-z]:/.test(rest)) {
+                return nbCodeRefBlock(lang, rest, code, ci);
+            }
+            if (lang === 'trace' || lang === 'traceid' || lang === '调用链') return nbTraceHtml(code);
+            if (lang === 'cfg' || lang === 'config' || lang === '配置') return nbCfgHtml(code);
+            if (lang === 'cmd' || lang === 'ops' || lang === '命令') return nbCmdHtml(code);
+            if (lang === 'pseudo' || lang === '伪代码') return nbCodeBlock(code, 'pseudo', ci);
+            return nbCodeBlock(code, lang, ci);
+        }
+        // 21 代码引用块：顶部「📄 文件路径 + L行号」，路径可一键复制
+        function nbCodeRefBlock(lang, pathArg, code, ci) {
+            const key = NB_LANG_ALIAS[lang] || '';
+            const label = key || lang || 'code';
+            const pm = String(pathArg).match(/^(.*?)#L(.+)$/i);
+            let path = pathArg, range = '';
+            if (pm) {
+                path = pm[1].trim();
+                range = pm[2].trim().replace(/L/gi, '');   // "42-L58" → "42-58"（L 前缀只留最前一个）
+            }
+            const refTxt = path + (range ? '#L' + range : '');
+            const nLines = String(code == null ? '' : code).split('\n').length;
+            const long = nLines > NB_FOLD_LINES;
+            const folded = long && !nbFoldOpen[ci || 0];
+            let foldBtn = '';
+            if (long) {
+                foldBtn = '<button type="button" class="nb-code-fold" onclick="nbCodeFoldToggle(this)" title="' + (folded ? '展开这段代码' : '收起这段代码') + '">'
+                    + (folded ? '▸ ' + nLines + ' 行 · 展开' : '▾ ' + nLines + ' 行 · 收起') + '</button>';
+            }
+            const refHtml = path
+                ? '<span class="nb-ref-path" data-ref="' + nbEdEsc(refTxt) + '" title="' + nbEdEsc(path) + '">📄 ' + nbEdEsc(path) + (range ? '<span class="nb-ref-ln">L' + nbEdEsc(range) + '</span>' : '') + '</span>'
+                : '';
+            const copyPathBtn = path ? '<button type="button" class="nb-code-copy" onclick="nbRefPathCopy(this)" title="复制文件路径（含行号）">⧉ 路径</button>' : '';
+            return '<div class="nb-code' + (folded ? ' folded' : '') + '" data-lang="' + nbEdEsc(label) + '" data-lines="' + nLines + '" data-ci="' + (ci || 0) + '">'
+                + '<div class="nb-code-hd"><span class="nb-code-lang">' + nbEdEsc(label) + '</span>' + refHtml + foldBtn
+                + copyPathBtn
+                + '<button type="button" class="nb-code-copy" onclick="nbCodeCopy(this)" title="复制整段代码">⧉ 代码</button></div>'
+                + '<pre><code>' + nbCodeHi(code, key) + '</code></pre></div>';
+        }
+        function nbRefPathCopy(btn) {
+            const box = btn && btn.closest ? btn.closest('.nb-code') : null;
+            const p = box ? box.querySelector('.nb-ref-path') : null;
+            nbCopyStr(p ? (p.getAttribute('data-ref') || '') : '', '⧉ 已复制路径');
+        }
+        // 26 Trace 调用链：每行「服务 操作 耗时」，超阈值行标红
+        function nbTraceHtml(code) {
+            const TH = 500;   // 超 500ms 判慢
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            let traceId = '';
+            const rows = [];
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln) return;
+                if (/^trace(id)?\s*[:：]/i.test(ln)) { traceId = ln.replace(/^trace(id)?\s*[:：]\s*/i, '').trim(); return; }
+                if (/^#/.test(ln)) return;
+                const m = ln.match(/^(.*?)[\s\t]+([\d.]+)\s*(ms|s|µs|us)?\s*$/i);
+                let svc, op, ms = null, msTxt = '';
+                if (m) {
+                    const parts = m[1].trim().split(/\s+/);
+                    svc = parts[0] || '';
+                    op = parts.slice(1).join(' ');
+                    const v = parseFloat(m[2]);
+                    const u = (m[3] || 'ms').toLowerCase();
+                    ms = u === 's' ? v * 1000 : (u === 'µs' || u === 'us' ? v / 1000 : v);
+                    msTxt = m[2] + (m[3] || 'ms');
+                } else {
+                    svc = ln; op = ''; msTxt = '';
+                }
+                rows.push({ svc: svc, op: op, ms: ms, msTxt: msTxt });
+            });
+            let h = '<div class="nb-trace"><div class="nb-trace-hd">🔍 ' + (traceId ? ('traceId: ' + nbEdEsc(traceId)) : '调用链记录') + '</div>';
+            h += '<table class="nb-tbl"><thead><tr><th>服务</th><th>操作</th><th style="text-align:right">耗时</th></tr></thead><tbody>';
+            rows.forEach(function (r) {
+                const slow = r.ms != null && r.ms >= TH;
+                h += '<tr' + (slow ? ' class="slow"' : '') + '><td>' + nbEdEsc(r.svc) + '</td><td>' + nbEdEsc(r.op) + '</td><td class="ms' + (slow ? ' big' : '') + '">' + nbEdEsc(r.msTxt) + (slow ? ' ⚠' : '') + '</td></tr>';
+            });
+            return h + '</tbody></table></div>';
+        }
+        // 28 配置项对照表：key = 默认值 -> 线上值  # 说明
+        function nbCfgHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            const rows = [];
+            lines.forEach(function (raw) {
+                const ln = raw.trim();
+                if (!ln || /^#/.test(ln)) return;
+                let note = '';
+                const nm = ln.match(/^(.*?)\s+#\s*(.*)$/);
+                const body = (nm ? nm[1] : ln).trim();
+                if (nm) note = nm[2];
+                let key = body, def = '', live = '';
+                const km = body.match(/^([^=]+?)\s*=\s*(.*)$/);
+                if (km) {
+                    key = km[1].trim();
+                    const arr = km[2].split(/\s*->\s*/);
+                    if (arr.length >= 2) { def = arr[0].trim(); live = arr.slice(1).join(' -> ').trim(); }
+                    else live = arr[0].trim();
+                }
+                rows.push({ key: key, def: def, live: live, note: note });
+            });
+            let h = '<div class="nb-cfg"><div class="nb-cfg-hd">⚙️ 配置对照</div>';
+            h += '<table class="nb-tbl"><thead><tr><th>配置项</th><th>默认值</th><th>线上值</th><th>说明</th></tr></thead><tbody>';
+            rows.forEach(function (r) {
+                h += '<tr><td><code>' + nbEdEsc(r.key) + '</code></td><td class="cdef">' + nbEdEsc(r.def) + '</td><td class="clive">' + nbEdEsc(r.live) + '</td><td>' + nbEdEsc(r.note) + '</td></tr>';
+            });
+            return h + '</tbody></table></div>';
+        }
+        // 29 运维 / 排查命令清单：按危险等级着色（安全绿 / 有副作用黄 / 高危红），每行可复制
+        const NB_CMD_DANGER = ['flushdb', 'flushall', 'rm -rf', 'rm -r', 'rmdir /s', 'del /s', 'del /f', 'drop table', 'drop database', 'truncate', 'format ', 'mkfs', 'fdisk', 'dd if=', 'kill -9', 'shutdown', 'poweroff', 'init 0', 'reboot', 'reset --hard', '> /dev/'];
+        const NB_CMD_WARN = ['rm ', 'delete', 'del ', 'remove', 'restart', 'rollout', 'stop', 'kill', 'scale', 'update', 'set ', 'overwrite', 'force', 'purge', 'clean', 'clear', 'drop', 'vacuum', 'exec', 'apply', 'replace', 'reindex', 'flush'];
+        function nbCmdLevel(cmd) {
+            const c = String(cmd || '').toLowerCase();
+            for (let i = 0; i < NB_CMD_DANGER.length; i++) if (c.indexOf(NB_CMD_DANGER[i]) >= 0) return 'danger';
+            for (let i = 0; i < NB_CMD_WARN.length; i++) if (c.indexOf(NB_CMD_WARN[i]) >= 0) return 'warn';
+            return 'safe';
+        }
+        function nbCmdHtml(code) {
+            const lines = String(code == null ? '' : code).replace(/\r\n?/g, '\n').split('\n');
+            let h = '<div class="nb-cmd">';
+            lines.forEach(function (raw) {
+                const ln = raw.replace(/^\s+/, '');
+                if (!ln.trim() || /^(#|\/\/)/.test(ln.trim())) return;
+                const lv = nbCmdLevel(ln.trim());
+                const tag = lv === 'danger' ? '⚠ 高危' : (lv === 'warn' ? '⚠ 有副作用' : '✓ 只读');
+                h += '<div class="nb-cmd-row ' + lv + '"><code>' + nbEdEsc(ln) + '</code>'
+                    + '<button type="button" class="nb-code-copy" onclick="nbCmdCopy(this)" title="复制这条命令">⧉</button>'
+                    + '<span class="nb-cmd-tag">' + tag + '</span></div>';
+            });
+            return h + '</div>';
+        }
+        function nbCmdCopy(btn) {
+            const row = btn && btn.closest ? btn.closest('.nb-cmd-row') : null;
+            const code = row ? row.querySelector('code') : null;
+            nbCopyStr(code ? code.textContent : '', '⧉ 已复制命令');
+        }
         function nbEdMd(t) {
             const lines = String(t == null ? '' : t).replace(/\r\n?/g, '\n').split('\n');
             const out = []; let i = 0, list = null, nbTkNo = 0, nbCodeNo = 0;
@@ -30192,13 +30403,13 @@ function renderDayDetail() {
             const brk = s => nbEdInline(s).replace(/\n/g, '<br>');
             while (i < lines.length) {
                 const ln = lines[i], tr = ln.trim();
-                if (/^```/.test(tr)) {                       // ``` 代码块（2026-10-10 方案 01：带语言标签 + 复制 + 着色）
+                if (/^```/.test(tr)) {                       // ``` 代码块（2026-10-10 方案 01；B 组 21/25/26/28/29 按语言路由到专门渲染器）
                     closeList();
-                    const lang = tr.replace(/^`+/, '').replace(/`+$/, '').trim().toLowerCase();
+                    const fence = tr.replace(/^`+/, '').replace(/`+$/, '').trim();
                     const buf = []; i++;
                     while (i < lines.length && !/^```/.test(lines[i].trim())) { buf.push(lines[i]); i++; }
                     i++;
-                    out.push(nbCodeBlock(buf.join('\n'), lang, nbCodeNo++));
+                    out.push(nbFenceRender(fence, buf.join('\n'), nbCodeNo++));
                     continue;
                 }
                 if (!tr) { closeList(); i++; continue; }
@@ -30579,6 +30790,11 @@ function renderDayDetail() {
             { k: 'sql', ic: '🛢', nm: 'SQL 代码块', sb: '```sql', tpl: '```sql\n\n```', caret: 'inside' },
             { k: 'json', ic: '🧩', nm: 'JSON 代码块', sb: '```json', tpl: '```json\n\n```', caret: 'inside' },
             { k: 'java', ic: '☕', nm: 'Java 代码块', sb: '```java', tpl: '```java\n\n```', caret: 'inside' },
+            { k: 'ref', ic: '📄', nm: '代码引用块', sb: '```java 路径#L行号', tpl: '```java OrderService.java#L42-L58\n\n```', caret: 'inside' },
+            { k: 'pseudo', ic: '🧠', nm: '伪代码块', sb: '```pseudo', tpl: '```pseudo\nFOR each 订单:\n  IF 超时: 关单()\n```', caret: 'inside' },
+            { k: 'trace', ic: '🔍', nm: 'Trace 调用链', sb: '```trace', tpl: '```trace\ntraceId: \ngateway 路由 8ms\norder-svc createOrder 45ms\n```', caret: 'inside' },
+            { k: 'cfg', ic: '⚙️', nm: '配置项对照表', sb: '```cfg', tpl: '```cfg\norder.timeout = 1000 -> 3000\npool.maxSize = 20 -> 50\n```', caret: 'inside' },
+            { k: 'cmd', ic: '🖥', nm: '命令清单', sb: '```cmd 危险分级', tpl: '```cmd\nkubectl get pods -n prod\nflushdb\n```', caret: 'inside' },
             { k: 'table', ic: '▦', nm: '参数表 / 对比表', sb: '| 参数 | 类型 | 说明 |', tpl: '| 参数 | 类型 | 说明 |\n| --- | --- | --- |\n|  |  |  |' },
             { k: 'todo', ic: '☑', nm: '待办清单', sb: '- [ ] 条目', tpl: '- [ ] ' },
             { k: 'time', ic: '🕐', nm: '时间戳行', sb: '[当前时间]', tpl: function () { return '[' + nbHM() + '] '; } }
@@ -30727,7 +30943,10 @@ function renderDayDetail() {
             { k: 'ddl', ic: '🧱', name: 'SQL 建表模板', body: "```sql\nCREATE TABLE `t_name` (\n  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',\n  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='表说明';\n```" },
             { k: 'try', ic: '🛡️', name: 'try-catch + 日志打点', body: "```java\ntry {\n    // TODO 业务逻辑\n} catch (Exception e) {\n    log.error(\"[模块] 参数={}, 异常\", param, e);\n    throw new BizException(\"操作失败\", e);\n}\n```" },
             { k: 'bug', ic: '🐞', name: 'Bug 排查记录骨架', body: "## Bug：一句话描述\n\n**现象**：\n\n**复现**：\n\n**根因**：\n\n**修复**：\n\n**回归**：" },
-            { k: 'api', ic: '🔌', name: '接口文档骨架', body: "### `GET /api/xxx` · 接口名\n\n- **入参**：\n- **出参**：\n- **说明**：" }
+            { k: 'api', ic: '🔌', name: '接口文档骨架', body: "### `GET /api/xxx` · 接口名\n\n- **入参**：\n- **出参**：\n- **说明**：" },
+            { k: 'trace', ic: '🔍', name: 'Trace 调用链记录', body: "```trace\ntraceId: \ngateway 路由 8ms\norder-svc createOrder 45ms\ninventory-svc deduct 1280ms\nmysql UPDATE 12ms\n```" },
+            { k: 'cfg', ic: '⚙️', name: '配置项对照表', body: "```cfg\norder.timeout = 1000 -> 3000  # 说明\npool.maxSize = 20 -> 50\nretry.times = 3\n```" },
+            { k: 'cmd', ic: '🖥', name: '排查命令清单', body: "```cmd\nkubectl get pods -n prod\nkubectl logs -f deploy/order-svc\nkubectl rollout restart deploy/order-svc\nflushdb\n```" }
         ];
         function nbUserSnips() {
             try {
@@ -30853,7 +31072,61 @@ function renderDayDetail() {
             pop.style.left = Math.round(left) + 'px';
             pop.style.top = Math.round(top) + 'px';
         }
-        function nbPopCloseAll() { nbSnipClose(); nbTimeClose(); }
+        function nbPopCloseAll() { nbSnipClose(); nbTimeClose(); nbTutClose(); }
+
+        // ---------- 教程浮层（2026-10-10 B 组：演示所有新功能，一键插入示例） ----------
+        const NB_TUT_ITEMS = [
+            { g: 'B 组 · 代码与逻辑', items: [
+                { k: 'ref', ic: '📄', nm: '代码引用块', ds: '代码块带「文件路径 + 行号」，路径可复制', fn: '```java OrderService.java#L42-L58', demo: "```java src/main/java/com/order/OrderService.java#L42-L58\npublic BigDecimal calc(Order o) {\n    if (o == null) throw new BizException(\"order.null\");\n    return o.amount.multiply(rate);\n}\n```" },
+                { k: 'pseudo', ic: '🧠', nm: '伪代码块', ds: '还没写、先想清楚；IF / LOOP / RETURN 轻高亮', fn: '```pseudo', demo: "```pseudo\nFOR each 过期订单:\n  IF 支付超时 30min:\n    关单()  // 释放库存\n  ELSE IF 已支付:\n    发货()\n```" },
+                { k: 'trace', ic: '🔍', nm: 'Trace 调用链', ds: 'traceId + 每跳耗时渲染成表，慢的那跳自动标红', fn: '```trace', demo: "```trace\ntraceId: 7f3a91c2e8\ngateway 路由 8ms\norder-svc createOrder 45ms\ninventory-svc deduct 1280ms\nmysql UPDATE 12ms\n```" },
+                { k: 'cfg', ic: '⚙️', nm: '配置项对照表', ds: '默认值 → 线上值 一眼对照，改配置不怕漏项', fn: '```cfg', demo: "```cfg\norder.timeout = 1000 -> 3000  # 大促放宽\npool.maxSize = 20 -> 50\nretry.times = 3\n```" },
+                { k: 'cmd', ic: '🖥', nm: '命令清单', ds: '按危险等级上色：只读绿 / 有副作用黄 / 高危红', fn: '```cmd', demo: "```cmd\nkubectl get pods -n prod\nkubectl rollout restart deploy/order-svc\nflushdb\n```" }
+            ] },
+            { g: '常用排版', items: [
+                { k: 'code', ic: '⌨', nm: '代码块', ds: '带语言标签 + 语法着色 + 一键复制', fn: '```sql', demo: "```sql\nSELECT id, name FROM users WHERE status = 1;\n```" },
+                { k: 'table', ic: '▦', nm: '参数表', ds: '两行表格，自动长成真表格', fn: '| 参数 | 类型 | 说明 |', demo: "| 参数 | 类型 | 说明 |\n| --- | --- | --- |\n| id | bigint | 主键 |\n| uid | bigint | 用户 ID |" },
+                { k: 'todo', ic: '☑', nm: '待办清单', ds: '点一下就勾上，回写原文', fn: '- [ ] 条目', demo: "- [ ] 梳理接口\n- [ ] 搭环境\n- [x] 写方案" },
+                { k: 'log', ic: '🧾', nm: '排障日志骨架', ds: 'INFO / STEP / CAUSE / FIX 六段排障记录', fn: '🕐 时间 按钮', demo: "## 排障日志\n\n[10:00] INFO 收到诉求：\n[10:05] STEP 复现：\n[10:20] CAUSE 根因：\n[10:30] FIX 修复：\n[10:40] DONE 回归：" }
+            ] }
+        ];
+        function nbTutRender() {
+            const pop = document.getElementById('nbTutPop');
+            if (!pop) return;
+            let h = '<div class="nb-pop-hd">📖 编辑器教程 <span class="sub">点「插入示例」到光标处，再切「预览」看效果</span><button type="button" class="x" onclick="nbTutClose()" title="关闭">✕</button></div>';
+            NB_TUT_ITEMS.forEach(function (grp) {
+                h += '<div class="nb-tut-sec">' + nbEdEsc(grp.g) + '</div>';
+                grp.items.forEach(function (it) {
+                    h += '<div class="nb-tut-item">'
+                        + '<span class="nb-tut-ic">' + nbEdEsc(it.ic) + '</span>'
+                        + '<div class="nb-tut-bd"><div class="nb-tut-nm">' + nbEdEsc(it.nm) + '</div>'
+                        + '<div class="nb-tut-ds">' + nbEdEsc(it.ds) + '</div>'
+                        + '<div class="nb-tut-fn">' + nbEdEsc(it.fn) + '</div></div>'
+                        + '<button type="button" class="nb-tut-ins" onclick="nbTutInsert(\'' + it.k + '\')">插入示例</button>'
+                        + '</div>';
+                });
+            });
+            pop.innerHTML = h;
+        }
+        function nbTutOpen(btn) {
+            const pop = document.getElementById('nbTutPop');
+            if (!pop) return;
+            const wasOpen = pop.classList.contains('show');
+            nbPopCloseAll();
+            if (wasOpen) return;
+            nbTutRender();
+            pop.classList.add('show');
+            nbPopPos(pop, btn);
+        }
+        function nbTutClose() { const p = document.getElementById('nbTutPop'); if (p) p.classList.remove('show'); }
+        function nbTutInsert(k) {
+            let it = null;
+            NB_TUT_ITEMS.forEach(function (g) { g.items.forEach(function (x) { if (x.k === k) it = x; }); });
+            if (!it) return;
+            nbTutClose();
+            nbInsText(it.demo, { block: true });
+            showToast('✅ 已插入「' + it.nm + '」示例 —— 切到「👁 预览」看效果');
+        }
 
         // 把正文存进知识库（便签本身不受影响；和保存便签时的自动入库同一套）
         function nbEdToKnowledge() {
@@ -31472,8 +31745,8 @@ function renderDayDetail() {
                     e.preventDefault();
                     const fb = document.getElementById('nbFindBar');
                     if (fb && fb.classList.contains('show')) { nbFindClose(); return; }
-                    const sp = document.getElementById('nbSnipPop'), tp = document.getElementById('nbTimePop');
-                    if ((sp && sp.classList.contains('show')) || (tp && tp.classList.contains('show'))) { nbPopCloseAll(); return; }
+                    const sp = document.getElementById('nbSnipPop'), tp = document.getElementById('nbTimePop'), tut = document.getElementById('nbTutPop');
+                    if ((sp && sp.classList.contains('show')) || (tp && tp.classList.contains('show')) || (tut && tut.classList.contains('show'))) { nbPopCloseAll(); return; }
                     const pop = document.getElementById('nbHistPop');
                     if (pop && pop.classList.contains('show')) closeNbHist(); else closeNoteModal();
                     return;
@@ -31547,7 +31820,7 @@ function renderDayDetail() {
             document.addEventListener('mousedown', function (e) {
                 const t = e.target;
                 if (!t || !t.closest) return;
-                if (t.closest('#nbSlashMenu') || t.closest('#nbSnipPop') || t.closest('#nbTimePop')) return;
+                if (t.closest('#nbSlashMenu') || t.closest('#nbSnipPop') || t.closest('#nbTimePop') || t.closest('#nbTutPop')) return;
                 const m = document.getElementById('noteModal');
                 if (!m || !m.classList.contains('show')) { nbSlashClose(); nbPopCloseAll(); return; }
                 if (!t.closest('.be-trow')) nbPopCloseAll();
@@ -45631,7 +45904,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101420";
+        window.NIKO_VERSION = "202610101501";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
