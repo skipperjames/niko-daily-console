@@ -9486,6 +9486,20 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .be-trow button { border: 1px solid #e5e2dc; background: transparent; color: #6b6878; border-radius: 5px; padding: 2px 9px; font-size: 11.5px; cursor: pointer; font-family: inherit; line-height: 1.7; }
         .be-trow button:hover { color: #2b2b3a; border-color: #667eea; }
         body.dark-mode .be-trow button { border-color: #3a3a4d; color: #c9c6d8; }
+        /* ===== 2026-10-10 按钮归类：模式切换（✍ 日常 / 🎮 UE / ⚙ 后端）===== */
+        .be-trow .nb-mtabs { display: inline-flex; gap: 2px; background: rgba(127,127,127,.12); border-radius: 7px; padding: 2px; }
+        .be-trow .nb-mtabs .nb-mtab { border: none; background: transparent; border-radius: 5px; padding: 2px 8px; font-size: 11.5px; color: #8a8798; line-height: 1.6; }
+        .be-trow .nb-mtabs .nb-mtab:hover { color: #2b2b3a; border: none; }
+        .be-trow .nb-mtabs .nb-mtab.on { background: #fff; color: #2b2b3a; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.10); }
+        body.dark-mode .be-trow .nb-mtabs { background: rgba(255,255,255,.08); }
+        body.dark-mode .be-trow .nb-mtabs .nb-mtab { color: #9a98a8; }
+        body.dark-mode .be-trow .nb-mtabs .nb-mtab:hover { color: #e6e4f0; }
+        body.dark-mode .be-trow .nb-mtabs .nb-mtab.on { background: #35354a; color: #e6e4f0; }
+        .be-trow .nb-msep { display: inline-block; width: 1px; height: 15px; background: rgba(127,127,127,.32); margin: 0 2px; }
+        /* 模式显隐（纯 CSS，无闪烁）：默认无 data-mode = 日常，只显示基础格式 */
+        .be-trow [data-nm="u"], .be-trow [data-nm="s"] { display: none; }
+        .be-trow[data-mode="u"] [data-nm="u"] { display: inline-block; }
+        .be-trow[data-mode="s"] [data-nm="s"] { display: inline-block; }
         #noteModalContent { flex: 1; min-height: 160px; width: 100%; background: #faf9f6; border: 1px solid #e5e2dc; border-radius: 8px; padding: 13px 15px; color: #2b2b3a; font-size: 15px; line-height: 1.9; font-family: inherit; resize: none; outline: none; overflow-y: auto; }
         #noteModalContent:focus { border-color: #667eea; }
         body.dark-mode #noteModalContent { background: #20202c; border-color: #3a3a4d; color: #e3e1ef; }
@@ -16051,25 +16065,41 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <section class="be-col be-ed" id="nbEdColBody">
                 <div class="be-edin">
                     <div class="be-trow">
-                        <button type="button" onclick="nbEdIns('## ', '', '小标题', 1)" title="小标题">H2</button>
-                        <button type="button" onclick="nbEdIns('**', '**', '加粗文字')" title="加粗（Ctrl+B）"><b>加粗</b></button>
-                        <button type="button" onclick="nbEdIns('*', '*', '斜体文字')" title="斜体（Ctrl+I）"><i>斜体</i></button>
-                        <button type="button" onclick="nbEdIns('~~', '~~', '划掉的文字')" title="删除线"><s>删除</s></button>
-                        <button type="button" class="hl" onclick="nbEdIns('==', '==', '要突出的重点')" title="高亮（Ctrl+U）">🖍 高亮</button>
-                        <button type="button" onclick="nbEdIns('`', '`', '代码')" title="行内代码">&lt;/&gt; 代码</button>
-                        <button type="button" onclick="nbEdIns('&gt; ', '', '引用内容', 1)" title="引用">引用</button>
-                        <button type="button" onclick="nbEdIns('- ', '', '列表项', 1)" title="无序列表">• 列表</button>
-                        <button type="button" onclick="nbEdIns('1. ', '', '列表项', 1)" title="有序列表">1. 有序</button>
-                        <button type="button" onclick="nbEdIns('- [ ] ', '', '待办事项', 1)" title="待办清单">☑ 待办</button>
-                        <button type="button" onclick="nbEdIns('\n---\n', '', '')" title="分割线">分割线</button>
-                        <button type="button" onclick="nbEdIns('[', '](https://)', '链接文字')" title="链接">🔗 链接</button>
-                        <button type="button" onclick="nbEdIns('```\n', '\n```', '在这里贴代码', 0)" title="代码块（可写 ```sql / ```java / ```json 指定语言）">{ } 代码块</button>
-                        <button type="button" onclick="nbTutOpen(this)" title="教程：演示所有新功能（代码引用 / 伪代码 / Trace / 配置对照 / 命令清单…），点开一键插入示例">📖 教程</button>
-                        <button type="button" onclick="nbSnipOpen(this)" title="片段库：常用代码模板一键插入，也能把自己的选中内容存成片段">📎 片段</button>
-                        <button type="button" onclick="nbTimeOpen(this)" title="插入当前时间戳 / 排障日志骨架">🕐 时间</button>
-                        <button type="button" onclick="nbFindOpen(false)" title="查找（Ctrl+F）">🔍 查找</button>
-                        <button type="button" id="nbIndentBtn" onclick="nbToggleIndent()" title="Tab 缩进宽度（点击切换 2 / 4 空格）">⇥ 2</button>
-                        <span class="sp"><button type="button" onclick="openNbHist()" title="编辑时每 2 分钟自动留一张副本，可随时退回">🕘 历史</button><button type="button" onclick="nbEdToKnowledge()" title="把正文存进知识库 03-Resources（便签本身不受影响）">📥 存进知识库</button></span>
+                        <!-- 2026-10-10 按钮归类：日常 / UE / 后端 三模式。切换只影响「专属围栏」按钮，基础格式始终在 -->
+                        <span class="nb-mtabs" id="nbMTabs">
+                            <button type="button" class="nb-mtab on" data-m="d" onclick="nbModeSet('d')" title="日常记录 / 文案：基础格式（标题·列表·待办·高亮·引用…）">✍ 日常</button>
+                            <button type="button" class="nb-mtab" data-m="u" onclick="nbModeSet('u')" title="UE 蓝图开发：多出 节点卡 / 术语卡 / 分组 / 矩阵 / 时序">🎮 UE</button>
+                            <button type="button" class="nb-mtab" data-m="s" onclick="nbModeSet('s')" title="后端开发：多出 代码引用 / Trace / 配置对照 / 命令">⚙ 后端</button>
+                        </span>
+                        <span class="nb-msep"></span>
+                        <button type="button" data-nm="u" onclick="nbEdIns('```bp\n', '\n```', '节点名 | 分类', 0)" title="插入 UE 节点卡（```bp）：节点名 + 分类 + 引脚">🎮 节点卡</button>
+                        <button type="button" data-nm="u" onclick="nbEdIns('```term\n', '\n```', 'Blueprint | 蓝图', 0)" title="插入 UE 术语卡（```term）：一行一条中英对照">📖 术语卡</button>
+                        <button type="button" data-nm="u" onclick="nbEdIns('```group\n', '\n```', '## 组名', 0)" title="插入分组总览（```group）：按系统 / 负责人分组，计数自动算">🧩 分组</button>
+                        <button type="button" data-nm="u" onclick="nbEdIns('```matrix\n', '\n```', '| 行 \\ 列 | A | B |', 0)" title="插入矩阵（```matrix）：行×列打勾，自动统计行列，0 标红">▦ 矩阵</button>
+                        <button type="button" data-nm="u" onclick="nbEdIns('```seq\n', '\n```', 'A → B : 说明', 0)" title="插入跨蓝图时序图（```seq）：画成生命线图">⏱ 时序</button>
+                        <button type="button" data-nm="s" onclick="nbEdIns('```java 文件.java#L1\n', '\n```', '在这里贴代码', 0)" title="插入代码引用块：带文件路径 + 行号，路径可复制">📄 代码引用</button>
+                        <button type="button" data-nm="s" onclick="nbEdIns('```trace\n', '\n```', 'gateway 路由 8ms', 0)" title="插入 Trace 调用链：每跳耗时成表，慢行自动标红">🔍 Trace</button>
+                        <button type="button" data-nm="s" onclick="nbEdIns('```cfg\n', '\n```', 'key = 默认值 -> 线上值', 0)" title="插入配置项对照表：默认值 → 线上值">⚙ 配置对照</button>
+                        <button type="button" data-nm="s" onclick="nbEdIns('```cmd\n', '\n```', '写命令', 0)" title="插入命令清单：按危险等级着色，每行可复制">🖥 命令</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('## ', '', '小标题', 1)" title="小标题">H2</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('**', '**', '加粗文字')" title="加粗（Ctrl+B）"><b>加粗</b></button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('*', '*', '斜体文字')" title="斜体（Ctrl+I）"><i>斜体</i></button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('~~', '~~', '划掉的文字')" title="删除线"><s>删除</s></button>
+                        <button type="button" data-nm="b" class="hl" onclick="nbEdIns('==', '==', '要突出的重点')" title="高亮（Ctrl+U）">🖍 高亮</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('`', '`', '代码')" title="行内代码">&lt;/&gt; 代码</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('&gt; ', '', '引用内容', 1)" title="引用">引用</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('- ', '', '列表项', 1)" title="无序列表">• 列表</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('1. ', '', '列表项', 1)" title="有序列表">1. 有序</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('- [ ] ', '', '待办事项', 1)" title="待办清单">☑ 待办</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('\n---\n', '', '')" title="分割线">分割线</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('[', '](https://)', '链接文字')" title="链接">🔗 链接</button>
+                        <button type="button" data-nm="b" onclick="nbEdIns('```\n', '\n```', '在这里贴代码', 0)" title="代码块（可写 ```sql / ```java / ```json 指定语言）">{ } 代码块</button>
+                        <button type="button" data-nm="b" onclick="nbTutOpen(this)" title="教程：演示所有新功能（UE 蓝图 / 代码引用 / 伪代码 / Trace / 配置对照 / 命令清单…），点开一键插入示例">📖 教程</button>
+                        <button type="button" data-nm="b" onclick="nbSnipOpen(this)" title="片段库：常用代码模板一键插入，也能把自己的选中内容存成片段">📎 片段</button>
+                        <button type="button" data-nm="b" onclick="nbTimeOpen(this)" title="插入当前时间戳 / 排障日志骨架">🕐 时间</button>
+                        <button type="button" data-nm="b" onclick="nbFindOpen(false)" title="查找（Ctrl+F）">🔍 查找</button>
+                        <button type="button" data-nm="b" id="nbIndentBtn" onclick="nbToggleIndent()" title="Tab 缩进宽度（点击切换 2 / 4 空格）">⇥ 2</button>
+                        <span class="sp"><button type="button" data-nm="b" onclick="openNbHist()" title="编辑时每 2 分钟自动留一张副本，可随时退回">🕘 历史</button><button type="button" data-nm="b" onclick="nbEdToKnowledge()" title="把正文存进知识库 03-Resources（便签本身不受影响）">📥 存进知识库</button></span>
                     </div>
                     <!-- 2026-10-10 方案 14：编辑器内查找 / 替换（Ctrl+F / Ctrl+H） -->
                     <div class="nb-find" id="nbFindBar">
@@ -30139,6 +30169,28 @@ function renderDayDetail() {
         //   无选区 → 插入占位文字并选中它，直接打字就覆盖（不会再留下「加粗文字」这种占位垃圾）
         //   第 4 个参数 lineStart=true 表示「行首标记」类（标题/列表/引用/待办），
         //   会给选中的每一行都加上前缀 —— 多行一次成型。
+        // ===== 2026-10-10 按钮归类：编辑器模式（✍ 日常 / 🎮 UE / ⚙ 后端）=====
+        // 只切 .be-trow 的 data-mode（显隐由 CSS 管，无闪烁）；基础格式 data-nm="b" 恒显；模式记忆在 localStorage
+        const NB_MODE_KEY = 'niko_nb_edmode';
+        function nbModeSet(m) {
+            const mm = (m === 'u' || m === 's') ? m : 'd';
+            const row = document.querySelector('.be-trow');
+            if (row) {
+                if (mm === 'd') row.removeAttribute('data-mode');
+                else row.setAttribute('data-mode', mm);
+            }
+            const tabs = document.querySelectorAll('#nbMTabs .nb-mtab');
+            for (let i = 0; i < tabs.length; i++) tabs[i].classList.toggle('on', tabs[i].getAttribute('data-m') === mm);
+            try { localStorage.setItem(NB_MODE_KEY, mm); } catch (e) {}
+            window.__nbMode = mm;
+            return mm;
+        }
+        function nbModeInit() {
+            let m = 'd';
+            try { m = localStorage.getItem(NB_MODE_KEY) || 'd'; } catch (e) {}
+            return nbModeSet(m);
+        }
+        setTimeout(function () { try { nbModeInit(); } catch (e) {} }, 0);
         function nbEdIns(pre, suf, ph, lineStart) {
             const ta = document.getElementById('noteModalContent');
             if (!ta) return;
@@ -46233,7 +46285,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101805";
+        window.NIKO_VERSION = "202610101816";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
