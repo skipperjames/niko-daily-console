@@ -9615,7 +9615,18 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-tut-ins { flex: 0 0 auto; border: 1px solid rgba(102,126,234,.45); background: transparent; color: #667eea; border-radius: 5px; font-size: 10.5px; padding: 1px 8px; cursor: pointer; font-family: inherit; white-space: nowrap; }
         .nb-tut-ins:hover { background: rgba(102,126,234,.12); }
         body.dark-mode .nb-tut-ins { color: #8ab4ff; border-color: rgba(122,144,255,.5); }
-        .nb-tut-sec { font-size: 10.5px; color: #9a96a8; padding: 7px 9px 3px; letter-spacing: .02em; }
+        .nb-tut-sec { display: flex; align-items: center; gap: 6px; font-size: 10.5px; color: #9a96a8; padding: 8px 9px 4px; letter-spacing: .02em; }
+        .nb-tut-sec i.dot { width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0; }
+        .nb-tut-sec b { font-weight: 600; color: #6b6878; font-size: 11px; }
+        .nb-tut-sec .sub { font-weight: 400; color: #b0a998; font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .nb-tut-sec .cur { margin-left: auto; font-size: 9.5px; background: #667eea; color: #fff; border-radius: 8px; padding: 0 6px; flex-shrink: 0; }
+        body.dark-mode .nb-tut-sec b { color: #c9c6d8; }
+        body.dark-mode .nb-tut-sec .sub { color: #7a7890; }
+        /* ===== 2026-10-10 教程示范按钮：实底高亮，跟其他工具按钮明显区分 ===== */
+        .be-trow button.nb-tutbtn { background: #667eea; border-color: #667eea; color: #fff; font-weight: 600; box-shadow: 0 1px 4px rgba(102,126,234,.35); }
+        .be-trow button.nb-tutbtn:hover { background: #5568d3; border-color: #5568d3; color: #fff; box-shadow: 0 2px 9px rgba(102,126,234,.48); }
+        body.dark-mode .be-trow button.nb-tutbtn { background: #5b6fd8; border-color: #5b6fd8; color: #fff; }
+        body.dark-mode .be-trow button.nb-tutbtn:hover { background: #6b7ee0; border-color: #6b7ee0; color: #fff; }
         /* ===== 2026-10-10 UE 蓝图：节点卡（```bp）+ 术语卡（```term）===== */
         .nb-bpnode { margin: 0 0 11px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(127,127,127,.28); }
         .nb-bpnode-hd { display: flex; align-items: center; gap: 8px; padding: 4px 10px; background: linear-gradient(180deg,#4d4d6b,#3a3a52); color: #fff; font-size: 12px; }
@@ -16094,7 +16105,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button type="button" data-nm="b" onclick="nbEdIns('\n---\n', '', '')" title="分割线">分割线</button>
                         <button type="button" data-nm="b" onclick="nbEdIns('[', '](https://)', '链接文字')" title="链接">🔗 链接</button>
                         <button type="button" data-nm="b" onclick="nbEdIns('```\n', '\n```', '在这里贴代码', 0)" title="代码块（可写 ```sql / ```java / ```json 指定语言）">{ } 代码块</button>
-                        <button type="button" data-nm="b" onclick="nbTutOpen(this)" title="教程：演示所有新功能（UE 蓝图 / 代码引用 / 伪代码 / Trace / 配置对照 / 命令清单…），点开一键插入示例">📖 教程</button>
+                        <button type="button" data-nm="b" class="nb-tutbtn" onclick="nbTutOpen(this)" title="教程示范：按 UE / 后端 / 日常 三模式分组，点「插入示例」一键体验全部围栏">✨ 教程示范</button>
                         <button type="button" data-nm="b" onclick="nbSnipOpen(this)" title="片段库：常用代码模板一键插入，也能把自己的选中内容存成片段">📎 片段</button>
                         <button type="button" data-nm="b" onclick="nbTimeOpen(this)" title="插入当前时间戳 / 排障日志骨架">🕐 时间</button>
                         <button type="button" data-nm="b" onclick="nbFindOpen(false)" title="查找（Ctrl+F）">🔍 查找</button>
@@ -31449,7 +31460,7 @@ function renderDayDetail() {
 
         // ---------- 教程浮层（2026-10-10 B 组：演示所有新功能，一键插入示例） ----------
         const NB_TUT_ITEMS = [
-            { g: '🎮 UE 蓝图', items: [
+            { g: '🎮 UE 模式', m: 'u', sub: '节点卡 · 术语卡 · 分组 · 台账 · 矩阵 · 时序', items: [
                 { k: 'bp', ic: '🎮', nm: 'UE 节点卡', ds: '节点名 + 分类 + 输入/输出引脚（类型配色）+ 说明', fn: '```bp', demo: "```bp\nSpawn Actor from Class | 生成\nIN: 执行, Class(类), Spawn Transform(位置)\nOUT: 执行, Return Value(对象)\n给定类+位置在关卡里实例化，返回引用\n```" },
                 { k: 'term', ic: '📖', nm: '术语卡', ds: 'UE 术语中英对照，一行一条', fn: '```term', demo: "```term\nBlueprint | 蓝图（可视化编程）\nDelegate | 委托（函数指针）\nEvent Dispatcher | 事件分发器（一对多广播）\n```" },
                 { k: 'group', ic: '🧩', nm: '分组总览', ds: '按系统 / 负责人分组列蓝图，组计数自动算', fn: '```group', demo: "```group\n## 玩家系统\nBP_Player\nBP_Weapon\n## 敌人系统\nBP_Enemy\nBT_Enemy\n```" },
@@ -31457,14 +31468,14 @@ function renderDayDetail() {
                 { k: 'matrix', ic: '▦', nm: '矩阵表（自动统计）', ds: '行×列打勾，自动算每行「Σ」每列合计，0 标红', fn: '```matrix', demo: "```matrix 接口实现\n| 接口 \\ 蓝图 | BP_Player | BP_Enemy | BP_Box |\n| TakeDamage(量) | ● | ● | ● |\n| IsDead() | ● | ● | — |\n```" },
                 { k: 'seq', ic: '⏱', nm: '跨蓝图时序图', ds: 'A → B : 说明，画成生命线图，跨蓝图调用顺序一眼看清', fn: '```seq', demo: "```seq 开火流程\n玩家 → 武器 : 开火\n武器 → 敌人 : 结算伤害\n敌人 → HUD : 血量变化\n```" }
             ] },
-            { g: 'B 组 · 代码与逻辑', items: [
+            { g: '⚙ 后端模式', m: 's', sub: '代码引用 · 伪代码 · Trace · 配置对照 · 命令', items: [
                 { k: 'ref', ic: '📄', nm: '代码引用块', ds: '代码块带「文件路径 + 行号」，路径可复制', fn: '```java OrderService.java#L42-L58', demo: "```java src/main/java/com/order/OrderService.java#L42-L58\npublic BigDecimal calc(Order o) {\n    if (o == null) throw new BizException(\"order.null\");\n    return o.amount.multiply(rate);\n}\n```" },
                 { k: 'pseudo', ic: '🧠', nm: '伪代码块', ds: '还没写、先想清楚；IF / LOOP / RETURN 轻高亮', fn: '```pseudo', demo: "```pseudo\nFOR each 过期订单:\n  IF 支付超时 30min:\n    关单()  // 释放库存\n  ELSE IF 已支付:\n    发货()\n```" },
                 { k: 'trace', ic: '🔍', nm: 'Trace 调用链', ds: 'traceId + 每跳耗时渲染成表，慢的那跳自动标红', fn: '```trace', demo: "```trace\ntraceId: 7f3a91c2e8\ngateway 路由 8ms\norder-svc createOrder 45ms\ninventory-svc deduct 1280ms\nmysql UPDATE 12ms\n```" },
                 { k: 'cfg', ic: '⚙️', nm: '配置项对照表', ds: '默认值 → 线上值 一眼对照，改配置不怕漏项', fn: '```cfg', demo: "```cfg\norder.timeout = 1000 -> 3000  # 大促放宽\npool.maxSize = 20 -> 50\nretry.times = 3\n```" },
                 { k: 'cmd', ic: '🖥', nm: '命令清单', ds: '按危险等级上色：只读绿 / 有副作用黄 / 高危红', fn: '```cmd', demo: "```cmd\nkubectl get pods -n prod\nkubectl rollout restart deploy/order-svc\nflushdb\n```" }
             ] },
-            { g: '常用排版', items: [
+            { g: '✍ 日常记录', m: 'd', sub: '代码块 · 表格 · 待办 · 排障日志', items: [
                 { k: 'code', ic: '⌨', nm: '代码块', ds: '带语言标签 + 语法着色 + 一键复制', fn: '```sql', demo: "```sql\nSELECT id, name FROM users WHERE status = 1;\n```" },
                 { k: 'table', ic: '▦', nm: '参数表', ds: '两行表格，自动长成真表格', fn: '| 参数 | 类型 | 说明 |', demo: "| 参数 | 类型 | 说明 |\n| --- | --- | --- |\n| id | bigint | 主键 |\n| uid | bigint | 用户 ID |" },
                 { k: 'todo', ic: '☑', nm: '待办清单', ds: '点一下就勾上，回写原文', fn: '- [ ] 条目', demo: "- [ ] 梳理接口\n- [ ] 搭环境\n- [x] 写方案" },
@@ -31474,9 +31485,15 @@ function renderDayDetail() {
         function nbTutRender() {
             const pop = document.getElementById('nbTutPop');
             if (!pop) return;
-            let h = '<div class="nb-pop-hd">📖 编辑器教程 <span class="sub">点「插入示例」到光标处，再切「预览」看效果</span><button type="button" class="x" onclick="nbTutClose()" title="关闭">✕</button></div>';
-            NB_TUT_ITEMS.forEach(function (grp) {
-                h += '<div class="nb-tut-sec">' + nbEdEsc(grp.g) + '</div>';
+            const cur = window.__nbMode || 'd';
+            let h = '<div class="nb-pop-hd">✨ 教程示范 <span class="sub">点「插入示例」到光标处，再切「预览」看效果</span><button type="button" class="x" onclick="nbTutClose()" title="关闭">✕</button></div>';
+            const grpOrder = NB_TUT_ITEMS.slice().sort(function (a, b) { return (a.m === cur ? 0 : 1) - (b.m === cur ? 0 : 1); });
+            grpOrder.forEach(function (grp) {
+                h += '<div class="nb-tut-sec"><i class="dot" style="background:' + (grp.m === 'u' ? '#7c3aed' : (grp.m === 's' ? '#0e7490' : '#c77d2a')) + '"></i>'
+                    + '<b>' + nbEdEsc(grp.g) + '</b>'
+                    + (grp.sub ? '<span class="sub">' + nbEdEsc(grp.sub) + '</span>' : '')
+                    + (grp.m === cur ? '<span class="cur">当前</span>' : '')
+                    + '</div>';
                 grp.items.forEach(function (it) {
                     h += '<div class="nb-tut-item">'
                         + '<span class="nb-tut-ic">' + nbEdEsc(it.ic) + '</span>'
@@ -46285,7 +46302,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610101816";
+        window.NIKO_VERSION = "202610101823";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
