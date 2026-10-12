@@ -12325,6 +12325,53 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .tl .ev .bd em{font-style:normal;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:6px;padding:0 6px;font-size:10.5px;color:var(--muted);margin-right:6px}
 .tl .ev .sb{font-size:11.5px;color:var(--muted);margin-top:1px}
 .rxbox{background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:9px;padding:11px 12px;font-size:12px;line-height:1.85;white-space:pre-line;color:var(--text)}
+/* ===== 2026-10-12 发作记录主卡（本轮落地 7 个方案：01 点哪记哪 / 04 热力人体 / 09 一句话速记 / 17 措施成对 / 23 病程线 / 24 年历热力 / 25 间隔曲线）===== */
+.mnx-top{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mnx-top input{flex:1;min-width:190px;padding:9px 12px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);font-size:12.5px;font-family:inherit}
+.mnx-top input:focus{outline:none;border-color:var(--accent)}
+.mnx-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.mnx-ch{font-size:11.5px;padding:4px 10px;border-radius:999px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text);cursor:pointer;transition:.15s;-webkit-user-select:none;user-select:none}
+.mnx-ch:hover{border-color:var(--accent);color:var(--accent)}
+.mnx-ch.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.mnx-grid{display:grid;grid-template-columns:172px 1fr;gap:16px;align-items:start;margin-top:13px}
+@media(max-width:820px){.mnx-grid{grid-template-columns:1fr}}
+.mnx-figwrap{position:relative;border-radius:14px;overflow:hidden;background:#0b0b14;border:1px solid var(--card-border);line-height:0}
+.mnx-figwrap img{display:block;width:100%;height:auto}
+.mnx-figwrap svg{position:absolute;left:0;top:0;width:100%;height:100%}
+.mnx-hit{position:absolute;border-radius:50%;cursor:pointer;transition:.18s;border:2px solid rgba(255,255,255,.85);box-sizing:border-box}
+.mnx-hit:hover{transform:scale(1.22);border-color:#fff}
+.mnx-legend{font-size:10.5px;color:var(--muted);margin-top:7px;line-height:1.65}
+.mnx-blk{margin-bottom:13px}
+.mnx-hd{font-size:12.5px;font-weight:700;margin:0 0 8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.mnx-hd .sub{font-size:10.5px;color:var(--muted);font-weight:400}
+.mnx-cal{display:grid;grid-template-columns:repeat(13,1fr);gap:3px;max-width:338px}
+.mnx-cal i{aspect-ratio:1;border-radius:3px;background:var(--card-border);display:block;cursor:pointer}
+.mnx-bars{display:flex;align-items:flex-end;gap:3px;height:56px;position:relative;max-width:338px}
+.mnx-bars b{flex:1;border-radius:3px 3px 0 0;background:var(--accent);min-height:3px;display:block}
+.mnx-bars b.hi{background:var(--warn)}
+.mnx-avg{position:absolute;left:0;right:0;border-top:1.5px dashed #34d399}
+.mnx-mini{font-size:10.5px;color:var(--muted);line-height:1.65;margin-top:6px}
+.mnx-ev{border:1px solid var(--card-border);border-radius:12px;padding:10px 12px;margin-bottom:9px;background:var(--card-bg)}
+.mnx-ev .h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px}
+.mnx-ev .h b{font-size:12.5px}
+.mnx-ev .h .dt{font-size:10.5px;color:var(--muted)}
+.mnx-ev .meta{font-size:11px;color:var(--muted);line-height:1.7}
+.mnx-tl{margin-top:8px;padding-left:15px;position:relative}
+.mnx-tl:before{content:'';position:absolute;left:4px;top:4px;bottom:4px;width:1.5px;background:var(--card-border)}
+.mnx-tl .n{position:relative;margin-bottom:6px;font-size:11px;line-height:1.6}
+.mnx-tl .n:before{content:'';position:absolute;left:-14px;top:5px;width:7px;height:7px;border-radius:50%;background:var(--accent);border:1.5px solid var(--card-bg)}
+.mnx-tl .n em{font-style:normal;color:var(--muted);font-size:10.5px}
+.mnx-empty{font-size:11.5px;color:var(--muted);padding:12px 0;text-align:center}
+.mnx-sev{display:inline-block;padding:1px 7px;border-radius:6px;font-size:10.5px;font-weight:700}
+.mnx-sev.s1{background:rgba(52,211,153,.16);color:#34d399}
+.mnx-sev.s2{background:rgba(246,211,101,.18);color:#eab308}
+.mnx-sev.s3{background:rgba(248,113,113,.18);color:#ef4444}
+.mnx-acts{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.mnx-act{font-size:10.5px;padding:2px 8px;border-radius:999px;background:rgba(52,211,153,.14);color:#0f9d76}
+.mnx-act.no{background:rgba(148,163,184,.18);color:var(--muted)}
+.mnx-rw{margin-top:9px;font-size:11.5px;line-height:1.7;padding:8px 11px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)}
+.mnx-rw.warn{border-color:rgba(246,211,101,.5);background:rgba(246,211,101,.08)}
+.mnx-rw.ok{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)}
 
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
@@ -14466,6 +14513,34 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <div class="ov-ck-hd"><b>📌 核心医嘱</b><span class="sub" id="hpv11RxFrom"></span></div>
           <div id="hpv11Rx"></div>
         </div>
+      </div>
+
+      <!-- ===== 2026-10-12 发作记录主卡（本轮落地 7 方案：01 点哪记哪 / 04 热力人体 / 09 一句话速记 / 17 措施成对 / 23 病程线 / 24 年历热力 / 25 间隔曲线）===== -->
+      <div class="card" style="margin-top:14px">
+        <div class="ov-ck-hd"><b>⚡ 发作记录</b><span class="sub">说一句话 · 或点身上的部位 —— 3 秒记完，措施一起记</span></div>
+        <div class="mnx-top">
+          <input id="mnxSay" placeholder="例：下午脖子后边酸胀，久坐搞的，热敷了一下" oninput="mnxSayParse()" onkeydown="if(event.key==='Enter'){event.preventDefault();mnxSayGo();}">
+          <button class="hp-btn p" id="mnxSayBtn" onclick="mnxSayGo()">✅ 记下</button>
+        </div>
+        <div id="mnxSayRes"></div>
+        <div class="mnx-grid">
+          <div>
+            <div class="mnx-figwrap" id="mnxFig"></div>
+            <div class="mnx-legend">深浅 = 这个部位发作过几次（近 12 个月）<br><b>点光圈直接记一次</b></div>
+          </div>
+          <div>
+            <div class="mnx-blk">
+              <div class="mnx-hd">📅 发作年历<span class="sub">近 13 周 · 一格一天 · 点格子看当天</span></div>
+              <div class="mnx-cal" id="mnxCal"></div>
+            </div>
+            <div class="mnx-blk" style="margin-bottom:0">
+              <div class="mnx-hd">📈 间隔曲线<span class="sub">两次发作隔了几天 · 超平均 = 进了复发窗口</span></div>
+              <div id="mnxGap"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mnx-hd" style="margin-top:15px">🕘 最近发作 · 措施与病程<span class="sub">不用点开就看得见做了什么、什么时候好</span></div>
+        <div id="mnxList"></div>
       </div>
 
       <div class="card" style="margin-top:14px">
@@ -37665,6 +37740,256 @@ function hpfSummary(){
   L.push('每日自评：还没有记录（连续记 7 天以上，「好转推断」里会出趋势）。');
   return L.join('\n');
 }
+/* =====================================================================
+   2026-10-12 发作记录主卡 —— 本轮落地的 7 个方案
+   01 点哪记哪 · 04 热力人体 · 09 一句话速记 · 17 措施成对记录
+   23 病程线 · 24 年历热力 · 25 间隔曲线 + 复发窗口
+   数据全部落在 MINOR（localStorage：niko_health_v1），不上传任何服务器。
+   ===================================================================== */
+/* 自由文本部位 → 身体地图 zone（ZIMG 的 key）。来源：MN_SITES 词表 + 口语同义词 */
+var MN_ZONE={
+  '舌尖':'head','舌边':'head','舌下':'head','舌根':'head','上唇':'head','下唇':'head','嘴角':'head',
+  '颊黏膜':'head','牙龈':'head','上颚':'head','口腔':'head','嘴':'head','鼻':'head','鼻腔':'head',
+  '眼睛':'head','耳朵':'head','后脑':'head_b','头':'head','偏头痛':'head',
+  '咽喉':'neck_f','喉咙':'neck_f','脖子':'neck_b','颈部':'neck_b','颈椎':'neck_b','颈肩':'neck_b','落枕':'neck_b',
+  '肩胛骨':'upperback','肩胛':'upperback','上背':'upperback','后背':'upperback','背':'upperback',
+  '肩膀':'sh_l','肩':'sh_l',
+  '腰':'lumbar','下背':'lumbar',
+  '胸口':'chest','胸':'chest',
+  '腹部':'abdomen','肚子':'abdomen','肠胃':'abdomen',
+  '屁股':'glute','髋':'pelvis','骨盆':'pelvis',
+  '手臂':'arm_up_l','胳膊':'arm_up_l','手腕':'fore_l','手':'fore_l','肘':'elbow_l',
+  '大腿':'thigh_l','腿':'thigh_l','膝':'knee_l','膝盖':'knee_l','小腿':'shin_l','脚踝':'foot_l','脚后跟':'heel_l','脚':'foot_l'
+};
+/* 口语 → 词表标准写法：只归一化同义口语，避免同一条部位在数据里出现「脖子 / 颈部」两种写法 */
+var MN_CANON={'脖子':'颈部','脖子疼':'颈部','颈椎':'颈部','颈肩':'颈部','肩膀':'肩','肩胛':'肩胛骨','后背':'上背','背':'上背',
+  '下背':'腰','肚子':'腹部','肠胃':'腹部','胳膊':'手臂','手腕':'手','膝盖':'膝','胸':'胸口','屁股':'臀','后脑':'后脑'};
+/* 措施词表 —— 必须有「什么都没做」这一项（措施有效率的对照组，没有它算不出哪个管用） */
+var MN_CARE=['热敷','休息','起身活动','按摩','拉伸','吃药','就医','早睡','冷敷','贴膏药','什么都没做'];
+var MN_LV=[[/剧烈|很疼|特别疼|受不了|疼死|吃不下|睡不着/,3],[/明显|比较疼|挺疼/,2],[/酸胀|发紧|僵|钝|麻|刺/,2],[/隐隐|有点|轻微|不太/,1]];
+var MN_WHEN=['早上','上午','中午','下午','傍晚','晚上','昨晚','半夜'];
+
+function mnxEl(id){ return document.getElementById(id); }
+function mnxDays(a,b){ return Math.round((new Date(a+'T00:00:00')-new Date(b+'T00:00:00'))/86400000); }
+
+/* —— 04 热力人体：按部位聚合近 12 个月发作次数 —— */
+function mnxHeat(){
+  var lim=dAdd(todayStr(),-365), map={};
+  MINOR.forEach(function(e){
+    if(!e||!e.start||e.start<lim) return;
+    (e.sites||[]).forEach(function(s){
+      var z=MN_ZONE[s]; if(!z) return;
+      map[z]=map[z]||{n:0,last:''};
+      map[z].n++;
+      if(!map[z].last || e.start>map[z].last) map[z].last=e.start;
+    });
+  });
+  return map;
+}
+function mnxFigHtml(){
+  var heat=mnxHeat(), ks=Object.keys(heat);
+  var h='<img alt="身体地图" src="'+BODY_URI+'">';
+  if(!ks.length){
+    return h+'<div style="position:absolute;left:8px;right:8px;bottom:10px;text-align:center;font-size:10.5px;color:#9aa;line-height:1.5">'
+      +'还没有部位记录<br>说一句话、或点下面记一次</div>';
+  }
+  var max=Math.max.apply(null,ks.map(function(k){ return heat[k].n; }));
+  ks.forEach(function(z){
+    var p=ZIMG[z]; if(!p) return;
+    var v=heat[z].n/max, w=7.5+v*6;   /* 直径 = 容器宽度的百分比（随次数变大）—— 用原图坐标会缩成几个像素看不见 */
+    h+='<div class="mnx-hit" data-zone="'+z+'" title="'+esc(ZSHORT[z]||z)+' · 近一年 '+heat[z].n+' 次 · 最近 '+heat[z].last+'"'
+      +' style="left:'+(p[0]/IMG_W*100)+'%;top:'+(p[1]/IMG_H*100)+'%;width:'+w+'%;padding-bottom:'+w+'%;'
+      +'margin-left:-'+(w/2)+'%;margin-top:-'+(w/2)+'%;background:rgba(248,113,113,'+(0.42+v*0.48).toFixed(2)+');'
+      +'box-shadow:0 0 0 4px rgba(248,113,113,.18),0 0 12px rgba(248,113,113,.5)"></div>';
+  });
+  return h;
+}
+
+/* —— 24 年历热力：近 13 周，一格一天 —— */
+function mnxCalHtml(){
+  var N=91, cnt={}, max=1;
+  MINOR.forEach(function(e){ if(e.start) cnt[e.start]=(cnt[e.start]||0)+1; });
+  Object.keys(cnt).forEach(function(k){ if(cnt[k]>max) max=cnt[k]; });
+  var h='';
+  for(var i=N-1;i>=0;i--){
+    var d=dAdd(todayStr(),-i), c=cnt[d]||0;
+    h+='<i data-d="'+d+'" title="'+d+(c?(' · '+c+' 次发作'):' · 没有发作')+'"'
+      +(c?(' style="background:rgba(239,68,68,'+(0.25+c/max*0.75).toFixed(2)+')"'):'')+'></i>';
+  }
+  return h;
+}
+
+/* —— 25 间隔曲线 + 复发窗口 —— */
+function mnxGaps(){
+  var ds=MINOR.filter(function(e){ return !!e.start; }).map(function(e){ return e.start; }).sort();
+  var uq=[]; ds.forEach(function(d){ if(uq[uq.length-1]!==d) uq.push(d); });
+  var gaps=[]; for(var i=1;i<uq.length;i++) gaps.push(mnxDays(uq[i],uq[i-1]));
+  return { gaps:gaps, n:uq.length, last:uq.length? uq[uq.length-1] : null };
+}
+function mnxGapHtml(){
+  var g=mnxGaps();
+  if(g.gaps.length<2){
+    return '<div class="mnx-mini">现在有 <b>'+g.n+'</b> 天有发作记录 —— 至少要 3 次才看得出间隔。'
+      +'继续记，这里会自己长出你自己的节律（间隔曲线 + 复发窗口）。</div>';
+  }
+  var avg=Math.round(g.gaps.reduce(function(a,b){ return a+b; },0)/g.gaps.length);
+  var mx=Math.max.apply(null,g.gaps.concat([avg,1]));
+  var bars=g.gaps.map(function(v){
+    return '<b class="'+(v>avg?'hi':'')+'" style="height:'+Math.max(7,Math.round(v/mx*100))+'%" title="隔了 '+v+' 天"></b>';
+  }).join('');
+  var since=g.last? mnxDays(todayStr(),g.last) : 0, over=since>avg;
+  return '<div class="mnx-bars">'+bars+'<div class="mnx-avg" style="bottom:'+Math.round(avg/mx*100)+'%"></div></div>'
+    +'<div class="mnx-mini">平均间隔 <b>'+avg+'</b> 天 · 距上次 <b>'+since+'</b> 天（虚线 = 平均线，高过它的柱子是偏长的间隔）</div>'
+    +'<div class="mnx-rw '+(over?'warn':'ok')+'">'
+    +(over
+      ? '⚠️ 已距上次 <b>'+since+'</b> 天，超过平均 '+avg+' 天 —— <b>这几天就在复发窗口里</b>，留意上次发作前的那几个信号。'
+      : '✅ 按你自己的节奏，约 <b>'+Math.max(0,avg-since)+'</b> 天后进入复发窗口（平均 '+avg+' 天）。')
+    +'</div>';
+}
+
+/* —— 17 措施成对 + 23 病程线：每条发作一张卡 —— */
+function mnxEvHtml(e){
+  var sev=Math.min(3,Math.max(1,+e.sev||2)), care=(e.care||[]);
+  var days=e.end? (mnxDays(e.end,e.start)+1) : 1;
+  var acts=care.length? care.map(function(a){
+      return '<span class="mnx-act'+(/没|没管|硬扛/.test(a)?' no':'')+'">'+esc(a)+'</span>';
+    }).join('') : '<span class="mnx-act no">没记措施</span>';
+  var tl=[{t:'0h · 发作', d:((e.sites||[]).join('、')||'部位未填')+' · '+['','轻','中','重'][sev]+'度'}];
+  if(care.length) tl.push({t:'当时 · 处理', d:care.join('、')});
+  tl.push({t:(days>1? (days+' 天后 · 结束') : '当天 · 结束'), d:(e.end||e.start||'')});
+  (e.nodes||[]).forEach(function(nd){ tl.push({t:nd.t, d:nd.d}); });
+  return '<div class="mnx-ev">'
+    +'<div class="h"><b>'+esc(e.name||'发作')+'</b><span class="mnx-sev s'+sev+'">'+['','轻','中','重'][sev]+'</span>'
+    +'<span class="dt">'+(e.start||'')+(e.end&&e.end!==e.start?(' → '+e.end):'')+' · 共 '+days+' 天</span></div>'
+    +'<div class="meta">'+((e.sites||[]).length?('部位：'+esc(e.sites.join('、'))+' · '):'')
+    +((e.trig||[]).length?('诱因：'+esc(e.trig.join('、'))+' · '):'')+(e.dr?'看过医生':'自己处理')+'</div>'
+    +'<div class="mnx-acts">'+acts+'</div>'
+    +'<div class="mnx-tl">'+tl.map(function(n){
+        return '<div class="n"><b>'+esc(n.t)+'</b> <em>'+esc(n.d)+'</em></div>'; }).join('')+'</div>'
+    +'<div style="display:flex;gap:7px;margin-top:9px;flex-wrap:wrap">'
+    +'<button class="hp-btn" style="font-size:11px;padding:4px 10px" onclick="mnAddNode(\''+e.id+'\')">＋ 补记节点</button>'
+    +'<button class="hp-btn" style="font-size:11px;padding:4px 10px" onclick="mnEdit(\''+e.id+'\')">✏️ 编辑</button>'
+    +'</div></div>';
+}
+
+/* —— 总渲染 —— */
+function renderMnx(){
+  var fig=mnxEl('mnxFig'); if(!fig) return;
+  fig.innerHTML=mnxFigHtml();
+  Array.prototype.forEach.call(fig.querySelectorAll('.mnx-hit'),function(el){
+    el.onclick=function(){ mnxHitZone(el.getAttribute('data-zone')); };
+  });
+  var cal=mnxEl('mnxCal');
+  if(cal){
+    cal.innerHTML=mnxCalHtml();
+    Array.prototype.forEach.call(cal.querySelectorAll('i'),function(el){
+      el.onclick=function(){
+        var d=el.getAttribute('data-d');
+        var es=MINOR.filter(function(e){ return e.start===d; });
+        if(!es.length){ try{ pvToast(d+' · 没有发作记录'); }catch(e){} return; }
+        try{ pvToast(d+' · '+es.map(function(e){ return e.name; }).join('、')); }catch(e){}
+      };
+    });
+  }
+  var gap=mnxEl('mnxGap'); if(gap) gap.innerHTML=mnxGapHtml();
+  var list=mnxEl('mnxList');
+  if(list){
+    var es=MINOR.slice().sort(function(a,b){ return String(b.start||'').localeCompare(String(a.start||'')); }).slice(0,5);
+    list.innerHTML= es.length? es.map(mnxEvHtml).join('')
+      : '<div class="mnx-empty">还没有发作记录 —— 在上面说一句话，或点身上的部位。</div>';
+  }
+  mnxSayParse();
+}
+function mnxRenderAll(){ try{ renderMnx(); }catch(e){ try{ console.warn('renderMnx',e); }catch(e2){} } }
+
+/* —— 01 点哪记哪：点热力光圈 → 按这个部位预填记录 —— */
+function mnxHitZone(z){
+  var zh='';
+  Object.keys(MN_ZONE).forEach(function(k){ if(!zh && MN_ZONE[k]===z) zh=k; });
+  if(!zh) zh=ZSHORT[z]||z;
+  var last=null;
+  MINOR.forEach(function(e){ if(!last && (e.sites||[]).indexOf(zh)>=0) last=e; });
+  mnQuick(last? last.name : '', [zh], last? (last.trig||[]).slice() : []);
+  try{ pvToast('已按「'+zh+'」预填 —— 确认就进档案'); }catch(e){}
+}
+
+/* —— 09 一句话速记：说人话 → 自动拆字段 —— */
+function mnxParse(txt){
+  var raw=String(txt||'').trim();
+  var o={ name:'', sites:[], sev:2, trig:[], care:[], dr:false, when:'', raw:raw };
+  var used={};
+  Object.keys(MN_ZONE).sort(function(a,b){ return b.length-a.length; }).forEach(function(w){
+    if(raw.indexOf(w)>=0){ var z=MN_ZONE[w]; if(!used[z]){ used[z]=1; o.sites.push(MN_CANON[w]||w); } }
+  });
+  MN_NAMES.forEach(function(f){ if(!o.name && raw.indexOf(f)>=0) o.name=(f==='嘴溃疡'?'口腔溃疡':f); });
+  if(!o.name) o.name=MNSEL||'';
+  MN_TRIG.forEach(function(t){ if(raw.indexOf(t)>=0 && o.trig.indexOf(t)<0) o.trig.push(t); });
+  if(/久坐|坐太久|坐久|坐了一/.test(raw) && o.trig.indexOf('久坐')<0) o.trig.push('久坐');
+  MN_CARE.forEach(function(c){ if(raw.indexOf(c)>=0 && o.care.indexOf(c)<0) o.care.push(c); });
+  if(!o.care.length && /没管|没处理|硬扛|什么都没|没做什么/.test(raw)) o.care.push('什么都没做');
+  var lv=0; MN_LV.forEach(function(p){ if(p[0].test(raw)) lv=Math.max(lv,p[1]); });
+  o.sev=lv||2;
+  if(/(去|看)(了)?(医院|医生|门诊|诊所|急诊)|就诊|开了药/.test(raw)) o.dr=true;
+  MN_WHEN.forEach(function(w){ if(!o.when && raw.indexOf(w)>=0) o.when=w; });
+  return o;
+}
+function mnxSayParse(){
+  var inp=mnxEl('mnxSay'), box=mnxEl('mnxSayRes');
+  if(!inp||!box) return;
+  var t=inp.value.trim();
+  if(t.length<2){ box.innerHTML=''; return; }
+  var o=mnxParse(t), c=[];
+  c.push(o.sites.length? '<span class="mnx-ch on">📍 '+esc(o.sites.join('、'))+'</span>'
+    : '<span class="mnx-ch" style="border-style:dashed;color:var(--muted)">📍 没认出部位（可以点下面的图）</span>');
+  c.push('<span class="mnx-ch on">强度 '+o.sev+'/3 · '+['','轻','中','重'][o.sev]+'</span>');
+  if(o.name) c.push('<span class="mnx-ch on">'+esc(o.name)+'</span>');
+  o.trig.forEach(function(x){ c.push('<span class="mnx-ch on">⚡ '+esc(x)+'</span>'); });
+  o.care.forEach(function(x){ c.push('<span class="mnx-ch on">🧊 '+esc(x)+'</span>'); });
+  if(o.when) c.push('<span class="mnx-ch on">🕘 '+o.when+'</span>');
+  if(o.dr) c.push('<span class="mnx-ch on">🩺 看过医生</span>');
+  box.innerHTML='<div class="mnx-chips">'+c.join('')+'</div>'
+    +'<div class="mnx-mini">先给你拆一遍 —— 点「记下」进档案，之后还能编辑。</div>';
+}
+function mnxSayGo(){
+  var inp=mnxEl('mnxSay'); if(!inp) return;
+  var t=inp.value.trim();
+  if(t.length<2){ try{ pvToast('先写一句 —— 例：下午脖子后边酸胀，久坐搞的，热敷了一下'); }catch(e){} return; }
+  var o=mnxParse(t);
+  MINOR.push({ id:'mn'+Date.now().toString(36), name:o.name||'发作', start:todayStr(), end:todayStr(),
+    sites:o.sites.slice(), count:1, sev:o.sev, trig:o.trig.slice(), care:o.care.slice(),
+    dr:o.dr, note:(o.when? ('速记 · '+o.when) : '速记'), real:true });
+  MNSEL=o.name||MNSEL; HSAVE();
+  inp.value=''; mnxEl('mnxSayRes').innerHTML='';
+  try{ renderMnx(); renderMinor(); renderHpFoot(); renderTabs(); }catch(e){}
+  try{ pvToast('已记下：'+(o.sites.join('、')||'这条发作')+' ✓ 措施与病程已进卡片'); }catch(e){}
+}
+/* —— 23 病程线：给某次发作补一个节点 —— */
+function mnAddNode(id){
+  var e=null; MINOR.forEach(function(x){ if(x.id===id) e=x; }); if(!e) return;
+  var t=prompt('节点时间（例：2h / 第 2 天 / 第二天早上）','2h'); if(t==null) return;
+  var d=prompt('那一刻的情况（例：好一点了，强度降到 1）',''); if(d==null) return;
+  if(!String(d).trim()){ try{ pvToast('没写内容，没加节点'); }catch(e2){} return; }
+  e.nodes=e.nodes||[]; e.nodes.push({ t:String(t).trim()||'节点', d:String(d).trim() });
+  HSAVE(); renderMnx();
+  try{ pvToast('已补记一个节点 ✓ 病程线更新'); }catch(e2){}
+}
+/* —— 17 表单里的措施多选（「什么都没做」互斥） —— */
+function mnCarePick(el){
+  var a=el.getAttribute('data-a'), v=GM.v;
+  v.care=v.care||[];
+  if(a==='什么都没做'){
+    v.care= (v.care.indexOf(a)>=0)? [] : ['什么都没做'];
+  } else {
+    v.care=v.care.filter(function(x){ return x!=='什么都没做'; });
+    if(v.care.indexOf(a)>=0) v.care=v.care.filter(function(x){ return x!==a; });
+    else v.care.push(a);
+  }
+  var box=document.getElementById('mnCareBox');
+  if(box) Array.prototype.forEach.call(box.querySelectorAll('.mnx-ch'),function(c){
+    c.classList.toggle('on', v.care.indexOf(c.getAttribute('data-a'))>=0);
+  });
+}
+
 function hpfTL(){
   var evs=hpfEvents(), list=(HPF==='全部')?evs:evs.filter(function(e){ return e.k===HPF; });
   var body=list.length? list.map(function(e){
@@ -37703,6 +38028,7 @@ function hpfCopy(btn){
   go(false);
 }
 function renderHpFoot(){
+  mnxRenderAll();   /* 2026-10-12：发作记录主卡跟着刷新（mnSave/mnDel/hpClearDemo 都会走到这里） */
   var box=document.getElementById('hpFoot'); if(!box) return;
   box.innerHTML=hpfBeat()+hpfTL();
 }
@@ -38567,7 +38893,12 @@ function mnFormHtml(){
      '<div class="fld"><label>⑦ 看过医生吗</label><select onchange="GM.v.dr=(this.value===\'1\')">'+
        '<option value="0"'+(!v.dr?' selected':'')+'>没看，自己处理</option><option value="1"'+(v.dr?' selected':'')+'>看了</option></select></div></div>'+
    '<div class="fld"><label>⑧ 诱因（这次之前发生了什么）</label><input value="'+esc((v.trig||[]).join('、'))+'" oninput="GM.v.trig=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：熬夜、吃辣、咬到、压力大"></div>'+
-   '<div class="fld"><label>⑨ 当时怎么处理的</label><input value="'+esc((v.care||[]).join('、'))+'" oninput="GM.v.care=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="例：含漱液、贴片、热敷、没管它"></div>'+
+   '<div class="fld"><label>⑨ 措施（做了什么 · 可多选 · 这是算「有没有用」的数据）</label>'+
+     '<div class="mnx-chips" id="mnCareBox">'+MN_CARE.map(function(a){
+        return '<span class="mnx-ch'+(((v.care||[]).indexOf(a)>=0)?' on':'')+'" data-a="'+a+'" onclick="mnCarePick(this)">'+a+'</span>';
+     }).join('')+'</div>'+
+     '<input value="'+esc((v.care||[]).join('、'))+'" oninput="GM.v.care=this.value.split(/[、,，\\s]+/).filter(Boolean)" placeholder="也可以手打：含漱液、贴片…（顿号分隔）" style="margin-top:9px">'+
+     '<div style="font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.6">勾「什么都没做」也是有效记录 —— 它是算措施有效率的对照组（没有对照，就永远不知道热敷到底管不管用）。</div></div>'+
    '<div class="fld"><label>⑩ 备注</label><input value="'+esc(v.note)+'" oninput="GM.v.note=this.value" placeholder="想记什么记什么"></div>';
 }
 function mnAdd(){ GM.v={id:'', name:MNSEL||'', start:todayStr(), end:todayStr(), sites:[], count:1, sev:2, trig:[], care:[], dr:false, note:'', real:true};
@@ -39648,7 +39979,7 @@ function renderHealthPage(){
   var k = S.tab || 'today';
   try {
     hpv11DocMode(k === 'doc');
-    if (k === 'today')     hpv11Today();
+    if (k === 'today')     { hpv11Today(); mnxRenderAll(); }
     else if (k === 'map')  { renderBodyMap(); renderCheck(); renderCkLink(); try{ hpv11Side(S.sel||null); }catch(e){} }
     else if (k === 'doc')  hpv11Doc();
     else if (k === 'hist')  renderHist();
@@ -39738,6 +40069,23 @@ function hpClearDemo(){
   window.hpfChip = hpfChip;
   window.hpfCopy = hpfCopy;
   window.renderHealthPage = renderHealthPage;
+  /* 2026-10-12 发作记录主卡：HTML 内联事件引用到的函数必须挂 window（本段整体在 IIFE 内，不导出就等于未定义） */
+  window.mnxSayParse = mnxSayParse;
+  window.mnxSayGo = mnxSayGo;
+  window.mnAddNode = mnAddNode;
+  window.mnCarePick = mnCarePick;
+  /* 门禁探针：造 / 查发作记录 —— 写入需要显式打开 __MNX_TEST__，只读不设限 */
+  window.__mnxSeed = function(list){
+    if(!window.__MNX_TEST__) return 'disabled';
+    MINOR.length=0;
+    (list||[]).forEach(function(x){ MINOR.push(x); });
+    HSAVE();
+    try{ renderMnx(); renderMinor(); renderHpFoot(); }catch(e){}
+    return MINOR.length;
+  };
+  window.__mnxInspect = function(){
+    return { n:MINOR.length, names:MINOR.map(function(x){ return x.name; }) };
+  };
 
 /* ===== 2026-09-20 用户要求：打开 NIKO 就启用服药提醒（不再等点进健康档案才弹） =====
    原来 doseInit() 只在 renderHealthPage() 里被调用 → 不进健康档案就没有定时器、不弹。
@@ -41753,7 +42101,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121741";
+        window.NIKO_VERSION = "202610121822";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
