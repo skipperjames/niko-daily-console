@@ -17052,6 +17052,12 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
             {
+                v: 'b-20261012-1522', d: '2026-10-12', at: '15:22', name: '便签 · 自由摆放按层独立',
+                items: [
+                    { sec: '🧩 便签', t: '在摞里开自由摆放，不再连累主墙', how: '自由摆放改成「每一层各管各的」—— 在哪一层打开就只管哪一层，来回切层会自动换档；摞内的按钮也会写成「🖐 本摞自由摆放」', go: 'notes' }
+                ]
+            },
+            {
                 v: 'b-20261012-1504', d: '2026-10-12', at: '15:04', name: '便签 · 划区改成「自己拉框」',
                 items: [
                     { sec: '🧩 便签', t: '划区能自己拉框了', how: '面包屑点「▦ 划区」→ 在墙上**空白处按住拖一个框**就是一个区；区名点一下就能改，区右上角 ✕ 删', go: 'notes' },
@@ -28539,7 +28545,36 @@ function renderDayDetail() {
 
         // ========== 便签看板（新增） ==========
         let nbView = safeStorage.get('niko_notes_view', 'wall');   // board | wall | list，默认便签墙（持久化记忆）
-        let nbFreeWall = safeStorage.get('niko_nb_freewall', false);   // 2026-10-12 #136：自由摆放（整面墙的总开关）
+        // 2026-10-12 #136：自由摆放 —— **每一层各管各的**（用户点名：「在哪里打开就是哪里自由摆放」）
+        // 旧版是一个全局开关，在「一摞」里打开会把主墙也一起变成自由摆放。现在按层存：
+        //   wall        = 主墙
+        //   m:<模块id>  = 每一摞各自一份
+        // 旧的单值 niko_nb_freewall 自动迁到 wall，老用户的开着状态不会丢。
+        function nbFreeMapGet() {
+            let m = safeStorage.get('niko_nb_freewall_map', null);
+            if (!m || typeof m !== 'object' || Array.isArray(m)) {
+                const old = safeStorage.get('niko_nb_freewall', false);
+                m = { wall: !!old };
+                safeStorage.set('niko_nb_freewall_map', m);
+            }
+            return m;
+        }
+        let nbFreeMap = nbFreeMapGet();
+        let nbFreeWall = !!nbFreeMap.wall;   // 当前层的状态（渲染时同步；**只读**，别直接改）
+        function nbFreeKey() { return nbModule ? ('m:' + nbModule) : 'wall'; }
+        function nbFreeState() { return !!nbFreeMap[nbFreeKey()]; }
+        function nbFreeSet(v) {
+            nbFreeMap[nbFreeKey()] = !!v;
+            safeStorage.set('niko_nb_freewall_map', nbFreeMap);
+            nbFreeWall = !!v;
+        }
+        // 当前在哪一层：只影响按钮文案和提示，不影响数据
+        function nbFreeWhere() {
+            if (!nbModule) return { nm: '🖐 自由摆放', where: '墙上的任意位置', scope: '主墙' };
+            const m = notes.find(x => x.id === nbModule);
+            const nm = m ? (nbPlain(m.content).split('\n')[0] || '').slice(0, 10) : '';
+            return { nm: '🖐 本摞自由摆放', where: (nm ? '「' + nm + '」' : '这一摞') + '里', scope: (nm ? '「' + nm + '」' : '这一摞') };
+        }
         let nbSpecial = null;        // null | 'recycle' | 'archive'
         let nbSort = safeStorage.get('niko_notes_sort', 'newest');       // manual | newest | oldest | updated（持久化记忆）
         let nbSearch = '';
@@ -28862,7 +28897,7 @@ function renderDayDetail() {
         // 位置存 n.fx（0~1，占容器宽的比例）+ n.fy（px），拖动才落库；没位置的按三列网格给默认位（不落库）。
         // ≤768px 不提供（手机上位置记忆没意义、拖拽也容易误触）——本地开着也自动退回瀑布流。
         function nbFreeWallOn() {
-            if (!nbFreeWall) return false;
+            if (!nbFreeState()) return false;   // 2026-10-12：看**当前层**的开关，不看全局
             if (nbView !== 'wall' || nbSpecial) return false;
             if (window.matchMedia && window.matchMedia('(max-width:768px)').matches) return false;
             return true;
@@ -28870,27 +28905,33 @@ function renderDayDetail() {
         function nbFreeWallBtnSync() {
             const b = document.getElementById('nbFreeWallBtn');
             if (!b) return;
-            // 2026-10-12：自由摆放不再只管「整面墙」—— 钻进一摞（项目）里同样可用。
-            // 每一层各记各的位置：子卡在主墙不显示，所以 n.fx / n.fy 天然按层分开，不会打架。
+            // 2026-10-12：自由摆放每一层各管各的 —— 主墙和每一摞都有自己的开关，切层自动换档。
             const usable = (nbView === 'wall' && !nbSpecial);
             b.style.display = usable ? '' : 'none';
-            b.classList.toggle('primary', !!nbFreeWall);
-            b.textContent = nbFreeWall ? '🖐 自由摆放 · 开' : '🖐 自由摆放';
-            const where = nbModule ? '这一摞（项目）里' : '墙上的任意位置';
-            b.title = nbFreeWall
-                ? '自由摆放已开：直接拖便签到' + where + '（再点一次关掉，回到自动排布）'
-                : '自由摆放：把便签拖到' + where + '，位置会被记住（每一层各记各的）';
+            const W = nbFreeWhere();
+            const on = nbFreeState();
+            nbFreeWall = on;   // 兼容：给只读用途同步一份
+            b.classList.toggle('primary', on);
+            b.textContent = on ? (W.nm + ' · 开') : W.nm;
+            b.title = (on
+                ? W.scope + '：自由摆放已开，直接拖便签到' + W.where + '（再点一次关掉，回到自动排布）'
+                : W.scope + '：把便签拖到' + W.where + '，位置会被记住')
+                + '\n每一层各管各的 —— 在哪里打开就是哪里自由摆放，不会连累别处';
         }
         function nbToggleFreeWall() {
-            nbFreeWall = !nbFreeWall;
-            safeStorage.set('niko_nb_freewall', nbFreeWall);
-            if (nbFreeWall && nbSort !== 'manual') {   // 自由摆放 = 位置优先，顺手切到手动排序（同一套「我摆的算」心智）
+            const W = nbFreeWhere();
+            const next = !nbFreeState();
+            nbFreeSet(next);
+            // 只有**主墙**才顺手切手动排序 —— 摞内的开关不该改主墙的排序口径（排序是全局的）
+            if (next && !nbModule && nbSort !== 'manual') {
                 nbSort = 'manual';
                 safeStorage.set('niko_notes_sort', 'manual');
                 nbSyncSortUI();
             }
             renderNotesPage();
-            showToast(nbFreeWall ? '🖐 自由摆放已开 · 拖到哪就记住哪' : '🔀 已回到自动排布（位置给你留着）');
+            showToast(next
+                ? ('🖐 ' + W.scope + ' 已开自由摆放 · 拖到哪就记住哪（只管这一层）')
+                : ('🔀 ' + W.scope + ' 已回到自动排布（位置给你留着）'));
         }
         // #178 自由墙：松手点压在哪个模块卡上（返回那张卡，没有就 null）
         function nbFreeHitModule(wall, card, cx, cy) {
@@ -41666,7 +41707,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121508";
+        window.NIKO_VERSION = "202610121525";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
