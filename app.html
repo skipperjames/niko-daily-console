@@ -34514,7 +34514,16 @@ function renderDayDetail() {
     const EXCLUDE_KEYS = [
         'niko_pomodoro_active',          // 番茄钟进行中状态
         'niko_notes_view',               // 便签视图状态
+        // 2026-10-12 用户报「便签排序每次打开都跳回手动」——根因：本机显示偏好被当数据同步，
+        // 云端旧值经 conflict（默认策略 remote）把本地选择覆盖回去。以下与 niko_notes_view 同类，一律不同步。
+        'niko_notes_sort',               // 便签排序口径（手动 / 最新 / 最早 / 最近更新）
+        'niko_notes_density',            // 便签卡片密度档位
+        'niko_note_indent',              // 便签编辑器缩进单位
+        'niko_note_wall_cols',           // 手机便签墙单列 / 双列
+        'niko_nb_drawer',                // 便签手机工具抽屉开合
+        'niko_nb_paper',                 // 便签纸样式
         'niko_plan_show_time',           // 计划面板显示时间
+        'niko_plan_tools_open',          // 计划页工具抽屉开合
         'niko_copy_sidebar_collapsed',   // 文案库侧栏折叠
         'niko_hot_fav_collapsed',        // 热点收藏折叠
         'niko_meme_sidebar_collapsed',   // 梗文化侧栏折叠
@@ -35661,7 +35670,7 @@ function renderDayDetail() {
         // 暴露内部函数供自动化测试
         window.NikoSync.__internals = {
             computeMerge, collectLocal, loadSnapshot, saveSnapshot,
-            getDeviceId, summarizeValue, state, DATA_PREFIXES,
+            getDeviceId, summarizeValue, state, DATA_PREFIXES, EXCLUDE_KEYS,
             readRemote, writeRemote, activeChannels, doSyncChannel,
             readRemoteGh, writeRemoteGh, applyPushPull,
             notifyDataChanged, scheduleAutoPush, getSyncIntervalMs
@@ -41708,7 +41717,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121528";
+        window.NIKO_VERSION = "202610121700";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
