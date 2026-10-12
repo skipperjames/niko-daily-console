@@ -28572,8 +28572,9 @@ function renderDayDetail() {
         function nbFreeWhere() {
             if (!nbModule) return { nm: '🖐 自由摆放', where: '墙上的任意位置', scope: '主墙' };
             const m = notes.find(x => x.id === nbModule);
-            const nm = m ? (nbPlain(m.content).split('\n')[0] || '').slice(0, 10) : '';
-            return { nm: '🖐 本摞自由摆放', where: (nm ? '「' + nm + '」' : '这一摞') + '里', scope: (nm ? '「' + nm + '」' : '这一摞') };
+            const raw = m ? String(nbPlain(m.content).split('\n')[0] || '') : '';
+            const nm = raw.slice(0, 10).replace(/[\s·\-—–]+$/, '');   // 截断后把尾巴上的「 —— ·」擦掉，别让 toast 出现「战斗系统 ——」
+            return { nm: '🖐 本摞自由摆放', where: (nm ? '「' + nm + '」' : '这一摞') + '里', scope: nm ? ('「' + nm + '」') : '这一摞' };
         }
         let nbSpecial = null;        // null | 'recycle' | 'archive'
         let nbSort = safeStorage.get('niko_notes_sort', 'newest');       // manual | newest | oldest | updated（持久化记忆）
@@ -28930,8 +28931,8 @@ function renderDayDetail() {
             }
             renderNotesPage();
             showToast(next
-                ? ('🖐 ' + W.scope + ' 已开自由摆放 · 拖到哪就记住哪（只管这一层）')
-                : ('🔀 ' + W.scope + ' 已回到自动排布（位置给你留着）'));
+                ? ('🖐 ' + W.scope + '已开自由摆放 · 拖到哪就记住哪（只管这一层）')
+                : ('🔀 ' + W.scope + '已回到自动排布（位置给你留着）'));
         }
         // #178 自由墙：松手点压在哪个模块卡上（返回那张卡，没有就 null）
         function nbFreeHitModule(wall, card, cx, cy) {
@@ -41707,7 +41708,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121525";
+        window.NIKO_VERSION = "202610121528";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
