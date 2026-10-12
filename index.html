@@ -28614,7 +28614,9 @@ function renderDayDetail() {
                 if (!n) return;
                 const has = (typeof n.fx === 'number' && isFinite(n.fx) && typeof n.fy === 'number' && isFinite(n.fy));
                 const p = has ? { fx: n.fx, fy: n.fy } : nbFreeDefaultPos(i);
-                card.style.left = (Math.max(0, Math.min(0.9, p.fx)) * 100).toFixed(3) + '%';
+                const wallW = wall.clientWidth || 1;
+                const maxFx = Math.max(0, (wallW - card.offsetWidth) / wallW);   // 右边界不许出墙
+                card.style.left = (Math.max(0, Math.min(maxFx, p.fx)) * 100).toFixed(3) + '%';
                 card.style.top = Math.max(0, p.fy) + 'px';
             });
             nbFreeWallHeight(wall);
@@ -40770,7 +40772,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121309";
+        window.NIKO_VERSION = "202610121314";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
