@@ -9401,6 +9401,23 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-crumb-hint { color: #8a8899; }
         .nb-ed-parent-sel { width: 100%; font-size: 12px; padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd8cf; background: #fff; color: #333; font-family: inherit; }
         body.dark-mode .nb-ed-parent-sel { background: #20202c; border-color: #333345; color: #d0d0d8; }
+        /* 2026-10-12 #133 便签翻面（每张便签各自的属性：只有写了背面，这张才有翻面） */
+        .nb-ed-back { width: 100%; min-height: 108px; resize: vertical; font-size: 12px; line-height: 1.55; padding: 7px 9px; border-radius: 8px; border: 1px solid #ddd8cf; background: #fff; color: #333; font-family: inherit; box-sizing: border-box; }
+        body.dark-mode .nb-ed-back { background: #20202c; border-color: #333345; color: #d0d0d8; }
+        .nb-back-hint { font-size: 11px; color: #9aa0b4; line-height: 1.5; margin: 5px 0 0; }
+        .nb-flip-btn { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 999px; border: 1px solid rgba(37,99,235,.35); background: rgba(37,99,235,.09); color: #2563eb; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+        .nb-flip-btn:hover { background: rgba(37,99,235,.18); }
+        .nb-card.nb-flipped { border-left-color: #2563eb; box-shadow: 0 0 0 1px rgba(37,99,235,.26), 0 2px 10px rgba(37,99,235,.12); }
+        .nb-card.nb-flipped .nb-card-content { max-height: none; overflow: visible; color: #3b4a63; }
+        .nb-card.nb-flipped .nb-card-content.nb-clamped::after { display: none; }
+        .nb-detail-flip { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; border: 1px solid rgba(37,99,235,.4); background: rgba(37,99,235,.09); color: #2563eb; cursor: pointer; white-space: nowrap; margin-left: 6px; }
+        .nb-detail-flip:hover { background: rgba(37,99,235,.18); }
+        /* 2026-10-12 #136 自由摆放墙（全局开关：整面墙一起切；卡片定宽 220，位置按容器宽的比例存） */
+        .nb-wall.nb-free { display: block; position: relative; columns: auto; column-gap: 0; min-height: 240px; }
+        .nb-wall.nb-free .nb-card { position: absolute; width: 220px; margin: 0; break-inside: auto; cursor: grab; touch-action: none; transition: box-shadow .12s; }
+        .nb-wall.nb-free .nb-card:hover { transform: none; }
+        .nb-wall.nb-free .nb-card.nb-dragging { cursor: grabbing; z-index: 6; box-shadow: 0 10px 26px rgba(0,0,0,.22); }
+        body.dark-mode .nb-wall.nb-free { background: rgba(255,255,255,.02); border-radius: 10px; }
         .nb-ed-parent-hint { font-size: 11px; color: #9aa0b4; line-height: 1.5; margin: 4px 0 0; }
         @media (max-width: 768px) { .nb-stack-btn { padding: 5px 10px; font-size: 11px; } .nb-ed-parent-sel { font-size: 16px; padding: 9px 10px; } }
         .nb-detail-text.paper-cream { background: #f7efdc; color: #4a4030; border-radius: 10px; padding: 14px 16px; }
@@ -13752,6 +13769,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <button id="nbViewWall" onclick="nbSetView('wall')">🧩 便签墙</button>
                             <button id="nbViewList" onclick="nbSetView('list')">🕐 时间线</button>
                         </div>
+                        <!-- 2026-10-12 #136：自由摆放 = 整面墙的总开关（只在便签墙视图出现；≤768px 自动不提供） -->
+                        <button class="nb-btn" id="nbFreeWallBtn" onclick="nbToggleFreeWall()" style="display:none" title="自由摆放：把便签拖到墙上的任意位置，位置会被记住（整面墙的总开关）">🖐 自由摆放</button>
                         <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建</button>
                         <button class="nb-btn nb-quick" id="nbMorningBtn" onclick="nbMaybeMorningRead(true)" title="每天从墙里抽 3 张旧便签，30 秒早读">🌅 早读</button>
                         <button class="nb-btn nb-quick" onclick="nbOpenReview()" title="全屏过卡：记住了 / 再放回去">🎴 复习</button>
@@ -14757,6 +14776,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                             <option value="">（独立便签 · 不归模块）</option>
                         </select>
                         <div class="nb-ed-parent-hint" id="nbEdParentHint">归到一个模块后，那张便签在墙上会显示成「一摞」，点它可以钻进去看这一组。</div>
+                    </div>
+                    <!-- 2026-10-12 #133 便签翻面：背面 = 「用到时才看的那面」（完整逻辑 / 调用示例 / 坑）。
+                         留空 → 这张便签只有正面，墙上不会出现「↻ 翻面」按钮（每张便签各自的属性）。 -->
+                    <div class="be-sec" id="nbEdBackSec">
+                        <div class="be-lbl">↻ 背面 <span id="nbEdBackState" style="font-weight:400;color:#9aa0b4">（留空 = 只有正面）</span></div>
+                        <textarea class="nb-ed-back" id="nbEdBack" placeholder="用到时才看的那面：完整逻辑 / 调用示例 / 踩过的坑…（留空 → 墙上不出现翻面按钮）" oninput="nbEdBackInput()"></textarea>
+                        <div class="nb-back-hint" id="nbEdBackHint">墙上默认只显示正面（一眼扫的那面）；翻过来才显示这里。</div>
                     </div>
                     <div class="be-sec">
                         <div class="be-lbl">时间</div>
@@ -28236,6 +28262,7 @@ function renderDayDetail() {
 
         // ========== 便签看板（新增） ==========
         let nbView = safeStorage.get('niko_notes_view', 'wall');   // board | wall | list，默认便签墙（持久化记忆）
+        let nbFreeWall = safeStorage.get('niko_nb_freewall', false);   // 2026-10-12 #136：自由摆放（整面墙的总开关）
         let nbSpecial = null;        // null | 'recycle' | 'archive'
         let nbSort = safeStorage.get('niko_notes_sort', 'newest');       // manual | newest | oldest | updated（持久化记忆）
         let nbSearch = '';
@@ -28257,6 +28284,7 @@ function renderDayDetail() {
         // 不用新建卡片类型、不用你手动标记成「模块」。
         let nbModule = null;                        // 当前钻入的模块（null = 在主墙）
         let nbEdParentPick = '';                    // 编辑器里「所属模块」的暂存值
+        let nbEdBackPick = '';                      // 2026-10-12 #133：编辑器里「背面」的暂存值（留空 = 只有正面）
         const nbChildren = (id) => notes.filter(n => !n.deleted && n.parent === id);
         const nbIsModule = (id) => nbChildren(id).length > 0;
         const nbParentNote = (n) => (n && n.parent) ? (notes.find(x => x.id === n.parent && !x.deleted) || null) : null;
@@ -28347,7 +28375,7 @@ function renderDayDetail() {
         }
         // 便签墙拖拽重排（仅手动排序下生效；其他模式下拖起即自动切手动）
         function bindNotesWallDnD(c) {
-            if (nbBatch) return;
+            if (nbBatch || nbFreeWallOn()) return;   // 2026-10-12 #136：自由摆放模式改用 pointer 拖动
             c.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
                 card.addEventListener('dragstart', e => {
                     draggedNoteId = card.dataset.noteId;
@@ -28480,6 +28508,7 @@ function renderDayDetail() {
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
             renderNbCrumb();        // 2026-10-12 #144：钻入模块时的面包屑
+            nbFreeWallBtnSync();    // 2026-10-12 #136：自由摆放开关（只在便签墙可用）
             document.getElementById('nbSelCount').textContent = nbSelected.size;
             const c = document.getElementById('nbContent');
             // 2026-10-12 #144：模块视图空态 —— 别让用户以为便签丢了
@@ -28524,14 +28553,143 @@ function renderDayDetail() {
             bindNotesBoardDnD(c);
         }
 
+        // ===== 2026-10-12 #136 自由摆放墙（全局开关）=====
+        // 窗口宽度跨过 768px 要重排（自由墙 ↔ 瀑布流）：绝对定位的墙不会自己跟着窄屏走，
+        // 必须显式重算 —— 与「不触发 resize 就不重绘」是同一类坑。
+        let nbFreeResizeT = null;
+        window.addEventListener('resize', () => {
+            if (typeof currentPage !== 'undefined' && currentPage !== 'notes') return;
+            clearTimeout(nbFreeResizeT);
+            nbFreeResizeT = setTimeout(() => { try { renderNotesPage(); } catch (e) {} }, 220);
+        });
+        // 口径（用户 2026-10-12 点名）：#136 自由摆放 = 整面墙的总开关；#133 翻面才是每张便签的属性。
+        // 位置存 n.fx（0~1，占容器宽的比例）+ n.fy（px），拖动才落库；没位置的按三列网格给默认位（不落库）。
+        // ≤768px 不提供（手机上位置记忆没意义、拖拽也容易误触）——本地开着也自动退回瀑布流。
+        function nbFreeWallOn() {
+            if (!nbFreeWall) return false;
+            if (nbView !== 'wall' || nbSpecial) return false;
+            if (window.matchMedia && window.matchMedia('(max-width:768px)').matches) return false;
+            return true;
+        }
+        function nbFreeWallBtnSync() {
+            const b = document.getElementById('nbFreeWallBtn');
+            if (!b) return;
+            const usable = (nbView === 'wall' && !nbSpecial && !nbModule);
+            b.style.display = usable ? '' : 'none';
+            b.classList.toggle('primary', !!nbFreeWall);
+            b.textContent = nbFreeWall ? '🖐 自由摆放 · 开' : '🖐 自由摆放';
+            b.title = nbFreeWall
+                ? '自由摆放已开：直接拖便签到任意位置（再点一次关掉，回到自动排布）'
+                : '自由摆放：把便签拖到墙上的任意位置，位置会被记住（整面墙的总开关）';
+        }
+        function nbToggleFreeWall() {
+            nbFreeWall = !nbFreeWall;
+            safeStorage.set('niko_nb_freewall', nbFreeWall);
+            if (nbFreeWall && nbSort !== 'manual') {   // 自由摆放 = 位置优先，顺手切到手动排序（同一套「我摆的算」心智）
+                nbSort = 'manual';
+                safeStorage.set('niko_notes_sort', 'manual');
+                nbSyncSortUI();
+            }
+            renderNotesPage();
+            showToast(nbFreeWall ? '🖐 自由摆放已开 · 拖到哪就记住哪' : '🔀 已回到自动排布（位置给你留着）');
+        }
+        function nbFreeDefaultPos(i) {
+            const cols = 3;
+            return { fx: 0.015 + (i % cols) * 0.32, fy: Math.floor(i / cols) * 152 };
+        }
+        function nbFreeWallHeight(wall) {
+            if (!wall) return;
+            let maxB = 0;
+            wall.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
+                const t = parseFloat(card.style.top) || 0;
+                maxB = Math.max(maxB, t + card.offsetHeight);
+            });
+            wall.style.height = Math.max(240, maxB + 20) + 'px';
+        }
+        function layoutFreeWall(c) {
+            const wall = c.querySelector('.nb-wall.nb-free');
+            if (!wall) return;
+            Array.from(wall.querySelectorAll('.nb-card[data-note-id]')).forEach((card, i) => {
+                const n = notes.find(x => x.id === card.dataset.noteId);
+                if (!n) return;
+                const has = (typeof n.fx === 'number' && isFinite(n.fx) && typeof n.fy === 'number' && isFinite(n.fy));
+                const p = has ? { fx: n.fx, fy: n.fy } : nbFreeDefaultPos(i);
+                card.style.left = (Math.max(0, Math.min(0.9, p.fx)) * 100).toFixed(3) + '%';
+                card.style.top = Math.max(0, p.fy) + 'px';
+            });
+            nbFreeWallHeight(wall);
+            requestAnimationFrame(() => nbFreeWallHeight(wall));   // 字体/换行落定后再量一次
+        }
+        function bindFreeWall(c) {
+            const wall = c.querySelector('.nb-wall.nb-free');
+            if (!wall) return;
+            wall.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
+                card.setAttribute('draggable', 'false');   // 自由模式走 pointer 拖，别触发 HTML5 drag
+                let st = null;
+                card.addEventListener('pointerdown', e => {
+                    if (e.button !== 0) return;
+                    if (e.target.closest('button')) return;
+                    const wr = wall.getBoundingClientRect(), cr = card.getBoundingClientRect();
+                    st = { dx: e.clientX - cr.left, dy: e.clientY - cr.top, wr, x0: e.clientX, y0: e.clientY, moved: false };
+                });
+                card.addEventListener('pointermove', e => {
+                    if (!st) return;
+                    if (!st.moved) {
+                        if (Math.abs(e.clientX - st.x0) < 4 && Math.abs(e.clientY - st.y0) < 4) return;   // 4px 内算点击，不算拖
+                        st.moved = true;
+                        card.classList.add('nb-dragging');
+                        try { card.setPointerCapture(e.pointerId); } catch (err) {}
+                    }
+                    let x = e.clientX - st.wr.left - st.dx;
+                    let y = e.clientY - st.wr.top - st.dy;
+                    x = Math.max(0, Math.min(x, st.wr.width - card.offsetWidth));
+                    y = Math.max(0, y);
+                    card.style.left = (x / st.wr.width * 100).toFixed(3) + '%';
+                    card.style.top = y + 'px';
+                });
+                const endDrag = () => {
+                    if (!st) return;
+                    const wasDrag = st.moved;
+                    st = null;
+                    card.classList.remove('nb-dragging');
+                    if (!wasDrag) return;   // 没真拖 → 把 click 留给单击展开 / 双击详情
+                    const n = notes.find(x => x.id === card.dataset.noteId);
+                    if (n) {
+                        n.fx = Math.max(0, Math.min(1, (parseFloat(card.style.left) || 0) / 100));
+                        n.fy = Math.max(0, parseFloat(card.style.top) || 0);
+                        saveNotes();
+                    }
+                    nbFreeWallHeight(wall);
+                    showToast('🖐 位置已记住');
+                    // 拖完紧跟的那一下 click（单击=展开/收起）要吃掉，否则一松手卡片就展开
+                    const kill = ev => { ev.stopPropagation(); ev.preventDefault(); window.removeEventListener('click', kill, true); };
+                    window.addEventListener('click', kill, true);
+                    setTimeout(() => window.removeEventListener('click', kill, true), 150);
+                };
+                card.addEventListener('pointerup', endDrag);
+                card.addEventListener('pointercancel', endDrag);
+            });
+        }
+
         function renderNotesWallView(c) {
             const list = visibleList();
             const filterTip = nbTagFilter ? '该分类下没有便签' : (nbSearch ? '没有匹配的便签' : '便签墙空空如也');
             const filterHint = nbTagFilter || nbSearch ? '换个筛选条件试试' : '贴几张便签再上墙';
-            c.innerHTML = list.length
-                ? `<div class="nb-wall">${list.map(n => nbCardHtml(n)).join('')}</div>`
-                : nbEmptyHtml(filterTip, filterHint);
-            bindNotesWallDnD(c);    // v2.21 便签墙手动拖拽排序
+            if (!list.length) {
+                c.innerHTML = nbEmptyHtml(filterTip, filterHint);
+                bindNotesWallDnD(c);
+                nbFreeWallBtnSync();
+                return;
+            }
+            if (nbFreeWallOn()) {
+                c.innerHTML = `<div class="nb-wall nb-free">${list.map(n => nbCardHtml(n)).join('')}</div>`;
+                layoutFreeWall(c);
+                bindFreeWall(c);
+            } else {
+                c.innerHTML = `<div class="nb-wall">${list.map(n => nbCardHtml(n)).join('')}</div>`;
+                bindNotesWallDnD(c);    // v2.21 便签墙手动拖拽排序
+            }
+            nbFreeWallBtnSync();
         }
 
         function renderNotesTimelineView(c) {
@@ -28587,6 +28745,7 @@ function renderDayDetail() {
             // 2026-10-12 #132 / #138：有子便签 = 这一张是「一摞」（模块卡）→ 层叠投影 + 数量按钮
             const kids = nbChildren(n.id);
             const isMod = kids.length > 0;
+            const backTxt = String(n.back || '').trim();   // 2026-10-12 #133：有背面才出现「↻ 翻面」
             return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isMod ? ' nb-stack-card' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
@@ -28594,7 +28753,7 @@ function renderDayDetail() {
                 <div class="nb-card-content">${escapeHtml(plain)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
-                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${noRevMark}
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${backTxt ? `<button class="nb-flip-btn" title="翻过来看背面：完整逻辑 / 调用示例 / 踩过的坑" onclick="event.stopPropagation();nbFlipCard('${n.id}',event)">↻ 翻面</button>` : ''}${noRevMark}
                     ${isMod ? `<button class="nb-stack-btn" title="这一摞里有 ${kids.length} 张，点开看这一组" onclick="event.stopPropagation();nbOpenModule('${n.id}')">📚 ${kids.length} 张 ›</button>` : ''}
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
@@ -28877,6 +29036,10 @@ function renderDayDetail() {
             nbEditingNoRev = (n && n.noReview === true) ? "off" : (n && n.noReview === false) ? "on" : "inherit";
             // 2026-10-12 #132：所属模块回显；在模块里新建便签 → 默认就归到这一摞
             nbEdParentPick = n ? (n.parent || '') : (nbModule || '');
+            // 2026-10-12 #133：背面回显（留空 = 这张只有正面）
+            nbEdBackPick = n ? (n.back || '') : '';
+            { const elB = document.getElementById('nbEdBack'); if (elB) elB.value = nbEdBackPick; }
+            nbEdBackSync();
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? n.content : '';
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
@@ -29018,6 +29181,57 @@ function renderDayDetail() {
         }
         // 只改暂存值，点「保存便签」才真正落库（与置顶 / 参与复习 同一口径）
         function nbEdSetParent(v) { nbEdParentPick = v || ''; }
+        // ===== 2026-10-12 #133 便签翻面（每张便签的属性：写了背面，这张才有那一面）=====
+        // 卡片上的「↻ 翻面」= 半圈切换（转到 84° 时换内容，视觉上就是纸片翻过来），
+        // 不给卡片加第二层 DOM —— 现有卡片结构一行都不用动。
+        function nbFlipCard(id, e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            const card = (e && e.target && e.target.closest) ? e.target.closest('.nb-card') : null;
+            const n = notes.find(x => x.id === id);
+            if (!card || !n || !String(n.back || '').trim() || card.dataset.nbFlipping === '1') return;
+            const box = card.querySelector('.nb-card-content');
+            if (!box) return;
+            const toBack = !card.classList.contains('nb-flipped');
+            card.dataset.nbFlipping = '1';
+            card.style.transition = 'transform .16s ease-in';
+            card.style.transform = 'perspective(900px) rotateY(84deg)';
+            setTimeout(() => {
+                if (toBack) {
+                    box.textContent = String(n.back);
+                    box.classList.remove('expanded', 'nb-clamped');
+                } else {
+                    box.textContent = nbPlain(n.content);
+                }
+                card.classList.toggle('nb-flipped', toBack);
+                card.style.transform = 'perspective(900px) rotateY(0deg)';
+                setTimeout(() => {
+                    card.style.transition = '';
+                    card.style.transform = '';
+                    card.dataset.nbFlipping = '0';
+                    if (!toBack && typeof nbMarkClamp === 'function') nbMarkClamp();
+                }, 175);
+            }, 165);
+        }
+        function nbEdBackInput() {
+            const el = document.getElementById('nbEdBack');
+            nbEdBackPick = el ? el.value : '';
+            nbEdBackSync();
+        }
+        function nbEdBackSync() {
+            const st = document.getElementById('nbEdBackState');
+            const hint = document.getElementById('nbEdBackHint');
+            const len = String(nbEdBackPick || '').trim().length;
+            if (st) st.textContent = len ? '（' + len + ' 字 · 墙上可翻面）' : '（留空 = 只有正面）';
+            if (hint) hint.textContent = len
+                ? '墙上默认只显示正面；点卡片上的「↻ 翻面」看这一面 —— 详情页顶部也有正 / 反切换。'
+                : '墙上默认只显示正面（一眼扫的那面）；翻过来才显示这里。留空 → 这张便签不出现翻面按钮。';
+        }
+        function nbDetailFlip(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n || !String(n.back || '').trim()) return;
+            nbDetailSide = (nbDetailSide === 'back') ? 'front' : 'back';
+            openNbDetail(id, true);
+        }
         // 窄屏三页签（桌面端 .be-tabs 是 display:none，三栏同时显示）
         function nbEdTab(t) {
             document.querySelectorAll('#nbEdTabs button').forEach(b => b.classList.toggle('on', b.getAttribute('data-t') === t));
@@ -30410,12 +30624,15 @@ function renderDayDetail() {
                     // 2026-10-12 #132：所属模块（不能选自己，防自环）
                     if (nbEdParentPick && nbEdParentPick !== n.id) n.parent = nbEdParentPick; else delete n.parent;
                     if (capsulePick && !n.capsule) capsuleAttach(n);
+                    // 2026-10-12 #133：背面（留空即删字段 = 这张只有正面）
+                    if (String(nbEdBackPick || '').trim()) n.back = String(nbEdBackPick).trim(); else delete n.back;
                 }
                 showToast('✅ 便签已更新');
             } else {
                 const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
+                if (String(nbEdBackPick || '').trim()) note.back = String(nbEdBackPick).trim();   // 2026-10-12 #133
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -30467,6 +30684,7 @@ function renderDayDetail() {
         // ===== v2.20 便签详情页（手机误触根修配套：拆内滚后长文看全靠它）=====
         let _nbLastTap = {};
         let nbDetailId = null;
+        let nbDetailSide = 'front';   // 2026-10-12 #133：详情页当前看的是正面还是背面（front | back）
         function nbToggleExpand(card) {
             const c = card && card.querySelector ? card.querySelector('.nb-card-content') : null;
             if (!c) return;
@@ -30505,7 +30723,7 @@ function renderDayDetail() {
         function openNbDetail(id, skipCount) {
             const n = notes.find(x => x.id === id);
             if (!n) return;
-            if (nbDetailFoldFor !== id) { nbFoldOpen = {}; nbDetailFoldFor = id; }   // 2026-10-10 批次B：换一张便签 → 折叠态复位
+            if (nbDetailFoldFor !== id) { nbFoldOpen = {}; nbDetailFoldFor = id; nbDetailSide = 'front'; }   // 2026-10-10 批次B：换一张便签 → 折叠态复位（#133：正反面也复位）
             nbDetailId = id;
             // v2.21 生命感：翻阅即「碰过」——刷新 lastOpenAt + 计数（静默写盘，不触发重渲染抢滚动位）
             // v2.24 修复：纸色切换/置顶刷新等「重开详情」场景不计数（skipCount），只有真实翻阅才 +1
@@ -30519,6 +30737,9 @@ function renderDayDetail() {
             const updated = n.updatedAt ? new Date(n.updatedAt) : null;
             const touchTs = Math.max(created.getTime(), new Date(n.updatedAt || n.createdAt).getTime(), n.lastOpenAt ? new Date(n.lastOpenAt).getTime() : 0);
             const ageD = Math.floor((Date.now() - touchTs) / 86400000);
+            // 2026-10-12 #133：详情页正 / 反（有背面才出现切换）
+            const backTxt = String(n.back || '').trim();
+            const showBack = nbDetailSide === 'back' && backTxt.length > 0;
             const dList = nbDetailList();
             const dIdx = dList.findIndex(x => x.id === id);
             const dTotal = dList.length;
@@ -30527,11 +30748,12 @@ function renderDayDetail() {
                     <span class="nb-detail-tag" style="background:${tag.chipBg};">${tag.icon} ${escapeHtml(tag.name)}</span>
                     ${n.pinned ? '<span class="nb-detail-pin">📌 置顶</span>' : ''}
                     ${dIdx >= 0 && dTotal > 1 ? `<span class="nb-detail-idx">${dIdx + 1} / ${dTotal}</span>` : ''}
+                    ${backTxt ? `<span class="nb-detail-flip" onclick="nbDetailFlip('${id}')" title="正面 = 扫（一眼看懂）；背面 = 用（逻辑 / 调用 / 坑）">${showBack ? '↻ 看正面' : '↻ 看背面'}</span>` : ''}
                     <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaper === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaper === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
-                <div class="nb-detail-text nb-md ${nbPaperClass()}">${nbEdMd(n.content)}</div>
+                <div class="nb-detail-text nb-md ${nbPaperClass()}">${nbEdMd(showBack ? backTxt : n.content)}</div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
@@ -30548,7 +30770,7 @@ function renderDayDetail() {
             const mBox = document.querySelector('#nbDetailModal .modal');
             if (mBox) mBox.scrollTop = 0;   // 翻到下一张回到顶部
         }
-        function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; }
+        function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; nbDetailSide = 'front'; }
         function nbDetailEdit(id) { closeNbDetail(); openNoteModal(id, null, null); }
         function nbDetailPin(id) {
             const n = notes.find(x => x.id === id);
@@ -40548,7 +40770,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121241";
+        window.NIKO_VERSION = "202610121309";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
