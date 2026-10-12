@@ -9524,8 +9524,27 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-zone-key-i { color: #8fb4ff; background: rgba(96,140,255,.12); border-color: rgba(96,140,255,.28); }
         body.dark-mode .nb-zone-key { color: #8a8899; }
         .nb-zone-key-h { font-size: 10.5px; color: #9aa0b4; }
-        .nb-zone-line { position: absolute; background: rgba(0,0,0,.055); z-index: 0; pointer-events: none; }
-        body.dark-mode .nb-zone-line { background: rgba(255,255,255,.07); }
+        .nb-zone-key-mode { font-size: 11px; font-weight: 700; color: #2563eb; background: rgba(37,99,235,.10); border: 1px solid rgba(37,99,235,.24); border-radius: 999px; padding: 2px 10px; cursor: pointer; }
+        .nb-zone-key-mode:hover { background: rgba(37,99,235,.20); }
+        .nb-zone-key-mode.on { background: #2563eb; color: #fff; border-color: #2563eb; }
+        body.dark-mode .nb-zone-key-mode { color: #8fb4ff; background: rgba(96,140,255,.12); border-color: rgba(96,140,255,.28); }
+        body.dark-mode .nb-zone-key-mode.on { background: #2563eb; color: #fff; }
+        /* 墙内的区层：默认在卡片下面（z:1），编辑模式提到最上层（z:5，此时卡片不可点） */
+        .nb-zone-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+        .nb-zone-layer.editing { z-index: 5; }
+        .nb-zone { position: absolute; border: 1.5px dashed rgba(37,99,235,.40); background: rgba(37,99,235,.035); border-radius: 10px; pointer-events: none; }
+        body.dark-mode .nb-zone { border-color: rgba(96,140,255,.42); background: rgba(96,140,255,.055); }
+        .nb-zone-layer.editing .nb-zone { border-color: rgba(37,99,235,.75); background: rgba(37,99,235,.075); }
+        .nb-zone-nm { position: absolute; left: 8px; top: 5px; font-size: 10.5px; font-weight: 700; color: #2563eb;
+            background: rgba(255,255,255,.9); border: 1px solid rgba(37,99,235,.25); border-radius: 999px; padding: 1px 8px;
+            cursor: pointer; pointer-events: auto; user-select: none; white-space: nowrap; }
+        .nb-zone-nm:hover { background: #2563eb; color: #fff; }
+        body.dark-mode .nb-zone-nm { background: rgba(28,28,42,.92); color: #8fb4ff; border-color: rgba(96,140,255,.3); }
+        .nb-zone-x { position: absolute; right: 5px; top: 4px; font-size: 11px; line-height: 1; color: #9aa0b4; cursor: pointer; pointer-events: auto; padding: 2px 5px; border-radius: 6px; }
+        .nb-zone-x:hover { color: #fff; background: #ef4444; }
+        .nb-zone-draft { position: absolute; display: none; border: 1.5px dashed #2563eb; background: rgba(37,99,235,.10); border-radius: 8px; pointer-events: none; }
+        .nb-wall.nb-free.zb-editing { cursor: crosshair; }
+        .nb-wall.nb-free.zb-editing .nb-card { pointer-events: none; }
         .nb-zone-tag { font-size: 9px; font-weight: 600; padding: 0 5px; border-radius: 999px; background: rgba(37,99,235,.10); color: #2563eb; border: 1px solid rgba(37,99,235,.22); pointer-events: none; white-space: nowrap; }
         /* #182 拖动对齐参考线 */
         .nb-guide { position: absolute; background: #2563eb; opacity: .62; pointer-events: none; z-index: 5; display: none; }
@@ -28954,11 +28973,11 @@ function renderDayDetail() {
             if (nbZones.on) {
                 wall.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
                     card.querySelectorAll('.nb-zone-tag').forEach(x => x.remove());
-                    if (card.classList.contains('nb-guide')) return;
-                    const zi = nbZoneIndexOf(card, wall);
+                    const zName = nbZoneNameOfCard(card, wall);
+                    if (!zName) return;
                     const sp = document.createElement('span');
                     sp.className = 'nb-zone-tag';
-                    sp.textContent = nbZones.names[zi] || '';
+                    sp.textContent = zName;
                     const fl = card.querySelector('.nb-flags');
                     if (fl) fl.insertBefore(sp, fl.firstChild); else card.appendChild(sp);
                 });
@@ -29052,10 +29071,12 @@ function renderDayDetail() {
             }
             const modCls = nbModule ? ' nb-in-module' : '';   // #177 钻进一摞：子卡带层级缩进
             if (nbFreeWallOn()) {
-                c.innerHTML = nbZoneKeyHtml() + '<div class="nb-wall nb-free' + modCls + '">' + nbZoneLayerHtml() +
+                const zEdit = nbZonesEdit() ? ' zb-editing' : '';
+                c.innerHTML = nbZoneKeyHtml() + '<div class="nb-wall nb-free' + modCls + zEdit + '">' + nbZoneLayerHtml() +
                     list.map(n => nbCardHtml(n)).join('') + '</div>';
                 layoutFreeWall(c);
                 bindFreeWall(c);
+                bindZoneLayer(c.querySelector('.nb-wall.nb-free'));   // 2026-10-12 #181 拉框画区
                 // #185：答案收在摞里时，墙上给一条去处（不然「搜不到」）
                 if (nbSearch) {
                     const dh = nbDeepHitCount();
@@ -29342,72 +29363,193 @@ function renderDayDetail() {
         // #194 版本号（信息栏）：只影响显示，不改变任何归属关系
         function nbEdSetVer(v) { nbEdVerPick = String(v || '').trim(); }
         function nbEdVerSync() { const el = document.getElementById('nbEdVer'); if (el) el.value = nbEdVerPick || ''; }
-        // ===== #181 墙上划区（位置自带含义）：先划区，再往里摆，卡落在哪个区就带哪个区的名字 =====
+        // ===== #181 墙上划区（2026-10-12 升级：固定 2×2 → **自己拉框画区**）=====
+        // 区 = 墙上一个矩形：x / w 按容器宽的比例存，y / h 存 px —— 与卡片位置同一坐标系，
+        // 所以窗口变宽变窄时区会跟着缩放，和卡片永远对得上。
+        const NB_ZONE_DEF = ['⚔ 战斗', '🖥 UI', '💾 存档', '❓ 待研究'];
         function nbZonesGet() {
-            const d = safeStorage.get('niko_nb_zones', null);
-            if (d && typeof d === 'object' && Array.isArray(d.names) && d.names.length === 4) return d;
-            return { on: false, names: ['⚔ 战斗', '🖥 UI', '💾 存档', '❓ 待研究'] };
+            let d = safeStorage.get('niko_nb_zones2', null);
+            if (d && typeof d === 'object' && Array.isArray(d.items)) {
+                if (typeof d.on !== 'boolean') d.on = false;
+                if (typeof d.edit !== 'boolean') d.edit = false;
+                return d;
+            }
+            // 迁移：旧版是固定 2×2 四象限（niko_nb_zones.names）。**只有用户真改过名字**才把四块搬过来，
+            // 否则给一块空墙 —— 让他自己拉框，而不是莫名其妙多出四个大框。
+            const old = safeStorage.get('niko_nb_zones', null);
+            const touched = !!(old && Array.isArray(old.names) && old.names.length === 4 && old.names.some((x, i) => x !== NB_ZONE_DEF[i]));
+            d = {
+                on: !!(old && old.on), edit: false,
+                items: touched ? [
+                    { id: 'z1', name: old.names[0], x: 0, y: 0, w: .5, h: 300 },
+                    { id: 'z2', name: old.names[1], x: .5, y: 0, w: .5, h: 300 },
+                    { id: 'z3', name: old.names[2], x: 0, y: 300, w: .5, h: 300 },
+                    { id: 'z4', name: old.names[3], x: .5, y: 300, w: .5, h: 300 }
+                ] : []
+            };
+            safeStorage.set('niko_nb_zones2', d);
+            return d;
         }
         let nbZones = nbZonesGet();
+        let nbZoneDraftBox = null;   // 刚拉完、等用户填名字的那个框
+        function nbZoneItems() { return (nbZones && Array.isArray(nbZones.items)) ? nbZones.items : []; }
+        function nbZonesEdit() { return !!nbZones.on && !!nbZones.edit; }
+        function nbZoneSave() { safeStorage.set('niko_nb_zones2', nbZones); renderNotesPage(); }
         function nbZonesToggle() {
-            nbZones.on = !nbZones.on;
-            safeStorage.set('niko_nb_zones', nbZones);
-            renderNotesPage();
-            showToast(nbZones.on ? '▦ 划区已开：卡落在哪个区，卡上就带哪个区的名字（点区名可改）' : '▦ 划区已关');
+            if (!nbZones.on) {
+                nbZones.on = true; nbZones.edit = true;
+                showToast('▦ 划区已开 · 在墙上**空白处按住拖一个框**，就能圈出一个区');
+            } else if (!nbZones.edit) {
+                nbZones.edit = true;
+                showToast('✎ 继续画区：空白处拖框新建 · 区右上角 ✕ 删除 · 点区名改名');
+            } else {
+                nbZones.edit = false;
+                if (!nbZoneItems().length) nbZones.on = false;
+                showToast(nbZones.on ? '✓ 画完了 —— 区一直显示，卡落在哪个区就带哪个区名' : '▦ 划区已关');
+            }
+            nbZoneSave();
         }
-        function nbZoneRename(i) {
-            // 不用 window.prompt：手机上丑，预览面板 / 嵌入式浏览器里还可能被直接拦掉
-            const cur = nbZones.names[i] || '';
+        function nbZoneAskName(box, wall) {
+            const wr = wall.getBoundingClientRect();
+            nbPickClose();
+            const def = '新区 ' + (nbZoneItems().length + 1);
+            let html = '<div class="nb-pick-mask" id="nbPickMask" onclick="if(event.target===this)nbPickClose()"><div class="nb-pick">';
+            html += '<div class="nb-pick-hd">▦ 给这个区起个名字</div>';
+            html += '<div class="nb-pick-sub">名字会印在落进这一格的便签上；以后点区名（或工具条上的名字）随时能改。</div>';
+            html += '<input class="nb-pick-inp" id="nbZoneInp" maxlength="12" value="' + escapeHtml(def) + '">';
+            html += '<div style="display:flex;gap:8px;margin-top:10px"><button class="nb-btn primary" onclick="nbZoneAddDo()">建这个区</button><button class="nb-btn" onclick="nbPickClose()">取消</button></div>';
+            html += '</div></div>';
+            nbZoneDraftBox = { x: box.left / (wr.width || 1), y: box.top, w: box.width / (wr.width || 1), h: box.height };
+            document.body.insertAdjacentHTML('beforeend', html);
+            const el = document.getElementById('nbZoneInp');
+            if (el) { el.focus(); try { el.select(); } catch (e) {} el.onkeydown = function (ev) { if (ev.key === 'Enter') nbZoneAddDo(); }; }
+        }
+        function nbZoneAddDo() {
+            const el = document.getElementById('nbZoneInp');
+            const nm = el ? String(el.value || '').trim().slice(0, 12) : '';
+            const b = nbZoneDraftBox;
+            nbZoneDraftBox = null;
+            nbPickClose();
+            if (!b) return;
+            nbZones.items.push({ id: 'z' + Date.now(), name: nm || ('新区 ' + (nbZoneItems().length + 1)), x: b.x, y: b.y, w: b.w, h: b.h });
+            nbZoneSave();
+            showToast('▦ 建好了 —— 把便签拖进来，它就带这个区名');
+        }
+        function nbZoneDel(i) {
+            const z = nbZoneItems()[i];
+            if (!z) return;
+            nbZones.items.splice(i, 1);
+            nbZoneSave();
+            showToast('🗑 已删掉「' + z.name + '」（区里的便签一个都没动）');
+        }
+        function nbZoneRenameIdx(i) {
+            const z = nbZoneItems()[i];
+            if (!z) return;
             nbPickClose();
             let html = '<div class="nb-pick-mask" id="nbPickMask" onclick="if(event.target===this)nbPickClose()"><div class="nb-pick">';
-            html += '<div class="nb-pick-hd">▦ 给这一格起个名字</div>';
-            html += '<div class="nb-pick-sub">这个名字会印在落进这一格的便签上。留空 = 用回默认名。</div>';
-            html += '<input class="nb-pick-inp" id="nbZoneInp" maxlength="12" value="' + escapeHtml(cur) + '">';
-            html += '<div style="display:flex;gap:8px;margin-top:10px"><button class="nb-btn primary" onclick="nbZoneRenameDo(' + i + ')">保存</button><button class="nb-btn" onclick="nbPickClose()">取消</button></div>';
+            html += '<div class="nb-pick-hd">▦ 改区名</div>';
+            html += '<div class="nb-pick-sub">只改名字，区的位置和大小都不动。</div>';
+            html += '<input class="nb-pick-inp" id="nbZoneInp" maxlength="12" value="' + escapeHtml(z.name) + '">';
+            html += '<div style="display:flex;gap:8px;margin-top:10px"><button class="nb-btn primary" onclick="nbZoneRenameDoIdx(' + i + ')">保存</button>'
+                + '<button class="nb-btn" onclick="nbZoneDel(' + i + ');nbPickClose()">删掉这个区</button>'
+                + '<button class="nb-btn" onclick="nbPickClose()">取消</button></div>';
             html += '</div></div>';
             document.body.insertAdjacentHTML('beforeend', html);
             const el = document.getElementById('nbZoneInp');
-            if (el) {
-                el.focus();
-                try { el.select(); } catch (e) {}
-                el.onkeydown = function (ev) { if (ev.key === 'Enter') nbZoneRenameDo(i); };
-            }
+            if (el) { el.focus(); try { el.select(); } catch (e) {} el.onkeydown = function (ev) { if (ev.key === 'Enter') nbZoneRenameDoIdx(i); }; }
         }
-        function nbZoneRenameDo(i) {
+        function nbZoneRenameDoIdx(i) {
+            const z = nbZoneItems()[i];
             const el = document.getElementById('nbZoneInp');
             const v = el ? String(el.value || '').trim().slice(0, 12) : '';
-            const DEF = ['⚔ 战斗', '🖥 UI', '💾 存档', '❓ 待研究'];
-            nbZones.names[i] = v || DEF[i] || ('区 ' + (i + 1));
-            safeStorage.set('niko_nb_zones', nbZones);
             nbPickClose();
-            renderNotesPage();
-            showToast('▦ 区名已改成「' + nbZones.names[i] + '」');
+            if (z && v) { z.name = v; nbZoneSave(); showToast('▦ 区名已改成「' + v + '」'); }
         }
-        function nbZoneIndexOf(card, wall) {
+        // 卡中心落在哪个区（跨区取第一个命中的）；没落进任何区 → 空字符串
+        function nbZoneNameOfCard(card, wall) {
+            const items = nbZoneItems();
+            if (!items.length) return '';
             const cw = wall.clientWidth || 1;
-            const ch = wall.clientHeight || 1;
-            const l = (parseFloat(card.style.left) || 0) / 100 * cw + card.offsetWidth / 2;
-            const t = (parseFloat(card.style.top) || 0) + card.offsetHeight / 2;
-            const col = (l / cw) < 0.5 ? 0 : 1;
-            const row = (t / ch) < 0.5 ? 0 : 1;
-            return row * 2 + col;
+            const cx = (parseFloat(card.style.left) || 0) / 100 * cw + card.offsetWidth / 2;
+            const cy = (parseFloat(card.style.top) || 0) + card.offsetHeight / 2;
+            const hit = items.find(z => cx >= z.x * cw && cx <= (z.x + z.w) * cw && cy >= z.y && cy <= z.y + z.h);
+            return hit ? hit.name : '';
         }
+        // 墙内的区层（在卡片**之前**渲染 → 压在卡片下面；编辑模式下提到最上层，方便看和点）
         function nbZoneLayerHtml() {
             if (!nbZones.on || !nbFreeWallOn()) return '';
-            // 2026-10-12：墙内只画十字分隔线 —— 区名改到墙外那一排图例（写在墙上会压住卡片）
-            return '<div class="nb-zone-line" style="left:50%;top:0;bottom:0;width:1px"></div>'
-                + '<div class="nb-zone-line" style="top:50%;left:0;right:0;height:1px"></div>';
-        }
-        // 2026-10-12 #181：墙外的一排区名图例（点一下就能改名字）
-        function nbZoneKeyHtml() {
-            if (!nbZones.on || !nbFreeWallOn()) return '';
-            let h = '<div class="nb-zone-key"><span class="nb-zone-key-t">▦ 划区</span>';
-            nbZones.names.forEach((nm, i) => {
-                h += '<span class="nb-zone-key-i" onclick="nbZoneRename(' + i + ')" title="点一下改名字">' + escapeHtml(nm) + '</span>';
+            const editing = nbZonesEdit();
+            let h = '<div class="nb-zone-layer' + (editing ? ' editing' : '') + '">';
+            nbZoneItems().forEach((z, i) => {
+                h += '<div class="nb-zone" style="left:' + (z.x * 100).toFixed(3) + '%;top:' + Math.max(0, z.y) + 'px;width:' + (z.w * 100).toFixed(3) + '%;height:' + Math.max(24, z.h) + 'px">'
+                    + '<span class="nb-zone-nm" onclick="nbZoneRenameIdx(' + i + ')" title="点一下改名字">' + escapeHtml(z.name) + '</span>'
+                    + (editing ? '<span class="nb-zone-x" onclick="nbZoneDel(' + i + ')" title="删掉这个区（区里的便签一个都不动）">✕</span>' : '')
+                    + '</div>';
             });
-            h += '<span class="nb-zone-key-h">卡落在哪个区，卡上就带哪个区的名字</span></div>';
+            h += '<div class="nb-zone-draft"></div></div>';
             return h;
         }
+        // 工具条（在墙外，不压卡片）：模式切换 + 区名一览
+        function nbZoneKeyHtml() {
+            if (!nbZones.on || !nbFreeWallOn()) return '';
+            const editing = nbZonesEdit();
+            let h = '<div class="nb-zone-key"><span class="nb-zone-key-t">▦ 划区</span>';
+            nbZoneItems().forEach((z, i) => {
+                h += '<span class="nb-zone-key-i" onclick="nbZoneRenameIdx(' + i + ')" title="点一下改名 / 删除">' + escapeHtml(z.name) + '</span>';
+            });
+            h += '<span class="nb-zone-key-mode' + (editing ? ' on' : '') + '" onclick="nbZonesToggle()">' + (editing ? '✓ 画完了' : '✎ 继续画区') + '</span>';
+            h += '<span class="nb-zone-key-h">' + (editing
+                ? '在墙上空白处按住拖一个框 = 新建一个区' : '卡落在哪个区，卡上就带哪个区名') + '</span>';
+            h += '</div>';
+            return h;
+        }
+        // 拉框画区：只在编辑模式生效（此时卡片 pointer-events:none，事件不会被卡片抢走）
+        function bindZoneLayer(wall) {
+            if (!wall || !nbZones.on) return;
+            const layer = wall.querySelector('.nb-zone-layer');
+            if (!layer) return;
+            const draft = layer.querySelector('.nb-zone-draft');
+            if (!draft) return;
+            let st = null;
+            wall.addEventListener('pointerdown', e => {
+                if (!nbZonesEdit()) return;
+                if (e.button !== 0) return;
+                if (e.target.closest('.nb-card') || e.target.closest('.nb-zone-nm') || e.target.closest('.nb-zone-x')) return;
+                const wr = wall.getBoundingClientRect();
+                st = { x0: e.clientX - wr.left, y0: e.clientY - wr.top, wr: wr, moved: false };
+                draft.style.display = 'block';
+                draft.style.left = st.x0 + 'px'; draft.style.top = st.y0 + 'px';
+                draft.style.width = '0px'; draft.style.height = '0px';
+                try { wall.setPointerCapture(e.pointerId); } catch (err) {}
+            });
+            wall.addEventListener('pointermove', e => {
+                if (!st) return;
+                const wr = st.wr;
+                const cx = Math.max(0, Math.min(e.clientX - wr.left, wr.width));
+                const cy = Math.max(0, e.clientY - wr.top);
+                const x = Math.min(st.x0, cx), y = Math.min(st.y0, cy);
+                const w = Math.abs(cx - st.x0), h = Math.abs(cy - st.y0);
+                if (w > 4 || h > 4) st.moved = true;
+                draft.style.left = x + 'px'; draft.style.top = y + 'px';
+                draft.style.width = w + 'px'; draft.style.height = h + 'px';
+            });
+            const endDrag = () => {
+                if (!st) return;
+                const moved = st.moved;
+                const box = {
+                    left: parseFloat(draft.style.left) || 0, top: parseFloat(draft.style.top) || 0,
+                    width: parseFloat(draft.style.width) || 0, height: parseFloat(draft.style.height) || 0
+                };
+                st = null;
+                draft.style.display = 'none';
+                if (!moved) return;
+                if (box.width < 60 || box.height < 40) { showToast('框太小了 —— 拖出至少一块便签那么大'); return; }
+                nbZoneAskName(box, wall);
+            };
+            wall.addEventListener('pointerup', endDrag);
+            wall.addEventListener('pointercancel', endDrag);
+        }
+
         // #182 拖动时出对齐参考线（同列 / 同行吸附，±7px）
         function nbAlignSnap(wall, card, x, y) {
             const cw = wall.clientWidth || 1, w = card.offsetWidth, h = card.offsetHeight;
@@ -41549,7 +41691,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121453";
+        window.NIKO_VERSION = "202610121501";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
