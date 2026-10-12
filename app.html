@@ -2392,77 +2392,41 @@
         .today-sec-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; white-space: nowrap; }
         body.dark-mode .today-sec-sub { color: #8f8fa3; }
         .today-sec-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
-
         /* ===== 2026-10-12 📣 更新日记（今日看板）=====
-
            把当天上线的东西汇总成一份「看得懂」的清单：每条回答「在哪用 / 怎么用」。
-
            刻意不做已读红点堆叠 —— 只用一个橙点标「这批还没看过」。 */
-
         .uf-off { font-size: 11.5px; color: #9aa0b4; cursor: pointer; padding: 3px 0; }
-
         .uf-off:hover { color: #667eea; }
-
         .uf-live { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700;
-
             color: #c2410c; background: #fff3e8; border: 1px solid #fcd9bd; border-radius: 999px; padding: 1px 8px; }
-
         body.dark-mode .uf-live { color: #fbbf24; background: #3a2a12; border-color: #5a4220; }
-
         .uf-done { font-size: 10.5px; color: #9aa0b4; }
-
         .uf-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #f97316;
-
             box-shadow: 0 0 6px rgba(249,115,22,.8); flex-shrink: 0; }
-
         .uf-sw { font-size: 11px; color: #9aa0b4; cursor: pointer; user-select: none; }
-
         .uf-sw:hover { color: #667eea; }
-
         .uf-body { margin-top: 2px; }
-
         .uf-group { padding: 7px 0 2px; border-top: 1px dashed #eeece8; }
-
         .uf-group:first-child { border-top: 0; padding-top: 0; }
-
         body.dark-mode .uf-group { border-top-color: #2c2c3d; }
-
         .uf-ghead { display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap; }
-
         .uf-gv { font-size: 10.5px; font-weight: 700; color: #fff; background: #8b8ba7; border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; }
-
         .uf-gt { font-size: 12.5px; font-weight: 600; }
-
         .uf-gn { font-size: 10.5px; color: #9aa0b4; }
-
         .uf-gx { margin-left: auto; font-size: 11px; color: #667eea; white-space: nowrap; }
-
         .uf-items { margin: 6px 0 4px 2px; display: flex; flex-direction: column; gap: 2px; }
-
         .uf-it { display: flex; align-items: baseline; gap: 7px; font-size: 12px; line-height: 1.62; padding: 1px 0; flex-wrap: wrap; }
-
         .uf-it b { font-weight: 600; white-space: nowrap; }
-
         .uf-it > span { color: #8a93a5; font-size: 11.5px; }
-
         .uf-go { margin-left: auto; font-style: normal; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; flex-shrink: 0;
-
             border: 1px solid #e2e4f5; border-radius: 999px; padding: 0 8px; }
-
         .uf-go:hover { background: #eef0fb; }
-
         body.dark-mode .uf-go { border-color: #33334a; }
-
         body.dark-mode .uf-go:hover { background: #26263a; }
-
         @media (max-width: 768px) {
-
             .uf-it b { white-space: normal; }
-
             .uf-it > span { font-size: 11px; }
-
         }
-
 
         /* ===== 开机点灯（2026-09-06：一天一次，看板逐层点亮） ===== */
         @keyframes igniteSec { 0% { opacity: 0; filter: brightness(.35) saturate(.4); transform: translateY(6px); } 60% { opacity: 1; filter: brightness(1.22); } 100% { opacity: 1; filter: none; transform: none; } }
@@ -17084,6 +17048,14 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // name = 这一批干了什么一句人话 / items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }）。
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: '202610121501', d: '2026-10-12', at: '15:01', name: '便签 · 划区改成「自己拉框」',
+                items: [
+                    { sec: '🧩 便签', t: '划区能自己拉框了', how: '面包屑点「▦ 划区」→ 在墙上**空白处按住拖一个框**就是一个区；区名点一下就能改，区右上角 ✕ 删', go: 'notes' },
+                    { sec: '🧩 便签', t: '区不再限制 4 块', how: '想圈几块圈几块、大小位置随你拖。卡落在哪个区就带哪个区名；删掉区，区里的便签一个都不会丢', go: 'notes' },
+                    { sec: '🧩 便签', t: '画区时卡片自动让路', how: '编辑模式下卡片暂时不可点（光标变十字），画完点「✓ 画完了」就恢复拖拽；区会一直显示着', go: 'notes' }
+                ]
+            },
             {
                 v: '202610121434', d: '2026-10-12', at: '14:34', name: '便签 · 深化 14 项 + 两处修复',
                 items: [
@@ -41691,7 +41663,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121501";
+        window.NIKO_VERSION = "202610121504";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
