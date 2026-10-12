@@ -12642,15 +12642,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-item" data-nav="plan" onclick="switchPage('plan')">📋 计划</div>
             <div class="nav-item" data-nav="hot" onclick="switchPage('hot')">🔥 热点</div>
             <div class="nav-item" data-nav="notes" onclick="switchPage('notes')">🗂️ 便签看板</div>
-            <div class="nav-item" data-nav="knowledge" onclick="switchPage('knowledge')">🧠 知识库</div>
             <div class="nav-item" data-nav="book" onclick="switchPage('book')">📚 读书</div>
             <div class="nav-item" data-nav="diary" onclick="switchPage('diary')">📔 日记</div>
             <div class="nav-item" data-nav="member" onclick="switchPage('member')">💰 会员</div>
             <div class="nav-item" data-nav="game" onclick="switchPage('game')">🎮 游戏时间</div>
-            <div class="nav-item" data-nav="compound" onclick="switchPage('compound')">📈 复利面板</div>
-            <div class="nav-item" data-nav="parenting" onclick="switchPage('parenting')">👶 育儿手册</div>
             <div class="nav-item" data-nav="health" onclick="switchPage('health')">🩺 健康档案</div>
-            <div class="nav-item" data-nav="tw" onclick="switchPage('tw')">✍️ 推文工坊</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
             <div class="nav-title">Settings</div>
@@ -12692,17 +12688,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="nmp-group-label">全部板块</div>
         <div class="nmp-grid">
             <div class="nav-more-item" data-navpage="hot" onclick="switchPage('hot');hideNavMore()">🔥 热点</div>
-            <div class="nav-more-item" data-navpage="meme" onclick="switchPage('meme');hideNavMore()">🈯 梗文化</div>
-            <div class="nav-more-item" data-navpage="copy" onclick="switchPage('copy');hideNavMore()">✍️ 文案库</div>
             <div class="nav-more-item" data-navpage="notes" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
-            <div class="nav-more-item" data-navpage="knowledge" onclick="switchPage('knowledge');hideNavMore()">🧠 知识库</div>
             <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
             <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
-            <div class="nav-more-item" data-navpage="compound" onclick="switchPage('compound');hideNavMore()">📈 复利面板</div>
             <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
-            <div class="nav-more-item" data-navpage="parenting" onclick="switchPage('parenting');hideNavMore()">👶 育儿手册</div>
             <div class="nav-more-item" data-navpage="health" onclick="switchPage('health');hideNavMore()">🩺 健康档案</div>
-            <div class="nav-more-item" data-navpage="tw" onclick="switchPage('tw');hideNavMore()">✍️ 推文工坊</div>
         </div>
     </div>
 
@@ -12713,7 +12703,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="niko-mobile-tab" data-page="diary" onclick="switchPage('diary')"><span class="tab-icon">📔</span><span>日记</span></div>
         <div class="niko-mobile-tab" data-page="notes" onclick="switchPage('notes')"><span class="tab-icon">🗂️</span><span>便签</span></div>
         <div class="niko-mobile-tab" data-page="game" onclick="switchPage('game')"><span class="tab-icon">🎮</span><span>游戏</span></div>
-        <div class="niko-mobile-tab" data-page="knowledge" onclick="switchPage('knowledge')"><span class="tab-icon">🧠</span><span>知识</span></div>
     </div>
 
 
@@ -13711,12 +13700,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         </div>
     </div>
         </div>
-        <div class="page" id="memePage">
-
-        </div>
-        <div class="page" id="copyPage">
-
-        </div>
         <div class="page" id="notesPage">
 <div class="nb-page-wrap">
                 <div class="nb-toolbar" id="nbToolbar">
@@ -13755,9 +13738,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div class="nb-tag-filter-bar" id="nbTagFilterBar"></div>
                 <div class="nb-content" id="nbContent"></div>
             </div>
-        </div>
-        <div class="page" id="knowledgePage">
-
         </div>
         <div class="page" id="bookPage">
 <div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
@@ -14243,12 +14223,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 </div>
             </div>
         </div>
-        <div class="page" id="compoundPage">
-
-        </div>
-        <div class="page" id="parentingPage">
-
-        </div>
         <div class="page" id="healthPage">
 <div style="padding:16px 32px 0;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
   <div class="hp-head">
@@ -14612,9 +14586,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     </div>
   </div>
 </div>
-        </div>
-        <div class="page" id="twPage">
-
         </div>
     </div>
 
@@ -16416,7 +16387,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 t.classList.toggle('active', t.getAttribute('data-page') === page);
             });
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page + 'Page').classList.add('active');
+            // 2026-10-12：已下线板块的页面容器会被 verify_merge.py 物理删除。
+            // 但 switchPage 仍可能被「全局搜索 / 旧书签 / 云同步恢复的旧状态」用旧 page 值调进来，
+            // 此时 getElementById 拿不到容器 → 直接对 null 调 classList 会抛异常、整页卡死。
+            // 兜底：容器不存在就当没这个板块，回今日看板，不留白屏。
+            const _pageEl = document.getElementById(page + 'Page');
+            if (!_pageEl) { if (page !== 'today') { try { switchPage('today'); } catch (e) {} } return; }
+            _pageEl.classList.add('active');
             if (page === 'hot') {
                 renderHotFull();
             } else if (page === 'meme') {
@@ -40448,7 +40425,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610120859";
+        window.NIKO_VERSION = "202610120911";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
@@ -40974,7 +40951,7 @@ function hpClearDemo(){
     </script>
     <!-- 截图识别 OCR 引擎（Tesseract.js）已改为「用到时才注入」——见 ensureTesseractScript()。
          原先这里挂同步 <script>，会拖住 load 事件（国内拉 jsdelivr 慢 → 标签页一直转圈），故移除。 -->
-<style>/* 临时下线板块入口隐藏（verify_merge.py DISABLED_BOARDS）*/
+<style>/* 下线板块兜底隐藏（verify_merge.py DISABLED_BOARDS）——入口 DOM 已物理删除，此处仅双保险 */
 .nav-item[data-nav="parenting"]{display:none !important;}
 .nav-more-item[data-navpage="parenting"]{display:none !important;}
 [data-board-tag="parenting"]{display:none !important;}
