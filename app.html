@@ -17049,7 +17049,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
             {
-                v: '202610121501', d: '2026-10-12', at: '15:01', name: '便签 · 划区改成「自己拉框」',
+                v: '202610121504', d: '2026-10-12', at: '15:04', name: '便签 · 划区改成「自己拉框」',
                 items: [
                     { sec: '🧩 便签', t: '划区能自己拉框了', how: '面包屑点「▦ 划区」→ 在墙上**空白处按住拖一个框**就是一个区；区名点一下就能改，区右上角 ✕ 删', go: 'notes' },
                     { sec: '🧩 便签', t: '区不再限制 4 块', how: '想圈几块圈几块、大小位置随你拖。卡落在哪个区就带哪个区名；删掉区，区里的便签一个都不会丢', go: 'notes' },
@@ -41663,7 +41663,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121504";
+        window.NIKO_VERSION = "202610121507";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
