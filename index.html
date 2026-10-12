@@ -2392,6 +2392,78 @@
         .today-sec-sub { font-size: 10.5px; color: #999; letter-spacing: .5px; white-space: nowrap; }
         body.dark-mode .today-sec-sub { color: #8f8fa3; }
         .today-sec-more { margin-left: auto; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; }
+
+        /* ===== 2026-10-12 📣 更新日记（今日看板）=====
+
+           把当天上线的东西汇总成一份「看得懂」的清单：每条回答「在哪用 / 怎么用」。
+
+           刻意不做已读红点堆叠 —— 只用一个橙点标「这批还没看过」。 */
+
+        .uf-off { font-size: 11.5px; color: #9aa0b4; cursor: pointer; padding: 3px 0; }
+
+        .uf-off:hover { color: #667eea; }
+
+        .uf-live { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700;
+
+            color: #c2410c; background: #fff3e8; border: 1px solid #fcd9bd; border-radius: 999px; padding: 1px 8px; }
+
+        body.dark-mode .uf-live { color: #fbbf24; background: #3a2a12; border-color: #5a4220; }
+
+        .uf-done { font-size: 10.5px; color: #9aa0b4; }
+
+        .uf-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #f97316;
+
+            box-shadow: 0 0 6px rgba(249,115,22,.8); flex-shrink: 0; }
+
+        .uf-sw { font-size: 11px; color: #9aa0b4; cursor: pointer; user-select: none; }
+
+        .uf-sw:hover { color: #667eea; }
+
+        .uf-body { margin-top: 2px; }
+
+        .uf-group { padding: 7px 0 2px; border-top: 1px dashed #eeece8; }
+
+        .uf-group:first-child { border-top: 0; padding-top: 0; }
+
+        body.dark-mode .uf-group { border-top-color: #2c2c3d; }
+
+        .uf-ghead { display: flex; align-items: center; gap: 8px; cursor: pointer; flex-wrap: wrap; }
+
+        .uf-gv { font-size: 10.5px; font-weight: 700; color: #fff; background: #8b8ba7; border-radius: 6px; padding: 1px 6px; font-variant-numeric: tabular-nums; }
+
+        .uf-gt { font-size: 12.5px; font-weight: 600; }
+
+        .uf-gn { font-size: 10.5px; color: #9aa0b4; }
+
+        .uf-gx { margin-left: auto; font-size: 11px; color: #667eea; white-space: nowrap; }
+
+        .uf-items { margin: 6px 0 4px 2px; display: flex; flex-direction: column; gap: 2px; }
+
+        .uf-it { display: flex; align-items: baseline; gap: 7px; font-size: 12px; line-height: 1.62; padding: 1px 0; flex-wrap: wrap; }
+
+        .uf-it b { font-weight: 600; white-space: nowrap; }
+
+        .uf-it > span { color: #8a93a5; font-size: 11.5px; }
+
+        .uf-go { margin-left: auto; font-style: normal; font-size: 11px; color: #667eea; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+
+            border: 1px solid #e2e4f5; border-radius: 999px; padding: 0 8px; }
+
+        .uf-go:hover { background: #eef0fb; }
+
+        body.dark-mode .uf-go { border-color: #33334a; }
+
+        body.dark-mode .uf-go:hover { background: #26263a; }
+
+        @media (max-width: 768px) {
+
+            .uf-it b { white-space: normal; }
+
+            .uf-it > span { font-size: 11px; }
+
+        }
+
+
         /* ===== 开机点灯（2026-09-06：一天一次，看板逐层点亮） ===== */
         @keyframes igniteSec { 0% { opacity: 0; filter: brightness(.35) saturate(.4); transform: translateY(6px); } 60% { opacity: 1; filter: brightness(1.22); } 100% { opacity: 1; filter: none; transform: none; } }
         @keyframes focusGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0); } 40% { box-shadow: 0 0 0 4px rgba(249,115,22,.35); } }
@@ -9463,6 +9535,19 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-card.nb-hit { box-shadow: 0 0 0 2px rgba(37,99,235,.85), 0 6px 18px rgba(37,99,235,.24) !important; }
         .nb-card.nb-dim { opacity: .38; }
         /* #190 搜索结果保持便签原样：只补一个「收在哪一摞」的归属标 */
+        /* 2026-10-12 🆕 便签页顶部的新功能提示（对应位置的入口；数据源 = 今日看板的 NIKO_UPDATE_FEED） */
+        .nb-uf-tip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 2px 9px;
+            font-size: 11.5px; padding: 6px 10px; border-radius: 9px;
+            background: linear-gradient(90deg, rgba(37,99,235,.09), rgba(124,58,237,.07));
+            border: 1px solid rgba(37,99,235,.20); }
+        body.dark-mode .nb-uf-tip { background: linear-gradient(90deg, rgba(96,140,255,.12), rgba(167,139,250,.09)); border-color: rgba(96,140,255,.26); }
+        .nb-uf-tip-t { font-weight: 700; color: #2563eb; }
+        body.dark-mode .nb-uf-tip-t { color: #8fb4ff; }
+        .nb-uf-tip-h { color: #8a93a5; }
+        .nb-uf-tip-go { color: #2563eb; cursor: pointer; text-decoration: underline; }
+        body.dark-mode .nb-uf-tip-go { color: #8fb4ff; }
+        .nb-uf-tip-x { margin-left: auto; color: #9aa0b4; cursor: pointer; padding: 0 3px; }
+        .nb-uf-tip-x:hover { color: #ef4444; }
         .nb-deep-hint { font-size: 11.5px; color: #2563eb; background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.20); border-radius: 8px; padding: 6px 10px; margin: 0 0 9px; }
         body.dark-mode .nb-deep-hint { color: #8fb4ff; background: rgba(96,140,255,.10); border-color: rgba(96,140,255,.26); }
         .nb-owner-pill { font-size: 9.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; background: rgba(124,58,237,.12); color: #7c3aed; }
@@ -12837,6 +12922,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <!-- 🎮 作品主线（2026-09-29 融入今日看板）：内容由 parts/作品.html 的 workRenderStrip() 渲染。
                      刻意不加侧栏/手机导航入口 —— 零新增入口是本条的设计前提。
                      板块若下线（或 work_js 未加载），容器保持 hidden，不会留下空白段。 -->
+                <!-- ===== 2026-10-12 📣 更新日记：把当天上线的东西汇总成一份看得懂的清单 =====
+                     口径：一份清单只在今日看板（零新增导航入口）；默认只展开最新一批；
+                     右上角「🚫 隐藏」可整体收起，隐藏后留一行极细入口（入口不丢）。 ===== -->
+                <section class="today-sec uf-sec" id="updateFeedStrip"></section>
                 <section class="today-sec work-sec" id="workStrip" hidden></section>
                 <!-- 💰 攒钱闸（2026-09-29 融入今日看板）：内容由 parts/钱包.html 的 walRenderStrip() 渲染。
                      一行摘要常显、零新增导航入口。板块若下线（或 wal_js 未加载），容器保持 hidden，不留空白段。 -->
@@ -13857,6 +13946,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button class="nb-btn" onclick="nbExport()" title="导出为 Markdown">⬇ 导出</button>
                     </div>
                 </div>
+                <!-- 2026-10-12 🆕 对应位置的新功能提示（便签是这一批更新最多的板块，进来先给一条轻提示） -->
+                <div id="nbUfTip"></div>
                 <!-- 分类筛选：全部 + 各标签 chips（便签墙 / 时间线通用） -->
                 <div class="nb-tag-filter-bar" id="nbTagFilterBar"></div>
                 <!-- 2026-10-12 #144：钻入模块时的面包屑（「🗂 全部 › ⚔ 战斗系统」），不在模块里时为空 -->
@@ -16967,8 +17058,120 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
 
 // ===== 今日看板专属JS =====
+
+        // ===== 2026-10-12 📣 更新日记 =====
+        // 这份清单是「给用户看的」——开发日记是给下一个我看的，别混。
+        // 维护口径：每次上线后，往最前面追加一个批次（v = 构建版本号 / d = 日期 / at = 时间 /
+        // name = 这一批干了什么一句人话 / items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }）。
+        // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
+        const NIKO_UPDATE_FEED = [
+            {
+                v: '202610121434', d: '2026-10-12', at: '14:34', name: '便签 · 深化 14 项 + 两处修复',
+                items: [
+                    { sec: '🧩 便签', t: '归组的卡不再在外面重复出现', how: '把便签归到某个模块后，墙上只留那一张模块卡；点卡上的「📚 N 张 ›」才看得到里面', go: 'notes' },
+                    { sec: '🧩 便签', t: '项目（一摞）里面也能自由摆放', how: '钻进一摞后照样能拖卡片摆位置 —— 每一层各记各的', go: 'notes' },
+                    { sec: '🧩 便签', t: '把卡拖到模块卡上就归入', how: '不用开编辑器找下拉了，直接拖上去松手', go: 'notes' },
+                    { sec: '🧩 便签', t: '整摞一起翻面', how: '钻进一摞，点面包屑上的「↻ 整摞一起翻」—— 一次看完整组逻辑；再点一次翻回正面', go: 'notes' },
+                    { sec: '🧩 便签', t: '摞的封面显示「最近动过什么」', how: '模块卡上多一行「最近动过：xxx · 2 小时前」；超过 14 天会泛黄（说明这摞冷掉了）', go: 'notes' },
+                    { sec: '🧩 便签', t: '墙上划区（位置自带含义）', how: '面包屑点「▦ 划区」→ 墙上分四格，区名点一下就能改；卡落在哪一格，卡上就带哪个区名', go: 'notes' },
+                    { sec: '🧩 便签', t: '拖动时出对齐参考线', how: '自由摆放里拖卡片，靠近另一张会自动吸附并亮一条蓝线', go: 'notes' },
+                    { sec: '🧩 便签', t: '搜索不再打乱位置', how: '自由摆放里搜索：命中的亮起来、其余变暗，卡片一个像素都不动（空间记忆不被毁）', go: 'notes' },
+                    { sec: '🧩 便签', t: '搜索结果告诉你「收在哪一摞」', how: '搜到摞里的卡时会带「📚 收在 xx」的标记，一眼知道它在哪一组', go: 'notes' },
+                    { sec: '🧩 便签', t: '进度快照（比两张照片）', how: '统计行「📸 快照」：存一张，下次再点就能看这几天多了什么、改了什么。刻意不做「完成度」', go: 'notes' },
+                    { sec: '🧩 便签', t: '待做 ❗ / 卡点 🚧 角标', how: '卡片右上角两个小角标，点一下就挂上；超 14 天泛黄。没有日期、不进日历', go: 'notes' },
+                    { sec: '🧩 便签', t: '背面一键插骨架', how: '编辑器背面点「＋ 插骨架」→ 是什么 / 怎么调 / 坑 / 示例，写满四段就是一张能用的卡', go: 'notes' },
+                    { sec: '🧩 便签', t: '版本摞（v1 → v3）', how: '编辑器信息栏填个版本号，同一功能的几个版本收进同一摞，横向看得见演进', go: 'notes' },
+                    { sec: '🛠 工具', t: '方案挑选页的「复制编号」修好了', how: '以前点了没反应（提示成功其实没复制）—— 现在复制不了会自动弹一个框，让你手动复制', go: 'notes' }
+                ]
+            },
+            {
+                v: '202610121314', d: '2026-10-12', at: '13:14', name: '便签 · 翻面 + 自由摆放',
+                items: [
+                    { sec: '🧩 便签', t: '便签能翻面了', how: '背面写「用到时才看的那面」（完整逻辑 / 调用示例 / 踩过的坑）；写了背面，卡上才出现「↻ 翻面」', go: 'notes' },
+                    { sec: '🧩 便签', t: '自由摆放墙（整面墙的总开关）', how: '工具栏「🖐 自由摆放」—— 拖到哪就记住哪；再点一次关掉，回到自动排布（位置给你留着）', go: 'notes' }
+                ]
+            },
+            {
+                v: '202610121241', d: '2026-10-12', at: '12:41', name: '便签 · 模块卡 / 一摞 / 网格纸',
+                items: [
+                    { sec: '🧩 便签', t: '模块卡 · 一摞 · 钻进去', how: '编辑器里给便签选个「📁 所属模块」，那张父便签在墙上就变成「一摞」，点「📚 N 张 ›」钻进去看这一组', go: 'notes' },
+                    { sec: '🧩 便签', t: '纸色扩到 5 档（含蓝图网格纸）', how: '详情页的纸色行多了 2 个色点 —— 蓝图配网格纸，截图更好看', go: 'notes' }
+                ]
+            }
+        ];
+
+        function ufTodayStr() { try { return formatDate(new Date()); } catch (e) { return ''; } }
+        function ufReadSet() { const a = safeStorage.get('niko_update_read', []); return Array.isArray(a) ? a : []; }
+        function ufIsRead(v) { return ufReadSet().indexOf(v) >= 0; }
+        function ufMarkRead(v) { const s = ufReadSet(); if (s.indexOf(v) < 0) { s.push(v); safeStorage.set('niko_update_read', s); } }
+        function ufFeedOn() { return safeStorage.get('niko_update_feed', 'on') !== 'off'; }
+        function ufToggleFeed() {
+            const next = !ufFeedOn();
+            safeStorage.set('niko_update_feed', next ? 'on' : 'off');
+            renderUpdateFeed();
+            if (typeof showToast === 'function') showToast(next ? '📣 更新日记已显示' : '📣 更新日记已隐藏（点那一行小字随时叫回来）');
+        }
+        function ufOpenSet() {
+            const a = safeStorage.get('niko_update_open', null);
+            if (a === null) return [NIKO_UPDATE_FEED[0] && NIKO_UPDATE_FEED[0].v].filter(Boolean);   // 第一次进来默认展开最新一批
+            return Array.isArray(a) ? a : [];
+        }
+        function ufToggleGroup(v) {
+            const s = ufOpenSet();
+            const i = s.indexOf(v);
+            if (i < 0) { s.push(v); ufMarkRead(v); } else s.splice(i, 1);
+            safeStorage.set('niko_update_open', s);
+            renderUpdateFeed();
+        }
+        function ufGo(page) { if (typeof switchPage === 'function') switchPage(page); }
+        function renderUpdateFeed() {
+            const host = document.getElementById('updateFeedStrip');
+            if (!host) return;
+            if (!NIKO_UPDATE_FEED.length) { host.hidden = true; return; }
+            host.hidden = false;
+            // 开关关掉时不留空白段，只留一行极细入口 —— 否则用户再也找不到怎么打开
+            if (!ufFeedOn()) {
+                host.innerHTML = '<div class="uf-off" onclick="ufToggleFeed()" title="点一下重新显示更新日记">📣 更新日记已隐藏 · 点这里显示</div>';
+                return;
+            }
+            const today = ufTodayStr();
+            const unread = NIKO_UPDATE_FEED.filter(g => !ufIsRead(g.v)).length;
+            const open = ufOpenSet();
+            let html = '<div class="today-sec-head">'
+                + '<span class="today-sec-title">📣 更新日记</span>'
+                + (unread ? '<span class="uf-live"><i class="uf-dot"></i>' + unread + ' 批还没看过</span>' : '<span class="uf-done">都看过了 ✅</span>')
+                + '<span class="today-sec-sub">汇总最近上线的新功能 · 每条都写了「在哪用」</span>'
+                + '<span class="today-sec-more"><span class="uf-sw" onclick="ufToggleFeed()" title="把这一块收起来（随时点那一行小字叫回来）">🚫 隐藏</span></span>'
+                + '</div>';
+            html += '<div class="uf-body">';
+            NIKO_UPDATE_FEED.forEach(g => {
+                const isOpen = open.indexOf(g.v) >= 0;
+                const dayName = (g.d === today) ? '今天' : g.d;
+                html += '<div class="uf-group">';
+                html += '<div class="uf-ghead" onclick="ufToggleGroup(\'' + g.v + '\')">'
+                    + '<span class="uf-gv">' + escapeHtml(g.at) + '</span>'
+                    + '<span class="uf-gt">' + escapeHtml(dayName + ' · ' + g.name) + '</span>'
+                    + '<span class="uf-gn">' + g.items.length + ' 项</span>'
+                    + (!ufIsRead(g.v) ? '<i class="uf-dot"></i>' : '')
+                    + '<span class="uf-gx">' + (isOpen ? '收起 ▴' : '展开 ▾') + '</span></div>';
+                if (isOpen) {
+                    html += '<div class="uf-items">';
+                    g.items.forEach(it => {
+                        html += '<div class="uf-it"><b>' + escapeHtml(it.t) + '</b>'
+                            + '<span>' + escapeHtml(it.how) + '</span>'
+                            + '<em class="uf-go" onclick="ufGo(\'' + it.go + '\')">' + escapeHtml(it.sec) + ' ›</em></div>';
+                    });
+                    html += '</div>';
+                }
+                html += '</div>';
+            });
+            html += '</div>';
+            host.innerHTML = html;
+        }
+
         function renderTodayPage() {
             renderCommandBrief();
+            renderUpdateFeed();   // 2026-10-12 📣 更新日记（放在最前 —— 一眼看到今天动了什么）
             renderClearSettle();
             renderBuddy();
             if (typeof workRenderStrip === 'function') workRenderStrip();   // 🎮 作品主线（parts/作品.html）
@@ -28605,6 +28808,7 @@ function renderDayDetail() {
             nbDailyTick();          // 晨读抽取 + 整理人巡墙（内部自带当日防抖）
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
+            { const tip = document.getElementById('nbUfTip'); if (tip) tip.innerHTML = nbUpdateTipHtml(); }   // 2026-10-12 🆕
             renderNbCrumb();        // 2026-10-12 #144：钻入模块时的面包屑
             nbFreeWallBtnSync();    // 2026-10-12 #136：自由摆放开关（只在便签墙可用）
             document.getElementById('nbSelCount').textContent = nbSelected.size;
@@ -28954,6 +29158,29 @@ function renderDayDetail() {
             if (!p) return '';
             const nm = nbPlain(p.content).split('\n')[0].slice(0, 12);
             return '<span class="nb-owner-pill" title="这一张收在「' + escapeHtml(nm) + '」里">📚 ' + escapeHtml(nm) + '</span>';
+        }
+        // 2026-10-12 🆕 便签页顶部的新功能提示 —— 数据源是今日看板的 NIKO_UPDATE_FEED（单一清单，不另起一份）
+        function nbUpdateTipHtml() {
+            try {
+                if (typeof NIKO_UPDATE_FEED === 'undefined' || !NIKO_UPDATE_FEED || !NIKO_UPDATE_FEED.length) return '';
+                if (typeof ufIsRead !== 'function') return '';
+                const mine = NIKO_UPDATE_FEED.filter(g => !ufIsRead(g.v) && (g.items || []).some(it => it.go === 'notes'));
+                if (!mine.length) return '';
+                const cnt = mine.reduce((a, g) => a + g.items.filter(it => it.go === 'notes').length, 0);
+                return '<div class="nb-uf-tip">'
+                    + '<span class="nb-uf-tip-t">🆕 便签最近更新了 ' + cnt + ' 项</span>'
+                    + '<span class="nb-uf-tip-h">（归纳 · 一摞自由摆放 · 划区 · 快照 · 待做 / 卡点角标 · 翻面 …）</span>'
+                    + '<span class="nb-uf-tip-go" onclick="nbUfTipGo()">去今日看板看清单 ›</span>'
+                    + '<span class="nb-uf-tip-x" onclick="nbUfTipOff()" title="我知道了（清单一里随时能回看）">✕</span></div>';
+            } catch (e) { return ''; }
+        }
+        function nbUfTipGo() { if (typeof switchPage === 'function') switchPage('today'); }
+        function nbUfTipOff() {
+            try {
+                NIKO_UPDATE_FEED.filter(g => !ufIsRead(g.v) && (g.items || []).some(it => it.go === 'notes')).forEach(g => ufMarkRead(g.v));
+            } catch (e) {}
+            renderNotesPage();
+            if (typeof showToast === 'function') showToast('👌 知道了 —— 今日看板的「📣 更新日记」里随时能回看');
         }
         function nbAgedOver(ts, days) {
             if (!ts) return false;
@@ -41322,7 +41549,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121434";
+        window.NIKO_VERSION = "202610121453";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
