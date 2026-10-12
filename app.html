@@ -9382,8 +9382,11 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-detail-text.paper-blue .nb-md-code, .nb-detail-text.paper-blue code { background: rgba(255,255,255,.14); color: #eaf2ff; }
 
         /* ===== 2026-10-12 #132 / #138 / #144 模块卡 · 一摞 · 子卡钻入（三者同源：parent 关系）===== */
-        .nb-card.nb-stack-card { box-shadow: 3px 3px 0 -1px rgba(0,0,0,.07), 6px 6px 0 -2px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.05); }
-        body.dark-mode .nb-card.nb-stack-card { box-shadow: 3px 3px 0 -1px rgba(255,255,255,.055), 6px 6px 0 -2px rgba(255,255,255,.035); }
+        .nb-card.nb-stack-card { box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+        /* 右侧 + 下侧「露出下面那张纸的边」—— 在卡片外沿画，不依赖负 z-index（不会被页面底色盖住） */
+        .nb-card.nb-stack-card::before { content: ''; position: absolute; left: 7px; right: 7px; bottom: -3px; height: 3px; border-radius: 0 0 3px 3px; background: rgba(0,0,0,.13); pointer-events: none; }
+        .nb-card.nb-stack-card::after { content: ''; position: absolute; top: 7px; bottom: 7px; right: -3px; width: 3px; border-radius: 0 3px 3px 0; background: rgba(0,0,0,.13); pointer-events: none; }
+        body.dark-mode .nb-card.nb-stack-card::before, body.dark-mode .nb-card.nb-stack-card::after { background: rgba(255,255,255,.16); }
         .nb-stack-btn { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; background: rgba(0,0,0,.06); border: none; border-radius: 7px; padding: 2px 7px; cursor: pointer; color: #5f5c6b; font-family: inherit; line-height: 1.5; }
         .nb-stack-btn:hover { background: rgba(0,0,0,.12); }
         body.dark-mode .nb-stack-btn { background: rgba(255,255,255,.10); color: #c5c5d5; }
@@ -40545,7 +40548,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121234";
+        window.NIKO_VERSION = "202610121241";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
