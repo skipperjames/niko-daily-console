@@ -9419,6 +9419,79 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-wall.nb-free .nb-card.nb-dragging { cursor: grabbing; z-index: 6; box-shadow: 0 10px 26px rgba(0,0,0,.22); }
         body.dark-mode .nb-wall.nb-free { background: rgba(255,255,255,.02); border-radius: 10px; }
         .nb-ed-parent-hint { font-size: 11px; color: #9aa0b4; line-height: 1.5; margin: 4px 0 0; }
+        .nb-ed-quick { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; }
+        .nb-ed-quick button { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 8px; border: 1px dashed #c9c2b6; background: transparent; color: #5f5c6b; cursor: pointer; font-family: inherit; }
+        .nb-ed-quick button:hover { border-color: #2563eb; color: #2563eb; }
+        body.dark-mode .nb-ed-quick button { border-color: #3a3a4a; color: #c5c5d5; }
+        .nb-ed-quick-hint { font-size: 10.5px; color: #9aa0b4; }
+        /* ===== 2026-10-12 便签深化（第三批 171–200 选定 14 项）===== */
+        /* #177 钻进一摞：子卡层级缩进（一眼知道自己在哪一摞里） */
+        .nb-wall.nb-in-module { padding-left: 13px; border-left: 2px solid rgba(37,99,235,.34); }
+        body.dark-mode .nb-wall.nb-in-module { border-left-color: rgba(96,140,255,.42); }
+        /* #176 摞的封面：最近动过什么 */
+        .nb-stack-meta { font-size: 10.5px; color: #8a93a5; margin-top: 3px; line-height: 1.5; }
+        .nb-stack-meta.cold { color: #c77d2a; font-weight: 600; }
+        body.dark-mode .nb-stack-meta { color: #9a98a8; }
+        body.dark-mode .nb-stack-meta.cold { color: #e0a860; }
+        .nb-stack-ver { display: inline-flex; align-items: center; gap: 3px; font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 999px; background: rgba(37,99,235,.10); color: #2563eb; }
+        /* #180 换封面 */
+        .nb-cover-hd { font-size: 9.5px; font-weight: 700; color: #7c3aed; letter-spacing: .2px; margin-bottom: 2px; }
+        /* #192 待做 / #193 卡点：两个角标，绝不做成任务条 */
+        .nb-flags { position: absolute; right: 7px; top: 5px; display: flex; gap: 3px; z-index: 2; }
+        .nb-flag { font-size: 11px; line-height: 1; cursor: pointer; opacity: .5; transition: opacity .12s, transform .12s; }
+        .nb-flag:hover { opacity: 1; transform: scale(1.18); }
+        .nb-flag.on { opacity: 1; }
+        .nb-flag.cold { filter: sepia(1) saturate(2.4) hue-rotate(-12deg); }
+        /* #194 版本标 */
+        .nb-ver-pill { font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 999px; background: rgba(15,156,123,.13); color: #0f9c7b; }
+        /* #181 墙上划区 */
+        .nb-zone-key { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin: 0 0 9px; font-size: 11.5px; color: #8a93a5; }
+        .nb-zone-key-t { font-weight: 700; letter-spacing: .4px; }
+        .nb-zone-key-i { background: rgba(37,99,235,.09); border: 1px solid rgba(37,99,235,.20); color: #2563eb; border-radius: 999px; padding: 2px 9px; cursor: pointer; font-weight: 600; }
+        .nb-zone-key-i:hover { background: rgba(37,99,235,.18); }
+        body.dark-mode .nb-zone-key-i { color: #8fb4ff; background: rgba(96,140,255,.12); border-color: rgba(96,140,255,.28); }
+        body.dark-mode .nb-zone-key { color: #8a8899; }
+        .nb-zone-key-h { font-size: 10.5px; color: #9aa0b4; }
+        .nb-zone-line { position: absolute; background: rgba(0,0,0,.055); z-index: 0; pointer-events: none; }
+        body.dark-mode .nb-zone-line { background: rgba(255,255,255,.07); }
+        .nb-zone-tag { font-size: 9px; font-weight: 600; padding: 0 5px; border-radius: 999px; background: rgba(37,99,235,.10); color: #2563eb; border: 1px solid rgba(37,99,235,.22); pointer-events: none; white-space: nowrap; }
+        /* #182 拖动对齐参考线 */
+        .nb-guide { position: absolute; background: #2563eb; opacity: .62; pointer-events: none; z-index: 5; display: none; }
+        .nb-guide.v { top: 0; bottom: 0; width: 1px; }
+        .nb-guide.h { left: 0; right: 0; height: 1px; }
+        /* #185 搜索：命中的亮、未命中的暗（位置一个像素都不动） */
+        .nb-card.nb-hit { box-shadow: 0 0 0 2px rgba(37,99,235,.85), 0 6px 18px rgba(37,99,235,.24) !important; }
+        .nb-card.nb-dim { opacity: .38; }
+        /* #190 搜索结果保持便签原样：只补一个「收在哪一摞」的归属标 */
+        .nb-deep-hint { font-size: 11.5px; color: #2563eb; background: rgba(37,99,235,.08); border: 1px solid rgba(37,99,235,.20); border-radius: 8px; padding: 6px 10px; margin: 0 0 9px; }
+        body.dark-mode .nb-deep-hint { color: #8fb4ff; background: rgba(96,140,255,.10); border-color: rgba(96,140,255,.26); }
+        .nb-owner-pill { font-size: 9.5px; font-weight: 600; padding: 1px 6px; border-radius: 999px; background: rgba(124,58,237,.12); color: #7c3aed; }
+        /* #178 拖到模块卡上即归入 */
+        .nb-card.nb-drop-into { box-shadow: 0 0 0 2px rgba(37,99,235,.75), 0 6px 18px rgba(37,99,235,.22); }
+        /* #174 整摞一起翻 / #180 换封面：面包屑上的动作按钮 */
+        .nb-crumb-act { background: #eef1f4; border: 1px solid #e0e5ea; border-radius: 8px; padding: 4px 10px; cursor: pointer; color: #4b5563; font-family: inherit; font-size: 12px; }
+        .nb-crumb-act:hover { background: #e3e8ee; }
+        body.dark-mode .nb-crumb-act { background: #24242f; border-color: #33334a; color: #c5c5d5; }
+        /* #180 换封面 / #191 快照 的浮层 */
+        .nb-pick-mask { position: fixed; inset: 0; z-index: 9600; background: rgba(12,12,18,.55); display: flex; align-items: center; justify-content: center; padding: 24px 14px; }
+        .nb-pick { width: min(520px, 94vw); max-height: 76vh; overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 18px 50px rgba(0,0,0,.34); padding: 14px 16px; }
+        body.dark-mode .nb-pick { background: #1e1e28; color: #d5d5e0; }
+        .nb-pick-hd { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+        .nb-pick-sub { font-size: 11px; color: #9aa0b4; margin-bottom: 10px; }
+        .nb-pick-inp { width: 100%; box-sizing: border-box; font-size: 14px; padding: 8px 10px; border-radius: 9px; border: 1px solid #d6d0c6; background: #fff; color: #333; font-family: inherit; }
+        body.dark-mode .nb-pick-inp { background: #20202c; border-color: #3a3a4a; color: #d5d5e0; }
+        .nb-pick-row { padding: 8px 10px; border-radius: 9px; cursor: pointer; font-size: 12.5px; line-height: 1.5; border: 1px solid transparent; }
+        .nb-pick-row:hover { background: rgba(37,99,235,.08); border-color: rgba(37,99,235,.25); }
+        .nb-pick-row.on { background: rgba(37,99,235,.12); border-color: rgba(37,99,235,.4); font-weight: 700; }
+        .nb-snap-sec { font-size: 12px; margin-bottom: 9px; }
+        .nb-snap-t { font-size: 11px; color: #9aa0b4; letter-spacing: .3px; margin-bottom: 4px; }
+        .nb-snap-row { font-size: 12px; line-height: 1.7; padding-left: 2px; }
+        .nb-snap-row em { font-style: normal; font-size: 10px; padding: 0 5px; border-radius: 999px; margin-right: 5px; }
+        .nb-snap-row em.add { background: rgba(15,156,123,.16); color: #0f9c7b; }
+        .nb-snap-row em.edit { background: rgba(199,125,42,.16); color: #c77d2a; }
+        .nb-snap-row em.gone { background: rgba(0,0,0,.07); color: #8a93a5; }
+        body.dark-mode .nb-snap-row em.gone { background: rgba(255,255,255,.10); }
+
         @media (max-width: 768px) { .nb-stack-btn { padding: 5px 10px; font-size: 11px; } .nb-ed-parent-sel { font-size: 16px; padding: 9px 10px; } }
         .nb-detail-text.paper-cream { background: #f7efdc; color: #4a4030; border-radius: 10px; padding: 14px 16px; }
         .nb-detail-text.paper-gray { background: #efefec; color: #3c3c3c; border-radius: 10px; padding: 14px 16px; }
@@ -14781,8 +14854,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                          留空 → 这张便签只有正面，墙上不会出现「↻ 翻面」按钮（每张便签各自的属性）。 -->
                     <div class="be-sec" id="nbEdBackSec">
                         <div class="be-lbl">↻ 背面 <span id="nbEdBackState" style="font-weight:400;color:#9aa0b4">（留空 = 只有正面）</span></div>
+                        <div class="nb-ed-quick"><button type="button" onclick="nbEdBackTemplate()" title="不知道背面写什么？一键插入四段骨架">＋ 插骨架</button><span class="nb-ed-quick-hint">是什么 / 怎么调 / 坑 / 示例</span></div>
                         <textarea class="nb-ed-back" id="nbEdBack" placeholder="用到时才看的那面：完整逻辑 / 调用示例 / 踩过的坑…（留空 → 墙上不出现翻面按钮）" oninput="nbEdBackInput()"></textarea>
                         <div class="nb-back-hint" id="nbEdBackHint">墙上默认只显示正面（一眼扫的那面）；翻过来才显示这里。</div>
+                    </div>
+                    <!-- 2026-10-12 #194 版本摞：同一功能改了三版，旧版不敢删 —— 填个版本号，收进同一摞即可横向对比 -->
+                    <div class="be-sec" id="nbEdVerSec">
+                        <div class="be-lbl">🗂 版本号 <span style="font-weight:400;color:#9aa0b4">（选填）</span></div>
+                        <input type="text" class="nb-ed-parent-sel" id="nbEdVer" maxlength="12" placeholder="如 v1 / v2 / v3（同一功能的多个版本归到同一摞即可）" oninput="nbEdSetVer(this.value)">
                     </div>
                     <div class="be-sec">
                         <div class="be-lbl">时间</div>
@@ -14809,6 +14888,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <button type="button" data-nm="s" onclick="nbEdIns('```trace\n', '\n```', 'gateway 路由 8ms', 0)" title="插入 Trace 调用链：每跳耗时成表，慢行自动标红">🔍 Trace</button>
                         <button type="button" data-nm="s" onclick="nbEdIns('```cfg\n', '\n```', 'key = 默认值 -> 线上值', 0)" title="插入配置项对照表：默认值 → 线上值">⚙ 配置对照</button>
                         <button type="button" data-nm="s" onclick="nbEdIns('```cmd\n', '\n```', '写命令', 0)" title="插入命令清单：按危险等级着色，每行可复制">🖥 命令</button>
+                        <button type="button" data-nm="b" onclick="nbEdBodyTemplate()" title="插入卡点骨架：现象 / 试过 / 猜 / 下一步">🚧 卡点骨架</button>
                         <button type="button" data-nm="b" onclick="nbEdIns('## ', '', '小标题', 1)" title="小标题">H2</button>
                         <button type="button" data-nm="b" onclick="nbEdIns('**', '**', '加粗文字')" title="加粗（Ctrl+B）"><b>加粗</b></button>
                         <button type="button" data-nm="b" onclick="nbEdIns('*', '*', '斜体文字')" title="斜体（Ctrl+I）"><i>斜体</i></button>
@@ -28285,6 +28365,7 @@ function renderDayDetail() {
         let nbModule = null;                        // 当前钻入的模块（null = 在主墙）
         let nbEdParentPick = '';                    // 编辑器里「所属模块」的暂存值
         let nbEdBackPick = '';                      // 2026-10-12 #133：编辑器里「背面」的暂存值（留空 = 只有正面）
+        let nbEdVerPick = '';                       // 2026-10-12 #194：编辑器里「版本号」的暂存值
         const nbChildren = (id) => notes.filter(n => !n.deleted && n.parent === id);
         const nbIsModule = (id) => nbChildren(id).length > 0;
         const nbParentNote = (n) => (n && n.parent) ? (notes.find(x => x.id === n.parent && !x.deleted) || null) : null;
@@ -28308,9 +28389,11 @@ function renderDayDetail() {
             bar.innerHTML = `<button class="nb-crumb" onclick="nbExitModule()" title="回到全部便签">🗂 全部</button>` +
                 `<span class="nb-crumb-sep">›</span>` +
                 `<span class="nb-crumb cur" title="当前模块">📁 ${escapeHtml(nm)}</span>` +
-                `<span class="nb-crumb-hint">这一摞 ${cnt} 张` +
-                (m ? ` · <span style="cursor:pointer;text-decoration:underline" onclick="openNoteModal('${nbModule}',null,null)" title="编辑这张模块卡本身">编辑模块卡</span>` : '') +
-                `</span>`;
+                '<span class="nb-crumb-hint">这一摞 ' + cnt + ' 张' + nbStackVerLabel(nbChildren(nbModule)) + '</span>' +
+                (m ? '<button class="nb-crumb-act" onclick="openNoteModal(\'' + nbModule + '\',null,null)" title="编辑这张模块卡本身（标题 / 归属 / 版本）">✏️ 编辑模块卡</button>' : '') +
+                '<button class="nb-crumb-act" onclick="nbFlipAllInModule(this)" title="整摞一起翻到背面（看用法面），再点一次翻回正面">↻ 整摞一起翻</button>' +
+                '<button class="nb-crumb-act" onclick="nbPickCover()" title="挑一张子卡当这一摞的脸">🎭 换封面</button>' +
+                '<button class="nb-crumb-act" onclick="nbZonesToggle()" title="墙上划区：卡落在哪个区，卡上就带哪个区的名字">▦ 划区' + (nbZones.on ? ' · 开' : '') + '</button>';
         }
 
         function visibleList() {
@@ -28323,6 +28406,10 @@ function renderDayDetail() {
                 list = list.filter(n => n.tag === nbTagFilter);
             }
             list = nbModuleFilter(list);   // 2026-10-12 #144：钻入模块后只看这一摞
+            // 2026-10-12 真机反馈：已归入某一摞的便签，在主视图里不再单独平铺 ——
+            // 否则同一张卡在墙上出现两次（一次平铺、一次在摞里），「归纳」等于没做。
+            // 例外：搜索时保留（不然搜不到摞里的内容，卡片上会标出它属于哪一摞）；收纳箱保留全部。
+            if (!nbModule && !nbSearch && !nbSpecial) list = list.filter(x => !nbParentNote(x));
             return list.slice().sort((a, b) => {
                 if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1; // 置顶永远优先
                 if (nbSort === 'manual') return (a.order || 0) - (b.order || 0);   // v2.21 手动拖拽排序
@@ -28393,17 +28480,27 @@ function renderDayDetail() {
                 card.addEventListener('dragover', e => {
                     if (!draggedNoteId || draggedNoteId === card.dataset.noteId) return;
                     e.preventDefault();
+                    // #178 拖到「模块卡」上 = 归入这一摞（不再只是排到它前面 / 后面）
+                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after', 'nb-drop-into'));
+                    if (nbIsModule(card.dataset.noteId)) {
+                        e.dataTransfer.dropEffect = 'link';
+                        card.classList.add('nb-drop-into');
+                        return;
+                    }
                     const r = card.getBoundingClientRect();
                     const before = (e.clientY - r.top) < r.height / 2;
-                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after'));
                     card.classList.add(before ? 'nb-drop-before' : 'nb-drop-after');
                 });
                 card.addEventListener('drop', e => {
                     e.preventDefault(); e.stopPropagation();
                     const targetId = card.dataset.noteId;
                     const pos = card.classList.contains('nb-drop-before') ? 'before' : 'after';
-                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after'));
-                    if (draggedNoteId && draggedNoteId !== targetId) nbReorder(draggedNoteId, targetId, pos);
+                    const into = card.classList.contains('nb-drop-into');
+                    c.querySelectorAll('.nb-card').forEach(x => x.classList.remove('nb-drop-before', 'nb-drop-after', 'nb-drop-into'));
+                    if (draggedNoteId && draggedNoteId !== targetId) {
+                        if (into || nbIsModule(targetId)) nbDropIntoParent(draggedNoteId, targetId);   // #178
+                        else nbReorder(draggedNoteId, targetId, pos);
+                    }
                     draggedNoteId = null;
                 });
             });
@@ -28480,7 +28577,8 @@ function renderDayDetail() {
                 `<span class="nb-stat"><strong>${act.length}</strong> 活跃</span>` +
                 `<span class="nb-stat"><strong>${todayCnt}</strong> 今日新增</span>` +
                 `<span class="nb-stat"><strong>${act.filter(n => n.pinned).length}</strong> 置顶</span>` +
-                `<span class="nb-stat nb-stat-btn" onclick="nbOpenTags()" title="标签管理：新增 / 换图标 / 隐藏 / 删除">🏷 标签管理</span>`;
+                `<span class="nb-stat nb-stat-btn" onclick="nbOpenTags()" title="标签管理：新增 / 换图标 / 隐藏 / 删除">🏷 标签管理</span>` +
+                `<span class="nb-stat nb-stat-btn" onclick="nbSnapOpen()" title="进度快照：存一张，下次再点就能看这几天墙上多了什么、改了什么">📸 快照` + (nbSnaps().length ? ` ${nbSnaps().length}` : '') + `</span>`;
             // 三个收纳箱的计数直接并入按钮文字，一处看清
             const boxBtns = [
                 ['nbArchiveBtn', '📦 归档箱', archivedNotes().length],
@@ -28574,13 +28672,16 @@ function renderDayDetail() {
         function nbFreeWallBtnSync() {
             const b = document.getElementById('nbFreeWallBtn');
             if (!b) return;
-            const usable = (nbView === 'wall' && !nbSpecial && !nbModule);
+            // 2026-10-12：自由摆放不再只管「整面墙」—— 钻进一摞（项目）里同样可用。
+            // 每一层各记各的位置：子卡在主墙不显示，所以 n.fx / n.fy 天然按层分开，不会打架。
+            const usable = (nbView === 'wall' && !nbSpecial);
             b.style.display = usable ? '' : 'none';
             b.classList.toggle('primary', !!nbFreeWall);
             b.textContent = nbFreeWall ? '🖐 自由摆放 · 开' : '🖐 自由摆放';
+            const where = nbModule ? '这一摞（项目）里' : '墙上的任意位置';
             b.title = nbFreeWall
-                ? '自由摆放已开：直接拖便签到任意位置（再点一次关掉，回到自动排布）'
-                : '自由摆放：把便签拖到墙上的任意位置，位置会被记住（整面墙的总开关）';
+                ? '自由摆放已开：直接拖便签到' + where + '（再点一次关掉，回到自动排布）'
+                : '自由摆放：把便签拖到' + where + '，位置会被记住（每一层各记各的）';
         }
         function nbToggleFreeWall() {
             nbFreeWall = !nbFreeWall;
@@ -28593,9 +28694,17 @@ function renderDayDetail() {
             renderNotesPage();
             showToast(nbFreeWall ? '🖐 自由摆放已开 · 拖到哪就记住哪' : '🔀 已回到自动排布（位置给你留着）');
         }
-        function nbFreeDefaultPos(i) {
-            const cols = 3;
-            return { fx: 0.015 + (i % cols) * 0.32, fy: Math.floor(i / cols) * 152 };
+        // #178 自由墙：松手点压在哪个模块卡上（返回那张卡，没有就 null）
+        function nbFreeHitModule(wall, card, cx, cy) {
+            if (cx == null || cy == null) return null;
+            let hit = null;
+            wall.querySelectorAll('.nb-card[data-note-id]').forEach(o => {
+                if (o === card) return;
+                if (!nbIsModule(o.dataset.noteId)) return;
+                const r = o.getBoundingClientRect();
+                if (cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom) hit = o;
+            });
+            return hit;
         }
         function nbFreeWallHeight(wall) {
             if (!wall) return;
@@ -28609,18 +28718,49 @@ function renderDayDetail() {
         function layoutFreeWall(c) {
             const wall = c.querySelector('.nb-wall.nb-free');
             if (!wall) return;
-            Array.from(wall.querySelectorAll('.nb-card[data-note-id]')).forEach((card, i) => {
+            const wallW = wall.clientWidth || 1;
+            const put = (card, fx, fy) => {
+                const maxFx = Math.max(0, (wallW - card.offsetWidth) / wallW);   // 右边界不许出墙
+                card.style.left = (Math.max(0, Math.min(maxFx, fx)) * 100).toFixed(3) + '%';
+                card.style.top = Math.max(0, fy) + 'px';
+            };
+            // ① 摆过的按记忆摆
+            const rest = [];
+            Array.from(wall.querySelectorAll('.nb-card[data-note-id]')).forEach(card => {
                 const n = notes.find(x => x.id === card.dataset.noteId);
                 if (!n) return;
                 const has = (typeof n.fx === 'number' && isFinite(n.fx) && typeof n.fy === 'number' && isFinite(n.fy));
-                const p = has ? { fx: n.fx, fy: n.fy } : nbFreeDefaultPos(i);
-                const wallW = wall.clientWidth || 1;
-                const maxFx = Math.max(0, (wallW - card.offsetWidth) / wallW);   // 右边界不许出墙
-                card.style.left = (Math.max(0, Math.min(maxFx, p.fx)) * 100).toFixed(3) + '%';
-                card.style.top = Math.max(0, p.fy) + 'px';
+                if (has) put(card, n.fx, n.fy); else rest.push(card);
             });
+            // ② 没摆过的按「最矮一列往下摞」
+            //    2026-10-12 修：原来用固定行距 152px，卡片一高（摞封面多了「最近动过」那行）就互相压住
+            if (rest.length) {
+                const COLX = [0.015, 0.335, 0.655];
+                const colTop = [0, 0, 0];
+                rest.forEach(card => {
+                    let ci = 0;
+                    for (let k = 1; k < COLX.length; k++) if (colTop[k] < colTop[ci]) ci = k;
+                    put(card, COLX[ci], colTop[ci]);
+                    colTop[ci] += card.offsetHeight + 12;
+                });
+            }
             nbFreeWallHeight(wall);
             requestAnimationFrame(() => nbFreeWallHeight(wall));   // 字体/换行落定后再量一次
+            // #181 区名小标：卡落在哪个区，卡上就带哪个区的名字
+            if (nbZones.on) {
+                wall.querySelectorAll('.nb-card[data-note-id]').forEach(card => {
+                    card.querySelectorAll('.nb-zone-tag').forEach(x => x.remove());
+                    if (card.classList.contains('nb-guide')) return;
+                    const zi = nbZoneIndexOf(card, wall);
+                    const sp = document.createElement('span');
+                    sp.className = 'nb-zone-tag';
+                    sp.textContent = nbZones.names[zi] || '';
+                    const fl = card.querySelector('.nb-flags');
+                    if (fl) fl.insertBefore(sp, fl.firstChild); else card.appendChild(sp);
+                });
+            } else {
+                wall.querySelectorAll('.nb-zone-tag').forEach(x => x.remove());
+            }
         }
         function bindFreeWall(c) {
             const wall = c.querySelector('.nb-wall.nb-free');
@@ -28646,14 +28786,36 @@ function renderDayDetail() {
                     let y = e.clientY - st.wr.top - st.dy;
                     x = Math.max(0, Math.min(x, st.wr.width - card.offsetWidth));
                     y = Math.max(0, y);
+                    // #182 拖动时出对齐参考线（同列 / 同行吸附）
+                    const sn = nbAlignSnap(wall, card, x, y);
+                    x = Math.max(0, Math.min(sn.x, st.wr.width - card.offsetWidth));
+                    y = Math.max(0, sn.y);
                     card.style.left = (x / st.wr.width * 100).toFixed(3) + '%';
                     card.style.top = y + 'px';
+                    // #178 拖到模块卡上 → 松手即归入
+                    wall.querySelectorAll('.nb-card').forEach(o => o.classList.remove('nb-drop-into'));
+                    const hit = nbFreeHitModule(wall, card, e.clientX, e.clientY);
+                    if (hit) hit.classList.add('nb-drop-into');
                 });
-                const endDrag = () => {
+                const endDrag = (ev) => {
                     if (!st) return;
                     const wasDrag = st.moved;
+                    const endX = ev && ev.clientX, endY = ev && ev.clientY;
                     st = null;
                     card.classList.remove('nb-dragging');
+                    nbGuidesHide(wall);
+                    // #178 松手时如果压在模块卡上 → 归入这一摞（不记位置，卡片换层了）
+                    const into = nbFreeHitModule(wall, card, endX, endY);
+                    wall.querySelectorAll('.nb-drop-into').forEach(o => o.classList.remove('nb-drop-into'));
+                    if (wasDrag && into) {
+                        const okInto = nbDropIntoParent(card.dataset.noteId, into.dataset.noteId);
+                        if (okInto) {
+                            const kill2 = e2 => { e2.stopPropagation(); e2.preventDefault(); window.removeEventListener('click', kill2, true); };
+                            window.addEventListener('click', kill2, true);
+                            setTimeout(() => window.removeEventListener('click', kill2, true), 150);
+                            return;
+                        }
+                    }
                     if (!wasDrag) return;   // 没真拖 → 把 click 留给单击展开 / 双击详情
                     const n = notes.find(x => x.id === card.dataset.noteId);
                     if (n) {
@@ -28674,7 +28836,8 @@ function renderDayDetail() {
         }
 
         function renderNotesWallView(c) {
-            const list = visibleList();
+            const hw = nbWallList();   // #185：自由墙 + 搜索 → 全量返回（命中高亮 / 未命中变暗），位置一个像素都不动
+            const list = hw.list;
             const filterTip = nbTagFilter ? '该分类下没有便签' : (nbSearch ? '没有匹配的便签' : '便签墙空空如也');
             const filterHint = nbTagFilter || nbSearch ? '换个筛选条件试试' : '贴几张便签再上墙';
             if (!list.length) {
@@ -28683,15 +28846,40 @@ function renderDayDetail() {
                 nbFreeWallBtnSync();
                 return;
             }
+            const modCls = nbModule ? ' nb-in-module' : '';   // #177 钻进一摞：子卡带层级缩进
             if (nbFreeWallOn()) {
-                c.innerHTML = `<div class="nb-wall nb-free">${list.map(n => nbCardHtml(n)).join('')}</div>`;
+                c.innerHTML = nbZoneKeyHtml() + '<div class="nb-wall nb-free' + modCls + '">' + nbZoneLayerHtml() +
+                    list.map(n => nbCardHtml(n)).join('') + '</div>';
                 layoutFreeWall(c);
                 bindFreeWall(c);
+                // #185：答案收在摞里时，墙上给一条去处（不然「搜不到」）
+                if (nbSearch) {
+                    const dh = nbDeepHitCount();
+                    if (dh > 0) c.insertAdjacentHTML('afterbegin', '<div class="nb-deep-hint">📚 还有 ' + dh + ' 张收在「一摞」里命中 —— 点开对应那张模块卡就能看到</div>');
+                }
             } else {
-                c.innerHTML = `<div class="nb-wall">${list.map(n => nbCardHtml(n)).join('')}</div>`;
+                c.innerHTML = '<div class="nb-wall' + modCls + '">' + list.map(n => nbCardHtml(n)).join('') + '</div>';
                 bindNotesWallDnD(c);    // v2.21 便签墙手动拖拽排序
             }
             nbFreeWallBtnSync();
+        }
+        // 2026-10-12 #185：便签墙的列表口径
+        //  - 自由墙 + 搜索：返回**全量**（含未命中）→ 位置不动、命中高亮（重排会毁掉空间记忆）
+        //  - 其余情况：与 visibleList 一致（搜索已在里面过滤）
+        function nbWallList() {
+            if (!nbFreeWallOn() || !nbSearch) return { list: visibleList(), search: false };
+            let list = nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : nbSpecial === 'quiet' ? quietNotes() : activeNotes();
+            if (nbTagFilter) list = list.filter(n => n.tag === nbTagFilter);
+            list = nbModuleFilter(list);
+            if (!nbModule && !nbSpecial) list = list.filter(x => !nbParentNote(x));
+            list = list.slice().sort((a, b) => {
+                if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+                if (nbSort === 'manual') return (a.order || 0) - (b.order || 0);
+                if (nbSort === 'updated') return new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt);
+                const ta = new Date(a.createdAt), tb = new Date(b.createdAt);
+                return nbSort === 'oldest' ? ta - tb : tb - ta;
+            });
+            return { list: list, search: true };
         }
 
         function renderNotesTimelineView(c) {
@@ -28730,6 +28918,347 @@ function renderDayDetail() {
                 : '<div class="nb-empty"><div class="icon">📦</div><p>还没有归档的便签<br><span style="font-size:11px;">处理完的灵感归档起来，看板更清爽</span></p></div>');
         }
 
+
+        // ===== 2026-10-12 便签深化（第三批 171–200 里选定的 14 项）=====
+        // 172 背面模板骨架 / 174 整摞一起翻 / 176 摞封面「最近动过」/ 177 子卡层级缩进 /
+        // 178 拖到模块卡即归入 / 180 换封面 / 181 墙上划区 / 182 拖动对齐参考线 /
+        // 185 搜索命中不重排 / 190 搜索结果保持卡片原样 / 191 进度快照 /
+        // 192 待做角标 / 193 卡点便签 / 194 版本摞
+        // #185 搜索是否命中（正面 + 背面一起搜 —— 「以后能调用」的答案大多在背面）
+        function nbNoteHit(n, k) {
+            return ((nbPlain(n.content) + '\n' + String(n.back || '')).toLowerCase().indexOf(k) >= 0);
+        }
+        function nbHitNote(n) {
+            const k = (nbSearch || '').toLowerCase();
+            if (!k) return null;
+            if (nbNoteHit(n, k)) return true;
+            // 摞级命中：答案在子卡里 → 模块卡也亮起来（点进去就看得到）
+            return nbChildren(n.id).some(c => nbNoteHit(c, k));
+        }
+        // 自由墙 + 搜索时：还有多少张「收在摞里」命中 —— 它们不在墙上，得给个去处
+        function nbDeepHitCount() {
+            if (!nbSearch) return 0;
+            const k = nbSearch.toLowerCase();
+            const shown = {};
+            document.querySelectorAll('#nbContent .nb-card[data-note-id]').forEach(c => { shown[c.dataset.noteId] = 1; });
+            let cnt = 0;
+            activeNotes().forEach(x => {
+                if (!nbParentNote(x) || shown[x.id]) return;
+                if (nbNoteHit(x, k)) cnt++;
+            });
+            return cnt;
+        }
+        // #190 搜索结果里标出「这一张收在哪一摞」
+        function nbOwnerPill(n) {
+            const p = nbParentNote(n);
+            if (!p) return '';
+            const nm = nbPlain(p.content).split('\n')[0].slice(0, 12);
+            return '<span class="nb-owner-pill" title="这一张收在「' + escapeHtml(nm) + '」里">📚 ' + escapeHtml(nm) + '</span>';
+        }
+        function nbAgedOver(ts, days) {
+            if (!ts) return false;
+            return (Date.now() - new Date(ts).getTime()) > days * 86400000;
+        }
+        // 1994 口径：相对时间（「2 小时前」「18 天前」），摞封面和快照都用它
+        function nbRelTime(ts) {
+            const t = new Date(ts).getTime();
+            if (!isFinite(t)) return '';
+            const d = Date.now() - t;
+            if (d < 60000) return '刚刚';
+            if (d < 3600000) return Math.floor(d / 60000) + ' 分钟前';
+            if (d < 86400000) return Math.floor(d / 3600000) + ' 小时前';
+            const days = Math.floor(d / 86400000);
+            if (days < 30) return days + ' 天前';
+            return Math.floor(days / 30) + ' 个月前';
+        }
+        // #176 摞的封面：显示「最近动过什么」（模块卡现在只有标题，一眼看不出这组还有没有活气）
+        function nbStackMetaHtml(kids) {
+            if (!kids || !kids.length) return '';
+            let last = null, lt = 0;
+            kids.forEach(k => { const t = new Date(k.updatedAt || k.createdAt).getTime() || 0; if (t > lt) { lt = t; last = k; } });
+            if (!last) return '';
+            const cold = (Date.now() - lt) > 14 * 86400000;
+            const nm = nbPlain(last.content).split('\n')[0].slice(0, 16);
+            return '<div class="nb-stack-meta' + (cold ? ' cold' : '') + '" title="这一摞里最后被动过的一张">最近动过：' + escapeHtml(nm) + ' · ' + nbRelTime(lt) + (cold ? ' ⏳' : '') + '</div>';
+        }
+        // #194 版本摞：子卡自带版本号 → 模块卡上标出「几个版本」
+        function nbStackVerLabel(kids) {
+            const vers = (kids || []).map(k => String(k.ver || '').trim()).filter(Boolean);
+            if (vers.length < 2) return '';
+            return '<span class="nb-stack-ver" title="这一摞收着 ' + vers.length + ' 个版本（' + escapeHtml(vers.join(' / ')) + '）">🗂 ' + vers.length + ' 个版本</span>';
+        }
+        // #180 换封面：模块卡的「脸」可以由某张子卡来当
+        function nbCoverOf(n, kids) {
+            if (!n || !n.cover) return null;
+            const c = (kids || []).find(k => k.id === n.cover);
+            if (!c) return null;
+            const line = nbPlain(c.content).split('\n')[0];
+            return { txt: line.slice(0, 60), from: line.slice(0, 14) };
+        }
+        function nbSetCover(cid) {
+            const m = notes.find(x => x.id === nbModule);
+            if (!m) return;
+            if (cid) m.cover = cid; else delete m.cover;
+            m.updatedAt = new Date().toISOString();
+            nbPickClose();
+            saveNotes();
+            showToast(cid ? '🎭 封面已换成这张子卡' : '↩ 已回到标题封面');
+        }
+        function nbPickClose() {
+            const m = document.getElementById('nbPickMask');
+            if (m) m.remove();
+        }
+        function nbPickCover() {
+            const kids = nbChildren(nbModule);
+            if (!kids.length) { showToast('ℹ️ 这一摞还是空的'); return; }
+            const m = notes.find(x => x.id === nbModule);
+            const cur = m ? m.cover : '';
+            let html = '<div class="nb-pick-mask" id="nbPickMask" onclick="if(event.target===this)nbPickClose()"><div class="nb-pick">';
+            html += '<div class="nb-pick-hd">🎭 换封面 —— 挑一张子卡当这一摞的脸</div>';
+            html += '<div class="nb-pick-sub">封面决定你在墙上先看到什么；选完只影响这一张模块卡的显示，子卡本身一个字都不动。</div>';
+            kids.forEach(k => {
+                const t = noteTagDict()[k.tag] || noteTagDict().other;
+                const nm = nbPlain(k.content).split('\n')[0].slice(0, 40) || '（空便签）';
+                html += '<div class="nb-pick-row' + (cur === k.id ? ' on' : '') + '" onclick="nbSetCover(\'' + k.id + '\')">' + t.icon + ' ' + escapeHtml(nm) + '</div>';
+            });
+            html += '<div class="nb-pick-row' + (!cur ? ' on' : '') + '" onclick="nbSetCover(\'\')">↩ 回到标题封面（默认）</div>';
+            html += '</div></div>';
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
+        // #174 整摞一起翻：钻进一摞里要的是「全部背面」（用法面），不是一张张点
+        function nbFlipAllInModule(btn) {
+            const cards = Array.prototype.slice.call(document.querySelectorAll('#nbContent .nb-card[data-note-id]'));
+            if (!cards.length) return;
+            const anyFront = cards.some(c => !c.classList.contains('nb-flipped'));
+            let hit = 0;
+            cards.forEach(card => {
+                const n = notes.find(x => x.id === card.dataset.noteId);
+                if (!n || !String(n.back || '').trim()) return;
+                const box = card.querySelector('.nb-card-content');
+                if (!box) return;
+                if (anyFront) { box.textContent = String(n.back); card.classList.add('nb-flipped'); }
+                else { box.textContent = nbPlain(n.content); card.classList.remove('nb-flipped'); }
+                card.classList.remove('nb-clamped', 'expanded');
+                hit++;
+            });
+            nbMarkClamp();
+            if (btn) btn.textContent = anyFront ? '↻ 翻回正面' : '↻ 整摞一起翻';
+            showToast(hit ? (anyFront ? '↻ 已整摞翻到背面（' + hit + ' 张）' : '↻ 已整摞翻回正面') : '这一摞还没有背面内容');
+        }
+        // #178 拖到模块卡上即归入（不用开编辑器找下拉）
+        function nbDropIntoParent(childId, parentId) {
+            if (!childId || !parentId || childId === parentId) return false;
+            const kid = notes.find(x => x.id === childId);
+            const par = notes.find(x => x.id === parentId);
+            if (!kid || !par) return false;
+            // 防环：目标不能是被拖卡自己的后代
+            let p = par, guard = 0;
+            while (p && p.parent && guard++ < 60) {
+                if (p.parent === childId) { showToast('⚠️ 不能归到自己的子便签里'); return false; }
+                p = notes.find(x => x.id === p.parent);
+            }
+            kid.parent = parentId;
+            kid.updatedAt = new Date().toISOString();
+            saveNotes();
+            showToast('📚 已归入「' + escapeHtml(nbPlain(par.content).split('\n')[0].slice(0, 14)) + '」');
+            return true;
+        }
+        // #192 待做 = 一个角标（点一下就挂），绝不做成任务条（没有日期、没有优先级、不进日历）
+        function nbToggleTodo(id, e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            if (n.todo) { delete n.todo; delete n.todoAt; showToast('已取消待做标记'); }
+            else { n.todo = true; n.todoAt = new Date().toISOString(); showToast('❗ 已标为待做（挂太久会泛黄提醒，但没有日期也不进日历）'); }
+            n.updatedAt = n.updatedAt || new Date().toISOString();
+            saveNotes();
+        }
+        // #193 卡点便签：卡住的时候最值钱的不是结论，是「试过什么」
+        function nbToggleBlock(id, e) {
+            if (e) { e.stopPropagation(); e.preventDefault(); }
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            if (n.blocked) { delete n.blocked; delete n.blockedAt; showToast('已取消卡点标记'); }
+            else { n.blocked = true; n.blockedAt = new Date().toISOString(); showToast('🚧 已标为卡点（编辑里可一键插「现象 / 试过 / 猜 / 下一步」骨架）'); }
+            saveNotes();
+        }
+        // #172 背面骨架：不知道背面写什么 → 一键插入四段
+        function nbEdBackTemplate() {
+            const el = document.getElementById('nbEdBack');
+            if (!el) return;
+            if (String(el.value || '').trim()) { showToast('ℹ️ 背面已经有内容了（先清空再插骨架）'); return; }
+            el.value = '是什么：\n怎么调：\n坑：\n示例：';
+            nbEdBackInput();
+            el.focus();
+            try { el.setSelectionRange(4, 4); } catch (e) {}
+            showToast('＋ 已插入背面骨架：是什么 / 怎么调 / 坑 / 示例');
+        }
+        // #193 正文骨架：现象 / 试过 / 猜 / 下一步
+        function nbEdBodyTemplate() {
+            nbEdInsertAtCursor('现象：\n试过：\n猜：\n下一步：\n');
+            showToast('＋ 已插入卡点骨架：现象 / 试过 / 猜 / 下一步');
+        }
+        function nbEdInsertAtCursor(text) {
+            const ta = document.getElementById('noteModalContent');
+            if (!ta) return;
+            const s = (ta.selectionStart == null) ? ta.value.length : ta.selectionStart;
+            const e2 = (ta.selectionEnd == null) ? s : ta.selectionEnd;
+            const v = ta.value;
+            const needNl = s > 0 && v.charAt(s - 1) !== '\n';
+            const ins = (needNl ? '\n' : '') + text;
+            ta.value = v.slice(0, s) + ins + v.slice(e2);
+            const pos = s + ins.length;
+            ta.focus();
+            try { ta.setSelectionRange(pos, pos); } catch (err) {}
+            try { ta.dispatchEvent(new Event('input', { bubbles: true })); } catch (err) {}
+        }
+        // #194 版本号（信息栏）：只影响显示，不改变任何归属关系
+        function nbEdSetVer(v) { nbEdVerPick = String(v || '').trim(); }
+        function nbEdVerSync() { const el = document.getElementById('nbEdVer'); if (el) el.value = nbEdVerPick || ''; }
+        // ===== #181 墙上划区（位置自带含义）：先划区，再往里摆，卡落在哪个区就带哪个区的名字 =====
+        function nbZonesGet() {
+            const d = safeStorage.get('niko_nb_zones', null);
+            if (d && typeof d === 'object' && Array.isArray(d.names) && d.names.length === 4) return d;
+            return { on: false, names: ['⚔ 战斗', '🖥 UI', '💾 存档', '❓ 待研究'] };
+        }
+        let nbZones = nbZonesGet();
+        function nbZonesToggle() {
+            nbZones.on = !nbZones.on;
+            safeStorage.set('niko_nb_zones', nbZones);
+            renderNotesPage();
+            showToast(nbZones.on ? '▦ 划区已开：卡落在哪个区，卡上就带哪个区的名字（点区名可改）' : '▦ 划区已关');
+        }
+        function nbZoneRename(i) {
+            // 不用 window.prompt：手机上丑，预览面板 / 嵌入式浏览器里还可能被直接拦掉
+            const cur = nbZones.names[i] || '';
+            nbPickClose();
+            let html = '<div class="nb-pick-mask" id="nbPickMask" onclick="if(event.target===this)nbPickClose()"><div class="nb-pick">';
+            html += '<div class="nb-pick-hd">▦ 给这一格起个名字</div>';
+            html += '<div class="nb-pick-sub">这个名字会印在落进这一格的便签上。留空 = 用回默认名。</div>';
+            html += '<input class="nb-pick-inp" id="nbZoneInp" maxlength="12" value="' + escapeHtml(cur) + '">';
+            html += '<div style="display:flex;gap:8px;margin-top:10px"><button class="nb-btn primary" onclick="nbZoneRenameDo(' + i + ')">保存</button><button class="nb-btn" onclick="nbPickClose()">取消</button></div>';
+            html += '</div></div>';
+            document.body.insertAdjacentHTML('beforeend', html);
+            const el = document.getElementById('nbZoneInp');
+            if (el) {
+                el.focus();
+                try { el.select(); } catch (e) {}
+                el.onkeydown = function (ev) { if (ev.key === 'Enter') nbZoneRenameDo(i); };
+            }
+        }
+        function nbZoneRenameDo(i) {
+            const el = document.getElementById('nbZoneInp');
+            const v = el ? String(el.value || '').trim().slice(0, 12) : '';
+            const DEF = ['⚔ 战斗', '🖥 UI', '💾 存档', '❓ 待研究'];
+            nbZones.names[i] = v || DEF[i] || ('区 ' + (i + 1));
+            safeStorage.set('niko_nb_zones', nbZones);
+            nbPickClose();
+            renderNotesPage();
+            showToast('▦ 区名已改成「' + nbZones.names[i] + '」');
+        }
+        function nbZoneIndexOf(card, wall) {
+            const cw = wall.clientWidth || 1;
+            const ch = wall.clientHeight || 1;
+            const l = (parseFloat(card.style.left) || 0) / 100 * cw + card.offsetWidth / 2;
+            const t = (parseFloat(card.style.top) || 0) + card.offsetHeight / 2;
+            const col = (l / cw) < 0.5 ? 0 : 1;
+            const row = (t / ch) < 0.5 ? 0 : 1;
+            return row * 2 + col;
+        }
+        function nbZoneLayerHtml() {
+            if (!nbZones.on || !nbFreeWallOn()) return '';
+            // 2026-10-12：墙内只画十字分隔线 —— 区名改到墙外那一排图例（写在墙上会压住卡片）
+            return '<div class="nb-zone-line" style="left:50%;top:0;bottom:0;width:1px"></div>'
+                + '<div class="nb-zone-line" style="top:50%;left:0;right:0;height:1px"></div>';
+        }
+        // 2026-10-12 #181：墙外的一排区名图例（点一下就能改名字）
+        function nbZoneKeyHtml() {
+            if (!nbZones.on || !nbFreeWallOn()) return '';
+            let h = '<div class="nb-zone-key"><span class="nb-zone-key-t">▦ 划区</span>';
+            nbZones.names.forEach((nm, i) => {
+                h += '<span class="nb-zone-key-i" onclick="nbZoneRename(' + i + ')" title="点一下改名字">' + escapeHtml(nm) + '</span>';
+            });
+            h += '<span class="nb-zone-key-h">卡落在哪个区，卡上就带哪个区的名字</span></div>';
+            return h;
+        }
+        // #182 拖动时出对齐参考线（同列 / 同行吸附，±7px）
+        function nbAlignSnap(wall, card, x, y) {
+            const cw = wall.clientWidth || 1, w = card.offsetWidth, h = card.offsetHeight;
+            const others = [];
+            wall.querySelectorAll('.nb-card[data-note-id]').forEach(o => {
+                if (o === card) return;
+                const ol = (parseFloat(o.style.left) || 0) / 100 * cw;
+                const ot = parseFloat(o.style.top) || 0;
+                others.push({ l: ol, r: ol + o.offsetWidth, c: ol + o.offsetWidth / 2, t: ot, b: ot + o.offsetHeight, m: ot + o.offsetHeight / 2 });
+            });
+            let bv = null, bh = null;
+            others.forEach(o => {
+                [[x, o.l], [x + w / 2, o.c], [x + w, o.r]].forEach(pair => {
+                    const d = Math.abs(pair[0] - pair[1]);
+                    if (!bv || d < bv.d) bv = { d: d, delta: pair[1] - pair[0], line: pair[1] };
+                });
+                [[y, o.t], [y + h / 2, o.m], [y + h, o.b]].forEach(pair => {
+                    const d = Math.abs(pair[0] - pair[1]);
+                    if (!bh || d < bh.d) bh = { d: d, delta: pair[1] - pair[0], line: pair[1] };
+                });
+            });
+            let gl = wall.querySelector('.nb-guide-v'), gh = wall.querySelector('.nb-guide-h');
+            if (!gl) { gl = document.createElement('div'); gl.className = 'nb-guide v'; wall.appendChild(gl); }
+            if (!gh) { gh = document.createElement('div'); gh.className = 'nb-guide h'; wall.appendChild(gh); }
+            if (bv && bv.d <= 7) { x = x + bv.delta; gl.style.left = bv.line + 'px'; gl.style.display = 'block'; } else gl.style.display = 'none';
+            if (bh && bh.d <= 7) { y = y + bh.delta; gh.style.top = bh.line + 'px'; gh.style.display = 'block'; } else gh.style.display = 'none';
+            return { x: x, y: y };
+        }
+        function nbGuidesHide(wall) {
+            if (!wall) return;
+            wall.querySelectorAll('.nb-guide').forEach(g => { g.style.display = 'none'; });
+        }
+        // ===== #191 进度快照（比两张照片，不勾选）=====
+        function nbSnaps() { const a = safeStorage.get('niko_nb_snapshots', []); return Array.isArray(a) ? a : []; }
+        function nbSnapMake(quiet) {
+            const items = activeNotes().map(n => ({ id: n.id, t: nbPlain(n.content).split('\n')[0].slice(0, 42), u: n.updatedAt || n.createdAt }));
+            const all = nbSnaps();
+            all.unshift({ at: new Date().toISOString(), items: items });
+            safeStorage.set('niko_nb_snapshots', all.slice(0, 8));
+            if (!quiet) showToast('📸 已存下这一张快照（共 ' + activeNotes().length + ' 张便签）');
+            return all.slice(0, 8);
+        }
+        function nbDiffSnaps(older, newer) {
+            const om = {}, nm = {};
+            (older.items || []).forEach(i => { om[i.id] = i; });
+            (newer.items || []).forEach(i => { nm[i.id] = i; });
+            const added = [], edited = [], gone = [];
+            (newer.items || []).forEach(i => {
+                if (!om[i.id]) added.push(i);
+                else if (om[i.id].u !== i.u) edited.push(i);
+            });
+            (older.items || []).forEach(i => { if (!nm[i.id]) gone.push(i); });
+            return { added: added, edited: edited, gone: gone };
+        }
+        function nbSnapOpen() {
+            let all = nbSnaps();
+            if (!all.length) { all = nbSnapMake(true); showToast('📸 第一次存快照 —— 下次再点就能看变化了'); }
+            const now = all[0], prev = all[1] || null;
+            let html = '<div class="nb-pick-mask" id="nbPickMask" onclick="if(event.target===this)nbPickClose()"><div class="nb-pick">';
+            html += '<div class="nb-pick-hd">📸 进度快照 —— 比两张照片，不看勾选</div>';
+            html += '<div class="nb-pick-sub">便签不该有「完成 / 未完成」（那是任务条）。这里只回答一个问题：这几天墙上多了什么、改了什么。</div>';
+            if (!prev) {
+                html += '<div class="nb-snap-sec">这张快照：<b>' + (now.items || []).length + ' 张</b>（还没有上一张可比 —— 下次再点就有对比了）</div>';
+            } else {
+                const d = nbDiffSnaps(prev, now);
+                html += '<div class="nb-snap-sec"><div class="nb-snap-t">' + nbRelTime(prev.at) + ' → ' + nbRelTime(now.at) + ' · ' + (prev.items || []).length + ' 张 → <b>' + (now.items || []).length + ' 张</b></div>';
+                const rows = [];
+                d.added.forEach(i => rows.push('<div class="nb-snap-row"><em class="add">✨ 新增</em>' + escapeHtml(i.t) + '</div>'));
+                d.edited.forEach(i => rows.push('<div class="nb-snap-row"><em class="edit">✏️ 改过</em>' + escapeHtml(i.t) + '</div>'));
+                d.gone.forEach(i => rows.push('<div class="nb-snap-row"><em class="gone">🗑 不在了</em>' + escapeHtml(i.t) + '</div>'));
+                html += rows.length ? rows.join('') : '<div class="nb-snap-row">两张一模一样 —— 这阵子没往墙上加东西。</div>';
+                html += '</div>';
+            }
+            html += '<div style="display:flex;gap:8px;margin-top:10px"><button class="nb-btn" onclick="nbSnapMake();nbPickClose();nbSnapOpen()">📸 现在再存一张</button><button class="nb-btn" onclick="nbPickClose()">关闭</button></div>';
+            html += '</div></div>';
+            nbPickClose();
+            document.body.insertAdjacentHTML('beforeend', html);
+        }
         function nbCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const sel = nbSelected.has(n.id);
@@ -28742,20 +29271,36 @@ function renderDayDetail() {
             const agedCls = ageD >= 30 ? ' aged aged-old' : ageD >= 14 ? ' aged' : '';
             // 2026-10-10：摘要走 nbPlain —— 卡片里不再露 ## / ** / == 这些标记符号
             const plain = nbPlain(n.content);
-            // v2.23 短便签自适应密排：单行且 ≤32 字的短卡挂 nb-slim 收紧留白（有胶囊角标的除外）
-            const slim = plain.length <= 32 && !plain.includes('\n') && !capsuleBadgeHtml(n);
-            // 2026-10-12 #132 / #138：有子便签 = 这一张是「一摞」（模块卡）→ 层叠投影 + 数量按钮
+            // v2.23 短便签自适应密排：单行且 ≤32 字的短卡挂 nb-slim 收紧留白
+            // （有胶囊角标的除外；模块卡也除外 —— 它还要多挂一行「最近动过」，紧行距会把两行挤到一起）
             const kids = nbChildren(n.id);
             const isMod = kids.length > 0;
+            const slim = plain.length <= 32 && !plain.includes('\n') && !capsuleBadgeHtml(n) && !isMod;
             const backTxt = String(n.back || '').trim();   // 2026-10-12 #133：有背面才出现「↻ 翻面」
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isMod ? ' nb-stack-card' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            // 2026-10-12 #192 待做 / #193 卡点：两个角标（点一下就挂，没有日期、不进日历）
+            const flags = (n.todo ? '<span class="nb-flag on' + (nbAgedOver(n.todoAt, 14) ? ' cold' : '') + '" title="待做' + (n.todoAt ? ' · 挂了 ' + n.todoAt.slice(0, 10) : '') + '（点一下取消）" onclick="nbToggleTodo(\'' + n.id + '\',event)">❗</span>' : '<span class="nb-flag" title="标为待做（只是一个角标，不是任务条）" onclick="nbToggleTodo(\'' + n.id + '\',event)">❗</span>')
+                + (n.blocked ? '<span class="nb-flag on' + (nbAgedOver(n.blockedAt, 14) ? ' cold' : '') + '" title="卡点 · 卡了 ' + (n.blockedAt ? Math.max(0, Math.floor((Date.now() - new Date(n.blockedAt).getTime()) / 86400000)) : 0) + ' 天（点一下取消）" onclick="nbToggleBlock(\'' + n.id + '\',event)">🚧</span>' : '<span class="nb-flag" title="标为卡点（现象 / 试过 / 猜 / 下一步）" onclick="nbToggleBlock(\'' + n.id + '\',event)">🚧</span>');
+            // 2026-10-12 #185 搜索（自由墙）：命中的亮、未命中的暗 —— 位置一个像素都不动
+            const hit = (nbSearch && nbFreeWallOn()) ? nbHitNote(n) : null;
+            const hitCls = hit === true ? ' nb-hit' : hit === false ? ' nb-dim' : '';
+            // 2026-10-12 #190 搜索结果保持便签原样：只补一个「收在哪一摞」的归属标
+            const owner = (!nbModule && nbParentNote(n)) ? nbOwnerPill(n) : '';
+            // 2026-10-12 #194 版本标
+            const verPill = String(n.ver || '').trim() ? '<span class="nb-ver-pill" title="这一版的版本号">' + escapeHtml(String(n.ver).trim()) + '</span>' : '';
+            // 2026-10-12 #180 换封面：模块卡的脸可以由某张子卡来当
+            const cover = isMod ? nbCoverOf(n, kids) : null;
+            const isModCls = (isMod ? ' nb-stack-card' : '');
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isModCls}${hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
+                <div class="nb-flags">${flags}</div>
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
-                <div class="nb-card-content">${escapeHtml(plain)}</div>
+                ${cover ? '<div class="nb-cover-hd">🎭 封面 · ' + escapeHtml(cover.from) + '</div>' : ''}
+                <div class="nb-card-content">${escapeHtml(cover ? cover.txt : plain)}</div>
+                ${isMod ? nbStackMetaHtml(kids) : ''}
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
-                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${backTxt ? `<button class="nb-flip-btn" title="翻过来看背面：完整逻辑 / 调用示例 / 踩过的坑" onclick="event.stopPropagation();nbFlipCard('${n.id}',event)">↻ 翻面</button>` : ''}${noRevMark}
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${backTxt ? `<button class="nb-flip-btn" title="翻过来看背面：完整逻辑 / 调用示例 / 踩过的坑" onclick="event.stopPropagation();nbFlipCard('${n.id}',event)">↻ 翻面</button>` : ''}${noRevMark}${verPill}${owner}
                     ${isMod ? `<button class="nb-stack-btn" title="这一摞里有 ${kids.length} 张，点开看这一组" onclick="event.stopPropagation();nbOpenModule('${n.id}')">📚 ${kids.length} 张 ›</button>` : ''}
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
@@ -29042,6 +29587,8 @@ function renderDayDetail() {
             nbEdBackPick = n ? (n.back || '') : '';
             { const elB = document.getElementById('nbEdBack'); if (elB) elB.value = nbEdBackPick; }
             nbEdBackSync();
+            nbEdVerPick = n ? String(n.ver || '') : '';   // 2026-10-12 #194
+            nbEdVerSync();
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? n.content : '';
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
@@ -30617,6 +31164,7 @@ function renderDayDetail() {
             // 之后 nbDraftClear() 拿到的槽位变成 '__new'，编辑已有便签时那个槽永远清不掉
             // （下次打开会冒出「已恢复草稿」）。先把槽位记下来。
             const _draftSlot = nbEditingId || '__new';
+            { const elV = document.getElementById('nbEdVer'); if (elV) nbEdVerPick = String(elV.value || '').trim(); }   // 2026-10-12 #194
             if (nbEditingId) {
                 const n = notes.find(x => x.id === nbEditingId);
                 if (n) {
@@ -30628,6 +31176,7 @@ function renderDayDetail() {
                     if (capsulePick && !n.capsule) capsuleAttach(n);
                     // 2026-10-12 #133：背面（留空即删字段 = 这张只有正面）
                     if (String(nbEdBackPick || '').trim()) n.back = String(nbEdBackPick).trim(); else delete n.back;
+                    if (nbEdVerPick) n.ver = nbEdVerPick; else delete n.ver;   // 2026-10-12 #194
                 }
                 showToast('✅ 便签已更新');
             } else {
@@ -30635,6 +31184,7 @@ function renderDayDetail() {
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
                 if (String(nbEdBackPick || '').trim()) note.back = String(nbEdBackPick).trim();   // 2026-10-12 #133
+                if (nbEdVerPick) note.ver = nbEdVerPick;   // 2026-10-12 #194
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -40772,7 +41322,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121314";
+        window.NIKO_VERSION = "202610121434";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
