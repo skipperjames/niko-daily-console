@@ -34524,6 +34524,42 @@ function renderDayDetail() {
         'niko_nb_paper',                 // 便签纸样式
         'niko_plan_show_time',           // 计划面板显示时间
         'niko_plan_tools_open',          // 计划页工具抽屉开合
+        // 2026-10-12 用户拍板：「这种问题和 bug 以后都不用申请，你自己修好告诉我」——
+        // 于是按本清单既有口径（① 本机进行中/当日状态 ② 显示与视图偏好 ③ 种子/迁移标记 ④ 更新时间戳）
+        // 把其余漏网的同类 key 一次清干净，杜绝「设置记不住 / 跨设备串扰」这一整类 bug。
+        // —— 数据类一律**不排**（便签正文、日历、习惯、读书快照、徽章、自定义配色、各面板设置等照常同步）
+        'niko_ignition_last',            // ① 今日点火标记（按天）
+        'niko_rollover_last',            // ① 今日已顺延标记
+        'niko_rollover_pending',         // ① 待顺延数（本机即时）
+        'niko_memorial_reminded',        // ① 今日纪念日已提醒
+        'niko_pomo_fizz',                // ① 今日萤火虫（按天，中途放弃记暗一只）
+        'niko_pomo_perm_hint_at',        // ① 番茄钟常驻提示时间戳
+        'niko_cp_overnight',             // ① 复利面板隔夜快照（按天）
+        'niko_combo_today',              // ① 今日连击（按天）
+        'niko_last_open_day',            // ① 上次打开日
+        'niko_season_seen',              // ① 赛季已看
+        'niko_kb_guide_dismissed',       // ① 知识库引导已关闭
+        'niko_tw_pending',               // ① 推文工坊未落盘标记
+        'niko_update_open',              // ① 更新面板展开状态
+        'niko_update_read',              // ① 更新已读（各机各自看各自的）
+        'niko_diary_cal_folded',         // ② 日记日历折叠
+        'niko_cn_festival_show',         // ② 显示中国节日
+        'niko_memorial_show',            // ② 显示纪念日
+        'niko_nav_garden',               // ② 侧栏花园入口显隐
+        'niko_gt_view',                  // ② 游戏时间视图模式
+        'niko_gt_manual_open',           // ② 游戏时间说明书展开
+        'niko_update_feed',              // ② 更新日记显示开关
+        'niko_cal_weeks',                // ② 日历显示周数
+        'niko_nb_freewall_map',          // ② 便签自由摆放位置（跟屏幕尺寸绑定，同步过去必错位）
+        'niko_nb_zones2',                // ② 便签墙上划区（同上）
+        'niko_knowledge_seeded',         // ③ 知识库种子标记
+        'niko_market_nodes_seeded_ver',  // ③ 买量节点种子版本
+        'niko_parenting_seed_version',   // ③ 育儿种子版本
+        'niko_copy_seed_version',        // ③ 文案库种子版本
+        'niko_meme_seed_version',        // ③ 梗库种子版本
+        'niko_week_start_fix_0918',      // ③ 周起始迁移标记（同步过去会让另一台跳过迁移）
+        'niko_weread_imported_at',       // ④ 微信读书导入时间戳
+        'niko_parenting_updated_at',     // ④ 育儿数据更新时间戳
         'niko_copy_sidebar_collapsed',   // 文案库侧栏折叠
         'niko_hot_fav_collapsed',        // 热点收藏折叠
         'niko_meme_sidebar_collapsed',   // 梗文化侧栏折叠
@@ -41717,7 +41753,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121700";
+        window.NIKO_VERSION = "202610121741";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
