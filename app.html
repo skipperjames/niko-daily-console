@@ -9372,6 +9372,34 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.nb-season-winter .nb-card { background-image: radial-gradient(rgba(148, 163, 184, .09) 1px, transparent 1.5px), radial-gradient(rgba(148, 163, 184, .055) 1px, transparent 1.5px); background-size: 18px 18px, 11px 11px; background-position: 0 0, 5px 7px; }
         .nb-paper-dot.gray { background: #e8e8e4; }
         .nb-paper-dot.dark { background: #26262e; }
+        /* ===== 2026-10-12 #140 纸色扩到 5 档：蓝图网格纸（专记节点/逻辑）+ 格子纸（画草图）===== */
+        .nb-paper-dot.grid { background: #fffdf5; background-image: linear-gradient(rgba(0,0,0,.13) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.13) 1px, transparent 1px); background-size: 5px 5px; }
+        .nb-paper-dot.blue { background: #12386e; background-image: linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px); background-size: 5px 5px; }
+        .nb-detail-text.paper-grid { background: #fffdf5; color: #3c3c3c; border-radius: 10px; padding: 14px 16px; background-image: linear-gradient(rgba(0,0,0,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.055) 1px, transparent 1px); background-size: 22px 22px; }
+        .nb-detail-text.paper-blue { background: #12386e; color: #e8f0ff; border-radius: 10px; padding: 14px 16px; background-image: linear-gradient(rgba(255,255,255,.075) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.075) 1px, transparent 1px); background-size: 22px 22px; }
+        body.dark-mode .nb-detail-text.paper-grid { background: #26262a; color: #c9c9cc; background-image: linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px); }
+        body.dark-mode .nb-detail-text.paper-blue { background: #0e2a52; color: #cfe0ff; }
+        .nb-detail-text.paper-blue .nb-md-code, .nb-detail-text.paper-blue code { background: rgba(255,255,255,.14); color: #eaf2ff; }
+
+        /* ===== 2026-10-12 #132 / #138 / #144 模块卡 · 一摞 · 子卡钻入（三者同源：parent 关系）===== */
+        .nb-card.nb-stack-card { box-shadow: 3px 3px 0 -1px rgba(0,0,0,.07), 6px 6px 0 -2px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.05); }
+        body.dark-mode .nb-card.nb-stack-card { box-shadow: 3px 3px 0 -1px rgba(255,255,255,.055), 6px 6px 0 -2px rgba(255,255,255,.035); }
+        .nb-stack-btn { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; background: rgba(0,0,0,.06); border: none; border-radius: 7px; padding: 2px 7px; cursor: pointer; color: #5f5c6b; font-family: inherit; line-height: 1.5; }
+        .nb-stack-btn:hover { background: rgba(0,0,0,.12); }
+        body.dark-mode .nb-stack-btn { background: rgba(255,255,255,.10); color: #c5c5d5; }
+        .nb-stack-btn:active { transform: scale(.95); }
+        .nb-crumb-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 0 2px 10px; font-size: 12px; }
+        .nb-crumb { background: #eef1f4; border: 1px solid #e0e5ea; border-radius: 8px; padding: 4px 11px; cursor: pointer; color: #4b5563; font-family: inherit; font-size: 12px; }
+        body.dark-mode .nb-crumb { background: #24242f; border-color: #33334a; color: #c5c5d5; }
+        .nb-crumb.cur { background: #fff4d6; border-color: #ecdfae; color: #8a6a1f; font-weight: 700; }
+        body.dark-mode .nb-crumb.cur { background: #2e2a1c; border-color: #4a422a; color: #e8d49a; }
+        .nb-crumb-sep { color: #b0a998; }
+        .nb-crumb-hint { font-size: 11px; color: #9a958a; margin-left: 2px; }
+        body.dark-mode .nb-crumb-hint { color: #8a8899; }
+        .nb-ed-parent-sel { width: 100%; font-size: 12px; padding: 6px 8px; border-radius: 8px; border: 1px solid #ddd8cf; background: #fff; color: #333; font-family: inherit; }
+        body.dark-mode .nb-ed-parent-sel { background: #20202c; border-color: #333345; color: #d0d0d8; }
+        .nb-ed-parent-hint { font-size: 11px; color: #9aa0b4; line-height: 1.5; margin: 4px 0 0; }
+        @media (max-width: 768px) { .nb-stack-btn { padding: 5px 10px; font-size: 11px; } .nb-ed-parent-sel { font-size: 16px; padding: 9px 10px; } }
         .nb-detail-text.paper-cream { background: #f7efdc; color: #4a4030; border-radius: 10px; padding: 14px 16px; }
         .nb-detail-text.paper-gray { background: #efefec; color: #3c3c3c; border-radius: 10px; padding: 14px 16px; }
         .nb-detail-text.paper-dark { background: #20202a; color: #c9c9d6; border-radius: 10px; padding: 14px 16px; }
@@ -13736,6 +13764,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 </div>
                 <!-- 分类筛选：全部 + 各标签 chips（便签墙 / 时间线通用） -->
                 <div class="nb-tag-filter-bar" id="nbTagFilterBar"></div>
+                <!-- 2026-10-12 #144：钻入模块时的面包屑（「🗂 全部 › ⚔ 战斗系统」），不在模块里时为空 -->
+                <div class="nb-crumb-bar" id="nbCrumbBar"></div>
                 <div class="nb-content" id="nbContent"></div>
             </div>
         </div>
@@ -14716,6 +14746,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <div class="be-tog"><span class="k">📮 时间胶囊</span><span class="be-caps" id="capsuleChipModal" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己">⏳ 寄给未来</span></div>
                         <div class="be-tog"><span class="k">🧠 参与复习</span><span class="be-sw" id="nbEdRev" onclick="nbEdToggleRev()"></span></div>
                         <div id="nbEdRevHint" style="font-size:11px;color:#9aa0b4;line-height:1.5;margin:2px 0 0;"></div>
+                    </div>
+                    <!-- 2026-10-12 #132/#144：归入某个模块卡 —— 选完之后，父便签在墙上变成「一摞」，可以点进去看子卡 -->
+                    <div class="be-sec" id="nbEdParentSec">
+                        <div class="be-lbl">📁 所属模块</div>
+                        <select class="nb-ed-parent-sel" id="nbEdParent" onchange="nbEdSetParent(this.value)">
+                            <option value="">（独立便签 · 不归模块）</option>
+                        </select>
+                        <div class="nb-ed-parent-hint" id="nbEdParentHint">归到一个模块后，那张便签在墙上会显示成「一摞」，点它可以钻进去看这一组。</div>
                     </div>
                     <div class="be-sec">
                         <div class="be-lbl">时间</div>
@@ -28210,6 +28248,40 @@ function renderDayDetail() {
         const recycledNotes = () => notes.filter(n => n.deleted);
         const quietNotes    = () => notes.filter(n => !n.deleted && n.quiet);
 
+        // ===== 2026-10-12 #132 / #138 / #144：模块卡 · 一摞 · 子卡钻入（三者同源）=====
+        // 数据只加一个可选字段：n.parent = 父便签 id。
+        // 「模块卡」是派生概念 —— 一张便签只要有未删除的子便签，它就是一摞：
+        // 不用新建卡片类型、不用你手动标记成「模块」。
+        let nbModule = null;                        // 当前钻入的模块（null = 在主墙）
+        let nbEdParentPick = '';                    // 编辑器里「所属模块」的暂存值
+        const nbChildren = (id) => notes.filter(n => !n.deleted && n.parent === id);
+        const nbIsModule = (id) => nbChildren(id).length > 0;
+        const nbParentNote = (n) => (n && n.parent) ? (notes.find(x => x.id === n.parent && !x.deleted) || null) : null;
+        function nbOpenModule(id) { nbModule = id; nbSpecial = null; if (nbBatch) nbToggleBatch(); renderNotesPage(); }
+        function nbExitModule() { nbModule = null; renderNotesPage(); }
+        // 模块视图：只留这一摞的子卡（模块卡本身不进网格，它显示在面包屑上）
+        function nbModuleFilter(list) {
+            if (!nbModule) return list;
+            if (!notes.find(x => x.id === nbModule && !x.deleted)) { nbModule = null; return list; }
+            return list.filter(n => n.parent === nbModule);
+        }
+        // 面包屑：钻进去之后才出现；首页永远是「🗂 全部」
+        function renderNbCrumb() {
+            const bar = document.getElementById('nbCrumbBar');
+            if (!bar) return;
+            if (!nbModule) { bar.innerHTML = ''; bar.style.display = 'none'; return; }
+            const m = notes.find(x => x.id === nbModule);
+            const nm = m ? (nbPlain(m.content).split('\n')[0].slice(0, 22) || '（空模块）') : '已删除';
+            const cnt = nbChildren(nbModule).length;
+            bar.style.display = 'flex';
+            bar.innerHTML = `<button class="nb-crumb" onclick="nbExitModule()" title="回到全部便签">🗂 全部</button>` +
+                `<span class="nb-crumb-sep">›</span>` +
+                `<span class="nb-crumb cur" title="当前模块">📁 ${escapeHtml(nm)}</span>` +
+                `<span class="nb-crumb-hint">这一摞 ${cnt} 张` +
+                (m ? ` · <span style="cursor:pointer;text-decoration:underline" onclick="openNoteModal('${nbModule}',null,null)" title="编辑这张模块卡本身">编辑模块卡</span>` : '') +
+                `</span>`;
+        }
+
         function visibleList() {
             let list = nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : nbSpecial === 'quiet' ? quietNotes() : activeNotes();
             if (nbSearch) {
@@ -28219,6 +28291,7 @@ function renderDayDetail() {
             if (nbTagFilter) {
                 list = list.filter(n => n.tag === nbTagFilter);
             }
+            list = nbModuleFilter(list);   // 2026-10-12 #144：钻入模块后只看这一摞
             return list.slice().sort((a, b) => {
                 if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1; // 置顶永远优先
                 if (nbSort === 'manual') return (a.order || 0) - (b.order || 0);   // v2.21 手动拖拽排序
@@ -28403,8 +28476,14 @@ function renderDayDetail() {
             nbDailyTick();          // 晨读抽取 + 整理人巡墙（内部自带当日防抖）
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
+            renderNbCrumb();        // 2026-10-12 #144：钻入模块时的面包屑
             document.getElementById('nbSelCount').textContent = nbSelected.size;
             const c = document.getElementById('nbContent');
+            // 2026-10-12 #144：模块视图空态 —— 别让用户以为便签丢了
+            if (nbModule && !visibleList().length) {
+                c.innerHTML = nbEmptyHtml('这一摞还是空的', '编辑别的便签，把「📁 所属模块」选成这一张，就会收进来');
+                nbMarkClamp(); return;
+            }
             if (nbSpecial === 'recycle') { renderRecycleView(c); nbMarkClamp(); return; }
             if (nbSpecial === 'archive') { renderArchiveView(c); nbMarkClamp(); return; }
             if (nbSpecial === 'quiet') { renderQuietView(c); nbMarkClamp(); return; }
@@ -28502,7 +28581,10 @@ function renderDayDetail() {
             const plain = nbPlain(n.content);
             // v2.23 短便签自适应密排：单行且 ≤32 字的短卡挂 nb-slim 收紧留白（有胶囊角标的除外）
             const slim = plain.length <= 32 && !plain.includes('\n') && !capsuleBadgeHtml(n);
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            // 2026-10-12 #132 / #138：有子便签 = 这一张是「一摞」（模块卡）→ 层叠投影 + 数量按钮
+            const kids = nbChildren(n.id);
+            const isMod = kids.length > 0;
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isMod ? ' nb-stack-card' : ''}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
@@ -28510,6 +28592,7 @@ function renderDayDetail() {
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${noRevMark}
+                    ${isMod ? `<button class="nb-stack-btn" title="这一摞里有 ${kids.length} 张，点开看这一组" onclick="event.stopPropagation();nbOpenModule('${n.id}')">📚 ${kids.length} 张 ›</button>` : ''}
                     <span class="nb-card-time">${formatNoteTime(n.createdAt)}</span>
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
@@ -28789,12 +28872,15 @@ function renderDayDetail() {
             else nbEditingTag = nbDefaultTag();
             nbEditingPinned = n ? !!n.pinned : false;
             nbEditingNoRev = (n && n.noReview === true) ? "off" : (n && n.noReview === false) ? "on" : "inherit";
+            // 2026-10-12 #132：所属模块回显；在模块里新建便签 → 默认就归到这一摞
+            nbEdParentPick = n ? (n.parent || '') : (nbModule || '');
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? n.content : '';
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
             capsulePick = (n && n.capsule && CAPSULE_SPANS[n.capsule.span]) ? n.capsule.span : '';
             updateCapsuleChips();
             renderModalTagPicker();
+            nbEdRenderParent();     // 2026-10-12 #132：所属模块下拉（要在 tag 字典就绪之后）
             nbEdSyncPin();
             const hint = document.getElementById('nbDraftHint');
             if (hint) hint.style.display = 'none';
@@ -28906,6 +28992,29 @@ function renderDayDetail() {
             }
         }
         function nbEdTogglePin() { nbEditingPinned = !nbEditingPinned; nbEdSyncPin(); nbEdRefresh(); }
+        // ===== 2026-10-12 #132 / #144：编辑器里的「📁 所属模块」选择器 =====
+        function nbEdRenderParent() {
+            const sel = document.getElementById('nbEdParent');
+            if (!sel) return;
+            const cur = nbEditingId ? ((notes.find(x => x.id === nbEditingId) || {}).parent || '') : (nbEdParentPick || '');
+            const opts = activeNotes()
+                .filter(n => n.id !== nbEditingId)
+                .map(n => {
+                    const t = noteTagDict()[n.tag] || noteTagDict().other;
+                    const nm = (nbPlain(n.content).split('\n')[0] || '（空便签）').slice(0, 24);
+                    return `<option value="${n.id}"${cur === n.id ? ' selected' : ''}>${t.icon} ${escapeHtml(nm)}</option>`;
+                }).join('');
+            sel.innerHTML = '<option value="">（独立便签 · 不归模块）</option>' + opts;
+            const hint = document.getElementById('nbEdParentHint');
+            if (hint) {
+                const kids = nbEditingId ? nbChildren(nbEditingId).length : 0;
+                hint.textContent = kids
+                    ? `这张便签底下已经有 ${kids} 张子便签 —— 它现在就是一摞（也可以再挂到别的模块下）。`
+                    : '归到一个模块后，那张便签在墙上会显示成「一摞」，点它可以钻进去看这一组。';
+            }
+        }
+        // 只改暂存值，点「保存便签」才真正落库（与置顶 / 参与复习 同一口径）
+        function nbEdSetParent(v) { nbEdParentPick = v || ''; }
         // 窄屏三页签（桌面端 .be-tabs 是 display:none，三栏同时显示）
         function nbEdTab(t) {
             document.querySelectorAll('#nbEdTabs button').forEach(b => b.classList.toggle('on', b.getAttribute('data-t') === t));
@@ -30295,12 +30404,15 @@ function renderDayDetail() {
                     n.content = content; n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
                     n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
                     if (nbEditingNoRev === "on") n.noReview = false; else if (nbEditingNoRev === "off") n.noReview = true; else delete n.noReview;   // #2 单条覆盖（inherit 时清字段）
+                    // 2026-10-12 #132：所属模块（不能选自己，防自环）
+                    if (nbEdParentPick && nbEdParentPick !== n.id) n.parent = nbEdParentPick; else delete n.parent;
                     if (capsulePick && !n.capsule) capsuleAttach(n);
                 }
                 showToast('✅ 便签已更新');
             } else {
                 const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
+                if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
@@ -30415,11 +30527,12 @@ function renderDayDetail() {
                     <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
-                <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button></div>
+                <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaper === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaper === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
                 <div class="nb-detail-text nb-md ${nbPaperClass()}">${nbEdMd(n.content)}</div>
                 ${capsuleBadgeHtml(n)}
-                <div class="nb-detail-meta">🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
+                <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
+                    ${nbIsModule(id) ? `<button onclick="closeNbDetail();nbOpenModule('${id}')">📚 钻进这一摞（${nbChildren(id).length}）</button>` : ''}
                     <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
                     <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
                     <button onclick="nbDetailCopy('${id}')">📋 复制全文</button>
@@ -31012,7 +31125,14 @@ function renderDayDetail() {
 
         // ===== v2.22 详情页护眼纸色：米黄 / 浅灰 / 深，选择持久化 =====
         let nbPaper = safeStorage.get('niko_nb_paper', 'cream');
-        function nbPaperClass() { return nbPaper === 'gray' ? 'paper-gray' : nbPaper === 'dark' ? 'paper-dark' : 'paper-cream'; }
+        function nbPaperClass() {
+            // 2026-10-12 #140：米黄 / 浅灰 / 深色 / 蓝图网格 / 格子纸
+            return nbPaper === 'gray' ? 'paper-gray'
+                 : nbPaper === 'dark' ? 'paper-dark'
+                 : nbPaper === 'grid' ? 'paper-grid'
+                 : nbPaper === 'blue' ? 'paper-blue'
+                 : 'paper-cream';
+        }
         function nbSetPaper(v) {
             nbPaper = v;
             safeStorage.set('niko_nb_paper', v);
@@ -40425,7 +40545,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610120911";
+        window.NIKO_VERSION = "202610121234";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
