@@ -12373,6 +12373,49 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .mnx-rw.warn{border-color:rgba(246,211,101,.5);background:rgba(246,211,101,.08)}
 .mnx-rw.ok{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)}
 
+/* ===== UE 团队看板（teamboard）· 只作用于本页，不外泄 ===== */
+#teamboardPage .tb-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex:0 0 auto}
+#teamboardPage .tb-head h1{font-size:22px;font-weight:600;margin:0;display:flex;align-items:center;gap:10px}
+#teamboardPage .tb-sub{font-size:12px;color:var(--muted,#888);line-height:1.6;margin-top:2px}
+#teamboardPage .tb-sub b{color:var(--text,#333);font-weight:600}
+#teamboardPage .tb-sub code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;padding:1px 5px;border-radius:4px;background:var(--soft,rgba(102,126,234,.10));color:var(--text,#333)}
+#teamboardPage .tb-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+#teamboardPage .tb-btn{
+  padding:6px 13px;border-radius:8px;border:1px solid var(--card-border,#e8e6e1);
+  background:var(--card-bg,#fff);color:var(--text,#333);cursor:pointer;font-size:12.5px;line-height:1.45;
+  transition:border-color .16s,color .16s,background .16s;
+}
+#teamboardPage .tb-btn:hover{border-color:var(--accent,#667eea);color:var(--accent,#667eea)}
+#teamboardPage .tb-btn:active{transform:translateY(1px)}
+#teamboardPage #niko-team{flex:0 0 auto;min-width:0}
+#teamboardPage .tb-foot{display:flex;align-items:center;gap:7px;flex:0 0 auto;font-size:11.5px;color:var(--muted,#888);padding-top:2px}
+#teamboardPage .tb-dot{width:8px;height:8px;border-radius:50%;background:#f59e0b;display:block;flex:0 0 auto}
+#teamboardPage .tb-foot .tb-tip{margin-left:auto;opacity:.85}
+/* ===== 身份选择浮层（首次进入自动弹 / 点「👤」随时改）===== */
+#teamboardPage .tbwho-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:18px}
+#teamboardPage .tbwho{background:var(--card-bg,#fff);color:var(--text,#333);border:1px solid var(--card-border,#e8e6e1);
+  border-radius:16px;padding:20px 22px;width:100%;max-width:430px;box-shadow:0 18px 50px rgba(0,0,0,.30);max-height:86vh;overflow-y:auto}
+#teamboardPage .tbwho h3{font-size:16px;font-weight:700;margin:0 0 6px}
+#teamboardPage .tbwho p.tbwho-sub{font-size:12px;color:var(--muted,#888);line-height:1.6;margin:0 0 14px}
+#teamboardPage .tbwho-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--card-border,#e8e6e1);
+  border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
+#teamboardPage .tbwho-row.on{border-color:var(--accent,#667eea);background:var(--soft,rgba(102,126,234,.08))}
+#teamboardPage .tbwho-dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+#teamboardPage .tbwho-name{flex:1 1 auto;min-width:0;border:none;border-bottom:1px dashed var(--card-border,#ddd);
+  background:transparent;color:inherit;font-size:13.5px;padding:2px 0;font-family:inherit}
+#teamboardPage .tbwho-name:focus{outline:none;border-bottom-color:var(--accent,#667eea)}
+#teamboardPage .tbwho-desc{font-size:11px;color:var(--muted,#999);flex:0 0 auto}
+#teamboardPage .tbwho-act{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+#teamboardPage .tbwho-btn{padding:7px 16px;border-radius:9px;border:1px solid var(--card-border,#e8e6e1);
+  background:var(--card-bg,#fff);color:inherit;cursor:pointer;font-size:13px;font-family:inherit}
+#teamboardPage .tbwho-btn.pri{background:var(--accent,#667eea);border-color:var(--accent,#667eea);color:#fff;font-weight:600}
+@media (max-width:768px){
+  #teamboardPage .tb-head h1{font-size:19px}
+  #teamboardPage .tb-sub{display:none}
+  #teamboardPage .tb-actions{width:100%;margin-left:0}
+  #teamboardPage .tb-btn{min-height:38px;flex:1 1 auto;justify-content:center;display:inline-flex;align-items:center}
+  #teamboardPage .tb-foot .tb-tip{display:none}
+}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -12883,6 +12926,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-item" data-nav="member" onclick="switchPage('member')">💰 会员</div>
             <div class="nav-item" data-nav="game" onclick="switchPage('game')">🎮 游戏时间</div>
             <div class="nav-item" data-nav="health" onclick="switchPage('health')">🩺 健康档案</div>
+            <div class="nav-item" data-nav="teamboard" onclick="switchPage('teamboard')">🎮 团队看板</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
             <div class="nav-title">Settings</div>
@@ -12929,6 +12973,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
             <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
             <div class="nav-more-item" data-navpage="health" onclick="switchPage('health');hideNavMore()">🩺 健康档案</div>
+            <div class="nav-more-item" data-navpage="teamboard" onclick="switchPage('teamboard');hideNavMore()">🎮 团队看板</div>
         </div>
     </div>
 
@@ -14861,6 +14906,28 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   </div>
 </div>
         </div>
+        <div class="page" id="teamboardPage">
+<div style="padding:20px 32px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;">
+                <div class="tb-head">
+                    <div>
+                        <h1>🎮 UE 团队看板</h1>
+                        <div class="tb-sub">三人小队（我 / 月饼 / 邢锦）共用一份数据 · 私有数据仓 <code>skipperjames/niko-team-data</code> · 没配 token 时只存本机</div>
+                    </div>
+                    <div class="tb-actions">
+                        <button class="tb-btn" id="tbWhoBtn" title="我是谁 / 改显示名（只存本机）">👤 我</button>
+                        <button class="tb-btn" id="tbRefresh" title="重新拉取云端数据">🔄 刷新</button>
+                        <button class="tb-btn" id="tbConfig" title="配置数据仓库与写入 token">⚙️ 同步设置</button>
+                    </div>
+                </div>
+                <div id="niko-team" data-me="me" data-repo="skipperjames/niko-team-data"></div>
+                <div class="tb-foot">
+                    <span class="tb-dot" id="tbDot"></span>
+                    <span id="tbStatus">正在初始化…</span>
+                    <span class="tb-tip">看板本体走 Shadow DOM，不污染本站样式；数据只写 <code>niko_team_*</code></span>
+                </div>
+                <div id="tbWhoHost"></div>
+            </div>
+        </div>
     </div>
 
     <!-- 手机端右上角浮动 dock：同步状态小圆点 + ⋮ 更多入口 -->
@@ -16716,6 +16783,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 try { if (typeof renderHealthPage === 'function') renderHealthPage(); } catch (e) {}
             } else if (page === 'tw') {
                 try { if (typeof renderTwPage === 'function') renderTwPage(); } catch (e) {}
+            } else if (page === 'teamboard') {
+                // UE 团队看板（2026-10-13）：容器切过来之前是 display:none，Shadow DOM 内尺寸可能算错 → 补一次重绘
+                try { if (typeof window.__nikoTeamBoardOnShow === 'function') window.__nikoTeamBoardOnShow(); } catch (e) {}
             } else {
                 render();
             }
@@ -17126,6 +17196,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-202610131312', d: '2026-10-13', at: '13:12', name: 'UE 团队看板接进来了（三人协作）',
+                items: [
+                    { sec: '🎮 团队看板', t: '侧栏多了「🎮 团队看板」（手机在「更多」里）', how: '切过去就是三人（我 / 月饼 / 邢锦）共用的任务看板。你改 A 卡、同事改 B 卡，**不会互相覆盖** —— 按每张卡单独比时间，新的赢', go: 'teamboard' },
+                    { sec: '🎮 团队看板', t: '第一次用，点「⚙️ 同步设置」粘一次 token', how: '把数据仓那把 token 粘进去就行（只存你这台机器，不上云、也不跟着 NIKO 云同步走）。粘完底部状态灯变绿：「已同步 · 共 N 项」。三个人各粘一次', go: 'teamboard' },
+                    { sec: '🎮 团队看板', t: '数据放私有仓，网上搜不到', how: '看板本体是公开组件（浏览器直接加载），但你们的任务数据在**私有仓**里 —— 少了 token 谁也读不到', go: 'teamboard' },
+                    { sec: '🎮 团队看板', t: '断网也照常干活', how: '云端连不上时改动先落在本机（状态灯黄点），拖拽编辑一切照旧，不丢东西；连上了自动同步', go: 'teamboard' },
+                ]
+            },
             {
                 v: 'b-20261012-1822', d: '2026-10-12', at: '18:22', name: '健康档案 · 发作记录 + 措施（7 项）',
                 items: [
@@ -34670,7 +34749,16 @@ function renderDayDetail() {
         'niko_book_updated_at',          // 读书更新时间戳
         'niko_copy_rec_updated_at',      // 文案推荐更新时间戳
         'niko_meme_rec_updated_at',      // 梗推荐更新时间戳
-        'niko_market_nodes_updated_at'   // 买量节点更新时间戳
+        'niko_market_nodes_updated_at',  // 买量节点更新时间戳
+        // 2026-10-13 UE 团队看板（teamboard）并入：团队看板自带独立同步通道（团队仓 skipperjames/uep-squad-board），
+        // 不能再被个人的坚果云 / GitHub 快照带走一份 —— 否则既泄露写权限凭证，又制造第二份团队数据副本、跟团队仓打架。
+        // 下面两个键是**成对**的：token = 同事共用写权限凭证；data = 团队看板数据（真相源只在团队仓 board.json）。
+        'niko_team_token',
+        'niko_team_data',
+        // 2026-10-13 团队看板「我是谁」+ 自定义显示名 —— 纯设备本地状态
+        // （A 机器选了「月饼」，云同步不许把 B 机器也改成月饼）
+        'niko_team_me',
+        'niko_team_roles'
     ];
     const SYNC_FILE = 'niko_data.json';
     const DEFAULT_SYNC_INTERVAL_SEC = 120; // 默认 2 分钟同步一次
@@ -40116,6 +40204,237 @@ function hpClearDemo(){
 
 })();
 
+(function () {
+  'use strict';
+  /* ============================================================
+     NIKO 侧胶水：加载 team.js + 状态回显 + 主题跟随 + 两个按钮
+     —— team.js 自带 #niko-team 自动挂载，这里**不调 mount()**
+        （重复 mount 会二次 attachShadow 直接抛错）。
+     整段 IIFE 隔离：所有 part 的 JS 共处同一个 script 作用域，裸名会互相覆盖。
+     ============================================================ */
+  var W = window;
+  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js';
+  var board = null;      // window.NikoTeam 的引用（接一次就不再接）
+
+  function el(id) { return document.getElementById(id); }
+
+  /* ---------- 1) 身份：本机自选「我是谁」+ 名字可改 ----------
+     存 localStorage：niko_team_me（身份）/ niko_team_roles（三个显示名）
+     ⚠️ 这两个键是「设备本地状态」，已在 parts/云同步.html 的 EXCLUDE_KEYS 里排除，
+        否则 A 机器选了「月饼」，云同步会把 B 机器也改成月饼。
+     ⚠️ 名字只在本机渲染（改完只影响自己看到的），三个人各自设一次。
+     ⚠️ 名字的「真相源」在本文件（不依赖组件仓 team.js 更新）：
+        team.js 的 ROLE 由 setMembers() 覆盖，所以组件仓不改也能改名。 */
+  var IDS = ['me', 'a', 'b'];
+  var ROLE_C = { me: '#667eea', a: '#34d399', b: '#f59e0b' };
+  var ROLE_R = { me: '制作人/策划', a: '程序', b: '美术TA' };
+  var ROLE_N = { me: '我', a: '月饼', b: '邢锦' };
+
+  function readMe() {
+    try { return localStorage.getItem('niko_team_me') || ''; } catch (e) { return ''; }
+  }
+  function readRoles() {
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem('niko_team_roles') || '{}') || {}; } catch (e) {}
+    var out = {};
+    IDS.forEach(function (id) {
+      out[id] = { n: (saved[id] && saved[id].n) || ROLE_N[id], c: ROLE_C[id], r: ROLE_R[id] };
+    });
+    return out;
+  }
+  function saveIdentity(id, roles) {
+    try {
+      localStorage.setItem('niko_team_me', id);
+      localStorage.setItem('niko_team_roles', JSON.stringify(roles));
+    } catch (e) {}
+  }
+  function applyIdentity(id, roles, api) {
+    var host = el('niko-team');
+    if (host) host.dataset.me = id;                 // 下次 team.js 自动挂载时直接读
+    if (api) {
+      try { api.config({ me: id }); } catch (e) {}
+      try { api.setMembers(roles); } catch (e) {}   // 改名 + 重绘
+    }
+    var b = el('tbWhoBtn');
+    if (b) b.textContent = '👤 ' + ((roles[id] && roles[id].n) || '我');
+  }
+
+  /* ---------- 1b) 浮层：选出「我是谁」+ 顺手改三个显示名 ---------- */
+  function openWho(api) {
+    var host = el('tbWhoHost');
+    if (!host) return;
+    if (host.querySelector('.tbwho-mask')) return;   // 已在显示
+    var cur = readMe() || 'me';
+    var roles = readRoles();
+    var rows = IDS.map(function (id) {
+      return '<label class="tbwho-row' + (id === cur ? ' on' : '') + '" data-id="' + id + '">' +
+        '<input type="radio" name="tbwho" value="' + id + '"' + (id === cur ? ' checked' : '') + '>' +
+        '<span class="tbwho-dot" style="background:' + ROLE_C[id] + '"></span>' +
+        '<input type="text" class="tbwho-name" data-nid="' + id + '" maxlength="10" value="' +
+        String(roles[id].n).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;') + '">' +
+        '<span class="tbwho-desc">' + ROLE_R[id] + '</span></label>';
+    }).join('');
+    host.innerHTML = '<div class="tbwho-mask"><div class="tbwho">' +
+      '<h3>👤 你是谁？</h3>' +
+      '<p class="tbwho-sub">选一个身份，名字可以直接点开改。<b>只存你这台机器</b>，不上云、不影响别人 —— ' +
+      '所以你看到的名字是你自己定的，三人各自设一次就行。</p>' + rows +
+      '<div class="tbwho-act">' +
+      '<button class="tbwho-btn" id="tbWhoLater">以后再改</button>' +
+      '<button class="tbwho-btn pri" id="tbWhoOk">就这个</button></div>' +
+      '</div></div>';
+
+    var mask = host.querySelector('.tbwho-mask');
+    function pick(id) {
+      Array.prototype.forEach.call(host.querySelectorAll('.tbwho-row'), function (r) {
+        r.classList.toggle('on', r.getAttribute('data-id') === id);
+      });
+    }
+    Array.prototype.forEach.call(host.querySelectorAll('.tbwho-row'), function (r) {
+      r.addEventListener('click', function (e) {
+        if (e.target && e.target.classList && e.target.classList.contains('tbwho-name')) return;  // 点名字框不切换
+        var id = r.getAttribute('data-id');
+        var rd = host.querySelector('input[name="tbwho"][value="' + id + '"]');
+        if (rd) rd.checked = true;
+        pick(id);
+      });
+    });
+    function collect() {
+      var id = 'me';
+      var rd = host.querySelector('input[name="tbwho"]:checked');
+      if (rd) id = rd.value;
+      var out = readRoles();
+      Array.prototype.forEach.call(host.querySelectorAll('.tbwho-name'), function (inp) {
+        var nid = inp.getAttribute('data-nid');
+        var v = String(inp.value || '').trim();
+        if (v) out[nid].n = v;                       // 留空 = 保留原值
+      });
+      return { id: id, roles: out };
+    }
+    function close() { host.innerHTML = ''; }
+
+    var ok = host.querySelector('#tbWhoOk');
+    if (ok) ok.onclick = function () {
+      var r = collect();
+      saveIdentity(r.id, r.roles);
+      applyIdentity(r.id, r.roles, api);
+      close();
+    };
+    var later = host.querySelector('#tbWhoLater');
+    if (later) later.onclick = close;
+    if (mask) mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
+  }
+
+  function paint(txt, color) {
+    var s = el('tbStatus'), d = el('tbDot');
+    if (s) s.textContent = txt;
+    if (d) {
+      d.style.background = color;
+      d.style.boxShadow = '0 0 0 3px ' + color + '22';
+    }
+  }
+
+  /* ---------- 2) 主题跟随：team.js 只在 render() 时读一次 data-theme ---------- */
+  function syncTheme(api) {
+    var last = '';
+    function apply() {
+      var t = document.documentElement.getAttribute('data-theme') || 'default';
+      if (t === last) return;
+      last = t;
+      // team.js 无公开 render()；setMembers({}) 是「空变更 + 重绘」，用它兜一次主题重绘
+      try { api.setMembers({}); } catch (e) {}
+    }
+    apply();
+    try {
+      new MutationObserver(apply).observe(document.documentElement,
+        { attributes: true, attributeFilter: ['data-theme'] });
+    } catch (e) {}
+  }
+
+  /* ---------- 3) 状态回显 ---------- */
+  function bindStatus(api) {
+    api.on('pull', function (p) { paint('已同步 · 共 ' + (p && p.count) + ' 项', '#10b981'); });
+    api.on('pull-error', function () { paint('本地模式 · 云端未连上，数据存在浏览器里', '#f59e0b'); });
+    api.on('push', function (p) { paint('已上传 · 共 ' + (p && p.count) + ' 项', '#10b981'); });
+    api.on('push-error', function () { paint('上传失败 · 改动已存本地', '#ef4444'); });
+  }
+
+  /* ---------- 4) 两个按钮 ---------- */
+  function bindButtons(api) {
+    var r = el('tbRefresh');
+    if (r) r.onclick = function () { paint('正在拉取…', '#f59e0b'); try { api.pull(); } catch (e) {} };
+    var c = el('tbConfig');
+    if (c) c.onclick = function () {
+      var repo = W.prompt('数据仓库（owner/repo）：', 'skipperjames/niko-team-data');
+      if (repo === null) return;
+      var token = W.prompt('共用写入 token（留空 = 只读本地）：', '');
+      if (token === null) return;
+      try {
+        api.config({ channel: { repo: String(repo).trim(), token: String(token || '').trim(), type: 'github' } });
+        if (String(token || '').trim()) localStorage.setItem('niko_team_token', String(token).trim());
+        api.push();
+        paint('配置已保存，正在同步…', '#f59e0b');
+      } catch (e) { paint('配置失败：' + e.message, '#ef4444'); }
+    };
+  }
+
+  /* ---------- 5) 接线 ---------- */
+  function attach(a) {
+    if (board || !a || typeof a.on !== 'function') return;
+    board = a;
+    bindStatus(a);
+    bindButtons(a);
+    applyIdentity(readMe() || 'me', readRoles(), a);   // 本机身份 + 自定义名字落到 team.js
+    var who = el('tbWhoBtn');
+    if (who) who.onclick = function () { openWho(a); };
+    syncTheme(a);
+    W.NikoTeamBoard = a;
+    var n = (a.data && a.data.length) || 0;
+    paint('已挂载 · 共 ' + n + ' 项（等云端回执…）', '#10b981');
+  }
+
+  /* ---------- 6) 动态注入 team.js ----------
+     不能直接写 <script src=…> 到 SECTION 里（会提前结束总框架的 script 块）；
+     用 createElement 注入，等效且安全。 */
+  function load() {
+    if (W.NikoTeam) { attach(W.NikoTeam); return; }
+    if (el('tbTeamScript')) return;          // 已经在路上
+    var host0 = el('niko-team');
+    if (host0) host0.dataset.me = readMe() || 'me';   // 注入前把本机身份写进 data-me（别写死）
+    var s = document.createElement('script');
+    s.id = 'tbTeamScript';
+    s.async = true;
+    s.src = SRC;
+    s.onload = function () {
+      if (W.NikoTeam) attach(W.NikoTeam);
+      else paint('组件已加载但未挂载（niko-team 容器缺失？）', '#ef4444');
+    };
+    s.onerror = function () {
+      paint('组件未加载 · uep-squad-board/team.js 还没就绪（404）', '#ef4444');
+    };
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  load();
+
+  /* ---------- 7) 轮询兜底（script 被缓存/时序错位时不至于一直停在初始化） ---------- */
+  var tries = 0;
+  (function poll() {
+    if (board) return;
+    if (W.NikoTeam) { attach(W.NikoTeam); return; }
+    if (++tries > 100) {                        // ~10s
+      if (!board) paint('组件未加载 · uep-squad-board/team.js 还没就绪（404）', '#ef4444');
+      return;
+    }
+    setTimeout(poll, 100);
+  })();
+
+  /* ---------- 8) 切到本页时补一次重绘（容器曾 display:none，Shadow 内尺寸可能算错） ---------- */
+  W.__nikoTeamBoardOnShow = function () {
+    if (!board) return;
+    try { board.setMembers({}); } catch (e) {}
+    if (!readMe()) openWho(board);           // 第一次进团队看板 → 问一次「你是谁」
+  };
+})();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
         // 当云同步模块拉取数据写入 localStorage 后，派发 niko:datachanged 事件
@@ -42119,7 +42438,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610121827";
+        window.NIKO_VERSION = "202610131319";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
