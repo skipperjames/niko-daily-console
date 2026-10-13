@@ -12409,6 +12409,15 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 #teamboardPage .tbwho-btn{padding:7px 16px;border-radius:9px;border:1px solid var(--card-border,#e8e6e1);
   background:var(--card-bg,#fff);color:inherit;cursor:pointer;font-size:13px;font-family:inherit}
 #teamboardPage .tbwho-btn.pri{background:var(--accent,#667eea);border-color:var(--accent,#667eea);color:#fff;font-weight:600}
+/* ===== 数据同步设置浮层（仓库 + token 表单，替代原生 prompt）===== */
+#teamboardPage .tbcfg-label{display:block;font-size:12px;color:var(--muted,#888);margin:13px 0 5px;font-weight:600}
+#teamboardPage .tbcfg-in{width:100%;padding:8px 11px;border:1px solid var(--card-border,#e8e6e1);border-radius:9px;
+  background:var(--soft,rgba(0,0,0,.03));color:var(--text,#333);font-size:13px;font-family:inherit;line-height:1.5}
+#teamboardPage .tbcfg-in:focus{outline:none;border-color:var(--accent,#667eea)}
+#teamboardPage .tbcfg-state{font-size:12px;margin:13px 0 0;padding:8px 11px;border-radius:9px;
+  background:var(--soft,rgba(0,0,0,.04));color:var(--muted,#888);line-height:1.65;word-break:break-all}
+#teamboardPage .tbcfg-state.ok{color:#10b981}
+#teamboardPage .tbcfg-state.bad{color:#ef4444}
 @media (max-width:768px){
   #teamboardPage .tb-head h1{font-size:19px}
   #teamboardPage .tb-sub{display:none}
@@ -40324,6 +40333,100 @@ function hpClearDemo(){
     if (mask) mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
   }
 
+  /* ---------- 1c) 浮层：数据同步设置（仓库 + token）----------
+     2026-10-13 换掉原生 prompt：连发两个 prompt 会被浏览器吞掉第二个
+     （用户实测：「配置不了 token」），手机上更不可用。改成表单，并顺手验 token。 */
+  function readToken() {
+    try { return localStorage.getItem('niko_team_token') || ''; } catch (e) { return ''; }
+  }
+  function maskToken(t) { return t ? t.slice(0, 13) + '…' + t.slice(-4) : ''; }
+
+  /* 验证仓库 + token 到底能不能用（GitHub 对「私有仓无权限」会返回 404，所以不能只看 200） */
+  function verifyChannel(repo, token) {
+    return new Promise(function (res) {
+      var h = { 'Accept': 'application/vnd.github+json' };
+      if (token) h.Authorization = 'token ' + token;
+      fetch('https://api.github.com/repos/' + repo, { headers: h }).then(function (r) {
+        if (r.status === 200) {
+          return r.json().then(function (j) {
+            var canWrite = !!(j.permissions && j.permissions.push);
+            res({
+              ok: true, write: canWrite,
+              msg: '仓库连通（' + (j.private ? '私有仓' : '公开仓') + '）' +
+                (token ? (canWrite ? ' · token 有写权限 ✅' : ' · ⚠️ token 只能读，改不了数据') : ' · 未填 token，只能读')
+            });
+          });
+        }
+        if (r.status === 404) return res({ ok: false, msg: token ? '仓库或 token 不匹配（私有仓没权限时 GitHub 也返回 404）' : '读不到这个仓 —— 若它是私有仓，必须先填 token' });
+        if (r.status === 401) return res({ ok: false, msg: 'token 无效或已过期' });
+        res({ ok: false, msg: '连通失败：HTTP ' + r.status });
+      }).catch(function (e) { res({ ok: false, msg: '网络错误：' + (e && e.message) }); });
+    });
+  }
+
+  function openConfig(api) {
+    var host = el('tbWhoHost');
+    if (!host) return;
+    if (host.querySelector('.tbwho-mask')) return;      // 已有模态（身份浮层等）
+    var h0 = el('niko-team');
+    var repoNow = (h0 && h0.dataset.repo) || 'skipperjames/niko-team-data';
+    var tokenNow = readToken();
+    var stateCls = tokenNow ? 'ok' : 'bad';
+    var stateTxt = tokenNow
+      ? '当前 token：' + maskToken(tokenNow) + '（已存本机）· 想换一把就直接覆盖下面的输入框'
+      : '⚠️ 还没配 token —— 数据在私有仓，没 token 读不到、也写不进（只会用本机缓存）';
+
+    host.innerHTML = '<div class="tbwho-mask"><div class="tbwho">' +
+      '<h3>⚙️ 数据同步设置</h3>' +
+      '<p class="tbwho-sub">团队数据放私有仓 <code>' + repoNow + '</code>。填一次 token 就能读写了 —— ' +
+      '<b>只存你这台机器</b>，不上云，也不跟着 NIKO 的云同步跑。</p>' +
+      '<label class="tbcfg-label">数据仓库（owner/repo）</label>' +
+      '<input class="tbcfg-in" id="tbCfgRepo" spellcheck="false" value="' + String(repoNow).replace(/"/g, '&quot;') + '">' +
+      '<label class="tbcfg-label">写入 token（github_pat_…）</label>' +
+      '<input class="tbcfg-in" id="tbCfgToken" spellcheck="false" autocomplete="off" placeholder="粘在这里，然后点「保存并同步」" value="' + String(tokenNow).replace(/"/g, '&quot;') + '">' +
+      '<p class="tbcfg-state ' + stateCls + '" id="tbCfgState">' + stateTxt + '</p>' +
+      '<div class="tbwho-act">' +
+      '<button class="tbwho-btn" id="tbCfgCancel">取消</button>' +
+      '<button class="tbwho-btn pri" id="tbCfgSave">保存并同步</button>' +
+      '</div></div></div>';
+
+    var mask = host.querySelector('.tbwho-mask');
+    var inpRepo = host.querySelector('#tbCfgRepo');
+    var inpToken = host.querySelector('#tbCfgToken');
+    var st = host.querySelector('#tbCfgState');
+    function setState(txt, cls) { if (st) { st.textContent = txt; st.className = 'tbcfg-state ' + (cls || ''); } }
+    function close() { host.innerHTML = ''; }
+
+    var save = host.querySelector('#tbCfgSave');
+    if (save) save.onclick = function () {
+      var repo = String(inpRepo.value || '').trim();
+      var token = String(inpToken.value || '').trim();
+      if (!/^[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+$/.test(repo)) { setState('仓库格式不对，应该是 owner/repo（例：skipperjames/niko-team-data）', 'bad'); return; }
+      setState('正在验证…', '');
+      save.disabled = true;
+      verifyChannel(repo, token).then(function (r) {
+        save.disabled = false;
+        if (!r.ok) { setState(r.msg, 'bad'); return; }
+        try { api.config({ channel: { repo: repo, token: token, type: 'github' } }); } catch (e) {}
+        try {
+          if (token) localStorage.setItem('niko_team_token', token);
+          else localStorage.removeItem('niko_team_token');
+        } catch (e) {}
+        if (h0) h0.dataset.repo = repo;
+        setState('✅ ' + r.msg + ' —— 正在同步…', 'ok');
+        paint('正在同步…', '#f59e0b');
+        try { api.pull(); } catch (e) {}
+        setTimeout(function () {
+          var s = st ? st.textContent : '';
+          if (/同步…$/.test(s)) setState('✅ 已同步（看板底部状态灯是最终结果）', 'ok');
+        }, 2500);
+      });
+    };
+    var cancel = host.querySelector('#tbCfgCancel');
+    if (cancel) cancel.onclick = close;
+    if (mask) mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
+  }
+
   function paint(txt, color) {
     var s = el('tbStatus'), d = el('tbDot');
     if (s) s.textContent = txt;
@@ -40358,23 +40461,12 @@ function hpClearDemo(){
     api.on('push-error', function () { paint('上传失败 · 改动已存本地', '#ef4444'); });
   }
 
-  /* ---------- 4) 两个按钮 ---------- */
+  /* ---------- 4) 按钮 ---------- */
   function bindButtons(api) {
     var r = el('tbRefresh');
     if (r) r.onclick = function () { paint('正在拉取…', '#f59e0b'); try { api.pull(); } catch (e) {} };
     var c = el('tbConfig');
-    if (c) c.onclick = function () {
-      var repo = W.prompt('数据仓库（owner/repo）：', 'skipperjames/niko-team-data');
-      if (repo === null) return;
-      var token = W.prompt('共用写入 token（留空 = 只读本地）：', '');
-      if (token === null) return;
-      try {
-        api.config({ channel: { repo: String(repo).trim(), token: String(token || '').trim(), type: 'github' } });
-        if (String(token || '').trim()) localStorage.setItem('niko_team_token', String(token).trim());
-        api.push();
-        paint('配置已保存，正在同步…', '#f59e0b');
-      } catch (e) { paint('配置失败：' + e.message, '#ef4444'); }
-    };
+    if (c) c.onclick = function () { openConfig(api); };   // 表单浮层（原 prompt 会被浏览器吞掉第二问）
   }
 
   /* ---------- 5) 接线 ---------- */
@@ -42438,7 +42530,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610131319";
+        window.NIKO_VERSION = "202610131413";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
