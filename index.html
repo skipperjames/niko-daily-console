@@ -14651,105 +14651,19 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     <h1>🩺 健康档案</h1>
     <div class="tabs" id="tabs"></div>
     <div class="hp-head-acts">
-      <button class="hp-btn" id="hpv11DocBtn" onclick="hpv11ToggleDoc()" title="切到给医生看的版面">🩺 复诊模式</button>
-      <button class="hp-btn primary" onclick="pvAdd()" title="添加一条病史">＋</button>
+      <button class="hp-btn" onclick="hpvNew()" title="新增一次就诊（可勾选「同时挂进病史库」，让身体地图长出图钉）">＋ 加一次就诊</button>
       <button class="hp-btn" onclick="hpClearDemo()" title="清除示例数据（只删带「示例」标记的条目，你自己的记录不动）">🧹</button>
     </div>
-    <div class="hp-head-hint">今天 · 身体地图 · 复诊 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 鼠标停在「＋ / 🧹」上有说明</div>
+    <div class="hp-head-hint">身体地图 + 看病记录 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 「🧹」清掉自带示例数据（你自己记的不动）</div>
   </div>
 
 
   <!-- ===== v11 视图一：今天（方案 01） ===== -->
-  <div class="panel on" id="p-today">
-    <div class="sec">
-      <div class="hpv11-today">
-        <div class="hpv11-ring">
-          <svg width="86" height="86" viewBox="0 0 86 86">
-            <circle cx="43" cy="43" r="36" fill="none" stroke="var(--card-border)" stroke-width="8"></circle>
-            <circle id="hpv11Arc" cx="43" cy="43" r="36" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="226.2"></circle>
-          </svg>
-          <div class="mid"><b id="hpv11Ck">0</b><span id="hpv11CkTot">/ 0</span></div>
-        </div>
-        <div class="txt">
-          <div class="v" id="hpv11Verdict">—</div>
-          <div class="s" id="hpv11Why"></div>
-        </div>
-      </div>
-
-      <div class="hpv11-g2">
-        <div class="card">
-          <div class="ov-ck-hd"><b>✅ 今天要做的 3 件事</b><span class="sub">点一下就勾 · 全部打卡项在身体地图里</span></div>
-          <div id="hpv11Tasks"></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:11px">
-            <button class="btn p" onclick="pvExStart()">▶ 开始 2 分钟跟练</button>
-            <button class="btn" onclick="pvTab('map')">看全部打卡项 →</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="ov-ck-hd"><b>📌 核心医嘱</b><span class="sub" id="hpv11RxFrom"></span></div>
-          <div id="hpv11Rx"></div>
-        </div>
-      </div>
-
-      <!-- ===== 2026-10-12 发作记录主卡（本轮落地 7 方案：01 点哪记哪 / 04 热力人体 / 09 一句话速记 / 17 措施成对 / 23 病程线 / 24 年历热力 / 25 间隔曲线）===== -->
-      <div class="card" style="margin-top:14px">
-        <div class="ov-ck-hd"><b>⚡ 发作记录</b><span class="sub">说一句话 · 或点身上的部位 —— 3 秒记完，措施一起记</span></div>
-        <div class="mnx-top">
-          <input id="mnxSay" placeholder="例：下午脖子后边酸胀，久坐搞的，热敷了一下" oninput="mnxSayParse()" onkeydown="if(event.key==='Enter'){event.preventDefault();mnxSayGo();}">
-          <button class="hp-btn p" id="mnxSayBtn" onclick="mnxSayGo()">✅ 记下</button>
-        </div>
-        <div id="mnxSayRes"></div>
-        <div class="mnx-grid">
-          <div>
-            <div class="mnx-figwrap" id="mnxFig"></div>
-            <div class="mnx-legend">深浅 = 这个部位发作过几次（近 12 个月）<br><b>点光圈直接记一次</b></div>
-          </div>
-          <div>
-            <div class="mnx-blk">
-              <div class="mnx-hd">📅 发作年历<span class="sub">近 13 周 · 一格一天 · 点格子看当天</span></div>
-              <div class="mnx-cal" id="mnxCal"></div>
-            </div>
-            <div class="mnx-blk" style="margin-bottom:0">
-              <div class="mnx-hd">📈 间隔曲线<span class="sub">两次发作隔了几天 · 超平均 = 进了复发窗口</span></div>
-              <div id="mnxGap"></div>
-            </div>
-          </div>
-        </div>
-        <div class="mnx-hd" style="margin-top:15px">🕘 最近发作 · 措施与病程<span class="sub">不用点开就看得见做了什么、什么时候好</span></div>
-        <div id="mnxList"></div>
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <div class="ov-ck-hd"><b>🧭 病程时间线</b><span class="sub">就诊 · 医嘱 · 用药 · 依从 —— 一条线看下来</span></div>
-        <div id="hpv11Tl"></div>
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <div class="ov-ck-hd"><b>⚠️ 现在不舒服？</b><span class="sub">点一下预填好，确认进档案 —— 发作周期越记越准</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="hp-btn p" onclick="mnQuick('肩胛骨痛',['肩胛骨'],['开车','久坐'])">⚡ 肩胛骨痛</button>
-          <button class="hp-btn" onclick="mnQuick('落枕',['颈部'],['睡姿'])">😴 落枕</button>
-          <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  
 
   <div class="panel" id="p-map">
     <div class="sec">
-      <div class="pv7-top">
-        <div class="t"><h2>🧍 身体地图</h2><p>点身上任意部位 → 右侧看该部位的完整病史 · 图钉与病史库联动</p></div>
-        <div class="pv7-stats" id="ovStats"></div>
-      </div>
-      <div class="pv7-rx" id="ovRx"></div>
-      <div class="card" style="margin:0 0 14px;border:1px solid rgba(255,138,76,.5);background:linear-gradient(135deg,rgba(255,138,76,.12),rgba(255,138,76,.02));display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 16px">
-        <div style="font-size:13.5px;font-weight:700">⚠️ 现在发作了？<span style="font-weight:400;font-size:11.5px;color:var(--muted)">点一下预填好，确认就进档案时间线 —— 发作周期越记越准，复诊时给医生看</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto">
-          <button class="hp-btn p" onclick="mnQuick('肩胛骨痛',['肩胛骨'],['开车','久坐'])">⚡ 肩胛骨痛</button>
-          <button class="hp-btn" onclick="mnQuick('落枕',['颈部'],['睡姿'])">😴 落枕</button>
-          <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
-        </div>
-      </div>
+
       <div class="hpmap2 hpv11-mapwrap">
         <div class="hpmap2-l">
       <div class="scn-card">
@@ -14776,185 +14690,25 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           </div>
         </div>
       </div>
-      <div class="ov-mid-row">
-      <div class="ov-mid">
-        <div class="card">
-          <div class="ov-ck-hd"><b>⏰ 活动闹钟 · 2 分钟跟练</b><span class="sub">每 30 分钟提醒一次</span></div>
-          <div id="ckSide"></div>
-        </div>
-        <div class="card">
-          <div class="ov-ck-hd"><b>✅ 今日打卡</b><span class="sub" id="ckSub"></span></div>
-          <div id="ckBody"></div>
-          <div id="ckLink" style="margin-top:12px"></div>
-        </div>
-      </div>
-      </div>
-      <div class="ov-sci" style="margin-top:14px">
-        <div class="sec-hd"><span>📚 科普精选</span><span class="sub">每条都标证据等级 + 出处 · 没有一条是自己推的</span></div>
-        <details class="fold">
-          <summary><span class="idx">①</span><span class="ttl">为什么用人体图标部位</span><span class="ev a">A · 有验证研究</span><span class="one">39 秒填完 · 误差 7.2%</span><span class="cv">▸</span></summary>
-          <div class="bd">
-            <p class="lead">「你点一下人身上哪里疼」是<b>被研究验证过的评估方式</b>，不是我拍脑袋做的可视化 —— 它也是唯一能让医生一眼看懂你全身状况的表达方式。</p>
-            <ul>
-              <li><b>密歇根体表图（Michigan Body Map）</b>——Brummett CM, et al. <b>Pain</b>. 2016。402 名患者、5 项研究验证；填完只要 <b>39–44 秒</b>，标注误差仅 <b>7.2%</b>，且错误基本都是左右侧混淆（所以图上有正面 / 背面两张）。</li>
-              <li><b>斯坦福 CHOIR 体表图</b>——Scherrer KH, et al. <b>Pain Reports</b>. 2021（PMID 33490848）。530 人验证 + 278 人隔 1 周重测：<b>两次填写相关性 ICC 0.93</b>，与问卷法不一致率 &lt;10%。已在全球 CHOIR 网络用了 10 万+ 次。</li>
-              <li><b>专门针对慢性颈痛</b>——希腊一项 2026 年研究（Archives of Hellenic Medicine）用 45 名慢性颈痛患者验证体表图：<b>重测信度 ICC 0.76–0.92</b>、部位一致性 84–100%。结论：纸质和电子体表图都能可靠估计疼痛分布。</li>
-            </ul>
-            <div class="src">出处：Brummett CM, et al. <b>Preliminary validation of the Michigan Body Map</b>. Pain. 2016 ｜ Scherrer KH, et al. <b>Development and validation of the CHOIR body map</b>. Pain Rep. 2021;6(1):e880. doi:10.1097/PR9.0000000000000880 ｜ Arch Hell Med 2026;1:94</div>
-          </div>
-        </details>
-        <details class="fold">
-          <summary><span class="idx">②</span><span class="ttl">为什么每天自评一下就有用</span><span class="ev b">B · 临床常用终点</span><span class="one">0–10 分是 RCT 标准终点</span><span class="cv">▸</span></summary>
-          <div class="bd">
-            <p class="lead">这不是「打卡游戏」，它是<b>疼痛研究里的标准做法</b>：颈部疼痛的随机对照试验，普遍把「每日 0–10 分数字评分（NRS）」当主要或次要终点。</p>
-            <ul>
-              <li>例：Petterson S, et al. <b>J Pain Res</b>（n=33，上斜方肌肌筋膜痛）——受试者<b>每天自评疼痛 0–10 分</b>，4 周后比较组间差异。</li>
-              <li>另一项 54 人颈部 RCT（Suvarnnato T, et al. <b>J Pain Res</b> 2019）同时用 <b>NPS 数字疼痛评分 + NDI 颈椎功能障碍指数</b>，在 6 周、1 个月、3 个月三个时间点复测。</li>
-              <li>中文康复资料汇总的指标口径一致：<b>用 VAS/NRS 定期评疼痛、用 NDI 评功能</b>；并指出 NDI 评分与患者日常活动能力呈负相关（r=−0.73, P&lt;0.01）。</li>
-            </ul>
-            <p class="lead">👉 医生说「这周怎么样」的时候，你答「还行」是 0 信息量；你给出「14 天里 11 天是『差不多』、3 天『更痛』、都在久坐 3 小时以上的那天」——这是能改方案的信息。</p>
-            <div class="src">出处：Petterson S, et al. J Pain Res（ClinicalTrials.gov NCT02135094）｜ Suvarnnato T, et al. <b>Effect of specific deep cervical muscle exercises…</b> J Pain Res. 2019（NCT02656030）｜ 中文自我康复资料（NDI r=−0.73, P&lt;0.01）</div>
-          </div>
-        </details>
-        <details class="fold">
-          <summary><span class="idx">📌</span><span class="ttl">颈椎专项科普（9 条）</span><span class="one">曲度变直 · 训练 · 热敷 · 游泳</span><span class="cv">▸</span></summary>
-          <div class="bd" style="font-size:12.5px;line-height:1.8;color:var(--muted)">
-            <b style="color:var(--text)">曲度变直不等于要治的病</b>（Helliwell 1994 / 21 项研究 meta / ACR 2024）、<b style="color:var(--text)">等长颈后伸训练 A 级</b>（Alpayci 2017, n=65, PMID 28118272）、<b style="color:var(--text)">JOSPT 2017 指南</b>、<b style="color:var(--text)">热敷 Cochrane</b>、<b style="color:var(--text)">游泳 E 级（老实说没有 RCT）</b>、<b style="color:var(--text)">米字操对已确诊颈椎病人不推荐</b> —— 这些整段挂在「颈椎病」这条病史的详情里，<b style="color:var(--text)">每个病症各自挂各自的科普</b>。新病症的科普由我联网查证后逐条填入，每条都带证据等级 + 出处。
-          </div>
-        </details>
-        <details class="fold">
-          <summary><span class="idx">💊</span><span class="ttl">止痛药 / 营养神经药 / 活血中成药：怎么吃才对</span><span class="ev b">B · 说明书口径</span><span class="one">饭后 · 忌酒 · 别混用</span><span class="cv">▸</span></summary>
-          <div class="bd">
-            <p class="lead">三类常见处方的通用吃法与忌口——<b>饭后、忌酒、不与同类止痛药混用</b>是共同底线。以下为药品说明书与权威科普的一般信息，不替代医嘱。</p>
-            <ul>
-              <li><b>NSAID 止痛药（例：艾瑞昔布）</b>——说明书：<b>餐后口服</b>，每次 0.1g、每日 2 次；多疗程累积用药限定 ≤24 周；原则是最短时间用最低有效剂量。<b>忌酒</b>（酒精 + NSAID = 上消化道出血风险叠加）；<b>不与其他 NSAID（布洛芬/阿司匹林）同服</b>。既往胃肠出血/穿孔史、活动性溃疡、磺胺或昔布类过敏、重度心衰禁用。</li>
-              <li><b>营养神经药（例：甲钴胺）</b>——活性维生素 B12（辅酶 B12），用于周围神经病变的麻木/感觉异常。<b>饭后半小时服用最佳</b>（减少胃肠刺激）；<b>吃满 1 个月没效果就应停用并就医</b>（说明书原话）；无需刻意忌口，但避酒（酒精伤胃肠黏膜影响吸收）；遇光易分解，避光密封保存。</li>
-              <li><b>活血化瘀类中成药（例：正骨紫金丸）</b>——活血散瘀、消肿止痛（骨伤科用药）。<b>饭后半小时</b>温开水送服、减少胃肠刺激；与其它药<b>间隔 1 小时以上</b>；<b>忌生冷、油腻、辛辣</b>；含血竭/红花等活血成分，<b>与抗凝药（阿司匹林/华法林）同服前必须先问医生</b>（出血风险叠加）；孕妇禁用。</li>
-            </ul>
-            <div class="src">出处：艾瑞昔布片说明书（餐后口服 · 累积≤24周）｜ 国家中医药管理局名词术语成果转化项目·正骨紫金丸词条 ｜ 腾讯医典·用药交代（艾瑞昔布/甲钴胺）｜ 科普中国·甲钴胺科普图文 —— 一般用药信息，不替代医嘱，具体以处方医生意见为准</div>
-          </div>
-        </details>
-      </div>
       <div class="hpv-modal" id="hpvModal"></div>
-      <div id="hpFoot" class="hp-foot"></div>
     </div>
   </div>
 
-    <div class="panel" id="p-hist">
-    <div class="sec">
-      <div class="sec-hd"><span>📁 我的伤病史（全量）</span><span class="sub" id="histSub"></span></div>
-      <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
-        <button class="hp-btn p" onclick="pvAdd()">＋ 添加一条病史</button>
-        <button class="hp-btn p" onclick="pvPasteOpen()">📋 粘贴一段话，自动填进档案</button>
-        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:200px">增 / 改 / 删 全闭环：每条卡下面有「✏️ 编辑」「🗑 删除」（删除二次确认）。</span>
-      </div>
-      <div id="histList"></div>
-    </div>
-  </div>
+    
 
-  <div class="panel" id="p-trend">
-    <div class="sec">
-      <div class="sec-hd"><span>📈 我到底有没有好转</span><span class="sub">从你自己的打卡记录里推断 · 算法全部摊开给你看</span></div>
-      <div class="stat-row" id="hpStats"></div>
-      <div class="verdict" id="verdict"></div>
-      <div class="chart-wrap">
-        <div class="chart-legend">
-          <i class="cb">柱子 = 当天 30 分钟活动完成次数（目标 16 次）</i>
-          <i class="cl">折线 = 当天自评（越往上越痛）</i>
-        </div>
-        <div id="chart"></div>
-      </div>
-      <div class="corr" id="corr"></div>
-      <div class="honest">
-        ⚠️ <b>说清楚这个方法能干什么、不能干什么</b><br>
-        ① 它算的是<b>相关性</b>，不是因果。完成率高的时候自评好，可能是「因为做了活动所以不痛」，也可能是「因为不痛所以做得动」。<br>
-        ② 单日波动大，看的是<b>趋势</b>不是某一天。<b>少于 7 天不下结论</b>。<br>
-        ③ 它<b>不诊断</b>。判断病情有没有好转，最终要医生结合查体。这个板块真正的价值是——<b>复诊时你不用凭回忆描述，直接把这张图给医生。</b>
-      </div>
-      <div class="disclaim">📝 记录型工具，非医疗建议。出现手麻、走路不稳、大小便异常请立即就医。</div>
-    </div>
-  </div>
+  
 
-  <div class="panel" id="p-watch">
-    <div class="sec">
-      <div class="sec-hd"><span>⌚ 手表数据 · 综合看身体</span><span class="sub">睡眠 · 心率 · 活动 → 和你的自评叠在一起看</span></div>
-      <div id="wdBody"></div>
-    </div>
-  </div>
+  
 
-  <div class="panel" id="p-plan">
-    <div class="sec">
-      <div class="sec-hd"><span>🩺 我的方案</span><span class="sub">按你的病症逐条查证 · 每条都标证据等级和出处</span></div>
-      <div id="planBody"></div>
-    </div>
-  </div>
+  
 
 
   <!-- ===== v11 视图三：复诊（方案 04） ===== -->
-  <div class="panel" id="p-doc">
-    <div class="sec">
-      <div class="sec-hd"><span>🩺 复诊模式</span><span class="sub">给医生看的一屏 · 无装饰 · 可直接打印</span></div>
-      <div class="card hpv11-doc">
-        <div class="hpv11-dochead">
-          <div>
-            <div class="t">复诊摘要 · 自动生成</div>
-            <div class="h" id="hpv11DocH">—</div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn p" onclick="hpv11CopyDoc(this)">📋 复制给医生</button>
-            <button class="btn" onclick="window.print()">🖨 打印 / 存 PDF</button>
-          </div>
-        </div>
-        <div class="rxbox" id="hpv11DocSum"></div>
-      </div>
+  
 
-      <div class="hpv11-g2" style="margin-top:14px">
-        <div class="card">
-          <div class="ov-ck-hd"><b>📋 病情要点</b></div>
-          <div id="hpv11DocKv"></div>
-        </div>
-        <div class="card">
-          <div class="ov-ck-hd"><b>❓ 这次想问医生的</b><span class="sub">复诊前先写好，现场不容易忘</span></div>
-          <div id="hpv11Ask"></div>
-          <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-            <input id="hpv11AskIn" type="text" placeholder="例：药吃完了还疼，要不要接着吃？"
-              style="flex:1;min-width:180px;background:var(--card-bg-2);border:1px solid var(--card-border);border-radius:8px;padding:7px 11px;color:var(--text);font-size:12.5px"
-              onkeydown="if(event.key==='Enter')hpv11AskAdd()">
-            <button class="btn p" onclick="hpv11AskAdd()">＋ 加一条</button>
-          </div>
-        </div>
-      </div>
 
-      <div class="card" style="margin-top:14px">
-        <div class="ov-ck-hd"><b>📊 近 14 天依从性</b><span class="sub" id="hpv11Adh"></span></div>
-        <div class="hpv11-stat-row" id="hpv11DocStat"></div>
-      </div>
 
-      <div class="card" style="margin-top:14px">
-        <div class="ov-ck-hd"><b>🩺 相关发作记录</b><span class="sub" id="hpv11DocMinorSub"></span></div>
-        <div id="hpv11DocMinor"></div>
-      </div>
-    </div>
-  </div>
-
-<div class="panel" id="p-med">
-    <div class="sec">
-      <div class="sec-hd"><span>💊 用药记录 · 医生给我开过什么药</span><span class="sub" id="medSub"></span></div>
-      <div id="medBody"></div>
-    </div>
-  </div>
-
-  <div class="panel" id="p-minor">
-    <div class="sec">
-      <div class="sec-hd"><span>🤒 小病复发记录</span><span class="sub" id="minorSub"></span></div>
-      <div class="card" style="margin-bottom:13px;display:flex;gap:11px;align-items:center;flex-wrap:wrap">
-        <button class="hp-btn p" onclick="mnAdd()">⚡ 现在不舒服</button>
-        <button class="hp-btn p" onclick="pasteOpen('minor')">📋 粘贴一句话</button>
-        <span style="font-size:11.5px;color:var(--muted);flex:1;min-width:220px">记一次看不出什么，记十次就能看出周期 —— 下面自动帮你总结成<b>主诉摘要</b>，复诊直接给医生。</span>
-      </div>
-      <div id="minorBody"></div>
-    </div>
-  </div>
+  
 
   
 </div>
@@ -17346,6 +17100,17 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261014-1830', d: '2026-10-14', at: '18:30', name: '健康档案瘦身：只留「身体地图 + 看病记录」',
+                items: [
+                    { sec: '🩺 健康', t: '健康档案只剩两块：左身体地图 + 右看病记录', how: '「今天 / 我的伤病史 / 用药记录 / 小病复发 / 手表数据 / 我的方案 / 好转推断 / 复诊模式」全部删掉，页面就剩左边缩小的人形图和右边的就诊卡。点图上任意部位，右边对应就诊卡会亮起来滚过去', go: 'health' },
+                    { sec: '🩺 健康', t: '顶部「＋」直接加一次就诊', how: '原来那个「＋」是加病史，现在改成**加就诊记录**（照样能勾「同时挂进病史库」，让地图长出图钉）—— 一个入口干完一件事', go: 'health' },
+                    { sec: '🩺 健康', t: '活动闹钟 / 今日打卡 / 科普精选 一起删了', how: '这三块原本挤在地图下面，现在整行没了 —— 所以「每 30 分钟起身」那个跟练按钮和 6 项打卡也一起没了。要是你还想留打卡，跟我说一声，我把它单独做成一个小开关加回来', go: 'health' },
+                    { sec: '🩺 健康', t: '地图下面那张小卡不再显示「今日打卡 0/6」', how: '打卡块删了以后这个数会永远停在 0 —— 现在改成显示这个部位的**看诊次数**（去右边加过一次就诊，这里就 +1）', go: 'health' },
+                    { sec: '🩺 健康', t: '留了个「🧹」清示例数据', how: '地图下面那几张灰卡（胃部不适 / 右踝扭伤 / 腰肌劳损）是软件自带示例 —— 点顶部「🧹」一次清干净，你自己记的一条都不会动', go: 'health' }
+                ]
+            },
+
             {
                 v: 'b-20261014-1330', d: '2026-10-14', at: '13:30', name: '健康档案 · 身体地图两列改版 + 看病记录（一次就诊一张卡）',
                 items: [
@@ -37198,7 +36963,7 @@ function renderDayDetail() {
    裸 function/var 会静默互相覆盖；只把 HTML onclick 真正引用到的函数挂到 window。 */
 
 /* ===================== 状态 ===================== */
-var S = { tab:'today', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
+var S = { tab:'map', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
 
 /* ===================== 人体图 v5 · 几何（由 _v5_geo.py 程序化生成） =====================
    单一闭合解剖轮廓（人体模型算出来 + Catmull-Rom 平滑）｜51 条肌纤维（裁在轮廓内）｜
@@ -37430,9 +37195,7 @@ function pvTheme(){ /* no-op：并入本体后主题跟随全站，不再由本�
 /* 2026-09-20 用户要求：删掉「手表数据 / 我的方案 / 好转推断」三块，并把「用药记录」挪到「总览」右边。
    面板 HTML 与渲染函数仍保留（休眠、无入口）——避免动到复诊摘要/总览脚注里对「好转推断」的文字引用。 */
 var TABS=[
-  {k:'today', ic:'📌', t:'今天'},
   {k:'map',   ic:'🧍', t:'身体地图'},
-  {k:'doc',   ic:'🩺', t:'复诊'}
 ];
 function renderTabs(){
   document.getElementById('tabs').innerHTML=TABS.map(function(x){
@@ -37441,21 +37204,13 @@ function renderTabs(){
   }).join('');
 }
 function pvTab(k){
-  S.tab=k;
-  ['today','map','hist','med','minor','watch','plan','trend','doc'].forEach(function(x){
-    var p=document.getElementById('p-'+x); if(p) p.classList.toggle('on', x===k);
-  });
+  /* 2026-10-14：健康档案只留「身体地图 + 看病记录」，其他面板全部删除 → 这里收敛成只有一个视图。
+    其他渲染函数（renderHist/renderMed/renderMinor/renderWatch/renderPlan/renderTrend/hpv11Today/hpv11Doc）
+    按铁律「面板 HTML 与渲染函数保留（休眠、无入口）」保留在代码里，不再有调用点。 */
+  S.tab = 'map';
+  var p = document.getElementById('p-map'); if(p) p.classList.add('on');
   renderTabs();
-  hpv11DocMode(k==='doc');
-  if(k==='today'){ hpv11Today(); }
-  if(k==='doc'){ hpv11Doc(); }
-  if(k==='map'){ renderBodyMap(); renderCheck(); try{ hpvRender(); }catch(e){ console.error('hpvRender failed', e); } }
-  if(k==='hist')  renderHist();
-  if(k==='med')   renderMed();
-  if(k==='minor') renderMinor();
-  if(k==='watch') renderWatch();
-  if(k==='plan')  renderPlan();
-  if(k==='trend') renderTrend();
+  try { renderBodyMap(); hpvRender(); } catch(e) { console.error('健康档案渲染失败', e); }
 }
 /* ===================== 人体图渲染 v5（解剖剪影 × 肌纤维 × 全息 HUD） ===================== */
 /* 画布 BP_W×BP_H=340×440（由 _v5_geo.py 生成，几何与热区同源，永不脱位）。
@@ -37665,11 +37420,11 @@ function renderBodyMap(){
     cards.forEach(function(cd){
       var h=cd.h, ac=SCN_AC[h.status]||'#f0a35e', st=ST[h.status]||{t:h.status};
       var d=scnDays(h.date);
-      var its=[]; (h.checks||[]).forEach(function(c,i){ its.push(h.id+'#'+i); });
-      var dn=its.filter(function(id){ return CK_DONE[id]; }).length;
+      /* 2026-10-14：今日打卡块已删 → 这里不再算打卡进度，改显示该部位的看诊次数 */
+      var vn=0; VISITS.forEach(function(v){ if(v.zone && (h.zones||[]).indexOf(v.zone)>=0) vn++; });
       lh+='<div class="scn-mini" style="border-left-color:'+ac+'">'
         +'<div class="sm-r1"><b>'+esc(scnName(h.name))+'</b><span class="sm-tag" style="color:'+ac+';border-color:'+ac+'">'+esc(st.t)+'</span></div>'
-        +'<div class="sm-r2"><span class="sm-big" style="color:#6ee7b7">'+(d==null?'—':d)+'</span><span class="sm-lab">天前</span><span class="sm-sep"></span><span class="sm-big" style="color:#c4b5fd">'+dn+'/'+its.length+'</span><span class="sm-lab">今日打卡</span></div>'
+        +'<div class="sm-r2"><span class="sm-big" style="color:#6ee7b7">'+(d==null?'—':d)+'</span><span class="sm-lab">天前</span><span class="sm-sep"></span><span class="sm-big" style="color:#c4b5fd">'+vn+'</span><span class="sm-lab">次就诊</span></div>'
         +'</div>';
     });
     olds.forEach(function(od){
@@ -38360,6 +38115,7 @@ function hpfCopy(btn){
   go(false);
 }
 function renderHpFoot(){
+  if(!document.getElementById('hpFoot')) return;   /* 2026-10-14 页脚已删：没有目标就早退，别报错 */
   mnxRenderAll();   /* 2026-10-12：发作记录主卡跟着刷新（mnSave/mnDel/hpClearDemo 都会走到这里） */
   var box=document.getElementById('hpFoot'); if(!box) return;
   box.innerHTML=hpfBeat()+hpfTL();
@@ -40308,18 +40064,10 @@ function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
   if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
-  var k = S.tab || 'today';
+  /* 2026-10-14：只画「身体地图 + 看病记录」 */
   try {
-    hpv11DocMode(k === 'doc');
-    if (k === 'today')     { hpv11Today(); mnxRenderAll(); }
-    else if (k === 'map')  { renderBodyMap(); renderCheck(); renderCkLink(); try{ hpv11Side(S.sel||null); }catch(e){} }
-    else if (k === 'doc')  hpv11Doc();
-    else if (k === 'hist')  renderHist();
-    else if (k === 'med')   renderMed();
-    else if (k === 'minor') renderMinor();
-    else if (k === 'watch') renderWatch();
-    else if (k === 'plan')  renderPlan();
-    else if (k === 'trend') renderTrend();
+    renderBodyMap();
+    hpvRender();
   } catch (e) { try { pvToast('渲染出错：' + e.message); } catch (e2) {} }
 }
 
@@ -43106,7 +42854,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610141320";
+        window.NIKO_VERSION = "202610141817";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
