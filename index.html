@@ -11734,6 +11734,128 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .hpv11-sd-card .ck .it.on{color:var(--muted);text-decoration:line-through}
 .hpv11-sd-ft{margin-top:10px;padding-top:9px;border-top:1px solid var(--card-border);display:flex;gap:7px;flex-wrap:wrap}
 
+/* ===================== 2026-10-14 身体地图 + 看病记录（两列） ===================== */
+.hpmap2{display:grid;grid-template-columns:minmax(0,352px) minmax(0,1fr);gap:14px;align-items:start}
+.hpmap2-l{display:flex;flex-direction:column;gap:12px;min-width:0}
+.hpmap2-r{min-width:0;display:flex;flex-direction:column;gap:12px}
+.ov-mid-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:14px}
+.ov-mid-row .ov-mid{display:contents}
+@media (max-width:1080px){
+  .hpmap2{grid-template-columns:minmax(0,1fr)}
+  .ov-mid-row{grid-template-columns:minmax(0,1fr)}
+}
+.hpv-tools{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.hpv-tb{height:26px;padding:0 10px;border-radius:8px;border:1px solid var(--card-border);background:transparent;
+  color:var(--muted);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.hpv-tb.on{background:var(--ok);border-color:var(--ok);color:#06281d}
+.hpv-flash{font-size:12px;min-height:17px;margin:8px 0 2px;color:var(--ok)}
+.hpv-flash.err{color:#ff6b6b}
+.hpv-hint{font-size:12px;color:var(--muted);margin-top:8px;min-height:16px}
+.hpv-empty{font-size:12.5px;color:var(--muted);line-height:1.9;padding:14px;border:1px dashed var(--card-border);border-radius:11px}
+.hpv-visit{border:1px solid var(--card-border);border-radius:11px;margin-bottom:11px;overflow:hidden;transition:.18s}
+.hpv-visit.hpv-hit{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok),0 0 20px rgba(67,224,160,.3);animation:hpvPulse .8s ease-in-out 2}
+@keyframes hpvPulse{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+.hpv-visit.hpv-edit{border-color:var(--ok)}
+.hpv-vtop{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--card-border);cursor:pointer}
+.hpv-visit.hpv-fold .hpv-vtop{border-bottom:none}
+.hpv-vdate{font-weight:800;font-size:13.5px;font-variant-numeric:tabular-nums}
+.hpv-vhosp{font-size:12px;color:var(--muted)}
+.hpv-vst{font-size:11px;font-weight:800;padding:1px 8px;border-radius:20px;border:1px solid}
+.hpv-vzone{font-size:11px;color:var(--muted);border:1px solid var(--card-border);border-radius:20px;padding:1px 8px}
+.hpv-vact{margin-left:auto;display:flex;gap:6px;flex:none}
+.hpv-vact button{background:transparent;border:1px solid var(--card-border);color:var(--muted);border-radius:8px;
+  padding:2px 9px;font-size:11px;cursor:pointer;font-family:inherit}
+.hpv-vact button:hover{border-color:var(--ok);color:var(--ok)}
+.hpv-vact button.dg:hover{border-color:#ff6b6b;color:#ff6b6b}
+.hpv-vdx{display:none;padding:9px 12px 0;font-size:13px}
+.hpv-visit:not(.hpv-fold) .hpv-vdx{display:block}
+.hpv-vrow{display:none;padding:0 12px 10px;font-size:12px;color:var(--muted)}
+.hpv-visit.hpv-fold .hpv-vrow{display:block}
+.hpv-vgrid{display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:9px;padding:10px 12px 12px}
+.hpv-visit:not(.hpv-fold) .hpv-vgrid{display:grid}
+.hpv-vblk{border:1px solid var(--card-border);border-radius:9px;padding:8px 10px;min-width:0}
+.hpv-vblk.wide{grid-column:1/-1}
+.hpv-vbh{font-size:12px;font-weight:800;margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:baseline}
+.hpv-vbh em{font-style:normal;font-weight:400;color:var(--muted);font-size:11px}
+.hpv-vnext{margin-top:7px;font-size:12px;color:var(--warn,#ffc247);font-weight:700}
+.hpv-meds{width:100%;border-collapse:collapse;font-size:12px}
+.hpv-meds th{text-align:left;color:var(--muted);font-weight:600;font-size:10.5px;padding:2px 0;border-bottom:1px solid var(--card-border)}
+.hpv-meds td{padding:4px 0;border-bottom:1px dashed rgba(140,150,180,.22);vertical-align:top}
+.hpv-meds tr:last-child td{border-bottom:none}
+.hpv-meds td.n{font-weight:700}
+.hpv-meds td.d{text-align:right;white-space:nowrap;color:var(--muted)}
+.hpv-tn{display:block;color:var(--muted);font-size:11px}
+.hpv-ul{margin:0;padding:0;list-style:none}
+.hpv-ul li{padding:4px 0;border-bottom:1px dashed rgba(140,150,180,.22);font-size:12px}
+.hpv-ul li:last-child{border-bottom:none}
+.hpv-ul li.no{opacity:.6}
+.hpv-ul li .r{display:block;color:var(--muted);font-size:11px}
+.hpv-adv li{padding-left:12px;position:relative;border-bottom:none}
+.hpv-adv li:before{content:'·';position:absolute;left:2px;color:var(--ok);font-weight:800}
+.hpv-vtb{width:100%;border-collapse:collapse;font-size:12px}
+.hpv-vtb th{background:rgba(140,150,180,.1);font-size:11px;color:var(--muted);text-align:left;padding:8px 10px;
+  border-bottom:1px solid var(--card-border);white-space:nowrap}
+.hpv-vtb td{padding:9px 10px;border-bottom:1px solid var(--card-border);vertical-align:top}
+.hpv-vtb tr:last-child td{border-bottom:none}
+.hpv-vtb td.when{white-space:nowrap;font-weight:700}
+.hpv-vtb td.when span{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.hpv-vtb td.when em{display:block;font-style:normal;font-size:11px;font-weight:800}
+.hpv-vtb ul{margin:0;padding:0;list-style:none}
+.hpv-vtb ul li{padding:1px 0 1px 11px;position:relative}
+.hpv-vtb ul li:before{content:'·';position:absolute;left:1px;color:var(--ok);font-weight:800}
+.hpv-scroll{overflow-x:auto}
+.hpv-fwrap{padding:11px 13px 13px}
+.hpv-fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:8px}
+.hpv-fld{display:flex;flex-direction:column;gap:3px;min-width:0}
+.hpv-fld.wide{grid-column:1/-1;margin-top:8px}
+.hpv-fld>span{font-size:10.5px;color:var(--muted)}
+.hpv-fld input,.hpv-fld select{background:rgba(140,150,180,.1);border:1px solid var(--card-border);color:var(--text);
+  border-radius:8px;padding:6px 8px;font-size:12.5px;font-family:inherit;width:100%}
+.hpv-fld input:focus,.hpv-fld select:focus{outline:none;border-color:var(--ok)}
+.hpv-fblk{border:1px solid var(--card-border);border-radius:9px;padding:8px 10px;margin-top:9px}
+.hpv-fbh{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;margin-bottom:6px}
+.hpv-fbh button{margin-left:auto;background:transparent;border:1px solid var(--card-border);color:var(--muted);
+  border-radius:8px;padding:2px 9px;font-size:11px;cursor:pointer;font-family:inherit}
+.hpv-fbh button:hover{border-color:var(--ok);color:var(--ok)}
+.hpv-frow{display:grid;grid-template-columns:1.5fr .8fr 1fr 1fr .8fr 1.4fr 28px;gap:5px;align-items:center;margin-bottom:5px}
+.hpv-frow.ex{grid-template-columns:1.8fr 2.6fr 60px 28px}
+.hpv-frow.ad{grid-template-columns:1fr 28px}
+.hpv-frow input:not([type=checkbox]){background:rgba(140,150,180,.1);border:1px solid var(--card-border);color:var(--text);
+  border-radius:7px;padding:5px 7px;font-size:12px;font-family:inherit;min-width:0;width:100%}
+.hpv-frow input:focus{outline:none;border-color:var(--ok)}
+.hpv-fck{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);justify-content:center}
+.hpv-fck input{width:15px;height:15px;accent-color:#43e0a0}
+.hpv-fdel{background:transparent;border:1px solid var(--card-border);color:var(--muted);border-radius:6px;height:28px;
+  cursor:pointer;font-family:inherit;font-size:11px}
+.hpv-fdel:hover{border-color:#ff6b6b;color:#ff6b6b}
+.hpv-fempty{font-size:12px;color:var(--muted);padding:5px 0}
+.hpv-fbtns{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:10px}
+.hpv-fbtns .m{margin-right:auto;font-size:11.5px;color:var(--muted)}
+.hpv-fbtns .m.err{color:#ff6b6b}
+.hpv-fbtns button{height:32px;padding:0 15px;border-radius:9px;border:1px solid var(--card-border);background:transparent;
+  color:var(--text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.hpv-fbtns button.pri{background:var(--ok);border-color:var(--ok);color:#06281d}
+.hpv-fchk{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:9px;cursor:pointer}
+.hpv-fchk input{width:15px;height:15px;accent-color:#43e0a0}
+.hpv-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-start;justify-content:center;
+  padding:4vh 14px;z-index:9999;overflow:auto}
+.hpv-modal.on{display:flex}
+.hpv-msheet{background:var(--card-bg,#171a24);border:1px solid var(--card-border);border-radius:14px;width:100%;
+  max-width:780px;max-height:92vh;overflow:auto}
+.hpv-mhd{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--card-border);
+  font-weight:800;font-size:13.5px;position:sticky;top:0;background:var(--card-bg,#171a24);z-index:1}
+.hpv-mhd button{margin-left:auto;background:transparent;border:1px solid var(--card-border);color:var(--muted);
+  border-radius:8px;padding:3px 10px;font-size:11.5px;cursor:pointer;font-family:inherit}
+@media (max-width:900px){
+  .hpv-vgrid{grid-template-columns:minmax(0,1fr)}
+  .hpv-vblk.wide{grid-column:auto}
+  .hpv-frow,.hpv-frow.ex,.hpv-frow.ad{display:flex;flex-wrap:wrap}
+  .hpv-frow input:not([type=checkbox]){flex:1 1 45%;min-width:0}
+  .hpv-frow.ad input{flex:1 1 100%}
+  .hpv-fdel{flex:0 0 30px}
+  .hpv-fbtns button{height:40px}
+}
+
 /* 复诊模式 */
 .hpv11-doc{border:1.5px solid var(--card-border)}
 .hpv11-dochead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
@@ -14628,7 +14750,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <button class="hp-btn" onclick="mnQuick()">＋ 其他发作</button>
         </div>
       </div>
-      <div class="ov-hero hpv11-mapwrap">
+      <div class="hpmap2 hpv11-mapwrap">
+        <div class="hpmap2-l">
       <div class="scn-card">
         <div class="scn-hd"><span>🧍 身体地图</span><span class="bdg" id="hpBpCount">0 处记录</span>
           <span class="lg"><i class="l-active">治疗中</i><i class="l-watch">需关注</i><i class="l-old">已稳定</i></span></div>
@@ -14637,6 +14760,23 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div id="scnList" class="scn-list"></div>
         <div class="scn-ft">图钉 = 按部位在身体上的大致解剖定位（背面部位镜像到正面）· 与病史库联动：加一条病史，这里就自动长出图钉</div>
       </div>
+        </div>
+        <div class="hpmap2-r">
+          <div class="card" style="margin:0">
+            <div class="ov-ck-hd"><b>🩺 看病记录</b><span class="sub" id="hpvSub"></span>
+              <span class="hpv-tools">
+                <button class="hpv-tb" id="hpvTbA" onclick="hpvForm('A')">卡片</button>
+                <button class="hpv-tb" id="hpvTbB" onclick="hpvForm('B')">对照表</button>
+                <button class="hpv-tb" id="hpvTbI" onclick="hpvEditMode('inline')">就地编辑</button>
+                <button class="hpv-tb" id="hpvTbM" onclick="hpvEditMode('modal')">弹窗编辑</button>
+                <button class="hp-btn p" onclick="hpvNew()">＋ 新增一次就诊</button>
+              </span></div>
+            <div class="hpv-flash" id="hpvFlash"></div>
+            <div id="hpvVisitBox"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ov-mid-row">
       <div class="ov-mid">
         <div class="card">
           <div class="ov-ck-hd"><b>⏰ 活动闹钟 · 2 分钟跟练</b><span class="sub">每 30 分钟提醒一次</span></div>
@@ -14648,7 +14788,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <div id="ckLink" style="margin-top:12px"></div>
         </div>
       </div>
-      <div class="ov-sci">
+      </div>
+      <div class="ov-sci" style="margin-top:14px">
         <div class="sec-hd"><span>📚 科普精选</span><span class="sub">每条都标证据等级 + 出处 · 没有一条是自己推的</span></div>
         <details class="fold">
           <summary><span class="idx">①</span><span class="ttl">为什么用人体图标部位</span><span class="ev a">A · 有验证研究</span><span class="one">39 秒填完 · 误差 7.2%</span><span class="cv">▸</span></summary>
@@ -14694,7 +14835,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           </div>
         </details>
       </div>
-      </div>
+      <div class="hpv-modal" id="hpvModal"></div>
       <div id="hpFoot" class="hp-foot"></div>
     </div>
   </div>
@@ -17205,6 +17346,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261014-1330', d: '2026-10-14', at: '13:30', name: '健康档案 · 身体地图两列改版 + 看病记录（一次就诊一张卡）',
+                items: [
+                    { sec: '🩺 健康', t: '身体地图缩到左边，右边全给内容', how: '进「健康档案 · 身体地图」，左手边是缩小的人形图。**点图上任意部位 → 右边对应的就诊卡会亮起来**，还会自动滚过去（点没有记录的部位，会提示你去加一条）', go: 'health' },
+                    { sec: '🩺 健康', t: '新增「看病记录」：一次就诊一张卡', how: '每张卡就是一次看病 —— 日期 / 医院科室 / 诊断，加 💊**用了哪些药**、🔬**做了什么检查**、🗣**医生叮嘱了什么**、⏭**下次复诊哪天**', go: 'health' },
+                    { sec: '🩺 健康', t: '检查手段是新加的一栏（以前真没地方记）', how: '每项检查记「名称 + 结论」，还能标「医生未开」。没做的会显示成灰色留着 —— 下次复诊正好照着问「上次说要做的那项现在做吗」', go: 'health' },
+                    { sec: '🩺 健康', t: '每张卡随时能改，不用删了重录', how: '卡右上角「✏️ 编辑 / 🗑 删除」；进去以后药、检查、叮嘱都能**一行一行加、一行一行删**，改完点保存立刻生效。默认「就地编辑」= 卡片原地变表单，不弹窗挡东西；不喜欢也能切「弹窗编辑」', go: 'health' },
+                    { sec: '🩺 健康', t: '两种看法：卡片 / 对照表', how: '「卡片」适合一次一次细看；「对照表」一行一次就诊，能一眼比出哪次开药多、哪次只做检查。两种形态下都能编辑', go: 'health' },
+                    { sec: '🩺 健康', t: '以前记过的就诊自动搬进来了', how: '你「用药记录」里那次就诊（2026-09-11 颈椎）已经自动变成一张卡 —— 药名、用法、疗程、医嘱全带过来了，不用重录一遍', go: 'health' },
+                    { sec: '🩺 健康', t: '新增就诊时能顺手挂到身体地图', how: '记新一次就诊时勾上「同时在病史库挂一条」，左边的人形图立刻长出那个部位的图钉 —— 不用再去两个地方录同一件事', go: 'health' },
+                    { sec: '🩺 健康', t: '「活动闹钟 / 今日打卡」挪到地图下面一行并排', how: '原来这两块和地图挤在同一行的右边，现在改成下面一整行并排放，每块更宽、看着更舒服', go: 'health' }
+                ]
+            },
+
             {
                 v: 'b-202610131312', d: '2026-10-13', at: '13:12', name: 'UE 团队看板接进来了（三人协作）',
                 items: [
@@ -37171,6 +37326,63 @@ var HIST = [
     avoid:[], checks:['平板支撑 30 秒 × 2','每 30 分钟起身活动 2 分钟'] }
 ];
 
+/* ===================== 2026-10-14 看病记录（一次就诊一条） =====================
+   口径（用户拍板）：一次就诊一条 = 日期 / 医院 / 科室 / 诊断 / 部位 / 状态 + 💊用药 + 🔬检查 + 🗣叮嘱 + ⏭下次复诊
+   用药复用 MEDS 的结构（n 药名 / s 规格 / f 用法 / t 饭前饭后 / d 疗程 / note 备注）；
+   「检查手段」是新增字段 exams[{n 名称, r 结论, ok 是否已做}]；next = 下次复诊日期。
+   数据落在 niko_health_v1 的 visits 字段，随全站云同步走（不新增存储 key）。 */
+var VISITS = [];
+var HPV_SEEDED = false, HPV_FORM = 'A', HPV_EDIT = 'inline', HPV_OPEN = null, HPV_DRAFT = null, HPV_MSG = '', HPV_ERR = false;
+
+/* 首次运行：把「真实病史」（HIST 里 real:true 的）自动迁成一条看病记录，
+   用药从同日期 / 同诊断的用药记录（MEDS）合并进来 —— 用户不用重新录一遍。
+   ⚠️ 驱动源必须是 HIST.real，不能是 MEDS.real：本文件里 MEDS md1 虽然是真的，但 real 标成了 false。 */
+function hpvMatchHist(m){
+  var d = m && m.date ? m.date : '', i;
+  for(i=0;i<HIST.length;i++){ if(HIST[i] && HIST[i].date === d) return HIST[i]; }
+  var key = String((m&&m.diag)||'').slice(0,4);
+  if(key){ for(i=0;i<HIST.length;i++){ if(HIST[i] && String(HIST[i].name||'').indexOf(key) >= 0) return HIST[i]; } }
+  return null;
+}
+function hpvGuessZone(m){ var h = hpvMatchHist(m); return (h && h.zones && h.zones.length) ? h.zones[0] : ''; }
+function hpvMedsOf(h){
+  var m = null;
+  (MEDS||[]).forEach(function(x){
+    if(m || !x) return;
+    if(h.date && x.date === h.date) m = x;
+  });
+  if(!m){
+    var k = String((h.name||h.dx||'')).slice(0,3);
+    if(k){ (MEDS||[]).forEach(function(x){ if(m || !x) return; if(x.diag && String(x.diag).indexOf(k) >= 0) m = x; }); }
+  }
+  if(!m) return [];
+  return (m.items||[]).map(function(it){
+    return { n:it.n||'', s:it.s||'', f:it.f||'', t:it.t||'',
+      d:(it.d==null||it.d==='')?'':((typeof it.d==='number')?(it.d+' 天'):String(it.d)), note:it.note||'' };
+  });
+}
+function hpvSeed(){
+  if(HPV_SEEDED) return;
+  HPV_SEEDED = true;
+  if(VISITS.length) return;
+  (HIST||[]).forEach(function(h){
+    if(!h || h.real !== true) return;
+    VISITS.push({
+      id:'hv_'+(h.id||Math.random().toString(36).slice(2)),
+      date:h.date||'', hosp:h.hosp||'', dept:'',
+      zone:(h.zones && h.zones.length) ? h.zones[0] : '',
+      st:(h.status==='watch'?'watch':(h.status==='old'?'old':'active')),
+      dx:h.dx || h.name || '',
+      meds:hpvMedsOf(h),
+      exams:[],
+      advice:(h.rx2 && h.rx2.length) ? h.rx2.slice(0) : (h.rx ? [h.rx] : []),
+      next:''
+    });
+  });
+  if(VISITS.length){ try{ HSAVE(); }catch(e){} }   /* 迁移结果立刻落盘，别每次打开重算 */
+}
+
+
 var DAYS   = ['8/29','8/30','8/31','9/1','9/2','9/3','9/4','9/5','9/6','9/7','9/8','9/9','9/10','9/11'];
 var DONE14 = [ 4, 5, 7, 6, 9, 8, 10, 9, 11, 12, 11, 13, 14, 15 ];
 var SELF14 = [ 2, 2, 1, 2, 1, 1, 1, 2, 1, 1, 0, 1, 0, 0 ];
@@ -37189,6 +37401,9 @@ function HLOAD(){
   if (Array.isArray(d.meds))  MEDS  = d.meds;
   if (Array.isArray(d.minor)) MINOR = d.minor;
   if (Array.isArray(d.watch)) WATCH = d.watch;
+  if (Array.isArray(d.visits)) { VISITS = d.visits; HPV_SEEDED = true; }
+  if (d.hpvForm === 'A' || d.hpvForm === 'B') HPV_FORM = d.hpvForm;
+  if (d.hpvEdit === 'inline' || d.hpvEdit === 'modal') HPV_EDIT = d.hpvEdit;
   if (Array.isArray(d.days))  DAYS  = d.days;
   if (Array.isArray(d.self14))SELF14= d.self14;
   if (d.ck && typeof d.ck === 'object') CK_DONE = d.ck;
@@ -37200,7 +37415,8 @@ function HSAVE(){
   try {
     safeStorage.set(HK, { v:1, t:Date.now(),
       hist:HIST, meds:MEDS, minor:MINOR, watch:WATCH,
-      days:DAYS, self14:SELF14, ck:CK_DONE, dose:DOSE, doseCfg:DOSE_CFG });
+      days:DAYS, self14:SELF14, ck:CK_DONE, dose:DOSE, doseCfg:DOSE_CFG,
+      visits:VISITS, hpvForm:HPV_FORM, hpvEdit:HPV_EDIT });
   } catch (e) {}
 }
 
@@ -37233,7 +37449,7 @@ function pvTab(k){
   hpv11DocMode(k==='doc');
   if(k==='today'){ hpv11Today(); }
   if(k==='doc'){ hpv11Doc(); }
-  if(k==='map'){ renderBodyMap(); renderCheck(); try{ hpv11Side(S.sel||null); }catch(e){} }
+  if(k==='map'){ renderBodyMap(); renderCheck(); try{ hpvRender(); }catch(e){ console.error('hpvRender failed', e); } }
   if(k==='hist')  renderHist();
   if(k==='med')   renderMed();
   if(k==='minor') renderMinor();
@@ -37437,7 +37653,8 @@ function renderBodyMap(){
       var z = el.getAttribute('data-zone');
       /* v11 方案 05：点击 → 右侧弹出该部位的完整记录；图钉保留不消失 */
       S.sel = z;
-      try { hpv11Side(z); } catch(e) { pvGoZone(z); }
+      /* 2026-10-14：点部位 → 右侧「看病记录」高亮并滚到对应就诊卡（不再开旧侧栏：窄列放不下） */
+      try { hpvHit(z); } catch(e) { console.error('hpvHit failed', e); }
       Array.prototype.forEach.call(svg.querySelectorAll('.scn-pin'), function(g){
         g.classList.toggle('hpv11-on', g.getAttribute('data-zone') === z);
       });
@@ -40211,6 +40428,365 @@ function hpClearDemo(){
   else setTimeout(hpDoseBoot, 600);
 })();
 
+/* ===================== 2026-10-14 看病记录 · 渲染与编辑 ===================== */
+function hpvById(id){ for(var i=0;i<VISITS.length;i++){ if(VISITS[i].id === id) return VISITS[i]; } return null; }
+function hpvIdx(id){ for(var i=0;i<VISITS.length;i++){ if(VISITS[i].id === id) return i; } return -1; }
+function hpvCol(st){ return (ST[st] && ST[st].col) ? ST[st].col : '#8a8fa3'; }
+function hpvStT(st){ return (ST[st] && ST[st].t) ? ST[st].t : st; }
+function hpvZLabel(z){ return ZSHORT[z] || z || '未指定部位'; }
+function hpvZoneOpts(){
+  var order = ['neck_f','neck_b','shb_l','shb_r','upperback','chest','abdomen','lumbar','pelvis',
+    'sh_l','sh_r','arm_up_l','arm_up_r','elbow_l','elbow_r','fore_l','fore_r',
+    'thigh_l','thigh_r','knee_l','knee_r','shin_l','shin_r','foot_l','foot_r','head'];
+  var out = [['','— 未指定 —']], seen = {};
+  order.forEach(function(z){ if(ZSHORT[z] && !seen[z]){ out.push([z, ZSHORT[z]]); seen[z]=1; } });
+  return out;
+}
+function hpvDeep(o){ return JSON.parse(JSON.stringify(o)); }
+function hpvP(o,p){ var a=p.split('.'), c=o; for(var i=0;i<a.length;i++){ if(c==null) return ''; c=c[a[i]]; } return c==null?'':c; }
+function hpvS(o,p,v){ var a=p.split('.'), c=o; for(var i=0;i<a.length-1;i++){ c=c[a[i]]; } c[a[a.length-1]]=v; }
+function hpvFlash(t, err){
+  var f=document.getElementById('hpvFlash');
+  if(f){ f.textContent=t||''; f.className='hpv-flash'+(err?' err':''); }
+}
+function hpvUseModal(){ return HPV_EDIT==='modal' || HPV_FORM==='B'; }
+function hpvTb(){
+  var a=document.getElementById('hpvTbA'), b=document.getElementById('hpvTbB'),
+      i=document.getElementById('hpvTbI'), m=document.getElementById('hpvTbM');
+  if(a) a.classList.toggle('on', HPV_FORM==='A');
+  if(b) b.classList.toggle('on', HPV_FORM==='B');
+  if(i) i.classList.toggle('on', HPV_EDIT==='inline');
+  if(m) m.classList.toggle('on', HPV_EDIT==='modal');
+}
+function hpvForm(k){ if(k!=='A' && k!=='B') return; HPV_FORM=k; HSAVE(); hpvRender(); }
+function hpvEditMode(k){ if(k!=='inline' && k!=='modal') return; HPV_EDIT=k; HPV_OPEN=null; HPV_DRAFT=null; HSAVE(); hpvRender(); }
+function hpvFold(id){
+  if(hpvIdx(id)<0) return;
+  var el=document.querySelector('.hpv-visit[data-v="'+id+'"]'); if(!el) return;
+  var was=el.classList.contains('hpv-fold');
+  el.classList.toggle('hpv-fold', !was ? true : false);
+  var btn=el.querySelector('.hpv-vfold'); if(btn) btn.textContent = el.classList.contains('hpv-fold') ? '展开' : '收起';
+}
+function hpvNew(){
+  if(HPV_OPEN){ hpvCancel(); }
+  HPV_OPEN='__new__'; HPV_MSG=''; HPV_ERR=false;
+  HPV_DRAFT={ id:'v'+Date.now()+Math.floor(Math.random()*900), date:(function(){ var d=new Date();
+      return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); })(),
+    hosp:'', dept:'', zone:'', st:'watch', dx:'', meds:[], exams:[], advice:[], next:'', _alsoHist:true };
+  hpvRender();
+}
+function hpvEdit(id){
+  if(hpvIdx(id)<0) return;
+  HPV_OPEN=id; HPV_DRAFT=hpvDeep(hpvById(id)); HPV_DRAFT._alsoHist=false; HPV_MSG=''; HPV_ERR=false; hpvRender();
+}
+function hpvCancel(){ HPV_OPEN=null; HPV_DRAFT=null; HPV_MSG=''; HPV_ERR=false; hpvRender(); }
+function hpvDel(id){
+  var v=hpvById(id); if(!v) return;
+  var t=(v.date||'')+' '+(v.dx||'这次就诊');
+  if(!window.confirm('确定删掉这条就诊记录？\n\n'+t+'\n\n删了就找不回来了。')) return;
+  var i=hpvIdx(id); if(i>=0) VISITS.splice(i,1);
+  if(HPV_OPEN===id){ HPV_OPEN=null; HPV_DRAFT=null; }
+  HSAVE(); hpvFlash('已删除 1 次就诊记录'); hpvRender();
+}
+/* 新增就诊时顺手在病史库挂一条 → 身体地图立刻长出对应图钉（避免让用户去两个地方录同一件事） */
+function hpvTouchHist(d){
+  var z=d.zone; if(!z) return;
+  for(var i=0;i<HIST.length;i++){
+    if(HIST[i] && HIST[i].zones && HIST[i].zones.indexOf(z) >= 0) return;   /* 这个部位已经有病史了 */
+  }
+  HIST.push({ id:'hv_'+Date.now(), real:true, status:(d.st||'watch'), name:(d.dx||'（待补诊断）'),
+    zones:[z], date:d.date||'', hosp:((d.hosp||'')+(d.dept?(' · '+d.dept):'')),
+    dx:d.dx||'', sym:'', rx:(d.advice&&d.advice[0])?d.advice[0]:'', rx2:(d.advice||[]).slice(0), avoid:[], checks:[] });
+}
+function hpvSave(){
+  if(!HPV_DRAFT) return;
+  if(!HPV_DRAFT.date){ HPV_MSG='请先填「就诊日期」'; HPV_ERR=true; hpvRender(); return; }
+  if(!String(HPV_DRAFT.dx||'').trim()){ HPV_MSG='请先填「诊断」'; HPV_ERR=true; hpvRender(); return; }
+  var d=HPV_DRAFT;
+  d.meds=(d.meds||[]).filter(function(m){ return String(m.n||'').trim(); });
+  d.exams=(d.exams||[]).filter(function(e){ return String(e.n||'').trim(); });
+  d.advice=(d.advice||[]).filter(function(a){ return String(a||'').trim(); });
+  var also=d._alsoHist; delete d._alsoHist;
+  var isNew = (HPV_OPEN==='__new__');
+  if(isNew){ VISITS.push(d); } else { var i=hpvIdx(HPV_OPEN); if(i>=0) VISITS[i]=d; }
+  if(also){ try{ hpvTouchHist(d); }catch(e){} }
+  HPV_OPEN=null; HPV_DRAFT=null; HPV_MSG=''; HPV_ERR=false;
+  HSAVE();
+  hpvFlash(isNew ? '已新增 1 次就诊记录（已存本机 + 随云同步）' : '已保存改动（已存本机 + 随云同步）');
+  hpvRender();
+  try{ renderBodyMap(); }catch(e){}
+}
+function hpvAdd(kind){
+  if(!HPV_DRAFT) return;
+  if(kind==='meds') HPV_DRAFT.meds.push({n:'',s:'',f:'',t:'',d:'',note:''});
+  else if(kind==='exams') HPV_DRAFT.exams.push({n:'',r:'',ok:true});
+  else if(kind==='advice') HPV_DRAFT.advice.push('');
+  HPV_MSG=''; HPV_ERR=false; hpvRender();
+}
+function hpvRowDel(p){
+  if(!HPV_DRAFT) return;
+  var a=p.split('.'), k=a[0], i=parseInt(a[1],10);
+  if(HPV_DRAFT[k]) HPV_DRAFT[k].splice(i,1);
+  hpvRender();
+}
+/* ---------- 只读渲染 ---------- */
+function hpvMedTable(meds){
+  if(!meds || !meds.length) return '<div class="hpv-fempty">这次医生没开药。</div>';
+  var h='<table class="hpv-meds"><thead><tr><th>药名 / 规格</th><th>用法</th><th class="d">疗程</th></tr></thead><tbody>';
+  meds.forEach(function(m){
+    h+='<tr><td class="n">'+esc(m.n)+(m.s?('<span class="hpv-tn">'+esc(m.s)+'</span>'):'')
+      +'</td><td>'+esc(m.f)+(m.t||m.note?('<span class="hpv-tn">'+esc(m.t)+(m.note?(' · '+esc(m.note)):'')+'</span>'):'')
+      +'</td><td class="d">'+esc(m.d)+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+function hpvExamList(exams){
+  if(!exams || !exams.length) return '<div class="hpv-fempty">这次没做检查。</div>';
+  var h='<ul class="hpv-ul">';
+  exams.forEach(function(e){
+    h+='<li'+(e.ok?'':' class="no"')+'><b>'+esc(e.n)+'</b>'+(e.r?('<span class="r">'+esc(e.r)+'</span>'):'')+'</li>';
+  });
+  return h+'</ul>';
+}
+function hpvAdvList(a){
+  if(!a || !a.length) return '<div class="hpv-fempty">没有记录叮嘱内容。</div>';
+  var h='<ul class="hpv-ul hpv-adv">';
+  a.forEach(function(x){ h+='<li>'+esc(x)+'</li>'; });
+  return h+'</ul>';
+}
+function hpvVisitCard(v, open){
+  var col=hpvCol(v.st);
+  if(!hpvUseModal() && HPV_OPEN===v.id){
+    return '<div class="hpv-visit hpv-edit" data-v="'+v.id+'" data-vz="'+esc(v.zone||'')+'">'
+      +'<div class="hpv-vtop" style="cursor:default"><span class="hpv-vdate">✏️ 正在修改这次就诊</span>'
+      +'<span class="hpv-vhosp">改完点「保存」立即生效</span>'
+      +'<span class="hpv-vact"><button class="dg" data-hpvcancel="1">放弃改动</button></span></div>'
+      +hpvFormHtml()+'</div>';
+  }
+  var ids=hpvIdx(v.id);
+  return '<div class="hpv-visit'+(open?'':' hpv-fold')+'" data-v="'+v.id+'" data-vz="'+esc(v.zone||'')+'">'
+    +'<div class="hpv-vtop" data-hpvfold="'+v.id+'" title="点这一行 = 展开 / 收起">'
+      +'<span class="hpv-vdate">'+esc(v.date||'（无日期）')+'</span>'
+      +'<span class="hpv-vhosp">'+esc(v.hosp||'')+(v.dept?(' · '+esc(v.dept)):'')+'</span>'
+      +'<span class="hpv-vst" style="color:'+col+';border-color:'+col+'">'+esc(hpvStT(v.st))+'</span>'
+      +(v.zone?('<span class="hpv-vzone">'+esc(hpvZLabel(v.zone))+'</span>'):'')
+      +'<span class="hpv-vact">'
+        +'<button class="hpv-vfold" data-hpvfold="'+v.id+'">'+(open?'收起':'展开')+'</button>'
+        +'<button data-hpvedit="'+v.id+'">✏️ 编辑</button>'
+        +'<button class="dg" data-hpvdel="'+v.id+'">🗑 删除</button>'
+      +'</span></div>'
+    +'<div class="hpv-vrow">'+esc(v.dx||'')+' · 💊'+(v.meds||[]).length+' · 🔬'+(v.exams||[]).length+' · 🗣'+(v.advice||[]).length
+      +(v.next?(' · ⏭ '+esc(v.next)):'')+'</div>'
+    +'<div class="hpv-vdx">'+esc(v.dx||'')+(v.next?('<div class="hpv-vnext">⏭ 下次复诊：'+esc(v.next)+'</div>'):'')+'</div>'
+    +'<div class="hpv-vgrid">'
+      +'<div class="hpv-vblk"><div class="hpv-vbh">💊 用药有哪些 <em>'+(v.meds||[]).length+' 种</em></div>'+hpvMedTable(v.meds)+'</div>'
+      +'<div class="hpv-vblk"><div class="hpv-vbh">🔬 检查手段 <em>'+(v.exams||[]).length+' 项</em></div>'+hpvExamList(v.exams)+'</div>'
+      +'<div class="hpv-vblk wide"><div class="hpv-vbh">🗣 医生叮嘱 <em>'+(v.advice||[]).length+' 条</em></div>'+hpvAdvList(v.advice)+'</div>'
+    +'</div></div>';
+}
+function hpvNewCard(){
+  return '<div class="hpv-visit hpv-edit" data-v="__new__" data-vz="">'
+    +'<div class="hpv-vtop" style="cursor:default"><span class="hpv-vdate">＋ 新增一次就诊</span>'
+    +'<span class="hpv-vhosp">填完点「保存」，立刻出现在下面</span>'
+    +'<span class="hpv-vact"><button class="dg" data-hpvcancel="1">放弃</button></span></div>'
+    +hpvFormHtml()+'</div>';
+}
+function hpvTable(){
+  var h='<div class="hpv-scroll"><table class="hpv-vtb"><thead><tr><th>就诊</th><th>💊 用药有哪些</th>'
+    +'<th>🔬 检查手段</th><th>🗣 医生叮嘱内容</th><th></th></tr></thead><tbody>';
+  VISITS.forEach(function(v){
+    var col=hpvCol(v.st);
+    h+='<tr data-v="'+v.id+'" data-vz="'+esc(v.zone||'')+'">'
+      +'<td class="when">'+esc(v.date||'—')+'<span>'+esc(v.hosp||'')+(v.dept?(' · '+esc(v.dept)):'')+'</span>'
+        +'<em style="color:'+col+'">'+esc(hpvStT(v.st))+'</em>'
+        +(v.zone?('<em style="color:var(--muted)">'+esc(hpvZLabel(v.zone))+'</em>'):'')
+        +(v.next?('<em style="color:var(--warn,#ffc247)">⏭ '+esc(v.next)+'</em>'):'')+'</td>'
+      +'<td>'+((v.meds||[]).length?('<ul>'+v.meds.map(function(m){ return '<li><b>'+esc(m.n)+'</b> '+esc(m.s)
+          +' · '+esc(m.f)+' · '+esc(m.t)+' · '+esc(m.d)+'</li>'; }).join('')+'</ul>'):'<span class="hpv-fempty">没开药</span>')+'</td>'
+      +'<td>'+((v.exams||[]).length?('<ul>'+v.exams.map(function(e){ return '<li><b>'+esc(e.n)+'</b>'+(e.r?(' · '+esc(e.r)):'')+'</li>'; }).join('')+'</ul>'):'<span class="hpv-fempty">没做检查</span>')+'</td>'
+      +'<td>'+((v.advice||[]).length?('<ul>'+v.advice.map(function(a){ return '<li>'+esc(a)+'</li>'; }).join('')+'</ul>'):'<span class="hpv-fempty">—</span>')+'</td>'
+      +'<td><button data-hpvedit="'+v.id+'" title="编辑">✏️</button> <button data-hpvdel="'+v.id+'" title="删除">🗑</button></td>'
+      +'</tr>';
+  });
+  return h+'</tbody></table></div>';
+}
+/* ---------- 编辑表单 ---------- */
+function hpvPick(label,k,type,ph,wide){
+  return '<label class="hpv-fld'+(wide?' wide':'')+'"><span>'+label+'</span>'
+    +'<input type="'+(type||'text')+'" data-hk="'+k+'" value="'+esc(hpvP(HPV_DRAFT,k))+'"'
+    +(ph?(' placeholder="'+esc(ph)+'"'):'')+'></label>';
+}
+function hpvSel(label,k,opts){
+  var v=hpvP(HPV_DRAFT,k), h='<label class="hpv-fld"><span>'+label+'</span><select data-hk="'+k+'">';
+  opts.forEach(function(o){ h+='<option value="'+esc(o[0])+'"'+(String(v)===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'; });
+  return h+'</select></label>';
+}
+function hpvFormHtml(){
+  var d=HPV_DRAFT; if(!d) return '';
+  var h='<div class="hpv-fwrap"><div class="hpv-fgrid">'
+    +hpvPick('就诊日期','date','date')+hpvPick('医院','hosp','text','如 湖南航天医院')
+    +hpvPick('科室','dept','text','如 骨科 / 康复科')
+    +hpvSel('状态','st',[['active','治疗中'],['watch','需关注'],['old','已稳定']])
+    +hpvSel('对应不舒服的部位','zone',hpvZoneOpts())
+    +hpvPick('⏭ 下次复诊（可留空）','next','date')
+    +'</div>'+hpvPick('诊断','dx','text','如 颈椎病 · 颈椎曲度变直',true);
+  h+='<div class="hpv-fblk"><div class="hpv-fbh">💊 用药有哪些<button data-hpvadd="meds">＋ 加一种药</button></div>';
+  if(!d.meds.length) h+='<div class="hpv-fempty">这次没开药 —— 点「＋ 加一种药」补上</div>';
+  d.meds.forEach(function(m,i){
+    h+='<div class="hpv-frow" data-row="meds.'+i+'">'
+      +'<input data-hk="meds.'+i+'.n" placeholder="药名" value="'+esc(m.n)+'">'
+      +'<input data-hk="meds.'+i+'.s" placeholder="规格" value="'+esc(m.s)+'">'
+      +'<input data-hk="meds.'+i+'.f" placeholder="用法" value="'+esc(m.f)+'">'
+      +'<input data-hk="meds.'+i+'.t" placeholder="饭前/饭后" value="'+esc(m.t)+'">'
+      +'<input data-hk="meds.'+i+'.d" placeholder="疗程" value="'+esc(m.d)+'">'
+      +'<input data-hk="meds.'+i+'.note" placeholder="备注" value="'+esc(m.note)+'">'
+      +'<button class="hpv-fdel" data-hpvrow="meds.'+i+'" title="删掉这一行">✕</button></div>';
+  });
+  h+='</div><div class="hpv-fblk"><div class="hpv-fbh">🔬 检查手段<button data-hpvadd="exams">＋ 加一项检查</button></div>';
+  if(!d.exams.length) h+='<div class="hpv-fempty">这次没做检查</div>';
+  d.exams.forEach(function(e,i){
+    h+='<div class="hpv-frow ex" data-row="exams.'+i+'">'
+      +'<input data-hk="exams.'+i+'.n" placeholder="检查名称" value="'+esc(e.n)+'">'
+      +'<input data-hk="exams.'+i+'.r" placeholder="结论 / 结果" value="'+esc(e.r)+'">'
+      +'<label class="hpv-fck"><input type="checkbox" data-hk="exams.'+i+'.ok"'+(e.ok?' checked':'')+'><span>已做</span></label>'
+      +'<button class="hpv-fdel" data-hpvrow="exams.'+i+'" title="删掉这一项">✕</button></div>';
+  });
+  h+='</div><div class="hpv-fblk"><div class="hpv-fbh">🗣 医生叮嘱内容<button data-hpvadd="advice">＋ 加一条叮嘱</button></div>';
+  if(!d.advice.length) h+='<div class="hpv-fempty">还没有叮嘱内容</div>';
+  d.advice.forEach(function(a,i){
+    h+='<div class="hpv-frow ad" data-row="advice.'+i+'">'
+      +'<input data-hk="advice.'+i+'" placeholder="医生嘱咐的一句话" value="'+esc(a)+'">'
+      +'<button class="hpv-fdel" data-hpvrow="advice.'+i+'" title="删掉这一条">✕</button></div>';
+  });
+  h+='</div>';
+  if(HPV_OPEN==='__new__'){
+    h+='<label class="hpv-fchk"><input type="checkbox" data-hk="_alsoHist"'+(d._alsoHist?' checked':'')+'>'
+      +'<span>同时在「病史库」挂一条 → 身体地图立刻长出这个部位的图钉</span></label>';
+  }
+  h+='<div class="hpv-fbtns"><span class="m'+(HPV_ERR?' err':'')+'">'+esc(HPV_MSG)+'</span>'
+    +'<button data-hpvcancel="1">取消</button><button class="pri" data-hpvsave="1">保存</button></div></div>';
+  return h;
+}
+/* ---------- 渲染入口 ---------- */
+function hpvModal(){
+  var md=document.getElementById('hpvModal'); if(!md) return;
+  if(hpvUseModal() && HPV_OPEN && HPV_DRAFT){
+    md.classList.add('on');
+    md.innerHTML='<div class="hpv-msheet"><div class="hpv-mhd">'
+      +(HPV_OPEN==='__new__'?'＋ 新增一次就诊':'✏️ 修改这次就诊')
+      +(HPV_FORM==='B'?'<span style="font-weight:400;font-size:11.5px;color:var(--muted)">对照表形态下统一在这里改</span>':'')
+      +'<button data-hpvcancel="1">关闭</button></div>'+hpvFormHtml()+'</div>';
+  } else { md.classList.remove('on'); md.innerHTML=''; }
+}
+function hpvRender(){
+  hpvSeed();
+  var box=document.getElementById('hpvVisitBox'); if(!box) return;
+  /* 硬化：云端/别处写入后 HLOAD 会换掉 VISITS，正在编辑的那条可能已经不存在了 →
+     别让 HPV_OPEN 指向死 id（否则界面看着"点了没反应"），直接取消并说明原因。 */
+  if(HPV_OPEN && HPV_OPEN!=='__new__' && hpvIdx(HPV_OPEN)<0){
+    HPV_OPEN=null; HPV_DRAFT=null; HPV_MSG=''; HPV_ERR=false;
+    hpvFlash('这条记录刚被别处改动了，编辑已取消 —— 请看最新的内容');
+  }
+  var nm=0, ne=0;
+  VISITS.forEach(function(v){ nm+=(v.meds||[]).length; ne+=(v.exams||[]).length; });
+  var sub=document.getElementById('hpvSub');
+  if(sub) sub.textContent='共 '+VISITS.length+' 次就诊 · '+nm+' 种药 · '+ne+' 项检查';
+  hpvTb();
+  var h='';
+  if(!VISITS.length && HPV_OPEN!=='__new__'){
+    h='<div class="hpv-empty">还没有就诊记录。<br>点右上「＋ 新增一次就诊」记一次 —— '
+      +'日期、用药、检查手段、医生叮嘱都收在一张卡里，随时能改。</div>';
+  } else if(HPV_FORM==='B'){
+    h=hpvTable();
+  } else {
+    if(!hpvUseModal() && HPV_OPEN==='__new__') h+=hpvNewCard();
+    VISITS.forEach(function(v,i){ h+=hpvVisitCard(v, i===0 || HPV_OPEN===v.id); });
+  }
+  box.innerHTML=h+'<div class="hpv-hint" id="hpvHint"></div>';
+  hpvModal();
+}
+/* 点身体地图上的部位 → 高亮并滚到对应就诊卡 */
+function hpvHit(z){
+  var box=document.getElementById('hpvVisitBox'); if(!box) return;
+  var n=0, first=null;
+  Array.prototype.forEach.call(box.querySelectorAll('[data-vz]'), function(el){
+    var on = el.getAttribute('data-vz') === z;
+    el.classList.toggle('hpv-hit', on);
+    if(on){ n++; if(!first) first=el; }
+  });
+  var hint=document.getElementById('hpvHint');
+  if(hint) hint.textContent = n ? ('↑ 已高亮「'+hpvZLabel(z)+'」的 '+n+' 条就诊记录')
+    : ('「'+hpvZLabel(z)+'」还没有就诊记录 —— 点右上「＋ 新增一次就诊」加一条，图上就会联动');
+  if(first){
+    try{ first.scrollIntoView({ behavior:'smooth', block:'nearest' }); }catch(e){ try{ first.scrollIntoView(); }catch(e2){} }
+  }
+  setTimeout(function(){
+    Array.prototype.forEach.call(box.querySelectorAll('.hpv-hit'), function(el){ el.classList.remove('hpv-hit'); });
+  }, 3000);
+}
+/* ---------- 事件（全部委托，innerHTML 重渲染也不会失效；只挂一次） ---------- */
+(function(){
+  function onKey(t, key){ var e=t.closest ? t.closest('['+key+']') : null; return e; }
+  document.addEventListener('click', function(e){
+    var t=e.target;
+    if(!t || !t.closest) return;
+    var sc=t.closest('#hpvVisitBox, #hpvModal');
+    if(!sc) return;
+    var b;
+    if((b=t.closest('[data-hpvsave]'))){ hpvSave(); return; }
+    if((b=t.closest('[data-hpvcancel]'))){ hpvCancel(); return; }
+    if((b=t.closest('[data-hpvadd]'))){ hpvAdd(b.getAttribute('data-hpvadd')); return; }
+    if((b=t.closest('[data-hpvrow]'))){ hpvRowDel(b.getAttribute('data-hpvrow')); return; }
+    if((b=t.closest('[data-hpvdel]'))){ hpvDel(b.getAttribute('data-hpvdel')); return; }
+    if((b=t.closest('[data-hpvedit]'))){ hpvEdit(b.getAttribute('data-hpvedit')); return; }
+    /* ⚠️ 折叠必须放最后：.hpv-vtop 是容器，先判它会把 ✏️/🗑 一起吃掉 */
+    if((b=t.closest('[data-hpvfold]'))){ hpvFold(b.getAttribute('data-hpvfold')); return; }
+  }, true);
+  document.addEventListener('input', function(e){
+    var t=e.target;
+    if(!t || !t.closest || !HPV_DRAFT) return;
+    var k=t.getAttribute && t.getAttribute('data-hk');
+    if(!k) return;
+    hpvS(HPV_DRAFT, k, (t.type==='checkbox') ? !!t.checked : t.value);
+  });
+  document.addEventListener('change', function(e){
+    var t=e.target;
+    if(!t || !t.closest || !HPV_DRAFT) return;
+    var k=t.getAttribute && t.getAttribute('data-hk');
+    if(!k) return;
+    hpvS(HPV_DRAFT, k, (t.type==='checkbox') ? !!t.checked : t.value);
+  });
+})();
+if(typeof window !== 'undefined'){
+  window.hpvForm = hpvForm;
+  window.hpvEditMode = hpvEditMode;
+  window.hpvNew = hpvNew;
+  window.hpvRender = hpvRender;
+  window.hpvHit = hpvHit;
+  window.__hpvInspect = function(){
+    return { visits:VISITS.length, seeded:HPV_SEEDED, form:HPV_FORM, edit:HPV_EDIT, open:HPV_OPEN,
+      cards:document.querySelectorAll('#hpvVisitBox .hpv-visit').length,
+      rows:document.querySelectorAll('#hpvVisitBox tbody tr').length,
+      meds:VISITS.reduce(function(a,v){ return a+(v.meds||[]).length; },0),
+      exams:VISITS.reduce(function(a,v){ return a+(v.exams||[]).length; },0),
+      advice:VISITS.reduce(function(a,v){ return a+(v.advice||[]).length; },0) };
+  };
+  window.__hpvReset = function(){ VISITS=[]; HPV_SEEDED=true; HPV_OPEN=null; HPV_DRAFT=null; HSAVE(); hpvRender(); };
+  window.__hpvSeed = function(n){
+    VISITS=[]; HPV_SEEDED=true; HPV_OPEN=null; HPV_DRAFT=null;
+    for(var i=0;i<(n||3);i++){
+      VISITS.push({ id:'t'+i, date:'2026-0'+(9-i)+'-11', hosp:'测试医院', dept:'测试科', zone:['neck_b','fore_l','chest'][i%3],
+        st:['active','watch','old'][i%3], dx:'测试诊断 '+i,
+        meds:[{n:'药A',s:'0.2g',f:'每日 1 次',t:'饭后',d:'7 天',note:''},{n:'药B',s:'50mg',f:'每日 3 次',t:'饭后',d:'7 天',note:''}],
+        exams:[{n:'X 光',r:'未见异常',ok:true},{n:'MRI',r:'医生未开',ok:false}],
+        advice:['医嘱一','医嘱二','医嘱三','医嘱四','医嘱五'], next:'2026-11-01' });
+    }
+    HSAVE();      /* ★ 测试数据也要落盘：否则一次 HLOAD（云同步/重渲染）就把 VISITS 换回旧数据，
+                     表现是"点了 ✏️ 没反应"——实际是 HPV_OPEN 指向了已经不存在的 id */
+    hpvRender();
+  };
+}
+
 })();
 
 (function () {
@@ -42530,7 +43106,7 @@ function hpClearDemo(){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610131413";
+        window.NIKO_VERSION = "202610141320";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
