@@ -12547,6 +12547,14 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   #teamboardPage .tb-btn{min-height:38px;flex:1 1 auto;justify-content:center;display:inline-flex;align-items:center}
   #teamboardPage .tb-foot .tb-tip{display:none}
 }
+
+/* v2.3（2026-10-14）：外层表头去重 —— 页面顶部原本有两套标题：
+   外层「🎮 团队看板 + 三人小队（我/月饼/邢锦）…」+ 看板自身的
+   「UE / HOUDINI · 三人共享开发工作区 / 一起把作品做出来」。
+   按用户要求只保留下面那套（看板自身，带「项目管理」按钮）。
+   注：按钮 DOM 仍保留（JS 依赖 tbWhoBtn/tbRefresh/tbConfig 等 id），只是不显示。 */
+#teamboardPage .tb-head,
+#teamboardPage .tb-foot{display:none!important}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -42854,7 +42862,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610141817";
+        window.NIKO_VERSION = "202610142228";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
