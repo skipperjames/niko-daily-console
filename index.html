@@ -24817,9 +24817,17 @@ function renderDayDetail() {
             var base = tblNextWorkday(startStr || tblStartDate());   // 起始日若落在休息日 → 先顺到最近工作日
             var cursor = base;
             TBL.skipped = [];
+            // 2026-10-15：纯 D 需求（无 C）不再跟着 C 落，改平均摊到「落天所在周期」的最后两天（周三/周四）
+            var wEnd = tblWeekRange(base).end;       // 周期结束 = 下周五（排他）→ 最后两天 = end-2(周三) / end-1(周四)
+            var dWed = tblDateAdd(wEnd, -2), dThu = tblDateAdd(wEnd, -1);
+            var dSeq = 0;
             reqs.forEach(function (rq, i) {
-                if (TBL.dates[i]) rq.date = TBL.dates[i];
-                else if (roll && rq.cCount > 0) { rq.date = cursor; cursor = tblNextWorkday(tblDateAdd(cursor, 1)); }
+                if (TBL.dates[i]) rq.date = TBL.dates[i];            // 手选日期永远优先
+                else if (rq.cCount > 0) {                            // 含 C：每个 C 一天一个顺延（口径不变）
+                    if (roll) { rq.date = cursor; cursor = tblNextWorkday(tblDateAdd(cursor, 1)); }
+                    else rq.date = base;
+                }
+                else if (rq.dCount > 0) rq.date = (dSeq++ % 2 === 0) ? dWed : dThu;   // 纯 D：周三/周四轮流平均
                 else rq.date = base;
             });
             // 收集排期区间内被跳过的休息日（界面要明示，别让用户以为漏了）—— 调用方此时还没写 TBL.reqs，
@@ -25280,6 +25288,7 @@ function renderDayDetail() {
             var evs = safeStorage.get('work_calendar_events', []) || [];
             var plist = (typeof projects !== 'undefined' && Array.isArray(projects)) ? projects : [];
             var newProjects = [], days = [], created = 0, updated = 0, skipped = 0;
+            var topIds = {};   // day -> [id]：本批落库的需求卡默认顶到当天任务列表最上面（2026-10-15）
             reqs.forEach(function (rq, i) {
                 var act = TBL.acts[i] || 'new';
                 if (act === 'skip') { skipped++; return; }
@@ -25301,11 +25310,18 @@ function renderDayDetail() {
                 if (pid || !isUpdate) payload.projectId = pid || '';
                 if (isUpdate) {
                     var t = dd.hits[0], idx = evs.indexOf(t);
-                    if (idx >= 0) { for (var k in payload) evs[idx][k] = payload[k]; updated++; days.push(day); return; }
+                    if (idx >= 0) { for (var k in payload) evs[idx][k] = payload[k]; updated++; days.push(day); (topIds[day] = topIds[day] || []).push(t.id); return; }
                 }
                 payload.id = 'ev_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
                 evs.push(payload); created++;
+                (topIds[day] = topIds[day] || []).push(payload.id);
                 days.push(day);
+            });
+            // 落库的需求卡置顶当天列表：写入 niko_plan_day_order 头部（保留该天原有的手排顺序，完成态仍会沉底）
+            Object.keys(topIds).forEach(function (day) {
+                var order = (typeof getDayOrder === 'function') ? (getDayOrder(day) || []) : [];
+                order = order.filter(function (id) { return topIds[day].indexOf(id) < 0; });
+                if (typeof setDayOrder === 'function') setDayOrder(day, topIds[day].concat(order));
             });
             days.sort();
             safeStorage.set('work_calendar_events', evs);
@@ -42872,7 +42888,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610151602";
+        window.NIKO_VERSION = "202610151613";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
