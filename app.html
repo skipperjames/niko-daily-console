@@ -24859,10 +24859,18 @@ function renderDayDetail() {
         }
 
         // ---- 本周期查重（周五 → 下周四，跟随「每周起始日」设置）----
-        function tblWeekRange() {
-            var start = (typeof getMonday === 'function') ? getMonday(new Date()) : (function () {
-                var d = new Date(), ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 5;
-                return new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() - ws + 7) % 7));
+        // 2026-10-15：base 参数 = 按哪天换算周期。查重必须按「落到哪天」算，不能按今天 ——
+        // 用户把落天改到明天（下周期）时，按今天算会误撞上一周期的同类条目
+        function tblWeekRange(base) {
+            var b = null;
+            if (base) {
+                var p = String(base).split('-');
+                b = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+            }
+            if (!b || isNaN(b.getTime())) b = new Date();
+            var start = (typeof getMonday === 'function') ? getMonday(b) : (function () {
+                var ws = (typeof nikoWeekStartDay === 'function') ? nikoWeekStartDay() : 5;
+                return new Date(b.getFullYear(), b.getMonth(), b.getDate() - ((b.getDay() - ws + 7) % 7));
             })();
             var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 7);
             return { start: tblYmd(start), end: tblYmd(end) };
@@ -24873,7 +24881,7 @@ function renderDayDetail() {
                 .replace(/\s+/g, '');
         }
         function tblDedup(rq, list) {
-            var w = tblWeekRange();
+            var w = tblWeekRange(rq.date);   // 严格按这条需求的落天换算周期
             var evs = list || safeStorage.get('work_calendar_events', []) || [];
             var my = tblNormTitle(rq.title);
             var hits = evs.filter(function (e) {
@@ -24897,11 +24905,11 @@ function renderDayDetail() {
         // ---- 渲染 ----
         function tblChipsHtml(d) {
             var reqs = d.reqs || [];
-            var w = tblWeekRange();
+            var w = tblWeekRange(tblStartDate());
             var h = '<span class="tbl-chip ok">已读到 <b>' + TBL.rows.length + ' 行 × ' + TBL.cols + ' 列</b></span>'
                 + '<span class="tbl-chip">合并 <b>' + TBL.merges + '</b> 处</span>'
                 + '<span class="tbl-chip ' + (reqs.length ? 'ok' : 'bad') + '"><b>' + d.leaves.length + '</b> 格 → <b>' + reqs.length + '</b> 条需求</span>'
-                + '<span class="tbl-chip">本周期 <b>' + tblFmtDay(w.start) + ' → ' + tblFmtDay(w.end) + '</b></span>'
+                + '<span class="tbl-chip" title="周期按「落在哪天」换算；查重按每条需求自己的落天逐条换算">落天周期 <b>' + tblFmtDay(w.start) + ' → ' + tblFmtDay(w.end) + '</b></span>'
                 + '<span class="tbl-chip rest">🏖 法定节假日不排' + (TBL.skipWeekend !== false ? ' · 周末不排' : '') + '</span>';
             var rc = {};
             reqs.forEach(function (rq) {
@@ -42864,7 +42872,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610142246";
+        window.NIKO_VERSION = "202610151602";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
