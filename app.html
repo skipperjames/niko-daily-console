@@ -35998,6 +35998,7 @@ function renderDayDetail() {
         // 暴露内部函数供自动化测试
         window.NikoSync.__internals = {
             computeMerge, collectLocal, loadSnapshot, saveSnapshot,
+            migrateAllSnapshots, nikoSnapFp, toFpDict, writeFpDict, parseSnapshot,
             getDeviceId, summarizeValue, state, DATA_PREFIXES, EXCLUDE_KEYS,
             readRemote, writeRemote, activeChannels, doSyncChannel,
             readRemoteGh, writeRemoteGh, applyPushPull,
@@ -36153,6 +36154,35 @@ function renderDayDetail() {
         updateSidebarIndicator,
         openDataManagerFromSidebar
     };
+
+    /* ---------- 启动时把「所有通道的快照」一次迁到指纹格式 ----------
+       为什么不能只靠 loadSnapshot 里的懒迁移：loadSnapshot 只在同步某个通道时才被调，
+       若某通道当前没连接（坚果云断了 / 手机端没配 GitHub），它那份全量快照就永远留在
+       本机白占配额。这里直接扫 localStorage 全量迁移，跟连没连无关。
+       注意：遍历中写回的是**同一个 key**，不新增也不删除条目，所以遍历安全。 */
+    function migrateAllSnapshots() {
+        const PREFIX = 'niko_sync_local_snapshot';
+        const done = [];
+        try {
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (!k || k.indexOf(PREFIX) !== 0) continue;
+                const raw = localStorage.getItem(k);
+                if (raw === null) continue;
+                const o = parseSnapshot(raw);
+                if (!o || o.migrated) continue;   // 已是新格式 / 解析不了 → 跳过
+                const ch = (k === PREFIX) ? 'fs' : k.slice(PREFIX.length + 2);   // '__github' → 'github'
+                writeFpDict(o.data, ch);
+                done.push(k + ' ' + raw.length + '→' + (localStorage.getItem(k) || '').length);
+            }
+        } catch (e) {}
+        if (done.length) {
+            addLog('已把本机快照转成指纹（释放配额）：' + done.join('，'), 'ok');
+            try { console.log('[NikoSync] 快照迁移：', done); } catch (e) {}
+        }
+        return done;
+    }
+    try { migrateAllSnapshots(); } catch (e) {}
 
     // 启动
     if (document.readyState === 'loading') {
@@ -43167,7 +43197,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610161651";
+        window.NIKO_VERSION = "202610161657";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
