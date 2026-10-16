@@ -1452,11 +1452,17 @@
         body.dark-mode .storage-top-bar { background: #2a2a2a; }
         .storage-top-bar i { display: block; height: 100%; background: #94a3b8; }
         .storage-top-v { width: 54px; text-align: right; flex: 0 0 auto; }
-        /* 侧栏「数据管理」入口的容量预警（小圆点，不遮挡内容） */
-        .nav-item.nav-store-warn { color: #b45309; }
-        .nav-item.nav-store-bad { color: #dc2626; background: rgba(239,68,68,.10); }
-        .nav-store-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 6px; vertical-align: middle; background: #f59e0b; }
-        .nav-store-dot.bad { background: #ef4444; }
+        /* 侧栏「数据管理」入口的容量进度条（2026-10-16 方案 A，取代旧小圆点）
+           口径与弹窗「📊 本机存储」一致：<70% 绿 · 70–85% 橙 · ≥85% 红。
+           侧栏宽固定 180px，故全程 nowrap + 省略号兜底，宁可省字也不换行。 */
+        .nav-item#navDataManager { gap: 6px; padding-right: 14px; }
+        .nav-store-txt { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .nav-store-meter { margin-left: auto; width: 24px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.14); overflow: hidden; flex: 0 0 auto; }
+        .nav-store-meter i { display: block; height: 100%; width: 0; border-radius: 3px; background: #10b981; transition: width .4s ease, background .3s ease; }
+        .nav-store-pct { font-size: 9.5px; line-height: 1; width: 22px; text-align: right; flex: 0 0 auto; color: #10b981; font-variant-numeric: tabular-nums; transition: color .3s ease; }
+        /* 告警时文字跟着变色（所有主题的侧栏都是深色底，故用亮色而非旧的 #b45309） */
+        .nav-item.nav-store-warn { color: #f59e0b; }
+        .nav-item.nav-store-bad { color: #ff6b6b; background: rgba(239,68,68,.10); }
 
         /* ===== Cmd+K 全局搜索 ===== */
         #globalSearchModal { align-items: flex-start; padding-top: 12vh; }
@@ -13104,7 +13110,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-title">Settings</div>
             <div class="nav-item" id="navSortToggle" onclick="toggleNavSort()">⇅ 调整板块顺序</div>
             <div class="nav-item" onclick="openColorSettings()">🎨 颜色设置</div>
-            <div class="nav-item" id="navDataManager" onclick="openDataManager()">💾 数据管理</div>
+            <div class="nav-item" id="navDataManager" onclick="openDataManager()" title="本机存储"><span class="nav-store-txt">💾 数据管理</span><span class="nav-store-meter"><i></i></span><span class="nav-store-pct">—</span></div>
             <div class="nav-item" onclick="openPushSettings()" style="background:rgba(245,158,11,.12);color:#b45309;font-weight:600;">📢 推送设置</div>
             <!-- 云同步状态指示器（由云同步模块自动更新） -->
             <div class="sync-indicator" id="syncIndicator" onclick="openDataManager()" title="云同步状态">
@@ -13135,7 +13141,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-more-item" onclick="toggleDarkMode();hideNavMore()">🌙 深色模式</div>
             <div class="nav-more-item" onclick="toggleNikoFullscreen();hideNavMore()">⛶ 全屏模式</div>
             <div class="nav-more-item" onclick="openColorSettings();hideNavMore()">🎨 颜色设置</div>
-            <div class="nav-more-item" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
+            <div class="nav-more-item" id="navMoreDataManager" onclick="openDataManager();hideNavMore()">💾 数据管理</div>
         </div>
         <div class="nmp-group-label">全部板块</div>
         <div class="nmp-grid">
@@ -41288,21 +41294,33 @@ if(typeof window !== 'undefined'){
             return u;
         }
 
-        /* 侧栏入口预警：不新增浮动元素，只在「💾 数据管理」上挂一个小圆点 */
+        /* 侧栏入口预警（2026-10-16 方案 A，取代旧小圆点）：不新增浮动元素，
+           直接在「💾 数据管理」行内画进度条 + 百分比，口径复用 nikoStoreTone()，
+           与弹窗「📊 本机存储」永远同色同值。 */
         function nikoStoreBadge() {
-            const item = document.getElementById('navDataManager');
-            if (!item) return;
             const u = nikoStoreUsage();
-            item.classList.remove('nav-store-warn', 'nav-store-bad');
-            const old = item.querySelector('.nav-store-dot');
-            if (old) old.remove();
-            if (u.pct >= 70) {
-                const bad = u.pct >= 85;
-                item.classList.add(bad ? 'nav-store-bad' : 'nav-store-warn');
-                const dot = document.createElement('span');
-                dot.className = 'nav-store-dot' + (bad ? ' bad' : '');
-                dot.title = '本机存储已用 ' + Math.round(u.pct) + '%';
-                item.appendChild(dot);
+            const tone = nikoStoreTone(u.pct);
+            const pctTxt = Math.round(u.pct) + '%';
+            const tipTxt = '本机存储已用 ' + pctTxt + '（' + nikoFmtChars(u.used) + ' / ' + nikoFmtChars(u.quota) + ' 字符）'
+                + ' · 还能存 ' + nikoFmtChars(Math.max(0, u.quota - u.used)) + '。点击打开数据管理';
+
+            // 桌面侧栏：条 + 数字
+            const item = document.getElementById('navDataManager');
+            if (item) {
+                item.classList.remove('nav-store-warn', 'nav-store-bad');
+                if (tone.cls) item.classList.add('nav-store-' + tone.cls);
+                item.title = tipTxt;
+                const fill = item.querySelector('.nav-store-meter i');
+                if (fill) { fill.style.width = Math.min(100, u.pct).toFixed(1) + '%'; fill.style.background = tone.color; }
+                const pctEl = item.querySelector('.nav-store-pct');
+                if (pctEl) { pctEl.textContent = pctTxt; pctEl.style.color = tone.color; }
+            }
+
+            // 手机「⋯ 更多」入口：双列居中塞不下条，只用文字颜色表达（零布局成本）
+            const more = document.getElementById('navMoreDataManager');
+            if (more) {
+                more.style.color = u.pct >= 85 ? '#ef4444' : (u.pct >= 70 ? '#f59e0b' : '');
+                more.title = tipTxt;
             }
         }
 
@@ -41336,6 +41354,7 @@ if(typeof window !== 'undefined'){
         function openDataManager() {
             document.getElementById('dataManagerModal').classList.add('show');
             renderStorageCheck();
+            nikoStoreBadge();   // 侧栏那条进度条跟弹窗同口径，顺手刷一次
             document.getElementById('exportTaskCount').textContent = dataItemCount('work_calendar_events', []);
             document.getElementById('exportRiskCount').textContent = dataItemCount('work_calendar_risks', []);
             document.getElementById('exportNoteCount').textContent = dataItemCount('niko_inspiration_notes', []);
@@ -43081,7 +43100,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610161533";
+        window.NIKO_VERSION = "202610161635";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
