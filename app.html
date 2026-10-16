@@ -35182,26 +35182,91 @@ function renderDayDetail() {
         return result;
     }
 
+    /* ---------- 快照指纹（2026-10-16 瘦身：全量副本 → 指纹）----------
+       为什么改：快照原先存「上次同步时每个 key 的完整值」，等于把所有数据在本机又存了
+       一遍，还要 × 通道数（github/fs 各一份），JSON 再转义一次比原数据还大 ~15%。
+       但 computeMerge() 对快照**只做相等比较、从不读它的内容** —— 所以存指纹就够。
+       指纹 = 「长度:FNV-1a 32bit」：长度先挡一刀，哈希再细分；同值必同指纹。
+       体积从「全量值」降到「key 名 + 十来字节」，实测降到 1% 以内。 */
+    const SNAPSHOT_V2 = 1;   // 新格式哨兵：老格式是 {key: 原始值}，没有 __fp 字段
+
+    function nikoSnapHash(str) {
+        let h = 2166136261;
+        for (let i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+        }
+        return (h >>> 0).toString(16).padStart(8, '0');
+    }
+    function nikoSnapFp(v) {
+        if (v === null || v === undefined) return null;
+        const s = String(v);
+        return s.length + ':' + nikoSnapHash(s);
+    }
+
+    /* 解析快照原文 → {data: 指纹字典, migrated: 是否本来就是新格式} */
+    function parseSnapshot(raw) {
+        let v;
+        try { v = JSON.parse(raw); } catch (e) { return null; }
+        if (!v || typeof v !== 'object') return null;
+        if (v.__fp === SNAPSHOT_V2) {
+            return { data: (v.k && typeof v.k === 'object') ? v.k : {}, migrated: true };
+        }
+        // 老格式：{key: 原始值字符串} → 现场转指纹
+        const fp = {};
+        Object.keys(v).forEach(k => { const f = nikoSnapFp(v[k]); if (f !== null) fp[k] = f; });
+        return { data: fp, migrated: false };
+    }
+
+    /* 「值字典」→「指纹字典」 */
+    function toFpDict(data) {
+        const fp = {};
+        Object.keys(data || {}).forEach(k => { const f = nikoSnapFp(data[k]); if (f !== null) fp[k] = f; });
+        return fp;
+    }
+    /* 已经是指纹字典 → 直接落盘。
+       ⚠️ 迁移路径必须走这里，不能走 writeSnapshot —— 否则会把「指纹字符串」再当值算一次
+       指纹，存成「指纹的指纹」，二次读取就与原值对不上（本轮门禁就是这么抓出来的）。 */
+    function writeFpDict(fp, channel) {
+        try {
+            localStorage.setItem('niko_sync_local_snapshot__' + (channel || 'fs'),
+                JSON.stringify({ __fp: SNAPSHOT_V2, k: fp || {} }));
+        } catch (e) {}
+    }
+    /* 写快照的唯一入口：入参永远是「值」，内部负责转指纹 */
+    function writeSnapshot(data, channel) {
+        writeFpDict(toFpDict(data), channel);
+    }
+
     function loadSnapshot(channel) {
         // 快照按通道隔离：坚果云(fs) 与 GitHub 各自记录"上次同步时本地长什么样"。
         // 若共用一份快照，先同步的通道会把快照刷成最新，后同步的通道就会误判
         // "本地没改、云端改了"，把云端旧数据拉回来覆盖本地（GitHub 永远显示已是最新）。
+        // 2026-10-16 起只存指纹；读到老格式（全量值）就现场转指纹**并顺手回写**，
+        // 迁移只发生一次，之后那份占用立刻降下来。
         const ch = channel || 'fs';
         const raw = localStorage.getItem('niko_sync_local_snapshot__' + ch);
         if (raw !== null) {
-            try { const v = JSON.parse(raw); return v || {}; } catch (e) { return {}; }
+            const o = parseSnapshot(raw);
+            if (o) {
+                if (!o.migrated) writeFpDict(o.data, ch);   // 老格式 → 回写成新格式（o.data 已是指纹）
+                return o.data;
+            }
+            return {};
         }
         // 迁移：旧版共用快照 → 作为该通道的初始快照（仅首次）
         const legacy = localStorage.getItem('niko_sync_local_snapshot');
         if (legacy) {
-            try { const v = JSON.parse(legacy); return v || {}; } catch (e) {}
+            const o = parseSnapshot(legacy);
+            if (o) {
+                writeFpDict(o.data, ch);
+                return o.data;
+            }
         }
         return {};
     }
     function saveSnapshot(data, channel) {
-        try {
-            localStorage.setItem('niko_sync_local_snapshot__' + (channel || 'fs'), JSON.stringify(data));
-        } catch (e) {}
+        writeSnapshot(data, channel);
     }
 
     /* ---------- 设备 ID ---------- */
@@ -35448,7 +35513,8 @@ function renderDayDetail() {
     function channelName(ch) { return ch === 'github' ? '🌐 GitHub' : '📁 坚果云'; }
 
     /* ---------- 三方合并计算 ---------- */
-    // local: {key: str}  snapshot: {key: str}  remoteKeys: {key: {value, updatedAt}}
+    // local: {key: 原始值}  snapshot: {key: 指纹}  remoteKeys: {key: {value, updatedAt}}
+    // （snapshot 自 2026-10-16 起存指纹，见 nikoSnapFp；比对时 lv/rv 现场转指纹）
     // 合并前统一剔除 EXCLUDE_KEYS（本地已排除，但云端旧文件 / 旧快照可能还带着状态 key，避免被拉回）
     function computeMerge(local, snapshot, remoteKeys) {
         const clean = (obj) => {
@@ -35474,12 +35540,13 @@ function renderDayDetail() {
 
         for (const key of allKeys) {
             const lv = (key in local) ? local[key] : null;
-            const sv = (key in snapshot) ? snapshot[key] : null;
+            const sv = (key in snapshot) ? snapshot[key] : null;   // ← 指纹，不是原始值
             const rv = (remoteKeys && remoteKeys[key]) ? remoteKeys[key].value : null;
 
-            if (lv === rv) { nothing.push(key); continue; }
-            const localChanged = lv !== sv;
-            const remoteChanged = rv !== sv;
+            if (lv === rv) { nothing.push(key); continue; }   // 值相同直接跳过（不依赖指纹，避免哈希碰撞误判）
+            // 与快照比时必须同口径：lv/rv 是原始值，先转指纹再比（2026-10-16 快照瘦身）
+            const localChanged = nikoSnapFp(lv) !== sv;
+            const remoteChanged = nikoSnapFp(rv) !== sv;
 
             if (localChanged && remoteChanged) conflict.push(key);
             else if (localChanged) push.push(key);
@@ -43100,7 +43167,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610161635";
+        window.NIKO_VERSION = "202610161651";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
