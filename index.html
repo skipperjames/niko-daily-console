@@ -1424,6 +1424,39 @@
             pointer-events: none;
         }
         .niko-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        /* 存储告警用的宽版 toast（长句子不挤成一条），别改基础 .niko-toast，其它板块在共用 */
+        .niko-toast.store-alert { max-width: min(560px, 88vw); white-space: normal; line-height: 1.55; text-align: center; }
+
+        /* ===== 本机存储体检 + 容量预警（2026-10-16）===== */
+        .storage-check { background: #fafafa; border: 1px solid #eee; border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+        body.dark-mode .storage-check { background: #1a1a1a; border-color: #2a2a2a; }
+        .storage-check-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+        .storage-check-head h4 { margin: 0; font-size: 13px; }
+        .storage-check-pct { margin-left: auto; font-size: 13px; font-weight: 600; color: #10b981; }
+        .storage-check-bar { height: 6px; border-radius: 3px; background: #e8e8e8; overflow: hidden; }
+        body.dark-mode .storage-check-bar { background: #2a2a2a; }
+        .storage-check-fill { display: block; height: 100%; width: 0; border-radius: 3px; background: #10b981; transition: width .4s ease, background .3s ease; }
+        .storage-check-nums { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: #888; margin-top: 7px; }
+        .storage-check-nums b { color: #333; font-weight: 600; }
+        body.dark-mode .storage-check-nums { color: #777; }
+        body.dark-mode .storage-check-nums b { color: #ddd; }
+        .storage-check-note { font-size: 11.5px; line-height: 1.6; margin-top: 8px; color: #888; }
+        .storage-check-note.warn { color: #b45309; }
+        .storage-check-note.bad { color: #dc2626; }
+        .storage-check-top { margin-top: 9px; border-top: 1px dashed #e5e5e5; padding-top: 7px; }
+        body.dark-mode .storage-check-top { border-top-color: #2a2a2a; }
+        .storage-top-row { display: flex; align-items: center; gap: 8px; font-size: 11.5px; line-height: 1.95; color: #666; }
+        body.dark-mode .storage-top-row { color: #999; }
+        .storage-top-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, Menlo, Consolas, monospace; }
+        .storage-top-bar { width: 64px; height: 4px; border-radius: 2px; background: #e8e8e8; flex: 0 0 auto; overflow: hidden; }
+        body.dark-mode .storage-top-bar { background: #2a2a2a; }
+        .storage-top-bar i { display: block; height: 100%; background: #94a3b8; }
+        .storage-top-v { width: 54px; text-align: right; flex: 0 0 auto; }
+        /* 侧栏「数据管理」入口的容量预警（小圆点，不遮挡内容） */
+        .nav-item.nav-store-warn { color: #b45309; }
+        .nav-item.nav-store-bad { color: #dc2626; background: rgba(239,68,68,.10); }
+        .nav-store-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-left: 6px; vertical-align: middle; background: #f59e0b; }
+        .nav-store-dot.bad { background: #ef4444; }
 
         /* ===== Cmd+K 全局搜索 ===== */
         #globalSearchModal { align-items: flex-start; padding-top: 12vh; }
@@ -13071,7 +13104,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-title">Settings</div>
             <div class="nav-item" id="navSortToggle" onclick="toggleNavSort()">⇅ 调整板块顺序</div>
             <div class="nav-item" onclick="openColorSettings()">🎨 颜色设置</div>
-            <div class="nav-item" onclick="openDataManager()">💾 数据管理</div>
+            <div class="nav-item" id="navDataManager" onclick="openDataManager()">💾 数据管理</div>
             <div class="nav-item" onclick="openPushSettings()" style="background:rgba(245,158,11,.12);color:#b45309;font-weight:600;">📢 推送设置</div>
             <!-- 云同步状态指示器（由云同步模块自动更新） -->
             <div class="sync-indicator" id="syncIndicator" onclick="openDataManager()" title="云同步状态">
@@ -15175,6 +15208,22 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="modal" style="width:460px;">
             <h3>💾 数据管理</h3>
 
+            <!-- 本机存储体检（2026-10-16）：用量 / 上限 / 还能存多少 + 最占地方的几个键 -->
+            <div class="storage-check" id="storageCheck">
+                <div class="storage-check-head">
+                    <h4>📊 本机存储</h4>
+                    <span class="storage-check-pct" id="storageCheckPct">—</span>
+                </div>
+                <div class="storage-check-bar"><i class="storage-check-fill" id="storageCheckFill"></i></div>
+                <div class="storage-check-nums">
+                    <span>已用 <b id="storageCheckUsed">—</b></span>
+                    <span>上限 <b id="storageCheckQuota">—</b></span>
+                    <span>还能存 <b id="storageCheckLeft">—</b></span>
+                </div>
+                <div class="storage-check-note" id="storageCheckNote"></div>
+                <div class="storage-check-top" id="storageCheckTop" style="display:none;"></div>
+            </div>
+
             <div class="data-action-card">
                 <h4>📤 导出所有数据</h4>
                 <p>任务、风险、便签、日记、读书、习惯、番茄记录、竞品、买量节点、热点收藏/已读、梗库、文案库、广告情报、AI 工具、颜色与偏好 — 一键打包 JSON 备份，防清缓存丢失。</p>
@@ -15609,6 +15658,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                     } catch (e2) {}
                 } catch (e) {
                     console.warn(`保存 ${key} 失败:`, e.message);
+                    // 2026-10-16：写爆配额时**绝不静默** —— 旧版这里只 console.warn，
+                    // 界面照常刷新、用户以为存上了，实际那条根本没落盘（事后无从追查）。
+                    // 现在广播一个事件，由下方「存储体检」模块接住并给出可见提示。
+                    try {
+                        window.dispatchEvent(new CustomEvent('niko:storage-write-fail', {
+                            detail: {
+                                key: key,
+                                name: (e && e.name) || '',
+                                message: (e && e.message) || ''
+                            }
+                        }));
+                    } catch (e2) {}
                 }
             }
         };
@@ -35200,6 +35261,22 @@ function renderDayDetail() {
             if (res.status === 404) return null; // 文件不存在 → 首次同步
             if (!res.ok) throw new Error(`GitHub API ${res.status}`);
             const data = await res.json();
+            // 2026-10-16：Contents API 对 **>1MB 的文件不返回 content**（encoding:"none" + content:""），
+            // 旧代码拿到空串就直接 JSON.parse → 返回 null → 上游当成「首次同步将全量上传」，
+            // 表现是「快照一超 1MB，云同步就静默失效」（不报错、同步灯照常）。
+            // 这里按团队看板 team.js（uep-squad-board 仓）已验证的既有做法补 raw 兜底：
+            // 有 sha 说明文件一定存在，改用 raw media type 把原文取回来。
+            if (!data.content && data.sha) {
+                const raw = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${state.ghToken}`,
+                        'Accept': 'application/vnd.github.raw+json'
+                    }
+                });
+                if (!raw.ok) throw new Error(`GitHub raw ${raw.status}`);
+                const rawText = await raw.text();
+                return rawText ? JSON.parse(rawText) : null;
+            }
             const content = b64ToUtf8(data.content);
             return content ? JSON.parse(content) : null;
         } catch (e) {
@@ -41141,8 +41218,124 @@ if(typeof window !== 'undefined'){
             return 0;
         }
 
+        /* ===== 本机存储体检 + 容量预警（2026-10-16）=====
+           上限口径 5242880 个字符 —— 2026-10-16 用无头 Chrome 对该 origin 灌数据直到
+           QuotaExceededError 实测得出的（UTF-16 code unit，中英文等重，汉字不额外罚分）。
+           注意：云端快照另有独立的 1MB 硬线（GitHub Contents API 的行为），与本卡阈值无关。 */
+        const NIKO_STORE_QUOTA = 5242880;
+
+        function nikoStoreUsage() {
+            const out = { used: 0, quota: NIKO_STORE_QUOTA, pct: 0, rows: [] };
+            try {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (!k) continue;
+                    const v = localStorage.getItem(k) || '';
+                    const n = k.length + v.length;
+                    out.used += n;
+                    out.rows.push({ key: k, chars: n });
+                }
+            } catch (e) {}
+            out.rows.sort((a, b) => b.chars - a.chars);
+            out.pct = out.quota ? (out.used / out.quota * 100) : 0;
+            return out;
+        }
+
+        function nikoFmtChars(n) {
+            n = Math.max(0, Math.round(n));
+            return n >= 10000 ? (n / 10000).toFixed(1) + ' 万' : String(n);
+        }
+
+        function nikoStoreTone(pct) {
+            if (pct >= 85) return { color: '#ef4444', cls: 'bad', note: '⚠️ 快满了。先点下面「下载备份文件」留档，再清理旧年份的任务 / 打卡记录 / 日记。满了之后写入会失败。' };
+            if (pct >= 70) return { color: '#f59e0b', cls: 'warn', note: '用量偏高，建议顺手导一份备份（零成本）。' };
+            return { color: '#10b981', cls: '', note: '宽裕。按目前的记录节奏，短期内不用管。' };
+        }
+
+        function renderStorageCheck() {
+            const u = nikoStoreUsage();
+            const pctEl = document.getElementById('storageCheckPct');
+            if (!pctEl) return u;
+            const tone = nikoStoreTone(u.pct);
+            pctEl.textContent = Math.round(u.pct) + '%';
+            pctEl.style.color = tone.color;
+            const fill = document.getElementById('storageCheckFill');
+            if (fill) { fill.style.width = Math.min(100, u.pct).toFixed(1) + '%'; fill.style.background = tone.color; }
+            const qEl = document.getElementById('storageCheckQuota');
+            if (qEl) qEl.textContent = nikoFmtChars(u.quota) + ' 字符';
+            const usedEl = document.getElementById('storageCheckUsed');
+            if (usedEl) usedEl.textContent = nikoFmtChars(u.used);
+            const leftEl = document.getElementById('storageCheckLeft');
+            if (leftEl) leftEl.textContent = nikoFmtChars(u.quota - u.used);
+            const noteEl = document.getElementById('storageCheckNote');
+            if (noteEl) { noteEl.textContent = tone.note; noteEl.className = 'storage-check-note ' + tone.cls; }
+            const topEl = document.getElementById('storageCheckTop');
+            if (topEl) {
+                const top = u.rows.slice(0, 5).filter(x => x.chars > 0);
+                if (top.length) {
+                    const max = top[0].chars || 1;
+                    topEl.innerHTML = top.map(x =>
+                        '<div class="storage-top-row">' +
+                        '<span class="storage-top-name">' + escapeHtml(x.key) + '</span>' +
+                        '<span class="storage-top-bar"><i style="width:' + Math.max(2, Math.round(x.chars / max * 100)) + '%"></i></span>' +
+                        '<span class="storage-top-v">' + nikoFmtChars(x.chars) + '</span>' +
+                        '</div>').join('');
+                    topEl.style.display = '';
+                } else {
+                    topEl.style.display = 'none';
+                }
+            }
+            return u;
+        }
+
+        /* 侧栏入口预警：不新增浮动元素，只在「💾 数据管理」上挂一个小圆点 */
+        function nikoStoreBadge() {
+            const item = document.getElementById('navDataManager');
+            if (!item) return;
+            const u = nikoStoreUsage();
+            item.classList.remove('nav-store-warn', 'nav-store-bad');
+            const old = item.querySelector('.nav-store-dot');
+            if (old) old.remove();
+            if (u.pct >= 70) {
+                const bad = u.pct >= 85;
+                item.classList.add(bad ? 'nav-store-bad' : 'nav-store-warn');
+                const dot = document.createElement('span');
+                dot.className = 'nav-store-dot' + (bad ? ' bad' : '');
+                dot.title = '本机存储已用 ' + Math.round(u.pct) + '%';
+                item.appendChild(dot);
+            }
+        }
+
+        function nikoStoreAlert(msg) {
+            try {
+                document.querySelectorAll('.niko-toast').forEach(t => t.remove());
+                const t = document.createElement('div');
+                t.className = 'niko-toast store-alert';
+                t.textContent = msg;
+                document.body.appendChild(t);
+                setTimeout(() => t.classList.add('show'), 10);
+                setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 350); }, 6000);
+            } catch (e) {}
+        }
+
+        /* 写入失败 → 让用户当场看见（旧版是静默的，只有 console.warn） */
+        window.addEventListener('niko:storage-write-fail', function (e) {
+            const d = (e && e.detail) || {};
+            const isQuota = /quota|exceed/i.test(String(d.name || '') + ' ' + String(d.message || ''));
+            nikoStoreAlert(isQuota
+                ? '⚠️ 本机存储已满，「' + d.key + '」这次没存上。去「💾 数据管理」导出备份后清理旧数据，再重试。'
+                : '⚠️ 「' + d.key + '」保存失败，改动可能没落盘：' + (d.message || ''));
+            nikoStoreBadge();
+            const dlg = document.getElementById('dataManagerModal');
+            if (dlg && dlg.classList.contains('show')) renderStorageCheck();
+        });
+
+        /* 启动时先挂一次预警标记（侧栏是静态 DOM，脚本跑到这儿已存在） */
+        try { nikoStoreBadge(); setTimeout(nikoStoreBadge, 1500); } catch (e) {}
+
         function openDataManager() {
             document.getElementById('dataManagerModal').classList.add('show');
+            renderStorageCheck();
             document.getElementById('exportTaskCount').textContent = dataItemCount('work_calendar_events', []);
             document.getElementById('exportRiskCount').textContent = dataItemCount('work_calendar_risks', []);
             document.getElementById('exportNoteCount').textContent = dataItemCount('niko_inspiration_notes', []);
@@ -42888,7 +43081,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610151613";
+        window.NIKO_VERSION = "202610161533";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
