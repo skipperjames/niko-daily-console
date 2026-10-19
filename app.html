@@ -34786,7 +34786,9 @@ function renderDayDetail() {
         // 2026-10-13 团队看板「我是谁」+ 自定义显示名 —— 纯设备本地状态
         // （A 机器选了「月饼」，云同步不许把 B 机器也改成月饼）
         'niko_team_me',
-        'niko_team_roles'
+        'niko_team_roles',
+        // 2026-10-19 团队看板「提醒语气」三档 —— 每人自己觉得多催，纯设备本地偏好
+        'niko_team_tone'
     ];
     const SYNC_FILE = 'niko_data.json';
     const DEFAULT_SYNC_INTERVAL_SEC = 120; // 默认 2 分钟同步一次
@@ -40758,7 +40760,7 @@ if(typeof window !== 'undefined'){
      整段 IIFE 隔离：所有 part 的 JS 共处同一个 script 作用域，裸名会互相覆盖。
      ============================================================ */
   var W = window;
-  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js?v=290';   // v2.9.0-20261019：@ 成员选择器 / 讨论名字上色 / 负责人多选 / 成员名跟数据走（带版本号绕开 CDN/浏览器缓存）
+  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js?v=300';   // v2.10.0-20261019：排期语气三档（默认柔和，不再满屏红字催人）（带版本号绕开 CDN/浏览器缓存）
   var board = null;      // window.NikoTeam 的引用（接一次就不再接）
 
   function el(id) { return document.getElementById(id); }
@@ -43199,7 +43201,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610191021";
+        window.NIKO_VERSION = "202610191051";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
