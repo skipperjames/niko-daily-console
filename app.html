@@ -9606,6 +9606,10 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-detail-text.paper-cream { background: #37301f; color: #d9cba4; }
         body.dark-mode .nb-detail-text.paper-gray { background: #2a2a30; color: #c5c5cc; }
         body.dark-mode .nb-detail-text.paper-dark { background: #17171d; color: #a8a8b6; }
+        /* 2026-10-19 默认纸色「跟标签自动配色」：纸底由 JS 按标签主色混出来（浅色 9% / 深色 16%），
+           两套色都算好塞进 CSS 变量，切主题时自动跟着变，不用重渲染。 */
+        .nb-detail-text.paper-tag { background: var(--nb-paper-bg, #fbf6ea); color: #2b2b3a; border-radius: 10px; padding: 14px 16px; }
+        body.dark-mode .nb-detail-text.paper-tag { background: var(--nb-paper-bg-dark, #23232b); color: #e3e1ef; }
 
         /* ============================================================
                v2.12 墙的呼吸系统：晨读三张 / 复习模式 / 寂寂角
@@ -10187,6 +10191,23 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-detail-modal .capsule-badge { flex: 0 0 auto; align-self: flex-start; margin: 8px 26px 0; }
         .nb-detail-modal .nb-paper-row { flex: 0 0 auto; padding: 0 26px; margin: 7px 0 3px; }
 
+        /* ===== 2026-10-19 双栏阅读（全屏下生效 · 自动 / 单栏 / 双栏 三态） ===== */
+        .nb-detail-cols { display: none; margin-left: 4px; width: 34px; height: 34px; flex: 0 0 auto; border: 1px solid #e5e2dc; background: #faf9f6; border-radius: 9px; cursor: pointer; color: #555; font-size: 15px; line-height: 1; align-items: center; justify-content: center; }
+        body.dark-mode .nb-detail-cols { background: #26263a; border-color: #3a3a4d; color: #c9c6d8; }
+        .nb-detail-modal.nb-wide .nb-detail-cols { display: flex; }
+        .nb-detail-cols.auto { border-style: dashed; opacity: .8; }
+        .nb-detail-cols.on2 { border-color: rgba(102,126,234,.55); color: #667eea; }
+        /* 双栏时纸面铺满整屏（不再是中间一条纸），两栏平分宽度。
+           ⚠️ nb-cols2 是加在正文元素自己身上的（不是卡片），选择器必须写成后代＋自身双类。 */
+        .nb-detail-modal.nb-wide .nb-detail-text.nb-cols2 { display: flex; flex-direction: column; overflow: hidden; background-clip: border-box !important; padding-left: max(24px, 4vw); padding-right: max(24px, 4vw); }
+        .nb-read-cols { flex: 1 1 auto; min-height: 0; display: flex; align-items: stretch; gap: 40px; }
+        .nb-read-col { flex: 1 1 0; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+        .nb-read-col > *:first-child { margin-top: 0 !important; }
+        .nb-read-col > *:last-child { margin-bottom: 0 !important; }
+        /* 纸色行第一个「A」= 跟标签自动配色 */
+        .nb-paper-dot.auto { position: relative; }
+        .nb-paper-dot.auto::after { content: 'A'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.45); }
+
         @media (max-width: 768px) {
             /* 手机端操作按钮常显 + 热区达标（铁律误触治理：≥32px） */
             .nb-card-actions { opacity: 1; }
@@ -10202,6 +10223,8 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
             .nb-detail-nav { display: none; }
             /* 手机上卡片本来就是 88vh 铺底，全屏按钮没有意义 → 不显示 */
             .nb-detail-wide { display: none; }
+            /* 手机屏幕窄，双栏每栏不到 180px，不做 */
+            .nb-detail-cols { display: none !important; }
         }
 
 /* ===== 读书看板专属CSS ===== */
@@ -31933,12 +31956,13 @@ function renderDayDetail() {
                     ${n.pinned ? '<span class="nb-detail-pin">📌 置顶</span>' : ''}
                     ${dIdx >= 0 && dTotal > 1 ? `<span class="nb-detail-idx">${dIdx + 1} / ${dTotal}</span>` : ''}
                     ${backTxt ? `<span class="nb-detail-flip" onclick="nbDetailFlip('${id}')" title="正面 = 扫（一眼看懂）；背面 = 用（逻辑 / 调用 / 坑）">${showBack ? '↻ 看正面' : '↻ 看背面'}</span>` : ''}
+                    <button class="nb-detail-cols ${nbCols === 'auto' ? 'auto' : ''} ${nbCols === '2' ? 'on2' : ''}" onclick="nbToggleCols()" title="版面：自动 / 单栏 / 双栏（全屏下生效，长文默认自动双栏）">${nbColsIcon()}</button>
                     <button class="nb-detail-wide" onclick="nbToggleWide()" title="${nbWide ? '还原阅读宽版' : '全屏阅读（长文用）'}">${nbWide ? '⤡' : '⛶'}</button>
                     <button class="nb-detail-close" onclick="closeNbDetail()" title="关闭">✕</button>
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
-                <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot cream ${nbPaper === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaper === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaper === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaper === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaper === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
-                <div class="nb-detail-text nb-md ${nbPaperClass()}"><div class="nb-md-inner">${nbEdMd(showBack ? backTxt : n.content)}</div></div>
+                <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot auto ${nbPaperFor(n) === 'tag' ? 'active' : ''}" style="background:${tag.chipBg};" onclick="nbSetPaper('tag')" title="跟标签自动配色（默认 · 换标签纸色跟着变）"></button><button class="nb-paper-dot cream ${nbPaperFor(n) === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaperFor(n) === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaperFor(n) === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaperFor(n) === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaperFor(n) === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
+                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${nbEdMd(showBack ? backTxt : n.content)}</div></div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
@@ -31958,6 +31982,7 @@ function renderDayDetail() {
             if (mBox) { mBox.classList.toggle('nb-wide', nbWide); mBox.scrollTop = 0; }
             const tBox = document.querySelector('#nbDetailModal .nb-detail-text');
             if (tBox) tBox.scrollTop = 0;   // 单滚动：正文自己的滚动位置也要归零（翻下一张回顶部）
+            setTimeout(nbBuildCols, 30);    // 双栏排版：等布局稳定后再量高度
         }
         function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; nbDetailSide = 'front'; }
         // 2026-10-19：⛶ 全屏阅读 / ⤡ 还原。全屏 = 铺满视口 + 正文 46 字读宽
@@ -32544,21 +32569,128 @@ function renderDayDetail() {
             document.body.classList.add('nb-season-' + s);
         })();
 
-        // ===== v2.22 详情页护眼纸色：米黄 / 浅灰 / 深，选择持久化 =====
-        let nbPaper = safeStorage.get('niko_nb_paper', 'cream');
-        function nbPaperClass() {
-            // 2026-10-12 #140：米黄 / 浅灰 / 深色 / 蓝图网格 / 格子纸
-            return nbPaper === 'gray' ? 'paper-gray'
-                 : nbPaper === 'dark' ? 'paper-dark'
-                 : nbPaper === 'grid' ? 'paper-grid'
-                 : nbPaper === 'blue' ? 'paper-blue'
+        // ===== v2.22 详情页护眼纸色 =====
+        // 2026-10-19 用户拍板：默认纸色改成「跟标签自动配色」——打开哪张便签，纸面就是这个标签的色系
+        //   （与便签墙卡片左边的色条同源）。优先级：单张记忆 n.paper → 全局默认 nbPaper → 米黄。
+        let nbPaper = safeStorage.get('niko_nb_paper', 'tag');   // 全局默认档；'tag' = 跟标签
+        function nbPaperFor(n) {
+            if (n && n.paper) return n.paper;
+            return (nbPaper === 'tag') ? 'tag' : nbPaper;
+        }
+        function nbPaperClass(n) {
+            // 2026-10-12 #140：米黄 / 浅灰 / 深色 / 蓝图网格 / 格子纸；2026-10-19 新增 paper-tag
+            const v = nbPaperFor(n);
+            return v === 'gray' ? 'paper-gray'
+                 : v === 'dark' ? 'paper-dark'
+                 : v === 'grid' ? 'paper-grid'
+                 : v === 'blue' ? 'paper-blue'
+                 : v === 'tag'  ? 'paper-tag'
                  : 'paper-cream';
         }
+        /* 标签主色 + 纸底色 混出柔和纸面（浅色混白 / 深色混黑） */
+        function nbMix(hex, dark, ratio) {
+            const h = String(hex || '#888888').replace('#', '');
+            const r = parseInt(h.slice(0, 2), 16) || 0;
+            const g = parseInt(h.slice(2, 4), 16) || 0;
+            const b = parseInt(h.slice(4, 6), 16) || 0;
+            const base = dark ? [26, 26, 32] : [255, 253, 248];
+            const f = (c, t) => Math.round(c * ratio + t * (1 - ratio));
+            const x = v => Math.max(0, Math.min(255, v)).toString(16).padStart(2, '0');
+            return '#' + x(f(r, base[0])) + x(f(g, base[1])) + x(f(b, base[2]));
+        }
+        function nbPaperStyle(n) {
+            if (nbPaperFor(n) !== 'tag') return '';
+            const d = noteTagDict();
+            const tag = (n && d[n.tag]) || d.other || { chipBg: '#10b981' };
+            // 浅色 / 深色两套都算好塞进变量 → 切主题时 CSS 自己换色，不用重渲染
+            return `--nb-paper-bg:${nbMix(tag.chipBg, false, 0.09)};--nb-paper-bg-dark:${nbMix(tag.chipBg, true, 0.17)};`;
+        }
         function nbSetPaper(v) {
-            nbPaper = v;
-            safeStorage.set('niko_nb_paper', v);
+            const n = notes.find(x => x.id === nbDetailId);
+            if (n) {                                  // 单张记忆：只改这一张，不动全局默认
+                n.paper = v;                          // 'tag' = 这张明确跟标签（区别于「没选过 → 走全局默认」）
+                saveNotes();
+            } else {
+                nbPaper = v; safeStorage.set('niko_nb_paper', v);
+            }
             if (nbDetailId) openNbDetail(nbDetailId, true);   // 详情开着就即时换纸（不计数）
         }
+
+        // ===== 2026-10-19 双栏阅读：全屏下生效，自动（长文）/ 单栏 / 双栏 三态 =====
+        let nbCols = safeStorage.get('niko_nb_cols', 'auto');
+        function nbColsIcon() { return nbCols === '1' ? '▤' : '▥'; }
+        function nbToggleCols() {
+            nbCols = nbCols === 'auto' ? '1' : (nbCols === '1' ? '2' : 'auto');
+            safeStorage.set('niko_nb_cols', nbCols);
+            if (nbDetailId) openNbDetail(nbDetailId, true);
+            const btn = document.querySelector('#nbDetailModal .nb-detail-cols');
+            if (btn) { btn.classList.toggle('auto', nbCols === 'auto'); btn.classList.toggle('on2', nbCols === '2'); }
+            showToast(nbCols === 'auto' ? '▥ 版面：自动（长文才双栏）' : (nbCols === '1' ? '▤ 版面：单栏' : '▥ 版面：双栏'));
+        }
+        function nbBuildCols() {
+            const box = document.querySelector('#nbDetailModal .nb-detail-text');
+            if (!box) return;
+
+            // ① 先还原成单栏：把两栏的节点按顺序搬回一个 .nb-md-inner
+            const wrapOld = box.querySelector('.nb-read-cols');
+            if (wrapOld) {
+                const fresh = document.createElement('div');
+                fresh.className = 'nb-md-inner';
+                wrapOld.querySelectorAll('.nb-read-col').forEach(c => { while (c.firstChild) fresh.appendChild(c.firstChild); });
+                wrapOld.remove();
+                box.appendChild(fresh);
+            }
+            box.classList.remove('nb-cols2');
+            const inner = box.querySelector('.nb-md-inner');
+            if (!inner) return;
+
+            // ② 只在全屏分栏：780 宽版两栏各不到 350px，纯属自虐
+            if (!nbWide) return;
+            const kids = Array.from(inner.children);
+            if (kids.length < 6) return;                        // 段落太少，分栏没意义
+
+            const viewH = box.clientHeight;
+            const fullH = inner.scrollHeight;
+            const isLong = fullH > viewH * 1.8;                  // 「长文」= 单栏要滚近两屏
+            const want = nbCols === '2' ? true : (nbCols === '1' ? false : isLong);
+            if (!want) return;
+
+            // ③ 按块高度对半切（不切开段落内部，只在块边界切）
+            let acc = 0, cut = kids.length;
+            for (let i = 0; i < kids.length; i++) {
+                const h = kids[i].getBoundingClientRect().height + 10;
+                if (acc + h > fullH / 2 && i > 0) { cut = i; break; }
+                acc += h;
+            }
+            if (cut >= kids.length) cut = Math.ceil(kids.length / 2);
+
+            const wrap = document.createElement('div'); wrap.className = 'nb-read-cols';
+            const Lc = document.createElement('div'); Lc.className = 'nb-read-col';
+            const Rc = document.createElement('div'); Rc.className = 'nb-read-col';
+            kids.forEach((el, i) => (i < cut ? Lc : Rc).appendChild(el));
+            wrap.appendChild(Lc); wrap.appendChild(Rc);
+            inner.remove();
+            box.classList.add('nb-cols2');
+            box.appendChild(wrap);
+            Lc.scrollTop = 0; Rc.scrollTop = 0;
+
+            // ④ 滚轮接管：左栏滚到底继续往下 = 自动进右栏；右栏到顶继续往上 = 回左栏
+            const handoff = (from, to, forward) => {
+                from.addEventListener('wheel', (e) => {
+                    const atEnd = from.scrollTop + from.clientHeight >= from.scrollHeight - 2;
+                    const atTop = from.scrollTop <= 0;
+                    if (forward && e.deltaY > 0 && atEnd) { e.preventDefault(); to.scrollTop += e.deltaY; }
+                    else if (!forward && e.deltaY < 0 && atTop) { e.preventDefault(); to.scrollTop += e.deltaY; }
+                }, { passive: false });
+            };
+            handoff(Lc, Rc, true);
+            handoff(Rc, Lc, false);
+        }
+        // 窗口尺寸变了要重排（分栏宽度依赖视口）
+        window.addEventListener('resize', () => {
+            clearTimeout(window.__nbColsT);
+            window.__nbColsT = setTimeout(() => { if (nbDetailId && nbWide) nbBuildCols(); }, 220);
+        });
 
         // ===== v2.22 骰子模式：随手摇一张旧便签（娱乐+回访，摇到即算翻过） =====
         let nbDiceLast = null;
@@ -34848,7 +34980,9 @@ function renderDayDetail() {
     // 2026-10-19 团队看板「提醒语气」三档 —— 每人自己觉得多催，纯设备本地偏好
     'niko_team_tone',
     // 2026-10-19 便签浏览卡片「阅读宽版 / 全屏」偏好 —— ② 显示偏好，跟屏幕尺寸绑定，同步过去会让另一台莫名全屏
-    'niko_nb_readmode'
+    'niko_nb_readmode',
+    // 2026-10-19 便签浏览卡片「单栏 / 双栏」版面偏好 —— ② 同上，屏幕宽度决定能不能双栏
+    'niko_nb_cols'
 ];
     const SYNC_FILE = 'niko_data.json';
     const DEFAULT_SYNC_INTERVAL_SEC = 120; // 默认 2 分钟同步一次
@@ -43261,7 +43395,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610191232";
+        window.NIKO_VERSION = "202610191301";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
