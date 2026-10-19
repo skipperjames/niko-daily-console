@@ -40758,7 +40758,7 @@ if(typeof window !== 'undefined'){
      整段 IIFE 隔离：所有 part 的 JS 共处同一个 script 作用域，裸名会互相覆盖。
      ============================================================ */
   var W = window;
-  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js';
+  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js?v=280';   // v2.8.0-20261019：统一看板 + 主要软件 AI 制作（带版本号绕开 CDN/浏览器缓存）
   var board = null;      // window.NikoTeam 的引用（接一次就不再接）
 
   function el(id) { return document.getElementById(id); }
@@ -43197,7 +43197,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610161657";
+        window.NIKO_VERSION = "202610190957";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
