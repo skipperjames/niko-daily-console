@@ -11911,6 +11911,17 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .hpv-vtb ul li:before{content:'·';position:absolute;left:1px;color:var(--ok);font-weight:800}
 .hpv-scroll{overflow-x:auto}
 .hpv-fwrap{padding:11px 13px 13px}
+/* 2026-10-20 · 病历粘贴自动填（把纸质/电子病历原文粘进来 → 拆成下面的格子） */
+.hpv-fpaste{margin-bottom:9px;border:1px dashed var(--card-border);border-radius:9px;padding:8px 9px;background:var(--card-bg-2,transparent)}
+.hpv-fpaste textarea{width:100%;min-height:56px;resize:vertical;box-sizing:border-box;border:1px solid var(--card-border);
+  border-radius:8px;background:transparent;color:var(--text);font-size:13px;line-height:1.62;padding:7px 9px;
+  font-family:inherit;outline:none}
+.hpv-fpaste textarea:focus{border-color:var(--ok)}
+.hpv-fpaste-bar{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.hpv-fpaste-bar button{height:30px;padding:0 13px;border-radius:8px;border:1px solid var(--card-border);
+  background:transparent;color:var(--text);font-size:12.5px;cursor:pointer;transition:.15s}
+.hpv-fpaste-bar button:hover{border-color:var(--ok);color:var(--ok)}
+.hpv-fpaste-bar span{font-size:11.5px;color:var(--muted);line-height:1.5}
 .hpv-fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(142px,1fr));gap:8px}
 .hpv-fld{display:flex;flex-direction:column;gap:3px;min-width:0}
 .hpv-fld.wide{grid-column:1/-1;margin-top:8px}
@@ -40471,6 +40482,12 @@ var HP_INIT = false;
 function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
+  /* 2026-10-20 修：10-14 收敛成「只剩身体地图 + 看病记录」时，p-today/p-doc 删掉了，
+     但 p-map 的 .on 没补；renderHealthPage 又只调 renderTabs()、不调 pvTab() →
+     面板永远 display:none，打开健康档案整页全空（用户截图实锤）。
+     这里每次进页面都补一次，pvTab 点击时同样会补。 */
+  var _pmap = document.getElementById('p-map');
+  if (_pmap && !_pmap.classList.contains('on')) _pmap.classList.add('on');
   if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
   /* 2026-10-14：只画「身体地图 + 看病记录」 */
   try {
@@ -40557,6 +40574,8 @@ function hpClearDemo(){
   window.hpfChip = hpfChip;
   window.hpfCopy = hpfCopy;
   window.renderHealthPage = renderHealthPage;
+  window.hpvParseReport = hpvParseReport;
+  window.hpvPasteFill = hpvPasteFill;
   /* 2026-10-12 发作记录主卡：HTML 内联事件引用到的函数必须挂 window（本段整体在 IIFE 内，不导出就等于未定义） */
   window.mnxSayParse = mnxSayParse;
   window.mnxSayGo = mnxSayGo;
@@ -40777,9 +40796,131 @@ function hpvSel(label,k,opts){
   opts.forEach(function(o){ h+='<option value="'+esc(o[0])+'"'+(String(v)===String(o[0])?' selected':'')+'>'+esc(o[1])+'</option>'; });
   return h+'</select></label>';
 }
+/* ============ 2026-10-20 · 病历原文 → 自动填表 ============
+   每次就诊都有一张纸质病历，手填 6 个格子 + N 行用药太烦。
+   这里把原文粘进来，粗拆成「日期 / 医院 / 科室 / 诊断 / 部位 / 用药 / 检查 / 叮嘱」，
+   ★ 只填进可编辑的表单 —— 用户逐格核对、改错，点「保存」才落库，绝不直接写数据。 */
+var HPV_ZW = [
+  ['扁桃体','neck_f'],['咽','neck_f'],['喉','neck_f'],['甲状腺','neck_f'],['颈前','neck_f'],
+  ['颈椎','neck_b'],['颈后','neck_b'],['项部','neck_b'],['后脑','head'],
+  ['鼻','head'],['耳','head'],['眼','head'],['头','head'],['牙','head'],['口腔','head'],['牙龈','head'],
+  ['肩胛','upperback'],['上背','upperback'],['背','upperback'],['肩','sh_l'],
+  ['支气管','chest'],['肺','chest'],['胸','chest'],['咳','chest'],['气喘','chest'],
+  ['胃','abdomen'],['腹','abdomen'],['肠','abdomen'],['肝','abdomen'],['胆','abdomen'],
+  ['腰','lumbar'],['臀','pelvis'],['泌尿','pelvis'],['膀胱','pelvis'],['前列腺','pelvis'],
+  ['手腕','fore_l'],['手','fore_l'],['肘','elbow_l'],['臂','arm_up_l'],
+  ['膝','knee_l'],['踝','foot_l'],['脚','foot_l'],['足','foot_l'],['腿','thigh_l']
+];
+function hpvZoneGuess(s){
+  s = String(s || '');
+  for (var i = 0; i < HPV_ZW.length; i++) { if (s.indexOf(HPV_ZW[i][0]) >= 0) return HPV_ZW[i][1]; }
+  return '';
+}
+var HPV_FRQ = { bid:'每日2次', tid:'每日3次', qd:'每日1次', qid:'每日4次', q8h:'每8小时1次', q12h:'每12小时1次' };
+function hpvFixDate(a, b, c){ return a + '-' + ('0' + b).slice(-2) + '-' + ('0' + c).slice(-2); }
+function hpvStripNo(x){ return String(x || '').replace(/^\s*\d+\s*[、.．)）]\s*/, '').trim(); }
+
+function hpvParseReport(txt){
+  var t = String(txt || '').replace(/\r/g, '').replace(/[ \t\u3000]+/g, ' ');
+  if (!t.trim()) return null;
+  var o = { date:'', hosp:'', dept:'', dx:'', zone:'', st:'active', meds:[], exams:[], advice:[], next:'' };
+
+  /* ① 日期 */
+  var m = t.match(/(?:就诊时间|就诊日期|开单日期|日期)[：:]\s*(\d{4})[-\/.年](\d{1,2})[-\/.月](\d{1,2})/);
+  if (!m) m = t.match(/(\d{4})[-\/.年](\d{1,2})[-\/.月](\d{1,2})/);
+  if (m) o.date = hpvFixDate(m[1], m[2], m[3]);
+
+  /* ② 医院 / 科室 */
+  var h = t.match(/([\u4e00-\u9fa5]{2,14}(?:人民医院|中心医院|医院|卫生院|门诊部|诊所))/);
+  if (h) o.hosp = h[1];
+  var dp = t.match(/科\s*别[：:]\s*([^\s\n]{2,16})/);
+  if (dp) o.dept = dp[1];
+  else { var dp2 = t.match(/([\u4e00-\u9fa5]{2,9}科)(?:门诊|急诊|普通门诊|专家门诊)?/); if (dp2) o.dept = dp2[0]; }
+
+  /* ③ 诊断（到空行 / 下一个大标题为止） */
+  var dx = t.match(/(?:初步诊断|临床诊断|门急诊诊断|诊断)[：:]\s*([\s\S]{2,160}?)(?:\n\s*\n|处理意见|处置|处方|医嘱|$)/);
+  if (dx) o.dx = dx[1].replace(/\s*\n\s*/g, ' ').replace(/[；;、,，]\s*$/, '').trim();
+
+  /* ④ 部位（诊断优先，再看主诉） */
+  var zs = o.dx;
+  var zs2 = t.match(/主诉[：:]\s*([^\n]+)/);
+  if (zs2) zs += ' ' + zs2[1];
+  o.zone = hpvZoneGuess(zs);
+
+  /* ⑤ 检查：辅助检查 + 处置里的检查项 */
+  var aid = t.match(/(?:辅助检查及结果|辅助检查结果|辅助检查|检查结果)[：:]\s*([^\n]+)/);
+  if (aid) {
+    var atxt = aid[1].trim();
+    var ar = atxt.match(/^(.{2,14}?)\s*(弱阳性|阳性|阴性|正常|异常|偏高|偏低)$/);
+    if (ar) o.exams.push({ n:ar[1], r:ar[2], ok:true });
+    else o.exams.push({ n:'辅助检查', r:atxt, ok:true });
+  }
+  var cz = t.match(/(?:处置|处理意见)[：:]\s*([\s\S]*?)(?:处方|医嘱|$)/);
+  if (cz) {
+    var czBody = cz[1].replace(/^\s*处置[：:]\s*/, '');
+    czBody.split(/[\n；;]/).forEach(function(seg){
+      seg = hpvStripNo(seg).replace(/^[：:\s]+/, '');
+      if (seg.length >= 4 && /(检查|分析|检测|彩超|B超|CT|X线|核磁|MRI|心电图|肺功能)/.test(seg)) {
+        if (!o.exams.some(function(e){ return e.n === seg; })) o.exams.push({ n:seg, r:'', ok:true });
+      }
+    });
+  }
+
+  /* ⑥ 用药（处方段，按序号 / 分号拆条） */
+  var rx = t.match(/处方[：:]\s*([\s\S]*?)(?:\n\s*医嘱|医嘱[：:]|$)/);
+  if (rx) {
+    rx[1].replace(/\n/g, '；').split(/[；;]/).forEach(function(seg){
+      seg = hpvStripNo(seg);
+      if (seg.length < 3) return;
+      if (/^(用法|用量|共|合计|备注)/.test(seg)) return;
+      if (o.meds.some(function(x){ return x.n && seg.indexOf(x.n) === 0; })) return;
+      var nm = seg.match(/^([\u4e00-\u9fa5A-Za-z（）()·\-]{2,26})/);
+      var n  = nm ? nm[1] : seg.split(' ')[0];
+      var sp = seg.match(/([\d.]+\s*(?:mg|g|ml|ug|μg|IU|片|粒|袋|支))/i);
+      var fq = seg.match(/(bid|tid|qd|qid|q8h|q12h|每日\s*\d\s*次|1日\s*\d\s*次|\d\s*次\s*\/\s*[日天])/i);
+      var f  = fq ? (HPV_FRQ[fq[0].toLowerCase()] || fq[0]) : '';
+      var tf = seg.match(/(饭前|饭后|餐前|餐后|空腹|睡前)/);
+      var dm = seg.match(/\d+\s*(?:盒|瓶|袋|支)/);
+      o.meds.push({ n:n, s: sp ? sp[1].replace(/\s+/g, '') : '', f:f,
+        t: tf ? tf[1] : '', d: dm ? dm[0].replace(/\s+/g, '') : '', note: seg });
+    });
+  }
+
+  /* ⑦ 叮嘱（医嘱段，按句拆） */
+  var adv = t.match(/医嘱[：:]\s*([\s\S]+)$/);
+  if (adv) {
+    adv[1].split(/[，,。；;\n]/).forEach(function(x){
+      x = hpvStripNo(x);
+      if (x.length >= 3 && o.advice.indexOf(x) < 0) o.advice.push(x);
+    });
+  }
+  return o;
+}
+
+function hpvPasteFill(){
+  var box = document.getElementById('hpvPasteBox');
+  if (!box || !HPV_DRAFT) return 'nodraft';
+  var r = hpvParseReport(box.value);
+  if (!r) { HPV_MSG = '先把病历原文粘进上面的框里'; HPV_ERR = true; hpvRender(); return 'empty'; }
+  var d = HPV_DRAFT, got = [];
+  ['date','hosp','dept','dx','zone'].forEach(function(k){ if (r[k]) { d[k] = r[k]; got.push(k); } });
+  if (r.meds.length)   { d.meds = r.meds;     got.push('用药 ' + r.meds.length + ' 种'); }
+  if (r.exams.length)  { d.exams = r.exams;   got.push('检查 ' + r.exams.length + ' 项'); }
+  if (r.advice.length) { d.advice = r.advice; got.push('叮嘱 ' + r.advice.length + ' 条'); }
+  if (!String(d.dx || '').trim()) { HPV_MSG = '没认出「诊断」—— 往下面手填那一格'; HPV_ERR = true; }
+  else { HPV_MSG = '已拆好：' + got.join(' · ') + '（逐格核对，不对就改，再点保存）'; HPV_ERR = false; }
+  hpvRender();
+  return { date:d.date, hosp:d.hosp, dept:d.dept, dx:d.dx, zone:d.zone,
+    meds:d.meds.length, exams:d.exams.length, advice:d.advice.length };
+}
+
 function hpvFormHtml(){
   var d=HPV_DRAFT; if(!d) return '';
-  var h='<div class="hpv-fwrap"><div class="hpv-fgrid">'
+  var h='<div class="hpv-fwrap">'
+    +'<div class="hpv-fpaste"><textarea id="hpvPasteBox" placeholder="有纸质/电子病历？把原文整段粘进这里 → 点「🔍 拆开填好」，日期、医院、科室、诊断、用药、检查、叮嘱会自动填进下面的格子，你再逐格核对。"></textarea>'
+    +'<div class="hpv-fpaste-bar"><button type="button" data-hpvpaste="1">🔍 拆开填好</button>'
+    +'<span id="hpvPasteMsg">粘一次省得手填；不想粘就往下直接填。</span></div></div>'
+    +'<div class="hpv-fgrid">'
     +hpvPick('就诊日期','date','date')+hpvPick('医院','hosp','text','如 湖南航天医院')
     +hpvPick('科室','dept','text','如 骨科 / 康复科')
     +hpvSel('状态','st',[['active','治疗中'],['watch','需关注'],['old','已稳定']])
@@ -40891,6 +41032,7 @@ function hpvHit(z){
     var b;
     if((b=t.closest('[data-hpvsave]'))){ hpvSave(); return; }
     if((b=t.closest('[data-hpvcancel]'))){ hpvCancel(); return; }
+    if((b=t.closest('[data-hpvpaste]'))){ hpvPasteFill(); return; }
     if((b=t.closest('[data-hpvadd]'))){ hpvAdd(b.getAttribute('data-hpvadd')); return; }
     if((b=t.closest('[data-hpvrow]'))){ hpvRowDel(b.getAttribute('data-hpvrow')); return; }
     if((b=t.closest('[data-hpvdel]'))){ hpvDel(b.getAttribute('data-hpvdel')); return; }
@@ -40954,7 +41096,7 @@ if(typeof window !== 'undefined'){
      整段 IIFE 隔离：所有 part 的 JS 共处同一个 script 作用域，裸名会互相覆盖。
      ============================================================ */
   var W = window;
-  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js?v=340';   // v2.13.0-20261019：右栏「今天」→「今日更新」（今天谁动了哪个任务 + 未读 + 复制摘要/摘要卡）（带版本号绕开 CDN/浏览器缓存）
+  var SRC = 'https://skipperjames.github.io/uep-squad-board/team.js?v=330';   // v2.12.1-20261019：卡片「我来做」下线，只留右键（带版本号绕开 CDN/浏览器缓存）
   var board = null;      // window.NikoTeam 的引用（接一次就不再接）
 
   function el(id) { return document.getElementById(id); }
@@ -43395,7 +43537,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610192243";
+        window.NIKO_VERSION = "202610201255";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
