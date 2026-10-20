@@ -11946,7 +11946,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   cursor:pointer;font-family:inherit;font-size:11px}
 .hpv-fdel:hover{border-color:#ff6b6b;color:#ff6b6b}
 .hpv-fempty{font-size:12px;color:var(--muted);padding:5px 0}
-.hpv-fbtns{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:10px}
+.hpv-fbtns{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:10px;flex-wrap:wrap;
+  /* 2026-10-20 用户实测：窗口 1080 宽时「保存」压在右下角悬浮条下面，看着像没有保存键。
+     按钮本身是渲染出来的（x=959~1015），给右侧留 52px 安全区让开悬浮窗/滚动条。 */
+  padding-right:52px}
 .hpv-fbtns .m{margin-right:auto;font-size:11.5px;color:var(--muted)}
 .hpv-fbtns .m.err{color:#ff6b6b}
 .hpv-fbtns button{height:32px;padding:0 15px;border-radius:9px;border:1px solid var(--card-border);background:transparent;
@@ -17254,6 +17257,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
             {
+                v: 'b-20261020-1310', d: '2026-10-20', at: '13:10', name: '看病记录能粘病历自动填 + 更新日记看过的自动清',
+                items: [
+                    { sec: '🩺 健康', t: '看病记录能「粘病历」自动填了', how: '点「＋ 加一次就诊」，表单最上面有个虚线框：把纸质病历 / 处方原文整段粘进去 → 点「🔍 拆开填好」，日期、医院、科室、诊断、部位、用药、检查、叮嘱会自动填进下面的格子，你逐格核对再点保存。不点保存，什么都不会写进档案', go: 'health' },
+                    { sec: '🩺 健康', t: '表单底部的「保存」不会再被右下角挡住', how: '窗口窄的时候「保存」原来会压在右下角那块悬浮条下面，看着像根本没这个键（其实一直在）。现在按钮行右边留出了空位，不会再被盖住', go: 'health' },
+                    { sec: '📣 今日', t: '更新日记：看过的 24 小时后自己消失', how: '展开看过的那一批，标题右会显示「🗑 Nh 后清」，到点自动从今日看板拿掉 —— 不用你手动清，也不会越堆越长。想翻旧账去开发日记看', go: 'today' }
+                ]
+            },
+
+            {
                 v: 'b-20261014-1830', d: '2026-10-14', at: '18:30', name: '健康档案瘦身：只留「身体地图 + 看病记录」',
                 items: [
                     { sec: '🩺 健康', t: '健康档案只剩两块：左身体地图 + 右看病记录', how: '「今天 / 我的伤病史 / 用药记录 / 小病复发 / 手表数据 / 我的方案 / 好转推断 / 复诊模式」全部删掉，页面就剩左边缩小的人形图和右边的就诊卡。点图上任意部位，右边对应就诊卡会亮起来滚过去', go: 'health' },
@@ -17354,10 +17366,30 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             }
         ];
 
+        /* 2026-10-20 用户要求：「看过了之后 24 小时删掉」。
+           口径：展开过 = 看过，记一个时间戳；从看过那一刻起满 24 小时，这一批就从更新日记里消失。
+           数据仍留在 NIKO_UPDATE_FEED 里（想翻旧账看开发日记），只是不再占今日看板的地方。 */
+        const UF_KEEP_MS = 24 * 3600 * 1000;
         function ufTodayStr() { try { return formatDate(new Date()); } catch (e) { return ''; } }
         function ufReadSet() { const a = safeStorage.get('niko_update_read', []); return Array.isArray(a) ? a : []; }
         function ufIsRead(v) { return ufReadSet().indexOf(v) >= 0; }
-        function ufMarkRead(v) { const s = ufReadSet(); if (s.indexOf(v) < 0) { s.push(v); safeStorage.set('niko_update_read', s); } }
+        function ufReadAtMap() { const m = safeStorage.get('niko_update_read_at', {}); return (m && typeof m === 'object' && !Array.isArray(m)) ? m : {}; }
+        function ufReadAt(v) {
+            const m = ufReadAtMap();
+            if (m[v]) return Number(m[v]) || 0;
+            /* 老账本里只有「读过」没时间 → 从这一次开始算 24 小时，别让老条目一升级就整片消失 */
+            if (ufIsRead(v)) { m[v] = Date.now(); safeStorage.set('niko_update_read_at', m); return m[v]; }
+            return 0;
+        }
+        function ufMarkRead(v) {
+            const s = ufReadSet();
+            if (s.indexOf(v) < 0) { s.push(v); safeStorage.set('niko_update_read', s); }
+            const m = ufReadAtMap();
+            if (!m[v]) { m[v] = Date.now(); safeStorage.set('niko_update_read_at', m); }
+        }
+        function ufGone(v) { const t = ufReadAt(v); return !!t && (Date.now() - t) >= UF_KEEP_MS; }
+        function ufFeedList() { return NIKO_UPDATE_FEED.filter(g => !ufGone(g.v)); }
+        function ufLeftH(v) { const t = ufReadAt(v); return t ? Math.max(0, Math.ceil((t + UF_KEEP_MS - Date.now()) / 3600000)) : 0; }
         function ufFeedOn() { return safeStorage.get('niko_update_feed', 'on') !== 'off'; }
         function ufToggleFeed() {
             const next = !ufFeedOn();
@@ -17367,7 +17399,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         }
         function ufOpenSet() {
             const a = safeStorage.get('niko_update_open', null);
-            if (a === null) return [NIKO_UPDATE_FEED[0] && NIKO_UPDATE_FEED[0].v].filter(Boolean);   // 第一次进来默认展开最新一批
+            if (a === null) { const f = ufFeedList()[0]; return f ? [f.v] : []; }   // 第一次进来默认展开最新一批（已清掉的不算）
             return Array.isArray(a) ? a : [];
         }
         function ufToggleGroup(v) {
@@ -17381,7 +17413,8 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         function renderUpdateFeed() {
             const host = document.getElementById('updateFeedStrip');
             if (!host) return;
-            if (!NIKO_UPDATE_FEED.length) { host.hidden = true; return; }
+            const feed = ufFeedList();               // 2026-10-20：看过满 24 小时的批次不再出现
+            if (!feed.length) { host.hidden = true; host.innerHTML = ''; return; }
             host.hidden = false;
             // 开关关掉时不留空白段，只留一行极细入口 —— 否则用户再也找不到怎么打开
             if (!ufFeedOn()) {
@@ -17389,16 +17422,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 return;
             }
             const today = ufTodayStr();
-            const unread = NIKO_UPDATE_FEED.filter(g => !ufIsRead(g.v)).length;
+            const unread = feed.filter(g => !ufIsRead(g.v)).length;
             const open = ufOpenSet();
             let html = '<div class="today-sec-head">'
                 + '<span class="today-sec-title">📣 更新日记</span>'
                 + (unread ? '<span class="uf-live"><i class="uf-dot"></i>' + unread + ' 批还没看过</span>' : '<span class="uf-done">都看过了 ✅</span>')
-                + '<span class="today-sec-sub">汇总最近上线的新功能 · 每条都写了「在哪用」</span>'
+                + '<span class="today-sec-sub">汇总最近上线的新功能 · 每条都写了「在哪用」· 看过 24 小时后自动清掉</span>'
                 + '<span class="today-sec-more"><span class="uf-sw" onclick="ufToggleFeed()" title="把这一块收起来（随时点那一行小字叫回来）">🚫 隐藏</span></span>'
                 + '</div>';
             html += '<div class="uf-body">';
-            NIKO_UPDATE_FEED.forEach(g => {
+            feed.forEach(g => {
                 const isOpen = open.indexOf(g.v) >= 0;
                 const dayName = (g.d === today) ? '今天' : g.d;
                 html += '<div class="uf-group">';
@@ -17406,7 +17439,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                     + '<span class="uf-gv">' + escapeHtml(g.at) + '</span>'
                     + '<span class="uf-gt">' + escapeHtml(dayName + ' · ' + g.name) + '</span>'
                     + '<span class="uf-gn">' + g.items.length + ' 项</span>'
-                    + (!ufIsRead(g.v) ? '<i class="uf-dot"></i>' : '')
+                    + (!ufIsRead(g.v) ? '<i class="uf-dot"></i>' : '<span class="uf-gn" title="看过了就倒计时，到点自动从这块消失">🗑 ' + ufLeftH(g.v) + 'h 后清</span>')
                     + '<span class="uf-gx">' + (isOpen ? '收起 ▴' : '展开 ▾') + '</span></div>';
                 if (isOpen) {
                     html += '<div class="uf-items">';
@@ -40576,6 +40609,9 @@ function hpClearDemo(){
   window.renderHealthPage = renderHealthPage;
   window.hpvParseReport = hpvParseReport;
   window.hpvPasteFill = hpvPasteFill;
+  /* 2026-10-20 补漏：mdRerow 在 mdRowsHtml2() 拼的 onclick 里被调用（用药记录 · 现已休眠无入口），
+     但一直没挂 window —— 哪天把用药记录放回来，点「＋ 加一种药」就是 ReferenceError。 */
+  window.mdRerow = mdRerow;
   /* 2026-10-12 发作记录主卡：HTML 内联事件引用到的函数必须挂 window（本段整体在 IIFE 内，不导出就等于未定义） */
   window.mnxSayParse = mnxSayParse;
   window.mnxSayGo = mnxSayGo;
@@ -43537,7 +43573,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610201255";
+        window.NIKO_VERSION = "202610201314";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
