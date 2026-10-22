@@ -9222,8 +9222,24 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
 
         /* 便签卡片 */
         /* ===== v3 便签卡：今日看板同款安静卡面，标签色只留左签 + 小 chip ===== */
-        .nb-card { --ntag: #10b981; border-radius: 10px; padding: 11px 13px 8px; cursor: grab; position: relative; transition: transform .15s, box-shadow .15s; background: #fff; border: 1px solid #e8e6e1; border-left: 3px solid var(--ntag); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+        .nb-card { --ntag: #10b981; border-radius: 10px; padding: 11px 13px 8px; cursor: grab; position: relative; transition: transform .15s, box-shadow .15s, opacity .18s, filter .18s; background: #fff; border: 1px solid #e8e6e1; border-left: 4px solid var(--ntag); box-shadow: 0 1px 3px rgba(0,0,0,.05); }
         body.dark-mode .nb-card { background: #1f1f2e; border-color: #333345; box-shadow: none; }
+        /* 2026-10-22 用户选定「方案 5 · 标签色标题 + 加粗左色条」：
+           便签第一行升格成标题（染标签色 + 加粗），正文归正文小字；左边色条 3px → 4px，靠颜色分区。
+           单行便签不拆标题（整段当正文），免得一句话被压成大字标题。 */
+        .nb-card-title { font-size: 14px; font-weight: 800; line-height: 1.4; color: var(--ntag); margin-bottom: 5px; }
+        .nb-card-body { font-size: 12.5px; line-height: 1.62; }
+        /* 紧凑密度下标题别比其他卡大一圈 */
+        body.nb-compact .nb-card-title { font-size: 13px; }
+        /* 2026-10-22 用户选定「方案 3 · 悬停聚焦（其余压暗）」：
+           只在「真有一张卡被 hover」时才压暗其它卡 —— 用 :has() 兜住
+           「鼠标停在列间距空白处时全场都变暗」的坑；不支持 :has 的浏览器整段不生效，不影响可用性。
+           选中态不参与压暗（那是你正在操作的那张）。悬停聚焦只在桌面 + 有真 hover 的设备开。 */
+        @supports selector(:has(*)) {
+            @media (hover: hover) and (min-width: 769px) {
+                body:has(.nb-card:hover) .nb-card:not(:hover):not(.selected) { opacity: .32; filter: saturate(.45); }
+            }
+        }
         @keyframes nbPinWobble { 0% { transform: scale(1); } 30% { transform: rotate(2.4deg) scale(1.03); } 60% { transform: rotate(-1.6deg) scale(1.01); } 100% { transform: scale(1); } }
         .nb-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.13); }
         body.dark-mode .nb-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,.4); }
@@ -30013,13 +30029,26 @@ function renderDayDetail() {
             // 2026-10-12 #180 换封面：模块卡的脸可以由某张子卡来当
             const cover = isMod ? nbCoverOf(n, kids) : null;
             const isModCls = (isMod ? ' nb-stack-card' : '');
+            // 2026-10-22 方案5：首行升格为标题。
+            //   有换行 + 首行非空 + 后面还有内容 → 首行做标题，其余做正文；
+            //   单行便签（一句话）不拆，整段当正文，免得一句话被压成大字标题。
+            //   换封面（模块卡）时不拆，直接用封面那张的正文。
+            let cardTitle = '', cardBody = cover ? cover.txt : plain;
+            if (!cover) {
+                const nl = plain.indexOf('\n');
+                if (nl > 0) {
+                    const t = plain.slice(0, nl).trim();
+                    const rest = plain.slice(nl + 1).replace(/^\s*\n+/, '');
+                    if (t && rest.trim()) { cardTitle = t; cardBody = rest; }
+                }
+            }
             return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isModCls}${hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 <div class="nb-flags">${flags}</div>
                 ${ageD >= 14 ? '<span class="nb-curl" title="这张便签已放了 ' + ageD + ' 天"></span>' : ''}
                 ${cover ? '<div class="nb-cover-hd">🎭 封面 · ' + escapeHtml(cover.from) + '</div>' : ''}
-                <div class="nb-card-content">${escapeHtml(cover ? cover.txt : plain)}</div>
+                <div class="nb-card-content">${cardTitle ? '<div class="nb-card-title">' + escapeHtml(cardTitle) + '</div>' : ''}<div class="nb-card-body">${escapeHtml(cardBody)}</div></div>
                 ${isMod ? nbStackMetaHtml(kids) : ''}
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-card-footer">
@@ -43607,7 +43636,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610221609";
+        window.NIKO_VERSION = "202610221703";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
