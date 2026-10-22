@@ -9236,13 +9236,6 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         body.dark-mode .nb-card-content.nb-clamped::after { background: linear-gradient(transparent, #1f1f2e 82%); }
         .nb-card-content.expanded { max-height: none; }
         .nb-card-content.expanded::after { display: none; }
-        /* 2026-10-22 方案 B：卡底「⌄ 展开全文」——只在内容真被截断时露出（.nb-card.has-more），
-           点它只在这张卡内展开；整卡单击改成进详情，两件事彻底分开，不再需要双击判定 */
-        .nb-more-btn { display: none; width: 100%; margin-top: 7px; padding: 5px; border: 1px dashed rgba(0,0,0,.13); border-radius: 7px; background: transparent; color: rgba(0,0,0,.42); font-size: 11.5px; line-height: 1.4; cursor: pointer; transition: color .12s, border-color .12s; font-family: inherit; }
-        .nb-card.has-more .nb-more-btn { display: block; }
-        .nb-more-btn:hover { color: #4b4b63; border-color: #667eea; }
-        body.dark-mode .nb-more-btn { border-color: #333345; color: #6b6b85; }
-        body.dark-mode .nb-more-btn:hover { color: #dcdcea; border-color: #667eea; }
         body.dark-mode .nb-card-content { color: #dcdcea; }
         .nb-card-tag { font-size: 10px; font-weight: 600; color: var(--ntag); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 42%; }
         .nb-card-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
@@ -10219,8 +10212,6 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
             /* 手机端操作按钮常显 + 热区达标（铁律误触治理：≥32px） */
             .nb-card-actions { opacity: 1; }
             .nb-icon-btn { width: 30px; height: 30px; font-size: 13px; }
-            /* 手机：展开全文按钮热区 ≥40px（铁律误触治理） */
-            .nb-more-btn { padding: 10px; font-size: 12.5px; }
             #nbDetailModal { align-items: flex-end; padding: 0; }
             #nbDetailModal .modal { width: 100vw !important; max-width: 100vw; margin: 0; border-radius: 18px 18px 0 0; height: 88vh; max-height: 88vh; overflow: hidden; padding-bottom: 0; }
             .nb-detail-head, .nb-detail-meta { padding-left: 18px; padding-right: 18px; }
@@ -30022,7 +30013,7 @@ function renderDayDetail() {
             // 2026-10-12 #180 换封面：模块卡的脸可以由某张子卡来当
             const cover = isMod ? nbCoverOf(n, kids) : null;
             const isModCls = (isMod ? ' nb-stack-card' : '');
-            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${nbBatch && sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isModCls}${hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)">
+            return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isModCls}${hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 <div class="nb-flags">${flags}</div>
@@ -30031,7 +30022,6 @@ function renderDayDetail() {
                 <div class="nb-card-content">${escapeHtml(cover ? cover.txt : plain)}</div>
                 ${isMod ? nbStackMetaHtml(kids) : ''}
                 ${capsuleBadgeHtml(n)}
-                <button class="nb-more-btn" title="只在这张卡里展开全文 —— 不弹窗，也不影响别的卡" onclick="event.stopPropagation();nbToggleExpand(this.closest('.nb-card'))">⌄ 展开全文</button>
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${backTxt ? `<button class="nb-flip-btn" title="翻过来看背面：完整逻辑 / 调用示例 / 踩过的坑" onclick="event.stopPropagation();nbFlipCard('${n.id}',event)">↻ 翻面</button>` : ''}${noRevMark}${verPill}${owner}
                     ${isMod ? `<button class="nb-stack-btn" title="这一摞里有 ${kids.length} 张，点开看这一组" onclick="event.stopPropagation();nbOpenModule('${n.id}')">📚 ${kids.length} 张 ›</button>` : ''}
@@ -30052,7 +30042,7 @@ function renderDayDetail() {
         function nbTlItemHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const sel = nbSelected.has(n.id);
-            return `<div class="nb-tl-item ${nbBatch && sel ? 'selected' : ''}" onclick="nbCardClick('${n.id}',event)">
+            return `<div class="nb-tl-item ${sel ? 'selected' : ''}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check" style="position:static;">✓</div>' : ''}
                 <span class="nb-tl-tag" style="background:${tag.chipBg};">${tag.icon} ${tag.name}</span>
                 <div class="nb-tl-content">${n.pinned ? '📌 ' : ''}${escapeHtml(nbPlain(n.content))}</div>
@@ -31946,6 +31936,14 @@ function renderDayDetail() {
             document.getElementById('nbBatchBtn').textContent = nbBatch ? '✕ 退出批量' : '☑️ 批量';
             renderNotesPage();
         }
+        // 2026-10-22 二次定版（推翻当天的方案 B，用户原话：
+        //   「还是双击打开预览窗口吧，这个单击只做选中便签的功能，这个展开全文的按钮也很鸡肋，不要了，
+        //     之后不需要再便签墙里面展开全文，要全文就双击打开预览窗口」）
+        //   ⇒ 便签墙里**不再有展开全文**这套动作，卡片正文永远按 clamp 折叠。
+        //   ⇒ 单击 = 选中（选中态高亮，配合卡上那排 📌✏️🗓📦🗑 改便签）；双击 = 打开预览窗口。
+        //   实现：单击延迟 240ms 才落选中，期间来了第二下（双击）就把定时器掐掉、直接开预览
+        //   —— 所以双击绝不会先把选中态闪一下，也不会出现旧的「跳回去」。
+        let _nbTapTimer = null;
         function nbCardClick(id, e) {
             if (nbBatch) {
                 e && e.stopPropagation();
@@ -31953,15 +31951,28 @@ function renderDayDetail() {
                 renderNotesPage();
                 return;
             }
-            // 2026-10-22 用户拍板「方案 B」：单击整卡 = 直接打开完整卡片。
-            //   取消 v2.20 的「单击展开 / 320ms 内双击打开详情」——那套把两件事挤在同一个点击里：
-            //   展开之后想双击，第二下距第一下早已超过 320ms → 被判成「又一次单击」→ 卡片收起（"跳回去"），
-            //   用户原话：「单击显示全部之后，双击又跳回去了，好鸡肋的这个交互」。
-            //   现在：卡内展开交给卡底的「⌄ 展开全文」按钮（不进详情），整卡点击只做一件事 —— 进详情。零判定、零延迟。
-            // 兜底：点在卡内任何按钮/链接上都不算「点了卡片」（按钮各管各的，别顺手弹出详情）
+            // 兜底：点在卡内任何按钮/链接上都不算「点了卡片」（按钮各管各的）
+            if (e && e.target && e.target.closest && e.target.closest('button, a, input, select, textarea')) return;
+            clearTimeout(_nbTapTimer);
+            _nbTapTimer = setTimeout(function () { nbSelectOnly(id); }, 240);
+        }
+        // 双击卡片 → 打开预览窗口（详情页）
+        function nbCardDblClick(id, e) {
+            clearTimeout(_nbTapTimer);
+            if (nbBatch) return;   // 批量勾选时不弹预览，免得双击把勾选状态搅乱
             if (e && e.target && e.target.closest && e.target.closest('button, a, input, select, textarea')) return;
             e && e.stopPropagation();
             openNbDetail(id);
+        }
+        // 选中（便签墙里单选）：点另一张就换过去，再点自己取消
+        // ⚠️ 只翻 class、不整墙重渲染 —— 单击就重渲染会把滚动位置抢回去（老坑）
+        function nbSelectOnly(id) {
+            const was = nbSelected.has(id) && nbSelected.size === 1;
+            nbSelected.clear();
+            if (!was) nbSelected.add(id);
+            document.querySelectorAll('.nb-card[data-note-id], .nb-tl-item[data-note-id]').forEach(el => {
+                el.classList.toggle('selected', nbSelected.has(el.dataset.noteId));
+            });
         }
 
         // ===== v2.20 便签详情页（手机误触根修配套：拆内滚后长文看全靠它）=====
@@ -31970,28 +31981,12 @@ function renderDayDetail() {
         // 2026-10-19 长文阅读：浏览卡片默认「阅读宽版」，右上角 ⛶ 切全屏。偏好存本机（不进云同步）
         let nbWide = safeStorage.get('niko_nb_readmode', '0') === '1';
         // 2026-10-22：卡内展开/收起（只由卡底「⌄ 展开全文」按钮调用，与「进详情」彻底分开）
-        function nbToggleExpand(card) {
-            const c = card && card.querySelector ? card.querySelector('.nb-card-content') : null;
-            if (!c) return;
-            const btn = card.querySelector ? card.querySelector('.nb-more-btn') : null;
-            if (c.classList.contains('expanded')) {
-                c.classList.remove('expanded');
-                if (c.scrollHeight > c.clientHeight + 2) c.classList.add('nb-clamped');
-            } else if (c.classList.contains('nb-clamped')) {
-                c.classList.remove('nb-clamped');
-                c.classList.add('expanded');
-            }
-            if (btn) btn.textContent = c.classList.contains('expanded') ? '⌃ 收起全文' : '⌄ 展开全文';
-        }
         function nbMarkClamp() {
             requestAnimationFrame(() => {
                 document.querySelectorAll('.nb-card-content').forEach(el => {
                     if (el.classList.contains('expanded')) return;
                     const clamped = el.scrollHeight > el.clientHeight + 2;
                     el.classList.toggle('nb-clamped', clamped);
-                    // 2026-10-22 方案 B：只有「真的被截断」的卡才露出「⌄ 展开全文」按钮
-                    const card = el.closest('.nb-card');
-                    if (card) card.classList.toggle('has-more', clamped);
                     // 回收站/归档/寂寂角卡片没有 nbCardClick，直接绑在内容上
                     if (clamped && !el.dataset.expandBound && !el.closest('[data-note-id]')) {
                         el.style.cursor = 'pointer';
@@ -43612,7 +43607,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610221531";
+        window.NIKO_VERSION = "202610221609";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
