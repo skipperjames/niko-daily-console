@@ -13217,10 +13217,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <!-- 🎮 作品主线（2026-09-29 融入今日看板）：内容由 parts/作品.html 的 workRenderStrip() 渲染。
                      刻意不加侧栏/手机导航入口 —— 零新增入口是本条的设计前提。
                      板块若下线（或 work_js 未加载），容器保持 hidden，不会留下空白段。 -->
-                <!-- ===== 2026-10-12 📣 更新日记：把当天上线的东西汇总成一份看得懂的清单 =====
-                     口径：一份清单只在今日看板（零新增导航入口）；默认只展开最新一批；
-                     右上角「🚫 隐藏」可整体收起，隐藏后留一行极细入口（入口不丢）。 ===== -->
-                <section class="today-sec uf-sec" id="updateFeedStrip"></section>
+                <!-- 2026-10-26 用户要求：📣 更新日记整块下线（今日看板顶部不再显示这一块）。
+                     只拆界面：NIKO_UPDATE_FEED 数据与 renderUpdateFeed / uf* 函数都还留在本文件里（可逆）。
+                     恢复方式（两处）：① 在下面加回一行更新日记 section 容器（id 见 renderUpdateFeed 里的 getElementById）
+                     ② 在 renderTodayPage() 里补回  renderUpdateFeed();  即可。 -->
                 <section class="today-sec work-sec" id="workStrip" hidden></section>
                 <!-- 💰 攒钱闸（2026-09-29 融入今日看板）：内容由 parts/钱包.html 的 walRenderStrip() 渲染。
                      一行摘要常显、零新增导航入口。板块若下线（或 wal_js 未加载），容器保持 hidden，不留空白段。 -->
@@ -17403,7 +17403,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
 
         function renderTodayPage() {
             renderCommandBrief();
-            renderUpdateFeed();   // 2026-10-12 📣 更新日记（放在最前 —— 一眼看到今天动了什么）
+            // 2026-10-26 📣 更新日记整块下线（用户要求）：调用点一并撤，函数本体保留
             renderClearSettle();
             renderBuddy();
             if (typeof workRenderStrip === 'function') workRenderStrip();   // 🎮 作品主线（parts/作品.html）
@@ -29120,7 +29120,8 @@ function renderDayDetail() {
             nbDailyTick();          // 晨读抽取 + 整理人巡墙（内部自带当日防抖）
             renderNbTagFilter();    // 同步工具栏分类筛选
             renderNbStats();
-            { const tip = document.getElementById('nbUfTip'); if (tip) tip.innerHTML = nbUpdateTipHtml(); }   // 2026-10-12 🆕
+            // 2026-10-26 📣 更新日记整块下线（用户要求）：便签页顶部那条「去今日看板看清单」提示一并撤
+            // —— 清单本身已不存在，留着就是死链。函数 nbUpdateTipHtml / nbUfTipOff / nbUfTipGo 保留（可逆）。
             renderNbCrumb();        // 2026-10-12 #144：钻入模块时的面包屑
             nbFreeWallBtnSync();    // 2026-10-12 #136：自由摆放开关（只在便签墙可用）
             document.getElementById('nbSelCount').textContent = nbSelected.size;
@@ -43248,7 +43249,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610260858";
+        window.NIKO_VERSION = "202610260906";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
