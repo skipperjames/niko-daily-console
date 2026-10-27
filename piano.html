@@ -492,6 +492,21 @@ body::after{
 }
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+/* —— 导入谱 —— */
+.imp textarea{
+  width:100%;min-height:136px;resize:vertical;display:block;
+  background:rgba(94,169,232,.09);border:1px solid var(--line);border-radius:9px;
+  padding:10px 12px;color:var(--text);
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12px;line-height:1.75;outline:none;transition:.18s;
+}
+.imp textarea::placeholder{color:var(--faint);opacity:.7}
+.imp textarea:focus{border-color:var(--purple);background:rgba(94,169,232,.15);box-shadow:0 0 0 3px rgba(94,169,232,.13)}
+.imp.ok{border-color:rgba(127,224,200,.55)}
+.imp #impMsg b{color:var(--teal);font-weight:500}
+.imp #impMsg .bad{color:#ff9b9b}
+.imp #impMsg .ok2{color:var(--teal)}
+
 /* —— 录音对比 —— */
 .rec{border-radius:var(--r-s);transition:.2s}
 .rec:hover{border-color:var(--purple)}
@@ -638,7 +653,7 @@ body::after{
     <div id="scoreLines"></div>
 
     <div class="snote" id="snote"></div>
-    <div class="snote" style="border-top:1px solid var(--line);padding-top:10px">
+    <div class="snote" id="scoreSrc" style="border-top:1px solid var(--line);padding-top:10px">
       谱源参考：<a href="https://www.tan8.com/unionscore-VFpneWFQck1yUlI.html" target="_blank" rel="noopener" style="color:#8fb0d0">弹琴吧 · 逐字和弦版</a>
       　<a href="https://yopu.co/view/RPOn3zdX" target="_blank" rel="noopener" style="color:#8fb0d0">有谱么 · G 调编配</a>
       <br>音色：Salamander Grand Piano 真实采样 + 厅堂混响，不是合成器。与原曲有出入时，以你的耳朵为准。
@@ -672,6 +687,28 @@ body::after{
       <button class="btn go" data-copy-score>复制扒谱请求</button>
     </div>
     <div class="hint">点一下就把「扒谱请求」复制走，<b>直接粘给 NIKO</b>。我会按你现在的水平扒成能弹的版本 —— 简版三和弦起步，扒完填进「想弹的」这一栏。</div>
+  </div>
+
+  <div class="card imp" style="margin-top:12px">
+    <div class="ttl">导入谱 · 粘贴就能存</div>
+    <div id="impList"></div>
+    <div class="hint" style="margin:0 0 10px">
+      从聊天里复制我给的表格，或任何「和弦 + 歌词」的文本，粘进来 → 解析 → 存进琴房。存好的歌会出现在「谱」页的切换条里，能试听、能打印。
+    </div>
+    <textarea id="impText" spellcheck="false" placeholder="| 01 | Am | Am7 | 爱像是一场小雨 |
+| 02 | D  | D7  | 淅沥沥淅沥沥滴入我 |
+| 03 | G  | Gmaj7 | 回忆 |
+【副歌】
+| 11 | Am | Am7 | 那张磁带一再一再 |"></textarea>
+    <div class="askrow" style="margin-top:10px">
+      <input id="impTitle" type="text" placeholder="歌名，比如：恋人" style="flex:1 1 140px" autocomplete="off" spellcheck="false">
+      <input id="impMeta" type="text" placeholder="调/BPM（可空）：G 调 70" style="flex:1 1 140px" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="askrow" style="margin-top:9px">
+      <button class="btn" id="impPreview">解析看看</button>
+      <button class="btn go" id="impSave">存进琴房</button>
+    </div>
+    <div class="hint" id="impMsg">还没有解析。</div>
   </div>
 </div>
 
@@ -1003,6 +1040,9 @@ body::after{
     var sg=SONGS[curSong]; if(!sg) return;
     document.getElementById('sgTitle').textContent=sg.title;
     document.getElementById('sgMeta').textContent=sg.meta;
+    /* 导入的谱不显示内置曲目的「谱源参考」（那是海陆风/恋人的来源，对导入谱是错的） */
+    var srcEl=document.getElementById('scoreSrc');
+    if(srcEl) srcEl.style.display = sg._at ? 'none' : '';
     document.getElementById('origBtn').href = curSong==='hailu' ? 'https://c6.y.qq.com/base/fcgi-bin/u?__=DIQ2OJtZRcP9' : 'https://i.y.qq.com/n2/m/search/index.html?w=%E6%81%8B%E4%BA%BA%20%E6%9D%8E%E8%8D%A3%E6%B5%A9';
     var tipTxt = sg.tip;
     if(curLv===3){
@@ -1088,16 +1128,57 @@ body::after{
     var b=e.target.closest('button[data-song]'); if(!b) return;
     this.querySelectorAll('button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
     curSong=b.dataset.song; stopAll(); renderScore();
-    if(curSong==='lover'){ document.getElementById('sBpm').value=72; sBpm=72; document.getElementById('sBpmNum').textContent=72; }
-    else { document.getElementById('sBpm').value=74; sBpm=74; document.getElementById('sBpmNum').textContent=74; }
+    var bp=(SONGS[curSong]&&SONGS[curSong].bpm)||((curSong==='lover')?72:74);
+    document.getElementById('sBpm').value=bp; sBpm=bp; document.getElementById('sBpmNum').textContent=bp;
   };
   document.getElementById('lvSw').onclick=function(e){
     var b=e.target.closest('button[data-lv]'); if(!b) return;
     this.querySelectorAll('button').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
     curLv=Number(b.dataset.lv); stopAll(); renderScore();
   };
+  /* 曲目按钮按 SONGS 实际内容生成 —— 导入的歌也会自动出现在这里 */
+  function rebuildSongSw(){
+    var box=document.getElementById('songSw');
+    if(!box) return;
+    var html='';
+    Object.keys(SONGS).forEach(function(k){
+      var o=SONGS[k]||{};
+      html+='<button data-song="'+k+'"'+(k===curSong?' class="on"':'')+'>'+(o.title||k)+'</button>';
+    });
+    box.innerHTML=html;
+  }
+  rebuildSongSw();
   renderScore();
   try{ initPiano(); }catch(e){}
+
+  /* ===== 对外接口（末尾「导入谱」模块调用，导入的歌存这里） ===== */
+  window.__nikoPiano={
+    addSong:function(key,data){
+      if(!key||!data||!data.lines||!data.lines.length) return false;
+      SONGS[key]=data;
+      rebuildSongSw();
+      return true;
+    },
+    hasSong:function(k){ return !!SONGS[k] },
+    removeSong:function(k){
+      if(!SONGS[k]) return false;
+      delete SONGS[k];
+      if(curSong===k) curSong=Object.keys(SONGS)[0]||'hailu';
+      rebuildSongSw(); stopAll(); renderScore();
+      return true;
+    },
+    keys:function(){ return Object.keys(SONGS) },
+    title:function(k){ return (SONGS[k]&&SONGS[k].title)||k },
+    go:function(k){
+      if(!SONGS[k]) return false;
+      curSong=k; rebuildSongSw();
+      var bp=SONGS[k].bpm||74;
+      document.getElementById('sBpm').value=bp; sBpm=bp;
+      document.getElementById('sBpmNum').textContent=bp;
+      stopAll(); renderScore();
+      return true;
+    }
+  };
 
   /* 录音波形 */
   function wave(id,seed){
@@ -1269,6 +1350,208 @@ body::after{
       }
     });
   });
+
+  /* ========== 导入谱：粘贴 → 解析 → 存进琴房 ========== */
+  var CHORD_RE=/^[A-G][#b]?(maj|min|m|M|dim|aug|sus|add)?[0-9]{0,2}(sus[24]|add[0-9]{1,2})?(\/[A-G][#b]?)?$/i;
+  var SEC_RE=/^(前奏|间奏|尾奏|尾声|主歌|副歌|桥段|尾副歌|导歌|Intro|Verse|Chorus|Bridge|Outro|Pre-?Chorus)[\sA-Za-z0-9]*$/i;
+  var STORE_KEY='niko_piano_sheets_v1';
+
+  function looksChord(s){
+    var t=String(s||'').trim();
+    if(!t||t.length>10) return false;
+    if(/^N\.?C\.?$/i.test(t)) return true;
+    return CHORD_RE.test(t);
+  }
+
+  function parseSheet(text){
+    var raw=String(text||'').split(/\r?\n/);
+    var lines=[],count=0,bad=0,secCount=0,lastChord='';
+    raw.forEach(function(row){
+      var t=String(row).trim();
+      if(!t) return;
+      t=t.replace(/\*\*/g,'');                                  /* 先拆掉 markdown 粗体标记 */
+      t=t.replace(/^[\s>*+\-#]+/,'').replace(/[\s*]+$/,'').trim();
+      if(!t) return;
+      if(/^[\|\-\s:]+$/.test(t)) return;
+      /* 分段标题：【主歌】 [副歌] 主歌: —— 允许后面同一行跟内容 */
+      var mSec=t.match(/^[【\[]\s*([^】\]]{1,14})\s*[】\]]\s*(.*)$/) || t.match(/^([^|]{1,14})[:：]\s*(.*)$/);
+      if(mSec){
+        var nm=mSec[1].replace(/\s+/g,' ').trim();
+        if(SEC_RE.test(nm)){
+          lines.push({sec:nm}); secCount++;
+          t=String(mSec[2]||'').trim();
+          if(!t) return;                                        /* 只有标题，下一行继续 */
+        }
+      }
+      var cells=t.split('|');
+      if(cells.length&&cells[0].trim()==='') cells.shift();
+      if(cells.length&&cells[cells.length-1].trim()==='') cells.pop();
+      cells=cells.map(function(x){return String(x).replace(/[*`]/g,'').trim()});
+      if(!cells.length) return;
+      if(/^(#|序号|no\.?|编号|简版|和弦|原和弦)$/i.test(cells[0])) return;
+      var n=null,s='',f='',l='';
+      if(cells.length>=4){
+        if(/^\d{1,3}$/.test(cells[0])){ n=Number(cells[0]); s=cells[1]; f=cells[2]; l=cells.slice(3).join(' '); }
+        else { s=cells[0]; f=cells[1]; l=cells.slice(2).join(' '); }
+      }else if(cells.length===3){
+        if(/^\d{1,3}$/.test(cells[0])){ n=Number(cells[0]); s=cells[1]; f=cells[1]; l=cells[2]; }
+        else if(looksChord(cells[1])){ s=cells[0]; f=cells[1]; l=cells[2]; }
+        else { s=cells[0]; f=cells[0]; l=cells.slice(1).join(' '); }
+      }else if(cells.length===2){
+        if(looksChord(cells[0])){ s=cells[0]; f=cells[0]; l=cells[1]; }
+        else { s=''; f=''; l=cells.join(' '); }
+      }else{
+        /* 单列：尝试「和弦 + 空格 + 歌词」 */
+        var mm=String(cells[0]).match(/^([A-G][#b]?(?:maj|min|m|M|dim|aug|sus|add)?[0-9]{0,2}(?:\/[A-G][#b]?)?)[\s\u3000]+(.+)$/);
+        if(mm&&looksChord(mm[1])){ s=mm[1]; f=mm[1]; l=mm[2]; }
+        else { s=''; f=''; l=cells[0]; }
+      }
+      if(s&&!looksChord(String(s).split(/\s+|\//)[0])){
+        l=(s+' '+l).trim(); s=''; f='';
+      }
+      if(!s){
+        if(!lastChord){ bad++; return; }
+        s=lastChord; f=lastChord;
+      }
+      lastChord=s;
+      count++;
+      lines.push({n:n||count, s:s, f:(f||s), l:l});
+    });
+    while(lines.length&&lines[lines.length-1].sec) lines.pop();
+    var realLines=lines.filter(function(x){return !x.sec}).length;
+    return {lines:lines,count:realLines,secCount:secCount,bad:bad};
+  }
+
+  function loadSheets(){
+    try{
+      var raw=localStorage.getItem(STORE_KEY);
+      if(!raw) return {};
+      var o=JSON.parse(raw);
+      return (o&&typeof o==='object')?o:{};
+    }catch(e){ return {}; }
+  }
+  function saveSheets(o){
+    try{ localStorage.setItem(STORE_KEY,JSON.stringify(o)); return true; }catch(e){ return false; }
+  }
+  var sheets=loadSheets();
+
+  function renderImpList(){
+    var box=document.getElementById('impList');
+    if(!box) return;
+    var keys=Object.keys(sheets);
+    if(!keys.length){ box.innerHTML=''; return; }
+    box.innerHTML=keys.map(function(k){
+      var s=sheets[k]||{};
+      var nm=s.title||k;
+      return '<div class="song" style="margin-bottom:7px">'
+        +'<div class="cov" style="background:rgba(127,224,200,.18);color:#7fe0c8">'+nm.slice(0,1)+'</div>'
+        +'<div class="info"><div class="nm2">'+nm+'</div><div class="mt">'+(s._n||'')+' 行 · 已存进琴房</div></div>'
+        +'<button class="btn mini" data-opensheet="'+k+'" style="flex:0 0 auto;font-size:11px;padding:6px 11px">打开</button>'
+        +'<button class="btn mini" data-delsheet="'+k+'" style="flex:0 0 auto;font-size:11px;padding:6px 9px;margin-left:6px">删</button>'
+        +'</div>';
+    }).join('');
+  }
+
+  /* 启动：把上次导入的歌挂回琴房 */
+  if(window.__nikoPiano){
+    Object.keys(sheets).forEach(function(k){
+      var s=sheets[k];
+      if(s&&s.lines&&s.lines.length) window.__nikoPiano.addSong(k,s);
+    });
+  }
+  renderImpList();
+
+  function impMsg(html){
+    var el=document.getElementById('impMsg');
+    if(el) el.innerHTML=html;
+  }
+
+  var lastParsed=null;
+
+  document.getElementById('impPreview').onclick=function(){
+    var txt=document.getElementById('impText').value||'';
+    if(!txt.trim()){ impMsg('<span class="bad">先粘点东西进来。</span>'); lastParsed=null; return; }
+    var p=parseSheet(txt);
+    lastParsed=p;
+    var card=document.querySelector('.imp');
+    if(!p.count){
+      lastParsed=null;
+      if(card) card.classList.remove('ok');
+      impMsg('<span class="bad">一行和弦都没认出来。</span> 至少要两列：<code>和弦 | 歌词</code>，或四列 <code>序号 | 简版 | 完整 | 歌词</code>。');
+      return;
+    }
+    if(card) card.classList.add('ok');
+    var sample=p.lines.filter(function(x){return !x.sec}).slice(0,2).map(function(x){
+      return x.s+(x.f&&x.f!==x.s?(' / '+x.f):'')+' → '+x.l;
+    }).join('　｜　');
+    impMsg('认出 <b>'+p.count+'</b> 行和弦'+(p.secCount?('、'+p.secCount+' 个分段'):'')
+      +(p.bad?('，<span class="bad">'+p.bad+' 行没法识别已跳过</span>'):'')
+      +'<br>例：'+sample);
+  };
+
+  document.getElementById('impSave').onclick=function(){
+    var txt=document.getElementById('impText').value||'';
+    var title=(document.getElementById('impTitle').value||'').trim()||'未命名谱';
+    var p=lastParsed||parseSheet(txt);
+    if(!p||!p.count){
+      impMsg('<span class="bad">还没解析出东西，先点「解析看看」。</span>');
+      return;
+    }
+    var metaRaw=(document.getElementById('impMeta').value||'').trim();
+    var bpm=70;
+    var m=metaRaw.match(/(\d{2,3})/);
+    if(m) bpm=Math.max(40,Math.min(200,Number(m[1])));
+    var meta=metaRaw||('导入谱 · 4/4');
+    if(!/bpm/i.test(meta)&&!/\d{2,3}/.test(meta)) meta=meta+' · '+bpm+' BPM';
+
+    var key='imp_'+Date.now().toString(36);
+    var song={
+      title:title, meta:meta, bpm:bpm,
+      tip:'右手柱式和弦，一小节按 4 下。点每行右边的播放键可以先听一遍这一句是什么味道。',
+      note:'你自己导入的谱（'+p.count+' 行）。和弦以你贴的为准，与原曲有出入时以耳朵为准。',
+      lines:p.lines, _n:p.count, _at:Date.now()
+    };
+    if(window.__nikoPiano&&window.__nikoPiano.addSong(key,song)){
+      sheets[key]=song;
+      var saved=saveSheets(sheets);
+      renderImpList();
+      lastParsed=null;
+      document.getElementById('impText').value='';
+      document.getElementById('impTitle').value='';
+      var card=document.querySelector('.imp');
+      if(card) card.classList.remove('ok');
+      impMsg('已存进琴房：<b>'+title+'</b>（'+p.count+' 行）'
+        +(saved?'':'　<span class="bad">（本机存不进 localStorage，刷新会丢）</span>')
+        +'<br>去「谱」页就能选到它了。');
+      toast('已存进琴房 — 谱页可以选「'+title+'」了');
+    }else{
+      impMsg('<span class="bad">存失败了，检查一下有没有和弦行。</span>');
+    }
+  };
+
+  document.addEventListener('click',function(e){
+    var op=e.target.closest('[data-opensheet]');
+    if(op){
+      var k=op.getAttribute('data-opensheet');
+      if(window.__nikoPiano&&window.__nikoPiano.go(k)){
+        document.querySelector('.tab[data-v="score"]').click();
+        toast('已切到「'+((sheets[k]&&sheets[k].title)||k)+'」');
+      }
+      return;
+    }
+    var dl=e.target.closest('[data-delsheet]');
+    if(dl){
+      var k2=dl.getAttribute('data-delsheet');
+      var nm2=(sheets[k2]&&sheets[k2].title)||k2;
+      if(!confirm('删掉「'+nm2+'」？删了要重新导入。')) return;
+      delete sheets[k2];
+      saveSheets(sheets);
+      if(window.__nikoPiano&&window.__nikoPiano.removeSong) window.__nikoPiano.removeSong(k2);
+      renderImpList();
+      toast('已删除「'+nm2+'」');
+    }
+  });
+
 })();
 </script>
 </body>
