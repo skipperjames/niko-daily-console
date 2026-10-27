@@ -13025,6 +13025,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         .eco-card-i { font-size: 10px; opacity: .68; margin-top: 2px; }
         @media (prefers-reduced-motion: reduce) { .eco-fly .eco-av { animation: none; } .eco-fly.eco-static { animation: none; opacity: 1; } }
         @media (max-width: 768px) { .eco-fly .eco-av { width: 38px; height: 38px; } .eco-fly .eco-tag { font-size: 11px; padding: 5px 9px; } .eco-dex-grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); } }
+        /* ===== 琴房（iframe 独立页，2026-10-27）===== */
+        .piano-frame { width: 100%; flex: 1; border: 0; display: block; }
+        @media (max-width: 768px) { .piano-frame { flex: 0 0 auto !important; height: calc(100dvh - 108px); } }
     </style>
 </head>
 <body>
@@ -13154,6 +13157,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-item" data-nav="diary" onclick="switchPage('diary')">📔 日记</div>
             <div class="nav-item" data-nav="member" onclick="switchPage('member')">💰 会员</div>
             <div class="nav-item" data-nav="game" onclick="switchPage('game')">🎮 游戏时间</div>
+            <div class="nav-item" data-nav="piano" onclick="switchPage('piano')">🎹 琴房</div>
             <div class="nav-item" data-nav="health" onclick="switchPage('health')">🩺 健康档案</div>
         </div>
         <div class="nav-section settings-section" style="margin-top:auto;">
@@ -13199,6 +13203,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             <div class="nav-more-item" data-navpage="notes" onclick="switchPage('notes');hideNavMore()">🗂 便签看板</div>
             <div class="nav-more-item" data-navpage="member" onclick="switchPage('member');hideNavMore()">💰 会员</div>
             <div class="nav-more-item" data-navpage="game" onclick="switchPage('game');hideNavMore()">🎮 游戏时间</div>
+            <div class="nav-more-item" data-navpage="piano" onclick="switchPage('piano');hideNavMore()">🎹 琴房</div>
             <div class="nav-more-item" data-navpage="book" onclick="switchPage('book');hideNavMore()">📚 读书</div>
             <div class="nav-more-item" data-navpage="health" onclick="switchPage('health');hideNavMore()">🩺 健康档案</div>
         </div>
@@ -14905,6 +14910,9 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
     </div>
   </div>
 </div>
+        </div>
+        <div class="page" id="pianoPage">
+            <iframe id="pianoFrame" class="piano-frame" src="piano.html" title="琴房" loading="lazy"></iframe>
         </div>
     </div>
 
@@ -16792,6 +16800,9 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             } else if (page === 'teamboard') {
                 // UE 团队看板（2026-10-13）：容器切过来之前是 display:none，Shadow DOM 内尺寸可能算错 → 补一次重绘
                 try { if (typeof window.__nikoTeamBoardOnShow === 'function') window.__nikoTeamBoardOnShow(); } catch (e) {}
+            } else if (page === 'piano') {
+                // 琴房（iframe 独立页）：静态承载，无需渲染；切回来时刷新 iframe 让音色引擎重新就绪
+                try { const _pf = document.getElementById('pianoFrame'); if (_pf && _pf.getAttribute('src') !== 'piano.html') _pf.setAttribute('src', 'piano.html'); } catch (e) {}
             } else {
                 render();
             }
@@ -43252,7 +43263,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610271233";
+        window.NIKO_VERSION = "202610271540";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
