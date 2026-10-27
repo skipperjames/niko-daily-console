@@ -6353,13 +6353,20 @@ body.dark-mode .wal-set-row input{background:#14141c}
             .stamp-mark { right: 24px; font-size: 9px; padding: 0 3px; }
             .stamp-mark.stamp-corner { right: 6px; top: 6px; font-size: 9.5px; }
         }
-        /* ===== 待办鸟群（2026-09-06）：今日任务=停在线上的鸟，完成一只飞走一只，全清=电线放晴 ===== */
-        .bird-wire-strip { display: flex; align-items: flex-end; margin: 0 2px 6px; padding: 2px 8px 0; height: 30px; position: relative; }
-        .bird-wire-line { position: absolute; left: 6px; right: 6px; top: 9px; height: 1.5px;
-            background: linear-gradient(90deg, rgba(150,150,150,.12), rgba(150,150,150,.5) 12%, rgba(150,150,150,.5) 88%, rgba(150,150,150,.12)); }
-        .bird-on-wire { position: relative; width: 20px; height: 20px; z-index: 1; flex-shrink: 0; }
-        .bird-on-wire svg { width: 100%; height: 100%; display: block; }
-        .bird-on-wire .bw-leg { position: absolute; left: 50%; top: 15px; width: 1px; height: 5px; background: rgba(120,120,120,.55); }
+        /* ===== 今日琴键（2026-10-27 由待办鸟群改版，方案44键帽厚度）：每个任务一个键帽，完成=按到底、厚度消失 ===== */
+        .bird-wire-strip { display: flex; align-items: center; margin: 0 2px 6px; padding: 0 8px; height: 30px; position: relative; }
+        .kb { position: relative; display: flex; gap: 2px; align-items: flex-start; padding-top: 1px; height: 28px; flex-shrink: 0; }
+        .kb-key { position: relative; width: var(--kw, 20px); height: 18px; box-sizing: border-box; border-radius: 2px;
+            background: #ffffff; box-shadow: inset 1px 0 0 #ffffff, inset -1px 0 0 #e8eaf2, inset 0 1px 0 #ffffff, 0 4px 0 #c9cdda, 0 0 0 1px rgba(120,125,145,.16);
+            transition: margin-top .14s ease, height .14s ease, box-shadow .14s ease, background .14s ease; }
+        .kb-key::after { content: ''; position: absolute; left: 3px; right: 3px; bottom: 2px; height: 0; border-radius: 1px; background: #46b598; transition: height .14s ease; }
+        .kb-key.done { margin-top: 5px; height: 17px; background: #dfe2ec; box-shadow: inset 1px 0 0 rgba(255,255,255,.6), inset -1px 0 0 rgba(255,255,255,.6), 0 1.5px 0 #b8bccc, 0 0 0 1px rgba(120,125,145,.14); }
+        .kb-key.done::after { height: 2px; }
+        body.dark-mode .kb-key { background: #cdd1e0; box-shadow: inset 1px 0 0 #e4e7f0, inset -1px 0 0 #e4e7f0, inset 0 1px 0 #eef0f7, 0 4px 0 #7f8496, 0 0 0 1px rgba(0,0,0,.10); }
+        body.dark-mode .kb-key.done { background: #9aa0b0; box-shadow: inset 1px 0 0 rgba(255,255,255,.25), inset -1px 0 0 rgba(255,255,255,.25), 0 1.5px 0 #6e727f, 0 0 0 1px rgba(0,0,0,.10); }
+        .kb-black { position: absolute; top: 1px; width: 9px; height: 10px; border-radius: 0 0 2px 2px;
+            background: #1c1c26; box-shadow: inset 0 -1px 0 rgba(255,255,255,.16), 0 2px 0 #3a3a48; pointer-events: none; z-index: 3; }
+        body.dark-mode .kb-black { background: #101018; box-shadow: inset 0 -1px 0 rgba(255,255,255,.18), 0 2px 0 #33333f; }
         .bird-wire-cap { font-size: 10px; color: #999; align-self: center; margin-left: 10px; white-space: nowrap; }
         body.dark-mode .bird-wire-cap { color: #8a8aa0; }
         @keyframes birdFlyOff { 0% { transform: translate(0,0) rotate(0); opacity: 1; } 100% { transform: translate(130px,-95px) rotate(-9deg); opacity: 0; } }
@@ -6370,8 +6377,8 @@ body.dark-mode .wal-set-row input{background:#14141c}
         @media (max-width: 768px) {
             .bird-wire-cap { display: none; }
             .bird-wire-strip { height: 26px; margin-bottom: 4px; }
-            .bird-on-wire { width: 17px; height: 17px; }
-            .bird-on-wire .bw-leg { top: 13px; height: 4px; }
+            .kb { --kw: 15px !important; gap: 2px; }
+            .kb-black { width: 8px; height: 9px; }
         }
 /* ===== 媒体热点专属CSS ===== */
         .hot-card .hot-header {
@@ -13619,7 +13626,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div id="calendarWrapper" class="calendar-wrapper">
                     <div class="calendar-scroll-pane">
                         <div class="week-header" id="weekHeaderRow"></div>
-                        <div class="bird-wire-strip" id="birdWire" title="待办鸟群：今日任务=停在线上的鸟，完成一只飞走一只，全清=电线放晴"><div class="bird-wire-line"></div></div>
+                        <div class="bird-wire-strip" id="birdWire" title="今日琴键：每个任务一个键帽，完成一个就按到底，全清=整排键都落下"><div class="kb"></div></div>
                         <div class="four-week-grid" id="fourWeekGrid"></div>
                     </div>
                     <!-- 闪捕条 + 停车场：随手输入回车即捕获，带日期自动排期，无日期入停车场待拖 -->
@@ -22125,7 +22132,7 @@ if (document.readyState === 'loading') {
             renderRaidWall();
         }
 
-        // ===== 待办鸟群（2026-09-06）：点击哪天，电线就停哪天的鸟（跟随 selectedDate）；完成一只飞走一只 =====
+        // ===== 今日琴键（2026-10-27 由待办鸟群改版）：完成的键靠左且按到底，未完成的靠右；点哪天就渲染哪天的键 =====
         function planTodayStr() {
             const n = new Date();
             return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
@@ -22133,53 +22140,49 @@ if (document.readyState === 'loading') {
         function renderTodoBirds() {
             const wire = document.getElementById('birdWire');
             if (!wire) return;
-            wire.innerHTML = '<div class="bird-wire-line"></div>';
             const selStr = formatDate(selectedDate);
             const isToday = selStr === planTodayStr();
             const selTasks = events.filter(e => (e.startDate === selStr || e.endDate === selStr));
-            const todays = selTasks.filter(e => e.status !== 'done');
-            const doneCnt = selTasks.length - todays.length;
-            let seed = 0; const sk = 'bird' + selStr;
-            for (let i = 0; i < sk.length; i++) seed = (seed * 31 + sk.charCodeAt(i)) >>> 0;
-            const shown = todays.slice(0, 7);
-            shown.forEach((e, i) => {
-                seed = (Math.imul(seed, 1103515245) + 12345) >>> 0;
-                const hue = seed % 360;
-                const b = document.createElement('span');
-                b.className = 'bird-on-wire';
-                b.title = '还停在线上：' + (e.title || e.text || '任务');
-                b.style.marginLeft = (i === 0 ? 4 : 6 + (seed % 22)) + 'px';
-                b.innerHTML = (typeof ecoArcSVG === 'function' ? ecoArcSVG('bird', hue) : '🐦') + '<i class="bw-leg"></i>';
-                wire.appendChild(b);
+            const doneCnt = selTasks.filter(e => e.status === 'done').length;
+            const ordered = selTasks.filter(e => e.status === 'done').concat(selTasks.filter(e => e.status !== 'done'));
+            const shown = ordered.slice(0, 7);
+            // 键宽随数量收窄；手机端由媒体查询再压到 15px
+            const kw = shown.length >= 7 ? 16 : (shown.length === 6 ? 18 : 20);
+            const pitch = kw + 2;
+            let html = '<div class="kb" style="--kw:' + kw + 'px">';
+            shown.forEach(e => {
+                const isDone = e.status === 'done';
+                const t = escapeHtml(e.title || e.text || '任务');
+                html += '<span class="kb-key' + (isDone ? ' done' : '') + '" title="' + (isDone ? '已弹下：' : '还没弹：') + t + '"></span>';
             });
-            if (todays.length > 7) {
-                const more = document.createElement('span');
-                more.className = 'bird-wire-cap';
-                more.textContent = '+' + (todays.length - 7);
-                wire.appendChild(more);
+            // 黑键落在白键缝隙上，缝序 0,1,3,4,5 = 钢琴的 2+3 分组
+            for (let i = 0; i < shown.length - 1; i++) {
+                if ([0, 1, 3, 4, 5].indexOf(i % 7) === -1) continue;
+                html += '<span class="kb-black" style="left:' + ((i + 1) * pitch - 5.5) + 'px"></span>';
             }
+            html += '</div>';
+            if (ordered.length > 7) html += '<span class="bird-wire-cap">+' + (ordered.length - 7) + '</span>';
             const dayLabel = isToday ? '今日' : (Number(selStr.slice(5, 7)) + '月' + Number(selStr.slice(8, 10)) + '日');
-            const cap = document.createElement('span');
-            cap.className = 'bird-wire-cap';
-            cap.textContent = selTasks.length === 0
-                ? `${dayLabel}无任务 · 电线留白`
-                : (todays.length === 0
-                    ? `🕊 ${dayLabel}放晴 · ${doneCnt} 只全部飞走`
-                    : `${dayLabel}停着 ${todays.length} 只${doneCnt ? ' · 已飞走 ' + doneCnt : ''} · 完成一只飞一只`);
-            wire.appendChild(cap);
+            const cap = selTasks.length === 0
+                ? `${dayLabel}无任务 · 键盘留白`
+                : (doneCnt === selTasks.length
+                    ? `${dayLabel}弹完了 · ${doneCnt} 键全部落到底`
+                    : `${dayLabel} ${doneCnt}/${selTasks.length} 已弹下 · 剩 ${selTasks.length - doneCnt} 键`);
+            html += '<span class="bird-wire-cap">' + cap + '</span>';
+            wire.innerHTML = html;
         }
-        // 完成任务瞬间的飞离动画（挂在打章/划掉的动作点，从被点的元素起飞）
+        // 完成任务瞬间的音符飘起（挂在打章/划掉的动作点，从被点的元素起跳）
         function nikoBirdFly(fromEl) {
             try {
                 let x = (window.innerWidth || 900) * 0.3, y = 120;
                 const wire = document.getElementById('birdWire');
-                const anchor = fromEl || (wire && wire.querySelector('.bird-on-wire'));
+                const anchor = fromEl || (wire && wire.querySelector('.kb-key'));
                 if (anchor) { const r = anchor.getBoundingClientRect(); if (r.width || r.height) { x = r.left + r.width / 2; y = r.top; } }
                 const f = document.createElement('div');
                 f.className = 'bird-fly-off';
                 f.style.left = x + 'px';
                 f.style.top = y + 'px';
-                f.innerHTML = typeof ecoArcSVG === 'function' ? ecoArcSVG('bird', 45 + Math.floor(Math.random() * 200)) : '🕊';
+                f.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13" fill="none" stroke="#46b598" stroke-width="2" stroke-linejoin="round"/><ellipse cx="6" cy="18" rx="3.4" ry="2.8" fill="#46b598"/><ellipse cx="16" cy="16" rx="3.4" ry="2.8" fill="#46b598"/></svg>';
                 document.body.appendChild(f);
                 setTimeout(() => f.remove(), 1200);
             } catch (e) {}
@@ -43249,7 +43252,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610260906";
+        window.NIKO_VERSION = "202610271233";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
