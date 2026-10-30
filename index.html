@@ -4933,7 +4933,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             pointer-events: none;
             z-index: 5;
         }
-        /* ===== 本周副本 · 进度墙容器（闪捕条/停车场已于 2026-10-30 下线） ===== */
+        /* ===== 本周副本 · 进度墙容器（2026-10-30 精简：日历下方的随手捕获区已移除） ===== */
         .plan-wall-wrap { padding: 10px 2px 4px; display: flex; flex-direction: column; gap: 8px; }
         /* v2.17 手机端隐藏该区域（2026-09-07 用户反馈：很挡视野，手机上没啥用） */
         @media (max-width: 768px) { .plan-wall-wrap { display: none !important; } }
@@ -43046,7 +43046,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610301636";
+        window.NIKO_VERSION = "202610301639";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
