@@ -4475,7 +4475,12 @@ body.dark-mode .wal-set-row input{background:#14141c}
             min-height: 0;
         }
         .calendar-scroll-pane {
+            /* 2026-10-30：原为纯 block + overflow 滚动。删掉日历下方的随手捕获区后，网格下方
+               露出一大片空白（pane 被 minmax(0,1fr) 抽满高度，网格却只按内容定高）。
+               改 flex column + 网格 flex:1，让日期格把这截余量吃掉。 */
             flex: 1;
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
             padding-right: 2px;
             min-height: 0;
@@ -4486,6 +4491,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             gap: 6px;
             margin-bottom: 4px;
             padding: 0 2px;
+            flex: 0 0 auto;          /* flex column 里不许被压扁 */
         }
         .week-header-cell {
             font-size: 12px;
@@ -4498,13 +4504,19 @@ body.dark-mode .wal-set-row input{background:#14141c}
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
             gap: 6px;
-            grid-auto-rows: 1fr;
+            grid-auto-rows: minmax(110px, 1fr);   /* 行高下限 110，余量按行平分 → 网格铺满可视区 */
+            flex: 1 1 auto;                       /* 吃掉 pane 剩余高度（2026-10-30 修底部空白） */
+            min-height: 0;
             position: relative;   /* 甘特覆盖层定位锚点 */
         }
         /* v2.11.1 修复日历歪斜：长任务标题的 min-content 曾把 1fr 列撑到 499px。
            minmax(0,1fr) 锁定七等分；day-cell/events-container 允许收缩，长标题走省略号 */
         .day-cell { min-width: 0; }
-        .day-cell .events-container { min-width: 0; width: 100%; }
+        .day-cell .events-container {
+            min-width: 0; width: 100%;
+            /* 2026-10-30：行高被拉伸锁定后，任务特别多的日子在格内滚动，不再溢出压到隔壁格 */
+            overflow-y: auto; min-height: 0; scrollbar-width: thin;
+        }
         .day-cell .event-item { max-width: 100%; }
         .day-cell {
             background: #fff;
@@ -6304,7 +6316,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             .stamp-mark.stamp-corner { right: 6px; top: 6px; font-size: 9.5px; }
         }
         /* ===== 今日琴键（2026-10-27 由待办鸟群改版，方案44键帽厚度）：每个任务一个键帽，完成=按到底、厚度消失 ===== */
-        .bird-wire-strip { display: flex; align-items: center; margin: 0 2px 6px; padding: 0 8px; height: 30px; position: relative; }
+        .bird-wire-strip { display: flex; align-items: center; margin: 0 2px 6px; padding: 0 8px; height: 30px; position: relative; flex: 0 0 auto; }
         .kb { position: relative; display: flex; gap: 2px; align-items: flex-start; padding-top: 1px; height: 28px; flex-shrink: 0; }
         .kb-key { position: relative; width: var(--kw, 20px); height: 18px; box-sizing: border-box; border-radius: 2px;
             background: #ffffff; box-shadow: inset 1px 0 0 #ffffff, inset -1px 0 0 #e8eaf2, inset 0 1px 0 #ffffff, 0 4px 0 #c9cdda, 0 0 0 1px rgba(120,125,145,.16);
@@ -43046,7 +43058,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610301639";
+        window.NIKO_VERSION = "202610301646";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
