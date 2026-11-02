@@ -12605,6 +12605,51 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .mnx-rw{margin-top:9px;font-size:11.5px;line-height:1.7;padding:8px 11px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)}
 .mnx-rw.warn{border-color:rgba(246,211,101,.5);background:rgba(246,211,101,.08)}
 .mnx-rw.ok{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.07)}
+/* ===================== 营养菜库 · 02 今日吃什么条 + 03 六维缺口环（2026-11-02）=====================
+   菜库 JSON 内嵌在 js 段（变量 CAIKU），这两块只是它的两个视图：
+   02 横幅读 weekPlan 排期，03 环读 foods 算账。颜色一律走主题变量 + 三档固定语义色。 */
+.hk-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--shadow,0 2px 10px rgba(0,0,0,.05));padding:12px 14px}
+.hk-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hk-date{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;height:44px;border-radius:11px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.07));line-height:1.15}
+.hk-date b{font-size:14.5px;font-weight:800;color:var(--text)}
+.hk-date span{font-size:9.5px;color:var(--muted)}
+.hk-meals{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0}
+.hk-m{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:9px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.07));color:var(--text);font-size:12px;line-height:1.35;cursor:pointer;transition:all .16s;min-height:32px}
+.hk-m:hover{border-color:var(--accent)}
+.hk-m em{font-style:normal;font-weight:800;font-size:10.5px;color:var(--muted)}
+.hk-m.on{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.55)}
+.hk-m.on em{color:#10b981}
+.hk-m .bx{flex:0 0 auto;width:15px;height:15px;border-radius:5px;border:1.5px solid var(--card-border);display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:800;color:transparent;font-style:normal}
+.hk-m.on .bx{background:#10b981;border-color:#10b981;color:#fff}
+.hk-cyc{border:0;background:transparent;color:var(--muted);font-size:12px;cursor:pointer;padding:0 1px;line-height:1}
+.hk-cyc:hover{color:var(--accent)}
+.hk-cnt{flex:0 0 auto;font-size:10.5px;color:var(--muted);white-space:nowrap}
+.hk-rings{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px dashed var(--card-border)}
+.hk-ring-w{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:50px}
+.hk-ring{position:relative;width:52px;height:52px;border-radius:50%;background:var(--card-border)}
+.hk-ring i{position:absolute;inset:5px;border-radius:50%;background:var(--card-bg)}
+.hk-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800}
+.hk-ring-w .lb{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.hk-adv{flex:1;min-width:200px;font-size:11.5px;color:var(--muted);line-height:1.65}
+.hk-adv b{color:var(--text)}
+.hk-na{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.6}
+.hk-na.over{color:#ef4444}
+@media (max-width:768px){
+  .hk-card{padding:11px 12px}
+  .hk-top{gap:8px;align-items:center}
+  /* 手机：日期块压成一条小胶囊，计数靠右，三顿各占一行更好点 */
+  .hk-date{width:auto;height:auto;flex-direction:row;gap:6px;padding:5px 10px;border-radius:9px}
+  .hk-date b{font-size:12.5px}
+  .hk-date span{font-size:11px}
+  .hk-cnt{order:-1;margin-left:auto}
+  .hk-meals{flex:1 1 100%}
+  .hk-m{min-height:36px;font-size:12.5px}
+  /* 六环 3×2 网格，比 flex 换行更整齐（flex 会出现「5+1」歪一行） */
+  .hk-rings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 6px;justify-items:center}
+  .hk-ring{width:46px;height:46px}
+  .hk-ring-w{min-width:0}
+  .hk-adv{grid-column:1/-1;min-width:0;font-size:12px}
+}
 
 
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
@@ -14713,6 +14758,11 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 
   <div class="panel" id="p-map">
     <div class="sec">
+
+      <!-- ===== 营养菜库：02 今日吃什么条 + 03 六维缺口环（2026-11-02）=====
+           数据来自 js 段内嵌的 CAIKU（营养菜库 v1），渲染入口 hkRender()。
+           默认 hidden：js 没加载 / 菜库没内嵌时不占地方，不留空白块。 -->
+      <div class="hk-card" id="hkCard" hidden></div>
 
       <div class="hpmap2 hpv11-mapwrap">
         <div class="hpmap2-l">
@@ -40328,6 +40378,7 @@ function renderHealthPage(){
   try {
     renderBodyMap();
     hpvRender();
+    hkRender();          /* 营养菜库：02 今日吃什么条 + 03 六维缺口环（内部会重读 niko_health_meal_v1） */
   } catch (e) { try { pvToast('渲染出错：' + e.message); } catch (e2) {} }
 }
 
@@ -40893,6 +40944,256 @@ function hpvHit(z){
     hpvS(HPV_DRAFT, k, (t.type==='checkbox') ? !!t.checked : t.value);
   });
 })();
+/* ===================== 营养菜库（2026-11-02 内嵌）=====================
+   来源：营养菜库-v1.json —— 全部按老板真实可得清单来的（便利店 6 样 / 食堂 9 样 / 大米先生 6 样 / 通用青菜 1 样）。
+   营养素为每份估算值，只用于相对比较与缺口回填，不做精确营养计算。
+   液体按 250ml、肉按 100g、饭按 1 碗(150g)、青菜按 150g 计。
+   改菜谱：直接改下面 CAIKU（它就是唯一数据源，没有第二份副本）。 */
+var CAIKU = {
+  meta: {
+    name:'NIKO 营养菜库', version:'v1', date:'2026-11-02',
+    basis:'老板真实可得清单：便利店 6 样 / 食堂减脂餐 9 样 / 大米先生 6 样',
+    note:'营养素为每份估算值，用于相对比较与缺口回填，不做精确营养计算。',
+    targets:{ protein:70, calcium:800, iron:12, zinc:12.5, b2:1.4, vd:800, sodium:2000 }
+  },
+  foods: [
+    { id:'milk',   name:'纯牛奶 250ml', scene:'便利店', role:'protein', p:8,   ca:300, fe:0.1, zn:1.0, b2:0.40, vd:2,   na:100, star:1, note:'钙地基，每天一盒。乳糖不耐受换零乳糖或酸奶' },
+    { id:'egg',    name:'茶叶蛋 1 个',  scene:'便利店', role:'protein', p:6.5, ca:30,  fe:1.2, zn:0.6, b2:0.15, vd:20,  na:350, star:1, note:'一周不超过 3 次，其余换水煮蛋（钠减半）' },
+    { id:'yogurt', name:'酸奶 150g',    scene:'便利店', role:'protein', p:4.5, ca:180, fe:0.1, zn:0.6, b2:0.20, vd:1,   na:60,  star:1, note:'钙的第二个来源，晚上加一盒补差' },
+    { id:'corn',   name:'甜玉米 1 根',  scene:'便利店', role:'carb',    p:4,   ca:2,   fe:0.5, zn:0.9, b2:0.06, vd:0,   na:5,   star:0, note:'算主食。叶黄素对盯屏的人有用' },
+    { id:'bun',    name:'馒头 1 个',    scene:'便利店', role:'carb',    p:7,   ca:38,  fe:1.8, zn:0.7, b2:0.05, vd:0,   na:165, star:0, note:'纯碳水，B2 在精制面粉里损失七成' },
+    { id:'soy',    name:'豆浆 250ml',   scene:'便利店', role:'carb',    p:4.5, ca:25,  fe:1.2, zn:0.6, b2:0.05, vd:0,   na:10,  star:0, note:'钙只有牛奶的 1/10，不能替代牛奶' },
+    { id:'chicken',name:'鸡排 去皮',    scene:'食堂',   role:'protein', p:24,  ca:11,  fe:0.7, zn:1.3, b2:0.13, vd:5,   na:300, star:1, note:'白肉，铁只有猪排的一半' },
+    { id:'pork',   name:'猪排',         scene:'食堂',   role:'protein', p:20,  ca:8,   fe:1.5, zn:2.2, b2:0.25, vd:8,   na:320, star:2, note:'铁锌最高的一档，每周 2 次' },
+    { id:'fish',   name:'鱼排',         scene:'食堂',   role:'protein', p:18,  ca:25,  fe:0.5, zn:0.6, b2:0.10, vd:40,  na:250, star:2, note:'唯一能吃到 VD 的日常菜，每周 2 次' },
+    { id:'fegg',   name:'煎鸡蛋 1 个',  scene:'食堂',   role:'protein', p:6.5, ca:28,  fe:1.2, zn:0.6, b2:0.20, vd:40,  na:170, star:1, note:'便宜好用的蛋白补丁，减脂餐蛋白不够就加' },
+    { id:'brice',  name:'黑米饭 1 碗',  scene:'食堂',   role:'carb',    p:4,   ca:10,  fe:0.9, zn:0.8, b2:0.03, vd:0,   na:2,   star:0, note:'比白米饭好，但仍是主食，和红薯二选一' },
+    { id:'sweet',  name:'红薯 150g',    scene:'食堂',   role:'carb',    p:1.5, ca:23,  fe:0.6, zn:0.3, b2:0.05, vd:0,   na:28,  star:0, note:'纤维好，但拿了它就别再拿饭' },
+    { id:'pasta',  name:'意面 1 份',    scene:'食堂',   role:'carb',    p:7,   ca:15,  fe:1.0, zn:0.7, b2:0.05, vd:0,   na:150, star:0, note:'奶油款脂肪翻倍，选番茄款' },
+    { id:'veg',    name:'时蔬青菜 150g',scene:'通用',   role:'veg',     p:2,   ca:80,  fe:1.5, zn:0.4, b2:0.10, vd:0,   na:200, star:1, note:'深色优先。钙不算高但每天都要有' },
+    { id:'saliva', name:'口水鸡',       scene:'大米先生',role:'protein',p:18,  ca:15,  fe:0.8, zn:1.2, b2:0.12, vd:5,   na:700, star:0, note:'⚠ 麻辣，与不吃辣冲突：让厨房少放红油，或换白切鸡腿' },
+    { id:'pump',   name:'南瓜 150g',    scene:'大米先生',role:'carb',   p:1,   ca:20,  fe:0.4, zn:0.3, b2:0.05, vd:0,   na:3,   star:0, note:'算主食不算菜，VA 高' },
+    { id:'broc',   name:'西蓝花 100g',  scene:'大米先生',role:'veg',    p:4,   ca:50,  fe:1.0, zn:0.4, b2:0.10, vd:0,   na:150, star:1, note:'VC 高，帮铁吸收' },
+    { id:'vermL',  name:'粉丝 1 份',    scene:'大米先生',role:'carb',   p:0.5, ca:10,  fe:0.3, zn:0.2, b2:0.01, vd:0,   na:400, star:0, note:'纯碳水，蛋白几乎为零，钠却不低' },
+    { id:'congee', name:'黑米粥 1 碗',  scene:'大米先生',role:'carb',   p:3,   ca:10,  fe:0.5, zn:0.4, b2:0.02, vd:0,   na:200, star:0, note:'GI 比米饭高，营养密度更低' },
+    { id:'chixia', name:'白切鸡腿',     scene:'大米先生',role:'protein',p:19,  ca:12,  fe:1.0, zn:1.4, b2:0.15, vd:6,   na:250, star:1, note:'口水鸡的不辣替身，优先选这个' },
+    { id:'steame', name:'蒸蛋',         scene:'大米先生',role:'protein',p:8,   ca:32,  fe:1.2, zn:0.7, b2:0.20, vd:40,  na:200, star:1, note:'最清淡稳定的蛋白来源' }
+  ],
+  meals: [
+    { id:'B1', slot:'早餐', name:'玉米 + 奶 + 蛋', items:{ corn:1, milk:1, egg:1 }, pick:true,  note:'标准款。蛋白 18.5g、钙 332mg，上午不崩' },
+    { id:'B2', slot:'早餐', name:'馒头 + 奶 + 蛋', items:{ bun:1, milk:1, egg:1 },  pick:true,  note:'换口味用，钠比 B1 高 160mg' },
+    { id:'B3', slot:'早餐', name:'玉米 + 奶（不加蛋）', items:{ corn:1, milk:1 }, pick:false, note:'缺蛋白，不推荐' },
+    { id:'B4', slot:'早餐', name:'馒头 + 豆浆（原吃法）', items:{ bun:1, soy:1 }, pick:false, note:'纯碳水，钙 63mg、B2 近零 —— 这就是上午没精神的原因' },
+    { id:'L1', slot:'午餐', name:'鱼排 + 煎蛋 + 青菜 + 红薯', items:{ fish:1, fegg:1, veg:1, sweet:1 }, pick:true, note:'鱼排日（周一/周四）' },
+    { id:'L2', slot:'午餐', name:'猪排 + 煎蛋 + 青菜 + 黑米饭', items:{ pork:1, fegg:1, veg:1, brice:1 }, pick:true, note:'猪排日（周二/周五），铁锌最高' },
+    { id:'L3', slot:'午餐', name:'鸡排 + 煎蛋 + 青菜 + 意面', items:{ chicken:1, fegg:1, veg:1, pasta:1 }, pick:true, note:'周三或自由日' },
+    { id:'D1', slot:'晚餐', name:'口水鸡 + 西蓝花 + 青菜 + 黑米粥', items:{ saliva:1, broc:1, veg:1, congee:1 }, pick:true, note:'口水鸡记得少红油' },
+    { id:'D2', slot:'晚餐', name:'白切鸡腿 + 西蓝花 + 青菜 + 南瓜', items:{ chixia:1, broc:1, veg:1, pump:1 }, pick:true, note:'不辣款，钠比 D1 少 450mg' },
+    { id:'D3', slot:'晚餐', name:'蒸蛋 + 西蓝花 + 青菜 + 粉丝', items:{ steame:1, broc:1, veg:1, vermL:1 }, pick:true, note:'清淡日' }
+  ],
+  weekPlan: [
+    { d:'周一', b:'B1', l:'L1', dn:'D1', sun:true  },
+    { d:'周二', b:'B1', l:'L2', dn:'D2', sun:true  },
+    { d:'周三', b:'B2', l:'L3', dn:'D3', sun:true  },
+    { d:'周四', b:'B1', l:'L1', dn:'D1', sun:true  },
+    { d:'周五', b:'B2', l:'L2', dn:'D2', sun:true  },
+    { d:'周六', b:'B1', l:'L3', dn:'D3', sun:false },
+    { d:'周日', b:'B2', l:'L1', dn:'D2', sun:false }
+  ],
+  supplements: [
+    { id:'vb',  name:'复合维生素 B', dose:'每天 1 片', span:'先吃 2 周', why:'熬夜 + 口腔溃疡主力' },
+    { id:'zn',  name:'葡萄糖酸锌 10mg', dose:'溃疡期每天', span:'连续不超 4 周', why:'超过 40mg/天会压铜，别长期大剂量' },
+    { id:'vd3', name:'维生素 D3', dose:'800–1000 IU 随餐', span:'阴雨天/没午休时', why:'脂溶性，空腹吸收差' }
+  ],
+  rules: [
+    '豆浆不替代牛奶（钙只有 1/10）',
+    '主食二选一：红薯 / 玉米 / 黑米饭 / 意面',
+    '晚餐碳水三选一：粉丝 / 黑米粥 / 南瓜',
+    '南瓜算主食不算菜',
+    '口水鸡是麻辣的，与「不吃辣」冲突 → 少红油或少吃',
+    '茶叶蛋一周不超过 3 次，其余换水煮蛋',
+    '外食汤汁不喝、蘸料减半（控钠，针对口干）',
+    '工作日午休出门晒 15 分钟，10:00–15:00，隔玻璃无效',
+    '猪肝、豆腐不作为必吃项（不做饭的人做不到，不勉强）'
+  ],
+  redlines: [
+    '溃疡超过 3 周不愈合、或边缘发硬不怎么痛 → 口腔科，排除癌性溃疡',
+    '反复溃疡 + 眼睛发炎 / 皮疹 → 查白塞病',
+    '持续口干眼干 + 关节痛 → 风湿免疫科，查干燥综合征',
+    '换掉含 SLS（十二烷基硫酸钠）的牙膏 —— 有随机对照试验支持能减少复发'
+  ]
+};
+
+/* 打卡状态独立一个 key：niko_health_v1 由 HSAVE 整体重写，营养打卡混进去会被别的写操作冲掉。 */
+var MK = 'niko_health_meal_v1';
+var MEAL = { v:1, days:{} };
+var MK_SLOTS = [ {k:'b', t:'早', s:'早餐'}, {k:'l', t:'午', s:'午餐'}, {k:'d', t:'晚', s:'晚餐'} ];
+var MK_NUTS  = [ {k:'p', n:'蛋白', u:'g',  tk:'protein'}, {k:'ca', n:'钙', u:'mg', tk:'calcium'}, {k:'fe', n:'铁', u:'mg', tk:'iron'},
+                 {k:'zn', n:'锌', u:'mg', tk:'zinc'},    {k:'b2', n:'B2', u:'mg', tk:'b2'},          {k:'vd', n:'VD', u:'IU', tk:'vd'} ];
+var MK_SUMKEYS = ['p','ca','fe','zn','b2','vd','na'];
+
+function mkLoad(){
+  var d = null;
+  try { d = safeStorage.get(MK, null); } catch(e){ d = null; }
+  if (d && typeof d === 'object' && d.days && typeof d.days === 'object') { MEAL = d; }
+  else { MEAL = { v:1, days:{} }; }
+  return MEAL;
+}
+function mkSave(){ try { safeStorage.set(MK, MEAL); } catch(e){} }
+function mkKey(dt){
+  dt = dt || new Date();
+  var m = dt.getMonth()+1, dd = dt.getDate();
+  return dt.getFullYear() + '-' + (m<10?'0':'') + m + '-' + (dd<10?'0':'') + dd;
+}
+function mkFood(id){ for(var i=0;i<CAIKU.foods.length;i++){ if(CAIKU.foods[i].id===id) return CAIKU.foods[i]; } return null; }
+function mkMeal(id){ for(var i=0;i<CAIKU.meals.length;i++){ if(CAIKU.meals[i].id===id) return CAIKU.meals[i]; } return null; }
+/* 今天该吃什么 = weekPlan 按「周一为第 0 项」取（和 NIKO 的周期口径无关，这里是自然周排期） */
+function mkPlan(){
+  var idx = (new Date().getDay() + 6) % 7;
+  return CAIKU.weekPlan[idx] || CAIKU.weekPlan[0];
+}
+function mkTarget(tk){ var t = (CAIKU.meta && CAIKU.meta.targets) || {}; return Number(t[tk]) || 0; }
+/* 取/建今天的记录：三顿没定过就按排期补，老状态缺字段也在这里补齐。
+   ⚠️ 晒太阳默认 false（不用排期的 sun 自动入账）：VD 只有真出门晒过才算，替用户记一笔就是假数据。 */
+function mkDay(){
+  var k = mkKey(), pl = mkPlan(), d = MEAL.days[k];
+  if (!d || typeof d !== 'object') { d = { b:pl.b, l:pl.l, d:pl.dn, e:{}, sun:0, t:Date.now() }; MEAL.days[k] = d; }
+  if (!d.e || typeof d.e !== 'object') d.e = {};
+  if (!mkMeal(d.b)) d.b = pl.b;
+  if (!mkMeal(d.l)) d.l = pl.l;
+  if (!mkMeal(d.d)) d.d = pl.dn;
+  if (d.sun == null) d.sun = 0;
+  return d;
+}
+/* 只留最近 40 天，别让这份状态无限长 */
+function mkPrune(){
+  var ks = Object.keys(MEAL.days).sort();
+  while (ks.length > 40) { delete MEAL.days[ks.shift()]; }
+}
+/* 算账：已打卡的餐按 foods 累加；晒太阳按 600IU 记（VD 的唯一真实来源，取保守值） */
+function mkSum(){
+  var d = mkDay(), s = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 };
+  MK_SLOTS.forEach(function(sl){
+    if (!d.e[sl.k]) return;
+    var m = mkMeal(d[sl.k]); if (!m) return;
+    Object.keys(m.items || {}).forEach(function(fid){
+      var f = mkFood(fid); if (!f) return;
+      var n = Number(m.items[fid]) || 1;
+      MK_SUMKEYS.forEach(function(x){ s[x] += (Number(f[x]) || 0) * n; });
+    });
+  });
+  if (d.sun) s.vd += 600;
+  return s;
+}
+function mkRing(n, v, t){
+  var r = t ? v / t : 0;
+  var p = Math.max(0, Math.min(100, Math.round(r * 100)));
+  var c = r >= 1 ? '#10b981' : (r >= 0.7 ? '#f59e0b' : '#ef4444');
+  return '<div class="hk-ring-w" title="' + n + ' ' + Math.round(v) + ' / ' + t + '">'
+    + '<div class="hk-ring" style="background:conic-gradient(' + c + ' 0 ' + p + '%, var(--card-border) ' + p + '% 100%)"><i></i>'
+    + '<b style="color:' + c + '">' + p + '%</b></div>'
+    + '<span class="lb">' + n + '</span></div>';
+}
+/* 一句补缺建议：只从菜库里挑，不推荐买钙片补剂，也不许出现要下厨的步骤 */
+function mkAdvice(s, d, eaten){
+  var pl = mkPlan();
+  if (!d.sun) {
+    if (pl.sun) return 'VD 靠吃补不满 —— 今天排期是晒太阳日：午休出门晒 15 分钟（10:00–15:00，隔玻璃无效），比吃什么补剂都直接。';
+    return 'VD 靠吃补不满 —— 周末排期没有晒太阳，只能靠鱼排 / 蛋补一点，别指望吃够。';
+  }
+  if (!eaten) return '晒过太阳了 —— 点上面三顿的名字算「吃过了」，六个环立刻回填。';
+  var worst = null;
+  MK_NUTS.forEach(function(x){
+    if (x.k === 'vd') return;
+    var t = mkTarget(x.tk); if (!t) return;
+    var r = s[x.k] / t;
+    if (!worst || r < worst.r) worst = { k:x.k, n:x.n, u:x.u, r:r, gap:t - s[x.k] };
+  });
+  if (!worst || worst.r >= 1) return '六项都到位了 ✓ 今天照这个节奏吃，不用再补。';
+  var cand = CAIKU.foods.slice().sort(function(a,b){ return (Number(b[worst.k])||0) - (Number(a[worst.k])||0); }).slice(0,2);
+  var best = cand[0] ? (Number(cand[0][worst.k]) || 0) : 0;
+  /* 这份菜库本身补不满的项（典型：锌 —— 你不吃红肉和海鲜）：如实说「别硬凑」，不许推荐吃三份猪排 */
+  if (best && worst.gap > best * 2) {
+    return '<b>' + worst.n + '</b> 差 ' + Math.round(worst.gap) + worst.u + '，但这份菜库里最多一次补 ' + best + worst.u
+      + ' —— 这就是你现有清单的上限，别硬凑（溃疡期靠锌片补 2–4 周即可）。';
+  }
+  var tip = cand.map(function(f){ return f.name + '（+' + (Number(f[worst.k]) || 0) + worst.u + '）'; }).join(' / ');
+  return '<b>' + worst.n + '</b> 还差 ' + Math.round(worst.gap) + worst.u + ' —— 最省事的补法：' + tip + '。';
+}
+/* 渲染：02 横幅（今天吃什么）+ 03 六维缺口环（今天补到几成） */
+function hkRender(){
+  mkLoad();
+  var box = document.getElementById('hkCard');
+  if (!box) return;
+  mkPrune();
+  var d = mkDay(), s = mkSum(), dt = new Date(), pl = mkPlan();
+  var wdn = ['日','一','二','三','四','五','六'][dt.getDay()];
+  var eaten = 0;
+  MK_SLOTS.forEach(function(sl){ if (d.e[sl.k]) eaten++; });
+
+  var head = '<div class="hk-top">'
+    + '<div class="hk-date"><b>' + (dt.getMonth()+1) + '/' + dt.getDate() + '</b><span>周' + wdn + '</span></div>'
+    + '<div class="hk-meals">';
+  MK_SLOTS.forEach(function(sl){
+    var m = mkMeal(d[sl.k]), on = !!d.e[sl.k];
+    head += '<span class="hk-m' + (on ? ' on' : '') + '" onclick="hkToggle(\'' + sl.k + '\')" title="' + esc(m ? (m.name + ' · ' + (m.note||'')) : '未定') + '">'
+      + '<i class="bx">✓</i><em>' + sl.t + '</em>' + esc(m ? m.name : '未定')
+      + '<button class="hk-cyc" onclick="event.stopPropagation();hkCyc(\'' + sl.k + '\')" title="换一餐（只在这套菜库里换，不会冒出要下厨的菜）">⇄</button></span>';
+  });
+  head += '<span class="hk-m' + (d.sun ? ' on' : '') + '" onclick="hkSun()" title="工作日午休出门晒 15 分钟，隔玻璃无效">'
+    + '<i class="bx">✓</i>☀ 晒太阳' + ((!d.sun && pl.sun) ? '<em>排期建议</em>' : '') + '</span>';
+  head += '</div><span class="hk-cnt">已记 ' + eaten + '/3 顿</span></div>';
+
+  var rings = '<div class="hk-rings">';
+  MK_NUTS.forEach(function(x){ rings += mkRing(x.n, s[x.k], mkTarget(x.tk)); });
+  rings += '<div class="hk-adv">' + mkAdvice(s, d, eaten) + '</div></div>';
+  var naT = mkTarget('sodium');
+  rings += '<div class="hk-na' + (s.na > naT ? ' over' : '') + '">钠 ' + Math.round(s.na) + ' / 上限 ' + naT + 'mg（按今天已记的三顿算）'
+    + ' · 每份营养素为估算值，只用于相对比较与补缺，不做精确营养计算</div>';
+
+  box.innerHTML = head + rings;
+  box.hidden = false;
+}
+function hkToggle(k){
+  var d = mkDay();
+  d.e[k] = d.e[k] ? 0 : 1;
+  d.t = Date.now();
+  mkSave(); hkRender();
+}
+function hkSun(){
+  var d = mkDay();
+  d.sun = d.sun ? 0 : 1;
+  d.t = Date.now();
+  mkSave(); hkRender();
+}
+/* 换一餐：只在同餐次且 pick:true 的方案里循环；换了就等于没吃过，要重新打卡 */
+function hkCyc(k){
+  var d = mkDay(), slot = '';
+  MK_SLOTS.forEach(function(sl){ if (sl.k === k) slot = sl.s; });
+  var list = CAIKU.meals.filter(function(m){ return m.slot === slot && m.pick; });
+  if (!list.length) return;
+  var cur = 0;
+  for (var i=0;i<list.length;i++){ if (list[i].id === d[k]) cur = i; }
+  d[k] = list[(cur + 1) % list.length].id;
+  d.e[k] = 0;
+  d.t = Date.now();
+  mkSave(); hkRender();
+}
+
+if(typeof window !== 'undefined'){
+  window.hkRender = hkRender;
+  window.hkToggle = hkToggle;
+  window.hkSun    = hkSun;
+  window.hkCyc    = hkCyc;
+  /* 门禁探针：只读回菜库规模和今天算出来的账，方便断言（不暴露写接口） */
+  window.__caiku = function(){
+    var s = mkSum(), d = mkDay();
+    return { foods:CAIKU.foods.length, meals:CAIKU.meals.length, plan:CAIKU.weekPlan.length,
+             today:{ b:d.b, l:d.l, d:d.d, sun:d.sun, e:d.e }, sum:s,
+             rings:document.querySelectorAll('#hkCard .hk-ring').length };
+  };
+}
+
 if(typeof window !== 'undefined'){
   window.hpvForm = hpvForm;
   window.hpvEditMode = hpvEditMode;
@@ -43058,7 +43359,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202610301646";
+        window.NIKO_VERSION = "202611021043";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
