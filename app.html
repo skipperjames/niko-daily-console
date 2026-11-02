@@ -12664,6 +12664,65 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   .hk-ring-w{min-width:0}
   .hk-adv{grid-column:1/-1;min-width:0;font-size:12px}
 }
+/* ===================== 营养页 v2：额外条目 + 三档环 + 水果坚果卡（2026-11-02）=====================
+   对应老板选定的 A1 一句话记账 / A3 常用菜一键点 / A4 对话式录入 / B1 六维环三档 / D1 水果坚果决策卡。
+   数据落 d.xl（菜单外吃的东西），算账见 mkSum / mkSumOn —— 没有这一层，吃牛肉面那天账是假的。 */
+.hk-eat{margin-top:10px;padding-top:10px;border-top:1px dashed var(--card-border)}
+.hk-eat-hd{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:7px}
+.hk-eat-hd .lb{font-size:10.5px;color:var(--muted);font-weight:700;white-space:nowrap}
+.hk-eat-hd .ct{font-size:10px;color:var(--muted)}
+.hk-eatbar{display:flex;gap:6px}
+.hk-eatbar input{flex:1;min-width:0;min-height:32px;padding:5px 10px;border-radius:9px;border:1px solid var(--card-border);
+  background:var(--card-bg-2,rgba(127,127,127,.07));color:var(--text);font-size:12px;outline:none}
+.hk-eatbar input:focus{border-color:var(--accent)}
+.hk-eb{flex:0 0 auto;min-height:32px;padding:0 10px;border-radius:9px;border:1px solid var(--card-border);
+  background:var(--card-bg-2,rgba(127,127,127,.07));color:var(--text);font-size:11.5px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.hk-eb:hover{border-color:var(--accent)}
+.hk-eb.p{background:rgba(124,92,255,.16);border-color:rgba(124,92,255,.5);color:#a78bfa;font-weight:700}
+.hk-quick{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.hk-q{font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--card-border);background:transparent;
+  color:var(--muted);cursor:pointer;min-height:26px;line-height:1.2;transition:all .15s}
+.hk-q:hover{border-color:var(--accent);color:var(--text)}
+.hk-bub{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.hk-x{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 4px 3px 9px;border-radius:999px;
+  background:rgba(124,92,255,.12);border:1px solid rgba(124,92,255,.35);color:var(--text)}
+.hk-x i{font-style:normal;font-size:9.5px;color:var(--muted)}
+.hk-x .x{cursor:pointer;width:16px;height:16px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;border:1px solid var(--card-border);font-size:10px;color:var(--muted)}
+.hk-x .x:hover{border-color:#ef4444;color:#ef4444}
+.hk-x.u{background:rgba(148,163,184,.14);border-color:rgba(148,163,184,.4);color:var(--muted)}
+.hk-say{margin-top:6px;font-size:11px;color:var(--muted);line-height:1.65}
+.hk-say b{color:var(--text)}
+.hk-scope{display:flex;gap:5px;margin-left:auto;align-items:center}
+.hk-s{font-size:10.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--card-border);background:transparent;
+  color:var(--muted);cursor:pointer;min-height:26px;transition:all .15s}
+.hk-s:hover{color:var(--text)}
+.hk-s.on{background:rgba(124,92,255,.16);border-color:rgba(124,92,255,.5);color:#a78bfa;font-weight:700}
+.hk-fruit{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.hk-fc{flex:1;min-width:150px;border-radius:11px;border:1px solid var(--card-border);padding:9px 11px;
+  background:var(--card-bg-2,rgba(127,127,127,.05))}
+.hk-fc.need{border-color:rgba(245,158,11,.5);background:rgba(245,158,11,.07)}
+.hk-fc.done{border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.07)}
+.hk-fc .t{font-size:12px;font-weight:700;color:var(--text)}
+.hk-fc .d{font-size:11px;color:var(--muted);line-height:1.6;margin-top:3px}
+.hk-fc .go{margin-top:6px;font-size:10.5px;padding:2px 9px;border-radius:7px;border:1px solid rgba(245,158,11,.55);
+  background:transparent;color:#eab308;cursor:pointer;min-height:24px}
+.hk-fc .go:hover{background:rgba(245,158,11,.16)}
+.hk-imp{margin-top:8px}
+.hk-imp textarea{width:100%;min-height:92px;padding:8px 10px;border-radius:9px;border:1px solid var(--card-border);
+  background:var(--card-bg-2,rgba(127,127,127,.07));color:var(--text);font-size:11.5px;line-height:1.7;
+  font-family:ui-monospace,Menlo,Consolas,monospace;resize:vertical;outline:none}
+.hk-imp textarea:focus{border-color:var(--accent)}
+.hk-imp .row{display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.hk-imp .tip{font-size:10.5px;color:var(--muted);line-height:1.5;flex:1;min-width:120px}
+@media(max-width:768px){
+  .hk-fruit{flex-direction:column}
+  .hk-fc{min-width:0}
+  .hk-scope{margin-left:0;width:100%;margin-top:6px;justify-content:flex-start}
+  .hk-eatbar input{font-size:12.5px;min-height:36px}
+  .hk-eb{min-height:36px;font-size:12px}
+  .hk-q{min-height:30px;font-size:11.5px}
+}
 
 
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
@@ -17226,6 +17285,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261102-1845', d: '2026-11-02', at: '18:45', name: '营养页 v2：菜单外也能记了 + 本周差多少 + 水果坚果到底吃不吃',
+                items: [
+                    { sec: '🍚 营养', t: '吃了菜单外面的东西，也能记进去', how: '营养卡多了一行输入框：打「牛肉面 加个蛋」→ 回车就入账，**不用填克数**（份数由菜库反推，说「一碗」就是一份）。下面一排是你最常吃的几样，点一下就是一份。记完它会回你一句「今天还差什么」', go: 'health' },
+                    { sec: '🍚 营养', t: '六维环能看「今日 / 本周 / 本月」了', how: '点环右边三个小键切换。本周按你的流程周期算（周五 → 周四），口径是「**有记录那几天的日均**」—— 没记的天不算成零，否则一天没记就把整周拉低，看着像全废了', go: 'health' },
+                    { sec: '🍚 营养', t: '水果、坚果：直接回答「要不要吃」', how: '两张卡。没吃 → 黄边 + 具体建议（1 份水果 / 15g 坚果，上午吃最好），下面直接有「点我记一份」；吃了 → 绿边「够了，别再补」。菜库原来一个水果都没有（所以这问题根本算不出来），这次补了苹果 / 香蕉 / 橙子 / 混合坚果 / 牛肉面 / 白米饭', go: 'health' },
+                    { sec: '🍚 营养', t: '拍张照就行：WorkBuddy 认完给你一段，粘进去就入账', how: '营养卡右上「📥 粘贴」—— 把食物照片发给 WorkBuddy，它回一段 @NIKO-EAT 的文本（如「早 milk*1 egg*1」「sun 1」），原样贴进来点导入。**跟当天菜单完全一致的那顿只打勾、不重复算**，不一样的才记成额外条目', go: 'health' }
+                ]
+            },
+
             {
                 v: 'b-20261020-1310', d: '2026-10-20', at: '13:10', name: '看病记录能粘病历自动填 + 更新日记看过的自动清',
                 items: [
@@ -40992,7 +41061,16 @@ var CAIKU = {
     { id:'vermL',  name:'粉丝 1 份',    scene:'大米先生',role:'carb',   p:0.5, ca:10,  fe:0.3, zn:0.2, b2:0.01, vd:0,   na:400, star:0, note:'纯碳水，蛋白几乎为零，钠却不低' },
     { id:'congee', name:'黑米粥 1 碗',  scene:'大米先生',role:'carb',   p:3,   ca:10,  fe:0.5, zn:0.4, b2:0.02, vd:0,   na:200, star:0, note:'GI 比米饭高，营养密度更低' },
     { id:'chixia', name:'白切鸡腿',     scene:'大米先生',role:'protein',p:19,  ca:12,  fe:1.0, zn:1.4, b2:0.15, vd:6,   na:250, star:1, note:'口水鸡的不辣替身，优先选这个' },
-    { id:'steame', name:'蒸蛋',         scene:'大米先生',role:'protein',p:8,   ca:32,  fe:1.2, zn:0.7, b2:0.20, vd:40,  na:200, star:1, note:'最清淡稳定的蛋白来源' }
+    { id:'steame', name:'蒸蛋',         scene:'大米先生',role:'protein',p:8,   ca:32,  fe:1.2, zn:0.7, b2:0.20, vd:40,  na:200, star:1, note:'最清淡稳定的蛋白来源' },
+    /* ===== 2026-11-02 补：水果 / 坚果 / 外食主食 =====
+       老板问「水果要不要吃、坚果要不要吃」，但原 22 样里一个水果都没有 —— D1 决策卡无从算起。
+       这几样的营养值按常见份量估算，口径同前：只用于相对比较与补缺。 */
+    { id:'apple',  name:'苹果 1 个',    scene:'通用',   role:'fruit',   p:0.3, ca:6,   fe:0.2, zn:0.05, b2:0.02, vd:0,   na:1,   star:1, note:'一天 1 份就够，饭后或下午三点；别拿它当饭吃' },
+    { id:'banana', name:'香蕉 1 根',    scene:'通用',   role:'fruit',   p:1.3, ca:6,   fe:0.3, zn:0.2,  b2:0.07, vd:0,   na:1,   star:1, note:'最好带的一种，上午或运动前吃' },
+    { id:'orange', name:'橙子 1 个',    scene:'通用',   role:'fruit',   p:1.0, ca:40,  fe:0.1, zn:0.07, b2:0.03, vd:0,   na:1,   star:0, note:'VC 高，跟青菜/猪排一起吃帮铁吸收' },
+    { id:'nut',    name:'混合坚果 15g', scene:'通用',   role:'nut',     p:3.0, ca:20,  fe:0.7, zn:0.5,  b2:0.05, vd:0,   na:2,   star:1, note:'一小把（带壳的一小袋）。你不吃红肉，锌主要靠它；多了就是油' },
+    { id:'noodle', name:'牛肉面 1 碗',  scene:'外食',   role:'main',    p:28,  ca:30,  fe:3.0, zn:3.5,  b2:0.20, vd:5,   na:1200,star:0, note:'⚠ 钠 1200，一顿顶掉半天额度；汤别喝光' },
+    { id:'rice',   name:'白米饭 1 碗',  scene:'外食',   role:'carb',    p:3.5, ca:10,  fe:0.4, zn:0.6,  b2:0.02, vd:0,   na:2,   star:0, note:'外食默认主食，盖浇饭/炒饭都用它记' },
   ],
   meals: [
     { id:'B1', slot:'早餐', name:'玉米 + 奶 + 蛋', items:{ corn:1, milk:1, egg:1 }, pick:true,  note:'标准款。蛋白 18.5g、钙 332mg，上午不崩' },
@@ -41072,26 +41150,33 @@ function mkPlan(){
 function mkTarget(tk){ var t = (CAIKU.meta && CAIKU.meta.targets) || {}; return Number(t[tk]) || 0; }
 /* 取/建今天的记录：三顿没定过就按排期补，老状态缺字段也在这里补齐。
    ⚠️ 晒太阳默认 false（不用排期的 sun 自动入账）：VD 只有真出门晒过才算，替用户记一笔就是假数据。 */
-function mkDay(){
-  var k = mkKey(), pl = mkPlan(), d = MEAL.days[k];
-  if (!d || typeof d !== 'object') { d = { b:pl.b, l:pl.l, d:pl.dn, e:{}, sun:0, t:Date.now() }; MEAL.days[k] = d; }
+function mkDayOf(k){
+  var pl = mkPlan(), d = MEAL.days[k];
+  if (!d || typeof d !== 'object') { d = { b:pl.b, l:pl.l, d:pl.dn, e:{}, xl:[], sun:0, t:Date.now() }; MEAL.days[k] = d; }
   if (!d.e || typeof d.e !== 'object') d.e = {};
+  /* xl = 菜单外吃的东西（A1/A3/A4 录进来的）；unk = 菜库里没有、只留名字的 */
+  if (!Array.isArray(d.xl)) d.xl = [];
+  if (!Array.isArray(d.unk)) d.unk = [];
   if (!mkMeal(d.b)) d.b = pl.b;
   if (!mkMeal(d.l)) d.l = pl.l;
   if (!mkMeal(d.d)) d.d = pl.dn;
   if (d.sun == null) d.sun = 0;
   return d;
 }
+function mkDay(){ return mkDayOf(mkKey()); }
 /* 只留最近 40 天，别让这份状态无限长 */
 function mkPrune(){
   var ks = Object.keys(MEAL.days).sort();
   while (ks.length > 40) { delete MEAL.days[ks.shift()]; }
 }
 /* 算账：已打卡的餐按 foods 累加；晒太阳按 600IU 记（VD 的唯一真实来源，取保守值） */
-function mkSum(){
-  var d = mkDay(), s = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 };
+/* 某一天的账：三顿菜单 + 菜单外条目（d.xl）+ 晒太阳。
+   2026-11-02：原来只算整份菜单，老板吃牛肉面而不是 L2 猪排时账是假的 → 现在 d.xl 一并累加。 */
+function mkSumOn(key){
+  var s = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 };
+  var d = (key === mkKey()) ? mkDay() : (MEAL.days[key] || { e:{}, xl:[] });
   MK_SLOTS.forEach(function(sl){
-    if (!d.e[sl.k]) return;
+    if (!d.e || !d.e[sl.k]) return;
     var m = mkMeal(d[sl.k]); if (!m) return;
     Object.keys(m.items || {}).forEach(function(fid){
       var f = mkFood(fid); if (!f) return;
@@ -41099,8 +41184,152 @@ function mkSum(){
       MK_SUMKEYS.forEach(function(x){ s[x] += (Number(f[x]) || 0) * n; });
     });
   });
+  (d.xl || []).forEach(function(en){
+    Object.keys(en.items || {}).forEach(function(fid){
+      var f = mkFood(fid); if (!f) return;
+      var n = Number(en.items[fid]) || 1;
+      MK_SUMKEYS.forEach(function(x){ s[x] += (Number(f[x]) || 0) * n; });
+    });
+  });
   if (d.sun) s.vd += 600;
   return s;
+}
+function mkSum(){ return mkSumOn(mkKey()); }
+/* ===================== 录入层：一句话 / 快捷 / 粘贴（A1 A3 A4）=====================
+   老板原话：「我不一定能严格按菜单吃，也预估不了多少量级」→ 所以这里只收「吃了什么」，
+   份数只有 0.5/1/2/3 四档，克数由菜库反推。 */
+var HK_SYN = [
+  ['牛奶','milk'],['纯牛奶','milk'],['豆浆','soy'],['酸奶','yogurt'],
+  ['茶叶蛋','egg'],['水煮蛋','egg'],['煎蛋','fegg'],['鸡蛋','egg'],
+  ['甜玉米','corn'],['玉米','corn'],['馒头','bun'],['红薯','sweet'],
+  ['黑米饭','brice'],['白米饭','rice'],['米饭','brice'],['白饭','rice'],
+  ['意面','pasta'],['粉丝','vermL'],['黑米粥','congee'],['粥','congee'],['南瓜','pump'],
+  ['西蓝花','broc'],['西兰花','broc'],['青菜','veg'],['时蔬','veg'],['蔬菜','veg'],
+  ['白切鸡','chixia'],['鸡腿','chixia'],['鸡排','chicken'],['口水鸡','saliva'],
+  ['猪排','pork'],['带骨沙丁鱼','sardine'],['沙丁鱼','sardine'],['鱼排','fish'],
+  ['蒸蛋','steame'],
+  ['苹果','apple'],['香蕉','banana'],['橙子','orange'],['橘子','orange'],['橙','orange'],
+  ['混坚','nut'],['坚果','nut'],['核桃','nut'],['巴旦木','nut'],['腰果','nut'],
+  ['牛肉面','noodle'],['拉面','noodle'],['面','noodle'],
+  /* 单字兜底放最后（HK_SYN_SORTED 按长度倒序匹配，长的先命中）——「加个蛋」「一杯奶」这种口语才认得出来 */
+  ['蛋','egg'],['奶','milk'],['鱼','fish'],['饭','brice']
+];
+var HK_SYN_SORTED = HK_SYN.slice().sort(function(a,b){ return b[0].length - a[0].length; });
+function mkShort(name){ return String(name||'').split(' ')[0]; }
+/* 一句话 → [{id,q}] 或 [{unk:'名字',q}]；支持「牛肉面*2」这种写法 */
+function mkParseEat(txt){
+  var out = [], seen = {};
+  String(txt||'').split(/[\s,，、+＋\/]+/).filter(Boolean).forEach(function(w){
+    var q = 1, m = w.match(/^(.+?)[*x×](\d+(?:\.\d+)?)$/);
+    if (m) { w = m[1]; q = Math.max(0.5, Math.min(3, Number(m[2]) || 1)); }
+    var hit = null;
+    for (var i=0;i<CAIKU.foods.length;i++){ if (CAIKU.foods[i].id === w) { hit = CAIKU.foods[i]; break; } }
+    if (!hit){
+      for (var j=0;j<HK_SYN_SORTED.length;j++){
+        if (w.indexOf(HK_SYN_SORTED[j][0]) >= 0 || HK_SYN_SORTED[j][0].indexOf(w) >= 0){ hit = mkFood(HK_SYN_SORTED[j][1]); break; }
+      }
+    }
+    if (!hit){ out.push({ unk:w, q:q }); return; }
+    if (seen[hit.id]) seen[hit.id].q += q;
+    else { seen[hit.id] = { id:hit.id, q:q }; out.push(seen[hit.id]); }
+  });
+  return out;
+}
+/* 落库：新条目塞进今天最后一条「同一来源、30 分钟内」的记录，避免气泡刷屏 */
+function mkAddEat(items, src){
+  var d = mkDay(), now = Date.now(), its = {}, unk = [], got = [];
+  items.forEach(function(it){
+    if (it.unk){ unk.push(it.unk); return; }
+    its[it.id] = (its[it.id] || 0) + it.q;
+    var f = mkFood(it.id);
+    got.push(mkShort(f ? f.name : it.id) + (it.q !== 1 ? '×' + it.q : ''));
+  });
+  var last = d.xl[d.xl.length - 1];
+  if (Object.keys(its).length){
+    if (last && last.src === (src || 'text') && now - last.t < 30 * 60 * 1000){
+      Object.keys(its).forEach(function(id){ last.items[id] = (last.items[id] || 0) + its[id]; });
+      last.t = now;
+    } else {
+      d.xl.push({ t:now, src:src || 'text', items:its });
+    }
+  }
+  if (unk.length) d.unk = d.unk.concat(unk);
+  d.t = now;
+  mkSave();
+  return { got:got, unk:unk };
+}
+/* A3 常用菜：最近吃过的排前面，再补必备项，最多 9 个 */
+function mkQuickList(){
+  var seen = {}, out = [], d = mkDay();
+  var push = function(f){ if (f && !seen[f.id] && out.length < 9){ seen[f.id] = 1; out.push(f); } };
+  for (var i = (d.xl || []).length - 1; i >= 0 && out.length < 4; i--){
+    Object.keys(d.xl[i].items || {}).forEach(function(fid){ push(mkFood(fid)); });
+  }
+  ['milk','egg','veg','nut','apple','banana','noodle','rice','fish'].forEach(function(id){ push(mkFood(id)); });
+  CAIKU.foods.forEach(function(f){ if (f.star >= 1) push(f); });
+  return out;
+}
+/* 今日某类（水果/坚果）吃了几份 —— 只从「已吃」里算，排期不算 */
+function mkRoleCount(role){
+  var d = mkDay(), n = 0;
+  MK_SLOTS.forEach(function(sl){
+    if (!d.e[sl.k]) return;
+    var m = mkMeal(d[sl.k]); if (!m) return;
+    Object.keys(m.items || {}).forEach(function(fid){ var f = mkFood(fid); if (f && f.role === role) n += Number(m.items[fid]) || 1; });
+  });
+  (d.xl || []).forEach(function(en){
+    Object.keys(en.items || {}).forEach(function(fid){ var f = mkFood(fid); if (f && f.role === role) n += Number(en.items[fid]) || 1; });
+  });
+  return n;
+}
+/* ===== B1 三档：今日 / 本周（周五→周四，NIKO 周期口径）/ 本月（日均）===== */
+var HK_SCOPE = 'd';            /* 不落盘：这是显示偏好，重开就回「今日」，也不参与云同步 */
+function mkCycleStart(){
+  var n = new Date(), d = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  d.setDate(d.getDate() - ((d.getDay() - 5 + 7) % 7));   /* 周五 = 周期第一天 */
+  return d;
+}
+function mkScopeDays(scope){
+  var now = new Date(), d0;
+  if (scope === 'w') d0 = mkCycleStart();
+  else if (scope === 'm') d0 = new Date(now.getFullYear(), now.getMonth(), 1);
+  else return [mkKey(now)];
+  var out = [], cur = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate());
+  var end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  while (cur <= end && out.length < 62){ out.push(mkKey(cur)); cur.setDate(cur.getDate() + 1); }
+  return out;
+}
+function mkHasRec(d){
+  if (!d || typeof d !== 'object') return false;
+  if (Array.isArray(d.xl) && d.xl.length) return true;
+  if (d.e && Object.keys(d.e).some(function(k){ return !!d.e[k]; })) return true;
+  return !!d.sun;
+}
+function mkScopeSum(scope){
+  if (scope === 'd') return { s:mkSum(), rec:mkHasRec(mkDay()) ? 1 : 0, days:1 };
+  var keys = mkScopeDays(scope), rec = 0, acc = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 };
+  keys.forEach(function(k){
+    if (!mkHasRec(MEAL.days[k])) return;
+    rec++;
+    var s1 = mkSumOn(k);
+    MK_SUMKEYS.forEach(function(x){ acc[x] += s1[x]; });
+  });
+  if (rec > 1) MK_SUMKEYS.forEach(function(x){ acc[x] = acc[x] / rec; });
+  return { s:acc, rec:rec, days:keys.length };
+}
+/* 周/月的口径必须说清楚：是「有记录那几天的日均」，不是把没记的天算成零 */
+function mkScopeTip(agg){
+  if (!agg.rec) return '这段时间还没有记录 —— 记一天就有一天，别指望一次补一周。';
+  var worst = null;
+  MK_NUTS.forEach(function(x){
+    if (x.k === 'vd') return;
+    var t = mkTarget(x.tk); if (!t) return;
+    var r = agg.s[x.k] / t;
+    if (!worst || r < worst.r) worst = { n:x.n, u:x.u, r:r, gap:t - agg.s[x.k] };
+  });
+  var head = '有记录的 <b>' + agg.rec + '</b> 天日均：最差 <b>' + worst.n + '</b> 只到 ' + Math.round(worst.r * 100) + '%';
+  if (worst.r >= 1) return head + ' —— 六项都够，这个节奏就是对的。';
+  return head + ' —— 差 ' + Math.round(worst.gap) + worst.u + '，这就是这段时间优先要补的。';
 }
 function mkRing(n, v, t){
   var r = t ? v / t : 0;
@@ -41266,7 +41495,9 @@ function hkRender(){
   var box = document.getElementById('hkCard');
   if (!box) return;
   mkPrune();
-  var d = mkDay(), s = mkSum(), dt = new Date(), pl = mkPlan();
+  var d = mkDay(), dt = new Date(), pl = mkPlan();
+  var sc = HK_SCOPE || 'd', isD = (sc === 'd');
+  var agg = mkScopeSum(sc), s = agg.s;
   var wdn = ['日','一','二','三','四','五','六'][dt.getDay()];
   var eaten = 0;
   MK_SLOTS.forEach(function(sl){ if (d.e[sl.k]) eaten++; });
@@ -41282,17 +41513,199 @@ function hkRender(){
   });
   head += '<span class="hk-m' + (d.sun ? ' on' : '') + '" onclick="hkSun()" title="工作日午休出门晒 15 分钟，隔玻璃无效">'
     + '<i class="bx">✓</i>☀ 晒太阳' + ((!d.sun && pl.sun) ? '<em>排期建议</em>' : '') + '</span>';
-  head += '</div><span class="hk-cnt">已记 ' + eaten + '/3 顿</span></div>';
+  head += '</div><span class="hk-cnt">已记 ' + eaten + '/3 顿</span>'
+    + '<span class="hk-scope">'
+    +   '<button class="hk-s' + (isD ? ' on' : '') + '" onclick="hkScopeSet(\'d\')" title="只看今天">今日</button>'
+    +   '<button class="hk-s' + (sc === 'w' ? ' on' : '') + '" onclick="hkScopeSet(\'w\')" title="本周期（周五 → 周四）有记录那几天的日均">本周</button>'
+    +   '<button class="hk-s' + (sc === 'm' ? ' on' : '') + '" onclick="hkScopeSet(\'m\')" title="本月有记录那几天的日均">本月</button>'
+    + '</span></div>';
+
+  /* ---- A1 一句话 / A3 快捷 / A4 气泡流 / 粘贴导入 ---- */
+  var xl = d.xl || [], unk = d.unk || [];
+  var eat = '<div class="hk-eat">'
+    + '<div class="hk-eat-hd"><span class="lb">🍽 今天还吃了什么</span>'
+    +   '<span class="ct">菜单外的都能记 · 只说吃了什么，不填克数</span></div>'
+    + '<div class="hk-eatbar">'
+    +   '<input id="hkEatIn" placeholder="一句话：牛肉面 加个蛋 一杯豆浆" onkeydown="if(event.key===\'Enter\')hkEatAdd()">'
+    +   '<button class="hk-eb p" onclick="hkEatAdd()">记下</button>'
+    +   '<button class="hk-eb" onclick="hkImportShow()" title="粘贴 WorkBuddy 识别后给你的 @NIKO-EAT 块">📥 粘贴</button>'
+    + '</div>';
+  var ql = mkQuickList();
+  if (ql.length){
+    eat += '<div class="hk-quick">' + ql.map(function(f){
+      return '<button class="hk-q" onclick="hkQuick(\'' + f.id + '\')" title="' + esc(f.name) + '">' + esc(mkShort(f.name)) + '</button>';
+    }).join('') + '</div>';
+  }
+  if (xl.length){
+    eat += '<div class="hk-bub">';
+    xl.forEach(function(en, i){
+      Object.keys(en.items || {}).forEach(function(fid){
+        var f = mkFood(fid);
+        eat += '<span class="hk-x">' + esc(f ? mkShort(f.name) : fid) + '<i>×' + en.items[fid] + '</i>'
+             + '<span class="x" onclick="hkDelX(' + i + ',\'' + fid + '\')" title="删掉这一样">×</span></span>';
+      });
+    });
+    eat += '</div>';
+  }
+  if (unk.length){
+    eat += '<div class="hk-bub">' + unk.map(function(u, i){
+      return '<span class="hk-x u">' + esc(u) + '<i>菜库没有·未计入</i>'
+           + '<span class="x" onclick="hkDelUnk(' + i + ')" title="删掉">×</span></span>';
+    }).join('') + '</div>';
+  }
+  if (HK_SAY) eat += '<div class="hk-say">' + HK_SAY + '</div>';
+  eat += '<div class="hk-imp" id="hkImpBox" hidden>'
+    + '<textarea id="hkImpTxt" placeholder="@NIKO-EAT 2026-11-02&#10;早 milk*1 egg*1 corn*1&#10;中 noodle*1 veg*1&#10;sun 1"></textarea>'
+    + '<div class="row"><button class="hk-eb p" onclick="hkImportGo()">导入</button>'
+    + '<button class="hk-eb" onclick="hkImportShow()">收起</button>'
+    + '<span class="tip">WorkBuddy 识别完会给你这一段，原样贴进来就行</span></div></div>';
+  eat += '</div>';
 
   var rings = '<div class="hk-rings">';
   MK_NUTS.forEach(function(x){ rings += mkRing(x.n, s[x.k], mkTarget(x.tk)); });
-  rings += '<div class="hk-adv">' + mkAdvice(s, d, eaten) + '</div></div>';
+  rings += '<div class="hk-adv">' + (isD ? mkAdvice(s, d, eaten) : mkScopeTip(agg)) + '</div></div>';
+
+  /* ---- D1 水果 / 坚果决策卡：不是显示 0%，而是回答「要不要吃、吃多少、什么时候」---- */
+  if (isD){
+    var fr = mkRoleCount('fruit'), nu = mkRoleCount('nut');
+    var fcard = function(icon, got, okTxt, needTxt, goId){
+      return '<div class="hk-fc ' + (got > 0 ? 'done' : 'need') + '">'
+        + '<div class="t">' + icon + (got > 0 ? ' · 已吃 ' + got + ' 份' : ' · 今天还没吃') + '</div>'
+        + '<div class="d">' + (got > 0 ? okTxt : needTxt) + '</div>'
+        + (got > 0 ? '' : '<button class="go" onclick="hkQuick(\'' + goId + '\')">点我记一份</button>')
+        + '</div>';
+    };
+    rings += '<div class="hk-fruit">'
+      + fcard('🍎 水果', fr, '够了 —— 一天 1–2 份就停，别拿它当饭吃',
+              '要吃 1 份（一个苹果 / 一根香蕉），饭后或下午三点都行', 'apple')
+      + fcard('🥜 坚果', nu, '够了 —— 15g 就够，多了是油',
+              '要吃 15g（一小把）。你不吃红肉，锌主要靠它，上午吃最好', 'nut')
+      + '</div>';
+  }
+
   var naT = mkTarget('sodium');
-  rings += '<div class="hk-na' + (s.na > naT ? ' over' : '') + '">钠 ' + Math.round(s.na) + ' / 上限 ' + naT + 'mg（按今天已记的三顿算）'
+  rings += '<div class="hk-na' + (s.na > naT ? ' over' : '') + '">钠 ' + Math.round(s.na) + ' / 上限 ' + naT + 'mg（'
+    + (isD ? '按今天已记的三顿 + 额外条目算' : '有记录的天数取日均') + '）'
     + ' · 每份营养素为估算值，只用于相对比较与补缺，不做精确营养计算</div>';
 
-  box.innerHTML = head + rings + hkAncHtml() + hkWeekHtml();
+  box.innerHTML = head + eat + rings + hkAncHtml() + hkWeekHtml();
   box.hidden = false;
+}
+/* 一句话录入（A1/A4）：记完回一句「还差什么」，这就是页内的「对话式」—— 不接 AI，纯本地匹配 */
+var HK_SAY = '';
+function hkEatAdd(){
+  var el = document.getElementById('hkEatIn');
+  if (!el) return;
+  var txt = String(el.value || '').trim();
+  if (!txt) return;
+  el.value = '';
+  var items = mkParseEat(txt);
+  if (!items.length){ HK_SAY = '没看懂空行。'; hkRender(); return; }
+  var r = mkAddEat(items, 'text');
+  if (!r.got.length && !r.unk.length){ HK_SAY = '没认出东西。'; hkRender(); return; }
+  var s = mkSum(), miss = [];
+  MK_NUTS.forEach(function(x){
+    if (x.k === 'vd') return;
+    var t = mkTarget(x.tk);
+    if (t && s[x.k] / t < 0.7) miss.push(x.n);
+  });
+  HK_SAY = '已记 <b>' + r.got.join(' / ') + '</b>'
+    + (r.unk.length ? '（「' + r.unk.join('、') + '」菜库里没有，先只留名字不计营养）' : '')
+    + (miss.length ? '。今天还差 <b>' + miss.slice(0, 3).join(' / ') + '</b>' : '。六项基本齐了，别再硬补');
+  hkRender();
+  var el2 = document.getElementById('hkEatIn');
+  if (el2 && document.activeElement !== el2) el2.focus();
+}
+function hkQuick(id){
+  var f = mkFood(id);
+  if (!f) return;
+  var r = mkAddEat([{ id:id, q:1 }], 'quick');
+  HK_SAY = '已记 <b>' + esc(mkShort(f.name)) + '</b> ×1（点气泡上的 × 可以撤）';
+  hkRender();
+}
+function hkDelX(i, fid){
+  var d = mkDay(), en = d.xl[i];
+  if (!en) return;
+  if (fid && en.items && en.items[fid] !== undefined){
+    delete en.items[fid];
+    if (!Object.keys(en.items).length) d.xl.splice(i, 1);
+  } else d.xl.splice(i, 1);
+  d.t = Date.now(); mkSave(); hkRender();
+}
+function hkDelUnk(i){
+  var d = mkDay();
+  if (d.unk && d.unk[i] !== undefined){ d.unk.splice(i, 1); d.t = Date.now(); mkSave(); hkRender(); }
+}
+function hkScopeSet(v){
+  HK_SCOPE = (v === 'w' || v === 'm') ? v : 'd';
+  HK_SAY = '';
+  hkRender();
+}
+function hkImportShow(){
+  var b = document.getElementById('hkImpBox');
+  if (!b) return;
+  b.hidden = !b.hidden;
+  if (!b.hidden){ var t = document.getElementById('hkImpTxt'); if (t) t.focus(); }
+}
+/* 粘贴导入：解析 WorkBuddy 的 @NIKO-EAT 块 → 写进那一天的记录
+   ⚠️ 关键：条目跟当天菜单完全一致 → 只打勾（e=1）；不一致 → 记成额外条目（e=0），
+   否则「菜单那套 + 实际那套」会被算两遍，账目虚高。 */
+function mkSameAsMeal(mealId, items){
+  var m = mkMeal(mealId);
+  if (!m) return false;
+  var a = m.items || {}, ks = Object.keys(a), kb = Object.keys(items || {});
+  if (ks.length !== kb.length) return false;
+  for (var i = 0; i < ks.length; i++){ if (Number(items[ks[i]]) !== Number(a[ks[i]])) return false; }
+  return true;
+}
+function hkImportGo(){
+  var ta = document.getElementById('hkImpTxt');
+  if (!ta) return;
+  var lines = String(ta.value || '').split(/\r?\n/).map(function(l){ return l.trim(); }).filter(Boolean);
+  if (!lines.length){ HK_SAY = '粘贴框是空的。'; hkRender(); return; }
+  var date = mkKey(), slots = [], sun = null, bad = [];
+  lines.forEach(function(l){
+    var m1 = l.match(/^@NIKO-EAT\s+(\d{4}-\d{2}-\d{2})$/i); if (m1){ date = m1[1]; return; }
+    var m2 = l.match(/^sun\s*([01])$/i);                       if (m2){ sun = Number(m2[1]); return; }
+    var m3 = l.match(/^([早中晚加])\s+(.+)$/);                  if (m3){ slots.push({ s:m3[1], body:m3[2] }); return; }
+    bad.push(l);
+  });
+  if (!slots.length && sun === null){
+    HK_SAY = '没认出内容：需要一行 <b>@NIKO-EAT 2026-11-02</b>，再跟「早/中/晚/加」开头的行。';
+    hkRender(); return;
+  }
+  var day = mkDayOf(date), map = { '早':'b', '中':'l', '晚':'d' }, unk = [], cnt = 0, marks = 0;
+  slots.forEach(function(it){
+    var items = {}, un = {};
+    it.body.split(/\s+/).filter(Boolean).forEach(function(tk){
+      var q = 1, m = tk.match(/^(.+?)[*x×](\d+(?:\.\d+)?)$/);
+      var id = m ? m[1] : tk;
+      if (m) q = Math.max(0.5, Math.min(3, Number(m[2]) || 1));
+      if (id.charAt(0) === '?'){ un[id.slice(1)] = q; return; }
+      if (!mkFood(id)){ un[id] = q; return; }
+      items[id] = (items[id] || 0) + q;
+    });
+    var slot = map[it.s];
+    if (slot && mkSameAsMeal(day[slot], items)){
+      day.e[slot] = 1; marks++;
+    } else {
+      if (slot) day.e[slot] = 0;
+      if (Object.keys(items).length){
+        day.xl.push({ t:Date.now(), src:'import', items:items });
+        Object.keys(items).forEach(function(){ cnt++; });
+      }
+    }
+    Object.keys(un).forEach(function(k){ unk.push(k); });
+  });
+  if (sun !== null) day.sun = sun;
+  if (unk.length) day.unk = day.unk.concat(unk);
+  day.t = Date.now();
+  HK_SAY = '导入 <b>' + date + '</b>：' + cnt + ' 样菜单外条目'
+    + (marks ? '、' + marks + ' 顿跟菜单一致直接打勾' : '')
+    + (sun !== null ? '、晒太阳' + (sun ? '记上了' : '取消了') : '')
+    + (unk.length ? '（' + unk.join('、') + ' 菜库没有，未计入）' : '')
+    + (bad.length ? '；' + bad.length + ' 行看不懂已忽略' : '');
+  mkSave(); hkRender();
 }
 function hkToggle(k){
   var d = mkDay();
@@ -41327,6 +41740,14 @@ if(typeof window !== 'undefined'){
   window.hkCyc    = hkCyc;
   window.hkAnClick = hkAnClick;
   window.hkSeedAnchors = hkSeedAnchors;
+  /* 2026-11-02 营养页 v2：一句话 / 快捷 / 删除 / 三档 / 粘贴导入 */
+  window.hkEatAdd  = hkEatAdd;
+  window.hkQuick   = hkQuick;
+  window.hkDelX    = hkDelX;
+  window.hkDelUnk  = hkDelUnk;
+  window.hkScopeSet = hkScopeSet;
+  window.hkImportShow = hkImportShow;
+  window.hkImportGo = hkImportGo;
   /* 门禁探针：只读回菜库规模和今天算出来的账，方便断言（不暴露写接口） */
   window.__caiku = function(){
     var s = mkSum(), d = mkDay();
@@ -41335,9 +41756,20 @@ if(typeof window !== 'undefined'){
       return { k:a.k, name:a.name, built:!!h, goal:a.goal, week:h?hkAnWeek(h):0, today:h?hkAnDone(h):false };
     });
     return { foods:CAIKU.foods.length, meals:CAIKU.meals.length, plan:CAIKU.weekPlan.length,
-             today:{ b:d.b, l:d.l, d:d.d, sun:d.sun, e:d.e }, sum:s,
+             today:{ b:d.b, l:d.l, d:d.d, sun:d.sun, e:d.e, xl:(d.xl||[]).length, unk:(d.unk||[]).length },
+             sum:s,
+             /* 营养页 v2 探针（门禁用）：额外条目、三档、水果坚果份数、当天明细 */
+             xl:(d.xl||[]).map(function(en){ return { src:en.src, items:en.items }; }),
+             scope:HK_SCOPE, scopeSum:mkScopeSum(HK_SCOPE).s, scopeRec:mkScopeSum(HK_SCOPE).rec,
+             fruit:mkRoleCount('fruit'), nut:mkRoleCount('nut'),
+             quick:mkQuickList().map(function(f){ return f.id; }),
+             mealItems:(function(){ var dd=mkDay(), o={}; MK_SLOTS.forEach(function(sl){ var mm=mkMeal(dd[sl.k]); o[sl.k]=mm?(mm.items||{}):{}; }); return o; })(),
+             sumOn:function(k){ return mkSumOn(k); },
+             parseEat:function(t){ return mkParseEat(t); },
              anchors: an,
-             rings:document.querySelectorAll('#hkCard .hk-ring').length };
+             rings:document.querySelectorAll('#hkCard .hk-ring').length,
+             hasEatBox:!!document.querySelector('#hkCard #hkEatIn'),
+             fruitCards:document.querySelectorAll('#hkCard .hk-fc').length };
   };
 }
 
@@ -43506,7 +43938,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611021434";
+        window.NIKO_VERSION = "202611021840";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
