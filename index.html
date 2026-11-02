@@ -12634,6 +12634,20 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .hk-adv b{color:var(--text)}
 .hk-na{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.6}
 .hk-na.over{color:#ef4444}
+/* 01 四锚点条（接 NIKO 习惯系统：点一下 = 习惯打卡，走 habitToggle，奖励/连击一样生效） */
+.hk-anc{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:11px;padding-top:11px;border-top:1px dashed var(--card-border)}
+.hk-anc .hd{font-size:10.5px;color:var(--muted);font-weight:700;white-space:nowrap}
+.hk-an{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:8px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.07));color:var(--text);font-size:11.5px;line-height:1.35;cursor:pointer;transition:all .16s;min-height:28px}
+.hk-an:hover{border-color:var(--accent)}
+.hk-an.done{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.5)}
+.hk-an .n{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.hk-an.done .n{color:#10b981}
+.hk-an.seed{border-style:dashed;border-color:var(--accent);color:var(--accent)}
+/* R10 周复盘：一行说完，不占地方 */
+.hk-week{margin-top:8px;font-size:10.5px;color:var(--muted);line-height:1.65}
+.hk-week b{color:var(--text)}
+.hk-week .w-ok{color:#10b981}
+.hk-week .w-bad{color:#ef4444}
 @media (max-width:768px){
   .hk-card{padding:11px 12px}
   .hk-top{gap:8px;align-items:center}
@@ -40966,6 +40980,7 @@ var CAIKU = {
     { id:'chicken',name:'鸡排 去皮',    scene:'食堂',   role:'protein', p:24,  ca:11,  fe:0.7, zn:1.3, b2:0.13, vd:5,   na:300, star:1, note:'白肉，铁只有猪排的一半' },
     { id:'pork',   name:'猪排',         scene:'食堂',   role:'protein', p:20,  ca:8,   fe:1.5, zn:2.2, b2:0.25, vd:8,   na:320, star:2, note:'铁锌最高的一档，每周 2 次' },
     { id:'fish',   name:'鱼排',         scene:'食堂',   role:'protein', p:18,  ca:25,  fe:0.5, zn:0.6, b2:0.10, vd:40,  na:250, star:2, note:'唯一能吃到 VD 的日常菜，每周 2 次' },
+    { id:'sardine',name:'带骨沙丁鱼罐头 100g', scene:'超市', role:'protein', p:25, ca:380, fe:2.6, zn:1.5, b2:0.19, vd:270, na:500, star:2, note:'R01：钙+蛋白+VD 三合一，唯一常温能囤的补钙主力。选水浸/低盐款，一周 1 次' },
     { id:'fegg',   name:'煎鸡蛋 1 个',  scene:'食堂',   role:'protein', p:6.5, ca:28,  fe:1.2, zn:0.6, b2:0.20, vd:40,  na:170, star:1, note:'便宜好用的蛋白补丁，减脂餐蛋白不够就加' },
     { id:'brice',  name:'黑米饭 1 碗',  scene:'食堂',   role:'carb',    p:4,   ca:10,  fe:0.9, zn:0.8, b2:0.03, vd:0,   na:2,   star:0, note:'比白米饭好，但仍是主食，和红薯二选一' },
     { id:'sweet',  name:'红薯 150g',    scene:'食堂',   role:'carb',    p:1.5, ca:23,  fe:0.6, zn:0.3, b2:0.05, vd:0,   na:28,  star:0, note:'纤维好，但拿了它就别再拿饭' },
@@ -40987,6 +41002,7 @@ var CAIKU = {
     { id:'L1', slot:'午餐', name:'鱼排 + 煎蛋 + 青菜 + 红薯', items:{ fish:1, fegg:1, veg:1, sweet:1 }, pick:true, note:'鱼排日（周一/周四）' },
     { id:'L2', slot:'午餐', name:'猪排 + 煎蛋 + 青菜 + 黑米饭', items:{ pork:1, fegg:1, veg:1, brice:1 }, pick:true, note:'猪排日（周二/周五），铁锌最高' },
     { id:'L3', slot:'午餐', name:'鸡排 + 煎蛋 + 青菜 + 意面', items:{ chicken:1, fegg:1, veg:1, pasta:1 }, pick:true, note:'周三或自由日' },
+    { id:'L4', slot:'午餐', name:'带骨鱼罐头 + 青菜 + 黑米饭', items:{ sardine:1, veg:1, brice:1 }, pick:true, note:'R01 平替：一罐补 380mg 钙 + 270IU VD，常温可囤、不用做饭' },
     { id:'D1', slot:'晚餐', name:'口水鸡 + 西蓝花 + 青菜 + 黑米粥', items:{ saliva:1, broc:1, veg:1, congee:1 }, pick:true, note:'口水鸡记得少红油' },
     { id:'D2', slot:'晚餐', name:'白切鸡腿 + 西蓝花 + 青菜 + 南瓜', items:{ chixia:1, broc:1, veg:1, pump:1 }, pick:true, note:'不辣款，钠比 D1 少 450mg' },
     { id:'D3', slot:'晚餐', name:'蒸蛋 + 西蓝花 + 青菜 + 粉丝', items:{ steame:1, broc:1, veg:1, vermL:1 }, pick:true, note:'清淡日' }
@@ -41014,7 +41030,8 @@ var CAIKU = {
     '茶叶蛋一周不超过 3 次，其余换水煮蛋',
     '外食汤汁不喝、蘸料减半（控钠，针对口干）',
     '工作日午休出门晒 15 分钟，10:00–15:00，隔玻璃无效',
-    '猪肝、豆腐不作为必吃项（不做饭的人做不到，不勉强）'
+    '猪肝、豆腐不作为必吃项（不做饭的人做不到，不勉强）',
+    '带骨鱼（沙丁鱼罐头）选水浸/低盐款，一周 1 次，罐里的汁别喝（钠高）'
   ],
   redlines: [
     '溃疡超过 3 周不愈合、或边缘发硬不怎么痛 → 口腔科，排除癌性溃疡',
@@ -41120,6 +41137,129 @@ function mkAdvice(s, d, eaten){
   var tip = cand.map(function(f){ return f.name + '（+' + (Number(f[worst.k]) || 0) + worst.u + '）'; }).join(' / ');
   return '<b>' + worst.n + '</b> 还差 ' + Math.round(worst.gap) + worst.u + ' —— 最省事的补法：' + tip + '。';
 }
+/* ===================== 01 四锚点（接习惯系统）+ R10 周复盘 =====================
+   四锚点是「方案 01」的落法：不去改习惯模块，而是在健康页把这 4 个锚点建成 NIKO 习惯，
+   点一下 = 一次习惯打卡（走 window.habitToggle，奖励分钟 / 连击 / 地下城战报全都照旧生效）。
+   ⚠️ 奖励分钟一律给 0：不擅自往游戏时间账本里塞钱，想入账让老板去习惯设置里自己填。 */
+var HK_ANCHORS = [
+  { k:'milk', name:'早餐奶 250ml',      icon:'🥛', frequency:'daily',    goal:7,        unit:'天' },
+  { k:'fish', name:'鱼排 / 鱼汤',        icon:'🐟', frequency:'weekly',   goal:2,        unit:'次' },
+  { k:'bone', name:'带骨鱼 100g',        icon:'🥫', frequency:'weekly',   goal:1,        unit:'次' },   /* R01 平替 */
+  { k:'sun',  name:'午休晒太阳 15 分',   icon:'☀️', frequency:'weekdays', goal:5, weekDays:[1,2,3,4,5], unit:'天' }  /* R08 */
+];
+function hkHabits(){ try { var a = safeStorage.get('niko_habits', []); return Array.isArray(a) ? a : []; } catch(e){ return []; } }
+function hkLogs(){ try { var a = safeStorage.get('niko_habit_logs', []); return Array.isArray(a) ? a : []; } catch(e){ return []; } }
+function hkAnchorHabit(a){
+  var list = hkHabits();
+  for (var i=0;i<list.length;i++){ if (list[i] && list[i].name === a.name) return list[i]; }
+  return null;
+}
+function hkAnDone(h){
+  if (!h) return false;
+  var t = mkKey(), logs = hkLogs();
+  for (var i=0;i<logs.length;i++){
+    if (logs[i] && logs[i].habitId === h.id && String(logs[i].date||'').slice(0,10) === t) return true;
+  }
+  return false;
+}
+/* 本周期（周五 → 下周四）完成次数：优先用习惯模块自己的口径，取不到就退化成近 7 天 */
+function hkAnWeek(h){
+  if (!h) return 0;
+  try { if (typeof habitWeekCount === 'function') return Number(habitWeekCount(h.id)) || 0; } catch(e){}
+  var since = mkKey(new Date(Date.now() - 6*86400000)), n = 0, logs = hkLogs();
+  for (var i=0;i<logs.length;i++){
+    if (!logs[i] || logs[i].habitId !== h.id) continue;
+    var d = String(logs[i].date||'').slice(0,10);
+    if (d >= since) n++;
+  }
+  return n;
+}
+/* 一键建 4 个锚点：按名字去重，已存在的不动（不覆盖老板已有的同名习惯） */
+function hkSeedAnchors(){
+  var list = hkHabits(), added = [];
+  HK_ANCHORS.forEach(function(a){
+    if (list.some(function(h){ return h && h.name === a.name; })) return;
+    var o = { id:'hb_' + Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+      name:a.name, icon:a.icon, goal:a.goal, rewardMin:0, frequency:a.frequency, timed:false,
+      createdAt:new Date().toISOString() };
+    if (a.weekDays) o.weekDays = a.weekDays.slice();
+    list.push(o); added.push(a.name);
+  });
+  if (added.length) { try { safeStorage.set('niko_habits', list); } catch(e){} }
+  try { if (typeof showToast === 'function') showToast(added.length ? ('🎯 已建 ' + added.length + ' 个锚点习惯：' + added.join(' / ')) : '四个锚点都已经在习惯里了'); } catch(e){}
+  try { if (typeof renderTodayHabits === 'function') renderTodayHabits(); } catch(e){}
+  try { if (typeof renderHabitStats === 'function') renderHabitStats(); } catch(e){}
+  hkRender();
+}
+/* 点锚点：有对应习惯就打卡（走官方 habitToggle），没有就先建 */
+function hkAnClick(k){
+  var a = null;
+  HK_ANCHORS.forEach(function(x){ if (x.k === k) a = x; });
+  if (!a) return;
+  var h = hkAnchorHabit(a);
+  if (!h) { hkSeedAnchors(); return; }
+  if (typeof window.habitToggle === 'function') { window.habitToggle(h.id); }
+  else {
+    /* 兜底：习惯模块没导出时自己写日志（格式与 habitToggle 一致） */
+    var logs = hkLogs(), t = mkKey(), idx = -1;
+    for (var i=0;i<logs.length;i++){ if (logs[i] && logs[i].habitId === h.id && String(logs[i].date||'').slice(0,10) === t) idx = i; }
+    if (idx >= 0) logs.splice(idx,1); else logs.push({ id:'hl_' + Date.now(), habitId:h.id, date:t, doneAt:new Date().toISOString() });
+    try { safeStorage.set('niko_habit_logs', logs); } catch(e){}
+  }
+  hkRender();
+}
+function hkAncHtml(){
+  var miss = HK_ANCHORS.filter(function(a){ return !hkAnchorHabit(a); }).length;
+  var out = '<div class="hk-anc"><span class="hd">🎯 四锚点</span>';
+  HK_ANCHORS.forEach(function(a){
+    var h = hkAnchorHabit(a);
+    if (!h) {
+      out += '<span class="hk-an seed" onclick="hkSeedAnchors()" title="还没建成习惯，点这里一起建">'
+        + '<span>' + a.icon + '</span>' + esc(a.name.replace(/\s*250ml|\s*100g/,'')) + '<span class="n">未建</span></span>';
+      return;
+    }
+    var done = hkAnDone(h), n = hkAnWeek(h), goal = Number(a.goal) || 7;
+    out += '<span class="hk-an' + (done ? ' done' : '') + '" onclick="hkAnClick(\'' + a.k + '\')" title="点一下 = 习惯打卡（' + (done ? '已完成，点一下取消' : hkFreqText(a)) + '）">'
+      + '<span>' + a.icon + '</span>' + esc(h.name.replace(/\s*250ml|\s*100g/,'')) + (done ? ' ✓' : '')
+      + '<span class="n">' + n + '/' + goal + a.unit + '</span></span>';
+  });
+  if (miss) {
+    out += '<span class="hk-an seed" onclick="hkSeedAnchors()">＋ 一键建' + miss + '个锚点（进习惯系统）</span>';
+  }
+  out += '</div>';
+  return out;
+}
+function hkFreqText(a){
+  if (a.frequency === 'daily') return '每天';
+  if (a.frequency === 'weekdays') return '工作日';
+  return '每周 ' + a.goal + ' 次';
+}
+/* R10 周复盘：四锚点完成度 + 溃疡次数，一句话说完（复盘点到这里，不做第二个仪表盘） */
+function hkWeekHtml(){
+  var total = 0, got = 0, parts = [];
+  HK_ANCHORS.forEach(function(a){
+    var h = hkAnchorHabit(a); if (!h) return;
+    var n = hkAnWeek(h), g = Number(a.goal) || 7;
+    total += g; got += Math.min(n, g);
+    parts.push(a.icon + ' ' + Math.min(n, g) + '/' + g);
+  });
+  if (!total) return '<div class="hk-week">本周复盘：四锚点还没建 —— 点上面「一键建锚点」，之后这里每周给你算账。</div>';
+  /* 溃疡次数：小病记录里近 7 天「口腔溃疡」，这是这套方案唯一的硬指标 */
+  var since = mkKey(new Date(Date.now() - 6*86400000)), ul = 0;
+  try {
+    (MINOR || []).forEach(function(m){
+      if (!m || String(m.name||'').indexOf('溃疡') < 0) return;
+      var s = String(m.start||'').slice(0,10);
+      if (s && s >= since) ul++;
+    });
+  } catch(e){}
+  var pct = Math.round(got / total * 100);
+  var cls = pct >= 80 ? 'w-ok' : 'w-bad';
+  var tail = ul === 0 ? '溃疡 <span class="w-ok">0 次</span>' : ('溃疡 <span class="w-bad">' + ul + ' 次</span>');
+  return '<div class="hk-week">📊 本周期（周五起）复盘：锚点 <b class="' + cls + '">' + got + '/' + total + '</b>（' + pct + '%）· '
+    + parts.join(' · ') + ' · ' + tail + ' · 吃满四锚点这两周，是这套方案唯一能验证的东西</div>';
+}
+
 /* 渲染：02 横幅（今天吃什么）+ 03 六维缺口环（今天补到几成） */
 function hkRender(){
   mkLoad();
@@ -41151,7 +41291,7 @@ function hkRender(){
   rings += '<div class="hk-na' + (s.na > naT ? ' over' : '') + '">钠 ' + Math.round(s.na) + ' / 上限 ' + naT + 'mg（按今天已记的三顿算）'
     + ' · 每份营养素为估算值，只用于相对比较与补缺，不做精确营养计算</div>';
 
-  box.innerHTML = head + rings;
+  box.innerHTML = head + rings + hkAncHtml() + hkWeekHtml();
   box.hidden = false;
 }
 function hkToggle(k){
@@ -41185,11 +41325,18 @@ if(typeof window !== 'undefined'){
   window.hkToggle = hkToggle;
   window.hkSun    = hkSun;
   window.hkCyc    = hkCyc;
+  window.hkAnClick = hkAnClick;
+  window.hkSeedAnchors = hkSeedAnchors;
   /* 门禁探针：只读回菜库规模和今天算出来的账，方便断言（不暴露写接口） */
   window.__caiku = function(){
     var s = mkSum(), d = mkDay();
+    var an = HK_ANCHORS.map(function(a){
+      var h = hkAnchorHabit(a);
+      return { k:a.k, name:a.name, built:!!h, goal:a.goal, week:h?hkAnWeek(h):0, today:h?hkAnDone(h):false };
+    });
     return { foods:CAIKU.foods.length, meals:CAIKU.meals.length, plan:CAIKU.weekPlan.length,
              today:{ b:d.b, l:d.l, d:d.d, sun:d.sun, e:d.e }, sum:s,
+             anchors: an,
              rings:document.querySelectorAll('#hkCard .hk-ring').length };
   };
 }
@@ -43359,7 +43506,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611021043";
+        window.NIKO_VERSION = "202611021434";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
