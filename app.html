@@ -12629,6 +12629,41 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .nn-ex{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .nn-ex button{font-size:11px;padding:4px 10px;border-radius:999px;border:1px dashed var(--card-border);background:transparent;color:var(--muted);cursor:pointer;font-family:inherit;transition:.16s}
 .nn-ex button:hover{border-color:var(--accent);color:var(--accent);border-style:solid}
+/* ===== P05 常吃榜（2026-11-03）：按「当前时段 × 近 30 天频次」排序，点一下就记一条 =====
+   只占一行 26px —— 1080p 纵向紧张，这东西是「少打字」用的，不许自己长成一块板。 */
+.nn-qk{display:flex;align-items:center;gap:7px;margin-top:9px;min-height:26px}
+.nn-qk .lb{font-size:10.5px;font-weight:800;color:var(--muted);flex:0 0 auto;letter-spacing:.3px}
+.nn-qk .list{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding:1px 0 2px;flex:1;min-width:0}
+.nn-qk .list::-webkit-scrollbar{display:none}
+.nn-qc{flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;border:1px solid var(--card-border);
+  background:var(--card-bg-2,rgba(127,127,127,.06));border-radius:999px;padding:2px 9px;font-size:11px;
+  font-weight:700;cursor:pointer;transition:.15s;font-family:inherit;color:var(--text)}
+.nn-qc:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.nn-qc i{font-style:normal;font-size:9px;color:var(--muted);font-weight:600}
+.nn-qc.hot{border-color:rgba(108,140,255,.5);background:rgba(108,140,255,.10);color:var(--accent)}
+.nn-qk .empty{font-size:10.5px;color:var(--muted)}
+/* ===== P01 待认领池（2026-11-03）：认不出的不再消失 ===== */
+.nn-pool{margin-top:9px;border:1px dashed rgba(245,158,11,.42);background:rgba(245,158,11,.055);border-radius:10px;padding:7px 9px 8px}
+.nn-pool .ph{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#eab558;flex-wrap:wrap}
+.nn-pool .ph .pt{font-size:10px;font-weight:700;color:var(--muted)}
+.nn-pool .ph .nn-btn{margin-left:auto;padding:3px 9px;font-size:10.5px;border-radius:7px}
+.nn-pool .items{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.nn-pu{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;border:1px solid rgba(245,158,11,.32);
+  background:rgba(245,158,11,.07);border-radius:6px;padding:1px 6px;color:#e2c48f;font-weight:700}
+.nn-pu b{color:#f59e0b;cursor:pointer;font-weight:800;font-size:11px;line-height:1}
+.nn-pu b:hover{color:#ef4444}
+/* ===== P01 打包弹层：① 复制去问 ② 粘回结果 ===== */
+.nn-pk{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);width:640px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;animation:nnPop .2s ease}
+.nn-pk-hd{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--card-border);font-size:14px;font-weight:800}
+.nn-pk-tabs{display:flex;gap:6px;padding:10px 16px 0}
+.nn-pk-tabs button{border:1px solid var(--card-border);background:transparent;color:var(--muted);font-size:11.5px;font-weight:800;padding:4px 11px;border-radius:999px;cursor:pointer;font-family:inherit;transition:.15s}
+.nn-pk-tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.nn-pk-bd{padding:11px 16px 6px;overflow:auto}
+.nn-pk-bd textarea{width:100%;height:min(44vh,340px);min-height:210px;background:var(--card-bg-2,rgba(127,127,127,.06));border:1px solid var(--card-border);border-radius:10px;color:var(--text);font-family:ui-monospace,Consolas,monospace;font-size:11px;line-height:1.7;padding:10px 12px;resize:vertical;outline:none}
+.nn-pk-bd textarea:focus{border-color:var(--accent)}
+.nn-pk-tip{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+.nn-pk-ft{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px 14px}
+.nn-pk-ft .nn-btn.pri{min-width:96px;justify-content:center}
 .nn-main{display:grid;grid-template-columns:1fr 380px;gap:12px;align-items:start}
 .nn-col{min-width:0}
 .nn-mgh{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:var(--muted);margin:8px 0 6px}
@@ -14911,6 +14946,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <button class="nn-btn" onclick="nnAddManual()">＋ 手动加一样</button>
           <span class="nn-hint">认不出的会按类别自动估一个值，标「估」的点开就能改</span>
         </div>
+        <!-- P05 常吃榜：按当前时段 + 近 30 天频次排序，点一下就记一条（不分「库内/库外」，吃过就学得会） -->
+        <div class="nn-qk"><span class="lb">常吃</span><div class="list" id="nnChips"></div></div>
         <div class="nn-ex" id="nnEx"></div>
       </div>
 
@@ -14919,6 +14956,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <div class="nn-card">
             <div class="nn-hd">📋 今天记下的<span class="nn-sp"></span><span class="nn-hint" id="nnCount"></span></div>
             <div id="nnList"></div>
+            <!-- P01 待认领池：菜库没有 + 类别也兜不住的，不再静默丢弃，落到这里攒着一起问 AI -->
+            <div id="nnPool"></div>
           </div>
         </div>
         <div class="nn-col">
@@ -41885,6 +41924,9 @@ function nnParse(text){
     for (var i=0;i<NN_MEALRE.length;i++){ if (NN_MEALRE[i].re.test(seg)) { meal = NN_MEALRE[i].m; break; } }
     var q = nnQty(seg);
     var rest = q.rest.replace(/吃了|吃了点|吃|喝了|喝|来了|来了个|点了|买了|外带|打包/g,'').trim();
+    /* 时间词只在上面判餐次时有用，不能留在食物名里 ——
+       否则「晚上吃了麻团」进了待认领池就叫「晚上麻团」，问 AI 也是问错了东西。 */
+    rest = rest.replace(/早上|早晨|清晨|上午|中午|午餐|午饭|中饭|下午|晚上|晚餐|晚饭|夜里|夜宵|宵夜|早餐|早饭|加餐|零食/g,'').trim();
     rest = rest.replace(/^(的|个|份|碗|瓶|杯)+/,'').trim();
     if (!rest) return;
     var hits = nnScan(rest);
@@ -41896,7 +41938,9 @@ function nnParse(text){
       });
     } else {
       var fb = nnFallback(rest);
-      if (!fb) return;
+      /* P01（2026-11-03）：原来这里直接 return —— 认不出的食物一个字都不留，用户根本不知道自己丢了多少。
+         现在改成「进待认领池」：不参与营养计算，但留得住，能打包一起问 AI。 */
+      if (!fb) { out.push({ unk:rest, n:q.n, meal:meal }); return; }
       var b = fb.b;
       out.push({ name:rest, n:q.n, meal:meal, role:fb.role,
         p:b[0], ca:b[1], fe:b[2], zn:b[3], b2:b[4], vd:b[5], na:b[6], src:'est', lb:fb.lb });
@@ -41911,17 +41955,27 @@ function nnSay(){
   if (!el) return;
   var txt = String(el.value||'').trim();
   if (!txt){ if (typeof showToast === 'function') showToast('先说一句吃了什么'); return; }
-  var items = nnParse(txt);
-  if (!items.length){ if (typeof showToast === 'function') showToast('没认出食物，换个说法（例：一碗牛肉面）'); return; }
+  var all = nnParse(txt);
+  if (!all.length){ if (typeof showToast === 'function') showToast('没认出食物，换个说法（例：一碗牛肉面）'); return; }
+  var items = all.filter(function(i){ return !i.unk; });
+  var unks  = all.filter(function(i){ return i.unk; }).map(function(i){ return i.unk; });
+  if (unks.length) uvAdd(unks);
   items.forEach(function(it){ it.id = NN.seq++; nnRecs().push(it); });
   el.value = '';
   nnSave();
   var lib = items.filter(function(i){ return i.src === 'lib'; }).length;
   var est = items.length - lib;
   var h = document.getElementById('nnHint');
-  if (h) h.textContent = '认出 ' + lib + ' 样' + (est ? ' · 估了 ' + est + ' 样' : '');
+  if (h) h.textContent = (items.length || unks.length)
+    ? ('认出 ' + lib + ' 样' + (est ? ' · 估了 ' + est + ' 样' : '') + (unks.length ? ' · ' + unks.length + ' 样待认领' : ''))
+    : '';
   nnRender();
-  if (typeof showToast === 'function') showToast('记下 ' + items.length + ' 样' + (est ? '（' + est + ' 样是估的，点名字可改）' : ''));
+  if (typeof showToast === 'function'){
+    var msg = [];
+    if (items.length) msg.push('记下 ' + items.length + ' 样' + (est ? '（' + est + ' 样是估的，点名字可改）' : ''));
+    if (unks.length) msg.push(unks.length + ' 样菜库没有，已放进待认领');
+    showToast(msg.join('，') || '已更新');
+  }
 }
 function nnClear(){
   if (!nnRecs().length) return;
@@ -42010,6 +42064,247 @@ function nnSaveSheet(){
 }
 function nnAddManual(){ nnOpenSheet(null); }
 
+/* ===================== P01 待认领池 + 打包问 AI（2026-11-03 老板拍板）=====================
+   为什么有这块：nnParse 原来认不出就 return，用户打「卤蛋」「麻团」一个字都不留，
+   而且他根本不知道自己丢了多少 —— 数据从源头就漏了。
+   现在：认不出 → 进池（按天，不参与营养计算）→ 打包成一段带上下文的请求 → 复制去问
+        → AI 回的 @NIKO-FOOD 块粘回来 → 建条目 + 从池子里划掉 + 自动进常吃榜。
+   存独立 key：niko_nutri_unclaimed_v1 = { 'YYYY-MM-DD': ['卤蛋','麻团'] }（只留 14 天） */
+var UV_STORE = 'niko_nutri_unclaimed_v1';
+var UV = { days:{} };
+function uvLoad(){
+  var raw = null;
+  try { raw = safeStorage.get(UV_STORE, null); } catch(e){ raw = null; }
+  UV = (raw && raw.days && typeof raw.days === 'object') ? { days:raw.days } : { days:{} };
+  return UV;
+}
+function uvSave(){
+  var ks = Object.keys(UV.days).sort();
+  while (ks.length > 14){ delete UV.days[ks.shift()]; }   /* 池子不是收件箱，过 14 天自己过期 */
+  try { safeStorage.set(UV_STORE, { days:UV.days }); } catch(e){}
+}
+function uvList(){ var d = UV.days[nnToday()]; return Array.isArray(d) ? d : []; }
+function uvAdd(names){
+  var k = nnToday(), cur = uvList(), add = 0;
+  names.forEach(function(n){
+    n = String(n||'').trim();
+    if (!n) return;
+    for (var i=0;i<cur.length;i++){ if (uvKey(cur[i]) === uvKey(n)) return; }
+    cur.push(n); add++;
+  });
+  if (add){ UV.days[k] = cur; uvSave(); }
+  return add;
+}
+function uvDel(name){
+  var k = nnToday(), cur = uvList().filter(function(x){ return x !== name; });
+  if (cur.length) UV.days[k] = cur; else delete UV.days[k];
+  uvSave(); nnRender();
+}
+function uvClear(){ delete UV.days[nnToday()]; uvSave(); nnRender(); }
+/* 池名 vs AI 回来的名：AI 八成都带份量（「麻团 1个」），池里只存「麻团」——
+   精确比对会删不掉，池子永远清不空。统一取「去掉份量的核心名」再比。 */
+function uvKey(s){
+  var t = String(s||'').trim();
+  var c = t.split(/[\s\d（(]/)[0];
+  return (c && c.length >= 1) ? c : t;
+}
+
+function nnPoolRender(){
+  var box = document.getElementById('nnPool');
+  if (!box) return;
+  var us = uvList();
+  if (!us.length){ box.innerHTML = ''; return; }
+  box.innerHTML = '<div class="nn-pool">'
+    + '<div class="ph">🟡 ' + us.length + ' 样没认出来'
+    +   '<span class="pt">· 不计营养，等 AI 给数</span>'
+    +   '<button class="nn-btn pri" onclick="nnPackOpen()">打包问 AI</button></div>'
+    + '<div class="items">' + us.map(function(u){
+        var q = nnEsc(u).replace(/'/g, "\\'");
+        return '<span class="nn-pu">' + nnEsc(u) + '<b onclick="uvDel(\'' + q + '\')" title="从池子里删掉">×</b></span>';
+      }).join('') + '</div></div>';
+}
+/* 打包成一段请求：带上「今天已吃什么 / 目标 / 缺口 / 必须回的格式」——
+   少这三样，AI 给的数就是凭空造的，等于白问。 */
+function nnPackText(){
+  var us = uvList(), recs = nnRecs(), s = nnTotals();
+  var eaten = recs.length ? recs.map(function(r){ return NN_MEALN[r.meal] + ' ' + r.name + '×' + r.n; }).join('；') : '（今天还没记别的）';
+  var tgt = NN_NUTS.map(function(x){ return x.n + ' ' + nnTgt(x.tk, x.dft) + x.u; }).join(' / ') + ' / 钠 ≤' + nnTgt('sodium', 2000) + 'mg';
+  var gap = NN_NUTS.map(function(x){ return { n:x.n, p:s[x.k] / nnTgt(x.tk, x.dft) * 100 }; })
+                   .filter(function(o){ return o.p < 100; })
+                   .sort(function(a,b){ return a.p - b.p; }).slice(0, 3)
+                   .map(function(o){ return o.n + ' 只到 ' + Math.round(o.p) + '%'; }).join('、');
+  var L = [];
+  L.push('帮我估一下下面几样吃的营养素，只要七个数值，不要解释、不要给建议。');
+  L.push('');
+  L.push('我的情况：男，29 岁，长期伏案做视频，不吃牛羊肉，不能吃辣。');
+  L.push('今天已吃：' + eaten);
+  L.push('今天目标：' + tgt);
+  L.push('目前缺口：' + (gap || '基本都够了'));
+  L.push('');
+  L.push('要估的（按我实际吃的份量，一份就是下面写的份量）：');
+  us.forEach(function(u, i){ L.push((i+1) + '. ' + u); });
+  L.push('');
+  L.push('只回下面这个块，一行一样，不要别的字：');
+  L.push('@NIKO-FOOD');
+  us.forEach(function(u){ L.push(u + ' | p0 ca0 fe0 zn0 b2:0 vd0 na0'); });
+  return L.join('\n');
+}
+/* 回填解析：只认「名称 | p.. ca.. fe.. zn.. b2:.. vd.. na..」的行，@ 行和别的行一律跳过 */
+function nnPackParse(txt){
+  var out = [], bad = [];
+  String(txt||'').split(/\r?\n/).forEach(function(raw, ln){
+    var line = String(raw||'').trim();
+    if (!line || line.charAt(0) === '@' || line.indexOf('|') < 0) return;
+    var bar = line.indexOf('|');
+    var name = line.slice(0, bar).replace(/^[\d.、)\s]+/, '').trim();
+    var rest = line.slice(bar + 1);
+    var o = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 }, hit = 0;
+    var re = /(ca|fe|zn|b2|vd|na|p)\s*[:=]?\s*(-?\d+(?:\.\d+)?)/gi, m;
+    while ((m = re.exec(rest))){ o[m[1].toLowerCase()] = Number(m[2]) || 0; hit++; }
+    if (!name || hit < 4){ bad.push(ln + 1); return; }
+    /* AI 回来的名字常带份量（「麻团 1个」）—— 拆成 名称 + 份数，列表里才干净 */
+    var nm = name, cnt = 1, qm = nnQty(name);
+    if (qm.rest && qm.rest.trim() && qm.rest.trim() !== name){ nm = qm.rest.trim(); cnt = qm.n; }
+    out.push({ name:nm, n:cnt, meal:nnClockMeal(), role:'mixed',
+      p:o.p, ca:o.ca, fe:o.fe, zn:o.zn, b2:o.b2, vd:o.vd, na:o.na, src:'ai' });
+  });
+  return { items:out, bad:bad };
+}
+var PK_TAB = 'send';
+function nnPackMaskEl(){
+  var m = document.getElementById('nnPackMask');
+  if (m) return m;
+  m = document.createElement('div');
+  m.id = 'nnPackMask'; m.className = 'nn-mask';
+  m.innerHTML = '<div class="nn-pk">'
+    + '<div class="nn-pk-hd"><b id="nnPkTitle">打包问 AI</b><span class="nn-sp"></span><button class="nn-x" onclick="nnPackClose()">×</button></div>'
+    + '<div class="nn-pk-tabs">'
+    +   '<button id="nnPkTab1" onclick="nnPackTab(\'send\')">① 复制去问</button>'
+    +   '<button id="nnPkTab2" onclick="nnPackTab(\'back\')">② 粘回结果</button>'
+    + '</div>'
+    + '<div class="nn-pk-bd"><textarea id="nnPkTxt" spellcheck="false"></textarea><div class="nn-pk-tip" id="nnPkTip"></div></div>'
+    + '<div class="nn-pk-ft"><button class="nn-btn" onclick="nnPackClose()">关闭</button>'
+    +   '<button class="nn-btn pri" id="nnPkGo" onclick="nnPackGo()">复制这段</button></div></div>';
+  m.addEventListener('click', function(e){ if (e.target === m) nnPackClose(); });
+  document.body.appendChild(m);
+  return m;
+}
+function nnPackOpen(){
+  if (!uvList().length){ if (typeof showToast === 'function') showToast('池子是空的'); return; }
+  nnPackMaskEl();
+  PK_TAB = 'send';
+  nnPackTab('send');
+  document.getElementById('nnPackMask').classList.add('on');
+}
+function nnPackTab(t){
+  PK_TAB = (t === 'back') ? 'back' : 'send';
+  var ta = document.getElementById('nnPkTxt');
+  var b1 = document.getElementById('nnPkTab1'), b2 = document.getElementById('nnPkTab2');
+  var tip = document.getElementById('nnPkTip'), go = document.getElementById('nnPkGo'), ti = document.getElementById('nnPkTitle');
+  if (b1) b1.className = PK_TAB === 'send' ? 'on' : '';
+  if (b2) b2.className = PK_TAB === 'back' ? 'on' : '';
+  if (PK_TAB === 'send'){
+    if (ti) ti.textContent = '① 把这段发给 AI';
+    if (ta){ ta.value = nnPackText(); ta.placeholder = ''; }
+    if (tip) tip.innerHTML = '复制后发给任意 AI（企微里的 / 网页的都行）。它回你一段 <b>@NIKO-FOOD</b>，切到 ② 粘回来就自动入库。';
+    if (go) go.textContent = '复制这段';
+  } else {
+    if (ti) ti.textContent = '② 把 AI 回的粘回来';
+    if (ta){ ta.value = ''; ta.placeholder = '把 AI 回的那段原样粘进来（含 @NIKO-FOOD 或只有下面这种行都行）：\n\n卤蛋 1个 | p6.5 ca30 fe1.2 zn0.6 b2:0.15 vd20 na350'; }
+    if (tip) tip.textContent = '只认「名称 | p.. ca.. fe.. zn.. b2.. vd.. na..」这种行，其余自动忽略；读不懂的行会告诉你第几行。';
+    if (go) go.textContent = '解析并入库';
+    if (ta) setTimeout(function(){ ta.focus(); }, 80);
+  }
+}
+function nnPackClose(){ var m = document.getElementById('nnPackMask'); if (m) m.classList.remove('on'); }
+function nnPackGo(){
+  if (PK_TAB === 'send'){
+    var ta = document.getElementById('nnPkTxt');
+    var ok = nnCopy(ta ? ta.value : '');
+    if (typeof showToast === 'function') showToast(ok ? '已复制 —— 去问 AI，回来切「② 粘回结果」' : '复制失败，手动全选复制');
+    return;
+  }
+  var t2 = document.getElementById('nnPkTxt');
+  var r = nnPackParse(t2 ? t2.value : '');
+  if (!r.items.length){
+    if (typeof showToast === 'function') showToast('没读到能用的行 —— 格式要「名称 | p6.5 ca30 fe1.2 zn0.6 b2:0.15 vd20 na350」');
+    return;
+  }
+  r.items.forEach(function(it){ it.id = NN.seq++; nnRecs().push(it); });
+  var k = nnToday(), cur = uvList();
+  r.items.forEach(function(it){
+    var kk = uvKey(it.name);
+    cur = cur.filter(function(x){ return uvKey(x) !== kk; });
+  });
+  if (cur.length) UV.days[k] = cur; else delete UV.days[k];
+  uvSave(); nnSave(); nnPackClose(); nnRender();
+  if (typeof showToast === 'function') showToast('已入库 ' + r.items.length + ' 样' + (r.bad.length ? '；第 ' + r.bad.join('/') + ' 行没读懂' : ''));
+}
+function nnCopy(txt){
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).catch(function(){}); return true; }
+  } catch(e){}
+  try {
+    var t = document.createElement('textarea');
+    t.value = txt; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    var ok = document.execCommand('copy');
+    document.body.removeChild(t);
+    return ok;
+  } catch(e){ return false; }
+}
+
+/* ===================== P05 常吃榜（2026-11-03 老板拍板）=====================
+   排序 = 近 30 天出现次数 + 「当前时段匹配」加成（早上把奶/蛋顶上来，下午把坚果顶上来）。
+   一律从历史记录里取，不另建存储 —— 吃过的东西（包括 AI 回填的）自动就会排进来，
+   顺带把「卤蛋下次还要重填」这件事一起解决了。 */
+function nnChipsData(){
+  var now = nnClockMeal(), map = {};
+  Object.keys(NN.days).sort().slice(-30).forEach(function(k){
+    (NN.days[k] || []).forEach(function(r){
+      if (!r || !r.name) return;
+      var o = map[r.name] || (map[r.name] = { name:r.name, n:0, same:0, rec:r });
+      o.n++;
+      if (r.meal === now) o.same++;
+      o.rec = r;                                  /* 留最后一次 = 最近一次的营养值 */
+    });
+  });
+  return Object.keys(map).map(function(k){
+    var o = map[k];
+    o.score = o.n + o.same * 1.6;                 /* 时段匹配加权 > 纯频次：早上推早餐，下午推加餐 */
+    return o;
+  }).sort(function(a, b){ return b.score - a.score; }).slice(0, 8);
+}
+function nnChipsRender(){
+  var box = document.getElementById('nnChips');
+  if (!box) return;
+  var arr = nnChipsData(), now = nnClockMeal();
+  if (!arr.length){
+    box.innerHTML = '<span class="empty">记两天就有了 —— 吃过的东西自动排到这里，点一下就记一条</span>';
+    return;
+  }
+  box.innerHTML = arr.map(function(o){
+    var same = (o.rec.meal === now);
+    var q = nnEsc(o.name).replace(/'/g, "\\'");
+    return '<button class="nn-qc' + (same ? ' hot' : '') + '" onclick="nnChipAdd(\'' + q + '\')"'
+      + ' title="' + nnEsc(o.name) + ' · 近 30 天 ' + o.n + ' 次' + (same ? ' · ' + NN_MEALN[now] + '常吃' : '') + '">'
+      + nnEsc(mkShort(o.name)) + '<i>×' + o.n + '</i></button>';
+  }).join('');
+}
+function nnChipAdd(name){
+  var o = null;
+  nnChipsData().forEach(function(x){ if (x.name === name) o = x; });
+  if (!o) { if (typeof showToast === 'function') showToast('没找到这一样'); return; }
+  var r = o.rec;
+  var rec = { id:NN.seq++, name:r.name, n:1, meal:nnClockMeal(), role:r.role || 'mixed',
+    p:r.p||0, ca:r.ca||0, fe:r.fe||0, zn:r.zn||0, b2:r.b2||0, vd:r.vd||0, na:r.na||0,
+    src:(r.src === 'lib' || r.src === 'est' || r.src === 'ai') ? r.src : 'manual' };
+  if (r.lb) rec.lb = r.lb;
+  nnRecs().push(rec);
+  nnSave(); nnRender();
+  if (typeof showToast === 'function') showToast('已记：' + r.name);
+}
+
 /* ---------- 渲染 ---------- */
 var NN_RV = { cur:[0,0,0,0,0,0], tgt:[0,0,0,0,0,0], raf:0, started:false };
 var NN_GEO = { cx:170, cy:160, R:108 };
@@ -42089,6 +42384,7 @@ function nnRenderList(){
       html += '<div class="nn-row">'
         + '<span class="nm" onclick="nnOpenSheet(' + r.id + ')" title="点一下改">' + nnEsc(r.name) + '</span>'
         + (r.src === 'lib' ? '<span class="nn-tag lib">库</span>'
+           : r.src === 'ai' ? '<span class="nn-tag" style="background:rgba(108,140,255,.15);color:#6c8cff;border:1px solid rgba(108,140,255,.38)" title="AI 给的数，可以点名字再改">AI</span>'
            : r.src === 'est' ? '<span class="nn-tag est" title="按「' + nnEsc(r.lb||'类别') + '」估算，点名字可改">估·' + nnEsc(r.lb||'') + '</span>'
            : '<span class="nn-tag est">手填</span>')
         + '<span class="kv">蛋白 ' + nnR1((r.p||0)*r.n) + 'g · 钙 ' + Math.round((r.ca||0)*r.n) + '</span>'
@@ -42154,6 +42450,8 @@ function nnFill(t){
 }
 function nnRender(){
   nnRenderList();
+  nnChipsRender();
+  nnPoolRender();
   nnRadarRender();
   nnRenderVerdict();
   var ov = document.getElementById('nnOv');
@@ -42163,6 +42461,7 @@ function nnRender(){
 }
 function nnBoot(){
   nnLoad();
+  uvLoad();
   nnRenderEx();
   var ta = document.getElementById('nnIn');
   if (ta && !ta.dataset.bound){
@@ -42183,6 +42482,11 @@ window.nnQuick = nnQuick;       window.nnRender = nnRender;
 window.nnParse = nnParse;       window.nnRecs = nnRecs;
 window.nnTotals = nnTotals;     window.nnPct = nnPct;
 window.nnOverall = nnOverall;   window.nnSave = nnSave;
+/* P01 / P05（2026-11-03）：待认领池 + 打包弹层 + 常吃榜 —— 同样是 onclick 调用，必须导出 */
+window.nnPackOpen = nnPackOpen; window.nnPackClose = nnPackClose;
+window.nnPackTab = nnPackTab;   window.nnPackGo = nnPackGo;
+window.nnChipAdd = nnChipAdd;   window.uvDel = uvDel;
+window.uvClear = uvClear;       window.nnPackParse = nnPackParse;
 window.__nn = NN;
 
 function hkRender(){
@@ -44633,7 +44937,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611031517";
+        window.NIKO_VERSION = "202611031606";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
