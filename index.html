@@ -12652,6 +12652,76 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   background:rgba(245,158,11,.07);border-radius:6px;padding:1px 6px;color:#e2c48f;font-weight:700}
 .nn-pu b{color:#f59e0b;cursor:pointer;font-weight:800;font-size:11px;line-height:1}
 .nn-pu b:hover{color:#ef4444}
+/* ===== 2026-11-03 三档：今日 / 本周 / 本月 =====
+   周 = 周带（7 段色 = 当天综合）+ 7 天列表；月 = 5×7 格（和 NIKO 日历同一个语言）。
+   颜色：大面积色块用降饱和一档的三色，小面积文字仍走主题三档语义色 —— 31 个纯红纯黄铺开就是 Excel。 */
+.nn-tool{display:flex;align-items:center;gap:9px;margin:0 0 10px}
+.nn-tool .nn-tt{font-size:13px;font-weight:800}
+.nn-tool .nn-ts{font-size:11px;color:var(--muted);font-weight:700}
+.nn-seg{display:inline-flex;border:1px solid var(--card-border);border-radius:9px;overflow:hidden;background:var(--card-bg)}
+.nn-seg button{border:0;background:transparent;color:var(--muted);font-size:11.5px;font-weight:800;padding:4px 13px;cursor:pointer;font-family:inherit;transition:.15s}
+.nn-seg button:hover{color:var(--text)}
+.nn-seg button.on{background:var(--accent);color:#fff}
+/* 周带 */
+.nn-rail{display:flex;gap:5px;align-items:flex-end;height:40px;margin:2px 0 0}
+.nn-rail .d{flex:1;min-width:0;position:relative;cursor:pointer}
+.nn-rail .bar{height:32px;border-radius:7px;transition:.16s;position:relative;overflow:hidden}
+.nn-rail .bar::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 55%)}
+.nn-rail .d:hover .bar{transform:translateY(-2px);filter:brightness(1.1)}
+.nn-rail .d.today .bar::before{content:"";position:absolute;inset:0;border-radius:7px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.72);z-index:2}
+.nn-rail .d.fut .bar{background:transparent;border:1px dashed var(--card-border);opacity:.4}
+.nn-rail .d.fut .bar::after{display:none}
+.nn-rail .d.fut:hover .bar{transform:none;filter:none}
+.nn-rail .d.none .bar{background:transparent;border:1px dashed var(--card-border)}
+.nn-rail .dw{font-size:10px;text-align:center;color:var(--muted);margin-top:3px;font-weight:800}
+.nn-rail .d.today .dw{color:var(--accent)}
+.nn-railx{display:flex;gap:4px;margin-top:1px}
+.nn-railx .dd{flex:1;text-align:center;font-size:8.5px;color:var(--muted);opacity:.66;font-variant-numeric:tabular-nums}
+/* 7 天列表 */
+.nn-dlist{margin-top:11px;border-top:1px dashed var(--card-border);padding-top:8px}
+.nn-dr{display:flex;align-items:center;gap:9px;padding:3.5px 2px;font-size:11.5px;border-radius:6px;cursor:pointer}
+.nn-dr:hover{background:var(--card-bg-2,rgba(127,127,127,.05))}
+.nn-dr.today{background:rgba(108,140,255,.10)}
+.nn-dr .k{width:56px;flex:0 0 auto;font-weight:800;opacity:.86}
+.nn-dr.today .k{color:var(--accent);opacity:1}
+.nn-dr .tk{flex:1;height:5px;background:rgba(127,127,127,.17);border-radius:3px;overflow:hidden;min-width:0}
+.nn-dr .tk i{display:block;height:100%;border-radius:3px}
+.nn-dr .v{width:38px;text-align:right;font-weight:900;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.nn-dr .g{width:110px;text-align:right;font-size:10px;color:var(--muted);flex:0 0 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nn-dr .g.w{color:#c08a2f}
+/* 主角卡 */
+.nn-hero .k{font-size:10px;font-weight:800;color:var(--muted);letter-spacing:.5px}
+.nn-hero .v{font-size:23px;font-weight:900;letter-spacing:-.8px;line-height:1.2;margin-top:1px}
+.nn-hero .v small{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0;margin-left:5px}
+.nn-hero .r2{display:flex;align-items:flex-end;gap:10px;margin-top:2px}
+.nn-hero .r2 .l{flex:1;min-width:0}
+.nn-hero .r2 .r{text-align:right;flex:0 0 auto}
+.nn-hero .pct{font-size:26px;font-weight:900;letter-spacing:-1.2px;line-height:1}
+.nn-hero .plb{font-size:9px;color:var(--muted);font-weight:700;margin-top:2px}
+.nn-hero .act{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.7}
+.nn-hero .act b{color:var(--text);font-weight:800}
+.nn-hero .more{margin-top:10px;padding-top:8px;border-top:1px dashed var(--card-border);display:flex;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--muted)}
+.nn-hero .more b{color:var(--text);font-weight:800}
+.nn-dots{display:flex;gap:4px;margin-top:8px}
+.nn-dots i{width:14px;height:14px;border-radius:4px;background:var(--card-border);display:block;opacity:.5}
+/* 月格 */
+.nn-mon{display:flex;gap:18px;align-items:flex-start;justify-content:center}
+.nn-grid7{display:grid;grid-template-columns:repeat(7,38px);gap:5px;flex:0 0 auto}
+.nn-grid7 .wd{font-size:8.5px;color:var(--muted);text-align:center;font-weight:800;padding-bottom:2px}
+.nn-grid7 .c{width:38px;height:38px;border-radius:6px;background:var(--card-bg-2,rgba(127,127,127,.06));position:relative;cursor:pointer;transition:.14s;
+  display:flex;align-items:flex-start;justify-content:flex-end;padding:2px 4px;font-size:10px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--muted)}
+.nn-grid7 .c.emp{border:1px dashed var(--card-border);background:transparent}
+.nn-grid7 .c.has:hover{transform:scale(1.1);box-shadow:0 0 0 1.5px var(--accent);z-index:2}
+.nn-grid7 .c.today{box-shadow:inset 0 0 0 2px rgba(255,255,255,.85)}
+.nn-grid7 .c.blank{visibility:hidden}
+.nn-grid7 .c.prev{background:rgba(127,127,127,.05);color:var(--muted);opacity:.55;cursor:default;font-weight:800}
+.nn-mlg{display:flex;flex-direction:column;gap:6px;font-size:10px;color:var(--muted);padding-top:12px}
+.nn-mlg .r{display:flex;align-items:center;gap:5px}
+.nn-mlg .sq{width:10px;height:10px;border-radius:3px;display:block}
+.nn-mstat{display:flex;gap:26px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--card-border)}
+.nn-mstat .it{flex:0 0 auto;min-width:56px}
+.nn-mstat .it .n{font-size:17px;font-weight:900;letter-spacing:-.5px;white-space:nowrap}
+.nn-mstat .it .l{font-size:9.5px;color:var(--muted);font-weight:700;margin-top:1px}
 /* ===== P01 打包弹层：① 复制去问 ② 粘回结果 ===== */
 .nn-pk{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.4);width:640px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;animation:nnPop .2s ease}
 .nn-pk-hd{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--card-border);font-size:14px;font-weight:800}
@@ -14951,17 +15021,35 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div class="nn-ex" id="nnEx"></div>
       </div>
 
+      <!-- ===== 2026-11-03 三档：今日 / 本周 / 本月（老板拍板：周带+主角制 + 月格）=====
+           切档只换主区内容，页面结构不动 —— 这是真实产品的切法，不是跳页。
+           周 = 周五→下周四（NIKO 周期口径）；本月 = 当月 1 号到今天。 -->
+      <div class="nn-tool">
+        <span class="nn-tt" id="nnScopeTtl">今天记下的</span>
+        <span class="nn-ts" id="nnScopeSub"></span>
+        <span class="nn-sp"></span>
+        <div class="nn-seg" id="nnSeg">
+          <button class="on" onclick="nnScopeSet('d')">今日</button>
+          <button onclick="nnScopeSet('w')">本周</button>
+          <button onclick="nnScopeSet('m')">本月</button>
+        </div>
+      </div>
+
       <div class="nn-main">
         <div class="nn-col">
-          <div class="nn-card">
+          <div class="nn-card" id="nnTodayCard">
             <div class="nn-hd">📋 今天记下的<span class="nn-sp"></span><span class="nn-hint" id="nnCount"></span></div>
             <div id="nnList"></div>
             <!-- P01 待认领池：菜库没有 + 类别也兜不住的，不再静默丢弃，落到这里攒着一起问 AI -->
             <div id="nnPool"></div>
           </div>
+          <!-- 本周：周带（7 段色 = 当天综合）+ 7 天列表 -->
+          <div class="nn-card" id="nnWeekCard" hidden><div id="nnWeekBody"></div></div>
+          <!-- 本月：月格（和 NIKO 日历同一个语言）-->
+          <div class="nn-card" id="nnMonthCard" hidden><div id="nnMonthBody"></div></div>
         </div>
         <div class="nn-col">
-          <div class="nn-card">
+          <div class="nn-card" id="nnRadarCard">
             <div class="nn-hd">🎯 六维缺口雷达<span class="nn-sp"></span><span class="nn-hint" id="nnOv"></span></div>
             <svg id="nnRadar" viewBox="0 0 340 320" class="nn-radar"></svg>
             <div class="nn-legend">
@@ -14971,11 +15059,13 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
               <span><i style="background:#10b981"></i>达标</span>
             </div>
           </div>
-          <div class="nn-card">
+          <div class="nn-card" id="nnVerdictCard">
             <div class="nn-hd">💡 还差什么</div>
             <div class="nn-verdict" id="nnVerdict"></div>
             <div class="nn-adv" id="nnAdv"></div>
           </div>
+          <!-- 本周 / 本月：主角制 —— 只讲最缺的那一项 -->
+          <div class="nn-card" id="nnHeroCard" hidden><div id="nnHeroBody"></div></div>
         </div>
       </div>
 
@@ -42305,6 +42395,257 @@ function nnChipAdd(name){
   if (typeof showToast === 'function') showToast('已记：' + r.name);
 }
 
+/* ===================== 三档：今日 / 本周 / 本月（2026-11-03 老板拍板）=====================
+   老板原话：「推荐组合和月格不错，合并一起看看效果」→ 上线口径：
+   · 今日：不动，还是雷达 + 还差什么（那是门面）
+   · 本周：周带（7 段色 = 当天综合）+ 7 天列表 + 主角制（只讲最缺那一项）
+   · 本月：月格（5×7，和 NIKO 日历同一个语言）+ 一段「最该记住的一件事」
+   口径：周 = 周五 → 下周四；日均只算「有记录的天」，没记的天不按 0 摊（否则周日看到 14% 心态崩）。
+   主角从「靠吃能补的 5 项」里选，VD 不参选 —— VD 靠晒太阳，天天垫底会永远占着主角位，没意义。 */
+var nnScope = 'd';                                  /* 不落盘：显示偏好，重开回今日 */
+var NN_HV = { ok:'#2f8f6d', md:'#a97a26', bad:'#a4474a' };
+var NN_WHY = {
+  p:'蛋白靠蛋、奶、鸡排就能补上，缺多半是那几天正餐没吃够',
+  ca:'钙基本全靠牛奶和带骨鱼 —— 一天一盒奶是最省事的补法',
+  fe:'你不吃红肉，铁主要靠猪排配青菜（VC 帮吸收）',
+  zn:'你不吃红肉和海鲜，这份菜库里锌本来就补不满 —— 一把坚果只能补 0.5mg，溃疡期直接锌片更实在',
+  b2:'B2 在精制面粉里损失七成，牛奶和蛋是最稳的来源'
+};
+function nnHcol(v){ return v >= 90 ? NN_HV.ok : v >= 60 ? NN_HV.md : NN_HV.bad; }
+function nnP2(n){ return (n < 10 ? '0' : '') + n; }
+function nnDKey(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); }
+function nnDaySum(key){
+  var s = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 };
+  (NN.days[key] || []).forEach(function(r){
+    NN_NUTS.forEach(function(x){ s[x.k] += (Number(r[x.k]) || 0) * (Number(r.n) || 1); });
+    s.na += (Number(r.na) || 0) * (Number(r.n) || 1);
+  });
+  return s;
+}
+function nnDayHas(key){ return (NN.days[key] || []).length > 0; }
+function nnDayPct(key){
+  var s = nnDaySum(key), t = 0;
+  NN_NUTS.forEach(function(x){ t += Math.min(100, s[x.k] / nnTgt(x.tk, x.dft) * 100); });
+  return t / 6;
+}
+/* 当天最该补的那一项（VD 除外，同上） */
+function nnDayWorst(key){
+  var s = nnDaySum(key), w = null;
+  NN_NUTS.forEach(function(x){
+    if (x.k === 'vd') return;
+    var p = s[x.k] / nnTgt(x.tk, x.dft);
+    if (!w || p < w.p) w = { x:x, p:p, v:s[x.k] };
+  });
+  return w;
+}
+/* 周五 = 周期第一天，共 7 天 */
+function nnCycleDays(){
+  var n = new Date(), d0 = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  d0.setDate(d0.getDate() - ((d0.getDay() - 5 + 7) % 7));
+  var out = [];
+  for (var i=0;i<7;i++) out.push(new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + i));
+  return out;
+}
+function nnMonthDays(){
+  var n = new Date(), out = [];
+  for (var i=1;i<=n.getDate();i++) out.push(new Date(n.getFullYear(), n.getMonth(), i));
+  return out;
+}
+/* 一组日期的「有记录天日均」→ 最缺项 + 达标天数 */
+function nnAgg(keys){
+  var acc = { p:0, ca:0, fe:0, zn:0, b2:0, vd:0, na:0 }, n = 0;
+  keys.forEach(function(k){
+    if (!nnDayHas(k)) return;
+    n++;
+    var s = nnDaySum(k);
+    Object.keys(acc).forEach(function(x){ acc[x] += s[x]; });
+  });
+  if (!n) return null;
+  var avg = {};
+  Object.keys(acc).forEach(function(x){ avg[x] = acc[x] / n; });
+  var worst = null, list = [], okN = 0;
+  NN_NUTS.forEach(function(x){
+    var p = avg[x.k] / nnTgt(x.tk, x.dft);
+    if (x.k !== 'vd'){
+      list.push({ x:x, p:p });
+      if (!worst || p < worst.p) worst = { x:x, p:p, v:avg[x.k] };
+      if (p >= 1) okN++;
+    }
+  });
+  return { n:n, avg:avg, worst:worst, list:list, okN:okN, days:keys.length, has:keys.filter(nnDayHas).length };
+}
+/* 补这一项最省事的两个菜（只从 NN_DB 里挑，不许冒要下厨的） */
+function nnFoodsFor(k){
+  var idx = -1;
+  NN_NUTS.forEach(function(x, i){ if (x.k === k) idx = i; });
+  if (idx < 0) return [];
+  var t = nnTgt(NN_NUTS[idx].tk, NN_NUTS[idx].dft);
+  return NN_DB.map(function(row){ return { name:row[1], gain:(Number(row[3+idx]) || 0) / t * 100 }; })
+              .filter(function(o){ return o.gain > 0; })
+              .sort(function(a, b){ return b.gain - a.gain; }).slice(0, 2);
+}
+
+function nnWeekRender(){
+  var box = document.getElementById('nnWeekBody');
+  if (!box) return;
+  var days = nnCycleDays(), today = nnToday(), WD = '日一二三四五六';
+  var rail = days.map(function(d){
+    var k = nnDKey(d), has = nnDayHas(k), isT = (k === today), fut = (k > today);
+    var v = has ? nnDayPct(k) : null;
+    var cls = 'd' + (fut ? ' fut' : (has ? '' : ' none')) + (isT ? ' today' : '');
+    var bg = (v == null) ? '' : ('background:' + nnHcol(v));
+    return '<div class="' + cls + '" title="' + k + '"><div class="bar" style="' + bg + '"></div><div class="dw">' + WD.charAt(d.getDay()) + '</div></div>';
+  }).join('');
+  var railx = days.map(function(d){ return '<div class="dd">' + (d.getMonth()+1) + '/' + nnP2(d.getDate()) + '</div>'; }).join('');
+  var rows = days.map(function(d){
+    var k = nnDKey(d), has = nnDayHas(k), isT = (k === today);
+    var kk = WD.charAt(d.getDay()) + ' ' + (d.getMonth()+1) + '/' + nnP2(d.getDate());
+    if (!has){
+      return '<div class="nn-dr"><span class="k" style="opacity:.45">' + kk + '</span><span class="tk"></span>'
+           + '<span class="v" style="opacity:.45">—</span><span class="g">' + (k > today ? '还没到' : '没记') + '</span></div>';
+    }
+    var v = Math.round(nnDayPct(k)), w = nnDayWorst(k);
+    var gt = (w.p >= 1) ? '全达标' : (w.x.n + ' ' + nnR1(w.v));
+    var warn = /锌|钠/.test(gt);
+    return '<div class="nn-dr' + (isT ? ' today' : '') + '"><span class="k">' + kk + '</span>'
+      + '<span class="tk"><i style="width:' + v + '%;background:' + nnHcol(v) + '"></i></span>'
+      + '<span class="v" style="color:' + nnHcol(v) + '">' + v + '%</span>'
+      + '<span class="g' + (warn ? ' w' : '') + '">' + gt + '</span></div>';
+  }).join('');
+  box.innerHTML = '<div class="nn-hd">📅 本周期 ' + (days[0].getMonth()+1) + '/' + nnP2(days[0].getDate()) + ' 五 → '
+    + (days[6].getMonth()+1) + '/' + nnP2(days[6].getDate()) + ' 四<span class="nn-sp"></span>'
+    + '<span class="nn-hint">' + days.filter(function(d){ return nnDayHas(nnDKey(d)); }).length + '/7 天有记录</span></div>'
+    + '<div class="nn-rail">' + rail + '</div><div class="nn-railx">' + railx + '</div>'
+    + '<div class="nn-dlist">' + rows + '</div>';
+}
+
+function nnMonthRender(){
+  var box = document.getElementById('nnMonthBody');
+  if (!box) return;
+  var days = nnMonthDays(), today = nnToday(), WD = ['一','二','三','四','五','六','日'];
+  var first = days[0], lead = (first.getDay() + 6) % 7;         /* 周一为第一列 */
+  var wd = WD.map(function(w){ return '<div class="wd">' + w + '</div>'; }).join('');
+  var cells = '';
+  /* 月初前面空的位置补上个月的灰日子：日历本来就该是完整一格，不是散落的几个色块 */
+  for (var i=0;i<lead;i++){
+    var pd = new Date(first.getFullYear(), first.getMonth(), i - lead + 1);
+    cells += '<div class="c prev">' + pd.getDate() + '</div>';
+  }
+  var recN = 0, sum = 0, missN = 0;
+  /* 整月都画出来（含未来的日子，灰字）—— 月初只画到今天的话，网格右边是一大片空白，不像日历 */
+  var dim = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+  for (var dd=1; dd<=dim; dd++){
+    var cur = new Date(first.getFullYear(), first.getMonth(), dd);
+    var k = nnDKey(cur), has = nnDayHas(k), fut = (k > today);
+    var cls = 'c', st = '';
+    if (fut){ cls += ' prev'; }
+    else if (!has){ cls += ' emp'; missN++; }
+    else {
+      var v = nnDayPct(k);
+      recN++; sum += v;
+      cls += ' has';
+      st = 'background:' + nnHcol(v) + ';color:' + (v >= 60 ? 'rgba(10,13,20,.82)' : 'rgba(255,255,255,.92)');
+    }
+    if (k === today) cls += ' today';
+    cells += '<div class="' + cls + '" style="' + st + '" title="' + k
+      + (fut ? ' · 还没到' : (has ? (' · ' + Math.round(nnDayPct(k)) + '%') : ' · 没记录')) + '">' + dd + '</div>';
+  }
+  var avg = recN ? Math.round(sum / recN) : 0;
+  box.innerHTML = '<div class="nn-hd">📅 ' + (days[0].getMonth()+1) + ' 月<span class="nn-sp"></span>'
+    + '<span class="nn-hint">' + recN + ' 天有记录 · 平均 ' + avg + '%</span></div>'
+    + '<div class="nn-mon"><div class="nn-grid7">' + wd + cells + '</div>'
+    + '<div class="nn-mlg">'
+    +   '<div class="r"><i class="sq" style="background:' + NN_HV.ok + '"></i>达标 ≥90%</div>'
+    +   '<div class="r"><i class="sq" style="background:' + NN_HV.md + '"></i>60–90%</div>'
+    +   '<div class="r"><i class="sq" style="background:' + NN_HV.bad + '"></i>&lt;60%</div>'
+    +   '<div class="r"><i class="sq" style="border:1px dashed var(--card-border)"></i>没记录</div>'
+    +   '<div style="margin-top:5px;opacity:.7;font-size:9.5px;line-height:1.6;max-width:112px">空格 = 那天没记，不是「没吃」</div>'
+    + '</div></div>'
+    + '<div class="nn-mstat">'
+    +   '<div class="it"><div class="n" style="color:' + NN_HV.ok + '">' + recN + '</div><div class="l">记了 ' + recN + ' 天</div></div>'
+    +   '<div class="it"><div class="n">' + avg + '%</div><div class="l">日均</div></div>'
+    +   '<div class="it"><div class="n" style="color:' + NN_HV.md + '">' + missN + '</div><div class="l">没记</div></div>'
+    +   '<div class="it"><div class="n" style="color:' + NN_HV.bad + '">' + nnWorstRun(days) + '</div><div class="l">最差连着</div></div>'
+    + '</div>';
+}
+/* 本月最差的一段连续不达标（<60%），没记录的日子不算「崩」，直接跳过 */
+function nnWorstRun(days){
+  var best = null, cur = null;
+  days.forEach(function(d){
+    var k = nnDKey(d);
+    if (!nnDayHas(k)) return;
+    var v = nnDayPct(k);
+    if (v < 60){
+      cur = cur ? { n:cur.n + 1, from:cur.from, to:k } : { n:1, from:k, to:k };
+      if (!best || cur.n > best.n) best = { n:cur.n, from:cur.from, to:cur.to };
+    } else cur = null;
+  });
+  if (!best || best.n < 2) return '—';
+  return best.from.slice(8) + '–' + best.to.slice(8) + ' · ' + best.n + '天';
+}
+
+function nnHeroRender(){
+  var box = document.getElementById('nnHeroBody');
+  if (!box) return;
+  var isW = (nnScope === 'w');
+  var keys = (isW ? nnCycleDays().map(nnDKey) : nnMonthDays().map(nnDKey));
+  var h = nnAgg(keys);
+  if (!h){
+    box.innerHTML = '<div class="nn-hero"><div class="k">' + (isW ? '本周' : '本月') + '还没有记录</div>'
+      + '<div class="act">记一天就有一天 —— 这里不会把没记的天算成 0%。</div></div>';
+    return;
+  }
+  var w = h.worst, pv = Math.round(Math.min(200, w.p * 100));
+  var col = pv >= 100 ? NN_HV.ok : pv >= 60 ? NN_HV.md : NN_HV.bad;
+  var dots = keys.map(function(k){
+    if (!nnDayHas(k)) return '<i></i>';
+    var p = nnDaySum(k)[w.x.k] / nnTgt(w.x.tk, w.x.dft);
+    if (p >= 1) return '<i style="background:' + NN_HV.ok + ';opacity:1"></i>';
+    if (p >= 0.5) return '<i style="background:' + NN_HV.md + ';opacity:.45"></i>';
+    return '<i></i>';
+  }).join('');
+  var more = h.list.filter(function(o){ return o.x.k !== w.x.k; })
+    .map(function(o){ return o.x.n + ' <b>' + Math.round(Math.min(999, o.p * 100)) + '%</b>'; }).join(' · ');
+  var naOver = Math.round(h.avg.na) > nnTgt('sodium', 2000);
+  var tips = nnFoodsFor(w.x.k);
+  var go = tips.length
+    ? '<button class="nn-hero-go" onclick="nnQuick(\'' + tips[0].name.replace(/'/g, "\\'") + '\')">记一份「' + tips[0].name + '」</button>'
+    : '';
+  var sumLine = isW
+    ? ('7 天里 <b>' + Math.round((1 - Math.min(1, w.p)) * 7) + ' 天</b>不到标')
+    : ('记了 ' + h.n + ' 天，日均只到目标的 <b>' + Math.round(w.p * 100) + '%</b>');
+  box.innerHTML = '<div class="nn-hero">'
+    + '<div class="k">' + (isW ? '本周一直缺的是' : '本月一直缺的是') + ' · ' + w.x.n.toUpperCase() + '</div>'
+    + '<div class="r2"><div class="l"><div class="v">' + w.x.n + ' <small>日均 ' + nnR1(w.v) + ' / ' + nnTgt(w.x.tk, w.x.dft) + w.x.u + '</small></div></div>'
+    + '<div class="r"><div class="pct" style="color:' + col + '">' + pv + '%</div><div class="plb">' + (isW ? '本周达标率' : '本月达标率') + '</div></div></div>'
+    + '<div class="nn-dots">' + dots + '</div>'
+    + '<div class="act">' + sumLine + '。' + (NN_WHY[w.x.k] || '') + '。</div>'
+    + '<div class="more"><span>' + more + '</span>'
+    +   (naOver ? '<span>钠 <b style="color:#c08a2f">日均 ' + Math.round(h.avg.na) + ' 超</b></span>' : '')
+    + '</div>'
+    + go.replace('class="nn-hero-go"', 'class="nn-btn pri" style="width:100%;margin-top:9px;justify-content:center"')
+    + '</div>';
+}
+
+function nnScopeSet(v){
+  nnScope = (v === 'w' || v === 'm') ? v : 'd';
+  var isD = nnScope === 'd', isW = nnScope === 'w';
+  var t = document.getElementById('nnTodayCard'), wk = document.getElementById('nnWeekCard'), mo = document.getElementById('nnMonthCard');
+  var rc = document.getElementById('nnRadarCard'), vc = document.getElementById('nnVerdictCard'), hc = document.getElementById('nnHeroCard');
+  if (t) t.hidden = !isD;
+  if (wk) wk.hidden = !isW;
+  if (mo) mo.hidden = !(nnScope === 'm');
+  if (rc) rc.hidden = !isD;
+  if (vc) vc.hidden = !isD;
+  if (hc) hc.hidden = isD;
+  var seg = document.querySelectorAll('#nnSeg button');
+  for (var i=0;i<seg.length;i++) seg[i].className = ((i === 0 && isD) || (i === 1 && isW) || (i === 2 && nnScope === 'm')) ? 'on' : '';
+  var tt = document.getElementById('nnScopeTtl'), ts = document.getElementById('nnScopeSub');
+  if (tt) tt.textContent = isD ? '今天记下的' : (isW ? '本周摄入' : '本月摄入');
+  if (ts) ts.textContent = isD ? '' : (isW ? '周五 → 周四 · 有记录的天取日均' : '本月 1 号至今 · 有记录的天取日均');
+  nnRender();
+}
+
 /* ---------- 渲染 ---------- */
 var NN_RV = { cur:[0,0,0,0,0,0], tgt:[0,0,0,0,0,0], raf:0, started:false };
 var NN_GEO = { cx:170, cy:160, R:108 };
@@ -42452,8 +42793,9 @@ function nnRender(){
   nnRenderList();
   nnChipsRender();
   nnPoolRender();
-  nnRadarRender();
-  nnRenderVerdict();
+  if (nnScope === 'd'){ nnRadarRender(); nnRenderVerdict(); }
+  else if (nnScope === 'w'){ nnWeekRender(); nnHeroRender(); }
+  else { nnMonthRender(); nnHeroRender(); }
   var ov = document.getElementById('nnOv');
   if (ov) ov.textContent = nnRecs().length ? ('综合 ' + Math.round(nnOverall()) + '%') : '还没记';
   var ct = document.getElementById('nnCount');
@@ -42470,7 +42812,7 @@ function nnBoot(){
       if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); nnSay(); }
     });
   }
-  nnRender();
+  nnScopeSet('d');   /* 首屏按「今日」渲染（替代原来直接 nnRender，保证三档的显示状态一致） */
 }
 /* 本模块是 IIFE 写法，DOM 里的 onclick 只能看到挂在 window 上的函数 —— 必须逐个导出 */
 window.nnBoot = nnBoot;         window.nnSay = nnSay;
@@ -42487,6 +42829,8 @@ window.nnPackOpen = nnPackOpen; window.nnPackClose = nnPackClose;
 window.nnPackTab = nnPackTab;   window.nnPackGo = nnPackGo;
 window.nnChipAdd = nnChipAdd;   window.uvDel = uvDel;
 window.uvClear = uvClear;       window.nnPackParse = nnPackParse;
+/* 三档切换（今日 / 本周 / 本月） */
+window.nnScopeSet = nnScopeSet;
 window.__nn = NN;
 
 function hkRender(){
@@ -44937,7 +45281,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611031606";
+        window.NIKO_VERSION = "202611031636";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
