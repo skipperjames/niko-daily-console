@@ -12609,6 +12609,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
    菜库 JSON 内嵌在 js 段（变量 CAIKU），这两块只是它的两个视图：
    02 横幅读 weekPlan 排期，03 环读 foods 算账。颜色一律走主题变量 + 三档固定语义色。 */
 .hk-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;box-shadow:var(--shadow,0 2px 10px rgba(0,0,0,.05));padding:12px 14px}
+/* 2026-11-03：营养独立成页签后整宽显示，宽屏上限 1100px 并居中（再宽一行拉到 1500px，眼睛跟不上；左对齐会在右边留一大块空） */
+#p-nutri .hk-card{max-width:1100px;margin:0 auto}
 .hk-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .hk-date{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;height:44px;border-radius:11px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.07));line-height:1.15}
 .hk-date b{font-size:14.5px;font-weight:800;color:var(--text)}
@@ -14818,24 +14820,28 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
   <div class="hp-head">
     <h1>🩺 健康档案</h1>
     <div class="tabs" id="tabs"></div>
-    <div class="hp-head-acts">
+    <div class="hp-head-acts" id="hpHeadActs">
       <button class="hp-btn" onclick="hpvNew()" title="新增一次就诊（可勾选「同时挂进病史库」，让身体地图长出图钉）">＋ 加一次就诊</button>
       <button class="hp-btn" onclick="hpClearDemo()" title="清除示例数据（只删带「示例」标记的条目，你自己的记录不动）">🧹</button>
     </div>
-    <div class="hp-head-hint">身体地图 + 看病记录 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 「🧹」清掉自带示例数据（你自己记的不动）</div>
+    <div class="hp-head-hint">营养 + 身体地图 + 看病记录 —— 数据只存在你自己的浏览器里，不上传任何服务器 · 「🧹」清掉自带示例数据（你自己记的不动）</div>
   </div>
 
 
   <!-- ===== v11 视图一：今天（方案 01） ===== -->
   
 
+  <!-- ===== 营养（2026-11-03 从「身体地图」里拆出来，独立成一个页签）=====
+       老板原话：「营养界面单独一个页面吧，没必要跟身体地图放一起」。
+       数据来自 js 段内嵌的 CAIKU，渲染入口 hkRender()。默认 hidden：菜库没内嵌时不占地方。 -->
+  <div class="panel" id="p-nutri">
+    <div class="sec">
+      <div class="hk-card" id="hkCard" hidden></div>
+    </div>
+  </div>
+
   <div class="panel" id="p-map">
     <div class="sec">
-
-      <!-- ===== 营养菜库：02 今日吃什么条 + 03 六维缺口环（2026-11-02）=====
-           数据来自 js 段内嵌的 CAIKU（营养菜库 v1），渲染入口 hkRender()。
-           默认 hidden：js 没加载 / 菜库没内嵌时不占地方，不留空白块。 -->
-      <div class="hk-card" id="hkCard" hidden></div>
 
       <div class="hpmap2 hpv11-mapwrap">
         <div class="hpmap2-l">
@@ -37350,7 +37356,7 @@ function renderDayDetail() {
    裸 function/var 会静默互相覆盖；只把 HTML onclick 真正引用到的函数挂到 window。 */
 
 /* ===================== 状态 ===================== */
-var S = { tab:'map', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
+var S = { tab:'nutri', mode:'B', theme:'', sel:null, editing:null, pick:[], pickSide:'front' };
 
 /* ===================== 人体图 v5 · 几何（由 _v5_geo.py 程序化生成） =====================
    单一闭合解剖轮廓（人体模型算出来 + Catmull-Rom 平滑）｜51 条肌纤维（裁在轮廓内）｜
@@ -37581,7 +37587,10 @@ function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60), x=s%60; re
 function pvTheme(){ /* no-op：并入本体后主题跟随全站，不再由本板块切换 */ }
 /* 2026-09-20 用户要求：删掉「手表数据 / 我的方案 / 好转推断」三块，并把「用药记录」挪到「总览」右边。
    面板 HTML 与渲染函数仍保留（休眠、无入口）——避免动到复诊摘要/总览脚注里对「好转推断」的文字引用。 */
+/* 2026-11-03：营养从「身体地图」里拆出来，成为健康页的第一个页签（老板要的「单独一个页面」）。
+   不新增侧栏入口 —— 侧栏已经够长，健康里再分两页签就够用。 */
 var TABS=[
+  {k:'nutri', ic:'🍚', t:'营养'},
   {k:'map',   ic:'🧍', t:'身体地图'},
 ];
 function renderTabs(){
@@ -37591,12 +37600,22 @@ function renderTabs(){
   }).join('');
 }
 function pvTab(k){
-  /* 2026-10-14：健康档案只留「身体地图 + 看病记录」，其他面板全部删除 → 这里收敛成只有一个视图。
-    其他渲染函数（renderHist/renderMed/renderMinor/renderWatch/renderPlan/renderTrend/hpv11Today/hpv11Doc）
-    按铁律「面板 HTML 与渲染函数保留（休眠、无入口）」保留在代码里，不再有调用点。 */
-  S.tab = 'map';
-  var p = document.getElementById('p-map'); if(p) p.classList.add('on');
+  /* 2026-10-14 收敛成单视图时的注释保留：其他面板的渲染函数仍在、无入口。
+     2026-11-03：拆成两页签 —— nutri 只渲染营养卡，map 渲染身体地图 + 看病记录。
+     「＋ 加一次就诊 / 🧹」只在 map 页签下显示（它们属于档案，不属于今天吃什么）。 */
+  k = (k === 'nutri') ? 'nutri' : 'map';
+  S.tab = k;
+  ['nutri','map'].forEach(function(x){
+    var p = document.getElementById('p-' + x);
+    if (p) p.classList.toggle('on', x === k);
+  });
+  var acts = document.getElementById('hpHeadActs');
+  if (acts) acts.style.display = (k === 'map') ? '' : 'none';
   renderTabs();
+  if (k === 'nutri'){
+    try { mkLoad(); hkRender(); } catch(e) { console.error('营养页渲染失败', e); }
+    return;
+  }
   try { renderBodyMap(); hpvRender(); } catch(e) { console.error('健康档案渲染失败', e); }
 }
 /* ===================== 人体图渲染 v5（解剖剪影 × 肌纤维 × 全息 HUD） ===================== */
@@ -40450,19 +40469,12 @@ var HP_INIT = false;
 function renderHealthPage(){
   HLOAD();                                  /* 铁律 §5：先重读存储再渲染 */
   if (!HP_INIT) { HP_INIT = true; renderTabs(); }
-  /* 2026-10-20 修：10-14 收敛成「只剩身体地图 + 看病记录」时，p-today/p-doc 删掉了，
-     但 p-map 的 .on 没补；renderHealthPage 又只调 renderTabs()、不调 pvTab() →
-     面板永远 display:none，打开健康档案整页全空（用户截图实锤）。
-     这里每次进页面都补一次，pvTab 点击时同样会补。 */
-  var _pmap = document.getElementById('p-map');
-  if (_pmap && !_pmap.classList.contains('on')) _pmap.classList.add('on');
+  /* 2026-10-20 修：收敛视图时 p-map 的 .on 没补 → 打开健康档案整页全空（用户截图实锤）。
+     2026-11-03：补 .on 的活统一交给 pvTab —— 进页面按 S.tab 渲染对应页签
+     （营养 = hkRender，地图 = renderBodyMap + hpvRender），不再三处硬编码。 */
   if(!DOSE_INIT){ DOSE_INIT=true; try{ doseInit(); }catch(e){} }
-  /* 2026-10-14：只画「身体地图 + 看病记录」 */
-  try {
-    renderBodyMap();
-    hpvRender();
-    hkRender();          /* 营养菜库：02 今日吃什么条 + 03 六维缺口环（内部会重读 niko_health_meal_v1） */
-  } catch (e) { try { pvToast('渲染出错：' + e.message); } catch (e2) {} }
+  try { pvTab(S.tab === 'nutri' ? 'nutri' : 'map'); }
+  catch (e) { try { pvToast('渲染出错：' + e.message); } catch (e2) {} }
 }
 
 /* 一键清除示例数据：只删带 real!==true 的条目 + 手表演示数据，用户自己记的一律不动 */
@@ -43938,7 +43950,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611021840";
+        window.NIKO_VERSION = "202611030853";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
