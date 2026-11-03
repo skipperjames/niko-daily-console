@@ -12619,7 +12619,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .nn-sub{font-size:11px;font-weight:600;color:var(--muted)}
 .nn-sp{flex:1}
 .nn-hint{font-size:11px;color:var(--muted);font-weight:600}
-.nn-ta{width:100%;min-height:62px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.06));color:var(--text);border-radius:12px;padding:11px 13px;font-size:14px;line-height:1.6;font-family:inherit;outline:none;resize:vertical;transition:.16s}
+.nn-ta{width:100%;min-height:44px;border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.06));color:var(--text);border-radius:12px;padding:11px 13px;font-size:14px;line-height:1.6;font-family:inherit;outline:none;resize:vertical;transition:.16s}
 .nn-ta:focus{border-color:var(--accent);box-shadow:0 0 0 1px rgba(124,92,255,.28)}
 .nn-bar{display:flex;gap:8px;align-items:center;margin-top:9px;flex-wrap:wrap}
 .nn-btn{border:1px solid var(--card-border);background:var(--card-bg-2,rgba(127,127,127,.06));color:var(--text);font-size:12.5px;font-weight:700;padding:7px 13px;border-radius:9px;cursor:pointer;transition:.16s;font-family:inherit}
@@ -12734,7 +12734,8 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .nn-pk-tip{font-size:10.5px;color:var(--muted);margin-top:6px;line-height:1.6}
 .nn-pk-ft{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px 14px}
 .nn-pk-ft .nn-btn.pri{min-width:96px;justify-content:center}
-.nn-main{display:grid;grid-template-columns:1fr 380px;gap:12px;align-items:start}
+.nn-main{display:grid;grid-template-columns:380px 1fr;gap:12px;align-items:start}
+.nn-main.one{grid-template-columns:1fr}
 .nn-col{min-width:0}
 .nn-mgh{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;color:var(--muted);margin:8px 0 6px}
 .nn-mgh .ln{flex:1;height:1px;background:var(--card-border)}
@@ -12754,7 +12755,7 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .nn-row .x{border:0;background:none;color:var(--muted);cursor:pointer;font-size:12px;flex:0 0 auto;padding:0 2px;opacity:.6}
 .nn-row .x:hover{color:#ef4444;opacity:1}
 .nn-empty{text-align:center;color:var(--muted);font-size:12.5px;padding:20px 0 14px;line-height:2}
-.nn-radar{display:block;width:100%;height:auto;overflow:visible}
+.nn-radar{display:block;width:100%;max-width:330px;height:auto;margin:0 auto;overflow:visible}
 .nn-legend{display:flex;gap:11px;flex-wrap:wrap;margin-top:6px;font-size:10.5px;color:var(--muted)}
 .nn-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .nn-verdict{font-size:13px;line-height:1.85}
@@ -15009,16 +15010,16 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
       <!-- ===== 2026-11-03 一句话记营养（老板拍板上线）：说一句 → 自动拆食物 → 自动算营养 → 雷达实时更新 ===== -->
       <div class="nn-card nn-say">
         <div class="nn-hd">💬 今天吃了什么 <span class="nn-sub">一句话，几样都行 —— 回车就记</span><span class="nn-sp"></span><span class="nn-hint" id="nnHint"></span></div>
-        <textarea id="nnIn" class="nn-ta" placeholder="例：早上吃了馒头、一瓶纯牛奶、一个茶叶蛋&#10;或者：中午牛肉面加个蛋，下午一杯豆浆"></textarea>
+        <textarea id="nnIn" class="nn-ta" rows="1" placeholder="例：早上吃了馒头、一瓶纯牛奶、一个茶叶蛋；中午牛肉面加个蛋，下午一杯豆浆"></textarea>
         <div class="nn-bar">
           <button class="nn-btn pri" onclick="nnSay()">记下 →</button>
-          <button class="nn-btn" onclick="nnClear()">清空今天</button>
           <button class="nn-btn" onclick="nnAddManual()">＋ 手动加一样</button>
-          <span class="nn-hint">认不出的会按类别自动估一个值，标「估」的点开就能改</span>
+          <button class="nn-btn" onclick="nnPackOpen()" title="把认不出的食物打包成一段话，复制去问 AI，回来粘上就自动入库">📦 打包问 AI</button>
+          <button class="nn-btn" onclick="nnClear()">清空今天</button>
+          <span class="nn-hint">认不出的自动按类别估值，并攒进「待认领池」等 AI 给数 —— 「📦 打包问 AI」随时可点</span>
         </div>
         <!-- P05 常吃榜：按当前时段 + 近 30 天频次排序，点一下就记一条（不分「库内/库外」，吃过就学得会） -->
         <div class="nn-qk"><span class="lb">常吃</span><div class="list" id="nnChips"></div></div>
-        <div class="nn-ex" id="nnEx"></div>
       </div>
 
       <!-- ===== 2026-11-03 三档：今日 / 本周 / 本月（老板拍板：周带+主角制 + 月格）=====
@@ -15035,19 +15036,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         </div>
       </div>
 
-      <div class="nn-main">
-        <div class="nn-col">
-          <div class="nn-card" id="nnTodayCard">
-            <div class="nn-hd">📋 今天记下的<span class="nn-sp"></span><span class="nn-hint" id="nnCount"></span></div>
-            <div id="nnList"></div>
-            <!-- P01 待认领池：菜库没有 + 类别也兜不住的，不再静默丢弃，落到这里攒着一起问 AI -->
-            <div id="nnPool"></div>
-          </div>
-          <!-- 本周：周带（7 段色 = 当天综合）+ 7 天列表 -->
-          <div class="nn-card" id="nnWeekCard" hidden><div id="nnWeekBody"></div></div>
-          <!-- 本月：月格（和 NIKO 日历同一个语言）-->
-          <div class="nn-card" id="nnMonthCard" hidden><div id="nnMonthBody"></div></div>
-        </div>
+      <!-- 2026-11-03 下午重排（老板反馈：雷达和「还缺啥」藏在右列窄条里，滚动才看得到）：
+           上排 = 🎯雷达（左）+ 💡今天还缺啥（右）并排，记完一眼看到结论；
+           下排 = 📋今天记下的 全宽（列表行舒展）。周/月档由 nnScopeSet 切 .one 单列。 -->
+      <div class="nn-main" id="nnMain">
         <div class="nn-col">
           <div class="nn-card" id="nnRadarCard">
             <div class="nn-hd">🎯 六维缺口雷达<span class="nn-sp"></span><span class="nn-hint" id="nnOv"></span></div>
@@ -15059,14 +15051,26 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
               <span><i style="background:#10b981"></i>达标</span>
             </div>
           </div>
+          <!-- 本周：周带（7 段色 = 当天综合）+ 7 天列表（周/月档 nn-main 切单列，这里全宽） -->
+          <div class="nn-card" id="nnWeekCard" hidden><div id="nnWeekBody"></div></div>
+          <!-- 本月：月格（和 NIKO 日历同一个语言）-->
+          <div class="nn-card" id="nnMonthCard" hidden><div id="nnMonthBody"></div></div>
+        </div>
+        <div class="nn-col">
           <div class="nn-card" id="nnVerdictCard">
-            <div class="nn-hd">💡 还差什么</div>
+            <div class="nn-hd">💡 今天还缺啥</div>
             <div class="nn-verdict" id="nnVerdict"></div>
             <div class="nn-adv" id="nnAdv"></div>
           </div>
           <!-- 本周 / 本月：主角制 —— 只讲最缺的那一项 -->
           <div class="nn-card" id="nnHeroCard" hidden><div id="nnHeroBody"></div></div>
         </div>
+      </div>
+      <div class="nn-card" id="nnTodayCard">
+        <div class="nn-hd">📋 今天记下的<span class="nn-sp"></span><span class="nn-hint" id="nnCount"></span></div>
+        <div id="nnList"></div>
+        <!-- P01 待认领池：菜库没有 + 类别也兜不住的，不再静默丢弃，落到这里攒着一起问 AI -->
+        <div id="nnPool"></div>
       </div>
 
       <!-- 旧版营养卡（2026-11-03 起不再显示，保留 DOM 与全部函数，防其他入口引用报错） -->
@@ -42280,7 +42284,7 @@ function nnPackMaskEl(){
   return m;
 }
 function nnPackOpen(){
-  if (!uvList().length){ if (typeof showToast === 'function') showToast('池子是空的'); return; }
+  if (!uvList().length){ if (typeof showToast === 'function') showToast('没有要问的 —— 认出的食物都直接记上了，认不出的会攒进待认领池'); return; }
   nnPackMaskEl();
   PK_TAB = 'send';
   nnPackTab('send');
@@ -42638,6 +42642,9 @@ function nnScopeSet(v){
   if (rc) rc.hidden = !isD;
   if (vc) vc.hidden = !isD;
   if (hc) hc.hidden = isD;
+  /* 2026-11-03 下午：今日档 = 雷达+还缺啥两列；周/月档切单列（周带/月格全宽才摆得下） */
+  var mn = document.getElementById('nnMain');
+  if (mn) mn.className = 'nn-main' + (isD ? '' : ' one');
   var seg = document.querySelectorAll('#nnSeg button');
   for (var i=0;i<seg.length;i++) seg[i].className = ((i === 0 && isD) || (i === 1 && isW) || (i === 2 && nnScope === 'm')) ? 'on' : '';
   var tt = document.getElementById('nnScopeTtl'), ts = document.getElementById('nnScopeSub');
@@ -45281,7 +45288,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611031636";
+        window.NIKO_VERSION = "202611031750";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
