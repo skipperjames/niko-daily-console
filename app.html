@@ -34060,6 +34060,7 @@ function renderDayDetail() {
         let diaryMonthY = new Date().getFullYear();
         let diaryMonthM = new Date().getMonth();
         let diarySelectedDate = null;   // 选中日期（YYYY-MM-DD），默认今天
+        let diarySkipDraft = false;     // 保存后放行一次：重渲染读已存内容，不吃草稿保护
         let diaryMood = 'ok';
 
         function diaryTodayStr() {
@@ -34213,11 +34214,25 @@ function renderDayDetail() {
             return '—— 今日习惯 ——\n' + lines.join('\n');
         }
         // 剥掉正文里上一次追加的习惯附录（幂等：反复保存不会叠加）
+        // 2026-11-03 FIX：以前是 indexOf 一刀截到末尾，把用户写在附录**后面**的正文一起删了。
+        // 现象：记完习惯再往下写自己的内容 → 保存后当前页看着还在（草稿保护撑着），
+        // 切到别的日期再切回来就没了（读的是已存坏的内容）。
+        // 现在只删「—— 今日习惯 ——」标题行 + 紧跟其后的若干条附录行，块外内容一律保留。
         function stripHabitAppendix(text) {
-            const t = String(text || '');
-            const i = t.indexOf('—— 今日习惯 ——');
-            if (i < 0) return t.replace(/\s+$/, '');
-            return t.slice(0, i).replace(/\s+$/, '');
+            const t = String(text == null ? '' : text);
+            if (t.indexOf('—— 今日习惯 ——') < 0) return t.replace(/\s+$/, '');
+            const APPX_LINE = /^.*\s✓(?:\s*（.*）)?\s*$/;   // 形如「😊 做笔记 ✓（22:21）」
+            const src = t.split('\n');
+            const keep = [];
+            for (let i = 0; i < src.length; i++) {
+                if (src[i].trim() === '—— 今日习惯 ——') {
+                    // 吃掉标题行 + 紧随其后的连续附录行；遇到第一行不像附录的就停手
+                    while (i + 1 < src.length && APPX_LINE.test(src[i + 1].trim())) i++;
+                    continue;
+                }
+                keep.push(src[i]);
+            }
+            return keep.join('\n').replace(/\n{3,}/g, '\n\n').trim();
         }
         // 13 用：把当天习惯附录预填进编辑器（光标停在正文末尾，等用户补一句）
         function diaryPrefillHabit(quiet) {
@@ -34505,8 +34520,11 @@ function renderDayDetail() {
             if (!el) return;
             const ds = diarySelectedDate || diaryTodayStr();
             // 草稿保护：云同步等触发的重渲染，不冲掉正在编辑、尚未保存的内容（仅限同一日期）
+            // 2026-11-03：加 diarySkipDraft —— 保存后那一次重渲染必须读「已经存进去的内容」，
+            // 不能被草稿保护挡住。否则内容存坏了也看不出来（就是这次丢字的掩盖机制）。
             const prevInput = document.getElementById('diaryEditorInput');
-            const draft = (prevInput && prevInput.getAttribute('data-date') === ds && prevInput.value.trim()) ? prevInput.value : null;
+            const draft = (!diarySkipDraft && prevInput && prevInput.getAttribute('data-date') === ds && prevInput.value.trim()) ? prevInput.value : null;
+            diarySkipDraft = false;
             const e = diaryEntry(ds);
             const today = diaryTodayStr();
             const d = new Date(ds + 'T00:00:00');
@@ -34601,15 +34619,17 @@ function renderDayDetail() {
             const content = input ? input.value.trim() : '';
             if (!content) { showToast('✏️ 写点什么再保存吧'); return; }
             const ds = diarySelectedDate || diaryTodayStr();
-            const firstLine = content.split(/\n/)[0].trim().slice(0, 30);   // 首行金句：只记第一句，最多 30 字
             const idx = diaryEntries.findIndex(x => x.date === ds);
             const isNew = idx < 0;
+            // 先剥掉上一次的习惯附录，剩下的才是用户真正写下的东西。
+            // 首行金句也从这里取 —— 否则附录标题会抢走 firstLine，日历格子永远显示「—— 今日习惯 ——」。
+            const _bodyBase = stripHabitAppendix(content);
+            const firstLine = (_bodyBase.split(/\n/)[0] || '').trim().slice(0, 30);   // 首行金句：只记第一句，最多 30 字
             // ===== 14 静默吸收当天习惯（2026-10-09）=====
             // 零交互：你落笔的那一刻，习惯数据自动作为快照写进日记条目 + 正文尾部附录。
             // 这是 13（当晚询问）的保底 —— 就算你从不点「带进日记」，也不会漏。
             // 正文追加幂等：先剥掉上一次的附录再拼，反复保存不会叠加。
             const _snap = diaryHabitSnapshot(ds);
-            const _bodyBase = stripHabitAppendix(content);
             const _appx = diaryHabitAppendix(ds);
             const _finalBody = _appx ? (_bodyBase + '\n\n' + _appx) : _bodyBase;
             if (!isNew) {
@@ -34638,6 +34658,7 @@ function renderDayDetail() {
                 date: ds
             });
             diaryAutoCheckHabit(ds);
+            diarySkipDraft = true;   // 存完读已存版本，别再拿草稿糊住
             renderDiaryPage();
             // 保存瞬间：合上本子扫光 + NIKO 读一遍回贴 + 墨羽闪光
             diaryCoverShutFx();
@@ -43959,7 +43980,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611030857";
+        window.NIKO_VERSION = "202611030917";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
