@@ -41345,7 +41345,7 @@ var CAIKU = {
     { id:'chicken',name:'鸡排 去皮',    scene:'食堂',   role:'protein', p:24,  ca:11,  fe:0.7, zn:1.3, b2:0.13, vd:5,   na:300, star:1, note:'白肉，铁只有猪排的一半' },
     { id:'pork',   name:'猪排',         scene:'食堂',   role:'protein', p:20,  ca:8,   fe:1.5, zn:2.2, b2:0.25, vd:8,   na:320, star:2, note:'铁锌最高的一档，每周 2 次' },
     { id:'fish',   name:'鱼排',         scene:'食堂',   role:'protein', p:18,  ca:25,  fe:0.5, zn:0.6, b2:0.10, vd:40,  na:250, star:2, note:'唯一能吃到 VD 的日常菜，每周 2 次' },
-    { id:'sardine',name:'带骨沙丁鱼罐头 100g', scene:'超市', role:'protein', p:25, ca:380, fe:2.6, zn:1.5, b2:0.19, vd:270, na:500, star:2, note:'R01：钙+蛋白+VD 三合一，唯一常温能囤的补钙主力。选水浸/低盐款，一周 1 次' },
+    { id:'sardine',name:'带骨沙丁鱼罐头 100g', scene:'超市', role:'protein', p:25, ca:380, fe:2.6, zn:1.5, b2:0.19, vd:270, na:500, star:0, gut:0, note:'⚠ 2026-11-04 下线：老板买不到也不想吃。它在 NN_AVOID 里，推荐永远不会再推它；VD 改由 D3 片 + 晒太阳承担' },
     { id:'fegg',   name:'煎鸡蛋 1 个',  scene:'食堂',   role:'protein', p:6.5, ca:28,  fe:1.2, zn:0.6, b2:0.20, vd:40,  na:170, star:1, note:'便宜好用的蛋白补丁，减脂餐蛋白不够就加' },
     { id:'brice',  name:'黑米饭 1 碗',  scene:'食堂',   role:'carb',    p:4,   ca:10,  fe:0.9, zn:0.8, b2:0.03, vd:0,   na:2,   star:0, gut:1, note:'全谷纤维高，平时比白米饭好，肠敏感期换白米饭' },
     { id:'sweet',  name:'红薯 150g',    scene:'食堂',   role:'carb',    p:1.5, ca:23,  fe:0.6, zn:0.3, b2:0.05, vd:0,   na:28,  star:0, gut:2, note:'⚠ 棉子糖产气第一名；纤维好，但腹泻期别碰，平时拿了它就别再拿饭' },
@@ -41382,7 +41382,7 @@ var CAIKU = {
     { id:'L1', slot:'午餐', name:'鱼排 + 煎蛋 + 青菜 + 红薯', items:{ fish:1, fegg:1, veg:1, sweet:1 }, pick:true, note:'鱼排日（周一/周四）' },
     { id:'L2', slot:'午餐', name:'猪排 + 煎蛋 + 青菜 + 黑米饭', items:{ pork:1, fegg:1, veg:1, brice:1 }, pick:true, note:'猪排日（周二/周五），铁锌最高' },
     { id:'L3', slot:'午餐', name:'鸡排 + 煎蛋 + 青菜 + 意面', items:{ chicken:1, fegg:1, veg:1, pasta:1 }, pick:true, note:'周三或自由日' },
-    { id:'L4', slot:'午餐', name:'带骨鱼罐头 + 青菜 + 黑米饭', items:{ sardine:1, veg:1, brice:1 }, pick:true, note:'R01 平替：一罐补 380mg 钙 + 270IU VD，常温可囤、不用做饭' },
+    { id:'L4', slot:'午餐', name:'鱼排 + 青菜 + 黑米饭', items:{ fish:1, veg:1, brice:1 }, pick:true, gut:0, note:'原「带骨鱼罐头版」已下线（2026-11-04 买不到也不想吃）→ 改成食堂鱼排，VD 别再指望这道菜，靠 D3 片' },
     { id:'D1', slot:'晚餐', name:'口水鸡 + 西蓝花 + 青菜 + 黑米粥', items:{ saliva:1, broc:1, veg:1, congee:1 }, pick:true, note:'口水鸡记得少红油' },
     { id:'D2', slot:'晚餐', name:'白切鸡腿 + 西蓝花 + 青菜 + 南瓜', items:{ chixia:1, broc:1, veg:1, pump:1 }, pick:true, note:'不辣款，钠比 D1 少 450mg' },
     { id:'D3', slot:'晚餐', name:'蒸蛋 + 西蓝花 + 青菜 + 粉丝', items:{ steame:1, broc:1, veg:1, vermL:1 }, pick:true, note:'清淡日' }
@@ -41417,7 +41417,7 @@ var CAIKU = {
     '外食汤汁不喝、蘸料减半（控钠，针对口干）',
     '工作日午休出门晒 15 分钟，10:00–15:00，隔玻璃无效',
     '猪肝、豆腐不作为必吃项（不做饭的人做不到，不勉强）',
-    '带骨鱼（沙丁鱼罐头）选水浸/低盐款，一周 1 次，罐里的汁别喝（钠高）'
+    '沙丁鱼罐头已下线（2026-11-04 买不到也不想吃）→ VD 全靠 D3 片 + 晒太阳，别再找替代鱼'
   ],
   redlines: [
     '溃疡超过 3 周不愈合、或边缘发硬不怎么痛 → 口腔科，排除癌性溃疡',
@@ -41654,7 +41654,7 @@ function mkAdvice(s, d, eaten){
   var pl = mkPlan();
   if (!d.sun) {
     if (pl.sun) return 'VD 靠吃补不满 —— 今天排期是晒太阳日：午休出门晒 15 分钟（10:00–15:00，隔玻璃无效），比吃什么补剂都直接。';
-    return 'VD 靠吃补不满 —— 周末排期没有晒太阳，只能靠鱼排 / 蛋补一点，别指望吃够。';
+    return 'VD 靠吃补不满（鱼排一份也才 40 IU）—— 周末排期没有晒太阳，记得吞 D3；出门晒 15 分钟比吃什么都直接。';
   }
   if (!eaten) return '晒过太阳了 —— 点上面三顿的名字算「吃过了」，六个环立刻回填。';
   var worst = null;
@@ -41684,7 +41684,7 @@ function mkAdvice(s, d, eaten){
 var HK_ANCHORS = [
   { k:'milk', name:'早餐奶 250ml',      icon:'🥛', frequency:'daily',    goal:7,        unit:'天' },
   { k:'fish', name:'鱼排 / 鱼汤',        icon:'🐟', frequency:'weekly',   goal:2,        unit:'次' },
-  { k:'bone', name:'带骨鱼 100g',        icon:'🥫', frequency:'weekly',   goal:1,        unit:'次' },   /* R01 平替 */
+  { k:'d3',   name:'维生素 D3 一片',    icon:'💊', frequency:'daily',    goal:7,        unit:'天' },   /* 2026-11-04：沙丁鱼罐头下线，VD 只剩 D3 + 晒太阳，这条从「每周带骨鱼」升级成每天 */
   { k:'sun',  name:'午休晒太阳 15 分',   icon:'☀️', frequency:'weekdays', goal:5, weekDays:[1,2,3,4,5], unit:'天' }  /* R08 */
 ];
 function hkHabits(){ try { var a = safeStorage.get('niko_habits', []); return Array.isArray(a) ? a : []; } catch(e){ return []; } }
@@ -41823,11 +41823,11 @@ var NN_MEALI = { b:'🌅', l:'☀️', d:'🌙', s:'🍪' };
 
 /* 🚫 老板不吃 / 买不到 / 医嘱忌口 —— 任何推荐一律不许再冒出来（2026-11-04）。
    以后再有吃不下或搞不到的，直接往这里加一行，两个推荐口子（今日缺口卡 / 周复盘）同时生效。
-   【不吃买不到】三文鱼、豆干、香干
+   【不吃买不到】三文鱼、豆干、香干、沙丁鱼（罐头版，老板 11-04 明确：买不到也不想吃）
    【不做饭做不到】腐竹（干货要泡发，跟「猪肝、豆腐不作为必吃项」同一个道理）
    【医嘱忌口】牛肉、羊肉（颈椎病 2026-09-11 医嘱：牛肉羊肉发物都不能吃）；拉面/兰州拉面同理，它的铁值来自牛肉汤
    【肠敏感雷区】麻辣烫、火锅、烧烤、炸鸡（重油重辣，补营养时推它就是害人） */
-var NN_AVOID = ['三文鱼', '豆干', '香干', '腐竹', '牛肉', '羊肉', '拉面', '麻辣烫', '火锅', '烧烤', '炸鸡'];
+var NN_AVOID = ['三文鱼', '豆干', '香干', '腐竹', '沙丁鱼', '牛肉', '羊肉', '拉面', '麻辣烫', '火锅', '烧烤', '炸鸡'];
 function nnBad(name){ var s = String(name || ''); for (var i=0;i<NN_AVOID.length;i++){ if (s.indexOf(NN_AVOID[i]) >= 0) return true; } return false; }
 
 /* 每「一份」估算：p g / ca mg / fe mg / zn mg / b2 mg / vd IU / na mg；别名用 | 分隔 */
@@ -42797,7 +42797,7 @@ function nnRenderList(){
   });
   box.innerHTML = html;
 }
-var NN_TIPS = { ca:'一盒零乳糖奶 + 一份小油菜', p:'一个蛋 + 半份鸡排', vd:'一罐带骨沙丁鱼（最多只到 34%）—— VD 靠吃就是补不满，今天记得吞 D3 + 午休晒 15 分钟',
+var NN_TIPS = { ca:'一盒零乳糖奶 + 一份小油菜', p:'一个蛋 + 半份鸡排', vd:'一片 D3（800–1000 IU）—— 这条线现在完全靠 D3 + 晒太阳，吃的补不满，别指望鱼',
                 fe:'半份猪排 + 一份青菜（尽量别跟奶同餐，钙压铁）', zn:'一小把坚果（腹泻期改成一片锌）', b2:'一盒零乳糖奶 + 一份青菜' };
 /* 六项精确条：雷达只给形状，这里给数字 —— 差几个点、还差多少，一眼读到 */
 function nnBarsRender(s){
@@ -42999,9 +42999,18 @@ function hkRender(){
     };
     rings += '<div class="hk-fruit">'
       + fcard('🍎 水果', fr, '够了 —— 一天 1–2 份就停，别拿它当饭吃',
-              '要吃 1 份（一个苹果 / 一根香蕉），饭后或下午三点都行', 'apple')
+              '要吃 1 份：香蕉（熟透）/ 蓝莓 / 猕猴桃 / 木瓜 / 橘子 —— 常温、饭后半小时', 'banana')
       + fcard('🥜 坚果', nu, '够了 —— 15g 就够，多了是油',
-              '要吃 15g（一小把）。你不吃红肉，锌主要靠它，上午吃最好', 'nut')
+              '要吃 15g 原味混合坚果（上午吃，补锌）。肚子还在闹就先换一片锌', 'nut')
+      + '</div>';
+    /* 2026-11-04 老板点名要「推荐的写上去，不推荐的也写上去」→ 两行清单一屏看完，不用背 */
+    rings += '<div id="hkFnTip" style="margin:10px 0 2px;padding:8px 0 4px 12px;border-left:3px solid var(--card-border);'
+      + 'font-size:12px;line-height:1.95;color:var(--muted)">'
+      + '<div><b style="color:#10b981">✅ 水果放心吃</b>　香蕉（要熟透带黑点）· 蓝莓 · 猕猴桃 · 木瓜 · 橘子</div>'
+      + '<div><b style="color:#ef4444">🚫 水果先避开</b>　苹果 · 梨 · 西瓜 · 西梅 · 火龙果 —— 山梨醇+果糖双高，肠易激头号诱因</div>'
+      + '<div><b style="color:#10b981">✅ 坚果吃这个</b>　原味混合坚果 15g，上午吃（补锌主力，你不吃红肉就靠它）</div>'
+      + '<div><b style="color:#ef4444">🚫 坚果别碰</b>　腹泻期全停（高脂催肠蠕动）；盐焗 / 蜜饯 / 糖炒的算零食不算坚果</div>'
+      + '<div style="margin-top:4px;font-size:11.5px;opacity:.8">吃法统一：常温、不冰镇、不空腹，一次一个拳头大小。</div>'
       + '</div>';
   }
 
@@ -45360,7 +45369,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611041211";
+        window.NIKO_VERSION = "202611041413";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
