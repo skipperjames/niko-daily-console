@@ -41327,30 +41327,33 @@ function hpvHit(z){
    改菜谱：直接改下面 CAIKU（它就是唯一数据源，没有第二份副本）。 */
 var CAIKU = {
   meta: {
-    name:'NIKO 营养菜库', version:'v1', date:'2026-11-02',
+    name:'NIKO 营养菜库', version:'v2', date:'2026-11-04',
     basis:'老板真实可得清单：便利店 6 样 / 食堂减脂餐 9 样 / 大米先生 6 样',
-    note:'营养素为每份估算值，用于相对比较与缺口回填，不做精确营养计算。',
+    note:'营养素为每份估算值，用于相对比较与缺口回填，不做精确营养计算。v2（11-04）：乳糖不耐确认→奶换零乳糖、早餐 B1 降级、新增 gut 肠胃敏感分级、水果按果糖/山梨醇重排、补剂加益生菌与腹泻期锌。',
     targets:{ protein:70, calcium:800, iron:12, zinc:12.5, b2:1.4, vd:800, sodium:2000 }
   },
   foods: [
-    { id:'milk',   name:'纯牛奶 250ml', scene:'便利店', role:'protein', p:8,   ca:300, fe:0.1, zn:1.0, b2:0.40, vd:2,   na:100, star:1, note:'钙地基，每天一盒。乳糖不耐受换零乳糖或酸奶' },
+    /* gut = 肠胃敏感分级：0 温和随便吃 / 1 限量 / 2 急性期先停（2026-11-04 老板确认乳糖不耐 + 喝冷水也拉）
+       乳糖不耐不是「一喝就炸」，是阈值型 —— 每天一盒卡在临界线，连喝三天叠个冷饮就崩。 */
+    { id:'milk',   name:'纯牛奶 250ml', scene:'便利店', role:'protein', p:8,   ca:300, fe:0.1, zn:1.0, b2:0.40, vd:2,   na:100, star:0, gut:2, tag:'乳糖', note:'⚠ 乳糖不耐——连喝三天就爆。别再当每天的钙地基，换零乳糖奶' },
+    { id:'milk0',  name:'零乳糖奶 250ml', scene:'便利店', role:'protein', p:8, ca:300, fe:0.1, zn:1.0, b2:0.40, vd:2,   na:100, star:1, gut:0, note:'✅ 钙地基正解：舒化这类的，钙跟纯牛奶一模一样，乳糖已水解' },
     { id:'egg',    name:'茶叶蛋 1 个',  scene:'便利店', role:'protein', p:6.5, ca:30,  fe:1.2, zn:0.6, b2:0.15, vd:20,  na:350, star:1, note:'一周不超过 3 次，其余换水煮蛋（钠减半）' },
-    { id:'yogurt', name:'酸奶 150g',    scene:'便利店', role:'protein', p:4.5, ca:180, fe:0.1, zn:0.6, b2:0.20, vd:1,   na:60,  star:1, note:'钙的第二个来源，晚上加一盒补差' },
-    { id:'corn',   name:'甜玉米 1 根',  scene:'便利店', role:'carb',    p:4,   ca:2,   fe:0.5, zn:0.9, b2:0.06, vd:0,   na:5,   star:0, note:'算主食。叶黄素对盯屏的人有用' },
-    { id:'bun',    name:'馒头 1 个',    scene:'便利店', role:'carb',    p:7,   ca:38,  fe:1.8, zn:0.7, b2:0.05, vd:0,   na:165, star:0, note:'纯碳水，B2 在精制面粉里损失七成' },
-    { id:'soy',    name:'豆浆 250ml',   scene:'便利店', role:'carb',    p:4.5, ca:25,  fe:1.2, zn:0.6, b2:0.05, vd:0,   na:10,  star:0, note:'钙只有牛奶的 1/10，不能替代牛奶' },
+    { id:'yogurt', name:'酸奶 150g',    scene:'便利店', role:'protein', p:4.5, ca:180, fe:0.1, zn:0.6, b2:0.20, vd:1,   na:60,  star:1, gut:1, tag:'乳糖', note:'乳糖比纯牛奶少三到五成，稳定期可以，急性期先停；拿出来放到不冰再吃' },
+    { id:'corn',   name:'甜玉米 1 根',  scene:'便利店', role:'carb',    p:4,   ca:2,   fe:0.5, zn:0.9, b2:0.06, vd:0,   na:5,   star:0, gut:2, note:'⚠ 粗纤维 + 产气，肠敏感期它是加速键；跟奶同吃最糟（2026-11-04 就是它俩）' },
+    { id:'bun',    name:'馒头 1 个',    scene:'便利店', role:'carb',    p:7,   ca:38,  fe:1.8, zn:0.7, b2:0.05, vd:0,   na:165, star:0, gut:0, note:'纯碳水，B2 在精制面粉里损失七成' },
+    { id:'soy',    name:'豆浆 250ml',   scene:'便利店', role:'carb',    p:4.5, ca:25,  fe:1.2, zn:0.6, b2:0.05, vd:0,   na:10,  star:0, gut:1, note:'钙只有牛奶的 1/10，不能替代牛奶；大豆低聚糖也产气，别当水喝' },
     { id:'chicken',name:'鸡排 去皮',    scene:'食堂',   role:'protein', p:24,  ca:11,  fe:0.7, zn:1.3, b2:0.13, vd:5,   na:300, star:1, note:'白肉，铁只有猪排的一半' },
     { id:'pork',   name:'猪排',         scene:'食堂',   role:'protein', p:20,  ca:8,   fe:1.5, zn:2.2, b2:0.25, vd:8,   na:320, star:2, note:'铁锌最高的一档，每周 2 次' },
     { id:'fish',   name:'鱼排',         scene:'食堂',   role:'protein', p:18,  ca:25,  fe:0.5, zn:0.6, b2:0.10, vd:40,  na:250, star:2, note:'唯一能吃到 VD 的日常菜，每周 2 次' },
     { id:'sardine',name:'带骨沙丁鱼罐头 100g', scene:'超市', role:'protein', p:25, ca:380, fe:2.6, zn:1.5, b2:0.19, vd:270, na:500, star:2, note:'R01：钙+蛋白+VD 三合一，唯一常温能囤的补钙主力。选水浸/低盐款，一周 1 次' },
     { id:'fegg',   name:'煎鸡蛋 1 个',  scene:'食堂',   role:'protein', p:6.5, ca:28,  fe:1.2, zn:0.6, b2:0.20, vd:40,  na:170, star:1, note:'便宜好用的蛋白补丁，减脂餐蛋白不够就加' },
-    { id:'brice',  name:'黑米饭 1 碗',  scene:'食堂',   role:'carb',    p:4,   ca:10,  fe:0.9, zn:0.8, b2:0.03, vd:0,   na:2,   star:0, note:'比白米饭好，但仍是主食，和红薯二选一' },
-    { id:'sweet',  name:'红薯 150g',    scene:'食堂',   role:'carb',    p:1.5, ca:23,  fe:0.6, zn:0.3, b2:0.05, vd:0,   na:28,  star:0, note:'纤维好，但拿了它就别再拿饭' },
+    { id:'brice',  name:'黑米饭 1 碗',  scene:'食堂',   role:'carb',    p:4,   ca:10,  fe:0.9, zn:0.8, b2:0.03, vd:0,   na:2,   star:0, gut:1, note:'全谷纤维高，平时比白米饭好，肠敏感期换白米饭' },
+    { id:'sweet',  name:'红薯 150g',    scene:'食堂',   role:'carb',    p:1.5, ca:23,  fe:0.6, zn:0.3, b2:0.05, vd:0,   na:28,  star:0, gut:2, note:'⚠ 棉子糖产气第一名；纤维好，但腹泻期别碰，平时拿了它就别再拿饭' },
     { id:'pasta',  name:'意面 1 份',    scene:'食堂',   role:'carb',    p:7,   ca:15,  fe:1.0, zn:0.7, b2:0.05, vd:0,   na:150, star:0, note:'奶油款脂肪翻倍，选番茄款' },
-    { id:'veg',    name:'时蔬青菜 150g',scene:'通用',   role:'veg',     p:2,   ca:80,  fe:1.5, zn:0.4, b2:0.10, vd:0,   na:200, star:1, note:'深色优先。钙不算高但每天都要有' },
-    { id:'saliva', name:'口水鸡',       scene:'大米先生',role:'protein',p:18,  ca:15,  fe:0.8, zn:1.2, b2:0.12, vd:5,   na:700, star:0, note:'⚠ 麻辣，与不吃辣冲突：让厨房少放红油，或换白切鸡腿' },
-    { id:'pump',   name:'南瓜 150g',    scene:'大米先生',role:'carb',   p:1,   ca:20,  fe:0.4, zn:0.3, b2:0.05, vd:0,   na:3,   star:0, note:'算主食不算菜，VA 高' },
-    { id:'broc',   name:'西蓝花 100g',  scene:'大米先生',role:'veg',    p:4,   ca:50,  fe:1.0, zn:0.4, b2:0.10, vd:0,   na:150, star:1, note:'VC 高，帮铁吸收' },
+    { id:'veg',    name:'时蔬青菜 150g',scene:'通用',   role:'veg',     p:2,   ca:80,  fe:1.5, zn:0.4, b2:0.10, vd:0,   na:200, star:1, gut:0, note:'首选小油菜/上海青（钙是普通青菜近两倍），避开韭菜芹菜这类粗纤维' },
+    { id:'saliva', name:'口水鸡',       scene:'大米先生',role:'protein',p:18,  ca:15,  fe:0.8, zn:1.2, b2:0.12, vd:5,   na:700, star:0, gut:2, note:'⚠ 麻辣红油直接刺激肠壁，肠敏感期直接换白切鸡腿' },
+    { id:'pump',   name:'南瓜 150g',    scene:'大米先生',role:'carb',   p:1,   ca:20,  fe:0.4, zn:0.3, b2:0.05, vd:0,   na:3,   star:0, gut:1, note:'算主食不算菜，VA 高；纤维中等，少量可以' },
+    { id:'broc',   name:'西蓝花 100g',  scene:'大米先生',role:'veg',    p:4,   ca:50,  fe:1.0, zn:0.4, b2:0.10, vd:0,   na:150, star:1, gut:2, note:'VC 高帮铁吸收，但十字花科产气明显 —— 肠敏感期减半或换青菜' },
     { id:'vermL',  name:'粉丝 1 份',    scene:'大米先生',role:'carb',   p:0.5, ca:10,  fe:0.3, zn:0.2, b2:0.01, vd:0,   na:400, star:0, note:'纯碳水，蛋白几乎为零，钠却不低' },
     { id:'congee', name:'黑米粥 1 碗',  scene:'大米先生',role:'carb',   p:3,   ca:10,  fe:0.5, zn:0.4, b2:0.02, vd:0,   na:200, star:0, note:'GI 比米饭高，营养密度更低' },
     { id:'chixia', name:'白切鸡腿',     scene:'大米先生',role:'protein',p:19,  ca:12,  fe:1.0, zn:1.4, b2:0.15, vd:6,   na:250, star:1, note:'口水鸡的不辣替身，优先选这个' },
@@ -41358,18 +41361,24 @@ var CAIKU = {
     /* ===== 2026-11-02 补：水果 / 坚果 / 外食主食 =====
        老板问「水果要不要吃、坚果要不要吃」，但原 22 样里一个水果都没有 —— D1 决策卡无从算起。
        这几样的营养值按常见份量估算，口径同前：只用于相对比较与补缺。 */
-    { id:'apple',  name:'苹果 1 个',    scene:'通用',   role:'fruit',   p:0.3, ca:6,   fe:0.2, zn:0.05, b2:0.02, vd:0,   na:1,   star:1, note:'一天 1 份就够，饭后或下午三点；别拿它当饭吃' },
-    { id:'banana', name:'香蕉 1 根',    scene:'通用',   role:'fruit',   p:1.3, ca:6,   fe:0.3, zn:0.2,  b2:0.07, vd:0,   na:1,   star:1, note:'最好带的一种，上午或运动前吃' },
+    { id:'apple',  name:'苹果 1 个',    scene:'通用',   role:'fruit',   p:0.3, ca:6,   fe:0.2, zn:0.05, b2:0.02, vd:0,   na:1,   star:0, gut:2, note:'⚠ 山梨醇+果糖双高，肠敏感最容易被它撂倒；平时一天 1 份，不是肠敏感期的选择' },
+    { id:'banana', name:'香蕉 1 根',    scene:'通用',   role:'fruit',   p:1.3, ca:6,   fe:0.3, zn:0.2,  b2:0.07, vd:0,   na:1,   star:2, gut:0, note:'✅ 肠敏感首选水果：补钾 + 果胶收敛。要熟透带黑点的，生的抗性淀粉多反而胀' },
+    { id:'kiwi',   name:'猕猴桃 1 个',  scene:'通用',   role:'fruit',   p:1.0, ca:35,  fe:0.3, zn:0.2,  b2:0.03, vd:0,   na:3,   star:1, gut:0, note:'✅ 低 FODMAP，VC 高；一次 1 个就行，别贪' },
+    { id:'blueb',  name:'蓝莓 1 盒',    scene:'通用',   role:'fruit',   p:0.7, ca:10,  fe:0.3, zn:0.1,  b2:0.03, vd:0,   na:1,   star:1, gut:0, note:'✅ 低 FODMAP，冰箱拿出来放常温再吃' },
+    { id:'papaya', name:'木瓜 1 份',    scene:'通用',   role:'fruit',   p:0.6, ca:25,  fe:0.3, zn:0.2,  b2:0.03, vd:0,   na:3,   star:1, gut:0, note:'✅ 木瓜蛋白酶帮消化，要吃熟的；生木瓜反而涩肠' },
     { id:'orange', name:'橙子 1 个',    scene:'通用',   role:'fruit',   p:1.0, ca:40,  fe:0.1, zn:0.07, b2:0.03, vd:0,   na:1,   star:0, note:'VC 高，跟青菜/猪排一起吃帮铁吸收' },
-    { id:'nut',    name:'混合坚果 15g', scene:'通用',   role:'nut',     p:3.0, ca:20,  fe:0.7, zn:0.5,  b2:0.05, vd:0,   na:2,   star:1, note:'一小把（带壳的一小袋）。你不吃红肉，锌主要靠它；多了就是油' },
-    { id:'noodle', name:'牛肉面 1 碗',  scene:'外食',   role:'main',    p:28,  ca:30,  fe:3.0, zn:3.5,  b2:0.20, vd:5,   na:1200,star:0, note:'⚠ 钠 1200，一顿顶掉半天额度；汤别喝光' },
+    { id:'nut',    name:'混合坚果 15g', scene:'通用',   role:'nut',     p:3.0, ca:20,  fe:0.7, zn:0.5,  b2:0.05, vd:0,   na:2,   star:1, gut:2, note:'一小把（带壳的一小袋）。锌主要靠它，但高脂会加快肠蠕动，腹泻期先停' },
+    { id:'noodle', name:'牛肉面 1 碗',  scene:'外食',   role:'main',    p:28,  ca:30,  fe:3.0, zn:3.5,  b2:0.20, vd:5,   na:1200,star:0, gut:2, note:'⚠ 牛肉是医嘱忌口（颈椎病 9-11）；钠 1200 一顿顶掉半天额度，汤别喝光' },
     { id:'rice',   name:'白米饭 1 碗',  scene:'外食',   role:'carb',    p:3.5, ca:10,  fe:0.4, zn:0.6,  b2:0.02, vd:0,   na:2,   star:0, note:'外食默认主食，盖浇饭/炒饭都用它记' },
   ],
   meals: [
-    { id:'B1', slot:'早餐', name:'玉米 + 奶 + 蛋', items:{ corn:1, milk:1, egg:1 }, pick:true,  note:'标准款。蛋白 18.5g、钙 332mg，上午不崩' },
-    { id:'B2', slot:'早餐', name:'馒头 + 奶 + 蛋', items:{ bun:1, milk:1, egg:1 },  pick:true,  note:'换口味用，钠比 B1 高 160mg' },
-    { id:'B3', slot:'早餐', name:'玉米 + 奶（不加蛋）', items:{ corn:1, milk:1 }, pick:false, note:'缺蛋白，不推荐' },
-    { id:'B4', slot:'早餐', name:'馒头 + 豆浆（原吃法）', items:{ bun:1, soy:1 }, pick:false, note:'纯碳水，钙 63mg、B2 近零 —— 这就是上午没精神的原因' },
+    /* 2026-11-04 早餐重排：B1「玉米+奶」是老板乳糖不耐爆发那天的原配方 → 降级不再推荐；
+       奶一律换零乳糖奶；B5 顶上当主力早餐。 */
+    { id:'B1', slot:'早餐', name:'玉米 + 奶 + 蛋', items:{ corn:1, milk:1, egg:1 }, pick:false, gut:2, note:'❌ 已降级：玉米粗纤维 + 冷奶低温，对你肠子是三重暴击（2026-11-04 就是这套拉的）' },
+    { id:'B2', slot:'早餐', name:'馒头 + 零乳糖奶 + 蛋', items:{ bun:1, milk0:1, egg:1 },  pick:true,  gut:0, note:'换口味用，钠比 B1 高 160mg；奶已换零乳糖' },
+    { id:'B3', slot:'早餐', name:'玉米 + 奶（不加蛋）', items:{ corn:1, milk0:1 }, pick:false, gut:2, note:'缺蛋白，不推荐' },
+    { id:'B4', slot:'早餐', name:'馒头 + 豆浆（原吃法）', items:{ bun:1, soy:1 }, pick:false, gut:1, note:'纯碳水，钙 63mg、B2 近零 —— 这就是上午没精神的原因' },
+    { id:'B5', slot:'早餐', name:'馒头 + 零乳糖奶 + 蒸蛋', items:{ bun:1, milk0:1, steame:1 }, pick:true, gut:0, note:'✅ 主力早餐（替代 B1）：钙 332mg 一分没少，去掉玉米，蒸蛋比茶叶蛋钠低一半' },
     { id:'L1', slot:'午餐', name:'鱼排 + 煎蛋 + 青菜 + 红薯', items:{ fish:1, fegg:1, veg:1, sweet:1 }, pick:true, note:'鱼排日（周一/周四）' },
     { id:'L2', slot:'午餐', name:'猪排 + 煎蛋 + 青菜 + 黑米饭', items:{ pork:1, fegg:1, veg:1, brice:1 }, pick:true, note:'猪排日（周二/周五），铁锌最高' },
     { id:'L3', slot:'午餐', name:'鸡排 + 煎蛋 + 青菜 + 意面', items:{ chicken:1, fegg:1, veg:1, pasta:1 }, pick:true, note:'周三或自由日' },
@@ -41379,20 +41388,26 @@ var CAIKU = {
     { id:'D3', slot:'晚餐', name:'蒸蛋 + 西蓝花 + 青菜 + 粉丝', items:{ steame:1, broc:1, veg:1, vermL:1 }, pick:true, note:'清淡日' }
   ],
   weekPlan: [
-    { d:'周一', b:'B1', l:'L1', dn:'D1', sun:true  },
-    { d:'周二', b:'B1', l:'L2', dn:'D2', sun:true  },
+    { d:'周一', b:'B5', l:'L1', dn:'D1', sun:true  },
+    { d:'周二', b:'B5', l:'L2', dn:'D2', sun:true  },
     { d:'周三', b:'B2', l:'L3', dn:'D3', sun:true  },
-    { d:'周四', b:'B1', l:'L1', dn:'D1', sun:true  },
+    { d:'周四', b:'B5', l:'L1', dn:'D1', sun:true  },
     { d:'周五', b:'B2', l:'L2', dn:'D2', sun:true  },
-    { d:'周六', b:'B1', l:'L3', dn:'D3', sun:false },
+    { d:'周六', b:'B5', l:'L3', dn:'D3', sun:false },
     { d:'周日', b:'B2', l:'L1', dn:'D2', sun:false }
   ],
   supplements: [
     { id:'vb',  name:'复合维生素 B', dose:'每天 1 片', span:'先吃 2 周', why:'熬夜 + 口腔溃疡主力' },
-    { id:'zn',  name:'葡萄糖酸锌 10mg', dose:'溃疡期每天', span:'连续不超 4 周', why:'超过 40mg/天会压铜，别长期大剂量' },
-    { id:'vd3', name:'维生素 D3', dose:'800–1000 IU 随餐', span:'阴雨天/没午休时', why:'脂溶性，空腹吸收差' }
+    { id:'zn',  name:'葡萄糖酸锌 10mg', dose:'溃疡期每天 / 腹泻期每天 1 片', span:'连续不超 4 周', why:'腹泻会大量流失锌，肠黏膜修复要靠它；超过 40mg/天会压铜，别长期大剂量' },
+    { id:'vd3', name:'维生素 D3', dose:'800–1000 IU 每天随餐', span:'长期每天，晴天晒够那天可减', why:'VD 靠吃根本补不满（要吃 20 个蛋才够）—— 这个才是主力，鱼排只是零头；脂溶性，随餐吸收' },
+    { id:'prob',name:'益生菌（双歧 / 布拉氏酵母菌）', dose:'每天 1 袋', span:'腹泻后连续 2 周', why:'肠敏感 + 刚拉过，菌群是乱的；跟抗生素隔 2 小时，温水冲别用烫水' }
   ],
   rules: [
+    '奶一律零乳糖奶（舒化这类）—— 纯牛奶是你乳糖不耐的直接诱因，别再当每天的钙地基',
+    '钙和铁、钙和锌都要错开：喝奶那顿别配青菜补铁，也别配坚果/猪排补锌（钙会压它们吸收）',
+    'VD 靠吃补不满 → 每天 D3 800–1000IU + 晴天午休晒 15 分钟；鱼排一周 2 次是为了蛋白，不是 VD',
+    '水果只吃常温的：香蕉 / 蓝莓 / 猕猴桃 / 木瓜 / 橘子；苹果、梨、西瓜、西梅先避开；一次一个拳头',
+    '腹泻期三停：停奶停玉米停冰的；只吃白粥白饭蒸蛋粉丝香蕉，口服补液盐比白水强',
     '豆浆不替代牛奶（钙只有 1/10）',
     '主食二选一：红薯 / 玉米 / 黑米饭 / 意面',
     '晚餐碳水三选一：粉丝 / 黑米粥 / 南瓜',
@@ -41492,7 +41507,8 @@ function mkSum(){ return mkSumOn(mkKey()); }
    老板原话：「我不一定能严格按菜单吃，也预估不了多少量级」→ 所以这里只收「吃了什么」，
    份数只有 0.5/1/2/3 四档，克数由菜库反推。 */
 var HK_SYN = [
-  ['牛奶','milk'],['纯牛奶','milk'],['豆浆','soy'],['酸奶','yogurt'],
+  ['牛奶','milk'],['纯牛奶','milk'],['零乳糖奶','milk0'],['舒化奶','milk0'],['无乳糖牛奶','milk0'],
+  ['豆浆','soy'],['酸奶','yogurt'],
   ['茶叶蛋','egg'],['水煮蛋','egg'],['煎蛋','fegg'],['鸡蛋','egg'],
   ['甜玉米','corn'],['玉米','corn'],['馒头','bun'],['红薯','sweet'],
   ['黑米饭','brice'],['白米饭','rice'],['米饭','brice'],['白饭','rice'],
@@ -41558,7 +41574,7 @@ function mkQuickList(){
   for (var i = (d.xl || []).length - 1; i >= 0 && out.length < 4; i--){
     Object.keys(d.xl[i].items || {}).forEach(function(fid){ push(mkFood(fid)); });
   }
-  ['milk','egg','veg','nut','apple','banana','noodle','rice','fish'].forEach(function(id){ push(mkFood(id)); });
+  ['milk0','egg','veg','kiwi','banana','nut','rice','fish'].forEach(function(id){ push(mkFood(id)); });
   CAIKU.foods.forEach(function(f){ if (f.star >= 1) push(f); });
   return out;
 }
@@ -41649,7 +41665,9 @@ function mkAdvice(s, d, eaten){
     if (!worst || r < worst.r) worst = { k:x.k, n:x.n, u:x.u, r:r, gap:t - s[x.k] };
   });
   if (!worst || worst.r >= 1) return '六项都到位了 ✓ 今天照这个节奏吃，不用再补。';
-  var cand = CAIKU.foods.slice().sort(function(a,b){ return (Number(b[worst.k])||0) - (Number(a[worst.k])||0); }).slice(0,2);
+  /* 2026-11-04：gut>=2（急性期先停的，比如纯牛奶、甜玉米、红薯）不进补缺建议 —— 否则缺钙它会推一盒纯牛奶 */
+  var cand = CAIKU.foods.filter(function(f){ return !(Number(f.gut) >= 2); })
+                        .sort(function(a,b){ return (Number(b[worst.k])||0) - (Number(a[worst.k])||0); }).slice(0,2);
   var best = cand[0] ? (Number(cand[0][worst.k]) || 0) : 0;
   /* 这份菜库本身补不满的项（典型：锌 —— 你不吃红肉和海鲜）：如实说「别硬凑」，不许推荐吃三份猪排 */
   if (best && worst.gap > best * 2) {
@@ -41803,6 +41821,15 @@ var NN_NUTS = [
 var NN_MEALN = { b:'早餐', l:'午餐', d:'晚餐', s:'加餐' };
 var NN_MEALI = { b:'🌅', l:'☀️', d:'🌙', s:'🍪' };
 
+/* 🚫 老板不吃 / 买不到 / 医嘱忌口 —— 任何推荐一律不许再冒出来（2026-11-04）。
+   以后再有吃不下或搞不到的，直接往这里加一行，两个推荐口子（今日缺口卡 / 周复盘）同时生效。
+   【不吃买不到】三文鱼、豆干、香干
+   【不做饭做不到】腐竹（干货要泡发，跟「猪肝、豆腐不作为必吃项」同一个道理）
+   【医嘱忌口】牛肉、羊肉（颈椎病 2026-09-11 医嘱：牛肉羊肉发物都不能吃）；拉面/兰州拉面同理，它的铁值来自牛肉汤
+   【肠敏感雷区】麻辣烫、火锅、烧烤、炸鸡（重油重辣，补营养时推它就是害人） */
+var NN_AVOID = ['三文鱼', '豆干', '香干', '腐竹', '牛肉', '羊肉', '拉面', '麻辣烫', '火锅', '烧烤', '炸鸡'];
+function nnBad(name){ var s = String(name || ''); for (var i=0;i<NN_AVOID.length;i++){ if (s.indexOf(NN_AVOID[i]) >= 0) return true; } return false; }
+
 /* 每「一份」估算：p g / ca mg / fe mg / zn mg / b2 mg / vd IU / na mg；别名用 | 分隔 */
 var NN_DB = [
   ['馒头|白馒头','馒头 1 个','carb',7,38,1.8,0.7,0.05,0,165],
@@ -41842,10 +41869,14 @@ var NN_DB = [
   ['茶叶蛋','茶叶蛋 1 个','protein',6.5,30,1.2,0.6,0.15,20,350],
   ['煎蛋|荷包蛋','煎蛋 1 个','protein',6.5,28,1.2,0.6,0.20,40,170],
   ['鸡蛋|水煮蛋|白煮蛋|蛋','鸡蛋 1 个','protein',6.5,30,1.2,0.6,0.15,20,70],
+  ['蒸蛋|鸡蛋羹|水蒸蛋','蒸蛋 1 份','protein',8,32,1.2,0.7,0.20,40,200],
   ['纯牛奶|牛奶','纯牛奶 250ml','protein',8,300,0.1,1.0,0.40,2,100],
+  /* 2026-11-04：老板乳糖不耐已确认（连喝三天累积爆发）→ 零乳糖奶是钙地基的默认替身，钙一分不少 */
+  ['零乳糖奶|舒化奶|无乳糖牛奶','零乳糖奶 250ml','protein',8,300,0.1,1.0,0.40,2,100],
   ['酸奶','酸奶 150g','protein',4.5,180,0.1,0.6,0.20,1,60],
   ['豆浆','豆浆 250ml','protein',4.5,25,1.2,0.6,0.05,0,10],
   ['鸡胸肉|鸡胸','鸡胸 1 份','protein',24,11,0.7,1.3,0.13,5,300],
+  ['白切鸡|白切鸡腿|白斩鸡','白切鸡腿 1 个','protein',19,12,1.0,1.4,0.15,6,250],
   ['鸡腿','鸡腿 1 个','protein',20,15,1.0,1.6,0.15,8,450],
   ['鸡排','鸡排 1 份(去皮)','protein',24,11,0.7,1.3,0.13,5,300],
   ['炸鸡','炸鸡 1 份','protein',20,20,1.2,1.5,0.14,10,600],
@@ -41854,7 +41885,8 @@ var NN_DB = [
   ['羊肉','羊肉 1 份','protein',20,12,2.3,3.5,0.18,5,420],
   ['鱼排|鱼肉','鱼排 1 份','protein',18,25,0.5,0.6,0.10,40,250],
   ['带鱼','带鱼 1 份','protein',18,30,1.0,0.8,0.12,20,350],
-  ['三文鱼','三文鱼 1 份','protein',20,12,0.8,0.6,0.20,400,200],
+  /* 三文鱼原在这里（VD 400/份，是 VD 榜第一）—— 2026-11-04 老板不吃也买不到，已移入 NN_AVOID，
+     VD 改由「沙丁鱼罐头 + 晒太阳 + D3 片」三件套承担，别再往回调。 */
   ['虾|大虾|基围虾','虾 1 份','protein',18,60,1.0,1.5,0.08,2,300],
   ['豆腐|嫩豆腐','豆腐 1 份','protein',8,120,1.5,0.8,0.05,0,10],
   ['豆干|香干','豆干 1 份','protein',16,300,3.0,1.6,0.10,0,600],
@@ -41866,8 +41898,12 @@ var NN_DB = [
   ['火锅','火锅 1 顿','protein',25,150,3.0,3.0,0.20,10,2200],
   ['烧烤|烤串','烧烤 1 份','protein',22,40,2.5,3.0,0.20,10,1500],
   ['青菜|小白菜|油麦菜','青菜 150g','veg',2,80,1.5,0.4,0.10,0,200],
+  /* 2026-11-04：补钙靠它 —— 小油菜/上海青的钙密度是普通青菜的近两倍，草酸还低，吸收率比菠菜好 */
+  ['小油菜|油菜|娃娃菜|上海青','小油菜 150g','veg',2,150,1.5,0.4,0.10,0,200],
   ['白菜|大白菜','白菜 150g','veg',1.5,50,0.8,0.3,0.06,0,150],
-  ['菠菜','菠菜 150g','veg',2.5,100,2.7,0.6,0.13,0,180],
+  /* 菠菜铁值按「可吸收量」记，不按含量记：草酸锁住九成，实际吸收率只有 1–2%，
+     按 2.7 记会让它在缺铁推荐里顶掉猪排 —— 那是数据假象，2026-11-04 下调 */
+  ['菠菜','菠菜 150g','veg',2.5,100,1.2,0.6,0.13,0,180],
   ['西蓝花|西兰花','西蓝花 100g','veg',4,50,1.0,0.4,0.10,0,150],
   ['黄瓜','黄瓜 1 根','veg',1,25,0.5,0.2,0.03,0,50],
   ['番茄|西红柿','番茄 1 个','veg',1.5,15,0.5,0.3,0.05,0,60],
@@ -41878,20 +41914,26 @@ var NN_DB = [
   ['蘑菇|香菇|菌菇','蘑菇 1 份','veg',3,10,0.5,0.6,0.20,5,80],
   ['木耳','木耳 1 份','veg',1.5,30,1.5,0.4,0.06,0,60],
   ['海带','海带 1 份','veg',1,110,1.5,0.4,0.08,0,300],
-  ['苹果','苹果 1 个','fruit',0.3,6,0.2,0.1,0.02,0,2],
-  ['香蕉','香蕉 1 根','fruit',1.5,7,0.4,0.2,0.05,0,1],
+  /* 水果口径（2026-11-04 肠敏感版）：按果糖 / 山梨醇排雷，不看维C高低。
+     ✅ 安全档：香蕉（要熟透带黑点）/ 蓝莓 / 猕猴桃 / 木瓜 / 橘子；
+     🚫 踩雷档：苹果、梨、西瓜（山梨醇+果糖双高，IBS 头号诱因）、西梅/火龙果（天然促排）；
+     ⚠️ 吃法统一：常温、饭后半小时、一次一个拳头大小，不冰镇、不空腹。 */
+  ['苹果','苹果 1 个','fruit',0.3,6,0.2,0.1,0.02,0,2],   /* ⚠️ 肠敏感最容易被它撂倒：山梨醇+果糖 */
+  ['香蕉','香蕉 1 根','fruit',1.5,7,0.4,0.2,0.05,0,1],   /* ✅ 首选：补钾 + 果胶收敛，要熟透的 */
   ['橙子|橘子|柑橘','橙子 1 个','fruit',1,40,0.2,0.1,0.04,0,1],
-  ['梨','梨 1 个','fruit',0.5,10,0.2,0.1,0.02,0,2],
+  ['梨','梨 1 个','fruit',0.5,10,0.2,0.1,0.02,0,2],      /* ⚠️ 山梨醇含量水果第一，腹泻期别碰 */
   ['葡萄','葡萄 1 串','fruit',0.6,10,0.3,0.1,0.03,0,2],
-  ['西瓜','西瓜 1 块','fruit',0.6,8,0.2,0.1,0.02,0,1],
-  ['猕猴桃|奇异果','猕猴桃 1 个','fruit',1,35,0.3,0.2,0.03,0,3],
-  ['蓝莓','蓝莓 1 盒','fruit',0.7,10,0.3,0.1,0.03,0,1],
+  ['西瓜','西瓜 1 块','fruit',0.6,8,0.2,0.1,0.02,0,1],   /* ⚠️ 果糖过量易胀气 */
+  ['猕猴桃|奇异果','猕猴桃 1 个','fruit',1,35,0.3,0.2,0.03,0,3],  /* ✅ 低 FODMAP */
+  ['蓝莓','蓝莓 1 盒','fruit',0.7,10,0.3,0.1,0.03,0,1],          /* ✅ 低 FODMAP */
+  ['木瓜','木瓜 1 份','fruit',0.6,25,0.3,0.2,0.03,0,3],          /* ✅ 木瓜蛋白酶帮消化，要熟的 */
   ['核桃','核桃 3 个','nut',4,25,0.8,0.8,0.05,0,2],
   ['花生','花生 一小把','nut',7,25,1.0,0.9,0.05,0,3],
   ['杏仁','杏仁 一小把','nut',6,70,1.0,0.9,0.10,0,3],
   ['腰果','腰果 一小把','nut',5,25,1.5,1.5,0.05,0,3],
   ['瓜子','瓜子 一把','nut',6,30,1.2,1.0,0.05,0,4],
-  ['坚果','坚果 一小把','nut',6,40,1.2,1.0,0.06,0,3],
+  ['芝麻酱|麻酱','芝麻酱 1 勺','nut',2,117,0.6,0.5,0.02,0,60],   /* ✅ 不用做饭的补钙口子 */
+  ['坚果','坚果 一小把','nut',6,40,1.2,1.0,0.06,0,3],             /* ⚠️ 高脂，腹泻期先停 */
   ['可乐','可乐 1 罐','drink',0,10,0.1,0.1,0,0,40],
   ['咖啡|美式|拿铁','咖啡 1 杯','drink',0.3,5,0.1,0.1,0.05,0,5],
   ['奶茶','奶茶 1 杯','drink',5,120,0.5,0.5,0.10,0,200],
@@ -42497,8 +42539,8 @@ function nnFoodsFor(k){
   NN_NUTS.forEach(function(x, i){ if (x.k === k) idx = i; });
   if (idx < 0) return [];
   var t = nnTgt(NN_NUTS[idx].tk, NN_NUTS[idx].dft);
-  return NN_DB.map(function(row){ return { name:row[1], gain:(Number(row[3+idx]) || 0) / t * 100 }; })
-              .filter(function(o){ return o.gain > 0; })
+  return NN_DB.map(function(row){ return { name:row[1], role:row[2], gain:(Number(row[3+idx]) || 0) / t * 100 }; })
+              .filter(function(o){ return o.gain > 0 && !nnBad(o.name); })
               .sort(function(a, b){ return b.gain - a.gain; }).slice(0, 2);
 }
 
@@ -42755,8 +42797,8 @@ function nnRenderList(){
   });
   box.innerHTML = html;
 }
-var NN_TIPS = { ca:'一盒酸奶 + 一份带骨沙丁鱼', p:'一个蛋 + 半份鸡排', vd:'一份带骨沙丁鱼，或一个煎蛋 + 出门晒 15 分钟',
-                fe:'半份猪排', zn:'一小把坚果', b2:'一盒牛奶 + 一份青菜' };
+var NN_TIPS = { ca:'一盒零乳糖奶 + 一份小油菜', p:'一个蛋 + 半份鸡排', vd:'一罐带骨沙丁鱼（最多只到 34%）—— VD 靠吃就是补不满，今天记得吞 D3 + 午休晒 15 分钟',
+                fe:'半份猪排 + 一份青菜（尽量别跟奶同餐，钙压铁）', zn:'一小把坚果（腹泻期改成一片锌）', b2:'一盒零乳糖奶 + 一份青菜' };
 /* 六项精确条：雷达只给形状，这里给数字 —— 差几个点、还差多少，一眼读到 */
 function nnBarsRender(s){
   var b = document.getElementById('nnBars');
@@ -42797,7 +42839,7 @@ function nnRenderVerdict(){
     var need = gaps[i].x, ni = -1;
     NN_NUTS.forEach(function(y, j){ if (y.k === need.k) ni = j; });
     var cand = NN_DB.map(function(row){ return { row:row, gain:(row[3+ni]||0) / nnTgt(need.tk, need.dft) * 100 }; })
-                    .filter(function(o){ return o.gain > 0 && !used[o.row[1]]; })
+                    .filter(function(o){ return o.gain > 0 && !used[o.row[1]] && !nnBad(o.row[1]); })
                     .sort(function(m,n){ return n.gain - m.gain; });
     if (cand[0]){ used[cand[0].row[1]] = 1; picks.push({ name:cand[0].row[1], gain:cand[0].gain, need:need }); }
   }
@@ -45318,7 +45360,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611032057";
+        window.NIKO_VERSION = "202611041211";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
