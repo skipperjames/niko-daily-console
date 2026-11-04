@@ -12735,6 +12735,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 .nn-pk-ft{display:flex;gap:8px;justify-content:flex-end;padding:10px 16px 14px}
 .nn-pk-ft .nn-btn.pri{min-width:96px;justify-content:center}
 .nn-main{display:grid;grid-template-columns:380px 1fr;gap:12px;align-items:stretch}
+/* 2026-11-04：右列改自适应网格 —— 屏够宽时「今天还缺啥」和「水果坚果怎么挑」并排（老板要的位置），
+   屏窄了自动变一列堆叠。用 grid 的 auto-fit 而不是 flex 换行：flex 下卡片会吃满整行，压根并不起来。 */
+.nn-col.nn-col-side{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px;align-items:start}
+.nn-col.nn-col-side>.nn-card{min-width:0;margin-bottom:0}
 .nn-main.one{grid-template-columns:1fr}
 .nn-col{min-width:0;display:flex;flex-direction:column}
 /* 2026-11-03 晚：右列不再留 299px 死白 —— 卡片吃满左列高度，中间补六项精确条 */
@@ -15067,13 +15071,18 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
           <!-- 本月：月格（和 NIKO 日历同一个语言）-->
           <div class="nn-card" id="nnMonthCard" hidden><div id="nnMonthBody"></div></div>
         </div>
-        <div class="nn-col">
+        <div class="nn-col nn-col-side">
           <div class="nn-card" id="nnVerdictCard">
             <div class="nn-hd">💡 今天还缺啥</div>
             <div class="nn-verdict" id="nnVerdict"></div>
             <!-- 2026-11-03 晚：六项精确条（雷达看不出差几个点，这里一眼读到数字） -->
             <div class="nn-bars" id="nnBars"></div>
             <div class="nn-adv" id="nnAdv"></div>
+          </div>
+          <!-- 2026-11-04：水果坚果清单，老板指定放「今天还缺啥」右边这块空位（只在今日档显示） -->
+          <div class="nn-card" id="nnFnCard" hidden>
+            <div class="nn-hd">🍎🥜 水果坚果怎么挑<span class="nn-sp"></span><span class="nn-hint">按果糖 / 山梨醇排</span></div>
+            <div id="nnFnTip"></div>
           </div>
           <!-- 本周 / 本月：主角制 —— 只讲最缺的那一项 -->
           <div class="nn-card" id="nnHeroCard" hidden><div id="nnHeroBody"></div></div>
@@ -15084,8 +15093,6 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
         <div id="nnList"></div>
         <!-- P01 待认领池：菜库没有 + 类别也兜不住的，不再静默丢弃，落到这里攒着一起问 AI -->
         <div id="nnPool"></div>
-        <!-- 2026-11-04：水果坚果「推荐 / 不推荐」清单（老板点名要能直接看到，不用记） -->
-        <div id="nnFnTip"></div>
       </div>
 
       <!-- 旧版营养卡（2026-11-03 起不再显示，保留 DOM 与全部函数，防其他入口引用报错） -->
@@ -41942,6 +41949,30 @@ var NN_DB = [
   ['果汁','果汁 1 杯','drink',0.5,15,0.2,0.1,0.02,0,10],
   ['啤酒','啤酒 1 罐','drink',0.5,10,0.1,0.1,0.02,0,20]
 ];
+
+/* ===== 常见汤单独建表（2026-11-04）=====
+   老板原话：「紫菜鸡蛋汤被识别成了鸡蛋，我经常喝汤的」。
+   根因：nnScan 拿 NN_DB 找最长别名，「紫菜鸡蛋汤」里只有「蛋」能命中 → 记成「鸡蛋 1 个」，
+   钠少了 600mg、蛋白少了 5g，还平白多出一个蛋。
+   汤的营养结构和「里面某样食材」本来就不是一回事（水多、钠高、蛋白低），所以单独建表、
+   解析时优先于普通食材。每份 = 1 碗 ≈ 300ml；钠按食堂/餐馆口味估，自己煮少放盐可以点名字改。
+   优先级：seg 里命中 ≥3 字的汤名 → 直接记整碗汤，不再往里拆蛋和菜。 */
+var NN_SOUP = [
+  ['紫菜蛋花汤|紫菜鸡蛋汤|紫菜汤',    '紫菜蛋花汤 1 碗', 'mixed', 6, 80,  1.2, 0.6, 0.10, 20,  700],
+  ['番茄蛋汤|西红柿蛋汤|番茄鸡蛋汤|西红柿鸡蛋汤', '番茄蛋汤 1 碗', 'mixed', 6, 70, 1.0, 0.6, 0.12, 25, 750],
+  ['冬瓜排骨汤|萝卜排骨汤|排骨汤',    '冬瓜排骨汤 1 碗', 'mixed', 9, 30,  0.8, 0.9, 0.10, 5,   800],
+  ['海带排骨汤|海带汤',              '海带汤 1 碗',     'mixed', 4, 90,  1.0, 0.4, 0.06, 0,   850],
+  ['鸡汤|老母鸡汤|乌鸡汤',           '鸡汤 1 碗',       'mixed', 5, 10,  0.4, 0.4, 0.05, 3,   600],
+  ['老鸭汤|鸭汤',                    '老鸭汤 1 碗',     'mixed', 7, 15,  0.6, 0.6, 0.08, 3,   700],
+  ['豆腐汤|青菜豆腐汤',              '豆腐汤 1 碗',     'mixed', 7, 120, 1.2, 0.6, 0.05, 0,   600],
+  ['青菜汤|蔬菜汤|时蔬汤|丝瓜汤',    '青菜汤 1 碗',     'veg',   2, 70,  0.9, 0.3, 0.07, 0,   500],
+  ['味噌汤|味增汤',                  '味噌汤 1 碗',     'mixed', 4, 40,  0.6, 0.4, 0.05, 0,   900],
+  ['银耳汤|雪梨银耳汤|银耳羹',       '银耳汤 1 碗',     'mixed', 1, 20,  0.4, 0.2, 0.02, 0,   30],
+  ['鸡蛋汤|蛋花汤',                  '蛋花汤 1 碗',     'mixed', 5, 40,  0.8, 0.5, 0.10, 25,  650],
+  ['酸辣汤',                        '酸辣汤 1 碗',     'mixed', 6, 40,  0.9, 0.5, 0.08, 5,   1100],
+  ['罗宋汤',                        '罗宋汤 1 碗',     'mixed', 5, 50,  1.0, 0.5, 0.08, 5,   900],
+  ['西红柿牛腩汤|牛腩汤',            '牛腩汤 1 碗',     'mixed', 10, 30, 1.8, 2.0, 0.10, 3,   850]
+];
 /* 菜库没有时按关键词归类兜底 —— 保证「一句话」永远出数，而不是记成 0 */
 var NN_FB = [
   {re:/麻辣|烫|冒菜/, role:'protein', b:[15,120,2.5,2.0,0.15,5,1800], lb:'麻辣'},
@@ -42049,11 +42080,22 @@ function nnScan(seg){
   var hits = [], i = 0;
   while (i < seg.length){
     var best = null;
-    for (var d=0; d<NN_DB.length; d++){
-      var as = String(NN_DB[d][0]).split('|');
-      for (var j=0;j<as.length;j++){
-        var a = as[j];
-        if (a && seg.substr(i, a.length) === a && (!best || a.length > best.len)) best = { row:NN_DB[d], len:a.length };
+    /* 汤优先（2026-11-04）：「紫菜鸡蛋汤」如果在 NN_DB 里找最长别名，只会命中「蛋」，
+       于是整碗汤被记成一个鸡蛋。汤名先扫一遍（≥3 字），命中就整碗记，不再往里拆。 */
+    for (var s=0; s<NN_SOUP.length; s++){
+      var sa = String(NN_SOUP[s][0]).split('|');
+      for (var sj=0; sj<sa.length; sj++){
+        var sy = sa[sj];
+        if (sy && sy.length >= 3 && seg.substr(i, sy.length) === sy && (!best || sy.length > best.len)) best = { row:NN_SOUP[s], len:sy.length };
+      }
+    }
+    if (!best){
+      for (var d=0; d<NN_DB.length; d++){
+        var as = String(NN_DB[d][0]).split('|');
+        for (var j=0;j<as.length;j++){
+          var a = as[j];
+          if (a && seg.substr(i, a.length) === a && (!best || a.length > best.len)) best = { row:NN_DB[d], len:a.length };
+        }
       }
     }
     if (best){ hits.push(best); i += best.len; }
@@ -42719,6 +42761,8 @@ function nnScopeSet(v){
   var isD = nnScope === 'd', isW = nnScope === 'w';
   var t = document.getElementById('nnTodayCard'), wk = document.getElementById('nnWeekCard'), mo = document.getElementById('nnMonthCard');
   var rc = document.getElementById('nnRadarCard'), vc = document.getElementById('nnVerdictCard'), hc = document.getElementById('nnHeroCard');
+  var fnc = document.getElementById('nnFnCard');
+  if (fnc) fnc.hidden = !isD;
   if (t) t.hidden = !isD;
   if (wk) wk.hidden = !isW;
   if (mo) mo.hidden = !(nnScope === 'm');
@@ -42838,9 +42882,7 @@ var NN_FN = {
 function nnFnTipRender(){
   var box = document.getElementById('nnFnTip');
   if (!box) return;
-  box.innerHTML = '<div class="nn-hd" style="margin-top:12px">🍎🥜 水果坚果怎么挑<span class="nn-sp"></span>'
-    + '<span class="nn-hint">按果糖 / 山梨醇排的，不是按维C</span></div>'
-    + '<div style="font-size:12px;line-height:1.95;color:var(--muted)">'
+  box.innerHTML = '<div style="font-size:12px;line-height:1.95;color:var(--muted)">'
     + '<div><b style="color:#10b981">✅ 水果放心吃</b>　' + NN_FN.fruitOk.join(' · ') + '</div>'
     + '<div><b style="color:#ef4444">🚫 水果先避开</b>　' + NN_FN.fruitNo.join(' · ') + ' —— 山梨醇+果糖双高，肠易激头号诱因</div>'
     + '<div><b style="color:#10b981">✅ 坚果</b>　' + NN_FN.nutOk.join('　') + '</div>'
@@ -45420,7 +45462,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611041434";
+        window.NIKO_VERSION = "202611041456";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
