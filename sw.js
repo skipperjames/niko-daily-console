@@ -9,7 +9,7 @@
 //
 // 注意：push_api.js 每次部署都会把 CACHE_NAME 升到新时间戳，
 // activate 时旧 cache 全清 → 部署后第一次打开必然拿新版，不会被旧缓存锁死。
-const CACHE_NAME = 'niko-sw-202609190748';
+const CACHE_NAME = 'niko-sw-202611040634';
 const VER_FILE = /\/niko_ver\.json$/;
 
 self.addEventListener('install', function () {
