@@ -11227,6 +11227,36 @@ body.dark-mode .sync-indicator-sub { color: #555; }
 .cloudsync-version b { color: #667eea; font-weight: 600; }
 body.dark-mode .cloudsync-version { color: #9aa0bd; }
 body.dark-mode .cloudsync-version b { color: #a5b4fc; }
+
+/* ===== 📜 云端历史（2026-11-06 C 方案）=====
+   GitHub 通道每次同步就是一个 commit —— 云端本来就是个一天几百个版本的无损版本库，
+   这里只是把这个能力暴露成按钮。列表只用「文件体积」判断健康度（瘦快照会骤降），
+   不下载内容，所以打开面板几乎不花流量；点「拉回」才真去取那一版。 */
+.cloudsync-hist { border-top: 1px dashed #ddd; padding-top: 10px; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+body.dark-mode .cloudsync-hist { border-top-color: #333; }
+.cloudsync-hist-tip { font-size: 11.5px; color: #888; line-height: 1.6; }
+.cloudsync-hist-list { display: flex; flex-direction: column; gap: 6px; max-height: 300px; overflow-y: auto; }
+.hist-row { display: flex; align-items: center; gap: 8px; background: #fafafa; border: 1px solid #eee; border-left: 3px solid #10b981; border-radius: 6px; padding: 6px 8px; }
+.hist-row.sus { border-left-color: #ef4444; background: #fff7f7; }
+.hist-main { flex: 1 1 auto; min-width: 0; }
+.hist-t { font-size: 12px; font-weight: 600; color: #333; }
+.hist-m { font-size: 11px; color: #8a8fa8; margin-top: 1px; }
+.hist-tag { display: inline-block; font-size: 10px; padding: 0 5px; border-radius: 3px; background: #fee2e2; color: #dc2626; margin-left: 4px; vertical-align: 1px; }
+.hist-btn { flex: 0 0 auto; border: 1px solid #cbd5e1; background: #fff; color: #334155; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
+.hist-btn:hover { border-color: #ef4444; color: #dc2626; background: #fff7f7; }
+.hist-empty { font-size: 11.5px; color: #9aa0aa; padding: 10px 2px; text-align: center; }
+body.dark-mode .cloudsync-hist-tip, body.dark-mode .hist-empty { color: #8b8b99; }
+body.dark-mode .hist-row { background: #222234; border-color: #333345; border-left-color: #10b981; }
+body.dark-mode .hist-t { color: #e2e2ea; }
+body.dark-mode .hist-m { color: #8b8b99; }
+body.dark-mode .hist-btn { background: #2a2a3c; border-color: #3d3d52; color: #c7c7d4; }
+body.dark-mode .hist-btn:hover { border-color: #ef4444; color: #fca5a5; background: #2e2028; }
+body.dark-mode .hist-row.sus { background: #2e2026; border-left-color: #ef4444; }
+body.dark-mode .hist-tag { background: #3a1f22; color: #fca5a5; }
+@media (max-width: 768px) {
+    .cloudsync-hist-list { max-height: 240px; }
+    .hist-btn { min-height: 34px; padding: 5px 12px; }
+}
 /* ===== 会员看板专属CSS ===== */
         .member-stats {
             display: grid;
@@ -15853,6 +15883,17 @@ body.dark-mode .lbak-err { color: #fca5a5; }
             </div>
         </div>
 
+        <!-- 📜 云端历史（2026-11-06 · C 方案）：GitHub 每次同步是一个 commit，等于白送一个版本库 -->
+        <div class="cloudsync-hist" id="cloudsyncHist">
+            <button class="cloudsync-btn" id="cloudsyncHistBtn" onclick="nikoHistToggle()">📜 云端历史 · 可回退</button>
+            <div class="cloudsync-hist-body" id="cloudsyncHistBody" hidden>
+                <div class="cloudsync-hist-tip" id="cloudsyncHistTip">
+                    云端每同步一次就是一个版本（含文件体积）。体积骤降的那份会标红 —— 那种版本别拉，它可能是「数据被删光」的那一版。
+                </div>
+                <div class="cloudsync-hist-list" id="cloudsyncHistList"></div>
+            </div>
+        </div>
+
         <div class="cloudsync-log" id="cloudsyncLog">
             <div class="cloudsync-log-title">📝 同步日志</div>
             <div class="cloudsync-log-item"><span class="msg" style="color:#999;">暂无记录</span></div>
@@ -17700,6 +17741,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261106-1445', d: '2026-11-06', at: '14:45', name: '打开快了 17 倍 + 云端历史能倒回去 + 删数据被拦',
+                items: [
+                    { sec: '⚙️ 全站', t: '换了下载通道，打开从 116 秒变 7 秒', how: '页面改从国内有节点的镜像取（jsDelivr），镜像不可用时自动回退原地址。**网址没变、数据没动**，日常打开仍是秒开；差别在「第一次装」「强制刷新」「更新后台下载」这三种场景 —— 以前要等两分钟，现在几秒', go: 'today' },
+                    { sec: '💾 数据管理', t: '云端历史：任意一个版本都能一键拉回', how: '「数据管理 → 云同步 → 📜 云端历史」里，云端每同步一次就是一个版本，列出来带时间和体积；体积骤降的那份会标红（那种是数据被删光的版本，别拉）。点「拉回」前会自动先存一份当前状态', go: 'today' },
+                    { sec: '🛡 数据安全', t: '整块删数据会被拦下来，原值进回收站', how: '页面现在带一道安全闸：任何代码要整块删掉一个数据键（便签/日历/日记这种有肉的），都会被拦下并把原值存进回收站，而不是让它消失。等于给「同步把你数据刷没」这类事故上了最后一道保险。要强行清掉可以设 niko_guard_off=1', go: 'today' },
+                    { sec: '☁️ 云同步', t: '内容没变就不再写云端', how: '以前每 2 分钟都往云端写一次（值一个字没变，只刷新了时间戳），把仓库撑大了。现在只有内容真的变了才写，同步日志里会出现「内容与云端一致，跳过写云端」', go: 'today' }
+                ]
+            },
+
             {
                 v: 'b-20261106-1315', d: '2026-11-06', at: '13:15', name: '数据多了一层本地保险：每 2 小时自动存一份，能一键倒回去',
                 items: [
@@ -36662,6 +36713,8 @@ function renderDayDetail() {
             const g = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
             if (g.block) {
                 addLog(`🛑 拒写云端：新快照只剩 ${g.next} 个键（云端原有 ${g.prev} 个），疑似要把云端刷瘦 —— 本轮跳过推送`, 'err');
+            } else if (sameRemoteValues(remoteKeys, nextRemoteKeys)) {
+                addLog('内容与云端一致，跳过写云端（省一次 commit）', 'info');
             } else {
                 await writeRemote(outRemote, channel || 'fs');
             }
@@ -36834,6 +36887,8 @@ function renderDayDetail() {
         const g2 = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
         if (g2.block) {
             addLog(`🛑 拒写云端：新快照只剩 ${g2.next} 个键（云端原有 ${g2.prev} 个），疑似要把云端刷瘦 —— 本轮只应用本地，不推云端`, 'err');
+        } else if (sameRemoteValues(remoteKeys, nextRemoteKeys)) {
+            addLog('冲突处理完内容与云端一致，跳过写云端（省一次 commit）', 'info');
         } else {
             await writeRemote(outRemote, state.pendingChannel || 'fs');
         }
@@ -37107,6 +37162,150 @@ function renderDayDetail() {
         });
         window.addEventListener('pagehide', flushOnHide);
     }
+
+    /* ========== 📜 云端历史（2026-11-06 · C 方案）==========
+       背景：2026-11-06 上午云端快照一度只剩 2 个键（git 历史里还留着一份「0 键」的），
+       而 GitHub 通道每次同步就是一个 commit —— 「能倒回去」这件事本来就有，只是一直没做成按钮。
+       口径：
+         1. 列表只读「每个版本的文件体积」，不下载内容 → 打开面板几乎不花流量，点「拉回」才真取那一版；
+         2. 体积比更早那一版小 40% 以上 → 标红「体积骤降」，那种版本是坏的，别拉；
+         3. 拉回只写不删（云端没有的键保留本地），且拉回前先存一份当前状态（P1 的 pre 快照）。 */
+    const HIST_PER_PAGE = 20;
+
+    function histHeaders(extra) {
+        return Object.assign({
+            'Authorization': 'Bearer ' + state.ghToken,
+            'Accept': 'application/vnd.github+json'
+        }, extra || {});
+    }
+
+    async function histList(page) {
+        if (!state.ghConnected) throw new Error('GitHub 未连接');
+        const base = `${GH_API}/repos/${state.ghOwner}/${state.ghRepo}`;
+        const r = await fetch(`${base}/commits?path=${encodeURIComponent(GH_FILE)}&per_page=${HIST_PER_PAGE}&page=${page || 1}`, { headers: histHeaders() });
+        if (!r.ok) throw new Error('GitHub API ' + r.status);
+        const commits = await r.json();
+        if (!Array.isArray(commits)) throw new Error('返回格式异常');
+        // 逐条取体积（小 JSON，不下载内容）；并发 4 条，避免串行太久
+        const rows = [];
+        for (let i = 0; i < commits.length; i += 4) {
+            const got = await Promise.all(commits.slice(i, i + 4).map(async (c) => {
+                let size = 0;
+                try {
+                    const q = await fetch(`${base}/contents/${GH_FILE}?ref=${c.sha}`, { headers: histHeaders() });
+                    if (q.ok) { const meta = await q.json(); size = Number(meta.size) || 0; }
+                } catch (e) {}
+                return { sha: c.sha, at: c.commit.author.date, size: size };
+            }));
+            rows.push.apply(rows, got);
+        }
+        return rows;
+    }
+
+    function histTime(iso) {
+        const d = new Date(iso);
+        if (isNaN(d.getTime())) return String(iso).slice(0, 16);
+        const p = (x) => String(x).length < 2 ? '0' + x : String(x);
+        return (d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+
+    function histRender(rows) {
+        const host = document.getElementById('cloudsyncHistList');
+        if (!host) return;
+        if (!rows || !rows.length) {
+            host.innerHTML = '<div class="hist-empty">读不到历史（仓库里还没有 sync_data.json 的提交）</div>';
+            return;
+        }
+        let html = '';
+        rows.forEach((r, i) => {
+            const older = rows[i + 1];
+            const sus = !!(older && older.size > 20000 && r.size < older.size * 0.6);
+            html += '<div class="hist-row' + (sus ? ' sus' : '') + '" data-sha="' + r.sha + '">'
+                + '<div class="hist-main">'
+                + '<div class="hist-t">' + histTime(r.at) + (sus ? '<span class="hist-tag">体积骤降</span>' : '') + '</div>'
+                + '<div class="hist-m">' + (r.size / 1024).toFixed(0) + ' KB · ' + String(r.sha).slice(0, 7) + '</div>'
+                + '</div>'
+                + '<button class="hist-btn" onclick="nikoHistRestore(\'' + r.sha + '\',' + (r.size / 1024).toFixed(0) + ')">拉回</button>'
+                + '</div>';
+        });
+        host.innerHTML = html;
+    }
+
+    async function histToggle() {
+        const body = document.getElementById('cloudsyncHistBody');
+        const host = document.getElementById('cloudsyncHistList');
+        if (!body || !host) return;
+        if (!state.ghConnected) {
+            body.hidden = false;
+            host.innerHTML = '<div class="hist-empty">云端历史目前只支持 🌐 GitHub 通道（坚果云文件夹保存的是单个文件，没有版本历史）。</div>';
+            return;
+        }
+        body.hidden = !body.hidden;
+        if (body.hidden) return;
+        host.innerHTML = '<div class="hist-empty">读取中…（第一次要拉 20 个版本的体积，约 2~3 秒）</div>';
+        try {
+            const rows = await histList(1);
+            window.__nikoHistRows = rows;
+            histRender(rows);
+            addLog(`云端历史：读到 ${rows.length} 个版本`, 'ok');
+        } catch (e) {
+            host.innerHTML = '<div class="hist-empty">读取失败：' + (e && e.message ? e.message : e) + '</div>';
+        }
+    }
+
+    async function histRestore(sha, kb) {
+        if (!state.ghConnected) return;
+        const base = `${GH_API}/repos/${state.ghOwner}/${state.ghRepo}`;
+        try {
+            const raw = await fetch(`${base}/contents/${GH_FILE}?ref=${sha}`, { headers: histHeaders({ 'Accept': 'application/vnd.github.raw+json' }) });
+            if (!raw.ok) throw new Error('GitHub raw ' + raw.status);
+            const obj = JSON.parse(await raw.text());
+            const keys = obj.keys || {};
+            const n = Object.keys(keys).length;
+            if (!n) { alert('这一版是空的（0 个键）—— 那是「数据被删光」的那一版，不能拉。'); return; }
+            let notes = -1;
+            if (keys['niko_inspiration_notes']) {
+                try { const a = JSON.parse(keys['niko_inspiration_notes'].value); notes = Array.isArray(a) ? a.length : -1; } catch (e) {}
+            }
+            const warn = (typeof kb === 'number' && kb < 50) ? '\n\n⚠️ 这一版只有 ' + kb + ' KB，明显偏瘦，很可能是坏版本。' : '';
+            if (!confirm('把云端这一版拉回本机？\n\n'
+                + '· 版本时间：' + (obj.updatedAt ? new Date(obj.updatedAt).toLocaleString('zh-CN') : sha.slice(0, 7)) + '\n'
+                + '· 键数：' + n + (notes >= 0 ? ' · 便签 ' + notes + ' 条' : '') + '\n\n'
+                + '拉回前会先自动存一份「当前状态」（本地备份的 pre 快照），所以拉回本身不会造成损失。\n'
+                + '云端没有的键不会被删除。' + warn)) return;
+            // ★ 先存当前状态（IndexedDB，不吃 localStorage 配额）
+            try { if (window.__lbak && typeof window.__lbak.run === 'function') await window.__lbak.run('pre'); } catch (e) {}
+            let w = 0, f = 0;
+            Object.keys(keys).forEach((k) => {
+                if (!Object.prototype.hasOwnProperty.call(keys, k)) return;
+                try { localStorage.setItem(k, keys[k].value); w++; } catch (e) { f++; }
+            });
+            alert('✅ 已拉回 ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + '，页面即将刷新');
+            setTimeout(() => location.reload(), 400);
+        } catch (e) {
+            alert('拉回失败：' + (e && e.message ? e.message : e));
+        }
+    }
+
+    /* 「内容没变就别写云端」——2026-11-06 实测：云端每 2 分钟一个 commit，
+       每次把 185 个键的 updatedAt 全部刷成同一时刻，值其实一个字都没变。
+       加这道闸后，只有内容真的变了才写，仓库不再无谓膨胀，GitHub API 调用也省下来。 */
+    function sameRemoteValues(a, b) {
+        const ka = Object.keys(a || {});
+        const kb = Object.keys(b || {});
+        if (ka.length !== kb.length) return false;
+        for (let i = 0; i < ka.length; i++) {
+            const k = ka[i];
+            if (!Object.prototype.hasOwnProperty.call(b, k)) return false;
+            const va = a[k] ? a[k].value : undefined;
+            const vb = b[k] ? b[k].value : undefined;
+            if (va !== vb) return false;
+        }
+        return true;
+    }
+
+    window.nikoHistToggle = histToggle;
+    window.nikoHistRestore = histRestore;
 
     // 暴露 API
     window.NikoSync = {
@@ -46429,7 +46628,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061345";
+        window.NIKO_VERSION = "202611061442";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
