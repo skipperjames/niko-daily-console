@@ -10345,6 +10345,14 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-md a { color: #667eea; text-decoration: underline; text-underline-offset: 2px; }
         .nb-md strong { font-weight: 700; }
         .nb-detail-meta { flex: 0 0 auto; font-size: 11px; color: #9a96a8; padding: 9px 26px 0; border-top: 1px dashed rgba(128,128,128,.3); margin-top: 10px; }
+        /* 2026-11-06 长正文压缩：确认弹窗必须盖在便签全屏编辑器（z-index 2900）上面 */
+        #nbZipAsk.modal-mask { z-index: 3000; }
+        /* 2026-11-06 长正文压缩：详情顶部的「已压缩」说明条 */
+        .nb-zip-pill {
+            display: inline-block; font-size: 11px; line-height: 1.5; padding: 3px 10px; margin: 0 0 10px;
+            border-radius: 20px; background: rgba(16,185,129,.1); color: #059669; border: 1px solid rgba(16,185,129,.3);
+        }
+        body.dark-mode .nb-zip-pill { background: rgba(52,211,153,.12); color: #6ee7b7; border-color: rgba(52,211,153,.3); }
         /* 操作按钮：8 个按钮原来占 3 行（手机 390 下吃掉 150px 正文高度）→ 收成小按钮 flex 换行 */
         .nb-detail-actions { flex: 0 0 auto; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding: 11px 26px 0; border-top: 1px solid rgba(128,128,128,.16); }
         .nb-detail-actions button { flex: 0 0 auto; min-height: 36px; padding: 0 13px; border: 1px solid #e5e2dc; background: #faf9f6; border-radius: 8px; font-size: 12px; cursor: pointer; color: #555; transition: all .15s; }
@@ -15663,6 +15671,23 @@ body.dark-mode .lbak-err { color: #fca5a5; }
         <button onclick="nbBatchDo('archive')">📦 归档</button>
         <button class="danger" onclick="nbBatchDo('delete')">🗑 删除</button>
         <button onclick="nbToggleBatch()">✕ 完成</button>
+    </div>
+
+    <!-- 长文本压缩确认（2026-11-06 v2：gzip 接入）· 压缩无损可逆，所以这里敢让老板点「压」 -->
+    <div class="modal-mask" id="nbZipAsk">
+        <div class="modal" style="width:452px;max-width:94vw;">
+            <h3 style="margin:0 0 8px;font-size:15px;">🗜 这条有点长，要压缩存吗？</h3>
+            <p id="nbZipAskDesc" style="font-size:12px;color:var(--muted,#888);line-height:1.75;margin:0 0 12px;"></p>
+            <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted,#888);cursor:pointer;">
+                <input type="checkbox" id="nbZipAskRemember" style="cursor:pointer;">
+                记住我的选择，以后别再问
+            </label>
+            <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;">
+                <button class="btn" onclick="nbZipAnswer('cancel')">取消</button>
+                <button class="btn" onclick="nbZipAnswer('plain')">原样保存</button>
+                <button class="btn primary" onclick="nbZipAnswer('zip')">🗜 压缩保存</button>
+            </div>
+        </div>
     </div>
 
     <!-- 便签全屏编辑器（v2.26 · 替换原 440px 小弹窗；⚠️ 不是浏览卡片 #nbDetailModal，那张没动） -->
@@ -29521,9 +29546,10 @@ function renderDayDetail() {
             convertingNoteId = id;
             const tag = noteTagDict()[note.tag] || noteTagDict().other;
             document.getElementById('eventModalTitle').textContent = '📌 灵感转任务';
-            document.getElementById('eventTitle').value = note.content.slice(0, 80);
+            const _nbTxt = nbNoteBody(note);   // 压缩过的取解压后的正文
+            document.getElementById('eventTitle').value = String(_nbTxt || note.title || '').slice(0, 80);
             const sourceLine = `—— 来源：灵感便签 · ${tag.icon}${tag.name} · ${formatNoteTime(note.createdAt)}`;
-            document.getElementById('eventDesc').value = (note.content.length > 80 ? note.content + '\n\n' : '') + sourceLine;
+            document.getElementById('eventDesc').value = (_nbTxt.length > 80 ? _nbTxt + '\n\n' : '') + sourceLine;
         }
 
         // 轻提示
@@ -29630,7 +29656,7 @@ function renderDayDetail() {
             let list = nbSpecial === 'recycle' ? recycledNotes() : nbSpecial === 'archive' ? archivedNotes() : nbSpecial === 'quiet' ? quietNotes() : activeNotes();
             if (nbSearch) {
                 const k = nbSearch.toLowerCase();
-                list = list.filter(n => n.content.toLowerCase().includes(k));
+                list = list.filter(n => { const b = n.c ? (nbBodyCache.get(n.id) || '') : n.content; return String(b).toLowerCase().includes(k) || String(n.title || '').toLowerCase().includes(k); });
             }
             if (nbTagFilter) {
                 list = list.filter(n => n.tag === nbTagFilter);
@@ -30822,14 +30848,50 @@ function renderDayDetail() {
                 const chars = n.c ? (n.cl || 0) : String(n.content || '').length;
                 return '◧ ' + (t || (n.c ? '素材卡' : nbGuessTitle(n.content))) + ' · ' + chars.toLocaleString() + ' 字';
             }
+            // 压缩过的普通便签：n.content 是空的，标签得靠 n.cl 拼，不然列表会显示成空白
+            if (n.c) return (t ? t + ' · ' : '') + '🗜 ' + (n.cl || 0).toLocaleString() + ' 字';
             return t ? t + ' · ' + nbPlain(n.content) : nbPlain(n.content);
         }
 
-        // ===== 2026-11-06 素材卡正文压缩 =====
+        // ===== 2026-11-06 长正文压缩（v2：LZW → gzip）=====
         // 老板：「这种只需要复制的文本能不能压缩成一个格式的东西，其实也不需要写到正文里面好占内存」。
-        // 口径：素材卡正文 >= 2500 字 → 存 n.c（LZW 打包 + base64），n.content 清空；
-        //       n.cl / n.cn 记住字数、行数，卡片直接显示，不用解压。
-        //       复制 / 打开详情 / 编辑时才解压（nbNoteBody）。
+        // 实测（_预览_便签压缩.html，13,695 字 T3D）：gzip 1,065 B → base64 1,420 字符 = 9.6 倍；
+        // 上一轮那版 LZW 只有 1.0 倍（等于没压）。
+        // 口径：
+        //   · 正文 >= NB_ZIP_MIN 才谈压缩；压之前**一定弹窗问**（可选原样保存 / 记住「别再问」）
+        //   · 压缩是**无损可逆**的：n.c 就是原文的 gzip 包，随时能「↩ 解压还原」回明文
+        //   · n.content 清空，n.cl / n.cn / n.cb 记住原文字数 / 行数 / 压缩后字节，卡片直接显示不解压
+        //   · DecompressionStream 是异步的 → nbBodyCache 缓存；取正文的入口先 await nbEnsureBody(n)
+        const NB_ZIP_MIN = 2500;
+        const nbBodyCache = new Map();     // noteId -> 解压后的正文
+        const nbBodyInflight = new Map();  // noteId -> Promise
+
+        function nbZipSupported() {
+            return typeof CompressionStream === 'function' && typeof DecompressionStream === 'function';
+        }
+        function nbB64FromBytes(bytes) {
+            let bin = ''; const CH = 0x8000;
+            for (let i = 0; i < bytes.length; i += CH) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+            return btoa(bin);
+        }
+        function nbBytesFromB64(b64) {
+            const bin = atob(b64); const out = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+            return out;
+        }
+        async function nbGzPack(str) {
+            const raw = new TextEncoder().encode(String(str || ''));
+            const stream = new Blob([raw]).stream().pipeThrough(new CompressionStream('gzip'));
+            const gz = new Uint8Array(await new Response(stream).arrayBuffer());
+            return { b64: nbB64FromBytes(gz), bytes: gz.length };
+        }
+        async function nbGzUnpack(b64) {
+            const gz = nbBytesFromB64(b64);
+            const stream = new Blob([gz]).stream().pipeThrough(new DecompressionStream('gzip'));
+            return await new Response(stream).text();
+        }
+
+        // 老的 LZW 包保留读取能力（n.c 但没有 n.cz 的，就是上一版压的）
         // 编码按 UTF-16 code unit：单字符 = 它自己的码（0..65535），词条从 65536 起，每码 3 字节。
         function nbLzPack(str) {
             const s = String(str || '');
@@ -30886,20 +30948,128 @@ function renderDayDetail() {
             }
             return out;
         }
-        // 读正文：压缩过的解压，没压的直接给 content
+        // ===== 读 / 写正文的唯一入口 =====
+        // 读：同步返回。缓存里有就给；没有就先返回空串，并在后台解压（解完刷新当前可见的详情/编辑器）。
         function nbNoteBody(n) {
             if (!n) return '';
-            if (n.c) return nbLzUnpack(n.c);
-            return String(n.content || '');
+            if (!n.c) return String(n.content || '');
+            const hit = nbBodyCache.get(n.id);
+            if (hit !== undefined) return hit;
+            nbEnsureBody(n);
+            return '';
         }
-        // 写正文：统一入口。压缩下一轮接（gzip 实测单条 T3D 7.5x，比 LZW 的 1.2x 强太多，
-        // 但 gzip 的 CompressionStream 是异步的，需要「启动还原 + 编辑前还原」的状态机，单独一轮做）。
-        // 现在只做一件事：清掉旧的 n.c，免得读到过期压缩包。
+        // 读（异步）：需要正文的入口（编辑 / 详情 / 复制 / 还原）一律用这个，保证不会拿到空串。
+        function nbEnsureBody(n) {
+            if (!n) return Promise.resolve('');
+            if (!n.c) return Promise.resolve(String(n.content || ''));
+            const _hit = nbBodyCache.get(n.id);
+            if (_hit !== undefined) return Promise.resolve(_hit);
+            if (nbBodyInflight.has(n.id)) return nbBodyInflight.get(n.id);
+            const p = (async () => {
+                let txt = '';
+                try {
+                    txt = (n.cz === 'gz') ? await nbGzUnpack(n.c) : nbLzUnpack(n.c);
+                } catch (e) {
+                    console.warn('便签解压失败', e);
+                    txt = '';
+                }
+                nbBodyCache.set(n.id, txt);
+                nbBodyInflight.delete(n.id);
+                return txt;
+            })();
+            nbBodyInflight.set(n.id, p);
+            return p;
+        }
+        // 写正文（明文）：清掉旧的压缩包，免得读到过期数据。
         function nbSetNoteBody(n, text) {
             n.content = String(text == null ? '' : text);
-            delete n.c; delete n.cl; delete n.cn;
+            delete n.c; delete n.cz; delete n.cl; delete n.cn; delete n.cb;
+            nbBodyCache.delete(n.id);
             return n;
         }
+        // 把明文塞进压缩包（无损：原文完整躺在 n.c 里，随时能解压还原）
+        function nbApplyPack(n, pkg, plain) {
+            const txt = String(plain == null ? '' : plain);
+            n.c = pkg.b64;
+            n.cz = 'gz';
+            n.cl = txt.length;
+            n.cn = txt.split('\n').length;
+            n.cb = pkg.bytes;
+            n.content = '';
+            nbBodyCache.set(n.id, txt);   // 本次会话直接命中缓存，不用再解一遍
+            return n;
+        }
+        // 压缩倍率（原始字数 / 实际占的字符数）
+        function nbZipRatio(n) {
+            if (!n || !n.c || !n.cl || !n.c.length) return 0;
+            return n.cl / n.c.length;
+        }
+
+        // ===== 压缩前的确认弹窗 =====
+        // 老板：「检测到压缩的时候，还是弹窗提示一下要确认吧，这个能撤回的吗？」
+        // 答：能。压缩是无损可逆的 —— 原文就在 n.c 里，点「↩ 解压还原」立刻变回明文便签。
+        let nbZipResolve = null;
+        let nbZipPending = null;    // { len, pkg } 弹窗里已经算好的压缩包，用户点「压」就直接用
+        function nbZipMode() {
+            try { return safeStorage.get('niko_note_zip_mode', 'ask') || 'ask'; } catch (e) { return 'ask'; }
+        }
+        function nbZipShouldAsk(content, n) {
+            if (!nbZipSupported()) return false;
+            if (String(content || '').length < NB_ZIP_MIN) return false;
+            if (n && n.nz) return false;                  // 这张选过「原样保存」
+            return nbZipMode() !== 'never';
+        }
+        async function nbAskZip(content) {
+            const plain = String(content || '');
+            let pkg = null;
+            try { pkg = await nbGzPack(plain); } catch (e) { return 'plain'; }
+            nbZipPending = { len: plain.length, pkg: pkg };
+            const ratio = plain.length / (pkg.b64.length || 1);
+            const d = document.getElementById('nbZipAskDesc');
+            if (d) d.innerHTML = '这条正文 <b>' + plain.length.toLocaleString() + '</b> 字，压缩后只占 '
+                + '<b>' + pkg.b64.length.toLocaleString() + '</b> 字符（<b>' + ratio.toFixed(1) + ' 倍</b>，省 '
+                + Math.round((1 - pkg.b64.length / plain.length) * 100) + '%）。'
+                + '<br><span style="color:#059669;">压缩是无损的</span> —— 原文完整存在里面，点「复制」拿到的还是原文，随时也能「↩ 解压还原」变回普通便签。';
+            const rem = document.getElementById('nbZipAskRemember');
+            if (rem) rem.checked = false;
+            document.getElementById('nbZipAsk').classList.add('show');
+            return new Promise(function (resolve) {
+                nbZipResolve = function (ans) {
+                    document.getElementById('nbZipAsk').classList.remove('show');
+                    const r = document.getElementById('nbZipAskRemember');
+                    if (ans === 'zip' && r && r.checked) { try { safeStorage.set('niko_note_zip_mode', 'always'); } catch (e) {} }
+                    if (ans === 'plain' && r && r.checked) { try { safeStorage.set('niko_note_zip_mode', 'never'); } catch (e) {} }
+                    nbZipResolve = null;
+                    resolve(ans);
+                };
+            });
+        }
+        function nbZipAnswer(ans) {
+            if (nbZipResolve) nbZipResolve(ans);
+        }
+        // 把某张便签从压缩包还原成明文（可逆操作的出口）
+        async function nbUnzipNote(id) {
+            const n = notes.find(x => x.id === id);
+            if (!n || !n.c) return;
+            const txt = await nbEnsureBody(n);
+            if (!txt) { showToast('⚠️ 解压失败，原文没动'); return; }
+            n.content = txt;
+            delete n.c; delete n.cz; delete n.cl; delete n.cn; delete n.cb;
+            nbBodyCache.delete(n.id);
+            n.updatedAt = new Date().toISOString();
+            saveNotes();
+            renderNotesPage();
+            if (nbDetailId === id) openNbDetail(id, true);
+            showToast('↩ 已还原成普通便签（' + txt.length.toLocaleString() + ' 字）');
+        }
+        // 开机预热：把还在压缩包里的正文慢慢解回内存，点开就是秒出
+        function nbPrewarmBodies() {
+            try {
+                const list = notes.filter(n => n && n.c && !n.deleted && !nbBodyCache.has(n.id));
+                list.slice(0, 30).forEach(n => nbEnsureBody(n));
+            } catch (e) {}
+        }
+        setTimeout(function () { try { nbPrewarmBodies(); } catch (e) {} }, 1500);   // 开机预热，点开就是秒出
 
         function nbTlItemHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
@@ -31183,6 +31353,16 @@ function renderDayDetail() {
             nbEdVerSync();
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
             document.getElementById('noteModalContent').value = n ? nbNoteBody(n) : '';
+            // 压缩过的便签：正文是异步解的，解完再回填（只在用户还没动手打字时回填，绝不覆盖输入）
+            if (n && n.c && nbBodyCache.get(n.id) === undefined) {
+                const _zipId = n.id;
+                nbEnsureBody(n).then(function (txt) {
+                    const el = document.getElementById('noteModalContent');
+                    if (!el || nbEditingId !== _zipId || el.value.trim()) return;
+                    el.value = txt;
+                    try { nbEdRefresh(); nbEdSyncMat(); } catch (e) {}
+                });
+            }
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
             capsulePick = (n && n.capsule && CAPSULE_SPANS[n.capsule.span]) ? n.capsule.span : '';
             updateCapsuleChips();
@@ -31328,12 +31508,12 @@ function renderDayDetail() {
         }
 
         // 2026-11-06 一键复制：只复制正文（n.content），标题 / 字数 / 时间一律不掺进去
-        function nbCopyNote(id, e) {
+        async function nbCopyNote(id, e) {
             e && e.stopPropagation();
             const n = notes.find(x => x.id === id);
             if (!n) return;
-            const txt = nbNoteBody(n);
             const btn = (e && e.target && e.target.closest) ? e.target.closest('button') : null;
+            const txt = await nbEnsureBody(n);   // 压缩过的先解压，别复制出空串
             const done = () => {
                 nbCopiedFlash = { id: id, at: Date.now() };
                 if (btn) {
@@ -32836,7 +33016,7 @@ function renderDayDetail() {
             });
             showToast('📥 已存进知识库');
         }
-        function saveNoteModal() {
+        async function saveNoteModal() {
             const content = document.getElementById('noteModalContent').value.trim();
             if (!content) { showToast('✏️ 内容不能为空'); return; }
             // 2026-11-06 标题 / 素材卡（标题留空 = 沿用「正文首行当标题」；素材卡没名字就自动认一个）
@@ -32847,6 +33027,26 @@ function renderDayDetail() {
             // （下次打开会冒出「已恢复草稿」）。先把槽位记下来。
             const _draftSlot = nbEditingId || '__new';
             { const elV = document.getElementById('nbEdVer'); if (elV) nbEdVerPick = String(elV.value || '').trim(); }   // 2026-10-12 #194
+
+            // ===== 长文本压缩决策（2026-11-06 v2）=====
+            // 在写库之前问：选「取消」就什么都不存，直接回到编辑器继续改。
+            let zipPkg = null, plainChosen = false;
+            const _exist = nbEditingId ? notes.find(x => x.id === nbEditingId) : null;
+            const _sameAsPacked = !!(_exist && _exist.c && _exist.cl === content.length);   // 只是改了标签/置顶、正文没动 → 静默重压，别再问一遍
+            if (_sameAsPacked) {
+                try { zipPkg = await nbGzPack(content); } catch (e) { zipPkg = null; }
+            } else if (nbZipShouldAsk(content, _exist)) {
+                if (nbZipMode() === 'always') {
+                    try { zipPkg = await nbGzPack(content); } catch (e) { zipPkg = null; }
+                } else {
+                    const ans = await nbAskZip(content);
+                    if (ans === 'cancel') { nbZipPending = null; return; }
+                    if (ans === 'zip' && nbZipPending && nbZipPending.len === content.length) zipPkg = nbZipPending.pkg;
+                    else if (ans === 'plain') plainChosen = true;   // 这张记下来，别每次保存都问一遍
+                }
+            }
+            nbZipPending = null;
+
             if (nbEditingId) {
                 const n = notes.find(x => x.id === nbEditingId);
                 if (n) {
@@ -32854,6 +33054,8 @@ function renderDayDetail() {
                     if (_title) n.title = _title; else delete n.title;
                     if (nbEditingMaterial) { n.material = true; if (!n.title) n.title = nbGuessTitle(content); } else delete n.material;
                     nbSetNoteBody(n, content);   // 2026-11-06 素材卡长正文压缩存放（material 先落，压缩才有依据）
+                    if (zipPkg) nbApplyPack(n, zipPkg, content);
+                    else if (plainChosen) n.nz = true;
                     n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
                     if (nbEditingNoRev === "on") n.noReview = false; else if (nbEditingNoRev === "off") n.noReview = true; else delete n.noReview;   // #2 单条覆盖（inherit 时清字段）
                     // 2026-10-12 #132：所属模块（不能选自己，防自环）
@@ -32869,6 +33071,8 @@ function renderDayDetail() {
                 if (_title) note.title = _title;
                 if (nbEditingMaterial) { note.material = true; if (!note.title) note.title = nbGuessTitle(content); }
                 nbSetNoteBody(note, content);   // 2026-11-06 素材卡长正文压缩
+                if (zipPkg) nbApplyPack(note, zipPkg, content);
+                else if (plainChosen) note.nz = true;
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
                 if (String(nbEdBackPick || '').trim()) note.back = String(nbEdBackPick).trim();   // 2026-10-12 #133
@@ -33006,7 +33210,7 @@ function renderDayDetail() {
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot auto ${nbPaperFor(n) === 'tag' ? 'active' : ''}" style="background:${tag.chipBg};" onclick="nbSetPaper('tag')" title="跟标签自动配色（默认 · 换标签纸色跟着变）"></button><button class="nb-paper-dot cream ${nbPaperFor(n) === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaperFor(n) === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaperFor(n) === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaperFor(n) === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaperFor(n) === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
-                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${String(n.title || '').trim() ? '<div class="nb-md-title">' + escapeHtml(String(n.title).trim()) + '</div>' : ''}${nbEdMd(showBack ? backTxt : nbNoteBody(n))}</div></div>
+                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner" id="nbDetailInner">${nbDetailInnerHtml(n, showBack)}</div></div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
@@ -33014,6 +33218,7 @@ function renderDayDetail() {
                     <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
                     <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
                     <button onclick="nbDetailCopy('${id}')">📋 复制正文</button>
+                    ${n.c ? `<button onclick="nbUnzipNote('${id}')" title="把压缩包解回明文便签（无损，随时可逆）">↩ 解压还原</button>` : ''}
                     <button onclick="closeNbDetail();nbConvert('${id}',event);">🗓 转任务</button>
                     <button onclick="nbArchive('${id}',event);closeNbDetail();renderNotesPage();">📦 归档</button>
                     <button class="danger" onclick="nbDelete('${id}',event);closeNbDetail();renderNotesPage();">🗑 删除</button>
@@ -33026,7 +33231,26 @@ function renderDayDetail() {
             if (mBox) { mBox.classList.toggle('nb-wide', nbWide); mBox.scrollTop = 0; }
             const tBox = document.querySelector('#nbDetailModal .nb-detail-text');
             if (tBox) tBox.scrollTop = 0;   // 单滚动：正文自己的滚动位置也要归零（翻下一张回顶部）
+            // 压缩过的便签：正文异步解压，解开后补进来（同一张才补，别串张）
+            if (!showBack && n.c && nbBodyCache.get(id) === undefined) {
+                nbEnsureBody(n).then(function () {
+                    const inner = document.getElementById('nbDetailInner');
+                    if (!inner || nbDetailId !== id) return;
+                    inner.innerHTML = nbDetailInnerHtml(n, false);
+                    try { nbBuildCols(); } catch (e) {}
+                });
+            }
             setTimeout(nbBuildCols, 30);    // 双栏排版：等布局稳定后再量高度
+        }
+
+        /* 详情正文的内层 HTML（标题 + 正文）。压缩包要先解压再进来，所以单独抽出来给两处用：
+           ① openNbDetail 首屏先用缓存 / 空串占位  ② 解压完成后原地替换 */
+        function nbDetailInnerHtml(n, showBack) {
+            const title = String(n.title || '').trim();
+            const body = showBack ? String(n.back || '') : nbNoteBody(n);
+            const zipTag = (!showBack && n.c) ? '<div class="nb-zip-pill">🗜 正文已压缩存放 · ' + (n.cl || 0).toLocaleString()
+                + ' 字 → ' + (n.c.length).toLocaleString() + ' 字符（' + nbZipRatio(n).toFixed(1) + ' 倍）</div>' : '';
+            return (title ? '<div class="nb-md-title">' + escapeHtml(title) + '</div>' : '') + zipTag + nbEdMd(body);
         }
         function closeNbDetail() { document.getElementById('nbDetailModal').classList.remove('show'); nbDetailId = null; nbDetailSide = 'front'; }
         // 2026-10-19：⛶ 全屏阅读 / ⤡ 还原。全屏 = 铺满视口 + 正文 46 字读宽
@@ -33047,10 +33271,10 @@ function renderDayDetail() {
             renderNotesPage();
             openNbDetail(id, true); // 刷新详情按钮文案（不计数）
         }
-        function nbDetailCopy(id) {
+        async function nbDetailCopy(id) {
             const n = notes.find(x => x.id === id);
             if (!n) return;
-            const txt = nbNoteBody(n);
+            const txt = await nbEnsureBody(n);   // 压缩过的先解压，别复制出空串
             const done = () => showToast('📋 正文已复制 · ' + txt.length.toLocaleString() + ' 字');
             if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(() => {});
             else {
@@ -33069,7 +33293,7 @@ function renderDayDetail() {
                 const order = visibleList().map(n => n.id);
                 const sel = notes.filter(n => nbSelected.has(n.id) && !n.deleted && !n.archived)
                     .sort((a, b) => ((order.indexOf(a.id) + 1) || 9e9) - ((order.indexOf(b.id) + 1) || 9e9));
-                const mergedContent = sel.map(n => n.content.trim()).join('\n\n─────\n\n');
+                const mergedContent = sel.map(n => nbNoteBody(n).trim()).join('\n\n─────\n\n');
                 // 标签取多数（并列取第一张的）
                 const tagCount = {};
                 sel.forEach(n => { tagCount[n.tag] = (tagCount[n.tag] || 0) + 1; });
@@ -47132,7 +47356,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061611";
+        window.NIKO_VERSION = "202611061730";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
