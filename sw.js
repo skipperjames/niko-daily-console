@@ -20,6 +20,11 @@ const VER_FILE = /\/niko_ver\.json$/;
 const MIRROR_ON = true;
 const MIRROR_BASE = 'https://cdn.jsdelivr.net/gh/skipperjames/niko-daily-console@main';
 const MIRROR_TIMEOUT = 12000;   // 镜像正常 6.5s；超这个数就当它挂了，回退本站
+// ★ 部署时由 push_api.js 自动改写成本次构建号（和版本号同源）。
+//   作用：jsDelivr 按 branch 缓存，purge 生效慢（实测部署后 4 分钟还可能是上一版）——
+//   拿到镜像页面后先看它里面有没有这串构建号，没有就说明是旧版，直接回退本站。
+//   这样「镜像滞后」永远不会把旧版喂给用户，最多这一次退化成慢一点。
+const MIRROR_BUILD = '202611061536';
 
 // ── 安全闸（注入页面）───────────────────────────────────
 // 写成函数再用 toString() 序列化 —— 避免在 sw.js 里手动转义引号（历史教训：引号截断静默失效）。
@@ -139,6 +144,13 @@ function looksLikePage(t) {
     return /<!doctype html|<html[\s>]/i.test(t.slice(0, 3000));
 }
 
+// 镜像拿到的这一版是不是「本次部署」？不是就当它没拿到（回退本站）。
+// 没配置构建号（占位符没被替换）时一律放行，避免把整条镜像通道误杀。
+function isFreshBuild(t) {
+    if (!MIRROR_BUILD || MIRROR_BUILD.indexOf('__NIKO') === 0) return true;
+    return t.indexOf(MIRROR_BUILD) >= 0;
+}
+
 // 取页面：镜像优先（快），失败/超时/内容可疑 → 回退本站
 async function fetchDoc(req, url) {
     if (MIRROR_ON) {
@@ -150,7 +162,7 @@ async function fetchDoc(req, url) {
             clearTimeout(timer);
             if (r && r.ok && r.type !== 'opaque') {
                 var t = await r.text();
-                if (looksLikePage(t)) {
+                if (looksLikePage(t) && isFreshBuild(t)) {
                     return new Response(t, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
                 }
             }
