@@ -28957,7 +28957,27 @@ function renderDayDetail() {
         }
 
         // 统一保存：同时刷新侧栏与便签看板
+        // 2026-11-06 事故后加装的两道数据保险：
+        //   ① 上一版滚动备份 → niko_notes_bak（本机专用，不入云同步；只存一份，约 60KB）
+        //   ② 数量骤降拦截：原来 ≥10 张、现在不到 20% → 回滚并提示，5 秒内再存一次才放行
+        //      （用户主动删/清空的路径会先置 nbShrinkOK，不会被这套挡住）
+        let nbShrinkWarnAt = 0;
+        let nbShrinkOK = false;
         function saveNotes() {
+            let prev = null;
+            try { prev = JSON.parse(localStorage.getItem('niko_inspiration_notes') || 'null'); } catch (e) { }
+            // 备份要写在拦截之前：哪怕这次保存被拦下，上一版也得留下来
+            try { if (Array.isArray(prev) && prev.length) localStorage.setItem('niko_notes_bak', JSON.stringify(prev)); } catch (e) { }
+            if (!nbShrinkOK && Array.isArray(prev) && prev.length >= 10 && notes.length < prev.length * 0.2) {
+                if (Date.now() - nbShrinkWarnAt > 5000) {
+                    nbShrinkWarnAt = Date.now();
+                    notes = prev.slice();
+                    if (typeof showToast === 'function') showToast('🛑 拦下一次「便签几乎被清空」，已回滚。真要清空请再操作一次');
+                    if (currentPage === 'notes') renderNotesPage();
+                    return;
+                }
+            }
+            nbShrinkOK = false;
             safeStorage.set('niko_inspiration_notes', notes);
             if (currentPage === 'notes') renderNotesPage();
         }
@@ -30531,8 +30551,8 @@ function renderDayDetail() {
         function nbArchive(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.archived = true; nbSelected.delete(id); saveNotes(); showToast('📦 已归档'); } }
         function nbUnarchive(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.archived = false; saveNotes(); showToast('📤 已放回看板'); } }
         function nbRestore(id, e) { e && e.stopPropagation(); const n = notes.find(x => x.id === id); if (n) { n.deleted = false; delete n.deletedAt; saveNotes(); showToast('♻️ 便签已恢复'); } }
-        function nbDestroy(id, e) { e && e.stopPropagation(); if (!confirm('彻底删除后无法恢复，确定吗？')) return; notes = notes.filter(x => x.id !== id); saveNotes(); showToast('已彻底删除'); }
-        function nbEmptyRecycle() { const cnt = recycledNotes().length; if (!cnt) return; if (!confirm(`将彻底删除回收站中的 ${cnt} 张便签，无法恢复！`)) return; notes = notes.filter(n => !n.deleted); saveNotes(); showToast('🗑 回收站已清空'); }
+        function nbDestroy(id, e) { e && e.stopPropagation(); if (!confirm('彻底删除后无法恢复，确定吗？')) return; notes = notes.filter(x => x.id !== id); nbShrinkOK = true; saveNotes(); showToast('已彻底删除'); }
+        function nbEmptyRecycle() { const cnt = recycledNotes().length; if (!cnt) return; if (!confirm(`将彻底删除回收站中的 ${cnt} 张便签，无法恢复！`)) return; notes = notes.filter(n => !n.deleted); nbShrinkOK = true; saveNotes(); showToast('🗑 回收站已清空'); }
         // 看板中转任务：直接复用侧栏的转换逻辑（打开日历任务弹窗并预填）
         function nbConvert(id, e) { e && e.stopPropagation(); convertNoteToTask(id); }
 
@@ -35507,6 +35527,7 @@ function renderDayDetail() {
     const EXCLUDE_KEYS = [
         'niko_pomodoro_active',          // 番茄钟进行中状态
         'niko_notes_view',               // 便签视图状态
+        'niko_notes_bak',                // 2026-11-06 事故配套：便签上一版滚动备份，本机专用，绝不同步（否则跨设备互相覆盖）
         // 2026-10-12 用户报「便签排序每次打开都跳回手动」——根因：本机显示偏好被当数据同步，
         // 云端旧值经 conflict（默认策略 remote）把本地选择覆盖回去。以下与 niko_notes_view 同类，一律不同步。
         'niko_notes_sort',               // 便签排序口径（手动 / 最新 / 最早 / 最近更新）
@@ -45821,7 +45842,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061205";
+        window.NIKO_VERSION = "202611061220";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
