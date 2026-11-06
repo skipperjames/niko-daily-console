@@ -988,8 +988,8 @@
         #dataManagerModal .dm-x:hover { border-color: #ef4444; color: #ef4444; }
         #dataManagerModal .dm-body { flex: 1 1 auto; overflow-y: auto; padding: 14px 20px 18px; }
 
-        /* 4 道保险：置顶一行看全 */
-        #dataManagerModal .dm-ins { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+        /* 3 道保险：云同步已提到顶部状态条，剩下三道一行看全 */
+        #dataManagerModal .dm-ins { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
         #dataManagerModal .dm-ins-card {
             display: flex; flex-direction: column; gap: 4px; padding: 12px 13px;
             background: var(--card-bg-2, var(--card-bg, #fff));
@@ -1002,10 +1002,97 @@
         #dataManagerModal .dm-ins-tx { margin: 2px 0 9px; font-size: 11.5px; line-height: 1.55; color: var(--muted, #888); }
         #dataManagerModal .dm-ins-tx b { color: var(--text, #333); font-weight: 500; }
         #dataManagerModal .dm-ins-btn {
-            margin-top: auto; border: 1px solid var(--card-border, #e8e6e1); background: transparent;
+            margin-top: auto; align-self: flex-start;
+            border: 1px solid var(--card-border, #e8e6e1); background: transparent;
             color: var(--text, #333); font-size: 11.5px; padding: 5px 10px; border-radius: 8px; cursor: pointer;
         }
         #dataManagerModal .dm-ins-btn:hover { border-color: var(--accent, #667eea); color: var(--accent, #667eea); }
+
+        /* ===== v3 置顶：云同步状态条（2026-11-06）=====
+           老板原话「云端同步显示要放到最上面比较显眼的位置」——进弹窗第一眼就是它。 */
+        #dataManagerModal .dm-sync {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 12px 14px; margin-bottom: 14px; border-radius: 12px;
+            background: var(--card-bg-2, #fbfaf8);
+            border: 1px solid var(--card-border, #e8e6e1);
+            border-left: 4px solid var(--accent, #667eea);
+        }
+        #dataManagerModal .dm-sync-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; background: #9ca3af; }
+        #dataManagerModal .dm-sync-dot.ok { background: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,.16); }
+        #dataManagerModal .dm-sync-dot.warn { background: #f59e0b; box-shadow: 0 0 0 4px rgba(245,158,11,.16); }
+        #dataManagerModal .dm-sync-dot.err { background: #ef4444; box-shadow: 0 0 0 4px rgba(239,68,68,.16); }
+        #dataManagerModal .dm-sync-tx { flex: 1 1 240px; min-width: 0; }
+        #dataManagerModal .dm-sync-t { font-size: 14px; font-weight: 600; color: var(--text, #222); line-height: 1.35; }
+        #dataManagerModal .dm-sync-s { font-size: 11.5px; color: var(--muted, #888); margin-top: 2px; line-height: 1.4; }
+        #dataManagerModal .dm-sync-ch { display: flex; gap: 6px; flex-wrap: wrap; }
+        #dataManagerModal .dm-chip {
+            display: inline-flex; align-items: center; gap: 4px; font-size: 11px;
+            padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+            background: var(--card-bg, #fff); border: 1px solid var(--card-border, #e8e6e1); color: var(--muted, #888);
+        }
+        #dataManagerModal .dm-chip.ok { color: #059669; border-color: rgba(16,185,129,.4); background: rgba(16,185,129,.08); }
+        #dataManagerModal .dm-chip.err { color: #dc2626; border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.07); }
+        #dataManagerModal .dm-sync-act { display: flex; gap: 8px; flex: 0 0 auto; }
+        #dataManagerModal .dm-sync-btn {
+            font-size: 12px; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;
+            background: var(--card-bg, #fff); border: 1px solid var(--card-border, #ddd); color: var(--text, #333);
+        }
+        #dataManagerModal .dm-sync-btn:hover { border-color: var(--accent, #667eea); color: var(--accent, #667eea); }
+        #dataManagerModal .dm-sync-btn.primary { background: var(--accent, #667eea); border-color: var(--accent, #667eea); color: #fff; }
+        #dataManagerModal .dm-sync-btn.primary:hover { filter: brightness(.94); color: #fff; }
+
+        /* v3 通道行（坚果云 / GitHub 各一行，状态 + 动作挤在一行里） */
+        #dataManagerModal .dm-ch {
+            display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+            padding: 8px 10px; border-radius: 9px;
+            background: var(--card-bg-2, #fbfaf8); border: 1px solid var(--card-border, #eeebe5);
+        }
+        #dataManagerModal .dm-ch-ico { font-size: 14px; flex: 0 0 auto; }
+        #dataManagerModal .dm-ch-tx { flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+        #dataManagerModal .dm-ch-tx b { font-size: 12.5px; font-weight: 600; color: var(--text, #333); }
+        #dataManagerModal .dm-ch-tx span { font-size: 11px; color: var(--muted, #999); word-break: break-all; }
+        #dataManagerModal .dm-ch-state { font-size: 11px; padding: 2px 8px; border-radius: 10px; flex: 0 0 auto; color: var(--muted, #999); }
+        #dataManagerModal .dm-ch-state.ok { color: #059669; background: rgba(16,185,129,.1); }
+        #dataManagerModal .dm-ch-state.err { color: #dc2626; background: rgba(239,68,68,.09); }
+        #dataManagerModal .dm-ch-state.warn { color: #b45309; background: rgba(245,158,11,.12); }
+
+        /* v3 折叠区（把频率 / 冲突 / 恢复 / GitHub 参数全收进去） */
+        #dataManagerModal .dm-fold-hd {
+            display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;
+            margin-top: 4px; padding: 8px 2px 6px; font-size: 12px; font-weight: 500;
+            color: var(--muted, #888); border-top: 1px dashed var(--card-border, #ddd);
+        }
+        #dataManagerModal .dm-fold-hd:hover { color: var(--accent, #667eea); }
+        #dataManagerModal .dm-fold-body { display: flex; flex-direction: column; gap: 8px; padding: 8px 0 2px; }
+        #dataManagerModal .dm-fold-body[hidden] { display: none; }
+        #dataManagerModal .dm-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--text, #333); }
+        #dataManagerModal .dm-row-lb { flex: 0 0 84px; font-size: 11.5px; color: var(--muted, #888); }
+        #dataManagerModal .dm-row select {
+            font-size: 12px; padding: 5px 9px; border-radius: 8px; cursor: pointer;
+            border: 1px solid var(--card-border, #ddd); background: var(--card-bg, #fff); color: var(--text, #333); outline: none;
+        }
+        #dataManagerModal .dm-row-hint { font-size: 11px; color: var(--muted, #aaa); }
+        /* 云同步里的「云端历史」按钮别拉成一整条空条子 */
+        #dataManagerModal .cloudsync-hist > .cloudsync-btn { align-self: flex-start; }
+
+        /* v3 已下线板块的残留数据 */
+        #dataManagerModal .dm-zombie {
+            display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+            margin-top: 10px; padding: 8px 10px; border-radius: 9px;
+            background: rgba(245,158,11,.07); border: 1px dashed rgba(245,158,11,.5);
+        }
+        #dataManagerModal .dm-zombie-ico { font-size: 14px; flex: 0 0 auto; }
+        #dataManagerModal .dm-zombie-tx { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; line-height: 1.45; }
+        #dataManagerModal .dm-zombie-tx b { font-size: 12px; font-weight: 600; color: var(--text, #333); }
+        #dataManagerModal .dm-zombie-tx span { font-size: 11px; color: var(--muted, #8a8072); }
+        #dataManagerModal .dm-zombie-btn {
+            flex: 0 0 auto; font-size: 11.5px; padding: 4px 11px; border-radius: 7px; cursor: pointer;
+            border: 1px solid rgba(245,158,11,.55); background: var(--card-bg, #fff); color: #b45309;
+        }
+        #dataManagerModal .dm-zombie-btn:hover { background: #f59e0b; border-color: #f59e0b; color: #fff; }
+        #dataManagerModal .dm-zombie.done { background: rgba(16,185,129,.07); border-color: rgba(16,185,129,.45); }
+        #dataManagerModal .dm-zombie.done .dm-zombie-btn { border-color: rgba(16,185,129,.55); color: #059669; }
+        #dataManagerModal .dm-zombie.done .dm-zombie-btn:hover { background: #10b981; border-color: #10b981; color: #fff; }
 
         /* 主体：两列瀑布 */
         #dataManagerModal .dm-grid { display: grid; grid-template-columns: 1.08fr 1fr; gap: 16px; align-items: start; }
@@ -1040,11 +1127,14 @@
             #dataManagerModal .dm-modal { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
             #dataManagerModal .dm-head { padding: 13px 14px 11px; }
             #dataManagerModal .dm-body { padding: 12px 12px 16px; }
-            #dataManagerModal .dm-ins { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+            #dataManagerModal .dm-ins { grid-template-columns: 1fr; gap: 8px; margin-bottom: 14px; }
             #dataManagerModal .dm-ins-tx { display: none; }
             #dataManagerModal .dm-ins-btn { width: 100%; min-height: 34px; }
             #dataManagerModal .dm-grid { grid-template-columns: 1fr; gap: 14px; }
             #dataManagerModal .dm-foot { padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0)); }
+            #dataManagerModal .dm-sync-act { width: 100%; }
+            #dataManagerModal .dm-sync-btn { flex: 1 1 auto; min-height: 40px; }
+            #dataManagerModal .dm-row-lb { flex: 0 0 100%; }
         }
 
         .data-action-card {
@@ -15829,25 +15919,34 @@ body.dark-mode .lbak-err { color: #fca5a5; }
             <div class="dm-head">
                 <div class="dm-head-tx">
                     <h3>💾 数据管理</h3>
-                    <p>你的数据有 4 道保险，下面是每道保险的状态。出事的时候，从这里能倒回去。</p>
+                    <p>云同步状态在最上面。下面是另外 3 道保险：本机自动备份、云端历史、手动导出。</p>
                 </div>
                 <button class="dm-x" onclick="closeDataManager()" title="关闭">✕</button>
             </div>
 
             <div class="dm-body">
-                <!-- 4 道保险：置顶、一眼看全（点按钮就是这道保险的动作） -->
+                <!-- v3 置顶：云同步状态（2026-11-06 老板要求「云端同步显示放最上面、显眼」）
+                     数据由 dmRenderSyncBar() 从 NikoSync.dmSummary() 拉，不在这里写死 -->
+                <section class="dm-sync" id="dmSyncBar">
+                    <span class="dm-sync-dot" id="dmSyncDot"></span>
+                    <div class="dm-sync-tx">
+                        <div class="dm-sync-t" id="dmSyncTitle">正在读取同步状态…</div>
+                        <div class="dm-sync-s" id="dmSyncSub"></div>
+                    </div>
+                    <div class="dm-sync-ch" id="dmSyncCh"></div>
+                    <div class="dm-sync-act">
+                        <button class="dm-sync-btn" onclick="dmOpenHist()">📜 云端历史</button>
+                        <button class="dm-sync-btn primary" onclick="NikoSync.doSync()">⚡ 立即同步</button>
+                    </div>
+                </section>
+
+                <!-- 3 道保险：云同步已提到上面那条状态条了 -->
                 <div class="dm-ins" id="dmInsurance">
                     <div class="dm-ins-card">
                         <div class="dm-ins-hd"><span class="dm-ins-ico">🗄</span><b>本机自动备份</b></div>
                         <div class="dm-ins-cad">自动 · 每 2 小时</div>
                         <p class="dm-ins-tx">存在<b>这台电脑</b>里，最多留 10 份。数据不对就点回退。</p>
                         <button class="dm-ins-btn" onclick="lbakRunNow()">立即备份</button>
-                    </div>
-                    <div class="dm-ins-card">
-                        <div class="dm-ins-hd"><span class="dm-ins-ico">☁️</span><b>云同步</b></div>
-                        <div class="dm-ins-cad">自动 · 几分钟一次</div>
-                        <p class="dm-ins-tx">手机 / 家里 / 公司共用同一份，连上就自己同步。</p>
-                        <button class="dm-ins-btn" onclick="NikoSync.doSync()">立即同步</button>
                     </div>
                     <div class="dm-ins-card">
                         <div class="dm-ins-hd"><span class="dm-ins-ico">📜</span><b>云端历史</b></div>
@@ -15882,37 +15981,20 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                 </div>
                 <div class="storage-check-note" id="storageCheckNote"></div>
                 <div class="storage-check-top" id="storageCheckTop" style="display:none;"></div>
+                <!-- v3：已下线板块的残留数据（知识库 / 团队看板 …）单列一行 + 一键清理 -->
+                <div class="dm-zombie" id="dmZombie" style="display:none;">
+                    <span class="dm-zombie-ico">🧹</span>
+                    <div class="dm-zombie-tx">
+                        <b>已下线板块的残留数据</b>
+                        <span id="dmZombieTx">—</span>
+                    </div>
+                    <button class="dm-zombie-btn" id="dmZombieBtn" onclick="dmPurgeDead()">清理掉</button>
+                </div>
             </div>
                         </section>
 
                         <section class="dm-sec">
-                            <div class="dm-sec-hd"><span class="dm-sec-no">2</span><h4>本机自动备份</h4></div>
-                            <p class="dm-plain">怕丢的兜底：每 2 小时自动存一份在<b>这台电脑</b>里，最多留 10 份。看着不对就点「回退」。</p>
-<div class="data-action-card lbak-card" id="lbakCard">
-    <h4>🗄 本地自动备份 <span class="lbak-badge" id="lbakBadge">读取中</span></h4>
-    <p class="lbak-note">
-        打开 NIKO 时，距上次备份满 <b>2 小时</b>就自动存一份完整数据到本机（IndexedDB + gzip）。<br>
-        正常备份保留最近 <b>10 份</b>；数据骤降 &gt;80% 的那份会被标成<b>可疑</b>，单独放异常区、不占用这 10 份名额。<br>
-        ⚠️ 只存在<b>当前这台电脑的这个浏览器</b>里 —— 不同步云端，换电脑 / 清缓存就没了（跨机请用下面的「下载备份文件」）。
-    </p>
-    <div class="lbak-head">
-        <span class="lbak-sum" id="lbakSummary">正在读取…</span>
-        <span class="lbak-acts">
-            <button class="lbak-mini" id="lbakRunBtn" onclick="lbakRunNow()">立即备份</button>
-            <button class="lbak-mini" onclick="lbakRenderPanel()">刷新</button>
-        </span>
-    </div>
-    <div class="lbak-list" id="lbakList"></div>
-    <div class="lbak-sus-wrap" id="lbakSuspects" hidden>
-        <div class="lbak-sus-hd">⚠ 异常快照区 <em>（数据骤降的那几份，留着给你对账，不占 10 份名额）</em></div>
-        <div class="lbak-list" id="lbakSusList"></div>
-    </div>
-    <div class="lbak-foot" id="lbakFoot"></div>
-</div>
-                        </section>
-
-                        <section class="dm-sec">
-                            <div class="dm-sec-hd"><span class="dm-sec-no">3</span><h4>导出一份文件 / 从文件恢复</h4></div>
+                            <div class="dm-sec-hd"><span class="dm-sec-no">2</span><h4>导出一份文件 / 从文件恢复</h4></div>
                             <p class="dm-plain">换电脑、重装、或者就想自己手上留一份时用。<b>它不自动，你得自己点。</b></p>
             <div class="data-action-card">
                 <h4>📤 导出所有数据</h4>
@@ -15963,54 +16045,36 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                     <div class="dm-col">
 
                         <section class="dm-sec">
-                            <div class="dm-sec-hd"><span class="dm-sec-no">4</span><h4>云同步</h4></div>
+                            <div class="dm-sec-hd"><span class="dm-sec-no">3</span><h4>云同步 · 连接与设置</h4></div>
                             <p class="dm-plain">手机、家里电脑、公司电脑共用同一份数据。连上之后它自己会同步，不用你管。</p>
 <div class="cloudsync-card" id="cloudsyncCard">
-        <div class="cloudsync-status">
-            <span class="cloudsync-dot" id="cloudsyncDot"></span>
-            <div class="cloudsync-status-txt">
-                <div id="cloudsyncStatusLine">检测同步环境...</div>
-                <div class="cloudsync-status-sub" id="cloudsyncStatusSub"></div>
-            </div>
-        </div>
-        <div class="cloudsync-version" id="cloudsyncVersionLine" title="当前设备加载的 NIKO 版本构建时间，每次更新自动刷新；与线上不一致时说明本机缓存了旧版">🧬 最新版本更新：<b id="cloudsyncVersionTime">—</b></div>
 
-        <div class="cloudsync-actions">
-            <button class="cloudsync-btn primary" id="cloudsyncConnectBtn" onclick="NikoSync.connect()">🔗 连接坚果云文件夹</button>
-            <button class="cloudsync-btn" id="cloudsyncSyncBtn" onclick="NikoSync.doSync()">⏳ 立即同步</button>
-            <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 从本地快照恢复</button>
-            <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="直接 HTTP 读远端坚果云 / GitHub 文件找 events（本地快照也空时用）">🌐 从远端硬拉（终极恢复）</button>
+        <!-- ① 坚果云通道：状态、说明、动作全挤在一行（不再是一个大状态块 + 一堆按钮） -->
+        <div class="dm-ch">
+            <span class="cloudsync-dot" id="cloudsyncDot"></span>
+            <div class="dm-ch-tx">
+                <b>📁 坚果云文件夹</b>
+                <span id="cloudsyncStatusSub">连接后自动检测变化并同步</span>
+            </div>
+            <span class="dm-ch-state" id="cloudsyncStatusLine">检测中…</span>
+            <button class="cloudsync-btn primary" id="cloudsyncConnectBtn" onclick="NikoSync.connect()">🔗 连接</button>
+            <button class="cloudsync-btn" id="cloudsyncSyncBtn" onclick="NikoSync.doSync()" style="display:none;">⏳ 立即同步</button>
             <button class="cloudsync-btn danger" id="cloudsyncDisconnectBtn" onclick="NikoSync.disconnect()" style="display:none;">断开</button>
         </div>
 
-        <div class="cloudsync-manual-row" style="gap:6px;">
-            <span>⏱️ 同步频率：</span>
-            <select id="cloudsyncInterval" onchange="NikoSync.setSyncInterval(this.value)"
-                style="font-size:12.5px;padding:6px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#333;outline:none;cursor:pointer;">
-            </select>
-            <span style="color:#999;font-size:11px;">本机修改仍会 3 秒内即时推送</span>
+        <!-- ② GitHub 通道 -->
+        <div class="dm-ch">
+            <span class="dm-ch-ico">🌐</span>
+            <div class="dm-ch-tx">
+                <b>GitHub 云端</b>
+                <span id="cloudsyncGhStatus">未连接 · 点「⚙ 设置」填用户名 / 仓库 / Token</span>
+            </div>
+            <span class="dm-ch-state" id="cloudsyncGhBadge">未连接</span>
+            <button class="cloudsync-btn" id="cloudsyncGhSetupBtn" onclick="dmFoldToggle('gh')">⚙ 设置</button>
         </div>
 
-        <div class="cloudsync-manual-row" style="gap:6px;">
-            <span>⚔️ 冲突策略：</span>
-            <select id="cloudsyncConflictPolicy" onchange="NikoSync.setConflictPolicy(this.value)"
-                style="font-size:12.5px;padding:6px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#333;outline:none;cursor:pointer;">
-                <option value="remote">自动用云端（推荐多设备党）</option>
-                <option value="local">自动用本地</option>
-                <option value="ask">每次弹窗问我</option>
-            </select>
-            <span style="color:#999;font-size:11px;" id="cloudsyncConflictHint">本地与云端同时改动时，不再弹窗，直接以云端为准</span>
-        </div>
-
-        <div class="cloudsync-hint" id="cloudsyncHint">
-            ① 打开坚果云客户端（或网页版），新建文件夹 <b>WorkBuddy</b><br>
-            ② 点击「连接坚果云文件夹」，选择该文件夹的<b>本地同步目录</b>（如 D:\坚果云\WorkBuddy）<br>
-            ③ 数据将写入 <b>niko_data.json</b>，由坚果云客户端自动同步到云端<br>
-            <span style="color:#ef4444;">⚠ 仅支持 Chrome / Edge 浏览器；自动同步频率可在下方「同步频率」中调整</span>
-        </div>
-
-        <div class="cloudsync-cb" id="cloudsyncGh">
-            <div class="cloudsync-cb-title">🌐 GitHub 云端同步 <span class="cloudsync-cb-tag">手机 / 多设备 · 永久免费</span></div>
+        <!-- ②-a GitHub 参数：折叠，连上之后自动收起（原来三行输入框 + 两大段说明常驻，最占地方的就是它） -->
+        <div class="dm-fold-body" id="dmFoldGh" hidden>
             <div class="cloudsync-cb-row">
                 <input type="text" id="cloudsyncGhOwner" placeholder="GitHub 用户名" spellcheck="false" />
             </div>
@@ -16022,17 +16086,14 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                 <button class="cloudsync-btn primary" id="cloudsyncGhConnectBtn" onclick="NikoSync.ghConnect()">🔗 连接</button>
                 <button class="cloudsync-btn danger" id="cloudsyncGhDisconnectBtn" onclick="NikoSync.ghDisconnect()" style="display:none;">断开</button>
             </div>
-            <div class="cloudsync-cb-status" id="cloudsyncGhStatus">未连接 · 填入用户名 / 仓库名 / Token 后点「连接」</div>
-            <div class="cloudsync-hint" id="cloudsyncGhHint">
-                📱 <b>手机同步</b>：所有设备访问<b>同一个网址</b>，填入<b>同样的 GitHub 参数</b>连接，即可双向同步全部看板数据。<br>
-                📌 全免费，无需注册任何付费服务。只需一个 GitHub 账号（免费注册）：
-                ① 新建一个<b>私有仓库</b>（Private）；② Settings → Developer settings → Personal access tokens → Generate new token，勾选 <code>repo</code> 权限；
-                ③ 把用户名、仓库名、Token 填入上方
+            <div class="cloudsync-hint">
+                📱 <b>手机同步</b>：所有设备访问<b>同一个网址</b>、填<b>同一套参数</b>，就能双向同步全部看板数据。<br>
+                📌 全免费。① 新建一个<b>私有仓库</b>（Private）；② Settings → Developer settings → Personal access tokens → Generate new token，勾 <code>repo</code> 权限；③ 把用户名、仓库名、Token 填到上面。
             </div>
         </div>
 
-        <!-- 📜 云端历史（2026-11-06 · C 方案）：GitHub 每次同步是一个 commit，等于白送一个版本库 -->
-        <div class="cloudsync-hist" id="cloudsyncHist">
+        <!-- ③ 📜 云端历史（2026-11-06 · C 方案）：GitHub 每次同步是一个 commit，等于白送一个版本库 -->
+        <div class="cloudsync-hist" id="cloudsyncHist" style="margin-top:2px;">
             <button class="cloudsync-btn" id="cloudsyncHistBtn" onclick="nikoHistToggle()">📜 云端历史 · 可回退</button>
             <div class="cloudsync-hist-body" id="cloudsyncHistBody" hidden>
                 <div class="cloudsync-hist-tip" id="cloudsyncHistTip">
@@ -16042,13 +16103,45 @@ body.dark-mode .lbak-err { color: #fca5a5; }
             </div>
         </div>
 
+        <!-- ④ 最近同步：不折叠，一眼看到同步真的在动（内容由 addLog 维护） -->
         <div class="cloudsync-log" id="cloudsyncLog">
-            <div class="cloudsync-log-title">📝 同步日志</div>
+            <div class="cloudsync-log-title">📝 最近同步</div>
             <div class="cloudsync-log-item"><span class="msg" style="color:#999;">暂无记录</span></div>
         </div>
 
-        <div class="cloudsync-manual">
-            <button class="cloudsync-manual-toggle" onclick="NikoSync.toggleManual()">🔄 手动模式（File System Access 不可用时使用）</button>
+        <!-- ⑤ 高级与恢复：频率 / 冲突策略 / 两种恢复 / 手动模式 / 坚果云接法，默认全收 -->
+        <div class="dm-fold-hd" onclick="dmFoldToggle('adv')">
+            <span id="dmFoldAdvArrow">▸</span> 高级 · 频率 / 冲突 / 恢复 / 手动
+        </div>
+        <div class="dm-fold-body" id="dmFoldAdv" hidden>
+
+            <div class="dm-row">
+                <span class="dm-row-lb">⏱️ 同步频率</span>
+                <select id="cloudsyncInterval" onchange="NikoSync.setSyncInterval(this.value)"></select>
+                <span class="dm-row-hint">本机改动仍会 3 秒内即时推送</span>
+            </div>
+
+            <div class="dm-row">
+                <span class="dm-row-lb">⚔️ 冲突策略</span>
+                <select id="cloudsyncConflictPolicy" onchange="NikoSync.setConflictPolicy(this.value)">
+                    <option value="remote">自动用云端（推荐多设备党）</option>
+                    <option value="local">自动用本地</option>
+                    <option value="ask">每次弹窗问我</option>
+                </select>
+                <span class="dm-row-hint" id="cloudsyncConflictHint">本地与云端同时改动时，不再弹窗，直接以云端为准</span>
+            </div>
+
+            <div class="dm-row">
+                <span class="dm-row-lb">🛟 数据丢了</span>
+                <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 从本地快照恢复</button>
+                <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="直接 HTTP 读远端坚果云 / GitHub 文件找 events（本地快照也空时用）">🌐 从远端硬拉（终极恢复）</button>
+                <span class="dm-row-hint">先试左边；左边也空就用右边</span>
+            </div>
+
+            <div class="dm-row">
+                <span class="dm-row-lb">🔄 手动模式</span>
+                <button class="cloudsync-manual-toggle" onclick="NikoSync.toggleManual()">浏览器不支持自动同步时用 ▾</button>
+            </div>
             <div class="cloudsync-manual-body" id="cloudsyncManualBody" style="display:none;">
                 <div class="cloudsync-manual-row">
                     <span>📤 导出：</span>
@@ -16061,7 +16154,17 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                     <input type="file" id="cloudsyncImportInput" accept=".json" onchange="NikoSync.importManualFile(this.files[0])">
                 </div>
             </div>
+
+            <div class="cloudsync-hint" id="cloudsyncHint">
+                ① 打开坚果云客户端（或网页版），新建文件夹 <b>WorkBuddy</b><br>
+                ② 点「🔗 连接」，选该文件夹的<b>本地同步目录</b>（如 D:\坚果云\WorkBuddy）<br>
+                ③ 数据写进 <b>niko_data.json</b>，由坚果云客户端自动上云<br>
+                <span style="color:#ef4444;">⚠ 仅 Chrome / Edge；File System Access 需要 https / localhost / file 打开</span>
+            </div>
+
         </div>
+
+        <div class="cloudsync-version" id="cloudsyncVersionLine" title="当前设备加载的 NIKO 版本构建时间，每次更新自动刷新；与线上不一致时说明本机缓存了旧版">🧬 最新版本更新：<b id="cloudsyncVersionTime">—</b></div>
 
         <!-- 冲突弹窗 -->
         <div class="cloudsync-conflict-mask" id="cloudsyncConflictMask" style="display:none;">
@@ -16085,16 +16188,29 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                         </section>
 
                         <section class="dm-sec">
-                            <div class="dm-sec-hd"><span class="dm-sec-no">5</span><h4>微信推送</h4></div>
-                            <p class="dm-plain">NIKO 干完活（部署完 / 习惯全完成）给你发条微信，人不在电脑前也知道。</p>
-            <div class="data-action-card" style="background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border-color:#f59e0b;">
-                <h4>📢 微信推送设置</h4>
-                <p>把关键事件（推送完成 / 测试通过 / 习惯全完成）推送到你的微信。已支持企业微信群机器人（30 秒搞定，<b>永远免费</b>）、Server 酱、WxPusher。</p>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">
-                    <button class="btn primary" onclick="closeDataManager();openPushSettings();">⚙ 打开推送设置</button>
-                    <button class="btn" onclick="closeDataManager();window.pushNotifyNow('📢 NIKO 推送测试（来自数据管理弹窗）');">📤 立即推一条</button>
-                </div>
-            </div>
+                            <div class="dm-sec-hd"><span class="dm-sec-no">4</span><h4>本机自动备份</h4></div>
+                            <p class="dm-plain">怕丢的兜底：每 2 小时自动存一份在<b>这台电脑</b>里，最多留 10 份。看着不对就点「回退」。</p>
+<div class="data-action-card lbak-card" id="lbakCard">
+    <h4>🗄 本地自动备份 <span class="lbak-badge" id="lbakBadge">读取中</span></h4>
+    <p class="lbak-note">
+        打开 NIKO 时，距上次备份满 <b>2 小时</b>就自动存一份完整数据到本机（IndexedDB + gzip）。<br>
+        正常备份保留最近 <b>10 份</b>；数据骤降 &gt;80% 的那份会被标成<b>可疑</b>，单独放异常区、不占用这 10 份名额。<br>
+        ⚠️ 只存在<b>当前这台电脑的这个浏览器</b>里 —— 不同步云端，换电脑 / 清缓存就没了（跨机请用下面的「下载备份文件」）。
+    </p>
+    <div class="lbak-head">
+        <span class="lbak-sum" id="lbakSummary">正在读取…</span>
+        <span class="lbak-acts">
+            <button class="lbak-mini" id="lbakRunBtn" onclick="lbakRunNow()">立即备份</button>
+            <button class="lbak-mini" onclick="lbakRenderPanel()">刷新</button>
+        </span>
+    </div>
+    <div class="lbak-list" id="lbakList"></div>
+    <div class="lbak-sus-wrap" id="lbakSuspects" hidden>
+        <div class="lbak-sus-hd">⚠ 异常快照区 <em>（数据骤降的那几份，留着给你对账，不占 10 份名额）</em></div>
+        <div class="lbak-list" id="lbakSusList"></div>
+    </div>
+    <div class="lbak-foot" id="lbakFoot"></div>
+</div>
                         </section>
 
                     </div>
@@ -36015,11 +36131,13 @@ function renderDayDetail() {
     }
 
     /* ---------- UI 渲染 ---------- */
+    /* v3（2026-11-06）：#cloudsyncStatusLine 从「一大块状态说明」改成通道行里的状态胶囊，
+       文案必须短（长的解释归 #cloudsyncStatusSub）。 */
     function setStatusLine(txt, cls) {
         const dot = $id('cloudsyncDot');
         const line = $id('cloudsyncStatusLine');
         if (dot) dot.className = 'cloudsync-dot' + (cls ? ' ' + cls : '');
-        if (line) line.textContent = txt;
+        if (line) { line.textContent = txt; line.className = 'dm-ch-state' + (cls ? ' ' + cls : ''); }
     }
 
     function renderUI() {
@@ -36030,8 +36148,8 @@ function renderDayDetail() {
         const sub = $id('cloudsyncStatusSub');
 
         if (state.manualOnly) {
-            setStatusLine('⚠️ 当前环境不支持自动同步，请使用手动模式', 'warn');
-            if (sub) sub.textContent = '浏览器需 Chrome/Edge 且页面在 https / localhost / file 下打开';
+            setStatusLine('手动模式', 'warn');
+            if (sub) sub.textContent = '当前浏览器不支持自动同步，用下面「手动模式」导入导出';
             if (connectBtn) connectBtn.style.display = 'none';
             if (syncBtn) { syncBtn.style.display = 'none'; }
             if (discBtn) discBtn.style.display = 'none';
@@ -36041,10 +36159,10 @@ function renderDayDetail() {
         }
 
         if (state.pendingRestore) {
-            setStatusLine('📌 点击「连接坚果云文件夹」重新授权', 'warn');
+            setStatusLine('待授权', 'warn');
             if (sub) sub.textContent = '浏览器刷新后需重新授权上次连接的文件夹';
             if (connectBtn) connectBtn.style.display = '';
-            if (connectBtn) connectBtn.textContent = '🔗 重新授权文件夹';
+            if (connectBtn) connectBtn.textContent = '🔗 重新授权';
             if (syncBtn) syncBtn.style.display = 'none';
             if (discBtn) discBtn.style.display = 'none';
             updateSidebarIndicator();
@@ -36052,18 +36170,18 @@ function renderDayDetail() {
         }
 
         if (state.connected && state.dirHandle) {
-            setStatusLine('✅ 已连接坚果云同步文件夹', 'ok');
-            if (sub) sub.textContent = `文件夹：${state.dirHandle.name} · 上次同步：${fmtTime(state.lastSyncAt)}`;
+            setStatusLine('已连接', 'ok');
+            if (sub) sub.textContent = `${state.dirHandle.name} / niko_data.json · 上次同步：${fmtTime(state.lastSyncAt)}`;
             if (connectBtn) connectBtn.style.display = 'none';
-            if (connectBtn) connectBtn.textContent = '🔗 连接坚果云文件夹';
+            if (connectBtn) connectBtn.textContent = '🔗 连接';
             if (syncBtn) syncBtn.style.display = '';
             if (discBtn) discBtn.style.display = '';
             showManual(false);
         } else {
-            setStatusLine('🔒 未连接 · 点击下方按钮连接坚果云同步文件夹', '');
+            setStatusLine('未连接', '');
             if (sub) sub.textContent = '连接后自动检测变化并同步';
             if (connectBtn) connectBtn.style.display = '';
-            if (connectBtn) connectBtn.textContent = '🔗 连接坚果云文件夹';
+            if (connectBtn) connectBtn.textContent = '🔗 连接';
             if (syncBtn) { syncBtn.style.display = 'none'; }
             if (discBtn) discBtn.style.display = 'none';
         }
@@ -36554,31 +36672,78 @@ function renderDayDetail() {
         const btn = $id('cloudsyncGhConnectBtn');
         const disc = $id('cloudsyncGhDisconnectBtn');
         const status = $id('cloudsyncGhStatus');
+        const badge = $id('cloudsyncGhBadge');
         const ownerInput = $id('cloudsyncGhOwner');
         const repoInput = $id('cloudsyncGhRepo');
         const tokenInput = $id('cloudsyncGhToken');
         if (!status) return;
         if (state.ghConnecting) {
-            status.textContent = '⏳ 正在连接 GitHub...';
+            status.textContent = '⏳ 正在验证参数…';
             status.style.color = '#f59e0b';
+            if (badge) { badge.textContent = '连接中'; badge.className = 'dm-ch-state warn'; }
             if (btn) btn.disabled = true;
         } else if (state.ghConnected) {
-            status.textContent = '✅ 已连接 GitHub（' + state.ghOwner + '/' + state.ghRepo + '）';
-            status.style.color = '#10b981';
+            status.textContent = '已连接 ' + state.ghOwner + '/' + state.ghRepo;
+            status.style.color = '';
+            if (badge) { badge.textContent = '已连接'; badge.className = 'dm-ch-state ok'; }
             if (btn) { btn.disabled = false; btn.style.display = 'none'; }
             if (disc) disc.style.display = '';
             if (ownerInput) ownerInput.disabled = true;
             if (repoInput) repoInput.disabled = true;
             if (tokenInput) tokenInput.disabled = true;
         } else {
-            status.textContent = '🔒 未连接 GitHub';
+            status.textContent = '未连接 · 点「⚙ 设置」填用户名 / 仓库 / Token';
             status.style.color = '';
+            if (badge) { badge.textContent = '未连接'; badge.className = 'dm-ch-state err'; }
             if (btn) { btn.disabled = false; btn.style.display = ''; }
             if (disc) disc.style.display = 'none';
             if (ownerInput) ownerInput.disabled = false;
             if (repoInput) repoInput.disabled = false;
             if (tokenInput) tokenInput.disabled = false;
         }
+    }
+
+    /* ===== v3：给「数据管理」顶部状态条供数的唯一入口 =====
+       老板要的是「一眼看出同步到底好不好」：色点 + 一句话 + 上一次推拉了多少 + 两个通道连没连。
+       真相源跟侧栏小绿点、右上角状态胶囊完全一致（都吃 state.lastResult / activeChannels）。 */
+    function dmWhen(iso) {
+        if (!iso) return '';
+        const t = new Date(iso).getTime();
+        if (isNaN(t)) return '';
+        const d = Math.max(0, Math.round((Date.now() - t) / 1000));
+        if (d < 60) return '刚刚';
+        if (d < 3600) return Math.round(d / 60) + ' 分钟前';
+        if (d < 86400) return Math.round(d / 3600) + ' 小时前';
+        return Math.round(d / 86400) + ' 天前';
+    }
+
+    function dmSummary() {
+        const chs = activeChannels();
+        const pills = [
+            { label: '📁 坚果云', cls: (state.connected && state.dirHandle) ? 'ok' : 'err' },
+            { label: '🌐 GitHub', cls: state.ghConnected ? 'ok' : 'err' }
+        ];
+        const r = state.lastResult || null;
+        let cls = 'warn', title = '', sub = '';
+
+        if (state.syncing) {
+            cls = 'warn'; title = '正在同步…'; sub = '和云端交换数据中，几秒钟';
+        } else if (state.manualOnly) {
+            cls = 'warn'; title = '当前是手动模式'; sub = '这个浏览器不支持自动同步，用「高级 → 手动模式」导入导出';
+        } else if (!chs.length) {
+            cls = 'err'; title = '云端还没连上'; sub = '下面「云同步 · 连接与设置」里连上坚果云或 GitHub 任意一个';
+        } else if (r) {
+            cls = 'ok';
+            title = '云同步正常 · ' + (dmWhen(state.lastSyncAt) || '刚刚同步过');
+            sub = '最近一次：推送 ' + (r.pushed || 0) + ' 项 · 拉取 ' + (r.pulled || 0) + ' 项'
+                + (r.conflicts ? ' · 冲突 ' + r.conflicts : '')
+                + (state.lastSyncAt ? '（' + fmtTime(state.lastSyncAt) + '）' : '');
+        } else {
+            cls = 'ok';
+            title = '已连接 · 还没同步过';
+            sub = '通道：' + (chs.indexOf('github') >= 0 ? 'GitHub ' : '') + (chs.indexOf('fs') >= 0 ? '坚果云' : '') + '，等下就会自己跑一轮';
+        }
+        return { cls, title, sub, pills };
     }
 
     async function ghConnect() {
@@ -36615,6 +36780,9 @@ function renderDayDetail() {
             addLog(remote ? '✅ 已连接 GitHub 云端文件' : '✅ 已连接 GitHub（首次同步将全量上传）', 'ok');
             renderUI();
             renderGhUI();
+            // v3：连上了就把参数折起来（参数本身没什么可看的，一直摊着最占地方）
+            const ghFold = $id('dmFoldGh');
+            if (ghFold) ghFold.hidden = true;
             startPolling();
             await doSync();
         } catch (e) {
@@ -37270,6 +37438,9 @@ function renderDayDetail() {
         txt.textContent = label;
         if (sub) sub.textContent = hint;
 
+        // v3：顺手把「数据管理」顶部状态条也刷一遍（同一个真相源，不许出现两套说法）
+        try { if (typeof window.dmRenderSyncBar === 'function') window.dmRenderSyncBar(); } catch (e) {}
+
         // 广播给全局右上角状态胶囊（所有板块可见）
         try {
             window.dispatchEvent(new CustomEvent('niko:sync-status', {
@@ -37479,7 +37650,8 @@ function renderDayDetail() {
         importManualFile,
         scheduleAutoPush,
         updateSidebarIndicator,
-        openDataManagerFromSidebar
+        openDataManagerFromSidebar,
+        dmSummary
     };
 
     /* ---------- 启动时把「所有通道的快照」一次迁到指纹格式 ----------
@@ -44978,6 +45150,101 @@ if(typeof window !== 'undefined'){
             return String(k).replace(/^work_calendar_/, '日历.').replace(/^niko_/, '');
         }
 
+        /* ===== v3：已下线板块的「残留数据」（2026-11-06）=====
+           板块下线（verify_merge.py 的 DISABLED_BOARDS）只是不再渲染入口和代码，浏览器里的数据一个字都没删，
+           于是它们一直混在「日历任务 17.9 万」这种活数据中间，看着像没删干净。
+           这里把「只属于已下线板块」的键挑出来单列一行 + 一个显式清理入口：
+             · 不自动删（删数据是破坏性动作，必须本人点）
+             · 点清理前先自动跑一次本机快照（lbakRunNow），留个后路
+           ⚠️ 故意不收 niko_tw_v1 / niko_tw_pending：笔记长文（推文工坊的继任者）还在用这对键，删了丢稿子。 */
+        const NIKO_DEAD_GROUPS = [
+            { board: '知识库',   keys: ['niko_knowledge', 'niko_kb_guide_dismissed', 'niko_kb_imported_refs', 'niko_knowledge_seeded'] },
+            { board: '团队看板', keys: ['niko_team_base', 'niko_team_data', 'niko_team_me', 'niko_team_roles', 'niko_team_token', 'niko_team_tone'] },
+            { board: '育儿手册', keys: ['niko_parenting_advice', 'niko_parenting_checklist', 'niko_parenting_news', 'niko_parenting_principles', 'niko_parenting_seed_version', 'niko_parenting_updated_at'] },
+            { board: '梗库',     keys: ['niko_memes', 'niko_memes_v2', 'niko_meme_recommend', 'niko_meme_taboos', 'niko_meme_updated_at', 'niko_meme_rec_updated_at', 'niko_meme_seed_version', 'niko_meme_sidebar_collapsed'] },
+            { board: '文案库',   keys: ['niko_copy_library', 'niko_copy_library_v2', 'niko_copy_recommend', 'niko_copy_rec_updated_at', 'niko_copy_seed_version', 'niko_copy_sidebar_collapsed'] }
+        ];
+
+        function nikoDeadScan() {
+            const items = []; const byBoard = {}; let total = 0;
+            NIKO_DEAD_GROUPS.forEach(function (g) {
+                let n = 0;
+                g.keys.forEach(function (k) {
+                    let v = null;
+                    try { v = localStorage.getItem(k); } catch (e) { return; }
+                    if (v === null) return;
+                    const chars = k.length + v.length;
+                    total += chars; n += chars;
+                    items.push({ key: k, board: g.board, chars: chars });
+                });
+                if (n > 0) byBoard[g.board] = n;
+            });
+            items.sort(function (a, b) { return b.chars - a.chars; });
+            return { total: total, items: items, byBoard: byBoard };
+        }
+
+        function dmPurgeDead() {
+            const s = nikoDeadScan();
+            if (!s.items.length) { alert('已经没有残留数据了。'); return; }
+            const lines = Object.keys(s.byBoard).map(function (b) { return '· ' + b + ' — ' + nikoFmtChars(s.byBoard[b]) + ' 字符'; }).join('\n');
+            if (!confirm('确定清掉这 ' + s.items.length + ' 个键吗？\n\n' + lines + '\n\n合计 ' + nikoFmtChars(s.total) + ' 字符。\n\n'
+                + '这几个板块已经下线，清完数据就真的没了（清之前我会先给本机存一份快照）。\n'
+                + '想留档就先关掉这里、点「下载备份」，再回来清。')) return;
+            try { if (typeof window.lbakRunNow === 'function') window.lbakRunNow(); } catch (e) {}
+            let done = 0;
+            s.items.forEach(function (x) { try { localStorage.removeItem(x.key); done++; } catch (e) {} });
+            window.__dmZombieDone = { n: done, chars: s.total };
+            renderStorageCheck();
+            try { if (typeof window.nikoUpdateStoreMeter === 'function') window.nikoUpdateStoreMeter(); } catch (e) {}
+        }
+        window.dmPurgeDead = dmPurgeDead;
+
+        /* ===== v3 顶部云同步状态条 =====
+           数据全部来自 NikoSync.dmSummary()：没连通道 / 正在同步 / 手动模式 / 刚同步完，各自有说法。
+           状态变化时由 NikoSync.updateSidebarIndicator() 回调这里，跟侧栏小绿点同一份真相。 */
+        function dmRenderSyncBar() {
+            const bar = document.getElementById('dmSyncBar');
+            if (!bar) return;
+            let s = null;
+            try {
+                if (window.NikoSync && typeof window.NikoSync.dmSummary === 'function') s = window.NikoSync.dmSummary();
+            } catch (e) {}
+            const dot = document.getElementById('dmSyncDot');
+            const tEl = document.getElementById('dmSyncTitle');
+            const sEl = document.getElementById('dmSyncSub');
+            const chEl = document.getElementById('dmSyncCh');
+            if (!s) {
+                if (dot) dot.className = 'dm-sync-dot warn';
+                if (tEl) tEl.textContent = '同步模块还没就绪';
+                if (sEl) sEl.textContent = '等页面加载完再看这一条';
+                if (chEl) chEl.innerHTML = '';
+                return;
+            }
+            if (dot) dot.className = 'dm-sync-dot ' + (s.cls || '');
+            if (tEl) tEl.textContent = s.title || '';
+            if (sEl) sEl.textContent = s.sub || '';
+            if (chEl) {
+                chEl.innerHTML = (s.pills || []).map(function (p) {
+                    return '<span class="dm-chip ' + (p.cls || '') + '">' + escapeHtml(p.label) + '</span>';
+                }).join('');
+            }
+        }
+        window.dmRenderSyncBar = dmRenderSyncBar;
+
+        /* v3 折叠开关：GitHub 参数 / 高级与恢复（默认全收，进来一个都不占地方） */
+        function dmFoldToggle(which) {
+            const id = which === 'gh' ? 'dmFoldGh' : (which === 'adv' ? 'dmFoldAdv' : null);
+            if (!id) return;
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.hidden = !el.hidden;
+            if (which === 'adv') {
+                const a = document.getElementById('dmFoldAdvArrow');
+                if (a) a.textContent = el.hidden ? '▸' : '▾';
+            }
+        }
+        window.dmFoldToggle = dmFoldToggle;
+
         /* 保险卡「打开历史」：展开云同步里的云端历史，并滚到它 */
         function dmOpenHist() {
             const box = document.getElementById('cloudsyncHistBody');
@@ -45006,9 +45273,12 @@ if(typeof window !== 'undefined'){
             if (leftEl) leftEl.textContent = nikoFmtChars(u.quota - u.used);
             const noteEl = document.getElementById('storageCheckNote');
             if (noteEl) { noteEl.textContent = tone.note; noteEl.className = 'storage-check-note ' + tone.cls; }
+            const dead = nikoDeadScan();
+            const deadSet = {};
+            dead.items.forEach(function (x) { deadSet[x.key] = 1; });
             const topEl = document.getElementById('storageCheckTop');
             if (topEl) {
-                const top = u.rows.slice(0, 5).filter(x => x.chars > 0);
+                const top = u.rows.filter(x => x.chars > 0 && !deadSet[x.key]).slice(0, 5);
                 if (top.length) {
                     const max = top[0].chars || 1;
                     topEl.innerHTML = top.map(x =>
@@ -45022,6 +45292,28 @@ if(typeof window !== 'undefined'){
                     topEl.style.display = 'none';
                 }
             }
+            // 已下线板块的残留数据：单列一行（不混进上面的活数据排行）
+            const zEl = document.getElementById('dmZombie');
+            if (zEl) {
+                const zTx = document.getElementById('dmZombieTx');
+                const zBtn = document.getElementById('dmZombieBtn');
+                const doneInfo = window.__dmZombieDone;
+                if (dead.items.length) {
+                    const names = Object.keys(dead.byBoard).map(function (b) { return b + ' ' + nikoFmtChars(dead.byBoard[b]); }).join(' · ');
+                    const pct = u.used ? (dead.total / u.used * 100) : 0;
+                    zEl.style.display = '';
+                    zEl.classList.remove('done');
+                    if (zTx) zTx.textContent = names + ' —— 共 ' + nikoFmtChars(dead.total) + ' 字符（占 ' + pct.toFixed(1) + '%）';
+                    if (zBtn) { zBtn.textContent = '清理掉'; zBtn.disabled = false; zBtn.style.opacity = ''; zBtn.style.cursor = ''; }
+                } else if (doneInfo) {
+                    zEl.style.display = '';
+                    zEl.classList.add('done');
+                    if (zTx) zTx.textContent = '已清理 ' + doneInfo.n + ' 个键 · 释放 ' + nikoFmtChars(doneInfo.chars) + ' 字符 —— 这几个板块下线后不会再写数据，留着只是占地方。';
+                    if (zBtn) { zBtn.textContent = '已清理'; zBtn.disabled = true; zBtn.style.opacity = '.6'; zBtn.style.cursor = 'default'; }
+                } else {
+                    zEl.style.display = 'none';
+                }
+            }
             return u;
         }
 
@@ -45029,6 +45321,7 @@ if(typeof window !== 'undefined'){
            否则它会停在 HTML 初始文案「正在读取…」上（P1 自己的 boot tick 要 4 秒后才跑）。 */
         function dmRefreshParts() {
             try { if (typeof window.lbakRenderPanel === 'function') window.lbakRenderPanel(); } catch (e) {}
+            try { dmRenderSyncBar(); } catch (e) {}
         }
         window.dmRefreshParts = dmRefreshParts;
 
@@ -46839,7 +47132,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061536";
+        window.NIKO_VERSION = "202611061611";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
