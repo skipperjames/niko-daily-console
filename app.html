@@ -12937,6 +12937,100 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
 }
 
 
+/* ===== 🗄 本地全量备份（IndexedDB · 2026-11-06 P1）=====
+   为什么必须用 IndexedDB：10 份全量约 5.4MB，localStorage 单域上限只有 5MB，装不下。
+   为什么必须分「正常区 / 异常区」：2026-11-06 的事故是「同步 4 秒把便签删光」，
+   下一次定时备份会把「空」当成正常备份存进去，再把真数据挤出 10 份轮转链 —— 备份反而帮倒忙。
+   所以：骤降 >80% 的快照标为「可疑」，进独立异常区，不占 10 份名额。 */
+.lbak-card h4 { justify-content: flex-start; flex-wrap: wrap; }
+.lbak-badge {
+    font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 20px;
+    background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe;
+}
+.lbak-badge.warn { background: #fef3c7; color: #b45309; border-color: #fcd34d; }
+.lbak-badge.bad  { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
+.lbak-note { font-size: 11.5px; line-height: 1.65; color: #8a8a96; margin: 0 0 10px; }
+.lbak-note b { color: #b45309; }
+.lbak-head {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 11.5px; color: #888; margin-bottom: 8px;
+    padding-bottom: 8px; border-bottom: 1px dashed #e5e5e5;
+}
+.lbak-head .lbak-sum { flex: 1 1 140px; min-width: 0; }
+.lbak-head .lbak-sum b { color: #333; }
+.lbak-acts { display: flex; gap: 6px; margin-left: auto; }
+.lbak-mini {
+    border: 1px solid #d8d5d0; background: #fff; color: #444;
+    font-size: 11.5px; padding: 3px 9px; border-radius: 20px; cursor: pointer;
+    line-height: 1.5; transition: all .15s;
+}
+.lbak-mini:hover { border-color: #667eea; color: #4f46e5; }
+.lbak-mini:disabled { opacity: .55; cursor: default; }
+.lbak-list { display: flex; flex-direction: column; gap: 6px; }
+.lbak-row {
+    display: flex; align-items: center; gap: 8px;
+    background: #f7f6f3; border: 1px solid #e8e6e1; border-left: 3px solid #10b981;
+    border-radius: 6px; padding: 7px 9px;
+}
+.lbak-row-main { flex: 1 1 auto; min-width: 0; }
+.lbak-row-t { font-size: 12px; font-weight: 600; color: #333; }
+.lbak-row-t .lbak-rel { font-weight: 400; color: #9a9aa4; font-size: 11px; margin-left: 4px; }
+.lbak-row-m { font-size: 11px; color: #8a8a96; margin-top: 2px; }
+.lbak-tag {
+    display: inline-block; font-size: 10px; padding: 0 5px; border-radius: 3px;
+    background: #eef2ff; color: #4f46e5; margin-left: 4px; vertical-align: 1px;
+}
+.lbak-btn {
+    flex: 0 0 auto; border: 1px solid #cbd5e1; background: #fff; color: #334155;
+    font-size: 11.5px; padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all .15s;
+}
+.lbak-btn:hover { border-color: #ef4444; color: #dc2626; background: #fff7f7; }
+.lbak-empty { font-size: 11.5px; color: #9a9aa4; padding: 10px 2px; text-align: center; }
+.lbak-err { font-size: 11.5px; color: #dc2626; line-height: 1.6; padding: 8px 2px; }
+.lbak-sus-wrap { margin-top: 10px; }
+.lbak-sus-wrap[hidden] { display: none; }
+.lbak-sus-hd {
+    display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600;
+    color: #dc2626; margin-bottom: 6px;
+}
+.lbak-sus-hd em { font-style: normal; font-weight: 400; color: #9a9aa4; }
+.lbak-row.sus { border-left-color: #ef4444; background: #fff7f7; }
+.lbak-row.sus .lbak-row-t { color: #b91c1c; }
+.lbak-why {
+    font-size: 11px; color: #b91c1c; line-height: 1.55; margin-top: 4px;
+    background: #fee2e2; border-radius: 4px; padding: 4px 6px;
+}
+.lbak-why span { display: block; }
+.lbak-foot { font-size: 10.5px; color: #a8a8b2; margin-top: 8px; line-height: 1.55; }
+body.dark-mode .lbak-note { color: #8b8b99; }
+body.dark-mode .lbak-note b { color: #fbbf24; }
+body.dark-mode .lbak-head { border-bottom-color: #333345; color: #8b8b99; }
+body.dark-mode .lbak-head .lbak-sum b { color: #e5e5ea; }
+body.dark-mode .lbak-mini { background: #2a2a3c; border-color: #3d3d52; color: #c7c7d4; }
+body.dark-mode .lbak-mini:hover { border-color: #818cf8; color: #a5b4fc; }
+body.dark-mode .lbak-row { background: #222234; border-color: #333345; border-left-color: #10b981; }
+body.dark-mode .lbak-row-t { color: #e2e2ea; }
+body.dark-mode .lbak-row-t .lbak-rel { color: #7c7c8c; }
+body.dark-mode .lbak-row-m { color: #8b8b99; }
+body.dark-mode .lbak-tag { background: #312e5c; color: #a5b4fc; }
+body.dark-mode .lbak-btn { background: #2a2a3c; border-color: #3d3d52; color: #c7c7d4; }
+body.dark-mode .lbak-btn:hover { border-color: #ef4444; color: #fca5a5; background: #2e2028; }
+body.dark-mode .lbak-row.sus { background: #2e2026; border-left-color: #ef4444; }
+body.dark-mode .lbak-row.sus .lbak-row-t { color: #fca5a5; }
+body.dark-mode .lbak-why { background: #3a2129; color: #fca5a5; }
+body.dark-mode .lbak-foot { color: #6f6f7e; }
+body.dark-mode .lbak-badge { background: #26264a; color: #a5b4fc; border-color: #3b3b6b; }
+body.dark-mode .lbak-badge.warn { background: #3a2c10; color: #fbbf24; border-color: #6b5320; }
+body.dark-mode .lbak-badge.bad  { background: #3a1f22; color: #fca5a5; border-color: #7f3b3b; }
+body.dark-mode .lbak-empty, body.dark-mode .lbak-err { color: #a1a1b0; }
+body.dark-mode .lbak-err { color: #fca5a5; }
+/* 手机：数据管理弹窗是全屏，行内要能挤下（按钮 ≥ 34px 好点） */
+@media (max-width: 768px) {
+    .lbak-head { font-size: 11px; }
+    .lbak-acts .lbak-mini { min-height: 34px; padding: 5px 12px; }
+    .lbak-btn { min-height: 34px; padding: 5px 12px; }
+    .lbak-row { padding: 8px; }
+}
 /* 桌宠 2026-09-16 下线：网页版桌宠整体移除，只保留桌面版（F:\skipper\NIKO\桌面桌宠） */
 
 /* ===== 手机端适配（<=768px：侧栏→底部Tab / 弹窗全屏 / 卡片单列） ===== */
@@ -15637,6 +15731,27 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                 <div class="storage-check-top" id="storageCheckTop" style="display:none;"></div>
             </div>
 
+            <div class="data-action-card lbak-card" id="lbakCard">
+    <h4>🗄 本地自动备份 <span class="lbak-badge" id="lbakBadge">读取中</span></h4>
+    <p class="lbak-note">
+        打开 NIKO 时，距上次备份满 <b>2 小时</b>就自动存一份完整数据到本机（IndexedDB + gzip）。<br>
+        正常备份保留最近 <b>10 份</b>；数据骤降 &gt;80% 的那份会被标成<b>可疑</b>，单独放异常区、不占用这 10 份名额。<br>
+        ⚠️ 只存在<b>当前这台电脑的这个浏览器</b>里 —— 不同步云端，换电脑 / 清缓存就没了（跨机请用下面的「下载备份文件」）。
+    </p>
+    <div class="lbak-head">
+        <span class="lbak-sum" id="lbakSummary">正在读取…</span>
+        <span class="lbak-acts">
+            <button class="lbak-mini" id="lbakRunBtn" onclick="lbakRunNow()">立即备份</button>
+            <button class="lbak-mini" onclick="lbakRenderPanel()">刷新</button>
+        </span>
+    </div>
+    <div class="lbak-list" id="lbakList"></div>
+    <div class="lbak-sus-wrap" id="lbakSuspects" hidden>
+        <div class="lbak-sus-hd">⚠ 异常快照区 <em>（数据骤降的那几份，留着给你对账，不占 10 份名额）</em></div>
+        <div class="lbak-list" id="lbakSusList"></div>
+    </div>
+    <div class="lbak-foot" id="lbakFoot"></div>
+</div>
             <div class="data-action-card">
                 <h4>📤 导出所有数据</h4>
                 <p>任务、风险、便签、日记、读书、习惯、番茄记录、竞品、买量节点、热点收藏/已读、梗库、文案库、广告情报、AI 工具、颜色与偏好 — 一键打包 JSON 备份，防清缓存丢失。</p>
@@ -17585,6 +17700,16 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261106-1315', d: '2026-11-06', at: '13:15', name: '数据多了一层本地保险：每 2 小时自动存一份，能一键倒回去',
+                items: [
+                    { sec: '💾 数据管理', t: '本机自动全量备份（每 2 小时一份，保留最近 10 份）', how: '打开 NIKO 时若距上次满 2 小时就自动存一份完整数据在本机（存 IndexedDB 并 gzip 压缩，10 份约 5.4MB）。入口在「💾 数据管理」弹窗顶部「🗄 本地自动备份」，也能点「立即备份」手动存一份', go: 'today' },
+                    { sec: '💾 数据管理', t: '数据骤降的那份会单独标红，不挤掉正常备份', how: '某块数据的条数/体积比上一份掉 80% 以上（比如便签从 100 条变 3 条），这份备份会自动被标成「可疑」放进独立异常区 —— 正常 10 份轮转一个字都不动。这样「坏数据」顶不掉「好数据」', go: 'today' },
+                    { sec: '💾 数据管理', t: '一键回退到任意一份备份，回退前先自动存当前状态', how: '在备份列表点「回退」即可。**回退前系统会先自动存一份「当前状态」**，所以回退本身不会造成损失；备份里没有的键也不会被删。回退后页面自动刷新', go: 'today' },
+                    { sec: '💾 数据管理', t: '写清楚了：这是本机备份，不同步', how: '备份只存在当前这台电脑的这个浏览器里，换电脑 / 清缓存就没了 —— 面板上直接写明，跨机还是走「下载备份文件」', go: 'today' }
+                ]
+            },
+
             {
                 v: 'b-20261103-0855', d: '2026-11-03', at: '08:55', name: '营养从健康档案里拆出来，独占一页',
                 items: [
@@ -43710,6 +43835,468 @@ if(typeof window !== 'undefined'){
 })();
 
 
+/* ===== 🗄 本地全量备份（IndexedDB · 2026-11-06 P1）=====
+   背景：2026-11-06 上午云同步把 niko_inspiration_notes 整块删光。
+   铁律：代码正确性不能当数据的最后一道防线 —— 必须有一份「能倒回去」的东西。
+   三条硬口径（别改回去）：
+     1. 存 IndexedDB 不存 localStorage —— 10 份 × gzip 540KB ≈ 5.4MB，超 localStorage 单域 5MB 上限。
+     2. 异常快照独立分区：某 key 体积/条数骤降 >80% → 标「可疑」进异常区，不占 10 份轮转名额。
+        没有这条，备份反而帮倒忙（空数据会顶掉真数据）。
+     3. 回退前先存一份「当前状态」—— 回退本身绝不可能是损失的原因。
+   本机备份、不同步（与 niko_notes_bak 同口径）：走 IndexedDB 而不是 localStorage，
+   所以云同步的键收集（遍历 localStorage.key）天然看不到它，不会跨设备串扰。 */
+(function () {
+    'use strict';
+
+    var LB_DB = 'niko_localbak';
+    var LB_STORE = 'snaps';
+    var LB_KEEP = 10;          // 正常区保留份数
+    var LB_KEEP_SUS = 20;      // 异常区保留份数（独立，不挤正常区）
+    var LB_GAP = 2 * 3600 * 1000;   // 自动备份间隔 2 小时
+    var LB_MIN_KEYS = 3;       // 少于这么多个键 = 页面还没就绪，不存（避免把空壳存成正常备份）
+    var LB_DROP = 0.2;         // 「骤降 >80%」= 现值 < 原值 × 0.2
+    // 不进备份的键：云同步自己的快照（体积大且是派生数据）+ 测试残留
+    var LB_SKIP = ['__niko_cloud_mock__', 'niko_sync_snapshot', 'niko_sync_local_snapshot'];
+    // 给用户看的键名（未列出的自动去掉前缀）
+    var LB_LABEL = {
+        'niko_inspiration_notes': '便签',
+        'work_calendar_events': '日历任务',
+        'work_calendar_risks': '风险',
+        'niko_diary_entries': '日记',
+        'niko_books': '读书',
+        'niko_book_notes': '读书笔记',
+        'niko_habits': '习惯',
+        'niko_habit_logs': '打卡记录',
+        'niko_pomodoro_logs': '番茄记录',
+        'niko_memberships': '会员',
+        'niko_investments': '投资',
+        'niko_tags': '标签',
+        'niko_knowledge': '知识库',
+        'niko_game_logs': '游戏记录',
+        'niko_indie_v1': '独立游戏雷达',
+        'niko_health_v1': '健康档案',
+        'niko_health_meal_v1': '营养打卡'
+    };
+
+    var _db = null;
+    var _booting = false;
+    var _running = false;
+
+    /* ---------- IndexedDB 基础 ---------- */
+    function lbakOpen() {
+        return new Promise(function (res, rej) {
+            if (_db) return res(_db);
+            if (!window.indexedDB) return rej(new Error('这个浏览器不支持 IndexedDB'));
+            var r;
+            try { r = indexedDB.open(LB_DB, 1); } catch (e) { return rej(e); }
+            r.onupgradeneeded = function () {
+                var db = r.result;
+                if (!db.objectStoreNames.contains(LB_STORE)) {
+                    var st = db.createObjectStore(LB_STORE, { keyPath: 'id' });
+                    st.createIndex('ts', 'ts');
+                    st.createIndex('kind', 'kind');
+                }
+            };
+            r.onsuccess = function () { _db = r.result; res(_db); };
+            r.onerror = function () { rej(r.error || new Error('IndexedDB 打不开')); };
+            r.onblocked = function () { rej(new Error('IndexedDB 被另一个标签页占用')); };
+        });
+    }
+    function lbakStore(mode) {
+        return lbakOpen().then(function (db) {
+            return db.transaction(LB_STORE, mode).objectStore(LB_STORE);
+        });
+    }
+    function lbakAll() {
+        return lbakStore('readonly').then(function (os) {
+            return new Promise(function (res, rej) {
+                var q = os.getAll();
+                q.onsuccess = function () { res(q.result || []); };
+                q.onerror = function () { rej(q.error); };
+            });
+        });
+    }
+    function lbakPut(rec) {
+        return lbakStore('readwrite').then(function (os) {
+            return new Promise(function (res, rej) {
+                var q = os.put(rec);
+                q.onsuccess = function () { res(rec); };
+                q.onerror = function () { rej(q.error); };
+            });
+        });
+    }
+    function lbakDel(id) {
+        return lbakStore('readwrite').then(function (os) {
+            return new Promise(function (res, rej) {
+                var q = os.delete(id);
+                q.onsuccess = function () { res(); };
+                q.onerror = function () { rej(q.error); };
+            });
+        });
+    }
+
+    /* ---------- 采集本机数据 ---------- */
+    // 一个键的「条数」：数组数长度、对象数顶层字段数、其它算 0（只靠体积判断）
+    function lbakCountOf(v) {
+        if (!v || (v.charAt(0) !== '[' && v.charAt(0) !== '{')) return 0;
+        try {
+            var o = JSON.parse(v);
+            if (Array.isArray(o)) return o.length;
+            if (o && typeof o === 'object') return Object.keys(o).length;
+        } catch (e) { }
+        return 0;
+    }
+    function lbakCollect() {
+        var keys = {}, stats = {}, keyCount = 0, total = 0, notes = 0, chars = 0;
+        var n = 0;
+        try { n = localStorage.length; } catch (e) { n = 0; }
+        for (var i = 0; i < n; i++) {
+            var k = null;
+            try { k = localStorage.key(i); } catch (e) { k = null; }
+            if (!k || LB_SKIP.indexOf(k) >= 0) continue;
+            var v = null;
+            try { v = localStorage.getItem(k); } catch (e) { v = null; }
+            if (v === null) continue;
+            keys[k] = v;
+            var c = lbakCountOf(v);
+            stats[k] = [v.length, c];
+            keyCount++;
+            total += c;
+            chars += v.length;
+            if (k === 'niko_inspiration_notes') notes = c;
+        }
+        return { keys: keys, stats: stats, keyCount: keyCount, totalCount: total, noteCount: notes, chars: chars };
+    }
+
+    /* ---------- gzip 压缩 / 解压 ---------- */
+    function lbakGzip(str) {
+        if (typeof CompressionStream === 'undefined') {
+            return Promise.resolve({ blob: new Blob([str], { type: 'application/json' }), enc: 'raw' });
+        }
+        try {
+            var stream = new Blob([str], { type: 'application/json' }).stream().pipeThrough(new CompressionStream('gzip'));
+            return new Response(stream).arrayBuffer().then(function (buf) {
+                return { blob: new Blob([buf], { type: 'application/gzip' }), enc: 'gzip' };
+            }).catch(function () {
+                return { blob: new Blob([str], { type: 'application/json' }), enc: 'raw' };
+            });
+        } catch (e) {
+            return Promise.resolve({ blob: new Blob([str], { type: 'application/json' }), enc: 'raw' });
+        }
+    }
+    function lbakGunzip(blob, enc) {
+        if (enc !== 'gzip' || typeof DecompressionStream === 'undefined') return blob.text();
+        try {
+            var stream = blob.stream().pipeThrough(new DecompressionStream('gzip'));
+            return new Response(stream).text();
+        } catch (e) { return blob.text(); }
+    }
+
+    /* ---------- 异常检测 ---------- */
+    function lbakLabel(k) {
+        if (LB_LABEL[k]) return LB_LABEL[k];
+        return k.replace(/^work_calendar_/, '日历.').replace(/^niko_/, '');
+    }
+    function lbakBytes(n) {
+        n = Number(n) || 0;
+        if (n < 1024) return n + ' B';
+        if (n < 1024 * 1024) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+        return (n / 1048576).toFixed(2) + ' MB';
+    }
+    // 返回 [] = 正常；非空 = 可疑原因列表
+    function lbakSuspect(prev, cur) {
+        var rs = [];
+        if (!prev || !prev.stats) return rs;
+        var pk = prev.stats;
+        for (var k in pk) {
+            if (!Object.prototype.hasOwnProperty.call(pk, k)) continue;
+            var p = pk[k] || [0, 0];
+            var c = cur.stats[k];
+            if (!c) {
+                if (p[0] >= 2000 || p[1] >= 5) {
+                    rs.push(lbakLabel(k) + ' 整块消失（原 ' + lbakBytes(p[0]) + ' / ' + p[1] + ' 条）');
+                }
+                continue;
+            }
+            if (p[1] >= 5 && c[1] < p[1] * LB_DROP) {
+                rs.push(lbakLabel(k) + ' 条数骤降 ' + p[1] + ' → ' + c[1]);
+                continue;
+            }
+            if (p[0] >= 2000 && c[0] < p[0] * LB_DROP) {
+                rs.push(lbakLabel(k) + ' 体积骤降 ' + lbakBytes(p[0]) + ' → ' + lbakBytes(c[0]));
+            }
+        }
+        if (prev.keyCount >= 20 && cur.keyCount < prev.keyCount * LB_DROP) {
+            rs.unshift('数据整体骤降（' + prev.keyCount + ' → ' + cur.keyCount + ' 个键）');
+        }
+        return rs;
+    }
+
+    /* ---------- 取一份 ---------- */
+    function lbakLatestNormal(all) {
+        var best = null;
+        for (var i = 0; i < all.length; i++) {
+            var r = all[i];
+            if (r.kind !== 'normal') continue;
+            if (!best || r.ts > best.ts) best = r;
+        }
+        return best;
+    }
+    function lbakRun(reason) {
+        // reason: 'auto' | 'manual' | 'pre'
+        return lbakOpen().then(function () { return lbakAll(); }).then(function (all) {
+            var prev = lbakLatestNormal(all);
+            if (!prev && all.length) {
+                // 全是可疑份时退回「最近一份」做对照（否则第一份正常备份无从判断）
+                for (var i = 0; i < all.length; i++) { if (!prev || all[i].ts > prev.ts) prev = all[i]; }
+            }
+            var cur = lbakCollect();
+            if (cur.keyCount < LB_MIN_KEYS) return null;   // 空壳，不存
+            var rs = lbakSuspect(prev, cur);
+            var ts = Date.now();
+            var payload = JSON.stringify({ v: 1, ts: ts, reason: reason, keys: cur.keys });
+            return lbakGzip(payload).then(function (gz) {
+                var rec = {
+                    id: 'lb_' + ts + '_' + Math.floor(Math.random() * 1e4),
+                    ts: ts,
+                    kind: rs.length ? 'suspect' : 'normal',
+                    reason: reason || 'auto',
+                    pre: reason === 'pre',
+                    keyCount: cur.keyCount,
+                    rawChars: payload.length,
+                    gzBytes: gz.blob.size,
+                    noteCount: cur.noteCount,
+                    totalCount: cur.totalCount,
+                    stats: cur.stats,
+                    reasons: rs,
+                    enc: gz.enc,
+                    blob: gz.blob
+                };
+                return lbakPut(rec).then(function () { return lbakRotate(rec); });
+            });
+        });
+    }
+    // 轮转：正常区只留最近 10 份；异常区独立留 20 份。可疑份绝不挤掉正常份。
+    function lbakRotate(rec) {
+        return lbakAll().then(function (all) {
+            var normals = [], sus = [];
+            for (var i = 0; i < all.length; i++) {
+                (all[i].kind === 'suspect' ? sus : normals).push(all[i]);
+            }
+            normals.sort(function (a, b) { return b.ts - a.ts; });
+            sus.sort(function (a, b) { return b.ts - a.ts; });
+            var jobs = [];
+            for (var j = LB_KEEP; j < normals.length; j++) jobs.push(normals[j].id);
+            for (var m = LB_KEEP_SUS; m < sus.length; m++) jobs.push(sus[m].id);
+            return jobs.reduce(function (p, id) {
+                return p.then(function () { return lbakDel(id).catch(function () { }); });
+            }, Promise.resolve()).then(function () { return rec; });
+        });
+    }
+    // 到点才备份（每次打开 + 定时兜底都走这里）
+    function lbakAutoCheck() {
+        return lbakAll().then(function (all) {
+            var last = 0;
+            for (var i = 0; i < all.length; i++) { if (all[i].ts > last) last = all[i].ts; }
+            if (last && (Date.now() - last) < LB_GAP) return null;
+            return lbakRun('auto');
+        }).catch(function (e) { return null; });
+    }
+
+    /* ---------- 回退 ---------- */
+    function lbakRestore(id, opts) {
+        opts = opts || {};
+        var ask = opts.ask !== false;
+        var reload = opts.reload !== false;
+        return lbakAll().then(function (all) {
+            var rec = null;
+            for (var i = 0; i < all.length; i++) { if (all[i].id === id) { rec = all[i]; break; } }
+            if (!rec) { if (ask) alert('找不到这份备份'); return null; }
+            if (ask) {
+                var msg = '回退到「' + lbakTime(rec.ts) + '」这份备份？\n\n'
+                    + '· 备份时间：' + new Date(rec.ts).toLocaleString('zh-CN') + '\n'
+                    + '· 压缩体积：' + lbakBytes(rec.gzBytes) + ' · ' + rec.keyCount + ' 个键 · 便签 ' + rec.noteCount + ' 条\n\n'
+                    + '回退前会自动先存一份「当前状态」，所以回退本身不会造成损失。\n'
+                    + '备份里没有的键不会被删除。回退后页面会自动刷新。';
+                if (!confirm(msg)) return null;
+            }
+            // ★ 硬口径：先存当前状态，再覆盖
+            return lbakRun('pre').then(function (pre) {
+                return lbakGunzip(rec.blob, rec.enc).then(function (txt) {
+                    var obj = null;
+                    try { obj = JSON.parse(txt); } catch (e) { throw new Error('这份备份已损坏，解不开'); }
+                    if (!obj || !obj.keys) throw new Error('这份备份内容为空');
+                    var n = 0, failed = 0;
+                    for (var k in obj.keys) {
+                        if (!Object.prototype.hasOwnProperty.call(obj.keys, k)) continue;
+                        try { localStorage.setItem(k, obj.keys[k]); n++; } catch (e) { failed++; }
+                    }
+                    return { written: n, failed: failed, pre: pre ? pre.id : null, recTs: rec.ts };
+                });
+            }).then(function (r) {
+                try { if (typeof showToast === 'function') showToast('✅ 已回退 ' + r.written + ' 个键' + (r.failed ? '（' + r.failed + ' 个写不进）' : '') + '，页面即将刷新'); } catch (e) { }
+                if (reload) setTimeout(function () { location.reload(); }, 900);
+                return r;
+            });
+        });
+    }
+    function lbakRestoreClick(id) { return lbakRestore(id, {}); }
+
+    /* ---------- 面板 ---------- */
+    function lbakTime(ts) {
+        var d = new Date(ts);
+        var p = function (x) { return String(x).length < 2 ? '0' + x : String(x); };
+        return p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+    function lbakRel(ts) {
+        var s = Math.max(0, Date.now() - ts);
+        if (s < 60 * 1000) return '刚刚';
+        if (s < 3600 * 1000) return Math.floor(s / 60000) + ' 分钟前';
+        if (s < 86400 * 1000) return Math.floor(s / 3600000) + ' 小时前';
+        return Math.floor(s / 86400000) + ' 天前';
+    }
+    function lbakEsc(s) {
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function lbakRowHtml(rec, isSus) {
+        var h = '<div class="lbak-row' + (isSus ? ' sus' : '') + '" data-id="' + lbakEsc(rec.id) + '">';
+        h += '<div class="lbak-row-main">';
+        h += '<div class="lbak-row-t">' + lbakTime(rec.ts) + '<span class="lbak-rel">· ' + lbakRel(rec.ts) + '</span>'
+            + (rec.pre ? '<span class="lbak-tag">回退前自动存</span>' : '')
+            + (rec.reason === 'manual' ? '<span class="lbak-tag">手动</span>' : '')
+            + '</div>';
+        h += '<div class="lbak-row-m">' + lbakBytes(rec.gzBytes) + ' · 便签 ' + rec.noteCount + ' · ' + rec.keyCount + ' 键</div>';
+        if (isSus && rec.reasons && rec.reasons.length) {
+            h += '<div class="lbak-why">';
+            for (var i = 0; i < rec.reasons.length && i < 4; i++) h += '<span>⚠ ' + lbakEsc(rec.reasons[i]) + '</span>';
+            h += '</div>';
+        }
+        h += '</div>';
+        h += '<button class="lbak-btn" onclick="lbakRestoreClick(\'' + lbakEsc(rec.id) + '\')">回退</button>';
+        h += '</div>';
+        return h;
+    }
+    function lbakRenderPanel() {
+        var list = document.getElementById('lbakList');
+        var susBox = document.getElementById('lbakSuspects');
+        var susList = document.getElementById('lbakSusList');
+        var sum = document.getElementById('lbakSummary');
+        var badge = document.getElementById('lbakBadge');
+        var foot = document.getElementById('lbakFoot');
+        if (!list) return Promise.resolve();
+        return lbakAll().then(function (all) {
+            var normals = [], sus = [];
+            for (var i = 0; i < all.length; i++) (all[i].kind === 'suspect' ? sus : normals).push(all[i]);
+            normals.sort(function (a, b) { return b.ts - a.ts; });
+            sus.sort(function (a, b) { return b.ts - a.ts; });
+
+            list.innerHTML = normals.length
+                ? normals.map(function (r) { return lbakRowHtml(r, false); }).join('')
+                : '<div class="lbak-empty">还没有备份 —— 满 2 小时或点「立即备份」就会存第一份</div>';
+
+            if (susBox && susList) {
+                susBox.hidden = sus.length === 0;
+                susList.innerHTML = sus.map(function (r) { return lbakRowHtml(r, true); }).join('');
+            }
+            var used = 0;
+            for (var m = 0; m < all.length; m++) used += Number(all[m].gzBytes) || 0;
+            var last = all.length ? Math.max.apply(null, all.map(function (r) { return r.ts; })) : 0;
+            if (sum) {
+                sum.innerHTML = last
+                    ? '上次 <b>' + lbakRel(last) + '</b> · 正常 <b>' + normals.length + '/' + LB_KEEP + '</b> 份'
+                      + (sus.length ? ' · 异常 <b>' + sus.length + '</b> 份' : '') + ' · 占用 <b>' + lbakBytes(used) + '</b>'
+                    : '还没有备份（页面首次打开满 2 小时，或点「立即备份」）';
+            }
+            if (badge) {
+                badge.textContent = sus.length ? ('⚠ ' + sus.length + ' 份可疑') : (normals.length ? (normals.length + ' 份可回退') : '待首次备份');
+                badge.className = 'lbak-badge' + (sus.length ? ' bad' : (normals.length ? '' : ' warn'));
+            }
+            if (foot) {
+                foot.textContent = '存储位置：本机 IndexedDB「' + LB_DB + '」· 不参与云同步 · 保留 ' + LB_KEEP + ' 份正常 + ' + LB_KEEP_SUS + ' 份异常';
+            }
+            return all;
+        }).catch(function (e) {
+            list.innerHTML = '<div class="lbak-err">读不到本机备份库：' + lbakEsc(e && e.message ? e.message : e) + '<br>（无痕模式 / 禁用了站点数据 时会出现）</div>';
+            if (badge) { badge.textContent = '不可用'; badge.className = 'lbak-badge bad'; }
+        });
+    }
+    function lbakRunNow() {
+        var btn = document.getElementById('lbakRunBtn');
+        if (btn) { btn.disabled = true; btn.textContent = '备份中…'; }
+        return lbakRun('manual').then(function (rec) {
+            if (btn) { btn.disabled = false; btn.textContent = '立即备份'; }
+            if (!rec) {
+                try { if (typeof showToast === 'function') showToast('数据还没加载完，稍等再试'); } catch (e) { }
+                return null;
+            }
+            try {
+                if (typeof showToast === 'function') {
+                    showToast(rec.kind === 'suspect'
+                        ? '⚠ 已存，但这份数据骤降被标为可疑（见异常快照区）'
+                        : '✅ 已备份 · ' + lbakBytes(rec.gzBytes) + ' · ' + rec.keyCount + ' 键');
+                }
+            } catch (e) { }
+            return lbakRenderPanel().then(function () { return rec; });
+        }).catch(function (e) {
+            if (btn) { btn.disabled = false; btn.textContent = '立即备份'; }
+            try { if (typeof showToast === 'function') showToast('❌ 备份失败：' + (e && e.message ? e.message : e)); } catch (e2) { }
+            return null;
+        });
+    }
+
+    /* ---------- 启动：打开时补一次 + 2h 定时兜底 ---------- */
+    function lbakTick() {
+        if (_running) return;
+        _running = true;
+        lbakAutoCheck().then(function (rec) {
+            _running = false;
+            if (rec) lbakRenderPanel();
+        });
+    }
+    function lbakHookOpen() {
+        if (typeof window.openDataManager === 'function' && !window.openDataManager.__lbakWrapped) {
+            var o = window.openDataManager;
+            var w = function () {
+                var r = o.apply(this, arguments);
+                try { lbakRenderPanel(); } catch (e) { }
+                return r;
+            };
+            w.__lbakWrapped = true;
+            window.openDataManager = w;
+        }
+    }
+    function lbakBoot() {
+        if (_booting) return;
+        _booting = true;
+        // 等页面把 localStorage 灌满再判断（4 秒；各板块都在 DOMContentLoaded 后才渲染）
+        setTimeout(function () { lbakHookOpen(); }, 600);
+        setTimeout(lbakTick, 4000);
+        // setInterval 只做兜底：后台标签会被节流，所以再挂一个「回到前台」的检查
+        setInterval(function () { if (!document.hidden) lbakTick(); }, LB_GAP);
+        document.addEventListener('visibilitychange', function () { if (!document.hidden) lbakTick(); });
+    }
+
+    /* ---------- 导出（onclick 属性在全局作用域找名字，必须挂 window） ---------- */
+    window.lbakRenderPanel = lbakRenderPanel;
+    window.lbakRunNow = lbakRunNow;
+    window.lbakRestore = lbakRestore;
+    window.lbakRestoreClick = lbakRestoreClick;
+    // 门禁探针（只读 / 显式传参，不改变默认行为）
+    window.__lbak = {
+        run: function (r) { return lbakRun(r || 'manual').then(function (rec) { return rec ? { id: rec.id, ts: rec.ts, kind: rec.kind, gzBytes: rec.gzBytes, keyCount: rec.keyCount, noteCount: rec.noteCount, reasons: rec.reasons, pre: !!rec.pre } : null; }); },
+        autoCheck: function () { return lbakAutoCheck().then(function (rec) { return rec ? { id: rec.id, kind: rec.kind, ts: rec.ts } : null; }); },
+        list: function () { return lbakAll().then(function (all) { return all.map(function (r) { return { id: r.id, ts: r.ts, kind: r.kind, gzBytes: r.gzBytes, keyCount: r.keyCount, noteCount: r.noteCount, reasons: r.reasons, pre: !!r.pre, reason: r.reason, enc: r.enc }; }).sort(function (a, b) { return b.ts - a.ts; }); }); },
+        clear: function () { return lbakAll().then(function (all) { return all.reduce(function (p, r) { return p.then(function () { return lbakDel(r.id); }); }, Promise.resolve()); }); },
+        restore: function (id, o) { return lbakRestore(id, o || { ask: false, reload: false }); },
+        gap: LB_GAP, keep: LB_KEEP, keepSus: LB_KEEP_SUS,
+        countOf: lbakCountOf,
+        suspect: function (p, c) { return lbakSuspect(p, c); },
+        render: function () { return lbakRenderPanel(); }
+    };
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', lbakBoot);
+    else lbakBoot();
+})();
 
         // ========== 云同步数据变更 → 跨面板刷新 ==========
         // 当云同步模块拉取数据写入 localStorage 后，派发 niko:datachanged 事件
@@ -45842,7 +46429,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061220";
+        window.NIKO_VERSION = "202611061345";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
