@@ -964,6 +964,89 @@
         body.dark-mode .theme-chip.active .theme-name { color: #a5b4fc; }
 
         /* ===== 数据管理样式 ===== */
+        /* ===== 数据管理 v2 整片布局（2026-11-06）=====
+           一屏看全 + 4 道保险置顶 + 每区一句大白话。
+           全部用主题变量（--card-bg / --card-border / --text / --muted / --accent），深浅色自动跟随，
+           不再逐个 body.dark-mode 覆盖。 */
+        #dataManagerModal .dm-modal {
+            width: min(96vw, 1520px); max-width: 96vw;
+            height: min(92vh, 1040px); max-height: 92vh;
+            padding: 0; display: flex; flex-direction: column; overflow: hidden;
+            border-radius: 16px;
+        }
+        #dataManagerModal .dm-head {
+            display: flex; align-items: flex-start; gap: 12px; flex: 0 0 auto;
+            padding: 16px 20px 13px; border-bottom: 1px solid var(--card-border, #e8e6e1);
+        }
+        #dataManagerModal .dm-head h3 { margin: 0 0 3px; font-size: 16px; }
+        #dataManagerModal .dm-head p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--muted, #888); }
+        #dataManagerModal .dm-x {
+            margin-left: auto; flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+            border: 1px solid var(--card-border, #e8e6e1); background: transparent;
+            color: var(--muted, #888); cursor: pointer; font-size: 13px; line-height: 1;
+        }
+        #dataManagerModal .dm-x:hover { border-color: #ef4444; color: #ef4444; }
+        #dataManagerModal .dm-body { flex: 1 1 auto; overflow-y: auto; padding: 14px 20px 18px; }
+
+        /* 4 道保险：置顶一行看全 */
+        #dataManagerModal .dm-ins { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 18px; }
+        #dataManagerModal .dm-ins-card {
+            display: flex; flex-direction: column; gap: 4px; padding: 12px 13px;
+            background: var(--card-bg-2, var(--card-bg, #fff));
+            border: 1px solid var(--card-border, #e8e6e1);
+            border-top: 3px solid var(--accent, #667eea); border-radius: 12px;
+        }
+        #dataManagerModal .dm-ins-hd { display: flex; align-items: center; gap: 7px; font-size: 13px; }
+        #dataManagerModal .dm-ins-ico { font-size: 15px; line-height: 1; }
+        #dataManagerModal .dm-ins-cad { font-size: 11px; font-weight: 500; color: var(--accent, #667eea); }
+        #dataManagerModal .dm-ins-tx { margin: 2px 0 9px; font-size: 11.5px; line-height: 1.55; color: var(--muted, #888); }
+        #dataManagerModal .dm-ins-tx b { color: var(--text, #333); font-weight: 500; }
+        #dataManagerModal .dm-ins-btn {
+            margin-top: auto; border: 1px solid var(--card-border, #e8e6e1); background: transparent;
+            color: var(--text, #333); font-size: 11.5px; padding: 5px 10px; border-radius: 8px; cursor: pointer;
+        }
+        #dataManagerModal .dm-ins-btn:hover { border-color: var(--accent, #667eea); color: var(--accent, #667eea); }
+
+        /* 主体：两列瀑布 */
+        #dataManagerModal .dm-grid { display: grid; grid-template-columns: 1.08fr 1fr; gap: 16px; align-items: start; }
+        #dataManagerModal .dm-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+        #dataManagerModal .dm-sec { display: flex; flex-direction: column; min-width: 0; }
+        #dataManagerModal .dm-sec-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+        #dataManagerModal .dm-sec-hd h4 { margin: 0; font-size: 13.5px; font-weight: 500; }
+        #dataManagerModal .dm-sec-no {
+            display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+            width: 18px; height: 18px; border-radius: 6px; font-size: 10.5px; color: var(--muted, #999);
+            background: var(--card-bg-2, #f2f0ec); border: 1px solid var(--card-border, #e8e6e1);
+        }
+        #dataManagerModal .dm-plain { margin: 0 0 9px; font-size: 11.5px; line-height: 1.6; color: var(--muted, #888); }
+        #dataManagerModal .dm-plain b { color: var(--text, #333); font-weight: 500; }
+        /* 分区内的老卡片去壳：结构/index 不动，只拿掉边框底色内边距；标题由分区头统一负责 */
+        #dataManagerModal .dm-sec .data-action-card,
+        #dataManagerModal .dm-sec .cloudsync-card,
+        #dataManagerModal .dm-sec .lbak-card {
+            background: transparent; border: none; padding: 0; margin: 0 0 12px; border-radius: 0;
+        }
+        #dataManagerModal .dm-sec .data-action-card:hover { background: transparent; border-color: transparent; }
+        /* 只隐藏「老卡片自己的标题」，分区头的 h4 必须留着（这里曾经写宽了，把分区名也吞掉） */
+        #dataManagerModal .dm-sec .data-action-card h4,
+        #dataManagerModal .dm-sec .storage-check h4,
+        #dataManagerModal .dm-sec .lbak-card h4 { display: none; }
+        #dataManagerModal .dm-sec .lbak-note { display: none; }
+        #dataManagerModal .dm-foot {
+            flex: 0 0 auto; display: flex; justify-content: flex-end; gap: 8px;
+            padding: 11px 20px; border-top: 1px solid var(--card-border, #e8e6e1);
+        }
+        @media (max-width: 900px) {
+            #dataManagerModal .dm-modal { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+            #dataManagerModal .dm-head { padding: 13px 14px 11px; }
+            #dataManagerModal .dm-body { padding: 12px 12px 16px; }
+            #dataManagerModal .dm-ins { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+            #dataManagerModal .dm-ins-tx { display: none; }
+            #dataManagerModal .dm-ins-btn { width: 100%; min-height: 34px; }
+            #dataManagerModal .dm-grid { grid-template-columns: 1fr; gap: 14px; }
+            #dataManagerModal .dm-foot { padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0)); }
+        }
+
         .data-action-card {
             background: #faf9f7;
             border: 1px solid #e8e6e1;
@@ -15740,12 +15823,52 @@ body.dark-mode .lbak-err { color: #fca5a5; }
         </div>
     </div>
 
-    <!-- 数据管理弹窗 -->
+    <!-- 数据管理弹窗（2026-11-06 v2：整片布局 · 4 道保险置顶 · 每区一句大白话） -->
     <div class="modal-mask" id="dataManagerModal" data-close-fn="closeDataManager">
-        <div class="modal" style="width:460px;">
-            <h3>💾 数据管理</h3>
+        <div class="modal dm-modal">
+            <div class="dm-head">
+                <div class="dm-head-tx">
+                    <h3>💾 数据管理</h3>
+                    <p>你的数据有 4 道保险，下面是每道保险的状态。出事的时候，从这里能倒回去。</p>
+                </div>
+                <button class="dm-x" onclick="closeDataManager()" title="关闭">✕</button>
+            </div>
 
-            <!-- 本机存储体检（2026-10-16）：用量 / 上限 / 还能存多少 + 最占地方的几个键 -->
+            <div class="dm-body">
+                <!-- 4 道保险：置顶、一眼看全（点按钮就是这道保险的动作） -->
+                <div class="dm-ins" id="dmInsurance">
+                    <div class="dm-ins-card">
+                        <div class="dm-ins-hd"><span class="dm-ins-ico">🗄</span><b>本机自动备份</b></div>
+                        <div class="dm-ins-cad">自动 · 每 2 小时</div>
+                        <p class="dm-ins-tx">存在<b>这台电脑</b>里，最多留 10 份。数据不对就点回退。</p>
+                        <button class="dm-ins-btn" onclick="lbakRunNow()">立即备份</button>
+                    </div>
+                    <div class="dm-ins-card">
+                        <div class="dm-ins-hd"><span class="dm-ins-ico">☁️</span><b>云同步</b></div>
+                        <div class="dm-ins-cad">自动 · 几分钟一次</div>
+                        <p class="dm-ins-tx">手机 / 家里 / 公司共用同一份，连上就自己同步。</p>
+                        <button class="dm-ins-btn" onclick="NikoSync.doSync()">立即同步</button>
+                    </div>
+                    <div class="dm-ins-card">
+                        <div class="dm-ins-hd"><span class="dm-ins-ico">📜</span><b>云端历史</b></div>
+                        <div class="dm-ins-cad">自动 · 每同步一次</div>
+                        <p class="dm-ins-tx">云端每个版本都留着，能翻到任一时刻再拉回来。</p>
+                        <button class="dm-ins-btn" onclick="dmOpenHist()">打开历史</button>
+                    </div>
+                    <div class="dm-ins-card">
+                        <div class="dm-ins-hd"><span class="dm-ins-ico">⬇</span><b>手动导出</b></div>
+                        <div class="dm-ins-cad">你点才有</div>
+                        <p class="dm-ins-tx">换电脑 / 重装时用。下载一个文件，以后拖回来。</p>
+                        <button class="dm-ins-btn" onclick="exportAllData()">下载备份</button>
+                    </div>
+                </div>
+
+                <div class="dm-grid">
+                    <div class="dm-col">
+
+                        <section class="dm-sec">
+                            <div class="dm-sec-hd"><span class="dm-sec-no">1</span><h4>这台电脑能装多少</h4></div>
+                            <p class="dm-plain">数据存在这台电脑的浏览器里，这里是它的“肚子”。没满就随便用，满了会存不进新东西。</p>
             <div class="storage-check" id="storageCheck">
                 <div class="storage-check-head">
                     <h4>📊 本机存储</h4>
@@ -15760,8 +15883,12 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                 <div class="storage-check-note" id="storageCheckNote"></div>
                 <div class="storage-check-top" id="storageCheckTop" style="display:none;"></div>
             </div>
+                        </section>
 
-            <div class="data-action-card lbak-card" id="lbakCard">
+                        <section class="dm-sec">
+                            <div class="dm-sec-hd"><span class="dm-sec-no">2</span><h4>本机自动备份</h4></div>
+                            <p class="dm-plain">怕丢的兜底：每 2 小时自动存一份在<b>这台电脑</b>里，最多留 10 份。看着不对就点「回退」。</p>
+<div class="data-action-card lbak-card" id="lbakCard">
     <h4>🗄 本地自动备份 <span class="lbak-badge" id="lbakBadge">读取中</span></h4>
     <p class="lbak-note">
         打开 NIKO 时，距上次备份满 <b>2 小时</b>就自动存一份完整数据到本机（IndexedDB + gzip）。<br>
@@ -15782,6 +15909,11 @@ body.dark-mode .lbak-err { color: #fca5a5; }
     </div>
     <div class="lbak-foot" id="lbakFoot"></div>
 </div>
+                        </section>
+
+                        <section class="dm-sec">
+                            <div class="dm-sec-hd"><span class="dm-sec-no">3</span><h4>导出一份文件 / 从文件恢复</h4></div>
+                            <p class="dm-plain">换电脑、重装、或者就想自己手上留一份时用。<b>它不自动，你得自己点。</b></p>
             <div class="data-action-card">
                 <h4>📤 导出所有数据</h4>
                 <p>任务、风险、便签、日记、读书、习惯、番茄记录、竞品、买量节点、热点收藏/已读、梗库、文案库、广告情报、AI 工具、颜色与偏好 — 一键打包 JSON 备份，防清缓存丢失。</p>
@@ -15815,8 +15947,24 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                 </div>
                 <button class="btn primary" onclick="exportAllData()" style="width:100%;">📥 下载备份文件</button>
             </div>
+            <div class="data-action-card">
+                <h4>📥 导入数据</h4>
+                <p>从之前导出的 JSON 文件恢复所有数据。导入将<span style="color:#ef4444;font-weight:600;">完全覆盖</span>当前数据，请谨慎操作。</p>
+                <div class="file-drop-zone" id="fileDropZone" onclick="document.getElementById('importFileInput').click()">
+                    <div class="drop-icon">📂</div>
+                    <div class="drop-text">点击选择文件或拖拽到此处</div>
+                    <div class="drop-hint">支持 .json 格式</div>
+                </div>
+                <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="handleImportFile(event)">
+                <div id="importPreviewArea"></div>
+                        </section>
 
-            <!-- 坚果云同步（云同步.html 注入） -->
+                    </div>
+                    <div class="dm-col">
+
+                        <section class="dm-sec">
+                            <div class="dm-sec-hd"><span class="dm-sec-no">4</span><h4>云同步</h4></div>
+                            <p class="dm-plain">手机、家里电脑、公司电脑共用同一份数据。连上之后它自己会同步，不用你管。</p>
 <div class="cloudsync-card" id="cloudsyncCard">
         <div class="cloudsync-status">
             <span class="cloudsync-dot" id="cloudsyncDot"></span>
@@ -15934,7 +16082,11 @@ body.dark-mode .lbak-err { color: #fca5a5; }
             </div>
         </div>
     </div>
+                        </section>
 
+                        <section class="dm-sec">
+                            <div class="dm-sec-hd"><span class="dm-sec-no">5</span><h4>微信推送</h4></div>
+                            <p class="dm-plain">NIKO 干完活（部署完 / 习惯全完成）给你发条微信，人不在电脑前也知道。</p>
             <div class="data-action-card" style="background:linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);border-color:#f59e0b;">
                 <h4>📢 微信推送设置</h4>
                 <p>把关键事件（推送完成 / 测试通过 / 习惯全完成）推送到你的微信。已支持企业微信群机器人（30 秒搞定，<b>永远免费</b>）、Server 酱、WxPusher。</p>
@@ -15943,22 +16095,13 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                     <button class="btn" onclick="closeDataManager();window.pushNotifyNow('📢 NIKO 推送测试（来自数据管理弹窗）');">📤 立即推一条</button>
                 </div>
             </div>
+                        </section>
 
-            <div class="data-action-card">
-                <h4>📥 导入数据</h4>
-                <p>从之前导出的 JSON 文件恢复所有数据。导入将<span style="color:#ef4444;font-weight:600;">完全覆盖</span>当前数据，请谨慎操作。</p>
-                <div class="file-drop-zone" id="fileDropZone" onclick="document.getElementById('importFileInput').click()">
-                    <div class="drop-icon">📂</div>
-                    <div class="drop-text">点击选择文件或拖拽到此处</div>
-                    <div class="drop-hint">支持 .json 格式</div>
+                    </div>
                 </div>
-                <input type="file" id="importFileInput" accept=".json" style="display:none;" onchange="handleImportFile(event)">
-                <div id="importPreviewArea"></div>
             </div>
 
-            <div class="modal-footer">
-                <button class="btn" onclick="closeDataManager()">关闭</button>
-            </div>
+            <div class="dm-foot"><button class="btn" onclick="closeDataManager()">关闭</button></div>
         </div>
     </div>
 
@@ -17741,6 +17884,15 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         //   items = 每条 { sec 板块, t 干了什么, how 怎么用, go 跳到哪个页面 }
         // sec 是给人看的板块名，go 是 switchPage() 的页面 key（notes / plan / diary / …）。
         const NIKO_UPDATE_FEED = [
+            {
+                v: 'b-20261106-1540', d: '2026-11-06', at: '15:40', name: '数据管理重做：一整片铺满 + 4 道保险摆到最上面 + 每块都讲人话',
+                items: [
+                    { sec: '💾 数据管理', t: '不再是窄长条，改成铺满整屏的一整片', how: '以前是 460px 宽的窄条往下滑 6 个区块，现在铺到 1520px、左右两列，一屏基本看全。手机上仍是整屏单列，保险卡排成 2×2', go: 'today' },
+                    { sec: '💾 数据管理', t: '「4 道保险」摆到最上面，一眼看清谁管什么', how: '本机自动备份 / 云同步 / 云端历史 / 手动导出，四张卡横排在最顶上，每张写着「多久一次」和「出事怎么办」，卡上直接就是这道保险的按钮（立即备份 / 立即同步 / 打开历史 / 下载备份）', go: 'today' },
+                    { sec: '💾 数据管理', t: '每个区块都换成大白话，英文键名也翻译了', how: '比如「数据存在这台电脑的浏览器里，这里是它的肚子」「它不自动，你得自己点」；存储体检里 work_calendar_events 这类键名一律显示成「日历任务」「便签历史版本」「知识库」这种人话', go: 'today' }
+                ]
+            },
+
             {
                 v: 'b-20261106-1445', d: '2026-11-06', at: '14:45', name: '打开快了 17 倍 + 云端历史能倒回去 + 删数据被拦',
                 items: [
@@ -44786,6 +44938,57 @@ if(typeof window !== 'undefined'){
             return { color: '#10b981', cls: '', note: '宽裕。按目前的记录节奏，短期内不用管。' };
         }
 
+        /* 数据管理 v2（2026-11-06）：把 localStorage 的英文键名翻译成人话。
+           没登记的键原样显示（去掉 niko_ / work_calendar_ 前缀，别让它看起来像乱码）。 */
+        const NIKO_KEY_LABEL = {
+            'work_calendar_events': '日历任务',
+            'work_calendar_risks': '风险',
+            'niko_inspiration_notes': '便签',
+            'niko_notes_bak': '便签上一版备份',
+            'niko_note_hist': '便签历史版本',
+            'niko_diary_entries': '日记',
+            'niko_books': '读书',
+            'niko_book_notes': '读书笔记',
+            'niko_book_logs': '阅读日志',
+            'niko_habits': '习惯',
+            'niko_habit_logs': '打卡记录',
+            'niko_pomodoro_logs': '番茄记录',
+            'niko_knowledge': '知识库',
+            'niko_team_base': '团队看板（基础）',
+            'niko_team_data': '团队看板（数据）',
+            'niko_memberships': '会员',
+            'niko_game_logs': '游戏记录',
+            'niko_health_v1': '健康档案',
+            'niko_tags': '标签',
+            'niko_indie_v1': '独立游戏雷达',
+            'niko_ai_models': 'AI 模型库',
+            'niko_ai_ranks': 'AI 排行',
+            'niko_ai_tools': 'AI 工具',
+            'niko_book_recommend': '读书推荐',
+            'niko_market_nodes': '买量节点',
+            'niko_meme_recommend': '梗库推荐',
+            'niko_hot_cloud': '热点云端缓存',
+            'niko_tw_v1': '推文工坊',
+            'niko_inbox': '收件箱',
+            'niko_plan_day_order': '计划排序',
+            'niko_push_history': '推送记录'
+        };
+        function nikoKeyLabel(k) {
+            if (NIKO_KEY_LABEL[k]) return NIKO_KEY_LABEL[k];
+            return String(k).replace(/^work_calendar_/, '日历.').replace(/^niko_/, '');
+        }
+
+        /* 保险卡「打开历史」：展开云同步里的云端历史，并滚到它 */
+        function dmOpenHist() {
+            const box = document.getElementById('cloudsyncHistBody');
+            if (box && box.hidden && typeof window.nikoHistToggle === 'function') {
+                try { window.nikoHistToggle(); } catch (e) {}
+            }
+            const el = document.getElementById('cloudsyncHist');
+            if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+        window.dmOpenHist = dmOpenHist;
+
         function renderStorageCheck() {
             const u = nikoStoreUsage();
             const pctEl = document.getElementById('storageCheckPct');
@@ -44810,7 +45013,7 @@ if(typeof window !== 'undefined'){
                     const max = top[0].chars || 1;
                     topEl.innerHTML = top.map(x =>
                         '<div class="storage-top-row">' +
-                        '<span class="storage-top-name">' + escapeHtml(x.key) + '</span>' +
+                        '<span class="storage-top-name">' + escapeHtml(nikoKeyLabel(x.key)) + '</span>' +
                         '<span class="storage-top-bar"><i style="width:' + Math.max(2, Math.round(x.chars / max * 100)) + '%"></i></span>' +
                         '<span class="storage-top-v">' + nikoFmtChars(x.chars) + '</span>' +
                         '</div>').join('');
@@ -44821,6 +45024,13 @@ if(typeof window !== 'undefined'){
             }
             return u;
         }
+
+        /* 数据管理 v2：打开弹窗时把「本机自动备份」也刷一次，
+           否则它会停在 HTML 初始文案「正在读取…」上（P1 自己的 boot tick 要 4 秒后才跑）。 */
+        function dmRefreshParts() {
+            try { if (typeof window.lbakRenderPanel === 'function') window.lbakRenderPanel(); } catch (e) {}
+        }
+        window.dmRefreshParts = dmRefreshParts;
 
         /* 侧栏入口预警（2026-10-16 方案 A，取代旧小圆点）：不新增浮动元素，
            直接在「💾 数据管理」行内画进度条 + 百分比，口径复用 nikoStoreTone()，
@@ -44882,6 +45092,7 @@ if(typeof window !== 'undefined'){
         function openDataManager() {
             document.getElementById('dataManagerModal').classList.add('show');
             renderStorageCheck();
+            dmRefreshParts();   // 2026-11-06 v2：顺手刷「本机自动备份」，别停在「正在读取…」
             nikoStoreBadge();   // 侧栏那条进度条跟弹窗同口径，顺手刷一次
             document.getElementById('exportTaskCount').textContent = dataItemCount('work_calendar_events', []);
             document.getElementById('exportRiskCount').textContent = dataItemCount('work_calendar_risks', []);
@@ -46628,7 +46839,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061442";
+        window.NIKO_VERSION = "202611061536";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
