@@ -9228,6 +9228,28 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-card-content.expanded { max-height: none; }
         .nb-card-content.expanded::after { display: none; }
         body.dark-mode .nb-card-content { color: #dcdcea; }
+        /* ===== 2026-11-06 素材卡（方案 B）：正文完全不在墙上渲染，只留标题 + 字数 + 一键复制 =====
+           老板原话：「我不需要看里面的内容，每次用到只是需要一键复制就行」。
+           ⇒ 这类卡（UE 节点 T3D、长代码、配置串）在墙上永远折叠成一张「资料卡」，
+             复制只复制正文 n.content（标题不掺进去）。 */
+        .nb-card.nb-material { padding: 12px 13px 9px; }
+        .nb-mat-hd { display: flex; align-items: flex-start; gap: 8px; }
+        .nb-mat-ico { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; background: var(--ntag); color: #fff; flex-shrink: 0; opacity: .92; }
+        .nb-mat-tt { font-size: 13.5px; font-weight: 800; line-height: 1.35; color: #2b2b3a; flex: 1; min-width: 0; word-break: break-word; }
+        body.dark-mode .nb-mat-tt { color: #e6e6f2; }
+        .nb-mat-meta { font-size: 10.5px; color: rgba(0,0,0,.42); margin: 5px 0 9px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+        body.dark-mode .nb-mat-meta { color: #6b6b85; }
+        .nb-mat-meta em { font-style: normal; color: var(--ntag); font-weight: 700; }
+        .nb-copy-big { width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--ntag); background: transparent; color: var(--ntag); font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s; font-family: inherit; }
+        @media (hover: hover) { .nb-copy-big:hover { background: var(--ntag); color: #fff; } }
+        .nb-copy-big.done { background: #10b981 !important; border-color: #10b981 !important; color: #fff !important; }
+        /* 编辑器：标题输入（便签一直没有标题字段，2026-11-06 补上） */
+        .nb-ed-titlewrap { flex: 0 0 auto; margin-bottom: 8px; }
+        .nb-ed-title { width: 100%; border: none; border-bottom: 1px dashed rgba(127,127,127,.35); background: transparent; color: #2b2b3a; font-size: 18px; font-weight: 800; padding: 2px 2px 8px; outline: none; font-family: inherit; box-sizing: border-box; }
+        body.dark-mode .nb-ed-title { color: #e9e9f5; }
+        .nb-ed-title::placeholder { font-weight: 500; font-size: 14px; color: #9aa0b4; }
+        .nb-ed-title:focus { border-bottom-color: #667eea; }
+        .nb-ed-titletip { font-size: 11px; color: #9aa0b4; margin-top: 5px; line-height: 1.5; }
         .nb-card-tag { font-size: 10px; font-weight: 600; color: var(--ntag); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 42%; }
         .nb-card-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 6px; border-top: 1px dashed rgba(0,0,0,.10); }
         body.dark-mode .nb-card-footer { border-top-color: #2c2c3d; }
@@ -10127,6 +10149,8 @@ body.dark-mode .indie-mvp { background:#2a2312; border-color:#5c4418; color:#fcd
         .nb-md > *:first-child, .nb-md-inner > *:first-child { margin-top: 0 !important; }
         .nb-md > *:last-child, .nb-md-inner > *:last-child { margin-bottom: 0 !important; }
         .nb-md h1 { font-size: 19px; font-weight: 700; margin: 14px 0 8px; }
+        /* 2026-11-06 便签标题：详情页顶部大字，比 h1 再重一档，与正文拉开层次 */
+        .nb-md-title { font-size: 20px; font-weight: 800; line-height: 1.35; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid rgba(127,127,127,.22); color: inherit; word-break: break-word; }
         .nb-md h2 { font-size: 16.5px; font-weight: 700; margin: 13px 0 7px; }
         .nb-md h3 { font-size: 15px; font-weight: 700; margin: 12px 0 6px; }
         .nb-md h4, .nb-md h5, .nb-md h6 { font-size: 14.5px; font-weight: 700; margin: 11px 0 6px; }
@@ -15381,6 +15405,10 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
                         <div class="be-tog"><span class="k">📮 时间胶囊</span><span class="be-caps" id="capsuleChipModal" onclick="cycleCapsulePick()" title="密封这枚便签，寄给未来的自己">⏳ 寄给未来</span></div>
                         <div class="be-tog"><span class="k">🧠 参与复习</span><span class="be-sw" id="nbEdRev" onclick="nbEdToggleRev()"></span></div>
                         <div id="nbEdRevHint" style="font-size:11px;color:#9aa0b4;line-height:1.5;margin:2px 0 0;"></div>
+                        <!-- 2026-11-06 素材卡：存「拿来复制的东西」（UE 节点 T3D / 长代码 / 配置串），
+                             墙上不渲染正文，只留名字 + 字数 + 一键复制；同时自动退出早读/复习/摇一张。 -->
+                        <div class="be-tog" style="margin-top:8px;"><span class="k">📋 素材卡</span><span class="be-sw" id="nbEdMat" onclick="nbEdToggleMat()"></span></div>
+                        <div id="nbEdMatHint" style="font-size:11px;color:#9aa0b4;line-height:1.5;margin:2px 0 0;"></div>
                     </div>
                     <!-- 2026-10-12 #132/#144：归入某个模块卡 —— 选完之后，父便签在墙上变成「一摞」，可以点进去看子卡 -->
                     <div class="be-sec" id="nbEdParentSec">
@@ -15411,6 +15439,12 @@ body.dark-mode .cloudsync-version b { color: #a5b4fc; }
             </aside>
             <section class="be-col be-ed" id="nbEdColBody">
                 <div class="be-edin">
+                    <!-- 2026-11-06 便签标题：便签一直只有正文、没有标题字段（墙上靠「首行升格」凑），
+                         素材卡必须有个名字才扫得动，所以补一个真正的标题输入。留空 = 沿用旧的「首行当标题」。 -->
+                    <div class="nb-ed-titlewrap">
+                        <input type="text" class="nb-ed-title" id="nbEdTitle" maxlength="60" placeholder="标题（选填 · 留空就用正文首行）" oninput="nbEdTitleInput()" autocomplete="off">
+                        <div class="nb-ed-titletip" id="nbEdTitleTip">💡 一键复制只复制下面的正文，标题不会跟着被复制。</div>
+                    </div>
                     <div class="be-trow">
                         <!-- 2026-10-10 按钮归类：日常 / UE / 后端 三模式。切换只影响「专属围栏」按钮，基础格式始终在 -->
                         <span class="nb-mtabs" id="nbMTabs">
@@ -30173,6 +30207,9 @@ function renderDayDetail() {
             const owner = (!nbModule && nbParentNote(n)) ? nbOwnerPill(n) : '';
             // 2026-10-12 #194 版本标
             const verPill = String(n.ver || '').trim() ? '<span class="nb-ver-pill" title="这一版的版本号">' + escapeHtml(String(n.ver).trim()) + '</span>' : '';
+            // 2026-11-06 素材卡：正文完全不在墙上渲染（省高度 + 不浪费渲染），只留名字 / 字数 / 一键复制。
+            //   老化那套（泛黄、卷角、落尘）对它无意义 —— 素材不「养」，所以整个 bypass。
+            if (n.material) return nbMaterialCardHtml(n, { tag, sel, flags, hitCls, owner, verPill });
             // 2026-10-12 #180 换封面：模块卡的脸可以由某张子卡来当
             const cover = isMod ? nbCoverOf(n, kids) : null;
             const isModCls = (isMod ? ' nb-stack-card' : '');
@@ -30182,11 +30219,16 @@ function renderDayDetail() {
             //   换封面（模块卡）时不拆，直接用封面那张的正文。
             let cardTitle = '', cardBody = cover ? cover.txt : plain;
             if (!cover) {
-                const nl = plain.indexOf('\n');
-                if (nl > 0) {
-                    const t = plain.slice(0, nl).trim();
-                    const rest = plain.slice(nl + 1).replace(/^\s*\n+/, '');
-                    if (t && rest.trim()) { cardTitle = t; cardBody = rest; }
+                // 2026-11-06：有显式标题 → 标题就是标题，正文原样全给（不再吃掉首行）
+                if (String(n.title || '').trim()) {
+                    cardTitle = String(n.title).trim();
+                } else {
+                    const nl = plain.indexOf('\n');
+                    if (nl > 0) {
+                        const t = plain.slice(0, nl).trim();
+                        const rest = plain.slice(nl + 1).replace(/^\s*\n+/, '');
+                        if (t && rest.trim()) { cardTitle = t; cardBody = rest; }
+                    }
                 }
             }
             return `<div class="nb-card ${n.pinned ? 'pinned' : ''} ${sel ? 'selected' : ''}${agedCls}${fresh ? ' nb-fresh' : ''}${slim ? ' nb-slim' : ''}${isModCls}${hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
@@ -30205,6 +30247,7 @@ function renderDayDetail() {
                     ${fresh ? '<span class="nb-fresh-mark" title="最近被翻过，保持崭新">🌿</span>' : ''}
                     ${ageD >= 14 ? `<span class="nb-dust" title="拂尘 · 恢复活力（刷新时间戳）" onclick="nbDust('${n.id}',event)">🕸</span>` : ''}
                     <div class="nb-card-actions nb-ca-main">
+                        <button class="nb-icon-btn" title="复制正文（标题不掺进去）" onclick="nbCopyNote('${n.id}',event)">📋</button>
                         <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
                         <button class="nb-icon-btn" title="编辑" onclick="openNoteModal('${n.id}',null,event)">✏️</button>
                         <button class="nb-icon-btn" title="转为日历任务" onclick="nbConvert('${n.id}',event)">🗓</button>
@@ -30215,13 +30258,51 @@ function renderDayDetail() {
             </div>`;
         }
 
+        // 2026-11-06 素材卡卡面（方案 B）：没有正文，只有「名字 + 字数行数 + 一个大按钮」。
+        // 复制走 nbCopyNote —— 只复制正文，标题不掺进去。
+        // 「✓ 已复制」不能只靠改 DOM 文案：便签墙随时会整块重渲染（实测 1s 内就还原了），
+        // 所以状态挂在 nbCopiedFlash 上，重渲染后按钮依然是「✓ 已复制」。
+        let nbCopiedFlash = { id: null, at: 0 };
+        function nbCopyFlashOn(id) { return nbCopiedFlash.id === id && (Date.now() - nbCopiedFlash.at) < 1500; }
+        function nbMaterialCardHtml(n, o) {
+            const tag = o.tag;
+            const body = String(n.content || '');
+            const title = String(n.title || '').trim() || nbGuessTitle(body);
+            const flash = nbCopyFlashOn(n.id);
+            return `<div class="nb-card nb-material ${n.pinned ? 'pinned' : ''} ${o.sel ? 'selected' : ''}${o.hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
+                ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
+                ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
+                <div class="nb-flags">${o.flags}</div>
+                <div class="nb-mat-hd"><div class="nb-mat-ico">◧</div><div class="nb-mat-tt">${escapeHtml(title)}</div></div>
+                <div class="nb-mat-meta"><span><em>${body.length.toLocaleString()}</em> 字</span><span>${body.split('\n').length} 行</span><span>${formatNoteTime(n.createdAt)}</span>${o.verPill}</div>
+                <button class="nb-copy-big${flash ? ' done' : ''}" data-note-id="${n.id}" title="只复制正文 · 标题不会跟着复制" onclick="nbCopyNote('${n.id}',event)">${flash ? '✓ 已复制' : '📋 一键复制'}</button>
+                <div class="nb-card-footer">
+                    <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${o.owner}
+                    <span class="nb-card-time" style="flex:1;">双击看全文</span>
+                    <div class="nb-card-actions nb-ca-main">
+                        <button class="nb-icon-btn" title="${n.pinned ? '取消置顶' : '置顶'}" onclick="nbPin('${n.id}',event)">${n.pinned ? '📍' : '📌'}</button>
+                        <button class="nb-icon-btn" title="编辑" onclick="openNoteModal('${n.id}',null,event)">✏️</button>
+                        <button class="nb-icon-btn" title="归档" onclick="nbArchive('${n.id}',event)">📦</button>
+                        <button class="nb-icon-btn danger" title="删除（进回收站）" onclick="nbDelete('${n.id}',event)">🗑</button>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        // 时间线 / 列表里的一行字：素材卡显示「名字 · N 字」，普通便签有标题就「标题 · 正文」
+        function nbNoteLabel(n) {
+            const t = String(n.title || '').trim();
+            if (n.material) return '◧ ' + (t || nbGuessTitle(n.content)) + ' · ' + String(n.content || '').length.toLocaleString() + ' 字';
+            return t ? t + ' · ' + nbPlain(n.content) : nbPlain(n.content);
+        }
+
         function nbTlItemHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const sel = nbSelected.has(n.id);
             return `<div class="nb-tl-item ${sel ? 'selected' : ''}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check" style="position:static;">✓</div>' : ''}
                 <span class="nb-tl-tag" style="background:${tag.chipBg};">${tag.icon} ${tag.name}</span>
-                <div class="nb-tl-content">${n.pinned ? '📌 ' : ''}${escapeHtml(nbPlain(n.content))}</div>
+                <div class="nb-tl-content">${n.pinned ? '📌 ' : ''}${escapeHtml(nbNoteLabel(n))}</div>
                 ${capsuleBadgeHtml(n)}
                 <span class="nb-tl-time">${formatNoteTime(n.createdAt)}</span>
                 <div class="nb-card-actions nb-ca-main">
@@ -30238,7 +30319,7 @@ function renderDayDetail() {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const days = n.deletedAt ? Math.floor((Date.now() - new Date(n.deletedAt).getTime()) / 86400000) : 0;
             return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.78;">
-                <div class="nb-card-content">${escapeHtml(nbPlain(n.content))}</div>
+                <div class="nb-card-content">${escapeHtml(nbNoteLabel(n))}</div>
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
                     <span class="nb-card-time">已删除 ${days === 0 ? '不到1天' : days + ' 天'}</span>
@@ -30253,7 +30334,7 @@ function renderDayDetail() {
         function nbArchiveCardHtml(n) {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.85;">
-                <div class="nb-card-content">${escapeHtml(nbPlain(n.content))}</div>
+                <div class="nb-card-content">${escapeHtml(nbNoteLabel(n))}</div>
                 <div class="nb-card-footer">
                     <span class="nb-card-time">${tag.icon} ${tag.name} · ${formatNoteTime(n.createdAt)}</span>
                     <div class="nb-card-actions" style="opacity:1;">
@@ -30469,6 +30550,8 @@ function renderDayDetail() {
         // ⚠️ 浏览卡片 #nbDetailModal 不经过本函数，一行都没动
         let nbEditingPinned = false;
         let nbEditingNoRev = "inherit";   // "inherit" 跟随标签 / "on" 参与 / "off" 不参与
+        let nbEditingTitle = '';          // 2026-11-06 标题（留空 = 沿用「正文首行当标题」）
+        let nbEditingMaterial = false;    // 2026-11-06 素材卡（墙上不渲染正文，只留一键复制）
         function openNoteModal(id, presetTag, e) {
             e && e.stopPropagation();
             nbEditingId = id || null;
@@ -30480,6 +30563,11 @@ function renderDayDetail() {
             else nbEditingTag = nbDefaultTag();
             nbEditingPinned = n ? !!n.pinned : false;
             nbEditingNoRev = (n && n.noReview === true) ? "off" : (n && n.noReview === false) ? "on" : "inherit";
+            // 2026-11-06 标题 / 素材卡回显
+            nbEditingTitle = n ? String(n.title || '') : '';
+            nbEditingMaterial = n ? !!n.material : false;
+            { const elT = document.getElementById('nbEdTitle'); if (elT) elT.value = nbEditingTitle; }
+            nbEdSyncMat();
             // 2026-10-12 #132：所属模块回显；在模块里新建便签 → 默认就归到这一摞
             nbEdParentPick = n ? (n.parent || '') : (nbModule || '');
             // 2026-10-12 #133：背面回显（留空 = 这张只有正面）
@@ -30582,6 +30670,93 @@ function renderDayDetail() {
             }
         }
         function nbEdSyncPin() { const el = document.getElementById('nbEdPin'); if (el) el.classList.toggle('on', nbEditingPinned); }
+
+        // ===== 2026-11-06 便签标题 + 素材卡（老板：「便签确实缺少一个标题的功能，加上标题功能吧，
+        //        然后这个一键复制只复制正文内容就好」）=====
+        function nbEdTitleInput() {
+            const el = document.getElementById('nbEdTitle');
+            nbEditingTitle = el ? el.value : '';
+        }
+        // 从正文里认一个名字 —— 绝不拿 T3D 的第一行（那行永远是 Begin Object Class=…）
+        function nbGuessTitle(txt) {
+            const t = String(txt || '');
+            let m = t.match(/ParameterName="([^"]{1,24})"/);
+            if (m) return '参数 · ' + m[1];
+            m = t.match(/MemberName="([^"]{1,30})"/);
+            if (m) return '蓝图 · ' + m[1];
+            m = t.match(/\/Game\/[^'"\n]*?\/([^'"\/.\n]{1,20})\./);
+            if (m) return m[1];
+            const lines = t.split('\n').map(s => s.trim()).filter(Boolean);
+            for (let i = 0; i < lines.length; i++) {
+                const ln = lines[i];
+                if (/^(Begin Object|End Object|CustomProperties|MaterialExpression|NodePos|NodeGuid|ExpressionGUID)/.test(ln)) continue;
+                return ln.length <= 22 ? ln : ln.slice(0, 18) + '…';
+            }
+            return '未命名素材';
+        }
+        function nbEdSyncMat() {
+            const sw = document.getElementById('nbEdMat');
+            if (sw) sw.classList.toggle('on', nbEditingMaterial);
+            const hint = document.getElementById('nbEdMatHint');
+            if (hint) hint.innerHTML = nbEditingMaterial
+                ? '✅ 墙上不显示正文，只留「名字 + 字数 + 一键复制」；不进早读 / 复习 / 摇一张，也不会泛黄落尘。'
+                : '存「拿来复制的东西」（UE 节点 T3D / 长代码 / 配置串）时打开：墙上只留名字和一键复制。';
+            const tip = document.getElementById('nbEdTitleTip');
+            if (tip) tip.textContent = nbEditingMaterial
+                ? '💡 素材卡必须有个名字才扫得动；留空会自动从正文里认（参数名 / 节点名 / 资产名）。'
+                : '💡 一键复制只复制下面的正文，标题不会跟着被复制。';
+        }
+        function nbEdToggleMat() {
+            nbEditingMaterial = !nbEditingMaterial;
+            if (nbEditingMaterial) {
+                nbEditingNoRev = "off";                 // 素材不背：顺手退出复习（想背可以再手动开回来）
+                try { nbEdSyncRev(); } catch (e) {}
+                const el = document.getElementById('nbEdTitle');
+                const body = document.getElementById('noteModalContent');
+                if (el && !el.value.trim() && body && body.value.trim()) {
+                    el.value = nbGuessTitle(body.value);
+                    nbEditingTitle = el.value;
+                    if (typeof showToast === 'function') showToast('📋 已按正文起名：' + el.value);
+                }
+            }
+            nbEdSyncMat();
+        }
+
+        // 2026-11-06 一键复制：只复制正文（n.content），标题 / 字数 / 时间一律不掺进去
+        function nbCopyNote(id, e) {
+            e && e.stopPropagation();
+            const n = notes.find(x => x.id === id);
+            if (!n) return;
+            const txt = String(n.content || '');
+            const btn = (e && e.target && e.target.closest) ? e.target.closest('button') : null;
+            const done = () => {
+                nbCopiedFlash = { id: id, at: Date.now() };
+                if (btn) {
+                    btn.classList.add('done');
+                    if (!btn.dataset.rawLabel) btn.dataset.rawLabel = btn.textContent;
+                    btn.textContent = '✓ 已复制';
+                }
+                if (typeof showToast === 'function') showToast('📋 正文已复制 · ' + txt.length.toLocaleString() + ' 字');
+                // 1.5s 后只把这一颗按钮改回去（不整墙重渲染 —— 会把滚动位置抢回去）
+                setTimeout(() => {
+                    if (nbCopiedFlash.id === id) nbCopiedFlash = { id: null, at: 0 };
+                    document.querySelectorAll('.nb-copy-big').forEach(b => {
+                        if (b.dataset.noteId === String(id)) { b.classList.remove('done'); b.textContent = '📋 一键复制'; }
+                    });
+                }, 1500);
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(txt).then(done).catch(() => done());
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = txt; ta.style.position = 'fixed'; ta.style.left = '-9999px';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch (err) {}
+                document.body.removeChild(ta);
+                done();
+            }
+        }
+
         // 2026-09-23 #2：单条便签「参与复习」三态（inherit 跟随标签 / on / off）
         function nbEdRevEffective() {
             if (nbEditingNoRev === "on") return true;
@@ -32059,6 +32234,9 @@ function renderDayDetail() {
         function saveNoteModal() {
             const content = document.getElementById('noteModalContent').value.trim();
             if (!content) { showToast('✏️ 内容不能为空'); return; }
+            // 2026-11-06 标题 / 素材卡（标题留空 = 沿用「正文首行当标题」；素材卡没名字就自动认一个）
+            const _titleEl = document.getElementById('nbEdTitle');
+            const _title = _titleEl ? String(_titleEl.value || '').trim() : '';
             // v2.26 修 bug：原来 closeNoteModal() 会把 nbEditingId 置空，
             // 之后 nbDraftClear() 拿到的槽位变成 '__new'，编辑已有便签时那个槽永远清不掉
             // （下次打开会冒出「已恢复草稿」）。先把槽位记下来。
@@ -32068,6 +32246,8 @@ function renderDayDetail() {
                 const n = notes.find(x => x.id === nbEditingId);
                 if (n) {
                     n.content = content; n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
+                    if (_title) n.title = _title; else delete n.title;
+                    if (nbEditingMaterial) { n.material = true; if (!n.title) n.title = nbGuessTitle(content); } else delete n.material;
                     n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
                     if (nbEditingNoRev === "on") n.noReview = false; else if (nbEditingNoRev === "off") n.noReview = true; else delete n.noReview;   // #2 单条覆盖（inherit 时清字段）
                     // 2026-10-12 #132：所属模块（不能选自己，防自环）
@@ -32080,6 +32260,8 @@ function renderDayDetail() {
                 showToast('✅ 便签已更新');
             } else {
                 const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
+                if (_title) note.title = _title;
+                if (nbEditingMaterial) { note.material = true; if (!note.title) note.title = nbGuessTitle(content); }
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
                 if (String(nbEdBackPick || '').trim()) note.back = String(nbEdBackPick).trim();   // 2026-10-12 #133
@@ -32087,8 +32269,9 @@ function renderDayDetail() {
                 capsuleAttach(note);
                 notes.unshift(note);
                 // 阶段二：新增便签同步存入知识库（03-Resources）
-                addToKnowledge({
-                    title: content.replace(/\s+/g, ' ').slice(0, 30),
+                // 2026-11-06：素材卡不灌知识库 —— 一坨 8000 字 T3D 进 03-Resources 只会把真笔记埋掉
+                if (!note.material) addToKnowledge({
+                    title: note.title || content.replace(/\s+/g, ' ').slice(0, 30),
                     body: content,
                     para: '03-Resources',
                     category: '生活',
@@ -32216,14 +32399,14 @@ function renderDayDetail() {
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot auto ${nbPaperFor(n) === 'tag' ? 'active' : ''}" style="background:${tag.chipBg};" onclick="nbSetPaper('tag')" title="跟标签自动配色（默认 · 换标签纸色跟着变）"></button><button class="nb-paper-dot cream ${nbPaperFor(n) === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaperFor(n) === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaperFor(n) === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaperFor(n) === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaperFor(n) === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
-                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${nbEdMd(showBack ? backTxt : n.content)}</div></div>
+                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${String(n.title || '').trim() ? '<div class="nb-md-title">' + escapeHtml(String(n.title).trim()) + '</div>' : ''}${nbEdMd(showBack ? backTxt : n.content)}</div></div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
                     ${nbIsModule(id) ? `<button onclick="closeNbDetail();nbOpenModule('${id}')">📚 钻进这一摞（${nbChildren(id).length}）</button>` : ''}
                     <button onclick="nbDetailEdit('${id}')">✏️ 编辑</button>
                     <button onclick="nbDetailPin('${id}')">${n.pinned ? '📍 取消置顶' : '📌 置顶'}</button>
-                    <button onclick="nbDetailCopy('${id}')">📋 复制全文</button>
+                    <button onclick="nbDetailCopy('${id}')">📋 复制正文</button>
                     <button onclick="closeNbDetail();nbConvert('${id}',event);">🗓 转任务</button>
                     <button onclick="nbArchive('${id}',event);closeNbDetail();renderNotesPage();">📦 归档</button>
                     <button class="danger" onclick="nbDelete('${id}',event);closeNbDetail();renderNotesPage();">🗑 删除</button>
@@ -32382,6 +32565,7 @@ function renderDayDetail() {
         // 语义：标签 use === "review"（缺省也算）才参与早读 / 复习 / 摇一张；n.noReview 单条覆盖
         function noteUseIsReview(n) {
             if (!n) return false;
+            if (n.material) return false;   // 2026-11-06 素材卡不参与早读 / 复习 / 摇一张（素材是拿来复制的，不是拿来背的）
             if (n.noReview === true) return false;
             if (n.noReview === false) return true;
             try { const t = noteTagDict()[n.tag]; if (t && t.use && t.use !== "review") return false; } catch (e) {}
@@ -32639,7 +32823,7 @@ function renderDayDetail() {
             const tag = noteTagDict()[n.tag] || noteTagDict().other;
             const days = Math.floor((Date.now() - new Date(n.updatedAt || n.createdAt).getTime()) / 86400000);
             return `<div class="nb-card" style="--ntag:${tag.chipBg};opacity:.72;">
-                <div class="nb-card-content">${escapeHtml(nbPlain(n.content))}</div>
+                <div class="nb-card-content">${escapeHtml(nbNoteLabel(n))}</div>
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>
                     <span class="nb-card-time">静置 ${days} 天</span>
@@ -45462,7 +45646,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611041456";
+        window.NIKO_VERSION = "202611061126";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
