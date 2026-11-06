@@ -29392,8 +29392,69 @@ function renderDayDetail() {
         }
 
         function nbEmptyHtml(title, hint) {
+            // 2026-11-06 数据事故兜底：便签被同步误删（云端快照被写瘦 + 冲突策略 remote）后，
+            // 空态直接给出「从知识库恢复」—— 每条新建便签都会往知识库留一份正文。
+            const cand = nbSearch ? 0 : nbRestoreCandidates().length;
+            const btn = cand ? `<button class="nb-btn" style="margin-top:8px" onclick="nbRestoreFromKnowledge()">♻️ 从知识库恢复 ${cand} 张便签</button>`
+                + '<div style="font-size:10.5px;color:#9aa0b4;margin-top:6px;line-height:1.6">便签被同步误删时用这个<br>恢复的是「新建时的正文」，之后在便签里改过的内容不在知识库里</div>' : '';
             return `<div class="nb-empty"><div class="icon">📭</div><p>${title}<br><span style="font-size:11px;">${hint}</span></p>
-                <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建便签</button></div>`;
+                <button class="nb-btn primary" onclick="openNoteModal()">＋ 新建便签</button>${btn}</div>`;
+        }
+
+        // ===== 2026-11-06 从知识库重建便签 =====
+        function nbRestoreCandidates() {
+            let kb = [];
+            try { kb = safeStorage.get('niko_knowledge', []) || []; } catch (e) { return []; }
+            if (!Array.isArray(kb)) return [];
+            const have = new Set(notes.map(n => n.c ? nbNoteBody(n) : String(n.content || '')));
+            return kb.filter(x => {
+                if (!x) return false;
+                const tags = Array.isArray(x.tags) ? x.tags : [];
+                const src = String(x.source || x.from || '');
+                if (tags.indexOf('便签') < 0 && src.indexOf('便签') < 0) return false;
+                const body = String(x.body || '');
+                if (!body.trim()) return false;
+                return !have.has(body);
+            });
+        }
+        // 长文本 / 引擎节点文本 → 恢复时就按素材卡建（别再把墙撑爆）
+        function nbLooksLikeMaterial(txt) {
+            const s = String(txt || '');
+            if (s.length >= 3000) return true;
+            return /Begin Object|CustomProperties Pin|PinType\.PinCategory|MaterialExpression|K2Node_/.test(s);
+        }
+        function nbRestoreFromKnowledge(silent) {
+            const cand = nbRestoreCandidates();
+            if (!cand.length) { if (!silent) showToast('知识库里没有可恢复的便签'); return 0; }
+            if (!silent && !confirm('从知识库恢复 ' + cand.length + ' 张便签？\n\n· 恢复的是「新建时的正文」，之后在便签里改过的内容不在知识库里\n· 长文本 / 引擎节点文本会按「素材卡」恢复（墙上只留名字和一键复制）')) return 0;
+            const now = Date.now();
+            cand.forEach((x, i) => {
+                const body = String(x.body || '');
+                const tags = Array.isArray(x.tags) ? x.tags : [];
+                const tag = tags.find(t => t && t !== '便签') || nbDefaultTag();
+                const ts = x.createdAt || x.updatedAt || new Date().toISOString();
+                const rec = {
+                    id: 'note_' + (now - i),
+                    content: body,
+                    tag: nbTagValid(tag) ? tag : nbDefaultTag(),
+                    createdAt: ts,
+                    updatedAt: x.updatedAt || ts,
+                    pinned: false, archived: false, deleted: false,
+                    order: new Date(ts).getTime() || (now - i),
+                    restoredFrom: 'knowledge'
+                };
+                if (nbLooksLikeMaterial(body)) {
+                    rec.material = true;
+                    rec.noReview = true;
+                    rec.title = nbGuessTitle(body);
+                }
+                nbSetNoteBody(rec, body);
+                notes.push(rec);
+            });
+            saveNotes();
+            if (typeof renderNotesPage === 'function') renderNotesPage();
+            if (!silent) showToast('♻️ 已从知识库恢复 ' + cand.length + ' 张便签');
+            return cand.length;
         }
 
         function renderNotesBoardView(c) {
@@ -30266,15 +30327,16 @@ function renderDayDetail() {
         function nbCopyFlashOn(id) { return nbCopiedFlash.id === id && (Date.now() - nbCopiedFlash.at) < 1500; }
         function nbMaterialCardHtml(n, o) {
             const tag = o.tag;
-            const body = String(n.content || '');
-            const title = String(n.title || '').trim() || nbGuessTitle(body);
+            const chars = n.c ? (n.cl || 0) : String(n.content || '').length;
+            const lines = n.c ? (n.cn || 1) : String(n.content || '').split('\n').length;
+            const title = String(n.title || '').trim() || (n.c ? '素材卡' : nbGuessTitle(n.content));
             const flash = nbCopyFlashOn(n.id);
             return `<div class="nb-card nb-material ${n.pinned ? 'pinned' : ''} ${o.sel ? 'selected' : ''}${o.hitCls}" style="--ntag:${tag.chipBg}" draggable="${!nbBatch}" data-note-id="${n.id}" onclick="nbCardClick('${n.id}',event)" ondblclick="nbCardDblClick('${n.id}',event)">
                 ${nbBatch ? '<div class="nb-batch-check">✓</div>' : ''}
                 ${n.pinned ? '<div class="nb-pin-flag">📌 置顶</div>' : ''}
                 <div class="nb-flags">${o.flags}</div>
                 <div class="nb-mat-hd"><div class="nb-mat-ico">◧</div><div class="nb-mat-tt">${escapeHtml(title)}</div></div>
-                <div class="nb-mat-meta"><span><em>${body.length.toLocaleString()}</em> 字</span><span>${body.split('\n').length} 行</span><span>${formatNoteTime(n.createdAt)}</span>${o.verPill}</div>
+                <div class="nb-mat-meta"><span><em>${chars.toLocaleString()}</em> 字</span><span>${lines} 行</span><span>${formatNoteTime(n.createdAt)}</span>${n.c ? '<span title="正文已压缩存放，复制时自动还原">🗜 已压缩</span>' : ''}${o.verPill}</div>
                 <button class="nb-copy-big${flash ? ' done' : ''}" data-note-id="${n.id}" title="只复制正文 · 标题不会跟着复制" onclick="nbCopyNote('${n.id}',event)">${flash ? '✓ 已复制' : '📋 一键复制'}</button>
                 <div class="nb-card-footer">
                     <span class="nb-card-tag">${tag.icon} ${tag.name}</span>${o.owner}
@@ -30292,8 +30354,87 @@ function renderDayDetail() {
         // 时间线 / 列表里的一行字：素材卡显示「名字 · N 字」，普通便签有标题就「标题 · 正文」
         function nbNoteLabel(n) {
             const t = String(n.title || '').trim();
-            if (n.material) return '◧ ' + (t || nbGuessTitle(n.content)) + ' · ' + String(n.content || '').length.toLocaleString() + ' 字';
+            if (n.material) {
+                const chars = n.c ? (n.cl || 0) : String(n.content || '').length;
+                return '◧ ' + (t || (n.c ? '素材卡' : nbGuessTitle(n.content))) + ' · ' + chars.toLocaleString() + ' 字';
+            }
             return t ? t + ' · ' + nbPlain(n.content) : nbPlain(n.content);
+        }
+
+        // ===== 2026-11-06 素材卡正文压缩 =====
+        // 老板：「这种只需要复制的文本能不能压缩成一个格式的东西，其实也不需要写到正文里面好占内存」。
+        // 口径：素材卡正文 >= 2500 字 → 存 n.c（LZW 打包 + base64），n.content 清空；
+        //       n.cl / n.cn 记住字数、行数，卡片直接显示，不用解压。
+        //       复制 / 打开详情 / 编辑时才解压（nbNoteBody）。
+        // 编码按 UTF-16 code unit：单字符 = 它自己的码（0..65535），词条从 65536 起，每码 3 字节。
+        function nbLzPack(str) {
+            const s = String(str || '');
+            if (!s) return '';
+            const dict = new Map();
+            let next = 65536;
+            const out = [];
+            let w = '';
+            for (let i = 0; i < s.length; i++) {
+                const ch = s[i];
+                const wc = w + ch;
+                if (w === '' || dict.has(wc)) { w = wc; continue; }
+                out.push(w.length === 1 ? w.charCodeAt(0) : dict.get(w));
+                dict.set(wc, next++);
+                w = ch;
+            }
+            if (w) out.push(w.length === 1 ? w.charCodeAt(0) : dict.get(w));
+            const bytes = new Uint8Array(out.length * 3);
+            for (let i = 0; i < out.length; i++) {
+                const c = out[i];
+                bytes[i * 3] = c & 255; bytes[i * 3 + 1] = (c >> 8) & 255; bytes[i * 3 + 2] = (c >> 16) & 255;
+            }
+            let bin = '';
+            const CH = 0x8000;
+            for (let i = 0; i < bytes.length; i += CH) {
+                bin += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+            }
+            return btoa(bin);
+        }
+        function nbLzUnpack(b64) {
+            if (!b64) return '';
+            let bin;
+            try { bin = atob(b64); } catch (e) { return ''; }
+            const codes = [];
+            for (let i = 0; i + 2 < bin.length; i += 3) {
+                codes.push(bin.charCodeAt(i) | (bin.charCodeAt(i + 1) << 8) | (bin.charCodeAt(i + 2) << 16));
+            }
+            if (!codes.length) return '';
+            const dict = [];
+            let next = 65536;
+            const getStr = (c) => (c < 65536 ? String.fromCharCode(c) : dict[c - 65536]);
+            let prev = getStr(codes[0]);
+            if (prev === undefined) return '';
+            let out = prev;
+            for (let i = 1; i < codes.length; i++) {
+                const c = codes[i];
+                let cur;
+                if (c < 65536) cur = String.fromCharCode(c);
+                else if (dict[c - 65536] !== undefined) cur = dict[c - 65536];
+                else cur = prev + prev[0];
+                out += cur;
+                dict[next++ - 65536] = prev + cur[0];
+                prev = cur;
+            }
+            return out;
+        }
+        // 读正文：压缩过的解压，没压的直接给 content
+        function nbNoteBody(n) {
+            if (!n) return '';
+            if (n.c) return nbLzUnpack(n.c);
+            return String(n.content || '');
+        }
+        // 写正文：统一入口。压缩下一轮接（gzip 实测单条 T3D 7.5x，比 LZW 的 1.2x 强太多，
+        // 但 gzip 的 CompressionStream 是异步的，需要「启动还原 + 编辑前还原」的状态机，单独一轮做）。
+        // 现在只做一件事：清掉旧的 n.c，免得读到过期压缩包。
+        function nbSetNoteBody(n, text) {
+            n.content = String(text == null ? '' : text);
+            delete n.c; delete n.cl; delete n.cn;
+            return n;
         }
 
         function nbTlItemHtml(n) {
@@ -30577,7 +30718,7 @@ function renderDayDetail() {
             nbEdVerPick = n ? String(n.ver || '') : '';   // 2026-10-12 #194
             nbEdVerSync();
             document.getElementById('noteModalTitle').textContent = n ? '✏️ 编辑便签' : '＋ 新建便签';
-            document.getElementById('noteModalContent').value = n ? n.content : '';
+            document.getElementById('noteModalContent').value = n ? nbNoteBody(n) : '';
             document.getElementById('nbEdCreated').textContent = n ? formatNoteTime(n.createdAt) : '刚刚';
             capsulePick = (n && n.capsule && CAPSULE_SPANS[n.capsule.span]) ? n.capsule.span : '';
             updateCapsuleChips();
@@ -30727,7 +30868,7 @@ function renderDayDetail() {
             e && e.stopPropagation();
             const n = notes.find(x => x.id === id);
             if (!n) return;
-            const txt = String(n.content || '');
+            const txt = nbNoteBody(n);
             const btn = (e && e.target && e.target.closest) ? e.target.closest('button') : null;
             const done = () => {
                 nbCopiedFlash = { id: id, at: Date.now() };
@@ -32245,9 +32386,10 @@ function renderDayDetail() {
             if (nbEditingId) {
                 const n = notes.find(x => x.id === nbEditingId);
                 if (n) {
-                    n.content = content; n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
+                    n.tag = nbEditingTag; n.updatedAt = new Date().toISOString();
                     if (_title) n.title = _title; else delete n.title;
                     if (nbEditingMaterial) { n.material = true; if (!n.title) n.title = nbGuessTitle(content); } else delete n.material;
+                    nbSetNoteBody(n, content);   // 2026-11-06 素材卡长正文压缩存放（material 先落，压缩才有依据）
                     n.pinned = nbEditingPinned;     // v2.26 全屏编辑器左栏可直接改置顶
                     if (nbEditingNoRev === "on") n.noReview = false; else if (nbEditingNoRev === "off") n.noReview = true; else delete n.noReview;   // #2 单条覆盖（inherit 时清字段）
                     // 2026-10-12 #132：所属模块（不能选自己，防自环）
@@ -32262,6 +32404,7 @@ function renderDayDetail() {
                 const note = { id: 'note_' + Date.now(), content, tag: nbEditingTag, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), pinned: nbEditingPinned, archived: false, deleted: false, order: Date.now() };
                 if (_title) note.title = _title;
                 if (nbEditingMaterial) { note.material = true; if (!note.title) note.title = nbGuessTitle(content); }
+                nbSetNoteBody(note, content);   // 2026-11-06 素材卡长正文压缩
                 if (nbEditingNoRev === "on") note.noReview = false; else if (nbEditingNoRev === "off") note.noReview = true;
                 if (nbEdParentPick) note.parent = nbEdParentPick;   // 2026-10-12 #132：新建时直接归入模块
                 if (String(nbEdBackPick || '').trim()) note.back = String(nbEdBackPick).trim();   // 2026-10-12 #133
@@ -32399,7 +32542,7 @@ function renderDayDetail() {
                 </div>
                 ${dIdx >= 0 && dTotal > 1 ? `<button class="nb-detail-nav l" onclick="nbDetailNav(-1)" title="上一张（←）">‹</button><button class="nb-detail-nav r" onclick="nbDetailNav(1)" title="下一张（→）">›</button>` : ''}
                 <div class="nb-paper-row"><span class="nb-paper-label">🫧 纸色</span><button class="nb-paper-dot auto ${nbPaperFor(n) === 'tag' ? 'active' : ''}" style="background:${tag.chipBg};" onclick="nbSetPaper('tag')" title="跟标签自动配色（默认 · 换标签纸色跟着变）"></button><button class="nb-paper-dot cream ${nbPaperFor(n) === 'cream' ? 'active' : ''}" onclick="nbSetPaper('cream')" title="米黄纸"></button><button class="nb-paper-dot gray ${nbPaperFor(n) === 'gray' ? 'active' : ''}" onclick="nbSetPaper('gray')" title="浅灰纸"></button><button class="nb-paper-dot dark ${nbPaperFor(n) === 'dark' ? 'active' : ''}" onclick="nbSetPaper('dark')" title="深色纸"></button><button class="nb-paper-dot grid ${nbPaperFor(n) === 'grid' ? 'active' : ''}" onclick="nbSetPaper('grid')" title="格子纸 · 画草图用（#140）"></button><button class="nb-paper-dot blue ${nbPaperFor(n) === 'blue' ? 'active' : ''}" onclick="nbSetPaper('blue')" title="蓝图网格纸 · 记节点 / 逻辑用（#140）"></button></div>
-                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${String(n.title || '').trim() ? '<div class="nb-md-title">' + escapeHtml(String(n.title).trim()) + '</div>' : ''}${nbEdMd(showBack ? backTxt : n.content)}</div></div>
+                <div class="nb-detail-text nb-md ${nbPaperClass(n)}" style="${nbPaperStyle(n)}"><div class="nb-md-inner">${String(n.title || '').trim() ? '<div class="nb-md-title">' + escapeHtml(String(n.title).trim()) + '</div>' : ''}${nbEdMd(showBack ? backTxt : nbNoteBody(n))}</div></div>
                 ${capsuleBadgeHtml(n)}
                 <div class="nb-detail-meta">${nbParentNote(n) ? `📁 <span style="cursor:pointer;text-decoration:underline" onclick="closeNbDetail();nbOpenModule('${n.parent}')" title="钻进这一摞">${escapeHtml((nbPlain(nbParentNote(n).content).split('\n')[0] || '模块').slice(0, 20))}</span> · ` : ''}🗓 创建于 ${created.toLocaleDateString('zh-CN')} ${String(created.getHours()).padStart(2, '0')}:${String(created.getMinutes()).padStart(2, '0')}${updated && updated.getTime() - created.getTime() > 60000 ? ' · ✏️ 更新于 ' + updated.toLocaleDateString('zh-CN') : ''}${ageD >= 14 ? ' · 已放 ' + ageD + ' 天' : ''}${n.openCount > 1 ? ' · 👀 翻过 ' + n.openCount + ' 次' : ''}${n.mergedFrom ? ' · 🔗 由 ' + n.mergedFrom.length + ' 张合并' : ''}</div>
                 <div class="nb-detail-actions">
@@ -32443,11 +32586,12 @@ function renderDayDetail() {
         function nbDetailCopy(id) {
             const n = notes.find(x => x.id === id);
             if (!n) return;
-            const done = () => showToast('📋 全文已复制');
-            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(n.content).then(done).catch(() => {});
+            const txt = nbNoteBody(n);
+            const done = () => showToast('📋 正文已复制 · ' + txt.length.toLocaleString() + ' 字');
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done).catch(() => {});
             else {
                 const ta = document.createElement('textarea');
-                ta.value = n.content; document.body.appendChild(ta); ta.select();
+                ta.value = txt; document.body.appendChild(ta); ta.select();
                 try { document.execCommand('copy'); done(); } catch (err) {}
                 document.body.removeChild(ta);
             }
@@ -36199,9 +36343,13 @@ function renderDayDetail() {
             const rv = (remoteKeys && remoteKeys[key]) ? remoteKeys[key].value : null;
 
             if (lv === rv) { nothing.push(key); continue; }   // 值相同直接跳过（不依赖指纹，避免哈希碰撞误判）
+            // 2026-11-06 事故配套：云端这份快照里**根本没有**这个 key（被写瘦过）——
+            //   既没东西可拉（不能走 pull，旧逻辑 pull 时遇到空值就直接不管了，云端永远缺这个键），
+            //   更不该判成冲突（判冲突 + 默认 remote 就会删本地，便签就是这么没的）。
+            //   口径：本地有、云端没有 → 一律当作「待推送」，顺手把云端补回来。
+            if (rv === null && lv !== null) { push.push(key); continue; }
             // 与快照比时必须同口径：lv/rv 是原始值，先转指纹再比（2026-10-16 快照瘦身）
-            const localChanged = nikoSnapFp(lv) !== sv;
-            const remoteChanged = nikoSnapFp(rv) !== sv;
+            const localChanged = nikoSnapFp(lv) !== sv;            const remoteChanged = nikoSnapFp(rv) !== sv;
 
             if (localChanged && remoteChanged) conflict.push(key);
             else if (localChanged) push.push(key);
@@ -36209,6 +36357,16 @@ function renderDayDetail() {
             else { nothing.push(key); } // 快照空且两边都空/一致，忽略
         }
         return { push, pull, conflict, nothing };
+    }
+
+    /* 2026-11-06 云端「被写瘦」保护（便签数据事故配套）
+       背景：云端快照一度只剩 2 个键（本地 232 个），再叠加 conflictPolicy=remote，
+       就把本地唯一的便签整块删掉了。这里在写云端前拦一道：新快照键数比云端原有的骤降 → 拒绝覆盖。
+       宁可这一轮不同步，也不能把云端的其它数据一起刷没。 */
+    function nikoShrinkGuard(prevKeys, nextKeys) {
+        const a = Object.keys(prevKeys || {}).length;
+        const b = Object.keys(nextKeys || {}).length;
+        return { block: a >= 20 && b < Math.floor(a * 0.6), prev: a, next: b };
     }
 
     /* ---------- 执行同步 ---------- */
@@ -36355,7 +36513,12 @@ function renderDayDetail() {
                 version: '3.0', app: 'NIKO', deviceId: getDeviceId(),
                 updatedAt: nowIso(), keys: nextRemoteKeys
             };
-            await writeRemote(outRemote, channel || 'fs');
+            const g = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
+            if (g.block) {
+                addLog(`🛑 拒写云端：新快照只剩 ${g.next} 个键（云端原有 ${g.prev} 个），疑似要把云端刷瘦 —— 本轮跳过推送`, 'err');
+            } else {
+                await writeRemote(outRemote, channel || 'fs');
+            }
         }
 
         // 拉取：云端 → 本地（云端写成功后才应用）
@@ -36469,7 +36632,7 @@ function renderDayDetail() {
         const nextRemoteKeys = {};
         Object.keys(remoteKeys).forEach(k => { nextRemoteKeys[k] = remoteKeys[k]; });
 
-        let useLocal = 0, useRemote = 0, skipped = 0;
+        let useLocal = 0, useRemote = 0, skipped = 0, keptLocal = 0;
         const remoteChangedKeys = []; // 用了云端数据的 key（需要通知面板刷新）
 
         for (const k of state.conflictList) {
@@ -36487,8 +36650,15 @@ function renderDayDetail() {
                     snapshotNow[k] = remoteKeys[k].value;
                     remoteChangedKeys.push(k);
                 } else {
-                    localStorage.removeItem(k);
-                    delete snapshotNow[k];
+                    // 🚨 2026-11-06 数据事故修复（便签被整块删光就是这里）：
+                    //   冲突 + conflictPolicy='remote' + 云端这份快照里**没有**这个 key →
+                    //   旧逻辑直接 localStorage.removeItem(k)，本地值凭空消失且无从恢复
+                    //   （当天实测：云端只剩 2 个键，本地 232 个键，唯一「本地改过」的便签被删）。
+                    //   新口径：云端没有 ≠ 该删。一律保留本地，并把它当作待推送补回云端。
+                    nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
+                    snapshotNow[k] = local[k];
+                    keptLocal++;
+                    addLog(`冲突处理：${k} 云端这份快照没有它 → 保留本地（绝不删数据）`, 'warn');
                 }
                 useRemote++;
                 addLog(`冲突处理：${k} 用云端`, 'ok');
@@ -36515,7 +36685,12 @@ function renderDayDetail() {
             updatedAt: nowIso(), keys: nextRemoteKeys
         };
         const conflictCount = state.conflictList ? state.conflictList.length : 0;
-        await writeRemote(outRemote, state.pendingChannel || 'fs');
+        const g2 = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
+        if (g2.block) {
+            addLog(`🛑 拒写云端：新快照只剩 ${g2.next} 个键（云端原有 ${g2.prev} 个），疑似要把云端刷瘦 —— 本轮只应用本地，不推云端`, 'err');
+        } else {
+            await writeRemote(outRemote, state.pendingChannel || 'fs');
+        }
         saveSnapshot(snapshotNow, state.pendingChannel || 'fs');
         closeConflictModal();
 
@@ -45646,7 +45821,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061126";
+        window.NIKO_VERSION = "202611061205";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
