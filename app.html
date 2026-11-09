@@ -16158,7 +16158,7 @@ body.dark-mode .lbak-err { color: #fca5a5; }
 
             <div class="dm-row">
                 <span class="dm-row-lb">🛟 数据丢了</span>
-                <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从云端 fs/github 快照中挑 events 最多的覆盖本地（数据丢失时用）">☁ 从本地快照恢复</button>
+                <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从本地快照（旧格式）与云端文件（坚果云/GitHub）里挑 events 最多的覆盖本地（数据丢失时用）">☁ 快照/云端恢复</button>
                 <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="直接 HTTP 读远端坚果云 / GitHub 文件找 events（本地快照也空时用）">🌐 从远端硬拉（终极恢复）</button>
                 <span class="dm-row-hint">先试左边；左边也空就用右边</span>
             </div>
@@ -17104,11 +17104,20 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             if (events.length === 0) console.warn('⚠️ 本地 events 为空！若任何快照长度>0，请运行 nikoForcePull() 拉取；若都没数据，请运行 nikoRemotePull() 读远端');
             return out;
         };
-        // 紧急：从云端 fs/github 两通道拉取 events，挑长度最大的覆盖本地
-        // 关键：快照键是 niko_sync_local_snapshot__<channel>，不是 niko_cloud_snapshot_<channel>
+        // 紧急恢复：本地快照（仅旧格式有原文）+ 云端文件（坚果云/GitHub）都扫一遍，挑 events 最多的覆盖本地
+        // 2026-11-09 修（恢复按钮失效）：2026-10-16 起本地快照改存「指纹」（只有哈希没有原文），
+        //   旧代码直接 JSON.parse 指纹串 → 永远找不到数据，「从本地快照恢复」实际失效。
+        //   新口径：指纹格式快照跳过（本来就没有原文），改扫云端文件——那里永远有原文。
         window.nikoForcePull = async function () {
-            if (!confirm('将从所有通道快照里挑 events 长度最大的覆盖本地。确定吗？')) return;
+            if (!confirm('将从本地快照（旧格式）与云端文件里挑 events 最多的覆盖本地。确定吗？')) return;
             let best = { len: 0, source: null, value: null };
+            const consider = (source, raw) => {
+                if (typeof raw !== 'string' || raw.charAt(0) !== '[') return;
+                try {
+                    const arr = JSON.parse(raw);
+                    if (Array.isArray(arr) && arr.length > best.len) best = { len: arr.length, source, value: raw };
+                } catch (e) {}
+            };
             const candidates = [
                 'niko_sync_local_snapshot__fs',
                 'niko_sync_local_snapshot__github',
@@ -17118,15 +17127,28 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             ];
             candidates.forEach(k => {
                 try {
-                    const snap = JSON.parse(localStorage.getItem(k) || '{}');
+                    const snap = JSON.parse(localStorage.getItem(k) || 'null');
+                    if (!snap || typeof snap !== 'object') return;
+                    if (snap.__fp === 1) return; // 指纹格式：只有哈希没有原文，恢复不了（跳过，不算失败）
                     if (snap['work_calendar_events']) {
-                        const arr = JSON.parse(snap['work_calendar_events']);
-                        if (Array.isArray(arr) && arr.length > best.len) {
-                            best = { len: arr.length, source: k, value: snap['work_calendar_events'] };
-                        }
+                        consider('本地快照 ' + k, snap['work_calendar_events']);
                     }
                 } catch (e) {}
             });
+            // 云端文件兜底：本地快照全是指纹时，这里是唯一能救的原文来源
+            try {
+                if (window.NikoSync && window.NikoSync.__internals) {
+                    const { readRemote } = window.NikoSync.__internals;
+                    for (const ch of ['fs', 'github']) {
+                        try {
+                            const remote = await readRemote(ch);
+                            if (remote && remote.keys && remote.keys['work_calendar_events']) {
+                                consider('云端文件(' + (ch === 'github' ? 'GitHub' : '坚果云') + ')', remote.keys['work_calendar_events'].value);
+                            }
+                        } catch (e) {}
+                    }
+                }
+            } catch (e) {}
             if (best.value) {
                 localStorage.setItem('work_calendar_events', best.value);
                 events = JSON.parse(best.value);
@@ -17134,7 +17156,7 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
                 safeStorage.set('work_calendar_events', events);
                 if (typeof render === 'function') render();
                 if (typeof renderPlanPage === 'function') renderPlanPage();
-                showToast('☁ 本地快照恢复成功：' + best.source + ' → ' + best.len + ' 个任务');
+                showToast('☁ 快照/云端恢复成功：' + best.source + ' → ' + best.len + ' 个任务');
             } else {
                 showToast('❌ 本地快照里都没有 events 数据，试试 nikoRemotePull() 直读远端');
             }
@@ -37089,6 +37111,11 @@ function renderDayDetail() {
             //   更不该判成冲突（判冲突 + 默认 remote 就会删本地，便签就是这么没的）。
             //   口径：本地有、云端没有 → 一律当作「待推送」，顺手把云端补回来。
             if (rv === null && lv !== null) { push.push(key); continue; }
+            // 2026-11-09 修（undefined 污染链）：本地整键删除（lv 为 null）绝不推送 ——
+            //   旧逻辑会走 push，把 {value:undefined} 写上云端（JSON.stringify 丢字段），
+            //   另一台拉到字面量 "undefined" 直接污染数据。口径：删除不传播，云端那份留着，
+            //   本地按「拉取」恢复 —— 与「云端缺键不删本地」（上面那条）完全对称。
+            if (lv === null && rv !== null) { pull.push(key); continue; }
             // 与快照比时必须同口径：lv/rv 是原始值，先转指纹再比（2026-10-16 快照瘦身）
             const localChanged = nikoSnapFp(lv) !== sv;            const remoteChanged = nikoSnapFp(rv) !== sv;
 
@@ -37240,6 +37267,11 @@ function renderDayDetail() {
 
         // 推送：本地 → 云端（先构造）
         for (const k of pushKeys) {
+            // 2026-11-09 双保险：computeMerge 已拦「本地删除」，这里再挡一道 undefined/null
+            if (local[k] === null || local[k] === undefined) {
+                addLog(`跳过推送 ${k}（本地无内容，删除不传播）`, 'warn');
+                continue;
+            }
             nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
             pushed++;
             addLog(`推送 ${k}`, 'ok');
@@ -37267,6 +37299,11 @@ function renderDayDetail() {
         // 拉取：云端 → 本地（云端写成功后才应用）
         for (const k of pullKeys) {
             if (remoteKeys[k]) {
+                // 2026-11-09 修：云端历史脏数据（value:undefined 空壳）不许拉进本地
+                if (remoteKeys[k].value === null || remoteKeys[k].value === undefined) {
+                    addLog(`跳过拉取 ${k}（云端这份是空壳，保留本地）`, 'warn');
+                    continue;
+                }
                 localStorage.setItem(k, remoteKeys[k].value);
                 snapshotNow[k] = remoteKeys[k].value;
                 pulled++;
@@ -37382,13 +37419,19 @@ function renderDayDetail() {
             const choice = state.conflictChoices[k] || 'skip';
             if (choice === 'local') {
                 // 本地覆盖云端
+                // 2026-11-09 双保险：本地无内容（已删除）不许推 undefined 空壳上云端
+                if (local[k] === null || local[k] === undefined) {
+                    skipped++;
+                    addLog(`冲突处理：${k} 本地无内容，跳过（删除不传播）`, 'warn');
+                    continue;
+                }
                 nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
                 snapshotNow[k] = local[k];
                 useLocal++;
                 addLog(`冲突处理：${k} 用本地`, 'ok');
             } else if (choice === 'remote') {
                 // 云端覆盖本地
-                if (remoteKeys[k]) {
+                if (remoteKeys[k] && remoteKeys[k].value !== null && remoteKeys[k].value !== undefined) {
                     localStorage.setItem(k, remoteKeys[k].value);
                     snapshotNow[k] = remoteKeys[k].value;
                     remoteChangedKeys.push(k);
@@ -37398,10 +37441,13 @@ function renderDayDetail() {
                     //   旧逻辑直接 localStorage.removeItem(k)，本地值凭空消失且无从恢复
                     //   （当天实测：云端只剩 2 个键，本地 232 个键，唯一「本地改过」的便签被删）。
                     //   新口径：云端没有 ≠ 该删。一律保留本地，并把它当作待推送补回云端。
-                    nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
-                    snapshotNow[k] = local[k];
+                    //   2026-11-09 补：云端「有键但 value 空壳」（undefined 污染遗留）同口径处理。
+                    if (local[k] !== null && local[k] !== undefined) {
+                        nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
+                        snapshotNow[k] = local[k];
+                    }
                     keptLocal++;
-                    addLog(`冲突处理：${k} 云端这份快照没有它 → 保留本地（绝不删数据）`, 'warn');
+                    addLog(`冲突处理：${k} 云端这份没有可用内容 → 保留本地（绝不删数据）`, 'warn');
                 }
                 useRemote++;
                 addLog(`冲突处理：${k} 用云端`, 'ok');
@@ -37415,11 +37461,17 @@ function renderDayDetail() {
         // 继续处理 push/pull
         for (const k of pullKeys) {
             if (remoteKeys[k]) {
+                // 2026-11-09 修：云端空壳不许拉进本地
+                if (remoteKeys[k].value === null || remoteKeys[k].value === undefined) {
+                    addLog(`冲突处理：${k} 云端空壳，跳过拉取`, 'warn');
+                    continue;
+                }
                 localStorage.setItem(k, remoteKeys[k].value);
                 snapshotNow[k] = remoteKeys[k].value;
             }
         }
         for (const k of pushKeys) {
+            if (local[k] === null || local[k] === undefined) continue; // 删除不传播（2026-11-09）
             nextRemoteKeys[k] = { value: local[k], updatedAt: nowIso() };
         }
 
@@ -37436,7 +37488,25 @@ function renderDayDetail() {
         } else {
             await writeRemote(outRemote, state.pendingChannel || 'fs');
         }
+        // 2026-11-09 修（skip 语义）：「跳过」的键必须保留**旧快照指纹** ——
+        //   旧代码把快照刷成本地值，下一轮该键就落 pull 被云端静默覆盖（skip = 延迟的「用云端」）。
+        //   保留旧指纹 → 下一轮仍判冲突，用户的选择才算数。
+        //   ⚠️ 顺序陷阱：旧指纹必须在 saveSnapshot **之前**读出来；且不能把指纹字符串
+        //   塞进 snapshotNow 再走 saveSnapshot（会被二次哈希成「指纹的指纹」）——
+        //   正确做法：先抓旧指纹 → 落盘新快照 → 用 writeFpDict 直写把 skip 键修回旧指纹。
+        const chSkip = state.pendingChannel || 'fs';
+        const oldSnapForSkip = loadSnapshot(chSkip);          // ← 旧指纹（落盘前抓）
         saveSnapshot(snapshotNow, state.pendingChannel || 'fs');
+        try {
+            const curFp = loadSnapshot(chSkip);               // 刚落盘的新指纹字典
+            let touched = false;
+            (state.conflictList || []).forEach((k) => {
+                if ((state.conflictChoices[k] || 'skip') !== 'skip') return;
+                if (Object.prototype.hasOwnProperty.call(oldSnapForSkip, k)) { curFp[k] = oldSnapForSkip[k]; touched = true; }
+                else { delete curFp[k]; touched = true; }     // 旧快照里也没有 → 删掉，下轮仍冲突
+            });
+            if (touched) writeFpDict(curFp, chSkip);
+        } catch (e) {}
         closeConflictModal();
 
         state.lastSyncAt = nowIso();
@@ -37823,10 +37893,28 @@ function renderDayDetail() {
             // ★ 先存当前状态（IndexedDB，不吃 localStorage 配额）
             try { if (window.__lbak && typeof window.__lbak.run === 'function') await window.__lbak.run('pre'); } catch (e) {}
             let w = 0, f = 0;
+            const writtenKeys = [];
             Object.keys(keys).forEach((k) => {
                 if (!Object.prototype.hasOwnProperty.call(keys, k)) return;
-                try { localStorage.setItem(k, keys[k].value); w++; } catch (e) { f++; }
+                try { localStorage.setItem(k, keys[k].value); w++; writtenKeys.push(k); } catch (e) { f++; }
             });
+            // ★ 2026-11-09 修（拉回被冲掉）：拉回后必须 ① 把该通道快照刷成拉回内容，
+            //   ② 立刻把拉回版本推回云端 —— 否则下一轮自动同步把它当冲突（默认策略 remote）
+            //   用云端当前版（很可能就是要逃开的坏版本）原样盖回来，拉回白拉。
+            //   推回云端时「只写不删」：当前云端多出来的键保留（可能是其他设备的新数据）。
+            try {
+                const snapNow = loadSnapshot('github');
+                writtenKeys.forEach((k) => { snapNow[k] = keys[k].value; });
+                saveSnapshot(snapNow, 'github');
+                let cur = null;
+                try { cur = await readRemoteGh(); } catch (e2) {}
+                const mergedKeys = Object.assign({}, (cur && cur.keys) || {});
+                writtenKeys.forEach((k) => { mergedKeys[k] = keys[k]; });
+                await writeRemote({ version: '3.0', app: 'NIKO', deviceId: getDeviceId(), updatedAt: nowIso(), keys: mergedKeys }, 'github');
+                addLog('拉回版本已推回云端（' + Object.keys(mergedKeys).length + ' 键），不会被下轮同步冲掉', 'ok');
+            } catch (e2) {
+                addLog('⚠️ 拉回已写入本机，但推回云端失败：' + (e2 && e2.message || e2) + ' —— 下次自动同步可能被云端盖回，请马上手动「立即同步」', 'err');
+            }
             alert('✅ 已拉回 ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + '，页面即将刷新');
             setTimeout(() => location.reload(), 400);
         } catch (e) {
@@ -47356,7 +47444,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611061730";
+        window.NIKO_VERSION = "202611090920";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
