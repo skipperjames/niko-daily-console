@@ -17137,11 +17137,10 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
             });
             // 云端文件兜底：本地快照全是指纹时，这里是唯一能救的原文来源
             try {
-                if (window.NikoSync && window.NikoSync.__internals) {
-                    const { readRemote } = window.NikoSync.__internals;
+                if (window.NikoSync && typeof window.NikoSync.readRemote === 'function') {
                     for (const ch of ['fs', 'github']) {
                         try {
-                            const remote = await readRemote(ch);
+                            const remote = await window.NikoSync.readRemote(ch);
                             if (remote && remote.keys && remote.keys['work_calendar_events']) {
                                 consider('云端文件(' + (ch === 'github' ? 'GitHub' : '坚果云') + ')', remote.keys['work_calendar_events'].value);
                             }
@@ -17164,12 +17163,13 @@ html[data-theme] .day-count { background: var(--card-bg-2, var(--card-bg)); colo
         // 终极：从远端（坚果云 + GitHub）直接读 events，覆盖本地（不依赖本地 snapshot）
         // 适用于：本地 events 空 + 本地快照也是空 + 但远端文件里还有数据
         window.nikoRemotePull = async function () {
-            if (!window.NikoSync || !window.NikoSync.__internals) {
+            if (!window.NikoSync || typeof window.NikoSync.readRemoteGh !== 'function') {
                 showToast('❌ NikoSync 未加载，云同步模块不可用');
                 return;
             }
             if (!confirm('将直接 HTTP 拉远端坚果云/GitHub 文件，挑 events 最长的覆盖本地。确定吗？')) return;
-            const { readRemote, readRemoteGh } = window.NikoSync.__internals;
+            const readRemote = window.NikoSync.readRemote;
+            const readRemoteGh = window.NikoSync.readRemoteGh;
             let best = { len: 0, source: null, value: null };
             // 坚果云
             try {
@@ -22520,7 +22520,7 @@ if (document.readyState === 'loading') {
         }
 
         // ===== 买量节点 =====
-        // AI 搜索的预置节点（2026-08-13 更新，来源：公开新闻报道/展会官方排期；日期以官方为准，可自行编辑/删除）
+        // AI 搜索的预置节点（2026-11-12 更新 v3，来源：公开新闻报道/展会官方排期；日期以官方为准，可自行编辑/删除）
         const NIKO_PRESET_MARKET_NODES = [
             { id: 'preset_guimi', title: '《诡秘之主》公测', date: '2026-08-21', region: 'CN', category: 'competitor', remindDays: 7, note: '快手UE5旗舰MMO·阅文超级IP，预约全开，重点盯首发买量素材', done: false },
             { id: 'preset_gamescom', title: 'gamescom 开幕式', date: '2026-08-25', region: '', category: 'promo', remindDays: 7, note: '科隆游戏展(8/26-30)，全球预告集中发布，扒素材好时机', done: false },
@@ -22557,7 +22557,23 @@ if (document.readyState === 'loading') {
             { id: 'preset_jp_shogatsu', title: '🇯🇵 正月·初诣（お正月）', date: '2027-01-01', region: 'JP', category: 'festival', remindDays: 7, note: '日本全年最大节点之一：初参拜+福袋+压岁钱（お年玉）。新年首个 xx 号/限定/福袋向素材提前1-2周备', done: false },
             { id: 'preset_jp_seijin', title: '🇯🇵 成人之日（成人の日）', date: '2027-01-11', region: 'JP', category: 'festival', remindDays: 7, note: '成人式振袖盛装，年轻成年用户向素材窗口', done: false },
             { id: 'preset_kr_seollal', title: '🇰🇷 韩国春节（설날）', date: '2027-02-06', region: 'KR', category: 'festival', remindDays: 7, note: '与国内春节同日，连休约2/6-8。压岁钱세뱃돈+韩服拜年+年糕汤，新春素材与国内共用可微调本地化', done: false },
-            { id: 'preset_springfest2027', title: '2027春节', date: '2027-02-06', region: 'CN', category: 'festival', remindDays: 7, note: '2027春节(以官方公布为准)，提前1个月备新春素材', done: false }
+            { id: 'preset_springfest2027', title: '2027春节', date: '2027-02-06', region: 'CN', category: 'festival', remindDays: 7, note: '2027春节(以官方公布为准)，提前1个月备新春素材', done: false },
+            // ---------- v3 新增（2026-11-12 搜索）----------
+            { id: 'preset_blueorigin', title: '《蓝色星原:旅谣》公测', date: '2026-11-26', region: 'CN', category: 'competitor', remindDays: 7, note: '蛮啾二次元开放世界，年末档第一个开跑的，抢在星布谷地/白银之城前7周占位；重点扒首发素材与买量节奏', done: false },
+            { id: 'preset_xenoblade3sw2', title: '异度神剑3 Switch2版', date: '2026-12-03', region: 'JP', category: 'competitor', remindDays: 3, note: 'Switch2增强版，日区情怀向；JRPG用户盘小节点', done: false },
+            { id: 'preset_xingbugudi', title: '《星布谷地》上线', date: '2026-12-04', region: 'CN', category: 'competitor', remindDays: 7, note: '米哈游首款慢生活模拟（种田/钓鱼/家具），休闲赛道对标；女性+轻度用户向素材参考', done: false },
+            { id: 'preset_silvercity', title: '《白银之城》全球公测', date: '2026-12-14', region: 'CN', category: 'competitor', remindDays: 7, note: '乐元素UE5维多利亚侦探开放世界，全球预约破1500万，PC/PS5/移动同步；素材量级会很大，提前扒', done: false },
+            { id: 'preset_yirenzhixia', title: '《异人之下》上线', date: '2026-12-18', region: 'CN', category: 'competitor', remindDays: 7, note: '腾讯国漫IP格斗，官方只说12月上线，日期未定；以官方公告为准，定档后自行改日期', done: false },
+            { id: 'preset_newyear2027', title: '元旦', date: '2027-01-01', region: 'CN', category: 'festival', remindDays: 7, note: '新年首个节点：跨年/新年愿望/年度回顾向素材；寒假同步开启，学生盘流量高峰', done: false },
+            { id: 'preset_wuxianda', title: '《无限大》全球公测', date: '2027-01-15', region: 'CN', category: 'competitor', remindDays: 7, note: '网易雷火都市开放世界，科隆开幕夜定档、全球同步；2027开年最大竞品节点，重点盯', done: false },
+            { id: 'preset_metroid', title: '《密特罗德 绝境嗜生》发售', date: '2027-01-28', region: 'JP', category: 'competitor', remindDays: 7, note: 'Switch2第一方正统续作，日美同步；任系用户盘节点', done: false },
+            { id: 'preset_setsubun', title: '🇯🇵 节分（節分）', date: '2027-02-03', region: 'JP', category: 'festival', remindDays: 3, note: '撒豆驱鬼+惠方卷，季节切换小节点，轻量蹭素材', done: false },
+            { id: 'preset_valentine', title: '情人节', date: '2027-02-14', region: '', category: 'festival', remindDays: 7, note: '全球情侣节点（日韩尤其重）：礼物/约会/告白向素材，提前1周投', done: false },
+            { id: 'preset_lantern2027', title: '元宵节', date: '2027-02-20', region: 'CN', category: 'festival', remindDays: 3, note: '2027春节(2/6)后正月十五，春节档最后一个尾巴，收尾素材', done: false },
+            { id: 'preset_zelda_musou2', title: '《塞尔达无双 灾厄启示录 决定版》', date: '2027-02-25', region: 'JP', category: 'competitor', remindDays: 7, note: 'Switch2决定版，任系IP向；日区买量窗口', done: false },
+            { id: 'preset_kr_samiljeol', title: '🇰🇷 三一节（삼일절）', date: '2027-03-01', region: 'KR', category: 'festival', remindDays: 3, note: '韩国公休，太极旗元素；轻节点', done: false },
+            { id: 'preset_jp_hinamatsuri', title: '🇯🇵 女儿节（ひなまつり）', date: '2027-03-03', region: 'JP', category: 'festival', remindDays: 3, note: '雏人形+桃花，亲子/女性向素材窗口', done: false },
+            { id: 'preset_whiteday', title: '白色情人节', date: '2027-03-14', region: '', category: 'festival', remindDays: 3, note: '日韩回礼文化，情人节素材可二次复用（换回礼角度）', done: false }
         ];
 
         let marketNodes = safeStorage.get('niko_market_nodes', []);
@@ -22858,7 +22874,7 @@ if (document.readyState === 'loading') {
 
         // 注入 AI 预置节点（幂等：自动只注入一次，删掉后不会复活；可点「重新载入AI预置」手动去重合并）
         // PRESET_VERSION 递增 = 预置内容更新过，自动补注入一次（去重合并不覆盖用户数据）
-        const NODE_PRESET_VERSION = 2; // v2: 新增韩日节假日节点（2026-09-01）
+        const NODE_PRESET_VERSION = 3; // v3: 新增年末二游档期+2027开年节点（2026-11-12）
         function seedMarketNodes(force) {
             if (typeof safeStorage === 'undefined') return 0;
             const seededVer = Number(safeStorage.get('niko_market_nodes_seeded_ver', 0));
@@ -36632,13 +36648,14 @@ function renderDayDetail() {
     }
 
     async function disconnect() {
-        stopPolling();
+        // 只断开坚果云：GitHub 的参数、连接状态和定时器都属于另一条独立通道，不能一起清掉。
+        if (state.fsPollTimer) { clearInterval(state.fsPollTimer); state.fsPollTimer = null; }
         state.dirHandle = null;
         state.fileHandle = null;
         state.connected = false;
         try { await idbClear(); } catch (e) {}
-        set('niko_sync_settings', {});
-        addLog('已断开连接', 'info');
+        saveSettings();
+        addLog('已断开坚果云连接（GitHub 配置保留）', 'info');
         renderUI();
     }
 
@@ -36681,15 +36698,19 @@ function renderDayDetail() {
     }
 
     /* ---------- 数据收集 ---------- */
+    // 判定一个键是否属于「业务数据」：云同步、恢复、历史拉回统一用它，
+    // 防止把 EXCLUDE_KEYS（本机偏好/迁移标记）或同步元数据（快照/settings/token）重新带回本机。
+    function isSyncDataKey(k) {
+        if (!k || !DATA_PREFIXES.some(p => k.startsWith(p))) return false;
+        if (META_KEYS.includes(k) || EXCLUDE_KEYS.includes(k)) return false;
+        if (k.startsWith('niko_sync_local_snapshot')) return false;
+        return true;
+    }
     function collectLocal() {
         const result = {};
         for (let i = 0; i < localStorage.length; i++) {
             const k = localStorage.key(i);
-            if (k && DATA_PREFIXES.some(p => k.startsWith(p)) &&
-                !META_KEYS.includes(k) && !EXCLUDE_KEYS.includes(k) &&
-                !k.startsWith('niko_sync_local_snapshot')) {
-                result[k] = localStorage.getItem(k);
-            }
+            if (isSyncDataKey(k)) result[k] = localStorage.getItem(k);
         }
         return result;
     }
@@ -37041,10 +37062,15 @@ function renderDayDetail() {
     }
 
     function ghDisconnect() {
+        // 「断开」必须跨刷新生效：清掉自动重连所读的凭证；坚果云通道与它的定时器不动。
         state.ghConnected = false;
         state.ghBackOffUntil = 0;
-        stopPolling();
-        addLog('已断开 GitHub 云端文件', 'info');
+        state.ghOwner = '';
+        state.ghRepo = '';
+        state.ghToken = '';
+        if (state.ghPollTimer) { clearInterval(state.ghPollTimer); state.ghPollTimer = null; }
+        saveSettings();
+        addLog('已断开 GitHub 云端文件（已清除自动重连参数）', 'info');
         renderUI();
         renderGhUI();
     }
@@ -37082,7 +37108,7 @@ function renderDayDetail() {
         const clean = (obj) => {
             const out = {};
             Object.keys(obj || {}).forEach(k => {
-                if (!EXCLUDE_KEYS.includes(k)) out[k] = obj[k];
+                if (isSyncDataKey(k)) out[k] = obj[k];
             });
             return out;
         };
@@ -37150,10 +37176,19 @@ function renderDayDetail() {
         if (syncBtn) syncBtn.disabled = true;
         try {
             for (const ch of channels) {
-                await doSyncChannel(ch);
+                try {
+                    await doSyncChannel(ch);
+                    // ask 模式出现待处理冲突时，pending* 只能属于一个通道；先停在这里，
+                    // 不许继续同步另一通道把用户正在看的冲突现场覆盖掉。
+                    if (state.conflictList) {
+                        addLog('有冲突等待处理，另一通道本轮暂停（下次同步再继续）', 'warn');
+                        break;
+                    }
+                } catch (e) {
+                    // 单通道故障不拖死另一通道：坚果云断文件 / GitHub 断网时，另一条仍能继续。
+                    addLog(`[${channelName(ch)}] 同步失败：${e.message}；继续尝试其他通道`, 'err');
+                }
             }
-        } catch (e) {
-            addLog('同步失败：' + e.message, 'err');
         } finally {
             state.syncing = false;
             if (syncBtn) syncBtn.disabled = false;
@@ -37328,6 +37363,9 @@ function renderDayDetail() {
     }
 
     /* ---------- 冲突处理 ---------- */
+    function escHtml(s) {
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
     function openConflictModal(conflictKeys, local, remoteKeys) {
         const mask = $id('cloudsyncConflictMask');
         const list = $id('cloudsyncConflictList');
@@ -37338,9 +37376,9 @@ function renderDayDetail() {
             const rv = remoteKeys[k] ? remoteKeys[k].value : null;
             const lInfo = summarizeValue(lv);
             const rInfo = summarizeValue(rv);
-            return `<div class="cloudsync-conflict-item" data-key="${k.replace(/"/g, '&quot;')}">
+            return `<div class="cloudsync-conflict-item" data-key="${escHtml(k)}">
                 <div class="cloudsync-conflict-item-head">
-                    <span class="cloudsync-conflict-key">${k}</span>
+                    <span class="cloudsync-conflict-key">${escHtml(k)}</span>
                     <span style="font-size:10.5px;color:#ef4444;font-weight:600;">本地与云端均已修改</span>
                 </div>
                 <div class="cloudsync-conflict-preview">
@@ -37392,9 +37430,9 @@ function renderDayDetail() {
             const v = JSON.parse(str);
             if (Array.isArray(v)) return `共 ${v.length} 条记录`;
             if (v && typeof v === 'object') return `共 ${Object.keys(v).length} 个字段`;
-            return String(v).slice(0, 40);
+            return escHtml(String(v).slice(0, 40));
         } catch (e) {
-            return String(str).slice(0, 60);
+            return escHtml(String(str).slice(0, 60));
         }
     }
 
@@ -37551,14 +37589,15 @@ function renderDayDetail() {
     function startPolling() {
         stopPolling();
         const interval = getSyncIntervalMs();
-        if ((state.connected || state.fsAvailable) && !state.manualOnly) {
+        if (state.connected && state.fileHandle && !state.manualOnly) {
             state.fsPollTimer = setInterval(() => {
-                if (!document.hidden && !state.syncing) doSyncChannel('fs');
+                // 必须走 doSync 的全局互斥锁；直接 doSyncChannel 会让两个定时器并发写本地/冲突现场。
+                if (!document.hidden && !state.syncing) doSync();
             }, interval);
         }
         if (state.ghConnected) {
             state.ghPollTimer = setInterval(() => {
-                if (!document.hidden && !state.syncing && Date.now() >= (state.ghBackOffUntil || 0)) doSyncChannel('github');
+                if (!document.hidden && !state.syncing && Date.now() >= (state.ghBackOffUntil || 0)) doSync();
             }, interval);
         }
     }
@@ -37892,20 +37931,28 @@ function renderDayDetail() {
                 + '云端没有的键不会被删除。' + warn)) return;
             // ★ 先存当前状态（IndexedDB，不吃 localStorage 配额）
             try { if (window.__lbak && typeof window.__lbak.run === 'function') await window.__lbak.run('pre'); } catch (e) {}
-            let w = 0, f = 0;
+            let w = 0, f = 0, s = 0;
             const writtenKeys = [];
             Object.keys(keys).forEach((k) => {
                 if (!Object.prototype.hasOwnProperty.call(keys, k)) return;
-                try { localStorage.setItem(k, keys[k].value); w++; writtenKeys.push(k); } catch (e) { f++; }
+                // 历史版本里可能混着 EXCLUDE_KEYS / 同步元数据 / 凭证，拉回必须跳过，
+                // 否则会跨设备带回本机偏好甚至把旧 Token 写回配置。
+                if (!isSyncDataKey(k)) { s++; return; }
+                const v = keys[k] && keys[k].value;
+                if (v === null || v === undefined || v === '') { f++; return; } // 空壳不落本地（防 "undefined" 污染）
+                try { localStorage.setItem(k, v); w++; writtenKeys.push(k); } catch (e) { f++; }
             });
             // ★ 2026-11-09 修（拉回被冲掉）：拉回后必须 ① 把该通道快照刷成拉回内容，
             //   ② 立刻把拉回版本推回云端 —— 否则下一轮自动同步把它当冲突（默认策略 remote）
             //   用云端当前版（很可能就是要逃开的坏版本）原样盖回来，拉回白拉。
             //   推回云端时「只写不删」：当前云端多出来的键保留（可能是其他设备的新数据）。
+            //   ② 2026-11-09 二修：快照里已有「未出现在历史版本里」的键，直接改值再 saveSnapshot
+            //   会把它的「指纹」再哈希成「指纹的指纹」，之后本机一改这键就被误判冲突、
+            //   被云端静默吃掉。正确做法：先取旧指纹字典，只把 writtenKeys 换成新值，用 writeFpDict 直写。
             try {
-                const snapNow = loadSnapshot('github');
-                writtenKeys.forEach((k) => { snapNow[k] = keys[k].value; });
-                saveSnapshot(snapNow, 'github');
+                const fp = loadSnapshot('github');
+                writtenKeys.forEach((k) => { fp[k] = nikoSnapFp(keys[k].value); });
+                writeFpDict(fp, 'github');
                 let cur = null;
                 try { cur = await readRemoteGh(); } catch (e2) {}
                 const mergedKeys = Object.assign({}, (cur && cur.keys) || {});
@@ -37913,9 +37960,11 @@ function renderDayDetail() {
                 await writeRemote({ version: '3.0', app: 'NIKO', deviceId: getDeviceId(), updatedAt: nowIso(), keys: mergedKeys }, 'github');
                 addLog('拉回版本已推回云端（' + Object.keys(mergedKeys).length + ' 键），不会被下轮同步冲掉', 'ok');
             } catch (e2) {
-                addLog('⚠️ 拉回已写入本机，但推回云端失败：' + (e2 && e2.message || e2) + ' —— 下次自动同步可能被云端盖回，请马上手动「立即同步」', 'err');
+                // 写回云端失败 = 拉回只在本机临时生效：把 GitHub 自动同步暂停，避免下一轮 remote 策略盖回。
+                state.ghBackOffUntil = Date.now() + 3600000;
+                addLog('⚠️ 拉回已写入本机，但推回云端失败：' + (e2 && e2.message || e2) + ' —— 已暂停 GitHub 自动同步 1 小时，请检查连接后重试拉回', 'err');
             }
-            alert('✅ 已拉回 ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + '，页面即将刷新');
+            alert('✅ 已拉回 ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + (s ? '（跳过 ' + s + ' 个非数据键）' : '') + '，页面即将刷新');
             setTimeout(() => location.reload(), 400);
         } catch (e) {
             alert('拉回失败：' + (e && e.message ? e.message : e));
@@ -37963,7 +38012,13 @@ function renderDayDetail() {
         scheduleAutoPush,
         updateSidebarIndicator,
         openDataManagerFromSidebar,
-        dmSummary
+        dmSummary,
+        // ★ 生产环境恢复入口（2026-11-09）：总框架的 nikoForcePull / nikoRemotePull 需要直读云端，
+        //   不能再依赖测试桥 __internals —— 正式页面里没有它，导致两个救命按钮实际失效。
+        state,
+        readRemote,
+        readRemoteGh,
+        isSyncDataKey
     };
 
     /* ---------- 启动时把「所有通道的快照」一次迁到指纹格式 ----------
@@ -45369,6 +45424,14 @@ if(typeof window !== 'undefined'){
         // 结构化导出：自动收集所有 work_calendar_* / niko_* 前缀的存储键，
         // 未来新增功能模块的数据无需改代码也会被自动包含
         const DATA_KEY_PREFIXES = ['work_calendar_', 'niko_'];
+        // 凭证 / 解锁 / 同步元数据：导出的备份文件里绝不允许出现（防止备份外发时泄露写权限、解锁码），
+        // 导入时也绝不允许被外部文件覆盖（防止恶意/旧备份把别人 Token 或解锁码写进本机）。
+        const DATA_EXPORT_EXCLUDE = [
+            'niko_sync_settings', 'niko_sync_device_id',
+            'niko_sync_snapshot', 'niko_sync_local_snapshot',
+            'niko_unlock_remember', 'niko_lock_device',
+            'niko_team_token', 'niko_team_me', 'niko_team_roles'
+        ];
         let pendingImportData = null;
 
         function getAllDataKeys() {
@@ -45376,7 +45439,11 @@ if(typeof window !== 'undefined'){
             const keys = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
-                if (DATA_KEY_PREFIXES.some(p => k.startsWith(p))) keys.push(k);
+                if (DATA_KEY_PREFIXES.some(p => k.startsWith(p))) {
+                    if (DATA_EXPORT_EXCLUDE.includes(k)) continue;
+                    if (k.startsWith('niko_sync_local_snapshot')) continue;
+                    keys.push(k);
+                }
             }
             return keys;
         }
@@ -45495,14 +45562,23 @@ if(typeof window !== 'undefined'){
             return { total: total, items: items, byBoard: byBoard };
         }
 
-        function dmPurgeDead() {
+        async function dmPurgeDead() {
             const s = nikoDeadScan();
             if (!s.items.length) { alert('已经没有残留数据了。'); return; }
             const lines = Object.keys(s.byBoard).map(function (b) { return '· ' + b + ' — ' + nikoFmtChars(s.byBoard[b]) + ' 字符'; }).join('\n');
             if (!confirm('确定清掉这 ' + s.items.length + ' 个键吗？\n\n' + lines + '\n\n合计 ' + nikoFmtChars(s.total) + ' 字符。\n\n'
                 + '这几个板块已经下线，清完数据就真的没了（清之前我会先给本机存一份快照）。\n'
                 + '想留档就先关掉这里、点「下载备份」，再回来清。')) return;
-            try { if (typeof window.lbakRunNow === 'function') window.lbakRunNow(); } catch (e) {}
+            // 硬闸：备份必须真的落盘后才允许删。旧版只「触发」不「等待」，IndexedDB 异步还没写完就开始删，
+            // 备份可能只备到一片空 —— 那就不叫备份了。
+            let bak = null;
+            try {
+                if (window.__lbak && typeof window.__lbak.run === 'function') bak = await window.__lbak.run('pre');
+                else if (typeof window.lbakRunNow === 'function') bak = await window.lbakRunNow();
+            } catch (e) { bak = null; }
+            if (!bak) {
+                if (!confirm('⚠️ 没能先存下备份（可能这个浏览器不支持本机备份库）。仍要继续清理吗？\n\n继续 = 直接删除，无法找回。')) return;
+            }
             let done = 0;
             s.items.forEach(function (x) { try { localStorage.removeItem(x.key); done++; } catch (e) {} });
             window.__dmZombieDone = { n: done, chars: s.total };
@@ -45847,23 +45923,40 @@ if(typeof window !== 'undefined'){
             `;
         }
 
-        function confirmImport() {
+        async function confirmImport() {
             if (!pendingImportData) return;
+            const host = document.getElementById('importPreviewArea');
 
-            // 写入 localStorage（只写已知前缀的键，避免写入无关数据）
+            // 硬闸：覆盖/写入前先落一份当前状态（异步，必须等它完成，否则导入就变「没备份的直接覆盖」）。
+            let bak = null;
+            try {
+                if (window.__lbak && typeof window.__lbak.run === 'function') bak = await window.__lbak.run('pre');
+            } catch (e) { bak = null; }
+            if (!bak) {
+                if (!confirm('⚠️ 没能先存下备份（可能这个浏览器不支持本机备份库）。仍要继续导入吗？\n\n继续 = 直接覆盖文件里有的键，无法找回当前数据。')) return;
+            }
+
+            // 写入 localStorage：只写已知前缀的业务键；凭证 / 解锁 / 同步元数据一律跳过，绝不覆盖。
+            let done = 0, skipped = 0, failed = 0;
             Object.keys(pendingImportData).forEach(key => {
                 if (!DATA_KEY_PREFIXES.some(p => key.startsWith(p))) return;
+                if (DATA_EXPORT_EXCLUDE.includes(key) || key.startsWith('niko_sync_local_snapshot')) { skipped++; return; }
+                const raw = pendingImportData[key];
+                if (typeof raw !== 'string') { failed++; return; }   // 只接受字符串值（标准导出的格式）
                 try {
-                    safeStorage.set(key, JSON.parse(pendingImportData[key]));
-                } catch (e) {}
+                    safeStorage.set(key, JSON.parse(raw));
+                    done++;
+                } catch (e) { failed++; }
             });
 
-            // 显示成功提示
-            document.getElementById('importPreviewArea').innerHTML = `
-                <div class="import-success">
-                    ✅ 数据导入成功！页面将在 2 秒后自动刷新...
-                </div>
-            `;
+            if (host) {
+                host.innerHTML = failed
+                    ? `<div class="import-warning" style="background:#fef3c7;border-color:#f59e0b;color:#92400e;">
+                        ⚠️ 已写入 ${done} 个键，但有 ${failed} 个键解析失败没有写入（${skipped} 个凭证/同步键已跳过）。请检查文件后重试。
+                    </div>`
+                    : `<div class="import-success">✅ 数据导入成功（${done} 个键${skipped ? '，跳过 ' + skipped + ' 个凭证/同步键' : ''}）。页面将在 2 秒后自动刷新...</div>`;
+            }
+            if (failed) return; // 有失败就不自动刷新，让用户看清楚再处理
 
             setTimeout(() => {
                 location.reload();
@@ -47444,7 +47537,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611090920";
+        window.NIKO_VERSION = "202611121046";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
