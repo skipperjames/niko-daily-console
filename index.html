@@ -1008,6 +1008,57 @@
         }
         #dataManagerModal .dm-ins-btn:hover { border-color: var(--accent, #667eea); color: var(--accent, #667eea); }
 
+        /* ===== 🆘 数据自救三步（2026-11-16）=====
+           老板原话：「我数据丢失都不知道应该先去点哪个，再点哪个，哪个是最终的保底后悔药」
+           —— 旧版三张平的卡片（本机备份 / 云端历史 / 手动导出）没有优先级，等于把判断丢回给用户。
+           新版按「越靠上越管用」竖排编号，并把「最终保底」单独说清楚。 */
+        #dataManagerModal .dm-rescue {
+            border: 1px solid rgba(239, 68, 68, .28);
+            background: rgba(239, 68, 68, .05);
+            border-radius: 12px; padding: 12px 13px 11px; margin-bottom: 16px;
+        }
+        #dataManagerModal .dm-rescue-hd { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 11px; }
+        #dataManagerModal .dm-rescue-ico { font-size: 19px; line-height: 1.1; flex: 0 0 auto; }
+        #dataManagerModal .dm-rescue-hd b { display: block; font-size: 13.5px; font-weight: 600; color: var(--text, #333); }
+        #dataManagerModal .dm-rescue-hd span { display: block; margin-top: 2px; font-size: 11.5px; color: var(--muted, #8a8072); }
+        #dataManagerModal .dm-rescue-steps { display: flex; flex-direction: column; gap: 7px; }
+        #dataManagerModal .dm-rescue-step {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 11px; border-radius: 9px;
+            background: var(--card-bg-2, var(--card-bg, #fff)); border: 1px solid var(--card-border, #e8e6e1);
+        }
+        #dataManagerModal .dm-rescue-step.primary { border-color: rgba(239, 68, 68, .42); }
+        #dataManagerModal .dm-rescue-no {
+            flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 700; color: #fff; background: var(--muted, #b0a89c);
+        }
+        #dataManagerModal .dm-rescue-step.primary .dm-rescue-no { background: #ef4444; }
+        #dataManagerModal .dm-rescue-tx { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; line-height: 1.5; }
+        #dataManagerModal .dm-rescue-tx b { font-size: 12.5px; font-weight: 600; color: var(--text, #333); }
+        #dataManagerModal .dm-rescue-tx span { font-size: 11px; color: var(--muted, #8a8072); }
+        #dataManagerModal .dm-rescue-btn {
+            flex: 0 0 auto; padding: 6px 12px; border-radius: 7px; cursor: pointer;
+            font-size: 11.5px; font-weight: 500; white-space: nowrap;
+            border: 1px solid var(--card-border, #e8e6e1); background: transparent; color: var(--text, #333);
+        }
+        #dataManagerModal .dm-rescue-btn.primary { background: #ef4444; border-color: #ef4444; color: #fff; }
+        #dataManagerModal .dm-rescue-btn:hover { border-color: var(--accent, #667eea); color: var(--accent, #667eea); }
+        #dataManagerModal .dm-rescue-btn.primary:hover { background: #dc2626; border-color: #dc2626; color: #fff; }
+        #dataManagerModal .dm-rescue-foot {
+            margin-top: 9px; padding-top: 8px; border-top: 1px dashed rgba(239, 68, 68, .22);
+            font-size: 11px; line-height: 1.65; color: var(--muted, #8a8072);
+        }
+        #dataManagerModal .dm-rescue-foot button {
+            border: none; background: none; padding: 0; margin: 0 1px; cursor: pointer;
+            font-size: 11px; font-weight: 600; color: var(--accent, #667eea); text-decoration: underline;
+        }
+        @media (max-width: 640px) {
+            #dataManagerModal .dm-rescue-step { flex-wrap: wrap; gap: 7px; }
+            #dataManagerModal .dm-rescue-tx { flex: 1 1 100%; order: 2; }
+            #dataManagerModal .dm-rescue-btn { flex: 1 1 100%; order: 3; }
+        }
+
         /* ===== v3 置顶：云同步状态条（2026-11-06）=====
            老板原话「云端同步显示要放到最上面比较显眼的位置」——进弹窗第一眼就是它。 */
         #dataManagerModal .dm-sync {
@@ -15965,25 +16016,43 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                     </div>
                 </section>
 
-                <!-- 3 道保险：云同步已提到上面那条状态条了 -->
-                <div class="dm-ins" id="dmInsurance">
-                    <div class="dm-ins-card">
-                        <div class="dm-ins-hd"><span class="dm-ins-ico">🗄</span><b>本机自动备份</b></div>
-                        <div class="dm-ins-cad">自动 · 每 2 小时</div>
-                        <p class="dm-ins-tx">存在<b>这台电脑</b>里，最多留 10 份。数据不对就点回退。</p>
-                        <button class="dm-ins-btn" onclick="lbakRunNow()">立即备份</button>
+                <!-- 🆘 数据自救：按优先级竖排（2026-11-16，老板原话「不知道先点哪个」） -->
+                <div class="dm-rescue" id="dmRescue">
+                    <div class="dm-rescue-hd">
+                        <span class="dm-rescue-ico">🆘</span>
+                        <div>
+                            <b>数据不对 / 东西丢了？按这个顺序来</b>
+                            <span>越靠上越管用。从 ① 开始试，别跳着点。</span>
+                        </div>
                     </div>
-                    <div class="dm-ins-card">
-                        <div class="dm-ins-hd"><span class="dm-ins-ico">📜</span><b>云端历史</b></div>
-                        <div class="dm-ins-cad">自动 · 每同步一次</div>
-                        <p class="dm-ins-tx">云端每个版本都留着，能翻到任一时刻再拉回来。</p>
-                        <button class="dm-ins-btn" onclick="dmOpenHist()">打开历史</button>
+                    <div class="dm-rescue-steps">
+                        <div class="dm-rescue-step primary">
+                            <span class="dm-rescue-no">①</span>
+                            <div class="dm-rescue-tx">
+                                <b>云端历史 · 首选</b>
+                                <span>GitHub 每同步一次存一版，能翻到任意时刻。找到条数最多的那版点「∪ 合并」，只补不删。</span>
+                            </div>
+                            <button class="dm-rescue-btn primary" onclick="dmOpenHist()">打开历史</button>
+                        </div>
+                        <div class="dm-rescue-step">
+                            <span class="dm-rescue-no">②</span>
+                            <div class="dm-rescue-tx">
+                                <b>本机自动备份 · 次选</b>
+                                <span>存在这台电脑里，每 2 小时一份、留 10 份。云端历史翻不到（或那时云端已被覆盖）就用它。</span>
+                            </div>
+                            <button class="dm-rescue-btn" onclick="dmGoBackup()">挑一份回退</button>
+                        </div>
+                        <div class="dm-rescue-step">
+                            <span class="dm-rescue-no">③</span>
+                            <div class="dm-rescue-tx">
+                                <b>你手上的导出文件 · 最终保底</b>
+                                <span>前两个都在「这台电脑 / 这个 GitHub 账号」里，只有这个在你自己手上。账号出问题、仓库没了，就靠它。</span>
+                            </div>
+                            <button class="dm-rescue-btn" onclick="document.getElementById('cloudsyncImportInput').click()">导入文件</button>
+                        </div>
                     </div>
-                    <div class="dm-ins-card">
-                        <div class="dm-ins-hd"><span class="dm-ins-ico">⬇</span><b>手动导出</b></div>
-                        <div class="dm-ins-cad">你点才有</div>
-                        <p class="dm-ins-tx">换电脑 / 重装时用。下载一个文件，以后拖回来。</p>
-                        <button class="dm-ins-btn" onclick="exportAllData()">下载备份</button>
+                    <div class="dm-rescue-foot">
+                        💡 最终保底永远是 ③ —— 每次大改前点一下 <button onclick="exportAllData()">下载备份</button>，一个 JSON 存在你自己手上，账号出事也动不了它。
                     </div>
                 </div>
 
@@ -16157,10 +16226,9 @@ body.dark-mode .lbak-err { color: #fca5a5; }
             </div>
 
             <div class="dm-row">
-                <span class="dm-row-lb">🛟 数据丢了</span>
-                <button class="cloudsync-btn" id="cloudsyncForcePullBtn" onclick="nikoForcePull()" style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;" title="从本地快照（旧格式）与云端文件（坚果云/GitHub）里挑 events 最多的覆盖本地（数据丢失时用）">☁ 快照/云端恢复</button>
-                <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="直接 HTTP 读远端坚果云 / GitHub 文件找 events（本地快照也空时用）">🌐 从远端硬拉（终极恢复）</button>
-                <span class="dm-row-hint">先试左边；左边也空就用右边</span>
+                <span class="dm-row-lb">🛟 历史打不开</span>
+                <button class="cloudsync-btn" id="cloudsyncRemotePullBtn" onclick="nikoRemotePull()" style="background:#fef2f2;color:#9d174d;border:1px solid #f9a8d4;" title="云端历史列表读不出来时才用：直接读远端文件，把 events 最多的那份覆盖到本地">🌐 从远端硬拉</button>
+                <span class="dm-row-hint">只在上面「📜 云端历史」打不开时用；能打开就用不上这个</span>
             </div>
 
             <div class="dm-row">
@@ -45913,6 +45981,14 @@ if(typeof window !== 'undefined'){
         window.dmFoldToggle = dmFoldToggle;
 
         /* 保险卡「打开历史」：展开云同步里的云端历史，并滚到它 */
+        // ② 本机备份：滚到备份卡片并确保列表是展开的
+        function dmGoBackup() {
+            const el = document.getElementById('lbakCard');
+            if (el && el.scrollIntoView) el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            try { if (typeof lbakRenderPanel === 'function') lbakRenderPanel(); } catch (e) {}
+        }
+        window.dmGoBackup = dmGoBackup;
+
         function dmOpenHist() {
             const box = document.getElementById('cloudsyncHistBody');
             if (box && box.hidden && typeof window.nikoHistToggle === 'function') {
@@ -47816,7 +47892,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611160958";
+        window.NIKO_VERSION = "202611161020";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
