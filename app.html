@@ -36706,10 +36706,25 @@ function renderDayDetail() {
         if (k.startsWith('niko_sync_local_snapshot')) return false;
         return true;
     }
+    /* ★ 2026-11-16：已清理的「已下线板块」键墓碑。
+       现场：用户点「清理掉」把本地清干净了，下一轮同步 computeMerge 判「本地没有、云端有 → 拉取」，
+             又原样拉回来 —— 表现就是「清不干净 / 每次清理都有各种问题」。
+       口径：清过的键记进墓碑，之后既不收集、不推送、也不拉取；云端那份在清理时一并删掉。 */
+    const PURGED_KEY = 'niko_dead_purged';
+    function purgedKeys() {
+        try {
+            const a = JSON.parse(localStorage.getItem(PURGED_KEY) || '[]');
+            return Array.isArray(a) ? a : [];
+        } catch (e) { return []; }
+    }
+
     function collectLocal() {
         const result = {};
+        const dead = new Set(purgedKeys());
         for (let i = 0; i < localStorage.length; i++) {
             const k = localStorage.key(i);
+            if (k === PURGED_KEY) continue;
+            if (dead.has(k)) continue;   // 已清理的已下线板块键：不再参与同步
             if (isSyncDataKey(k)) result[k] = localStorage.getItem(k);
         }
         return result;
@@ -37164,7 +37179,10 @@ function renderDayDetail() {
         const snapEmpty = !snapshot || Object.keys(snapshot).length === 0;
         const clean = (obj) => {
             const out = {};
+            const dead = new Set(purgedKeys());
+            const pure = new Set([PURGED_KEY]);
             Object.keys(obj || {}).forEach(k => {
+                if (pure.has(k) || dead.has(k)) return;   // 墓碑键：三边都不参与比对
                 if (isSyncDataKey(k)) out[k] = obj[k];
             });
             return out;
@@ -37856,6 +37874,40 @@ function renderDayDetail() {
         reader.readAsText(file);
     }
 
+    /* 清理已下线板块残留时，把云端那份也删掉（只删指定键，其它一概不动）
+       ★ 2026-11-16：不删云端 = 下一轮同步按「云端有、本地没有 → 拉取」原样拉回，
+         用户看到的现象就是「清完又回来了」。返回实际从云端删掉的键数。 */
+    async function purgeRemoteKeys(keys) {
+        if (!keys || !keys.length) return 0;
+        const set = new Set(keys);
+        let removed = 0;
+        for (const ch of activeChannels()) {
+            try {
+                const remote = await readRemote(ch);
+                if (!remote || !remote.keys) continue;
+                const next = {};
+                let changed = false;
+                Object.keys(remote.keys).forEach((k) => {
+                    if (set.has(k)) { changed = true; removed++; return; }
+                    next[k] = remote.keys[k];
+                });
+                if (changed) {
+                    await writeRemote({ version: '3.0', app: 'NIKO', deviceId: getDeviceId(), updatedAt: nowIso(), keys: next }, ch);
+                    addLog('已从云端删除 ' + Object.keys(remote.keys).length + '→' + Object.keys(next).length + ' 键（已下线板块残留）', 'ok');
+                }
+            } catch (e) {
+                addLog('[' + channelName(ch) + '] 清理云端残留失败：' + e.message, 'err');
+            }
+        }
+        // 落墓碑：之后 collectLocal / computeMerge 都不再碰这些键
+        try {
+            const cur = purgedKeys();
+            const merged = Array.from(new Set(cur.concat(keys)));
+            localStorage.setItem(PURGED_KEY, JSON.stringify(merged));
+        } catch (e) {}
+        return removed;
+    }
+
     /* ---------- 测试环境桥接 ---------- */
     function setupTestBridge() {
         if (!window.__NIKO_SYNC_TEST__) return;
@@ -38227,6 +38279,7 @@ function renderDayDetail() {
         getSyncIntervalMs,
         exportManual,
         importManualFile,
+        purgeRemoteKeys,
         scheduleAutoPush,
         updateSidebarIndicator,
         openDataManagerFromSidebar,
@@ -45798,6 +45851,14 @@ if(typeof window !== 'undefined'){
                 if (!confirm('⚠️ 没能先存下备份（可能这个浏览器不支持本机备份库）。仍要继续清理吗？\n\n继续 = 直接删除，无法找回。')) return;
             }
             let done = 0;
+            // ★ 2026-11-16：**先清云端，再删本地**。顺序反了会被自动同步抢在中间按
+            //   「本地没有、云端有 → 拉取」原样拉回来 —— 用户反馈的「每次清理都有各种问题」就是它。
+            let remoteDone = 0;
+            try {
+                if (window.NikoSync && typeof window.NikoSync.purgeRemoteKeys === 'function') {
+                    remoteDone = await window.NikoSync.purgeRemoteKeys(s.items.map(function (x) { return x.key; }));
+                }
+            } catch (e) {}
             s.items.forEach(function (x) { try { localStorage.removeItem(x.key); done++; } catch (e) {} });
             window.__dmZombieDone = { n: done, chars: s.total };
             renderStorageCheck();
@@ -47755,7 +47816,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611160921";
+        window.NIKO_VERSION = "202611160958";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
