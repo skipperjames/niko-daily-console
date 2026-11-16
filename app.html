@@ -36853,16 +36853,19 @@ function renderDayDetail() {
     }
 
     async function readRemoteGh() {
-        if (!state.ghConnected) return null;
+        // ★ 2026-11-16 数据事故根治①：原来「没连上」也 return null，而 null 在上游等于「云端没有文件」
+        //   → 会走首次同步整份上传本地。改成抛错，让本轮同步失败而不是拿本地去盖云端。
+        if (!state.ghConnected) throw new Error('GitHub 通道未连接，本轮不读写云端');
         try {
             const url = `${GH_API}/repos/${state.ghOwner}/${state.ghRepo}/contents/${GH_FILE}`;
             const res = await fetch(url, {
+                cache: 'no-store',   // 不许吃浏览器缓存：缓存里可能是别的设备刚推过的版本
                 headers: {
                     'Authorization': `Bearer ${state.ghToken}`,
                     'Accept': 'application/vnd.github+json'
                 }
             });
-            if (res.status === 404) return null; // 文件不存在 → 首次同步
+            if (res.status === 404) return null; // 文件真的不存在 → 首次同步
             if (!res.ok) throw new Error(`GitHub API ${res.status}`);
             const data = await res.json();
             // 2026-10-16：Contents API 对 **>1MB 的文件不返回 content**（encoding:"none" + content:""），
@@ -36872,21 +36875,65 @@ function renderDayDetail() {
             // 有 sha 说明文件一定存在，改用 raw media type 把原文取回来。
             if (!data.content && data.sha) {
                 const raw = await fetch(url, {
+                    cache: 'no-store',
                     headers: {
                         'Authorization': `Bearer ${state.ghToken}`,
-                        'Accept': 'application/vnd.github.raw+json'
+                        'Accept': 'application/vnd.github.raw'
                     }
                 });
                 if (!raw.ok) throw new Error(`GitHub raw ${raw.status}`);
                 const rawText = await raw.text();
-                return rawText ? JSON.parse(rawText) : null;
+                return parseRemotePayload(rawText);
             }
             const content = b64ToUtf8(data.content);
-            return content ? JSON.parse(content) : null;
+            return parseRemotePayload(content);
         } catch (e) {
-            if (/404|not found/i.test(e.message)) return null;
+            // ★ 2026-11-16 数据事故根治②：只有**明确的 404** 才算「云端没文件」。
+            //   旧代码 /404|not found/i 太宽，raw 兜底 404、网络抖一下都被当成首次同步 → 整份上传覆盖。
+            if (/^GitHub API 404$/.test(String(e.message))) return null;
             throw e;
         }
+    }
+
+    /* ★ 2026-11-16 数据事故根治③（这次云端被反复刷回 471 条的直接元凶）：
+       实测事故现场：每 2 分钟一轮、连续 7 轮把云端 600 条刷回 471 条，云端键数从 226 掉到 193
+       —— 因为上传的是**本地键集合**，说明上游认为「云端一个键都没有」。
+       根因：raw 兜底拿回来的如果是 JSON 元数据（没有 keys 字段）或空串，旧代码 `return null` /
+       直接返回畸形容器，上游拿到 remote.keys 为 undefined → 判定「每个键云端都没有」→
+       computeMerge 把全部键判成 push → 本地整份盖上去。
+       口径：拿不到**带 keys 的合法对象**一律抛错（本轮跳过），绝不当成空云端。 */
+    function parseRemotePayload(text) {
+        if (text === null || text === undefined || String(text).trim() === '') {
+            throw new Error('云端文件读回空内容，本轮跳过（不整份上传）');
+        }
+        let o;
+        try { o = JSON.parse(text); } catch (e) { throw new Error('云端文件不是合法 JSON，本轮跳过'); }
+        if (!o || typeof o !== 'object' || !o.keys || typeof o.keys !== 'object' || Array.isArray(o.keys)) {
+            throw new Error('云端文件缺少 keys 字段，本轮跳过（不整份上传）');
+        }
+        if (Object.keys(o.keys).length === 0) {
+            throw new Error('云端文件 keys 为空，本轮跳过（不整份上传）');
+        }
+        return o;
+    }
+
+    /* 只探测远端文件是否存在（不下载内容）——「读不到内容」时二次确认，避免误判成首次同步 */
+    async function remoteFileExists(channel) {
+        if (channel === 'github') {
+            const res = await fetch(`${GH_API}/repos/${state.ghOwner}/${state.ghRepo}/contents/${GH_FILE}`, {
+                cache: 'no-store',
+                headers: { 'Authorization': `Bearer ${state.ghToken}`, 'Accept': 'application/vnd.github+json' }
+            });
+            if (res.status === 200) return true;
+            if (res.status === 404) return false;
+            throw new Error('探测远端失败 HTTP ' + res.status);
+        }
+        if (channel === 'fs') {
+            if (window.__NIKO_SYNC_TEST__) return !!localStorage.getItem('__niko_cloud_mock__');
+            if (!state.fileHandle) return false;
+            try { const f = await state.fileHandle.getFile(); return f.size > 0; } catch (e) { return true; }
+        }
+        return false;
     }
 
     async function writeRemoteGh(data, _attempt) {
@@ -37363,6 +37410,15 @@ function renderDayDetail() {
 
         // 首次同步：云端无文件 → 全量推送
         if (!remote) {
+            /* ★ 2026-11-16 数据事故根治④：最后一道保险。
+               「读不到云端」绝不等价于「云端没文件」。这里独立探一次：远端有文件就拒绝整份上传。
+               探不到也按「有文件」处理 —— 宁可这一轮不同步，也不能拿本地去盖云端。 */
+            let exists = true;
+            try { exists = await remoteFileExists(channel); }
+            catch (e) { exists = true; }
+            if (exists) {
+                throw new Error('远端文件存在但读不到内容 → 本轮拒绝全量推送（防止把云端刷成本地这份）');
+            }
             const keys = {};
             Object.keys(local).forEach(k => {
                 keys[k] = { value: local[k], updatedAt: nowIso() };
@@ -47699,7 +47755,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611160904";
+        window.NIKO_VERSION = "202611160921";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
