@@ -36909,8 +36909,9 @@ function renderDayDetail() {
         } catch (e) {}
         // 创建或更新文件
         const content = utf8ToB64(JSON.stringify(data, null, 2));
+        // ★ 2026-11-16：commit message 带上各键条数 —— 云端历史列表不用下载内容就能看出哪一版被刷瘦了
         const body = {
-            message: `NIKO sync ${new Date().toISOString()}`,
+            message: `NIKO sync ${new Date().toISOString()} · ` + nikoSyncDigest(data),
             content: content,
             ...(sha ? { sha } : {})
         };
@@ -37105,6 +37106,15 @@ function renderDayDetail() {
     // （snapshot 自 2026-10-16 起存指纹，见 nikoSnapFp；比对时 lv/rv 现场转指纹）
     // 合并前统一剔除 EXCLUDE_KEYS（本地已排除，但云端旧文件 / 旧快照可能还带着状态 key，避免被拉回）
     function computeMerge(local, snapshot, remoteKeys) {
+        /* ★ 2026-11-16 数据事故修复（新设备首次上线整批覆盖云端 162 个键）
+           现场：一台从没参与过同步的设备（dev_msv8gvd4r3xfr2）首次上线，它的快照是空的
+                 → 每个键都判成「本地改过」→ 用它那份旧数据整批推上云端。结果：
+                 日历 548→471（10 月排期 49 条消失、30 条完成态被抹回待办）、便签 55→36、
+                 习惯打卡 101→79。而键数守卫（nikoShrinkGuard）只比键数，完全没拦住。
+           口径：空快照 ≠ 本地被改过。此时云端已有的键一律先拉云端（云端是多设备汇总，更可信）；
+                 只有「本地条目数明显多于云端（>1.5 倍）」才交策略处理，免得把本机独有的新数据丢掉；
+                 云端没有的键照常推送补全。 */
+        const snapEmpty = !snapshot || Object.keys(snapshot).length === 0;
         const clean = (obj) => {
             const out = {};
             Object.keys(obj || {}).forEach(k => {
@@ -37132,6 +37142,13 @@ function renderDayDetail() {
             const rv = (remoteKeys && remoteKeys[key]) ? remoteKeys[key].value : null;
 
             if (lv === rv) { nothing.push(key); continue; }   // 值相同直接跳过（不依赖指纹，避免哈希碰撞误判）
+            // ★ 空快照保护（见函数开头 2026-11-16 说明）：本机没同步过 → 云端有就拉云端的
+            if (snapEmpty && lv !== null && rv !== null) {
+                const la = nikoItemCount(lv), ra = nikoItemCount(rv);
+                if (la !== null && ra !== null && ra >= 3 && la > ra * 1.5) conflict.push(key);
+                else pull.push(key);
+                continue;
+            }
             // 2026-11-06 事故配套：云端这份快照里**根本没有**这个 key（被写瘦过）——
             //   既没东西可拉（不能走 pull，旧逻辑 pull 时遇到空值就直接不管了，云端永远缺这个键），
             //   更不该判成冲突（判冲突 + 默认 remote 就会删本地，便签就是这么没的）。
@@ -37161,6 +37178,118 @@ function renderDayDetail() {
         const a = Object.keys(prevKeys || {}).length;
         const b = Object.keys(nextKeys || {}).length;
         return { block: a >= 20 && b < Math.floor(a * 0.6), prev: a, next: b };
+    }
+
+    /* ---------- 内容级防缩水（2026-11-16 数据事故配套） ----------
+       键数守卫只能挡「整块键被删」，挡不住「键还在、里面的条目被刷少」
+       —— 这次事故 224→170 个键才降 13%，可日历条目掉了 77 条、便签掉了 19 张。
+       口径：同一个键要推的值条目数 < 云端 70%（且云端 ≥5 条）→ 判缩水，
+             不整轮拒绝（会挡住别的正常键），而是**自动并集合并**后再写云端，宁可多不可少。 */
+    const GUARD_MIN_ITEMS = 5;
+    const GUARD_DROP_RATIO = 0.7;
+
+    // 条目数：数组=长度，对象=顶层键数；解析失败返回 null（不参与判定）
+    function nikoItemCount(v) {
+        if (v === null || v === undefined) return null;
+        try {
+            const o = JSON.parse(v);
+            if (Array.isArray(o)) return o.length;
+            if (o && typeof o === 'object') return Object.keys(o).length;
+            return null;
+        } catch (e) { return null; }
+    }
+
+    function nikoContentGuard(remoteKeys, nextRemoteKeys) {
+        const shrunk = [];
+        Object.keys(nextRemoteKeys || {}).forEach((k) => {
+            const prev = remoteKeys && remoteKeys[k] ? remoteKeys[k].value : null;
+            if (prev === null || prev === undefined) return;
+            const nv = nextRemoteKeys[k] ? nextRemoteKeys[k].value : null;
+            if (nv === null || nv === undefined || nv === prev) return;
+            const a = nikoItemCount(prev), b = nikoItemCount(nv);
+            if (a === null || b === null || a < GUARD_MIN_ITEMS) return;
+            if (b < a * GUARD_DROP_RATIO) shrunk.push({ key: k, prev: a, next: b });
+        });
+        return shrunk;
+    }
+
+    // 数组元素主键（并集去重用）：id > key > date
+    function nikoKeyOfItem(e) {
+        if (e === null || typeof e !== 'object') return null;
+        if (e.id !== undefined && e.id !== null) return 'id:' + e.id;
+        if (e.key !== undefined && e.key !== null) return 'key:' + e.key;
+        if (e.date !== undefined && e.date !== null) return 'date:' + e.date;
+        return null;
+    }
+
+    // 并集：a=云端（为底，冲突时用云端），b=本地（只补它独有的条目）
+    function nikoUnionVal(a, b) {
+        const aArr = Array.isArray(a), bArr = Array.isArray(b);
+        if (aArr && bArr) {
+            const ia = a.map(nikoKeyOfItem), ib = b.map(nikoKeyOfItem);
+            if (ia.every((x) => x) && ib.every((x) => x)) {
+                const setA = new Set(ia);
+                const out = a.slice();
+                for (let i = 0; i < b.length; i++) if (!setA.has(ib[i])) out.push(b[i]);
+                return out;
+            }
+            return b.length > a.length ? b : a;
+        }
+        if (aArr !== bArr) return aArr ? a : b;
+        if (a && b && typeof a === 'object' && typeof b === 'object') {
+            const out = {};
+            Object.keys(a).forEach((k) => { out[k] = a[k]; });
+            Object.keys(b).forEach((k) => { out[k] = (k in a) ? nikoUnionVal(a[k], b[k]) : b[k]; });
+            return out;
+        }
+        return a;
+    }
+
+    function nikoUnionValue(remoteStr, localStr) {
+        let r, l;
+        try { r = JSON.parse(remoteStr); } catch (e) { return null; }
+        if (localStr === null || localStr === undefined) return JSON.stringify(r);
+        try { l = JSON.parse(localStr); } catch (e) { return null; }
+        try { return JSON.stringify(nikoUnionVal(r, l)); } catch (e) { return null; }
+    }
+
+    // 写云端前跑一遍：缩水的键就地改成并集，返回处理数量
+    function nikoContentRepair(remoteKeys, nextRemoteKeys) {
+        const shrunk = nikoContentGuard(remoteKeys, nextRemoteKeys);
+        // 未达拦截阈值但明显减少（≥8 条且 >5%）→ 只留痕不拦：以后查「谁把数据推少了」有据可循，
+        // 同时又不会因为用户正常清理十几条任务就把它们强行并集回来。
+        Object.keys(nextRemoteKeys || {}).forEach((k) => {
+            const pv = remoteKeys && remoteKeys[k] ? remoteKeys[k].value : null;
+            if (pv === null || pv === undefined) return;
+            const nv = nextRemoteKeys[k] ? nextRemoteKeys[k].value : null;
+            if (nv === null || nv === undefined || nv === pv) return;
+            const a = nikoItemCount(pv), b = nikoItemCount(nv);
+            if (a === null || b === null || a < 20 || a - b < 8) return;
+            if (b >= a * GUARD_DROP_RATIO) return;
+            if (shrunk.some((o) => o.key === k)) return;
+            addLog('⚠️ ' + k + '：本轮推送 ' + b + ' 条（云端 ' + a + ' 条，少了 ' + (a - b) + ' 条）—— 若不是你删的，可在「📜 云端历史」里点「∪ 合并」找回', 'warn');
+        });
+        if (!shrunk.length) return 0;
+        shrunk.forEach((o) => {
+            const cur = remoteKeys[o.key];
+            const merged = nikoUnionValue(cur.value, nextRemoteKeys[o.key].value);
+            if (merged !== null) {
+                nextRemoteKeys[o.key] = { value: merged, updatedAt: nowIso() };
+                addLog('🛡 ' + o.key + '：要推 ' + o.next + ' 条 / 云端 ' + o.prev + ' 条 → 已自动并集为 ' + nikoItemCount(merged) + ' 条再写云端', 'warn');
+            } else {
+                nextRemoteKeys[o.key] = { value: cur.value, updatedAt: cur.updatedAt };
+                addLog('🛑 ' + o.key + '：要推 ' + o.next + ' 条 / 云端 ' + o.prev + ' 条，无法并集 → 保留云端版本', 'err');
+            }
+        });
+        return shrunk.length;
+    }
+
+    // commit message 摘要：让云端历史列表零额外下载就能看出哪一版被刷瘦
+    function nikoSyncDigest(remote) {
+        const keys = (remote && remote.keys) || {};
+        const cnt = (k) => (keys[k] ? nikoItemCount(keys[k].value) : null);
+        const ev = cnt('work_calendar_events'), nt = cnt('niko_inspiration_notes');
+        return '日历' + (ev === null ? '-' : ev) + '·便签' + (nt === null ? '-' : nt) + '·键' + Object.keys(keys).length;
     }
 
     /* ---------- 执行同步 ---------- */
@@ -37321,6 +37450,7 @@ function renderDayDetail() {
                 version: '3.0', app: 'NIKO', deviceId: getDeviceId(),
                 updatedAt: nowIso(), keys: nextRemoteKeys
             };
+            nikoContentRepair(remoteKeys, nextRemoteKeys);   // ★ 2026-11-16 内容级防缩水
             const g = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
             if (g.block) {
                 addLog(`🛑 拒写云端：新快照只剩 ${g.next} 个键（云端原有 ${g.prev} 个），疑似要把云端刷瘦 —— 本轮跳过推送`, 'err');
@@ -37518,6 +37648,7 @@ function renderDayDetail() {
             updatedAt: nowIso(), keys: nextRemoteKeys
         };
         const conflictCount = state.conflictList ? state.conflictList.length : 0;
+        nikoContentRepair(remoteKeys, nextRemoteKeys);   // ★ 2026-11-16 内容级防缩水
         const g2 = nikoShrinkGuard(remoteKeys, nextRemoteKeys);
         if (g2.block) {
             addLog(`🛑 拒写云端：新快照只剩 ${g2.next} 个键（云端原有 ${g2.prev} 个），疑似要把云端刷瘦 —— 本轮只应用本地，不推云端`, 'err');
@@ -37851,7 +37982,7 @@ function renderDayDetail() {
                     const q = await fetch(`${base}/contents/${GH_FILE}?ref=${c.sha}`, { headers: histHeaders() });
                     if (q.ok) { const meta = await q.json(); size = Number(meta.size) || 0; }
                 } catch (e) {}
-                return { sha: c.sha, at: c.commit.author.date, size: size };
+                return { sha: c.sha, at: c.commit.author.date, size: size, msg: c.commit.message || '' };
             }));
             rows.push.apply(rows, got);
         }
@@ -37865,6 +37996,13 @@ function renderDayDetail() {
         return (d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
     }
 
+    // 从 commit message 里读条数（nikoSyncDigest 写的；老版本没有 → null，退化成只看体积）
+    function histDigest(msg) {
+        const m = String(msg || '').match(/日历(\d+|-)·便签(\d+|-)·键(\d+)/);
+        if (!m) return null;
+        return { ev: m[1] === '-' ? null : Number(m[1]), nt: m[2] === '-' ? null : Number(m[2]), keys: Number(m[3]) };
+    }
+
     function histRender(rows) {
         const host = document.getElementById('cloudsyncHistList');
         if (!host) return;
@@ -37875,13 +38013,21 @@ function renderDayDetail() {
         let html = '';
         rows.forEach((r, i) => {
             const older = rows[i + 1];
-            const sus = !!(older && older.size > 20000 && r.size < older.size * 0.6);
+            const dg = histDigest(r.msg), dgo = older ? histDigest(older.msg) : null;
+            const susSize = !!(older && older.size > 20000 && r.size < older.size * 0.6);
+            // ★ 2026-11-16：条数骤降比体积更早暴露问题（这次事故体积只降 13%，日历条目却掉了 77 条）
+            const susCount = !!(dg && dgo && dgo.ev >= 20 && dg.ev !== null && dg.ev < dgo.ev * 0.85);
+            const sus = susSize || susCount;
+            const tagTxt = susCount ? '日历骤降' : (susSize ? '体积骤降' : '');
+            const meta = (r.size / 1024).toFixed(0) + ' KB · ' + String(r.sha).slice(0, 7)
+                + (dg ? ' · 日历' + (dg.ev === null ? '-' : dg.ev) + '·便签' + (dg.nt === null ? '-' : dg.nt) + '·键' + dg.keys : '');
             html += '<div class="hist-row' + (sus ? ' sus' : '') + '" data-sha="' + r.sha + '">'
                 + '<div class="hist-main">'
-                + '<div class="hist-t">' + histTime(r.at) + (sus ? '<span class="hist-tag">体积骤降</span>' : '') + '</div>'
-                + '<div class="hist-m">' + (r.size / 1024).toFixed(0) + ' KB · ' + String(r.sha).slice(0, 7) + '</div>'
+                + '<div class="hist-t">' + histTime(r.at) + (tagTxt ? '<span class="hist-tag">' + tagTxt + '</span>' : '') + '</div>'
+                + '<div class="hist-m">' + meta + '</div>'
                 + '</div>'
-                + '<button class="hist-btn" onclick="nikoHistRestore(\'' + r.sha + '\',' + (r.size / 1024).toFixed(0) + ')">拉回</button>'
+                + '<button class="hist-btn" onclick="nikoHistRestore(\'' + r.sha + '\',' + (r.size / 1024).toFixed(0) + ',\'union\')" title="把这一版与本机现在合并（只补不删），推荐用这个">∪ 合并</button>'
+                + '<button class="hist-btn" onclick="nikoHistRestore(\'' + r.sha + '\',' + (r.size / 1024).toFixed(0) + ')">覆盖</button>'
                 + '</div>';
         });
         host.innerHTML = html;
@@ -37909,8 +38055,9 @@ function renderDayDetail() {
         }
     }
 
-    async function histRestore(sha, kb) {
+    async function histRestore(sha, kb, mode) {
         if (!state.ghConnected) return;
+        const UNION = mode === 'union';
         const base = `${GH_API}/repos/${state.ghOwner}/${state.ghRepo}`;
         try {
             const raw = await fetch(`${base}/contents/${GH_FILE}?ref=${sha}`, { headers: histHeaders({ 'Accept': 'application/vnd.github.raw+json' }) });
@@ -37924,7 +38071,7 @@ function renderDayDetail() {
                 try { const a = JSON.parse(keys['niko_inspiration_notes'].value); notes = Array.isArray(a) ? a.length : -1; } catch (e) {}
             }
             const warn = (typeof kb === 'number' && kb < 50) ? '\n\n⚠️ 这一版只有 ' + kb + ' KB，明显偏瘦，很可能是坏版本。' : '';
-            if (!confirm('把云端这一版拉回本机？\n\n'
+            if (!confirm((UNION ? '把这一版与本机现在【合并】回来？\n（历史版为底，本机多出来的条目只补不删，不会丢当前数据）\n\n' : '把云端这一版拉回本机？\n\n')
                 + '· 版本时间：' + (obj.updatedAt ? new Date(obj.updatedAt).toLocaleString('zh-CN') : sha.slice(0, 7)) + '\n'
                 + '· 键数：' + n + (notes >= 0 ? ' · 便签 ' + notes + ' 条' : '') + '\n\n'
                 + '拉回前会先自动存一份「当前状态」（本地备份的 pre 快照），所以拉回本身不会造成损失。\n'
@@ -37933,6 +38080,7 @@ function renderDayDetail() {
             try { if (window.__lbak && typeof window.__lbak.run === 'function') await window.__lbak.run('pre'); } catch (e) {}
             let w = 0, f = 0, s = 0;
             const writtenKeys = [];
+            const target = {};   // 实际写进本机的值（union 模式下与历史原值不同，推回云端必须用它）
             Object.keys(keys).forEach((k) => {
                 if (!Object.prototype.hasOwnProperty.call(keys, k)) return;
                 // 历史版本里可能混着 EXCLUDE_KEYS / 同步元数据 / 凭证，拉回必须跳过，
@@ -37940,7 +38088,16 @@ function renderDayDetail() {
                 if (!isSyncDataKey(k)) { s++; return; }
                 const v = keys[k] && keys[k].value;
                 if (v === null || v === undefined || v === '') { f++; return; } // 空壳不落本地（防 "undefined" 污染）
-                try { localStorage.setItem(k, v); w++; writtenKeys.push(k); } catch (e) { f++; }
+                let outV = v;
+                if (UNION) {
+                    // ★ 2026-11-16 合并恢复：以历史版为底，把本机现在多出来的条目补进去（只补不删）
+                    let cur = null;
+                    try { cur = localStorage.getItem(k); } catch (e) {}
+                    const uv = cur ? nikoUnionValue(v, cur) : null;
+                    if (uv !== null) outV = uv;
+                }
+                target[k] = outV;
+                try { localStorage.setItem(k, outV); w++; writtenKeys.push(k); } catch (e) { f++; }
             });
             // ★ 2026-11-09 修（拉回被冲掉）：拉回后必须 ① 把该通道快照刷成拉回内容，
             //   ② 立刻把拉回版本推回云端 —— 否则下一轮自动同步把它当冲突（默认策略 remote）
@@ -37951,12 +38108,17 @@ function renderDayDetail() {
             //   被云端静默吃掉。正确做法：先取旧指纹字典，只把 writtenKeys 换成新值，用 writeFpDict 直写。
             try {
                 const fp = loadSnapshot('github');
-                writtenKeys.forEach((k) => { fp[k] = nikoSnapFp(keys[k].value); });
+                writtenKeys.forEach((k) => { fp[k] = nikoSnapFp(target[k] !== undefined ? target[k] : (keys[k] && keys[k].value)); });
                 writeFpDict(fp, 'github');
                 let cur = null;
                 try { cur = await readRemoteGh(); } catch (e2) {}
                 const mergedKeys = Object.assign({}, (cur && cur.keys) || {});
-                writtenKeys.forEach((k) => { mergedKeys[k] = keys[k]; });
+                writtenKeys.forEach((k) => {
+                    // ★ 2026-11-16：推回云端必须用「实际写进本机的值」，否则 union 模式会被历史原值盖回去
+                    const v = target[k] !== undefined ? target[k] : (keys[k] && keys[k].value);
+                    if (v === null || v === undefined) return;
+                    mergedKeys[k] = { value: v, updatedAt: nowIso() };
+                });
                 await writeRemote({ version: '3.0', app: 'NIKO', deviceId: getDeviceId(), updatedAt: nowIso(), keys: mergedKeys }, 'github');
                 addLog('拉回版本已推回云端（' + Object.keys(mergedKeys).length + ' 键），不会被下轮同步冲掉', 'ok');
             } catch (e2) {
@@ -37964,7 +38126,7 @@ function renderDayDetail() {
                 state.ghBackOffUntil = Date.now() + 3600000;
                 addLog('⚠️ 拉回已写入本机，但推回云端失败：' + (e2 && e2.message || e2) + ' —— 已暂停 GitHub 自动同步 1 小时，请检查连接后重试拉回', 'err');
             }
-            alert('✅ 已拉回 ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + (s ? '（跳过 ' + s + ' 个非数据键）' : '') + '，页面即将刷新');
+            alert('✅ 已' + (UNION ? '合并' : '拉回') + ' ' + w + ' 个键' + (f ? '（' + f + ' 个写不进）' : '') + (s ? '（跳过 ' + s + ' 个非数据键）' : '') + '，页面即将刷新');
             setTimeout(() => location.reload(), 400);
         } catch (e) {
             alert('拉回失败：' + (e && e.message ? e.message : e));
@@ -47537,7 +47699,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611121046";
+        window.NIKO_VERSION = "202611160904";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
