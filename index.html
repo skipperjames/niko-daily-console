@@ -5375,6 +5375,36 @@ body.dark-mode .wal-set-row input{background:#14141c}
         }
         /* 项目旗帜（2026-09-07）：任务条标题前的地区旗 */
         .ev-flag { flex-shrink: 0; font-size: 11px; line-height: 1; }
+
+        /* ===== C / D 需求标记（2026-11-23 定稿 C6）=====
+           C = 金色实心块 + 当天置顶；D = 灰字母，刻意不缩小、不降透明度（用户点名：缩了看不清字）。
+           颜色不新增语义位：金块只落在标题前，不碰右上角状态圈，也不碰左侧项目色条。 */
+        .cd-badge {
+            flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+            height: 14px; min-width: 14px; padding: 0 3px; border-radius: 3px;
+            font-size: 9.5px; font-weight: 800; line-height: 1; letter-spacing: .2px;
+            margin-right: 4px; vertical-align: -1px;
+        }
+        .cd-badge.cd-c { background: #eab308; color: #1b1b1b; }
+        .cd-badge.cd-d { background: transparent; color: #6b7280; font-size: 11px; font-weight: 700; padding: 0; margin-right: 3px; min-width: 0; }
+        body.dark-mode .cd-badge.cd-c { background: #fbbf24; color: #16161f; }
+        body.dark-mode .cd-badge.cd-d { color: #9aa8bb; }
+
+        /* C 区 / D 区分隔：C 置顶之后，其余任务整体下沉并画一条淡金细线 */
+        .event-item.cd-sep { margin-top: 9px; }
+        .event-item.cd-sep::before {
+            content: ''; position: absolute; left: 2px; right: 6px; top: -5px; height: 1px;
+            background: linear-gradient(90deg, rgba(234,179,8,.55), rgba(120,130,150,.30) 55%, transparent);
+            pointer-events: none;
+        }
+        body.dark-mode .event-item.cd-sep::before {
+            background: linear-gradient(90deg, rgba(251,191,36,.50), rgba(255,255,255,.12) 55%, transparent);
+        }
+        /* 看板卡 / 今日看板：标记跟着字重放大一档 */
+        .board-card .cd-badge { height: 15px; min-width: 15px; font-size: 10px; }
+        .board-card .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
+        .day-task-item .cd-badge { height: 15px; min-width: 15px; font-size: 10px; margin-right: 5px; }
+        .day-task-item .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
         /* 标题主体（2026-09-18 用户要求「优先保障需求全名能显示完整」）：
            桌面也折两行——短名字仍占一行（line-clamp 自动），只有长名字才多占一行；
            悬停 item.title 仍给「项目·全名·状态」完整信息 */
@@ -23747,7 +23777,14 @@ if (document.readyState === 'loading') {
                 // 「单日最多 N 条」只限当日任务条：总可见条数 = 活跃车道数 + 当日条 ≤ N
                 let chipShown = 0;
                 const chipBudget = Math.max(0, MAX_EVENTS_PER_DAY - (maxActiveLane + 1));
-                dayEvents.forEach(ev => { if (ev.startDate === ev.endDate && chipShown < chipBudget) { renderList.push(ev); chipShown++; } });
+                // 2026-11-23：含 C 的单日任务置顶（稳定排序 —— 同档保持原顺序，不打乱手动拖拽出来的先后）
+                const singleEvs = dayEvents.map((ev, i) => ({ ev, i }))
+                    .filter(x => x.ev.startDate === x.ev.endDate)
+                    .sort((a, b) => (cdRank(a.ev) - cdRank(b.ev)) || (a.i - b.i))
+                    .map(x => x.ev);
+                const cdHasTop = singleEvs.some(ev => cdRank(ev) === 0);
+                const cdFirstRestId = cdHasTop ? (singleEvs.find(ev => cdRank(ev) !== 0) || {}).id : null;
+                singleEvs.forEach(ev => { if (chipShown < chipBudget) { renderList.push(ev); chipShown++; } });
                 renderList.forEach(ev => {
                     if (ev.__lanePad) {
                         const pad = document.createElement('div');
@@ -23766,6 +23803,11 @@ if (document.readyState === 'loading') {
                     item.className = `event-item type-${ev.type} status-${ev.status}${ev.status === 'done' ? ' completed' : ''}${ev.startDate !== ev.endDate ? ' long-task is-ghost' : ''}${isRepeatEvent ? ' repeat-event' : ''}${isOverdue ? ' overdue-event' : ''}`;
                     item.draggable = true;
                     item.dataset.eventId = ev.id;
+                    // C/D 标记（2026-11-23）：data-cd 只用于样式，不参与任何状态
+                    const cdKind = cdAttr(ev);
+                    if (cdKind) item.dataset.cd = cdKind;
+                    // 分区线：画在「当天第一条非 C 任务」上，前提是这天确实有 C（C 区在上、其余在下）
+                    if (cdFirstRestId && ev.id === cdFirstRestId) item.classList.add('cd-sep');
                     // 项目色（替代旧 6 固定轨道）
                     const project = getProject(ev.projectId);
                     item.style.setProperty('background-color', hexToRgba(project.color, 0.22), 'important');
@@ -23792,7 +23834,7 @@ if (document.readyState === 'loading') {
                     const copyActionHtml = `<span class="event-action copy-action" title="复制任务" onclick="duplicateEvent('${ev.id}', event)">⧉</span>`;
                     // 2026-09-07：去掉第二个 ✓（stamp-mark），完成信息移入悬停 title，只留前面的勾选框
                     const flagHtml = projFlag ? `<span class="ev-flag">${nikoFlagImg(projFlag)}</span>` : '';
-                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}`;
+                    item.innerHTML = `<span class="event-checkbox" onclick="toggleComplete('${ev.id}', event)">✓</span><span class="event-text">${flagHtml}${cdBadgeHtml(ev)}<span class="ev-title-main">${repeatIcon}${escapeHtml(timePrefix)}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${copyActionHtml}`;
                     // v2.10 状态圈长按轮盘
                     if (typeof attachStatusWheel === 'function') attachStatusWheel(item.querySelector('.status-mark'), ev.id);
                     item.addEventListener('dragstart', (e) => { draggedEventId = ev.id; e.dataTransfer.effectAllowed = 'move'; e.stopPropagation(); item.classList.add('dragging'); item.classList.add('carry-lift'); const ec = item.closest('.events-container'); if (ec) ec.classList.add('is-dragging'); });
@@ -24083,7 +24125,7 @@ function renderDayDetail() {
                 item.innerHTML = `${inBatch ? `<div class="batch-check${sel ? ' on' : ''}"></div>` : ''}<div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
                         <div class="task-row-main">
-                            <div class="task-title${isDone ? ' completed-title' : ''}">${escapeHtml(ev.title)}</div>
+                            <div class="task-title${isDone ? ' completed-title' : ''}">${cdBadgeHtml(ev)}${escapeHtml(ev.title)}</div>
                         </div>
                         <div class="task-row-meta">
                             <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${escapeHtml(project.name)}</span>
@@ -24144,17 +24186,48 @@ function renderDayDetail() {
             updateGlobalStats();
         }
 
+        // ===== C / D 需求标记（2026-11-23 用户定稿 C6 方案）=====
+        // ⚠️ 这组函数刻意放在 createBoardCard 前面：放在「function saveData」附近会被
+        //    verify_merge 的去重逻辑连带删掉（今日看板.html 里也有同名 saveData）。
+        // 标题尾段形如「数字门-1C2D / Route RaiD-1C5D / 棋子通缉-4D」→ 解析出 cCount / dCount。
+        // 必须锚定结尾：Route RaiD-1C5D 的名字里自带 D，全文搜字母会误判。
+        // 没有后缀的（周会 / 整理排期）一律不标、不置顶。
+        function parseCD(title) {
+            var m = String(title || '').match(/(?:(\d+)\s*C)?\s*(\d+)\s*D\s*$/i);
+            if (!m) return null;
+            var c = m[1] ? parseInt(m[1], 10) : 0;
+            var d = m[2] ? parseInt(m[2], 10) : 0;
+            if (!c && !d) return null;
+            return { c: c, d: d };
+        }
+        // 0 = 含 C（当天置顶）；1 = 其余（只有 D / 无后缀）
+        function cdRank(ev) {
+            var p = parseCD(ev && ev.title);
+            return (p && p.c > 0) ? 0 : 1;
+        }
+        // C = 金色实心块；D = 灰字母（不缩不降，保证字看得清 —— 2026-11-23 用户点名）
+        function cdBadgeHtml(ev) {
+            var p = parseCD(ev && ev.title);
+            if (!p) return '';
+            if (p.c > 0) return '<span class="cd-badge cd-c" title="含 ' + p.c + ' 个 C 需求">C</span>';
+            return '<span class="cd-badge cd-d" title="只有 D 需求（' + p.d + ' 个）">D</span>';
+        }
+        function cdAttr(ev) {
+            var p = parseCD(ev && ev.title);
+            return p ? (p.c > 0 ? 'c' : 'd') : '';
+        }
+
         function createBoardCard(ev) {
             const isDone = ev.status === 'done';
             const isOverdue = isEventOverdue(ev);
             const project = getProject(ev.projectId);
             return `
-                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}${isOverdue ? ' overdue-event' : ''}" draggable="true" data-event-id="${ev.id}" style="border-left:4px solid ${project.color} !important; box-shadow: inset 4px 0 8px -4px ${hexToRgba(project.color, 0.4)};">
+                <div class="board-card status-${ev.status}${ev.repeat || ev.repeatInstance ? ' repeat-card' : ''}${isOverdue ? ' overdue-event' : ''}" draggable="true" data-event-id="${ev.id}" data-cd="${cdAttr(ev)}" style="border-left:4px solid ${project.color} !important; box-shadow: inset 4px 0 8px -4px ${hexToRgba(project.color, 0.4)};">
                     <div class="card-actions">
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${cdBadgeHtml(ev)}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
                         <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
@@ -47940,7 +48013,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611230856";
+        window.NIKO_VERSION = "202611231826";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
