@@ -37346,6 +37346,38 @@ function renderDayDetail() {
         return shrunk;
     }
 
+    /* ★ 2026-11-23 跨键联动缩水保护（手机静默丢数据事故立）
+       现场：手机一轮把 日历 561→549、便签 53→49、排期 59→54 同时推上云端，云端被覆盖；
+             电脑下一轮又原样拉下来 —— 两台一起少。旧口径只有「单键降 30%」才并集，
+             这种 2% 的小幅缩水只打一条 warn 然后照推，完全没拦住。
+       判据：人不会同时在三块数据里删东西。**同一轮里 ≥2 个数据键同时变少、且总减少 ≥5 条**
+             → 判设备端丢数据（渲染截断 / 写入失败），不是人为删除，一律按并集处理，
+             宁可多不可少。单键少几条（正常删除）仍照旧传播，不受影响。 */
+    const CROSS_DROP_MIN_KEYS = 2;
+    const CROSS_DROP_MIN_ITEMS = 5;
+
+    // prevMap / nextMap 都是 { key: valueString }
+    function nikoCrossDropPairs(prevMap, nextMap) {
+        const drops = [];
+        Object.keys(nextMap || {}).forEach((k) => {
+            const pv = prevMap ? prevMap[k] : null;
+            const nv = nextMap[k];
+            if (pv === null || pv === undefined || nv === null || nv === undefined || nv === pv) return;
+            const a = nikoItemCount(pv), b = nikoItemCount(nv);
+            if (a === null || b === null || a < GUARD_MIN_ITEMS) return;
+            if (b < a) drops.push({ key: k, prev: a, next: b });
+        });
+        const total = drops.reduce((s, o) => s + (o.prev - o.next), 0);
+        if (drops.length < CROSS_DROP_MIN_KEYS || total < CROSS_DROP_MIN_ITEMS) return [];
+        return drops;
+    }
+
+    function nikoPickValues(keysObj) {
+        const out = {};
+        Object.keys(keysObj || {}).forEach((k) => { out[k] = keysObj[k] ? keysObj[k].value : null; });
+        return out;
+    }
+
     // 数组元素主键（并集去重用）：id > key > date
     function nikoKeyOfItem(e) {
         if (e === null || typeof e !== 'object') return null;
@@ -37389,6 +37421,12 @@ function renderDayDetail() {
     // 写云端前跑一遍：缩水的键就地改成并集，返回处理数量
     function nikoContentRepair(remoteKeys, nextRemoteKeys) {
         const shrunk = nikoContentGuard(remoteKeys, nextRemoteKeys);
+        // ★ 2026-11-23：跨键联动缩水 → 判设备端丢数据，直接并集（不再只留痕）
+        const cross = nikoCrossDropPairs(nikoPickValues(remoteKeys), nikoPickValues(nextRemoteKeys));
+        if (cross.length) {
+            addLog('🛡 本轮有 ' + cross.length + ' 个键同时变少（' + cross.map((o) => o.key + ' ' + o.prev + '→' + o.next).join('、') + '）—— 不像人为删除，按设备丢数据保护：并集后再写云端', 'warn');
+            cross.forEach((o) => { if (!shrunk.some((s) => s.key === o.key)) shrunk.push(o); });
+        }
         // 未达拦截阈值但明显减少（≥8 条且 >5%）→ 只留痕不拦：以后查「谁把数据推少了」有据可循，
         // 同时又不会因为用户正常清理十几条任务就把它们强行并集回来。
         Object.keys(nextRemoteKeys || {}).forEach((k) => {
@@ -37603,8 +37641,18 @@ function renderDayDetail() {
             }
         }
 
+        /* ★ 2026-11-23 拉取侧对称保护（手机把云端推少后，电脑一拉就跟丢的那一环）
+           口径：云端若在 ≥2 个键上同时比本地「少」（且总少 ≥5 条）→ 不是人为删除，是别的设备丢数据，
+                 本轮拒绝拉取这些键、保留本地；下一轮 computeMerge 会把本地多的那份推回云端补全。 */
+        const crossPull = nikoCrossDropPairs(local, nikoPickValues(remoteKeys));
+        const pullSkip = new Set(crossPull.map((o) => o.key));
+        if (crossPull.length) {
+            addLog('🛡 云端有 ' + crossPull.length + ' 个键同时比本地少（' + crossPull.map((o) => o.key + ' 云端' + o.next + '/本地' + o.prev).join('、') + '）—— 疑似别的设备推少了，本轮不拉取这些键、保留本地', 'warn');
+        }
+
         // 拉取：云端 → 本地（云端写成功后才应用）
         for (const k of pullKeys) {
+            if (pullSkip.has(k)) continue;
             if (remoteKeys[k]) {
                 // 2026-11-09 修：云端历史脏数据（value:undefined 空壳）不许拉进本地
                 if (remoteKeys[k].value === null || remoteKeys[k].value === undefined) {
@@ -47892,7 +47940,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611161020";
+        window.NIKO_VERSION = "202611230856";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
