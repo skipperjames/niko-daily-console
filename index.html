@@ -5405,6 +5405,9 @@ body.dark-mode .wal-set-row input{background:#14141c}
         .board-card .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
         .day-task-item .cd-badge { height: 15px; min-width: 15px; font-size: 10px; margin-right: 5px; }
         .day-task-item .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
+        /* 跨天甘特长条（gantt-bar）同款标记 —— 它是独立渲染路径，别只改 event-item（2026-11-24 铁律） */
+        .gantt-bar .cd-badge { height: 14px; min-width: 14px; font-size: 9.5px; }
+        .gantt-bar .cd-badge.cd-d { height: auto; min-width: 0; font-size: 11px; padding: 0; margin-right: 3px; }
         /* 标题主体（2026-09-18 用户要求「优先保障需求全名能显示完整」）：
            桌面也折两行——短名字仍占一行（line-clamp 自动），只有长名字才多占一行；
            悬停 item.title 仍给「项目·全名·状态」完整信息 */
@@ -23992,8 +23995,10 @@ if (document.readyState === 'loading') {
                         if (pct > 0) progressHtml = `<i class="gantt-progress" style="width:${pct}%"></i>`;
                     }
                     // 2026-09-09：文字结构对齐 event-item——同款 event-text + ev-title-main 包裹（含旗帜/重复图标/逾期史莱姆），字号字色截断行为完全一致
+                    // 2026-11-24 铁律补充：跨天长条走的是这条独立渲染路径，以后给任务条加任何标记/样式，
+                    //   event-item 的 innerHTML 和这里的 bar.innerHTML **必须一起改**（血泪：C 标记上线第一天就漏了跨天）
                     const slimeHtml = (isOverdue && !isDone) ? '<span class="slime-mark" title="逾期史莱姆 · 完成后啵地蒸发">🟢</span>' : '';
-                    bar.innerHTML = `${checkHtml}<span class="event-text">${gFlag ? `<span class="ev-flag">${nikoFlagImg(gFlag)}</span>` : ''}<span class="ev-title-main">${repeatIcon}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${progressHtml}`;
+                    bar.innerHTML = `${checkHtml}<span class="event-text">${gFlag ? `<span class="ev-flag">${nikoFlagImg(gFlag)}</span>` : ''}${cdBadgeHtml(ev)}<span class="ev-title-main">${repeatIcon}${safeTitle}${slimeHtml}</span></span>${statusMarkHtml}${progressHtml}`;
                     overlay.appendChild(bar);
                 }
             }
@@ -37063,9 +37068,19 @@ function renderDayDetail() {
             throw new Error('云端文件读回空内容，本轮跳过（不整份上传）');
         }
         let o;
-        try { o = JSON.parse(text); } catch (e) { throw new Error('云端文件不是合法 JSON，本轮跳过'); }
+        try { o = JSON.parse(text); } catch (e) { throw new Error('云端文件不是合法 JSON（长度 ' + String(text).length + '），本轮跳过'); }
+        // ★ 2026-11-24 兼容包裹层：万一某端把 payload 包了一层（payload/data/snapshot），现场拆开，
+        //   别因为多了一层壳就把整条通道卡死。
+        if (o && typeof o === 'object' && !o.keys && !Array.isArray(o)) {
+            for (const wrapKey of ['payload', 'data', 'snapshot']) {
+                if (o[wrapKey] && typeof o[wrapKey] === 'object' && o[wrapKey].keys && typeof o[wrapKey].keys === 'object') { o = o[wrapKey]; break; }
+            }
+        }
         if (!o || typeof o !== 'object' || !o.keys || typeof o.keys !== 'object' || Array.isArray(o.keys)) {
-            throw new Error('云端文件缺少 keys 字段，本轮跳过（不整份上传）');
+            const shape = (o && typeof o === 'object' && !Array.isArray(o))
+                ? '顶层字段: ' + Object.keys(o).slice(0, 8).join(', ')
+                : ('顶层类型: ' + (Array.isArray(o) ? 'array' : typeof o));
+            throw new Error('云端文件缺少 keys 字段（' + shape + '），本轮跳过（不整份上传）');
         }
         if (Object.keys(o.keys).length === 0) {
             throw new Error('云端文件 keys 为空，本轮跳过（不整份上传）');
@@ -37603,7 +37618,37 @@ function renderDayDetail() {
 
         const local = collectLocal();
         const snapshot = loadSnapshot(channel);
-        let remote = await readRemote(channel);
+        let remote = null;
+        let cloudBrokenMsg = '';
+        try { remote = await readRemote(channel); }
+        catch (e) {
+            // 只有「文件在、但格式读不出合法结构」这一类才算云端损坏；网络/HTTP 错误照旧往上抛
+            if (/keys 字段|keys 为空|读回空内容|不是合法 JSON/.test(String(e.message))) cloudBrokenMsg = String(e.message);
+            else throw e;
+        }
+
+        /* ★ 2026-11-24 云端损坏自愈（老板点名：「这个同步问题又出现了，怎么还没修复好」）：
+           旧逻辑：云端文件缺 keys → parseRemotePayload 抛错 → 本轮跳过 → 下一轮还是它 → 永远卡死。
+           新口径：云端那份已经读不出任何合法结构 = 没有可合并的东西；本地数据是完好的（快照/本地都在），
+           直接用本地全量重建云端（等价首次同步），重建后走正常合并。
+           另一台设备的数据不会丢：它的下一轮 computeMerge 会发现自己多的键、自动推回云端补全。 */
+        if (!remote && cloudBrokenMsg) {
+            const localKeys = Object.keys(local || {});
+            if (!localKeys.length) throw new Error(cloudBrokenMsg);   // 本地也是空的才继续跳过，绝不用空数据盖云端
+            addLog(`[${channelName(channel)}] ⚠ 云端文件损坏（${cloudBrokenMsg}）→ 用本地全量（${localKeys.length} 键）重建云端`, 'warn');
+            await writeRemote({
+                version: '3.0', app: 'NIKO', deviceId: getDeviceId(),
+                updatedAt: nowIso(), keys: (() => {
+                    const rebuilt = {};
+                    localKeys.forEach(k => { rebuilt[k] = { value: local[k], updatedAt: nowIso() }; });
+                    return rebuilt;
+                })()
+            }, channel);
+            saveSnapshot(local, channel);
+            remote = await readRemote(channel);
+            if (!remote) throw new Error('重建云端后仍读不到合法内容，本轮跳过');
+            addLog(`[${channelName(channel)}] 云端已重建，恢复正常同步`, 'ok');
+        }
 
         // 首次同步：云端无文件 → 全量推送
         if (!remote) {
@@ -48013,7 +48058,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611231826";
+        window.NIKO_VERSION = "202611240849";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
