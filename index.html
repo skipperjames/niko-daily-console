@@ -23340,12 +23340,24 @@ if (document.readyState === 'loading') {
             setTimeout(() => fx.remove(), 2900);
             showToast('🏆 项目「' + (project.name || '') + '」讨伐完成！');
         }
+        // 讨伐进度只算「实体任务」（2026-11-25 修正）：循环重复系列是无限提醒（如每周「提醒上传素材」），
+        // 把未来循环实例算进未完任务里，只要项目里有循环任务就永远清不了零 → 横幅一辈子不出现（日本项目 60 条未来实例就是这个坑）。
+        function projectSolidTasks(pid) {
+            return (events || []).filter(e => e.projectId === pid && !e.repeatGroup);
+        }
+        let _clearFxDay = {};
         function checkProjectClear(ev) {
             if (!ev || !ev.projectId) return;
             const project = getProject(ev.projectId);
             if (!project || project.id === 'pj_general') return;
-            const remain = events.filter(e => e.projectId === ev.projectId && e.status !== 'done').length;
-            if (remain === 0) projectClearCeremony(project);
+            const solid = projectSolidTasks(ev.projectId);
+            if (!solid.length) return;                                      // 只有循环提醒的项目不放横幅（否则收一条就播一次）
+            const remain = solid.filter(e => e.status !== 'done').length;
+            if (remain > 0) return;
+            const dayKey = project.id + '@' + new Date().toDateString();
+            if (_clearFxDay[dayKey]) return;                                // 同项目同一天只播一次
+            _clearFxDay[dayKey] = 1;
+            projectClearCeremony(project);
         }
 
         // 任务条纵向拖拽：每个日期存一份 ID 序列（niko_plan_day_order）
@@ -45855,9 +45867,10 @@ if(typeof window !== 'undefined'){
                         <button onclick="setProjectScope('${p.id}','life')" style="padding:4px 9px;font-size:12px;border:none;cursor:pointer;background:${pScope === 'life' ? 'rgba(16,185,129,0.28)' : 'transparent'};color:inherit;">🏡</button>
                     </span>`;
                 const taskCount = (events || []).filter(e => e.projectId === p.id).length;
-                // v2.10 项目 Boss 血条：HP = 未完成任务 / 全部任务，清零即讨伐完成
-                const pTotal = (events || []).filter(e => e.projectId === p.id).length;
-                const pRemain = (events || []).filter(e => e.projectId === p.id && e.status !== 'done').length;
+                // v2.10 项目 Boss 血条：HP = 未完成实体任务 / 实体任务总数，清零即讨伐完成
+                // 2026-11-25：循环重复系列的未来实例不计入（无限提醒永远清不了零，会把血条钉死）
+                const pTotal = (events || []).filter(e => e.projectId === p.id && !e.repeatGroup).length;
+                const pRemain = (events || []).filter(e => e.projectId === p.id && !e.repeatGroup && e.status !== 'done').length;
                 const hpPct = pTotal ? Math.round(pRemain / pTotal * 100) : 0;
                 const hpHtml = pTotal ? `
                     <div class="proj-hp${hpPct <= 25 && pRemain > 0 ? ' low' : ''}">
@@ -48058,7 +48071,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611240849";
+        window.NIKO_VERSION = "202611251817";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
