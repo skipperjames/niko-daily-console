@@ -14736,7 +14736,7 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                             🎮 独立游戏雷达
                             <span style="font-size:13px;font-weight:400;color:#888;" id="indieFullDate"></span>
                         </h1>
-                        <p style="color:#888;font-size:13px;margin-top:2px;">每周 Steam 新爆款 · 销量双轨 / 曝光链路 / 爆款因子 / 赛道饱和度</p>
+                        <p style="color:#888;font-size:13px;margin-top:2px;">本周 Steam 新爆款 · 在线人数 + 热销排名 · 曝光链路 / 爆款因子 / 赛道饱和度</p>
                     </div>
                     <div style="display:flex;align-items:center;gap:10px;">
                         <span id="indieFreshness" style="font-size:11px;padding:4px 12px;border-radius:14px;background:#eef2ff;color:#667eea;border:1px solid #c7d2fe;"></span>
@@ -14753,8 +14753,8 @@ body.dark-mode .lbak-err { color: #fca5a5; }
 
                 <!-- 数据口径说明（G1 双轨制的说明书，常驻显示） -->
                 <div class="indie-caliber">
-                    <b>📐 数据口径</b>
-                    <span>销量分两轨 —— <em>官方公告</em>取自开发者 / 发行商公开声明，权威但滞后，而且多数游戏根本不公布；<em>第三方估算</em>用 Boxleiter 法（评论数 × 价格带系数）反推，误差可达 ±60%，<b>只看量级不看精度</b>。两者打架是常态，而打架本身就是热度真假的最强信号。</span>
+            <b>📐 数据口径</b>
+            <span><b>指标 v2（2026-11-26）</b>：爆款指数 = <em>当前在线人数</em>（Steam 官方接口，3000 人封顶 50 分）+ <em>热销榜排名</em>（前 1 名 +40 分，越靠前越高）。<b>不再用评论数</b>—— 新作评论常年为 0，拿它当门槛会把刚上线的好游戏全筛掉。在线人数会随更新/促销波动，热销榜每小时变，所以这份榜单是<b>「此刻的热度快照」</b>，不是历史累计成绩；想看最新就喊我刷新一次。</span>
                 </div>
 
                 <!-- ===== 独立游戏雷达视图 ===== -->
@@ -27158,7 +27158,7 @@ function renderDayDetail() {
             var lastTxt = last ? indieFmtDate(String(last).slice(0, 10)) : '从未';
             var N = all.length || 1;
             function cls(n) { return n === 0 ? 'good' : (n > N / 2 ? 'bad' : 'warn'); }
-            var h = '<div class="indie-panel"><div class="pt">🩺 数据体检 <span class="hint">官方数据由 Actions 每周自动抓；下面是 AI 要补的分析字段</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
+            var h = '<div class="indie-panel"><div class="pt">🩺 数据体检 <span class="hint">官方数据按需手动刷新（在线人数 + 热销排名口径）；下面是 AI 要补的分析字段</span><span class="x" onclick="indiePanelClose()">收起 ✕</span></div>';
             h += '<div class="indie-health">'
                 + '<div class="indie-hc"><div class="k">当前款数</div><div class="v">' + all.length + ' <em>款</em></div></div>'
                 + '<div class="indie-hc"><div class="k">上次抓取</div><div class="v" style="font-size:13px;">' + lastTxt + '</div></div>'
@@ -27861,9 +27861,13 @@ function renderDayDetail() {
             var key = indieKeyOf(g);
             var onlineNow = (a.peakOnline !== undefined && a.peakOnline !== null) ? a.peakOnline : g.playersCurrent;
             var _conf = indieConfOf(g);   // C02：按评测数分档
+            // 2026-11-26 指标 v2：评论数停用 → 第二格优先显示「热销排名」（没有热销数据才回落到估算销量）
+            var slot2 = (g.hotRank != null)
+                ? { k: 'hot', label: '热销排名', v: '#' + g.hotRank }
+                : { k: 'sales', label: '估算销量', low: _conf.low, v: (sl && sl.mid ? indieFmtNum(sl.mid) + ' <em>份</em>' : '—') };
             var statRows = [
                 { k: 'burst', label: '爆款指数', v: (bu.score ? String(bu.score) : '—') },
-                { k: 'sales', label: '估算销量', low: _conf.low, v: (sl && sl.mid ? indieFmtNum(sl.mid) + ' <em>份</em>' : '—') },
+                slot2,
                 { k: 'rating', label: '好评率', v: (rv && rv.positivePct != null ? rv.positivePct + '%' : '—') },
                 { k: 'online', label: (a.peakOnline != null ? '峰值在线' : '当前在线'), v: (onlineNow != null ? indieFmtNum(onlineNow) + ' <em>人</em>' : '—') },
                 { k: 'fresh', label: '上线', v: (g.days != null ? g.days + ' <em>天</em>' : '—') }
@@ -28527,10 +28531,10 @@ function renderDayDetail() {
         // ---------- C03 缺失值显式化（空值 ≠ 零值）----------
         function indieMissingHtml(g) {
             var out = [];
-            if (!g.reviews || !g.reviews.total) out.push('评测数<b>未抓到</b>（Steam 未公开，或抓取被限流）');
-            if (!g.sales || g.sales.mid == null) out.push('估算销量<b>未抓到</b>（无评测数可反推）');
+            // 2026-11-26 指标 v2：评测数/估算销量已不作为口径（新作评论常年为 0），不再报「缺」
             if (!g.analysis) out.push('AI 分析<b>未补</b>（打开「🩺 数据体检」复制补分析指令）');
             if (!indieTagNames(g).length) out.push('社区标签<b>未抓到</b>（长效案例已补 appid，等抓取侧下一轮跑过即可）');
+            if (g.playersCurrent == null && g.hotRank == null) out.push('在线人数 / 热销排名都<b>没抓到</b>（这一款本轮数据为空）');
             if (!out.length) return '';
             return '<div class="indie-miss"><span>⚠️ 本轮缺：</span>'
                 + out.map(function (x) { return '<span>· ' + x + '</span>'; }).join('') + '</div>';
@@ -48068,7 +48072,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611251836";
+        window.NIKO_VERSION = "202611261012";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
