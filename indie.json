@@ -1,1226 +1,6827 @@
 {
-  "version": 1,
-  "fetchedAt": "2026-11-26T09:41:22+08:00",
-  "date": "2026-11-26",
-  "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
-  "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
-  "stats": {
-    "candidates": 560,
-    "passedReviews": 11,
-    "detailed": 11,
-    "picked": 7,
-    "minReviews": 20,
-    "maxReviews": 60000,
-    "maxReviewsPrefilter": 250000,
-    "maxTeam": 3,
-    "soloDev": 4,
-    "selfPublished": 5,
-    "indieTagId": 492
-  },
-  "games": [
+ "version": 1,
+ "date": "2026-11-26",
+ "fetchedAt": "2026-11-26T09:41:22+08:00",
+ "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）",
+ "caveat": "销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales",
+ "stats": {
+  "candidates": 560,
+  "passedReviews": 11,
+  "detailed": 11,
+  "picked": 25,
+  "minReviews": 20,
+  "maxReviews": 60000,
+  "maxReviewsPrefilter": 250000,
+  "maxTeam": 3,
+  "soloDev": 4,
+  "selfPublished": 5,
+  "indieTagId": 492,
+  "note": "20 款长效案例（10-16 批次）+ 5 款 11-24/25 抓到的新游"
+ },
+ "games": [
+  {
+   "appid": "1203620",
+   "name": "雾锁王国 (Enshrouded)",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1203620/98ca939f51b39bdd41e0e9198a9ccf8421148770/header_alt_assets_2.jpg?t=1792078032",
+   "desc": "《雾锁王国》是一款单人/合作生存动作RPG，在这里，你的自由与创造力将被摆在第一位。竭尽全力战胜蚕食薪谷王国的腐化瘴气：探索手工打造的瑰丽世界，揭开隐藏的秘密并披荆斩棘开辟道路，在完全支持地形改造的世界中尽情建造。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Keen Games GmbH"
+   ],
+   "publishers": [
+    "Keen Games GmbH"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "独立",
+    "角色扮演"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "Steam 成就",
+    "完全支持控制器",
+    "可调整文字大小",
+    "视角舒适度",
+    "可选颜色",
+    "自定义音量控制",
+    "可调整难度",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "立体声",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 35.99,
+   "priceInitial": 39.99,
+   "discount": 10,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/1203620/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 107453,
+    "positive": 92304,
+    "negative": 15149,
+    "score": "特别好评",
+    "positivePct": 86
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 83813.34,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 2363966,
+    "low": 1418380,
+    "high": 3782346,
+    "basis": "Boxleiter 法 · 评论数 × 22（$35.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 6489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Base Building」全站 6,489 款"
+    },
+    "niche": "Base Building"
+   },
+   "tags": [
     {
-      "appid": "5527800",
-      "name": "No Asteroids",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5527800/d62c870790fcce767edd856ce3e7e6df2a9b1395/header.jpg?t=1795542925",
-      "desc": "90 天后，一颗小行星将撞上地球。政府招标，来投标的只有一个矿工，自带矿镐。他分文不取，说小行星会自己买单。以第一人称挖掉 500 万立方米，卖掉矿石，给飞船买舰炮，让它们在你挖矿时一起开火。可单人游玩，也支持最多 8 人在线合作。",
-      "releaseText": "2026 年 11 月 24 日",
-      "release": "2026-11-24",
-      "comingSoon": false,
-      "developers": [
-        "Unruled Games"
-      ],
-      "publishers": [
-        "Unruled Games"
-      ],
-      "genres": [
-        "休闲",
-        "独立",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "多人",
-        "合作",
-        "在线合作",
-        "跨平台多人",
-        "Steam 成就",
-        "完全支持控制器",
-        "视角舒适度",
-        "自定义音量控制",
-        "无需应对快速反应事件",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 6.39,
-      "priceInitial": 7.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/5527800/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 464,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 2,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 271.44,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 17632,
-        "low": 10579,
-        "high": 28211,
-        "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Job Simulator」全站 1,630 款"
-        },
-        "niche": "Job Simulator"
-      },
-      "tags": [
-        {
-          "name": "Job Simulator",
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Mining",
-          "total": 1911,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Destruction",
-          "total": 2871,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Incremental",
-          "total": 9588,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Space",
-          "total": 10342,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Online Co-Op",
-          "total": 14322,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Co-op",
-          "total": 18068,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57902,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 10626,
-      "analysis": null
+     "name": "Base Building",
+     "total": 6489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
     },
     {
-      "appid": "3098060",
-      "name": "商业模拟器",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3098060/5d760359372cbeef8a44c631cb9809172d301821/header.jpg?t=1795630175",
-      "desc": "在这款游戏中，您将以少量资金为起点，通过决定在哪家商店开设哪种业务以及决定价格，在城市中建立一个商业帝国。商业奥德赛》是一款商业模拟游戏，将考验您的商业头脑和战略规划能力。",
-      "releaseText": "2026 年 11 月 25 日",
-      "release": "2026-11-25",
-      "comingSoon": false,
-      "developers": [
-        "HOGO Games"
-      ],
-      "publishers": [
-        "HOGO Games"
-      ],
-      "genres": [
-        "休闲",
-        "独立",
-        "模拟",
-        "策略"
-      ],
-      "categories": [
-        "单人",
-        "家庭共享"
-      ],
-      "priceUsd": 7.19,
-      "priceInitial": 11.99,
-      "discount": 40,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/3098060/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 187,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 1,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 218.79,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 7106,
-        "low": 4264,
-        "high": 11370,
-        "basis": "Boxleiter 法 · 评论数 × 38（$7.19 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Job Simulator」全站 1,630 款"
-        },
-        "niche": "Job Simulator"
-      },
-      "tags": [
-        {
-          "name": "Job Simulator",
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Capitalism",
-          "total": 3425,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Time Management",
-          "total": 5925,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Economy",
-          "total": 7430,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Immersive Sim",
-          "total": 10561,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Management",
-          "total": 13828,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Strategy",
-          "total": 56665,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57902,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 31,
-      "analysis": null
+     "name": "Crafting",
+     "total": 8653,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
     },
     {
-      "appid": "5568320",
-      "name": "中国式考试",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5568320/38e7c619685cb25224ef2c643ded825db0d9bfae/header_schinese.jpg?t=1795530424",
-      "desc": "如果今天再考一次，你还能拿多少分？《中国式考试》是一款单人考试模拟游戏。从小学一年级一路考到高考，看拼音写汉字、听英语录音、写作文，在数学卷上列出解题步骤。每学期交齐试卷，翻开批好的答卷，看看哪一步拿了分。",
-      "releaseText": "2026 年 11 月 24 日",
-      "release": "2026-11-24",
-      "comingSoon": false,
-      "developers": [
-        "Style Studio"
-      ],
-      "publishers": [
-        "Style Studio"
-      ],
-      "genres": [
-        "独立",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "Steam 创意工坊",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 0.79,
-      "priceInitial": 0.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/5568320/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 204,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 2,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 132.6,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 9180,
-        "low": 5508,
-        "high": 14688,
-        "basis": "Boxleiter 法 · 评论数 × 45（$0.79 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 7492,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Text-Based」全站 7,492 款"
-        },
-        "niche": "Text-Based"
-      },
-      "tags": [
-        {
-          "name": "Text-Based",
-          "total": 7492,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Education",
-          "total": 7853,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Immersive Sim",
-          "total": 10561,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57902,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Indie",
-          "total": 127055,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 131042,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 154,
-      "analysis": null
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
     },
     {
-      "appid": "3768760",
-      "name": "007 初露锋芒",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/be65391533f072e79699be70ef2d47b7b2ac57ee/header_alt_assets_5.jpg?t=1795019577",
-      "desc": "赢得编号。007 初露锋芒 是IO Interactive出品的惊险刺激的间谍动作冒险游戏。跟随年轻、机智但偶尔鲁莽的詹姆斯·邦德的脚步，他是军情六处训练项目中的新兵，一起探索这位世界最著名间谍的起源故事。",
-      "releaseText": "2026 年 5 月 26 日",
-      "release": "2026-05-26",
-      "comingSoon": false,
-      "developers": [
-        "IO Interactive A/S"
-      ],
-      "publishers": [
-        "IO Interactive A/S"
-      ],
-      "genres": [
-        "动作",
-        "冒险"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "完全支持控制器",
-        "视角舒适度",
-        "自定义音量控制",
-        "可调整难度",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "字幕选项",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 34.99,
-      "priceInitial": 69.99,
-      "discount": 50,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/3768760/",
-      "requiredAge": "13",
-      "reviews": {
-        "total": 38571,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 184,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 125.77,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 848562,
-        "low": 509137,
-        "high": 1357699,
-        "basis": "Boxleiter 法 · 评论数 × 22（$34.99 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Action",
-        "label": "动作",
-        "saturation": {
-          "total": 216,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Espionage」全站 216 款"
-        },
-        "niche": "Espionage"
-      },
-      "tags": [
-        {
-          "name": "Espionage",
-          "total": 216,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Third-Person Shooter",
-          "total": 4668,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Stealth",
-          "total": 5283,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Cinematic",
-          "total": 5542,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Combat",
-          "total": 23203,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Action-Adventure",
-          "total": 23296,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Story Rich",
-          "total": 37198,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 131042,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 3233,
-      "analysis": {
-        "src": [
-          "Steam 商店页 https://store.steampowered.com/app/3768760/",
-          "本站抓取：好评率 91%（48,477 条）· 估算 107 万 · 首发 40% 折 $69.99→$41.99"
-        ],
-        "sells": [
-          {
-            "t": "IO Interactive 的关卡设计口碑",
-            "d": "杀手系列班底做邦德"
-          },
-          {
-            "t": "邦德起源故事",
-            "d": "「赢得编号」—— 粉丝必看的前传"
-          },
-          {
-            "t": "大 IP + 大折扣",
-            "d": "首发直接 40% 折，$41.99 进 3A 区间"
-          }
-        ],
-        "hooks": [
-          {
-            "t": "谍战潜入 + 潜行",
-            "d": "Espionage / Stealth 双标签"
-          },
-          {
-            "t": "电影化演出",
-            "d": "Cinematic 标签，邦德味"
-          }
-        ],
-        "pains": [
-          {
-            "t": "3A 定价劝退",
-            "d": "40% 折扣把门槛砍到 $42"
-          },
-          {
-            "t": "IP 改编常翻车",
-            "d": "靠 IO 的关卡设计能力背书"
-          }
-        ],
-        "flow": [
-          {
-            "s": "0–10 分钟",
-            "d": "训练关卡，教潜行与伪装"
-          },
-          {
-            "s": "10–30 分钟",
-            "d": "第一次任务，学会多种通关路径"
-          },
-          {
-            "s": "30–50 分钟",
-            "d": "一次失手变枪战，发现「打也行」"
-          },
-          {
-            "s": "50–60 分钟",
-            "d": "想看下一段剧情，接受「重玩换路线」"
-          }
-        ],
-        "loop": {
-          "core": "侦察关卡 → 选一条潜入路线 → 执行 → 看评级/换路线重玩",
-          "steps": [
-            "情报收集",
-            "潜入执行",
-            "善后/脱身",
-            "复盘换路线"
-          ],
-          "mins": 40,
-          "note": "素材剪「同场景三种杀法」的对比，这是 IO 系游戏最独特的传播点"
-        },
-        "f7": {
-          "niche": 2,
-          "hook": 4,
-          "visual": 5,
-          "price": 3,
-          "publisher": 5,
-          "festival": 0,
-          "viral": 3
-        },
-        "ue5Fit": "red",
-        "ue5FitWhy": "这是 3A 团队 5 年量级的项目，一个人连一个关卡都做不完；只能学它的关卡结构，不能学它的规模",
-        "artScale": {
-          "level": 5,
-          "note": "3A 美术量：动作捕捉、面部、电影化演出，全部是团队产能"
-        },
-        "mvp": "别做邦德。学它「一张地图多个解法」：一个 100×100 米场景 + 3 条通关路径就是可玩原型",
-        "ue5": {
-          "pick": [
-            "Level Sequencer 做演出",
-            "Lumen",
-            "MetaHuman（可选）"
-          ],
-          "build": [
-            "关卡状态机与 AI 感知",
-            "多路径交互物",
-            "伪装/换装系统"
-          ],
-          "vs": "原作是 IO 自研 Glacier 引擎，强在关卡系统；UE5 强在画面，弱在「一个场景多种解法」的工具链",
-          "learn": [
-            {
-              "t": "Level Sequencer 过场动画",
-              "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/level-sequencer-in-unreal-engine"
-            },
-            {
-              "t": "AI 感知系统",
-              "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/ai-perception-in-unreal-engine"
-            },
-            {
-              "t": "Lumen",
-              "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
-            }
-          ]
-        },
-        "timeline": [
-          {
-            "d": "2026-05-26",
-            "x": "上架，首发 40% 折 $69.99→$41.99 · 商店页",
-            "cost": "paid"
-          },
-          {
-            "d": "2026-05-26",
-            "x": "IP + 发行方宣发铺量，143 天累计 4.8 万条评测 / 107 万估算销量",
-            "cost": "paid"
-          }
-        ],
-        "videoEdge": "曝光主要靠 IP 与发行方买量，片子是必要但不充分条件；对个人开发者的价值是「多解法关卡」这个视频母题",
-        "trailerImpact": 4,
-        "action": "本周做一个小实验：在 UE5 里搭一个 30×30 米房间，做出 3 条不同进入路径，录 20 秒对比片",
-        "pricing": [
-          {
-            "d": "2026-05-26",
-            "price": "$41.99",
-            "off": "40%",
-            "note": "3A 首发就 40% 折，说明 3A 定价体系在松动"
-          }
-        ],
-        "soloFit": "red",
-        "soloWhy": "3A 规模，团队与预算级；一人只可借鉴结构",
-        "partner": "1203620",
-        "partnerNote": "它是「IP + 大厂产能」的路，雾锁是「自研自发 + 建造自由」的路；一个人只能走后者"
-      }
+     "name": "Open World",
+     "total": 13445,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
     },
     {
-      "appid": "4990940",
-      "name": "PC Store Together",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4990940/ed4ad9ac6b819d4ea1a94ea3cbfdc919713ab0da/header.jpg?t=1795654457",
-      "desc": "和朋友一起经营电脑商店！组装和维修电脑，诊断故障，补充货架库存，制定价格，销售硬件和定制电脑，服务顾客，管理订单，升级店铺，解锁新配件，一起发展你们的生意。",
-      "releaseText": "2026 年 11 月 24 日",
-      "release": "2026-11-24",
-      "comingSoon": false,
-      "developers": [
-        "Sykes Games",
-        "Nightmare Studios"
-      ],
-      "publishers": [
-        "Sykes Games",
-        "Nightmare Studios"
-      ],
-      "genres": [
-        "独立"
-      ],
-      "categories": [
-        "单人",
-        "多人",
-        "合作",
-        "在线合作",
-        "Steam 成就",
-        "完全支持控制器",
-        "可选颜色",
-        "自定义音量控制",
-        "#category_playable_at_your_own_pace",
-        "无需应对快速反应事件",
-        "DUALSHOCK 控制器支持",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "立体声",
-        "家庭共享"
-      ],
-      "priceUsd": 11.04,
-      "priceInitial": 12.99,
-      "discount": 15,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4990940/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 117,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 2,
-      "team": {
-        "selfPub": true,
-        "devCount": 2,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 57.04,
-        "key": "dark",
-        "label": "⚡ 黑马",
-        "rank": 2
-      },
-      "sales": {
-        "mid": 3510,
-        "low": 2106,
-        "high": 5616,
-        "basis": "Boxleiter 法 · 评论数 × 30（$11.04 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Indie",
-        "label": "Indie",
-        "saturation": {
-          "total": 6813,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Life Sim」全站 6,813 款"
-        },
-        "niche": "Life Sim"
-      },
-      "tags": [
-        {
-          "name": "Life Sim",
-          "total": 6813,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Immersive Sim",
-          "total": 10561,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Management",
-          "total": 13828,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Sandbox",
-          "total": 14471,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "First-Person",
-          "total": 31514,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "3D",
-          "total": 52774,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57902,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Casual",
-          "total": 97489,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 1159,
-      "analysis": null
+     "name": "Survival",
+     "total": 13787,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
     },
     {
-      "appid": "4019220",
-      "name": "针影裁梦",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1794041965",
-      "desc": "来成为一名制衣师吧！挑选布料、裁出各类布样再将其缝在一起，制成你梦中之裙！这是一款画风温暖的手工类游戏，灵感来源于真正的裙装制作工艺。",
-      "releaseText": "2026 年 9 月 21 日",
-      "release": "2026-09-21",
-      "comingSoon": false,
-      "developers": [
-        "Cozy Lives"
-      ],
-      "publishers": [
-        "Free Lives"
-      ],
-      "genres": [
-        "休闲",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "自定义音量控制",
-        "可以仅用鼠标",
-        "无需应对快速反应事件",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 11.99,
-      "priceInitial": 14.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4019220/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 25856,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 66,
-      "team": {
-        "selfPub": false,
-        "devCount": 1,
-        "solo": false,
-        "tier": 2
-      },
-      "burst": {
-        "score": 293.82,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 775680,
-        "low": 465408,
-        "high": 1241088,
-        "basis": "Boxleiter 法 · 评论数 × 30（$11.99 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Job Simulator」全站 1,630 款"
-        },
-        "niche": "Job Simulator"
-      },
-      "tags": [
-        {
-          "name": "Job Simulator",
-          "total": 1630,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57902,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Casual",
-          "total": 97489,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 131042,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Crafting",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Design & Illustration",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Cozy",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        },
-        {
-          "name": "Relaxing",
-          "total": null,
-          "verdict": null,
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 10626,
-      "analysis": null
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
     },
     {
-      "appid": "4078430",
-      "name": "星球大战：银河赛车手™",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4078430/ad01abbb5196432a7ec9cd4656fa2ce0f735c3d7/header_schinese.jpg?t=1795526138",
-      "desc": "《星球大战：银河赛车手™》是一款以竞速为核心的惊险赛车游戏，重新定义了赛车游戏的概念，以法外之地外环星域为游戏背景。帝国覆灭之后，银河系得到了重建，银河联赛也应运而生：这是一个未经官方认可的地下赛车联盟，在各大财团的资金支持下，飞行员会在混乱中一决高下，争夺冠军。",
-      "releaseText": "2026 年 10 月 6 日",
-      "release": "2026-10-06",
-      "comingSoon": false,
-      "developers": [
-        "Fuse Games"
-      ],
-      "publishers": [
-        "Secret Mode"
-      ],
-      "genres": [
-        "动作",
-        "冒险",
-        "竞速",
-        "模拟",
-        "体育"
-      ],
-      "categories": [
-        "单人",
-        "多人",
-        "玩家对战",
-        "线上玩家对战",
-        "跨平台多人",
-        "Steam 成就",
-        "完全支持控制器",
-        "可调整文字大小",
-        "视角舒适度",
-        "自定义音量控制",
-        "推荐使用手柄",
-        "DUALSHOCK 控制器支持",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "DualSense 控制器支持",
-        "立体声",
-        "环绕声",
-        "Steam 云",
-        "家庭共享"
-      ],
-      "priceUsd": 47.99,
-      "priceInitial": 59.99,
-      "discount": 20,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4078430/",
-      "requiredAge": 0,
-      "reviews": {
-        "total": 8419,
-        "positive": 0,
-        "negative": 0,
-        "score": "",
-        "positivePct": null,
-        "src": "appdetails"
-      },
-      "days": 51,
-      "team": {
-        "selfPub": false,
-        "devCount": 1,
-        "solo": false,
-        "tier": 2
-      },
-      "burst": {
-        "score": 99.05,
-        "key": "burst",
-        "label": "🔥 现象级",
-        "rank": 3
-      },
-      "sales": {
-        "mid": 185218,
-        "low": 111131,
-        "high": 296349,
-        "basis": "Boxleiter 法 · 评论数 × 22（$47.99 价格带）",
-        "confidence": 2,
-        "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
-      },
-      "track": {
-        "primary": "Action",
-        "label": "动作",
-        "saturation": {
-          "total": 2827,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Competitive」全站 2,827 款"
-        },
-        "niche": "Competitive"
-      },
-      "tags": [
-        {
-          "name": "Competitive",
-          "total": 2827,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Cinematic",
-          "total": 5542,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Racing",
-          "total": 8762,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Roguelike",
-          "total": 16073,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Multiplayer",
-          "total": 29654,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Adventure",
-          "total": 87242,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Action",
-          "total": 94920,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 131042,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 1752,
-      "analysis": null
+     "name": "RPG",
+     "total": 48793,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Adventure",
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
     }
-  ]
+   ],
+   "playersCurrent": 29659,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/1203620/",
+     "本站抓取：好评率 86%（107,453 条评测）· 估算销量 236 万（Boxleiter 法）· 标签 Base Building 全站仅 6,489 款"
+    ],
+    "sells": [
+     {
+      "t": "体素建造 + 生存动作 RPG 双核",
+      "d": "商店页原话「完全支持地形改造的世界」——建造不是搭积木，是改地形"
+     },
+     {
+      "t": "单人 / 在线合作同一套内容",
+      "d": "商店页分类同时挂「单人」与「在线合作」，不用为联机单独做一套"
+     },
+     {
+      "t": "$35.99 的 3A 观感",
+      "d": "首发 10% 折（$39.99→$35.99），卖相往 3A 靠，价格仍在独立区间"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "一眼看见的建造反馈",
+      "d": "挖一块地形立刻改变世界，比「解锁图纸」爽得快"
+     },
+     {
+      "t": "腐化雾的区域压迫",
+      "d": "雾区=限时探索，天然给视频制造紧张感"
+     },
+     {
+      "t": "Boss 掉落驱动回基地",
+      "d": "打完必须回去扩建，把战斗收益转成建造动力"
+     }
+    ],
+    "pains": [
+     {
+      "t": "生存品类的入门门槛",
+      "d": "饥饿/温度/装备一整套系统会劝退轻度玩家，它用「建造爽」把人留下来"
+     },
+     {
+      "t": "联机找不到搭子",
+      "d": "在线合作但没有匹配系统，靠好友自发组队"
+     },
+     {
+      "t": "自由度过高导致不知道干嘛",
+      "d": "用雾区边界和主线推进给出方向"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "落地、捡素材、点亮第一个篝火，学会挖地形"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "建第一间屋、做第一套工具，进入雾区边缘试探"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "雾区深处打第一个精英，拿回图纸解锁新建筑"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "回基地扩建 → 想再来一轮，形成「出去—打—回来建」的钩子"
+     }
+    ],
+    "loop": {
+     "core": "出基地 → 进雾区采集/战斗 → 带材料回来扩建 → 解锁更远的雾区",
+     "steps": [
+      "采集与建造",
+      "进雾区推进",
+      "打精英/Boss 拿图纸",
+      "扩建基地解锁新配方"
+     ],
+     "mins": 20,
+     "note": "买量素材该剪「第一分钟挖穿地形 + 房子从无到有」的时间流逝感，别剪战斗"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 4,
+     "visual": 4,
+     "price": 3,
+     "publisher": 2,
+     "festival": 0,
+     "viral": 4
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "画面（Lumen/Nanite）UE5 反而更强，但「体素地形可编辑」这条 UE5 没有现成方案，得自己写体素网格与碰撞",
+    "artScale": {
+     "level": 5,
+     "note": "商店页强调「手工打造」的世界，美术量是头部档；别被「体素=低成本」骗了，地形材质与光照才是真成本"
+    },
+    "mvp": "一个雾区 + 一片可挖地形 + 10 种建材 + 1 个精英怪就够卖：把「挖 → 建 → 打」缩到 15 分钟一轮，别做开放世界",
+    "ue5": {
+     "pick": [
+      "Lumen 做体素室内外光照（省掉烘焙）",
+      "Nanite 用在不可破坏的装饰物上",
+      "World Partition 做雾区分块加载"
+     ],
+     "build": [
+      "体素地形编辑与网格重建（核心，必须自研）",
+      "建造吸附 / 蓝图复制",
+      "存档（体素体积数据比常规场景大一个量级）"
+     ],
+     "vs": "原作是自研体素引擎，UE5 侧没有等价模块；差异主要在地形数据结构和存档体积",
+     "learn": [
+      {
+       "t": "Voxel 插件与 ProceduralMesh 生成",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/procedural-mesh-component-in-unreal-engine"
+      },
+      {
+       "t": "Lumen 全局光照",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
+      },
+      {
+       "t": "World Partition 大世界分块",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/world-partition-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "正式版上架，首发 10% 折（$39.99→$35.99）· 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "首日爆发指数 83,813（本站估算），Steam 新游曝光自然扩散",
+      "cost": "free"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "10.7 万条评测堆到 86% 好评 —— 口碑本身成了后续最大的免费流量",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "这款的曝光基本靠「建造前后对比」的短视频和主播联机，片子贡献极高：买的不是战斗，是「我也能造出这个」",
+    "trailerImpact": 5,
+    "action": "本周剪一条 15 秒「挖地形 → 房子长出来」的时间流逝，标题写「一个人盖完这座城」，投 B 站 + 抖音测两种开头",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "¥/ $35.99",
+      "off": "10%",
+      "note": "首发即 10% 折，$39.99 原价没撑过一天"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "可破坏体素世界 + 手工地图 + 联机，工程量是团队级；一人做只能砍成「固定地图 + 预制件建造」",
+    "partner": "1374490",
+    "partnerNote": "同为「开放世界 + 生存 + 合作」，龙之荒野 30% 折、75 万估算销量、81% 好评——差在雾锁有「建造即内容」这条自传播钩子"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "1374490",
+   "name": "RuneScape: Dragonwilds 符文世界：龙之荒野",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1374490/54075131f72154097359812c842d9e23b424efdd/header_schinese.jpg?t=1791278745",
+   "desc": "在《符文世界》被遗忘的大陆——烬落之地，龙族已然苏醒。在这款多人合作生存冒险游戏中，收集资源、建造家园、修炼技能、打造道具。唯有精通生存之道、揭开远古秘辛，才有资格直面凶残的龙之女王。",
+   "releaseText": "2026 年 9 月 15 日",
+   "release": "2026-09-15",
+   "comingSoon": false,
+   "developers": [
+    "Jagex Ltd"
+   ],
+   "publishers": [
+    "Jagex Ltd",
+    "H2 Interactive Co., Ltd.",
+    "Graph"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "角色扮演"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "可调整文字大小",
+    "自定义音量控制",
+    "随时保存",
+    "立体声",
+    "部分支持控制器",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 20.99,
+   "priceInitial": 29.99,
+   "discount": 30,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/1374490/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 34279,
+    "positive": 27727,
+    "negative": 6552,
+    "score": "特别好评",
+    "positivePct": 81
+   },
+   "days": 31,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 663.46,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 754138,
+    "low": 452483,
+    "high": 1206621,
+    "basis": "Boxleiter 法 · 评论数 × 22（$20.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 1086,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Open World Survival Craft」全站 1,086 款"
+    },
+    "niche": "Open World Survival Craft"
+   },
+   "tags": [
+    {
+     "name": "Open World Survival Craft",
+     "total": 1086,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Crafting",
+     "total": 8653,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Open World",
+     "total": 13445,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Survival",
+     "total": 13787,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Early Access",
+     "total": 14699,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 10540,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/1374490/",
+     "本站抓取：好评率 81%（34,279 条）· 估算 75 万 · 标签 Open World Survival Craft 全站 1,086 款 · 抢先体验"
+    ],
+    "sells": [
+     {
+      "t": "RuneScape IP 的存量用户",
+      "d": "Jagex 自家 IP，商店页直接承接老玩家"
+     },
+     {
+      "t": "生存建造但门槛更低",
+      "d": "技能修炼 + 建造，比硬核生存温和"
+     },
+     {
+      "t": "抢先体验低价入场",
+      "d": "30% 折后 $20.99，EA 阶段先收一波"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "技能等级可见增长",
+      "d": "RuneScape 的老爽点：数字一直在涨"
+     },
+     {
+      "t": "龙之女王的目标感",
+      "d": "商店页把 Boss 写进卖点，给长线目标"
+     },
+     {
+      "t": "多人合作建造",
+      "d": "和朋友一起搭家园"
+     }
+    ],
+    "pains": [
+     {
+      "t": "生存建造太卷",
+      "d": "用 IP + 技能系统做差异，不跟 Valheim 硬碰"
+     },
+     {
+      "t": "老 IP 新作不敢买",
+      "d": "EA 低价 + 明确路线图降低决策成本"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "落地采集、点火、做第一把工具"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "建第一个营地，开始练技能"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "往内陆推进，遇到龙相关线索"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "回营地升级工作台，形成「练技能 → 造更好装备」循环"
+     }
+    ],
+    "loop": {
+     "core": "采集 → 练技能 → 造装备 → 推进更危险的区域",
+     "steps": [
+      "采集资源",
+      "练技能升级",
+      "造装备/建家园",
+      "挑战更强敌人"
+     ],
+     "mins": 25,
+     "note": "买量剪「技能等级跳数字」那一下，RuneScape 老玩家对这个动作有肌肉记忆"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 3,
+     "visual": 3,
+     "price": 3,
+     "publisher": 3,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "常规开放世界 + 建造 + 联机，UE5 的 World Partition / Lumen / 复制系统都能直接用",
+    "artScale": {
+     "level": 4,
+     "note": "风格化写实，靠材质与光照撑画面，比雾锁的体素世界好做但仍是大工程"
+    },
+    "mvp": "一张中等地图 + 三个技能线 + 一个 Boss，砍掉坐骑与家园装饰，先验证「练技能爽不爽」",
+    "ue5": {
+     "pick": [
+      "World Partition 大地图",
+      "Lumen 省烘焙",
+      "Enhanced Input 做技能快捷栏"
+     ],
+     "build": [
+      "技能等级与经验系统（原作核心资产）",
+      "合作建造的复制同步",
+      "存档兼容（EA 会频繁改数据）"
+     ],
+     "vs": "原作是 Jagex 自研引擎（RuneScape 老技术栈），UE5 侧反而更省事",
+     "learn": [
+      {
+       "t": "World Partition",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/world-partition-in-unreal-engine"
+      },
+      {
+       "t": "网络复制基础",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      },
+      {
+       "t": "Enhanced Input",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-09-15",
+      "x": "抢先体验上架，30% 折 $29.99→$20.99 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-09-15",
+      "x": "IP 存量用户在 Steam / 官方社区回流，首月 3.4 万条评测",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "曝光靠 IP 情怀 + 合作生存的联机切片，片子贡献中高；单机向的实机演示反而更能带转化",
+    "trailerImpact": 4,
+    "action": "本周把「RuneScape 老玩家看新作」做成对比向短视频：老版技能表 vs 新版画面，钩子是情怀不是玩法",
+    "pricing": [
+     {
+      "d": "2026-09-15",
+      "price": "$20.99",
+      "off": "30%",
+      "note": "EA 直接 30% 折入场，比同赛道低 10–15 美元"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "系统多但都常规；一人做要砍掉联机与家园，只留单人探索 + 技能",
+    "partner": "1203620",
+    "partnerNote": "同标签 1,086 款的细分里，它的价格低一档但好评低 5 个点——差别就在「建造自由度的爽感」"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "2929250",
+   "name": "越过山丘 over the hill",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2929250/ab147a07fa83de45f2499462a7ee8d890b977e91/header_schinese.jpg?t=1792002879",
+   "desc": "梦回越野黄金年代，探索广袤无垠天地。驾驶 60 至 80 年代的经典四驱车型，穿越充满挑战的崎岖小径。无论独自出发还是好友同行，都能悠然驰骋，尽情欣赏一路的壮美风光。",
+   "releaseText": "2026 年 10 月 14 日",
+   "release": "2026-10-14",
+   "comingSoon": false,
+   "developers": [
+    "Funselektor Labs Inc."
+   ],
+   "publishers": [
+    "Funselektor Labs Inc."
+   ],
+   "genres": [
+    "冒险",
+    "休闲",
+    "独立",
+    "竞速",
+    "模拟",
+    "体育"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "Steam 成就",
+    "完全支持控制器",
+    "视角舒适度",
+    "自定义音量控制",
+    "推荐使用手柄",
+    "#category_playable_at_your_own_pace",
+    "无需应对快速反应事件",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "立体声",
+    "Steam 云",
+    "统计数据",
+    "家庭共享"
+   ],
+   "priceUsd": 19.99,
+   "priceInitial": 24.99,
+   "discount": 20,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/2929250/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 1199,
+    "positive": 1113,
+    "negative": 86,
+    "score": "特别好评",
+    "positivePct": 93
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 584.51,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 35970,
+    "low": 21582,
+    "high": 57552,
+    "basis": "Boxleiter 法 · 评论数 × 30（$19.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Adventure",
+    "label": "冒险",
+    "saturation": {
+     "total": 494,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Offroad」全站 494 款"
+    },
+    "niche": "Offroad"
+   },
+   "tags": [
+    {
+     "name": "Offroad",
+     "total": 494,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Driving",
+     "total": 4564,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Racing",
+     "total": 8502,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Open World",
+     "total": 13445,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Relaxing",
+     "total": 25899,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Adventure",
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 5769,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/2929250/",
+     "本站抓取：好评率 93%（1,199 条）· 估算 3.6 万 · 标签 Offroad 仅 494 款"
+    ],
+    "sells": [
+     {
+      "t": "越野 + 老车情怀",
+      "d": "商店页主打 60–80 年代经典四驱车"
+     },
+     {
+      "t": "开不动的路也是内容",
+      "d": "崎岖小径本身就是玩法，不需要任务"
+     },
+     {
+      "t": "轻松合作",
+      "d": "单人/好友同行都能玩，节奏松弛"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "车与地形的物理反馈",
+      "d": "爬坡打滑、翻车的即时反馈"
+     },
+     {
+      "t": "风景即奖励",
+      "d": "商店页强调「壮美风光」，开到一个观景点就是成就"
+     },
+     {
+      "t": "慢节奏解压",
+      "d": "竞速标签但实际是漫游"
+     }
+    ],
+    "pains": [
+     {
+      "t": "赛道太窄（Offroad 全站 494 款）",
+      "d": "这个细分几乎没有强对手，占了先手"
+     },
+     {
+      "t": "越野游戏学习成本高",
+      "d": "把难度做在路面而不是操作说明里"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "选车、上手第一段烂路"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "学会低速四驱与拖拽，翻过一次车"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "开到第一个观景点，开始拍照"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "和朋友约定下次走哪条线"
+     }
+    ],
+    "loop": {
+     "core": "选一条更难的路 → 开过去 → 看风景/拍照 → 挑战更险的路",
+     "steps": [
+      "选路线",
+      "越野驾驶",
+      "抵达观景点",
+      "解锁新车/新路线"
+     ],
+     "mins": 15,
+     "note": "买量剪「差点翻车又救回来」的那三秒，比剪风景有效"
+    },
+    "f7": {
+     "niche": 5,
+     "hook": 3,
+     "visual": 4,
+     "price": 3,
+     "publisher": 2,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "载具物理 + 地形 + 摄影模式，UE5 有现成载具模板，Chaos 物理与 Niagara 都能直接用",
+    "artScale": {
+     "level": 3,
+     "note": "自然景观为主、角色为 0；美术成本集中在地形材质与光照，是「一个人也能做」的那一档"
+    },
+    "mvp": "一条 10 分钟的山路 + 两台车 + 一个观景点：把「开过去很爽」这一件事做透就够卖",
+    "ue5": {
+     "pick": [
+      "Chaos Vehicles 载具",
+      "Landscape 地形工具",
+      "Lumen 做黄昏光照"
+     ],
+     "build": [
+      "手感（悬挂/扭矩/轮胎抓地）调参管线",
+      "摄影模式与相机机位"
+     ],
+     "vs": "原作（Funselektor）是轻量引擎 + 自研物理，UE5 的载具物理更重，但地形与光照强得多",
+     "learn": [
+      {
+       "t": "Chaos Vehicles",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-vehicles-overview-in-unreal-engine"
+      },
+      {
+       "t": "Landscape 地形",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/landscape-technical-guide-in-unreal-engine"
+      },
+      {
+       "t": "Lumen",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-14",
+      "x": "上架，20% 折 $24.99→$19.99 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-14",
+      "x": "93% 好评（1,199 条）—— 小体量但口碑极干净，靠好评截图传播",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "这类游戏的片子几乎是全部曝光：没有战斗、没有剧情，只有「开车看风景」的画面，视频不好看就没人买",
+    "trailerImpact": 5,
+    "action": "本周做一条「一个人一台车一条烂路」的 30 秒无解说短片，只用环境音 + 引擎声，测完播率",
+    "pricing": [
+     {
+      "d": "2026-10-14",
+      "price": "$19.99",
+      "off": "20%",
+      "note": "$24.99 原价，首发 20% 折"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "无角色、无剧情、无联机强依赖，地形 + 载具手感 + 摄影模式就是全部，一人可做",
+    "partner": "1203620",
+    "partnerNote": "同样是「自研自发 + 开放世界」，它用 1/10 的美术量换来 93% 好评——小体量的干净口碑也是活法"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "5155360",
+   "name": "Hood Warfare 2",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5155360/73c77dc5efdbffef90c2d32324d518e68a18fc4b/header.jpg?t=1791686243",
+   "desc": "Rival gangs fight for control of Chicago. Pick a side, customize your weapons, and fight other players across a variety of action-packed game modes. Spin the block and take over the streets in this chaotic multiplayer FPS.",
+   "releaseText": "2026 年 10 月 8 日",
+   "release": "2026-10-08",
+   "comingSoon": false,
+   "developers": [
+    "Trapstar Games"
+   ],
+   "publishers": [
+    "Trapstar Games"
+   ],
+   "genres": [
+    "动作"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "玩家对战",
+    "线上玩家对战",
+    "完全支持控制器",
+    "家庭共享"
+   ],
+   "priceUsd": 5.99,
+   "priceInitial": 5.99,
+   "discount": 0,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/5155360/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 2433,
+    "positive": 1931,
+    "negative": 502,
+    "score": "多半好评",
+    "positivePct": 79
+   },
+   "days": 8,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 355.83,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 92454,
+    "low": 55472,
+    "high": 147926,
+    "basis": "Boxleiter 法 · 评论数 × 38（$5.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 10745,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "basis": "细分标签「FPS」全站 10,745 款"
+    },
+    "niche": "FPS"
+   },
+   "tags": [
+    {
+     "name": "FPS",
+     "total": 10745,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "PvP",
+     "total": 15323,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Shooter",
+     "total": 19377,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Funny",
+     "total": 23462,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "First-Person",
+     "total": 29545,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 122875,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 5682,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/5155360/",
+     "本站抓取：好评率 79%（2,433 条）· 估算 9.2 万 · 定价 $5.99 无折扣"
+    ],
+    "sells": [
+     {
+      "t": "$5.99 的冲动价",
+      "d": "低于一杯咖啡，几乎不需要决策"
+     },
+     {
+      "t": "帮派题材 + 芝加哥",
+      "d": "商店页写「争夺芝加哥控制权」"
+     },
+     {
+      "t": "FPS 多模式 PvP",
+      "d": "直接对标快节奏射击"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "枪械自定义",
+      "d": "商店页把 customization 放前面"
+     },
+     {
+      "t": "低价 PvP 的社交传播",
+      "d": "朋友一起买四份也无压力"
+     }
+    ],
+    "pains": [
+     {
+      "t": "PvP 冷启动没人陪",
+      "d": "靠低价把人数堆起来"
+     },
+     {
+      "t": "FPS 太卷",
+      "d": "用题材（帮派）而不是机制做差异"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "选阵营、改第一把枪"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "打两三个模式，摸清地图"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "开始在意 KD 与配枪"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "叫朋友一起买"
+     }
+    ],
+    "loop": {
+     "core": "进局 → 打钱/升级 → 改枪 → 再进局",
+     "steps": [
+      "匹配进局",
+      "交火",
+      "攒经验改枪",
+      "换模式再打"
+     ],
+     "mins": 10,
+     "note": "买量剪「第一局就爆头」的高光，FPS 素材只看击杀瞬间"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 3,
+     "visual": 2,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "FPS 联机 UE5 能白捡（复制/网络预测），但手感与反作弊是深坑，一人做 PvP 风险极高",
+    "artScale": {
+     "level": 3,
+     "note": "城市街区 + 若干枪械模型，美术量中等；PvP 靠地图数量撑内容量"
+    },
+    "mvp": "一张图 + 三把枪 + 一个模式，先把「射击手感」调到能打，再谈内容",
+    "ue5": {
+     "pick": [
+      "Lyra 示例工程的联机框架",
+      "Nanite 做街景",
+      "MetaSounds 做枪声"
+     ],
+     "build": [
+      "枪械手感与后坐力",
+      "匹配与房间服务",
+      "反作弊"
+     ],
+     "vs": "原作是小团队自研，UE5 联机成本更高但工具链完整",
+     "learn": [
+      {
+       "t": "Lyra 示例游戏",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lyra-sample-game-in-unreal-engine"
+      },
+      {
+       "t": "网络复制",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      },
+      {
+       "t": "MetaSounds",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-overview-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-08",
+      "x": "上架 $5.99，无首发折扣 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-08",
+      "x": "79% 好评（2,433 条）—— 低价 PvP 的典型口碑区间",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "低价 PvP 的曝光几乎全靠主播与短视频击杀集锦，片子贡献高，但留存差",
+    "trailerImpact": 3,
+    "action": "本周拆 3 条同类 FPS 的 TikTok 爆款，统计「击杀在第几秒出现」，把前 3 秒结构抄成模板",
+    "pricing": [
+     {
+      "d": "2026-10-08",
+      "price": "$5.99",
+      "off": "0%",
+      "note": "一次性买断低价，不打折也不涨价"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "PvP 联机 = 服务端 + 反作弊 + 匹配 + 平衡，一个人做不完；要单干就改单机射击",
+    "partner": "3816030",
+    "partnerNote": "同为「低价 + 联机」，DayZ Badlands 63% 好评说明：题材不够、完成度不够时，低价也救不回来"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "3816030",
+   "name": "DayZ Badlands",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3816030/a14cce662d9a779789852279c1d2006e48a1cb03/header.jpg?t=1792059040",
+   "desc": "《DayZ Badlands》带你进入纳斯达拉省动荡不安的地区——这片广袤的干旱区域面积达 267 平方公里。探索重重隐秘，争夺控制权，凝聚脆弱的联盟，并在往日战争的硝烟中重建一切。衡量生存的指标不仅是节省了多少滴水，更是剩余多少颗子弹。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Bohemia Interactive"
+   ],
+   "publishers": [
+    "Bohemia Interactive"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "大型多人在线"
+   ],
+   "categories": [
+    "多人",
+    "大型多人在线",
+    "玩家对战",
+    "线上玩家对战",
+    "合作",
+    "在线合作",
+    "DLC",
+    "Steam 成就",
+    "Steam 创意工坊",
+    "Steam 云",
+    "已启用 Valve 反作弊保护"
+   ],
+   "priceUsd": 22.49,
+   "priceInitial": 24.99,
+   "discount": 10,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3816030/",
+   "requiredAge": "17",
+   "reviews": {
+    "total": 346,
+    "positive": 219,
+    "negative": 127,
+    "score": "褒贬不一",
+    "positivePct": 63
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 269.88,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 7612,
+    "low": 4567,
+    "high": 12179,
+    "basis": "Boxleiter 法 · 评论数 × 22（$22.49 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 5451,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Zombies」全站 5,451 款"
+    },
+    "niche": "Zombies"
+   },
+   "tags": [
+    {
+     "name": "Zombies",
+     "total": 5451,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Post-apocalyptic",
+     "total": 6012,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Open World",
+     "total": 13445,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Survival",
+     "total": 13787,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "PvP",
+     "total": 15323,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Shooter",
+     "total": 19377,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 0,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3816030/",
+     "本站抓取：好评率 63%（346 条）· 估算 7,612 · 标签 Zombies 5,451 款 / Survival 13,787 款"
+    ],
+    "sells": [
+     {
+      "t": "DayZ 品牌延伸",
+      "d": "Bohemia 官方 IP 的干旱地图版"
+     },
+     {
+      "t": "267 平方公里大地图",
+      "d": "商店页直接给面积数字"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "硬核生存的资源紧张",
+      "d": "「省水不如省子弹」是它的宣传语"
+     },
+     {
+      "t": "PvP 争夺控制权",
+      "d": "大地图上的势力博弈"
+     }
+    ],
+    "pains": [
+     {
+      "t": "硬核生存入门",
+      "d": "目标用户本来就在，不用教育市场"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "落地、找水、找枪"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "遭遇第一个玩家或感染者，学会跑"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "找到据点，纠结要不要建基地"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "被老玩家伏击，产生「这游戏太难」的评价"
+     }
+    ],
+    "loop": {
+     "core": "找资源 → 活下去 → 抢别人的资源",
+     "steps": [
+      "搜刮",
+      "避战/交火",
+      "补给与治疗",
+      "再出发"
+     ],
+     "mins": 30,
+     "note": "素材只能剪「伏击/被伏击」的瞬间，剪不出就是没卖点"
+    },
+    "f7": {
+     "niche": 2,
+     "hook": 2,
+     "visual": 3,
+     "price": 2,
+     "publisher": 3,
+     "festival": 0,
+     "viral": 1
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "大地图 + 多人生存是 UE5 的常规活；原作（Enfusion 引擎）本来就是自研，换引擎阻力小",
+    "artScale": {
+     "level": 4,
+     "note": "267 平方公里地图是最大成本项，资产靠复用与程序化摆放"
+    },
+    "mvp": "一块 4 平方公里的地图 + 20 个玩家 + 一套搜刮/饥饿/感染就够验证；大地图是后期扩张的事",
+    "ue5": {
+     "pick": [
+      "World Partition",
+      "Nanite 做废墟资产",
+      "Lumen"
+     ],
+     "build": [
+      "生存数值与感染系统",
+      "服务器权威的搜刮/伤害",
+      "大地图载具"
+     ],
+     "vs": "原作 Enfusion 是 Bohemia 自研，UE5 在网络层更成熟但载具物理要重调",
+     "learn": [
+      {
+       "t": "World Partition",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/world-partition-in-unreal-engine"
+      },
+      {
+       "t": "网络复制",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，10% 折 $24.99→$22.49 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "63% 好评（346 条）—— 首发口碑直接崩在「完成度」上",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "题材视频本身有流量（僵尸生存），但片子再好也救不回 63% 好评",
+    "trailerImpact": 2,
+    "action": "本周把它当反面样本拆一遍：列出它商店页承诺但评测里被骂的点，做成「宣传 vs 实际」对照表存档",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$22.49",
+      "off": "10%",
+      "note": "首发 10% 折，价格不算高，问题不在价格"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "多人沙盒 + 大地图 + 服务器，团队级项目",
+    "partner": "1203620",
+    "partnerNote": "同为大地图生存、同一天上架：86% vs 63%。差的不是题材，是「第一小时有没有东西可做」",
+    "flop": {
+     "reason": "首发完成度不足，玩家预期是「DayZ 的新地图」，拿到的是半成品",
+     "death": "上架首日 346 条评测里 37% 差评，主打「卡顿/内容空/联机不稳」，口碑锁死在「褒贬不一」",
+     "lesson": "IP 加成的品类，玩家容忍度反而更低——别用大 IP 卖未完成品"
+    }
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4870960",
+   "name": "名利场2：冒牌富少",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4870960/dfa19b4a2482ed13ef9287097c5fb8489fd90f46/header_schinese.jpg?t=1792029524",
+   "desc": "好莱坞专业班底电影级制作，20万票共同参与选角，钟晨瑶携手亚洲小姐领衔主演，全程真实洛杉矶实景拍摄。玩家将扮演一个穷留学生，被塞进豪门阔少的皮囊，在洛杉矶的名利场里周旋于五段危险的关系。为了不被拆穿，他学着说谎、周旋，也学着成为所有人眼中的“少爷”——可面具戴得越久，他越分不清自己究竟是谁。",
+   "releaseText": "2026 年 10 月 14 日",
+   "release": "2026-10-14",
+   "comingSoon": false,
+   "developers": [
+    " Interactive Films LLC"
+   ],
+   "publishers": [
+    " Interactive Films LLC"
+   ],
+   "genres": [
+    "角色扮演"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 10.19,
+   "priceInitial": 11.99,
+   "discount": 15,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4870960/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 475,
+    "positive": 470,
+    "negative": 5,
+    "score": "特别好评",
+    "positivePct": 99
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 231.56,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 14250,
+    "low": 8550,
+    "high": 22800,
+    "basis": "Boxleiter 法 · 评论数 × 30（$10.19 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "RPG",
+    "label": "角色扮演",
+    "saturation": {
+     "total": 1204,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「FMV」全站 1,204 款"
+    },
+    "niche": "FMV"
+   },
+   "tags": [
+    {
+     "name": "FMV",
+     "total": 1204,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Dating Sim",
+     "total": 4261,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Interactive Fiction",
+     "total": 9006,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Visual Novel",
+     "total": 13341,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "RPG",
+     "total": 48793,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 54384,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Casual",
+     "total": 91958,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Choose Your Own Adventure",
+     "total": null,
+     "verdict": null,
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 114,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4870960/",
+     "本站抓取：好评率 99%（475 条）· 估算 1.4 万 · 标签 FMV 全站 1,204 款 / Dating Sim 4,261 款"
+    ],
+    "sells": [
+     {
+      "t": "真人实拍 + 电影级班底",
+      "d": "商店页写明「好莱坞专业班底、洛杉矶实景」"
+     },
+     {
+      "t": "20 万票参与选角",
+      "d": "社区共创带来天然预热"
+     },
+     {
+      "t": "豪门替身 + 五段关系的爽文结构",
+      "d": "短剧逻辑直接搬进游戏"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "看真人演戏的选择分支",
+      "d": "FMV 的核心爽点：你选，她演"
+     },
+     {
+      "t": "被拆穿的压力",
+      "d": "「面具戴久了分不清自己是谁」——道德张力"
+     }
+    ],
+    "pains": [
+     {
+      "t": "FMV 品类内容量不够",
+      "d": "用真人剧集量补，20 万票选角堆话题"
+     },
+     {
+      "t": "乙女/恋爱模拟同质化",
+      "d": "用「冒牌富少」的男频爽文视角做差异"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "开场被塞进豪门身份，认识第一个角色"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "第一次说谎，看到分支后果"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "牵进第二条关系线，开始怕被拆穿"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "一个选择把两条线撞在一起，想看下一集"
+     }
+    ],
+    "loop": {
+     "core": "看一段真人剧情 → 做一次冒险选择 → 承担关系后果 → 看下一段",
+     "steps": [
+      "看剧情",
+      "做选择",
+      "关系值变化",
+      "解锁新片段"
+     ],
+     "mins": 12,
+     "note": "买量剪「被拆穿的那一秒」+ 女演员特写，FMV 素材就是短剧素材"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 3,
+     "visual": 5,
+     "price": 3,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 4
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "FMV 游戏本质是视频播放器 + 分支状态机，UE5 的 3D 能力全浪费；用网页/Unity 更合适",
+    "artScale": {
+     "level": 5,
+     "note": "美术量=实拍成本：真人、实景、剪辑、配音，是「钱堆出来的」而非「工时堆出来的」"
+    },
+    "mvp": "一个场景 + 两位演员 + 30 分钟剧情 + 3 个分支结局，先把「选择有后果」演出来",
+    "ue5": {
+     "pick": [
+      "Media Framework 播视频",
+      "UMG 做选项 UI"
+     ],
+     "build": [
+      "分支状态机与存档",
+      "视频预加载/无缝切段"
+     ],
+     "vs": "UE5 能做但重；FMV 项目用网页技术栈成本低一个数量级",
+     "learn": [
+      {
+       "t": "Media Framework（视频播放）",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/media-framework-in-unreal-engine"
+      },
+      {
+       "t": "UMG UI 设计器",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-14",
+      "x": "上架，15% 折 $11.99→$10.19 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-14",
+      "x": "99% 好评（475 条）—— 小众品类做到极致口碑，靠短剧受众自然扩散",
+      "cost": "free"
+     },
+     {
+      "d": "2026-10-14",
+      "x": "20 万票选角的前期造势，把社区变成了预热渠道（商店页自述）",
+      "cost": "low"
+     }
+    ],
+    "videoEdge": "这款几乎 100% 靠片子卖——它本身就是片子。做视频的人应该反向学它：用真人短剧当游戏广告",
+    "trailerImpact": 5,
+    "action": "本周拆它商店页的三张截图和预告结构，做一份「短剧式游戏预告」模板（3 秒钩子/7 秒关系/15 秒反转）",
+    "pricing": [
+     {
+      "d": "2026-10-14",
+      "price": "$10.19",
+      "off": "15%",
+      "note": "$11.99 原价，首发小幅折扣"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "一人做不了真人实拍（演员/场地/摄影/剪辑），除非改成 AI 生成素材的伪 FMV",
+    "partner": "4516190",
+    "partnerNote": "同为「叙事驱动的小体量」，那边 89% 好评 63 条评测，说明叙事品类没口碑就没量"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "3768760",
+   "name": "007 初露锋芒",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3768760/be65391533f072e79699be70ef2d47b7b2ac57ee/header_alt_assets_5.jpg?t=1795019577",
+   "desc": "赢得编号。007 初露锋芒 是IO Interactive出品的惊险刺激的间谍动作冒险游戏。跟随年轻、机智但偶尔鲁莽的詹姆斯·邦德的脚步，他是军情六处训练项目中的新兵，一起探索这位世界最著名间谍的起源故事。",
+   "releaseText": "2026 年 5 月 26 日",
+   "release": "2026-05-26",
+   "comingSoon": false,
+   "developers": [
+    "IO Interactive A/S"
+   ],
+   "publishers": [
+    "IO Interactive A/S"
+   ],
+   "genres": [
+    "动作",
+    "冒险"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "完全支持控制器",
+    "视角舒适度",
+    "自定义音量控制",
+    "可调整难度",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "字幕选项",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 34.99,
+   "priceInitial": 69.99,
+   "discount": 50,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3768760/",
+   "requiredAge": "13",
+   "reviews": {
+    "total": 38571,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 184,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 125.77,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 848562,
+    "low": 509137,
+    "high": 1357699,
+    "basis": "Boxleiter 法 · 评论数 × 22（$34.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 216,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Espionage」全站 216 款"
+    },
+    "niche": "Espionage"
+   },
+   "tags": [
+    {
+     "name": "Espionage",
+     "total": 216,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Third-Person Shooter",
+     "total": 4668,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Stealth",
+     "total": 5283,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Cinematic",
+     "total": 5542,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Combat",
+     "total": 23203,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action-Adventure",
+     "total": 23296,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Story Rich",
+     "total": 37198,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 131042,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 3233,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3768760/",
+     "本站抓取：好评率 91%（48,477 条）· 估算 107 万 · 首发 40% 折 $69.99→$41.99"
+    ],
+    "sells": [
+     {
+      "t": "IO Interactive 的关卡设计口碑",
+      "d": "杀手系列班底做邦德"
+     },
+     {
+      "t": "邦德起源故事",
+      "d": "「赢得编号」—— 粉丝必看的前传"
+     },
+     {
+      "t": "大 IP + 大折扣",
+      "d": "首发直接 40% 折，$41.99 进 3A 区间"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "谍战潜入 + 潜行",
+      "d": "Espionage / Stealth 双标签"
+     },
+     {
+      "t": "电影化演出",
+      "d": "Cinematic 标签，邦德味"
+     }
+    ],
+    "pains": [
+     {
+      "t": "3A 定价劝退",
+      "d": "40% 折扣把门槛砍到 $42"
+     },
+     {
+      "t": "IP 改编常翻车",
+      "d": "靠 IO 的关卡设计能力背书"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "训练关卡，教潜行与伪装"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "第一次任务，学会多种通关路径"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "一次失手变枪战，发现「打也行」"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "想看下一段剧情，接受「重玩换路线」"
+     }
+    ],
+    "loop": {
+     "core": "侦察关卡 → 选一条潜入路线 → 执行 → 看评级/换路线重玩",
+     "steps": [
+      "情报收集",
+      "潜入执行",
+      "善后/脱身",
+      "复盘换路线"
+     ],
+     "mins": 40,
+     "note": "素材剪「同场景三种杀法」的对比，这是 IO 系游戏最独特的传播点"
+    },
+    "f7": {
+     "niche": 2,
+     "hook": 4,
+     "visual": 5,
+     "price": 3,
+     "publisher": 5,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "这是 3A 团队 5 年量级的项目，一个人连一个关卡都做不完；只能学它的关卡结构，不能学它的规模",
+    "artScale": {
+     "level": 5,
+     "note": "3A 美术量：动作捕捉、面部、电影化演出，全部是团队产能"
+    },
+    "mvp": "别做邦德。学它「一张地图多个解法」：一个 100×100 米场景 + 3 条通关路径就是可玩原型",
+    "ue5": {
+     "pick": [
+      "Level Sequencer 做演出",
+      "Lumen",
+      "MetaHuman（可选）"
+     ],
+     "build": [
+      "关卡状态机与 AI 感知",
+      "多路径交互物",
+      "伪装/换装系统"
+     ],
+     "vs": "原作是 IO 自研 Glacier 引擎，强在关卡系统；UE5 强在画面，弱在「一个场景多种解法」的工具链",
+     "learn": [
+      {
+       "t": "Level Sequencer 过场动画",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/level-sequencer-in-unreal-engine"
+      },
+      {
+       "t": "AI 感知系统",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/ai-perception-in-unreal-engine"
+      },
+      {
+       "t": "Lumen",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-05-26",
+      "x": "上架，首发 40% 折 $69.99→$41.99 · 商店页",
+      "cost": "paid"
+     },
+     {
+      "d": "2026-05-26",
+      "x": "IP + 发行方宣发铺量，143 天累计 4.8 万条评测 / 107 万估算销量",
+      "cost": "paid"
+     }
+    ],
+    "videoEdge": "曝光主要靠 IP 与发行方买量，片子是必要但不充分条件；对个人开发者的价值是「多解法关卡」这个视频母题",
+    "trailerImpact": 4,
+    "action": "本周做一个小实验：在 UE5 里搭一个 30×30 米房间，做出 3 条不同进入路径，录 20 秒对比片",
+    "pricing": [
+     {
+      "d": "2026-05-26",
+      "price": "$41.99",
+      "off": "40%",
+      "note": "3A 首发就 40% 折，说明 3A 定价体系在松动"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "3A 规模，团队与预算级；一人只可借鉴结构",
+    "partner": "1203620",
+    "partnerNote": "它是「IP + 大厂产能」的路，雾锁是「自研自发 + 建造自由」的路；一个人只能走后者"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "3569420",
+   "name": " 链兽角斗",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3569420/f362c5e59f95bb9874ad9914d1a3720e20a4a2cb/header_schinese.jpg?t=1792082632",
+   "desc": "链兽角斗 是一款支持 1–4 名玩家合作的角斗士类 Roguelike 游戏。与你的伙伴相互锁链，在混乱的战斗中并肩作战。利用锁链或竞技场，以创造性的方式击败敌人，赢得嗜血观众的欢呼。忍受身体与精神的创伤，打倒强大的首领，活到最后一刻。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Featherweight Games"
+   ],
+   "publishers": [
+    "Featherweight Games"
+   ],
+   "genres": [
+    "动作"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "同屏/分屏合作",
+    "同屏/分屏",
+    "跨平台多人",
+    "Steam 成就",
+    "完全支持控制器",
+    "推荐使用手柄",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "Steam 云",
+    "远程同乐",
+    "家庭共享"
+   ],
+   "priceUsd": 12.99,
+   "priceInitial": 19.99,
+   "discount": 35,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3569420/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 110,
+    "positive": 106,
+    "negative": 4,
+    "score": "特别好评",
+    "positivePct": 96
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 107.25,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 3300,
+    "low": 1980,
+    "high": 5280,
+    "basis": "Boxleiter 法 · 评论数 × 30（$12.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 7489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Hack and Slash」全站 7,489 款"
+    },
+    "niche": "Hack and Slash"
+   },
+   "tags": [
+    {
+     "name": "Hack and Slash",
+     "total": 7489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action Roguelike",
+     "total": 10136,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Roguelite",
+     "total": 14562,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Top-Down",
+     "total": 20084,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Funny",
+     "total": 23462,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "PvE",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 1506,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3569420/",
+     "本站抓取：好评率 96%（110 条）· 估算 3,300 · 35% 折 $19.99→$12.99"
+    ],
+    "sells": [
+     {
+      "t": "锁链绑定的合作玩法",
+      "d": "1–4 人互相锁在一起打，物理即玩法"
+     },
+     {
+      "t": "Roguelike + 角斗场",
+      "d": "Action Roguelike 标签，局内构筑"
+     },
+     {
+      "t": "低价试错",
+      "d": "$12.99 折后价"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "被队友拽飞的失控感",
+      "d": "锁链让合作变成事故现场，天生的搞笑素材"
+     },
+     {
+      "t": "观众欢呼的表演反馈",
+      "d": "商店页写「赢得嗜血观众的欢呼」"
+     }
+    ],
+    "pains": [
+     {
+      "t": "合作 Roguelike 太多",
+      "d": "用锁链这一个物理约束做出差异"
+     },
+     {
+      "t": "找不到 4 个朋友",
+      "d": "1–4 人弹性人数"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "学会走位，被队友拽倒两次，笑出声"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "开始配合：一人拉怪一人输出"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "拿到第一个构筑核心，感觉变强"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "打首领失败，想再开一局"
+     }
+    ],
+    "loop": {
+     "core": "进竞技场 → 锁链合作打一波 → 拿词条构筑 → 打首领",
+     "steps": [
+      "选角色",
+      "波次战斗",
+      "选构筑",
+      "首领战"
+     ],
+     "mins": 15,
+     "note": "素材剪「队友被锁链拽进怪堆」的翻车瞬间，比剪帅气连招传播力强 10 倍"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 5,
+     "visual": 3,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 4
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "物理约束 + 近战 + 联机，UE5 的 Chaos 物理与复制都能用，玩法原型一周能搭出来",
+    "artScale": {
+     "level": 3,
+     "note": "角斗场 + 若干敌人，俯视角省美术；重点在动画与物理反馈"
+    },
+    "mvp": "一个竞技场 + 两种敌人 + 锁链物理 + 一套构筑就够验证「锁链好不好玩」",
+    "ue5": {
+     "pick": [
+      "Chaos Physics 做锁链约束",
+      "Niagara 做血/尘",
+      "Lyra 的联机框架"
+     ],
+     "build": [
+      "锁链物理的手感调参",
+      "波次与构筑系统",
+      "联机同步（物理同步是最难的）"
+     ],
+     "vs": "独立团队多为 Unity 实现，UE5 物理更强但同步更难",
+     "learn": [
+      {
+       "t": "Chaos Physics 概览",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-physics-overview-in-unreal-engine"
+      },
+      {
+       "t": "Niagara 特效",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/niagara-visual-effects-system-in-unreal-engine"
+      },
+      {
+       "t": "网络复制",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，35% 折 $19.99→$12.99 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "96% 好评（110 条）—— 小样本高口碑，靠联机翻车切片传播",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "这类玩法天生适合短视频：锁链翻车三秒就能讲完，片子对曝光贡献极高",
+    "trailerImpact": 5,
+    "action": "本周在 UE5 里用 PhysicsConstraint 做一条绳子连两个胶囊体，测「拽倒」手感，录 10 秒看有没有笑点",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$12.99",
+      "off": "35%",
+      "note": "首发即 35% 折，$19.99 定得偏高"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "物理 + 联机是难点，但美术量小、玩法单一；砍成 2 人本地合作后一人可做",
+    "partner": "4660920",
+    "partnerNote": "同为「合作 + 打怪」，DREGS 走恐怖打工路线，它走角斗表演路线——差别在「笑的还是怕的」"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "5075110",
+   "name": "零氪超变",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5075110/a8595d38dc54ef31bf918b587f9a5848a69a0755/header_schinese.jpg?t=1792113697",
+   "desc": "无首充！无套路! 无强制消费! 耐玩性佳：海量特色玩法持续更新，长久陪伴乐趣无穷！ 匠心巨制：团队潜心一年重磅打造，热血体验诚意奉上！ 人气保障：专注打造火爆大服，激情永不落幕！",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "零氪超变"
+   ],
+   "publishers": [
+    "零氪超变"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "大型多人在线",
+    "角色扮演",
+    "免费开玩"
+   ],
+   "categories": [
+    "多人",
+    "大型多人在线",
+    "玩家对战",
+    "合作",
+    "应用内购买",
+    "可以仅用鼠标",
+    "#category_playable_at_your_own_pace",
+    "无需应对快速反应事件",
+    "随时保存",
+    "家庭共享"
+   ],
+   "priceUsd": 0,
+   "priceInitial": null,
+   "discount": 0,
+   "isFree": true,
+   "url": "https://store.steampowered.com/app/5075110/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 48,
+    "positive": 43,
+    "negative": 5,
+    "score": "好评",
+    "positivePct": 90
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 74.88,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": null,
+    "low": null,
+    "high": null,
+    "basis": "免费游戏（F2P），不适用评论数反推",
+    "confidence": 1
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 7489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Hack and Slash」全站 7,489 款"
+    },
+    "niche": "Hack and Slash"
+   },
+   "tags": [
+    {
+     "name": "Hack and Slash",
+     "total": 7489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Crafting",
+     "total": 8653,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "RPG",
+     "total": 48793,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action RPG",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Idler",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Loot",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Isometric",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Free to Play",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 12,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/5075110/",
+     "本站抓取：免费开玩 · 好评率 90%（48 条）· 标签 Hack and Slash / Idler / Loot"
+    ],
+    "sells": [
+     {
+      "t": "「无首充无套路」的反向定位",
+      "d": "商店页标题就是卖点，专打国内 F2P 疲劳"
+     },
+     {
+      "t": "免费入场",
+      "d": "0 元门槛，靠内购/时长"
+     },
+     {
+      "t": "海量玩法持续更新",
+      "d": "商店页承诺「长久陪伴」"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "挂机成长",
+      "d": "Idler 标签，离线也在变强"
+     },
+     {
+      "t": "刷装备",
+      "d": "Loot + Hack and Slash 的即时反馈"
+     }
+    ],
+    "pains": [
+     {
+      "t": "国产 F2P 首充焦虑",
+      "d": "直接写「无首充」当卖点"
+     },
+     {
+      "t": "玩家不愿为未知付费",
+      "d": "免费先玩"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "建号、领礼包、推第一张图"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "打到第一件紫装，开始比较数值"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "卡关，看到内购/成长礼包"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "挂机等收益，转成日常"
+     }
+    ],
+    "loop": {
+     "core": "推图 → 掉装备 → 换装变强 → 推更难的图",
+     "steps": [
+      "推图",
+      "掉落与词条",
+      "强化/合成",
+      "挂机等资源"
+     ],
+     "mins": 10,
+     "note": "素材剪「一刀爆屏 + 满屏掉落」，F2P 买量只认这个"
+    },
+    "f7": {
+     "niche": 2,
+     "hook": 2,
+     "visual": 2,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "F2P MMO 量级（服务器、经济、运营），不是一个人能碰的；技术栈也更适合自研/Unity",
+    "artScale": {
+     "level": 3,
+     "note": "美术靠素材库堆，量在「持续更新」而不是「首发精度」"
+    },
+    "mvp": "不做。要碰这个品类，先做单机版的「推图 + 掉落」10 分钟循环验证手感",
+    "ue5": {
+     "pick": [
+      "UMG 做数值面板"
+     ],
+     "build": [
+      "数值与经济系统",
+      "服务器与运营后台"
+     ],
+     "vs": "F2P 的核心不是引擎，是运营；引擎选型几乎不影响成败",
+     "learn": [
+      {
+       "t": "UMG UI 设计器",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "免费上架 · 商店页",
+      "cost": "free"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "90% 好评但只有 48 条评测 —— 免费游戏的评测数不等于用户数",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "F2P 的曝光 100% 靠买量素材（平台投流），自然流量几乎为零",
+    "trailerImpact": 2,
+    "action": "本周不做它；只把它商店页的「无首充」文案记进素材库，这是国内买量最好用的反向钩子",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$0",
+      "off": "0%",
+      "note": "免费 + 内购，与买断制不可比"
+     }
+    ],
+    "soloFit": "red",
+    "soloWhy": "F2P MMO 需要运营、客服、经济调优，个人开发者做不了",
+    "partner": "5363350",
+    "partnerNote": "同为免费入场，Mortuus Demo 用「试玩 Demo」换愿望单，它用「无首充」换下载——两条完全不同的免费策略"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4951850",
+   "name": "Enshrouded - Deluxe Upgrade Pack",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4951850/17ddc902daac47ce8e3257eb4763bd3ba05ca476/header.jpg?t=1792076744",
+   "desc": "《雾锁王国》是一款单人/合作生存动作RPG，在这里，你的自由与创造力将被摆在第一位。竭尽全力战胜蚕食薪谷王国的腐化瘴气：探索手工打造的瑰丽世界，揭开隐藏的秘密并披荆斩棘开辟道路，在完全支持地形改造的世界中尽情建造。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Keen Games GmbH"
+   ],
+   "publishers": [
+    "Keen Games GmbH"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "独立",
+    "角色扮演"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "DLC",
+    "Steam 成就",
+    "完全支持控制器",
+    "可调整文字大小",
+    "视角舒适度",
+    "可选颜色",
+    "自定义音量控制",
+    "可调整难度",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "立体声",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 9.99,
+   "priceInitial": 9.99,
+   "discount": 0,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4951850/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 59,
+    "positive": 59,
+    "negative": 0,
+    "score": "特别好评",
+    "positivePct": 100
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 69.03,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 2242,
+    "low": 1345,
+    "high": 3587,
+    "basis": "Boxleiter 法 · 评论数 × 38（$9.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 6489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Base Building」全站 6,489 款"
+    },
+    "niche": "Base Building"
+   },
+   "tags": [
+    {
+     "name": "Base Building",
+     "total": 6489,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Crafting",
+     "total": 8653,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Open World",
+     "total": 13445,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Survival",
+     "total": 13787,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "RPG",
+     "total": 48793,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Adventure",
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 0,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4951850/",
+     "本站抓取：好评率 100%（59 条）· 估算 2,242"
+    ],
+    "mvp": "这是《雾锁王国》的豪华升级包（DLC），不是独立游戏，不做玩法拆解；看它就够了：本体拆分 DLC 能多收 $9.99",
+    "ue5Fit": "red",
+    "ue5FitWhy": "DLC 无独立玩法，不适用",
+    "action": "本周记一条：本体 + $9.99 升级包是独立游戏提客单价的低风险做法，比涨价安全",
+    "soloFit": "red",
+    "soloWhy": "DLC 依附本体"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4841320",
+   "name": "Squad Weapon Skins - Recon Team Pack ",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4841320/6499eba31da772a3f68b9f73443e16ffe49dd61e/header.jpg?t=1792087188",
+   "desc": "This pack contains 5 woodland weapon skins for the USMC faction.",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Offworld"
+   ],
+   "publishers": [
+    "Offworld"
+   ],
+   "genres": [
+    "动作",
+    "大型多人在线",
+    "策略"
+   ],
+   "categories": [
+    "多人",
+    "玩家对战",
+    "线上玩家对战",
+    "合作",
+    "DLC"
+   ],
+   "priceUsd": 11.99,
+   "priceInitial": 11.99,
+   "discount": 100,
+   "isFree": true,
+   "url": "https://store.steampowered.com/app/4841320/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 33,
+    "positive": 28,
+    "negative": 5,
+    "score": "好评",
+    "positivePct": 85
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 51.48,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": null,
+    "low": null,
+    "high": null,
+    "basis": "免费游戏（F2P），不适用评论数反推",
+    "confidence": 1
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 10745,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "basis": "细分标签「FPS」全站 10,745 款"
+    },
+    "niche": "FPS"
+   },
+   "tags": [
+    {
+     "name": "FPS",
+     "total": 10745,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "PvP",
+     "total": 15323,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Military",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Realistic",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "PvE",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Tactical",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 0,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4841320/",
+     "本站抓取：好评率 85%（33 条）· 折扣字段 100%（疑为捆绑/赠送口径）"
+    ],
+    "mvp": "《Squad》的武器皮肤包（5 个 USMC 丛林涂装），纯外观 DLC，不做玩法分析",
+    "ue5Fit": "red",
+    "ue5FitWhy": "外观 DLC，不适用",
+    "action": "本周记一条：外观 DLC 是长线运营游戏最稳的现金流，但前提是本体有稳定在线",
+    "soloFit": "red",
+    "soloWhy": "依附本体"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4798110",
+   "name": "Order Picker Simulator",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4798110/c9661a266f2924dfb4813c00157da46c031635ff/header.jpg?t=1792080550",
+   "desc": "欢迎来到 Ultra Fresh Food！管理属于你自己的食品仓库，按照自己的节奏拣选订单，扩展业务，自定义工作空间，还可以雇佣员工帮忙。将你的小仓库发展成高效运转的专业运营中心！",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "trushkeen"
+   ],
+   "publishers": [
+    "trushkeen"
+   ],
+   "genres": [
+    "模拟"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "完全支持控制器",
+    "#category_playable_at_your_own_pace",
+    "无需应对快速反应事件",
+    "Steam 云",
+    "统计数据",
+    "Steam 排行榜",
+    "家庭共享"
+   ],
+   "priceUsd": 7.49,
+   "priceInitial": 9.99,
+   "discount": 25,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4798110/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 41,
+    "positive": 29,
+    "negative": 12,
+    "score": "多半好评",
+    "positivePct": 71
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 47.97,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 1558,
+    "low": 935,
+    "high": 2493,
+    "basis": "Boxleiter 法 · 评论数 × 38（$7.49 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 54384,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "basis": "细分标签「Simulation」全站 54,384 款"
+    },
+    "niche": "Simulation"
+   },
+   "tags": [
+    {
+     "name": "Relaxing",
+     "total": 25899,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 54384,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Casual",
+     "total": 91958,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Shop Keeper",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Inventory Management",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Organizing",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Economy",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Resource Management",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 5,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4798110/",
+     "本站抓取：好评率 71%（41 条）· 估算 1,558 · 25% 折 $9.99→$7.49"
+    ],
+    "sells": [
+     {
+      "t": "打工模拟的解压定位",
+      "d": "Relaxing 标签排第一"
+     },
+     {
+      "t": "仓库变大的成长线",
+      "d": "商店页写「把小仓库发展成运营中心」"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "拣货的机械爽感",
+      "d": "重复动作 + 完成订单的即时反馈"
+     },
+     {
+      "t": "雇佣员工自动化",
+      "d": "从自己干到看别人干"
+     }
+    ],
+    "pains": [
+     {
+      "t": "打工模拟同质化严重",
+      "d": "选「拣货」这个没人做的岗位"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "学会看单、找货、装车"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "仓库开始摆不下，考虑扩建"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "第一次雇人，发现自己不用搬了"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "重复感上来，关游戏"
+     }
+    ],
+    "loop": {
+     "core": "接单 → 拣货 → 装车 → 赚钱扩建",
+     "steps": [
+      "接单",
+      "寻路拣货",
+      "装车结算",
+      "扩建/雇人"
+     ],
+     "mins": 8,
+     "note": "素材剪「仓库从空到满」的俯视对比，打工模拟只卖成长曲线"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 2,
+     "visual": 2,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 1
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "小场景 + 交互物 + 简单 AI，UE5 一周能出可玩原型",
+    "artScale": {
+     "level": 2,
+     "note": "一个仓库 + 货架 + 纸箱，美术量最低的那一档"
+    },
+    "mvp": "一个仓库 + 20 种货 + 一套拣货计分就够卖 $5；扩建和雇人都是后续",
+    "ue5": {
+     "pick": [
+      "UMG 做订单 UI",
+      "AI Navigation 做寻路"
+     ],
+     "build": [
+      "拣货交互与判定",
+      "经济与扩建数值"
+     ],
+     "vs": "同类多为 Unity 小项目，UE5 反而重，但光影更好看",
+     "learn": [
+      {
+       "t": "AI Navigation",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/ai-navigation-in-unreal-engine"
+      },
+      {
+       "t": "UMG",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，25% 折 $9.99→$7.49 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "71% 好评（41 条）—— 打工模拟做不出差异就是「褒贬不一」",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "打工模拟靠「真实到好笑」的片段传播，这款没有梗，所以片子几乎是零贡献",
+    "trailerImpact": 2,
+    "action": "本周把它当「无梗打工模拟」的对照组：如果我的概念讲不出一句能让评论区笑的话，就先别做",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$7.49",
+      "off": "25%",
+      "note": "$9.99 原价，首发 25% 折"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "单场景、无战斗、无联机，一人两周内能出可玩版",
+    "partner": "4995030",
+    "partnerNote": "同为「整理/整理癖」赛道，Folded Fables 97% 好评：差别在「有手绘世界与收集欲」，不是「打工」"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4660920",
+   "name": "DREGS",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4660920/4b7dcf8cf84857e420fdc91a73e09b21d92303a6/header.jpg?t=1792088108",
+   "desc": "DREGS is a co-op space cleanup game with a flamethrower. Torch alien fungus, haul zombie corpses into incinerators, exterminate pests, and restore derelict ships for a bigger payout. No mission timer. Just satisfying cleanup, questionable teamwork, and plenty of things on fire.",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "T-Minus Zero Entertainment"
+   ],
+   "publishers": [
+    "T-Minus Zero Entertainment"
+   ],
+   "genres": [
+    "动作",
+    "冒险",
+    "独立"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "部分支持控制器",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 9.99,
+   "priceInitial": 9.99,
+   "discount": 0,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4660920/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 33,
+    "positive": 32,
+    "negative": 1,
+    "score": "好评",
+    "positivePct": 97
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 38.61,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 1254,
+    "low": 752,
+    "high": 2006,
+    "basis": "Boxleiter 法 · 评论数 × 38（$9.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "basis": "细分标签「Adventure」全站 84,335 款"
+    },
+    "niche": "Adventure"
+   },
+   "tags": [
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Adventure",
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Horror",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Comedy",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "3D",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 1,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4660920/",
+     "本站抓取：好评率 97%（33 条）· 估算 1,254 · $9.99 无折扣"
+    ],
+    "sells": [
+     {
+      "t": "合作清洁 + 喷火器",
+      "d": "商店页一句话就讲完：太空清洁工，用喷火器烧外星霉菌"
+     },
+     {
+      "t": "恐怖打工的组合",
+      "d": "Co-op + Horror 双标签"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "烧霉菌的解压反馈",
+      "d": "污渍消失的可视化奖励"
+     },
+     {
+      "t": "把僵尸尸体拖进焚化炉",
+      "d": "荒诞感本身就是爽点"
+     }
+    ],
+    "pains": [
+     {
+      "t": "恐怖游戏不敢单人玩",
+      "d": "1–4 人合作，把恐惧变成笑"
+     },
+     {
+      "t": "清洁类缺乏目标",
+      "d": "加订单/评分把清洁变成工作"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "学会喷火器与拖拽，清完第一个房间"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "遇到第一个活物，发现要边打边清"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "分工：一人烧一人拖，效率翻倍"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "结算评分，想刷更高分"
+     }
+    ],
+    "loop": {
+     "core": "进关 → 清理/焚烧 → 拖尸体 → 结算评分 → 下一关",
+     "steps": [
+      "进关勘察",
+      "清理污染",
+      "处理威胁",
+      "结算评分"
+     ],
+     "mins": 15,
+     "note": "素材剪「喷射火焰烧掉一片霉菌」的前后对比，三秒就够"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 4,
+     "visual": 2,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "小场景 + 火焰特效 + 合作，UE5 的 Niagara 与复制都是现成的",
+    "artScale": {
+     "level": 2,
+     "note": "太空站模块化场景，靠复用；成本主要在火焰/污渍材质"
+    },
+    "mvp": "一个房间 + 一种污渍 + 一个威胁 + 评分结算，一周可玩",
+    "ue5": {
+     "pick": [
+      "Niagara 火焰与烟雾",
+      "Lumen 做太空站冷光"
+     ],
+     "build": [
+      "污渍清理/扩散的网格系统",
+      "拖拽物理",
+      "合作复制"
+     ],
+     "vs": "同类多为 Unity 项目，UE5 的火焰与光照更好看",
+     "learn": [
+      {
+       "t": "Niagara 特效",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/niagara-visual-effects-system-in-unreal-engine"
+      },
+      {
+       "t": "Chaos 物理",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-physics-overview-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架 $9.99 无折扣 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "97% 好评（33 条）—— 小样本，但方向明确：荒诞 + 解压",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "「烧霉菌」这个动作天生适合 GIF/短视频，片子贡献高；反差感（脏 vs 干净）是它的传播引擎",
+    "trailerImpact": 4,
+    "action": "本周写一句话测试自己的概念：「你的游戏能不能用『用 X 干 Y』讲完」——讲不完就重设",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$9.99",
+      "off": "0%",
+      "note": "不打折，靠口碑"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "单场景循环 + 特效，一人可做；联机可先做单人版",
+    "partner": "3569420",
+    "partnerNote": "同为 10 美元档合作小游戏，它靠「解压」卖，链兽靠「翻车」卖——都是把人设成笑点"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4995030",
+   "name": "Folded Fables: Tidy Up The Dragon Hoard",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4995030/8759272466890195b12794304f1f8286d2eb4789/header.jpg?t=1792107469",
+   "desc": "Unwind in a relaxing first-person Tidy Up game where you'll sort and arrange 5,648 treasures in a papercraft world. Level up, unlock new skills, and tally every coin. Play solo or tidy up together with friends. Supports up to 16 players in online co-op.",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Codename Entertainment Inc."
+   ],
+   "publishers": [
+    "Codename Entertainment Inc."
+   ],
+   "genres": [
+    "休闲",
+    "模拟"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "部分支持控制器",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 5.39,
+   "priceInitial": 5.99,
+   "discount": 10,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4995030/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 33,
+    "positive": 32,
+    "negative": 1,
+    "score": "好评",
+    "positivePct": 97
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 38.61,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 1254,
+    "low": 752,
+    "high": 2006,
+    "basis": "Boxleiter 法 · 评论数 × 38（$5.39 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 54384,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "basis": "细分标签「Simulation」全站 54,384 款"
+    },
+    "niche": "Simulation"
+   },
+   "tags": [
+    {
+     "name": "Relaxing",
+     "total": 25899,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 54384,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Casual",
+     "total": 91958,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Hand-drawn",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Organizing",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Collectathon",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Fantasy",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Dragons",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 258,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4995030/",
+     "本站抓取：好评率 97%（33 条）· 估算 1,254 · 10% 折 $5.99→$5.39 · 商店页写明 5,648 件宝物"
+    ],
+    "sells": [
+     {
+      "t": "5,648 件宝物的量化卖点",
+      "d": "商店页直接报数字，给「内容量」一个可感知的锚"
+     },
+     {
+      "t": "纸艺（papercraft）第一人称整理",
+      "d": "视觉差异化，一眼记得住"
+     },
+     {
+      "t": "$5.39 的低价解压",
+      "d": "低于 6 美元的冲动价"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "整理癖的满足感",
+      "d": "Organizing + Collectathon 双标签"
+     },
+     {
+      "t": "升级解锁新技能",
+      "d": "整理也能成长"
+     }
+    ],
+    "pains": [
+     {
+      "t": "解压游戏缺内容",
+      "d": "5,648 件物件把「量」做成卖点"
+     },
+     {
+      "t": "整理类没有目标",
+      "d": "收集 + 升级给长线目标"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "整理第一间屋子，发现每件物品都能拿"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "解锁第一个技能，整理效率变高"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "开始强迫症式归位，停不下来"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "看着收集进度条，想看满是多少"
+     }
+    ],
+    "loop": {
+     "core": "进房间 → 整理/收集 → 升级 → 解锁新房间",
+     "steps": [
+      "发现物件",
+      "分类归位",
+      "升级技能",
+      "解锁新区域"
+     ],
+     "mins": 12,
+     "note": "素材剪「一堆乱 → 一秒整齐」的定格对比，整理类全靠这个视觉爽点"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 3,
+     "visual": 4,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "纸艺风格化渲染在 UE5 上要调材质（纸感/折痕），但交互与场景是常规活",
+    "artScale": {
+     "level": 3,
+     "note": "5,648 件物件是硬工作量，但都是小物件、低面数，可批量做"
+    },
+    "mvp": "一间房 + 300 件物件 + 一个收集进度条，先把「整理停不下来」验证出来",
+    "ue5": {
+     "pick": [
+      "Nanite 处理大量小物件",
+      "Lumen 做室内柔光"
+     ],
+     "build": [
+      "物件拾取/归位判定",
+      "批量物件管理与流送"
+     ],
+     "vs": "原作多为 Unity 小项目；UE5 处理几千个小物件反而更吃性能，要谨慎",
+     "learn": [
+      {
+       "t": "Nanite",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/nanite-virtualized-geometry-in-unreal-engine"
+      },
+      {
+       "t": "物理交互",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-physics-overview-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，10% 折 $5.99→$5.39 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "97% 好评（33 条）—— 小体量高口碑，靠整理前后对比图传播",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "整理类游戏的片子就是「乱 → 整齐」的对比，几乎不需要解说，是最好剪的一类",
+    "trailerImpact": 5,
+    "action": "本周拍一条 15 秒「我的桌子 30 秒变整齐」的实拍，套它的结构做自己的素材模板",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$5.39",
+      "off": "10%",
+      "note": "$5.99 原价"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "单场景、无战斗、无联机；工作量在物件数量，可外包建模",
+    "partner": "4798110",
+    "partnerNote": "同为整理/打工，97% vs 71%：一边给「收集欲」，一边只给「重复劳动」"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "5363350",
+   "name": "Mortuus Demo",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5363350/784c36f86cb069bf42894c749dd912d177053669/header.jpg?t=1792013774",
+   "desc": "A round-based co-op zombies FPS for 1 to 4 players. Survive endless hordes in brutalist procedurally generated map. Buy doors, hit the mystery box, upgrade your guns, and uncover the hidden ritual that wakes the Mother.",
+   "releaseText": "2026 年 10 月 14 日",
+   "release": "2026-10-14",
+   "comingSoon": false,
+   "developers": [
+    "Hamuno"
+   ],
+   "publishers": [
+    "Hamuno"
+   ],
+   "genres": [
+    "动作"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "游戏试用版",
+    "完全支持控制器",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持"
+   ],
+   "priceUsd": 0,
+   "priceInitial": null,
+   "discount": 0,
+   "isFree": true,
+   "url": "https://store.steampowered.com/app/5363350/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 48,
+    "positive": 46,
+    "negative": 2,
+    "score": "好评",
+    "positivePct": 96
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 37.44,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": null,
+    "low": null,
+    "high": null,
+    "basis": "免费游戏（F2P），不适用评论数反推",
+    "confidence": 1
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 5451,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Zombies」全站 5,451 款"
+    },
+    "niche": "Zombies"
+   },
+   "tags": [
+    {
+     "name": "Zombies",
+     "total": 5451,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "FPS",
+     "total": 10745,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Shooter",
+     "total": 19377,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Gore",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "PvE",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 356,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/5363350/",
+     "本站抓取：免费 Demo · 好评率 96%（48 条）· 标签 Zombies / FPS / Online Co-Op"
+    ],
+    "sells": [
+     {
+      "t": "回合制僵尸 FPS 的经典结构",
+      "d": "商店页写「买门、抽神秘箱、升级」——照抄僵尸模式"
+     },
+     {
+      "t": "程序生成的粗野主义地图",
+      "d": "brutalist 风格 + 程序化，视觉有辨识度"
+     },
+     {
+      "t": "免费 Demo 换愿望单",
+      "d": "0 元试玩，为正式版攒人"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "开神秘箱的赌博感",
+      "d": "僵尸模式最上瘾的一环"
+     },
+     {
+      "t": "1–4 人扛波次",
+      "d": "合作压力与分工"
+     }
+    ],
+    "pains": [
+     {
+      "t": "僵尸模式没有新作",
+      "d": "直接满足那批「想要新僵尸图」的玩家"
+     },
+     {
+      "t": "独立团队不敢买",
+      "d": "Demo 免费先行"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "熟悉操作，打前几波"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "攒钱开门，遇到新区域"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "抽到好枪，感觉能撑更久"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "团灭，想再来一局"
+     }
+    ],
+    "loop": {
+     "core": "打波次赚钱 → 开门/抽箱 → 变强 → 撑更久",
+     "steps": [
+      "清波次",
+      "赚点数",
+      "开门/抽箱",
+      "升级武器"
+     ],
+     "mins": 20,
+     "note": "素材剪「神秘箱开出神枪」的惊呼，僵尸模式的老玩家会为这个点进来"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 4,
+     "visual": 2,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "波次 + 小地图 + 合作射击，UE5 的 AI 与复制都够用，是「一人能做出 Demo」的规模",
+    "artScale": {
+     "level": 2,
+     "note": "程序化生成的粗野主义空间 + 少量敌人模型，美术量最低档"
+    },
+    "mvp": "一张图 + 3 种敌人 + 开门/抽箱 + 10 波，这就是 Demo 的全部",
+    "ue5": {
+     "pick": [
+      "AI Navigation",
+      "Niagara 做血雾",
+      "Lyra 复制框架"
+     ],
+     "build": [
+      "波次与点数经济",
+      "程序化地图拼接",
+      "武器手感"
+     ],
+     "vs": "原作是自研/Unity，UE5 的 AI 与特效更强",
+     "learn": [
+      {
+       "t": "AI Navigation",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/ai-navigation-in-unreal-engine"
+      },
+      {
+       "t": "Niagara",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/niagara-visual-effects-system-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-14",
+      "x": "免费 Demo 上架，为正式版攒愿望单 · 商店页",
+      "cost": "free"
+     },
+     {
+      "d": "2026-10-14",
+      "x": "96% 好评（48 条）—— Demo 阶段先把口碑做正",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "Demo 阶段的片子主要是给主播试玩用的；「开箱惊呼」是最容易二创的片段",
+    "trailerImpact": 3,
+    "action": "本周做一件事：把自己的 Demo 目标写成「10 波能撑完、不崩」，先到这一步再谈美术",
+    "pricing": [
+     {
+      "d": "2026-10-14",
+      "price": "$0",
+      "off": "0%",
+      "note": "免费 Demo，正式版价格未公布"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "单地图波次玩法，一人能在 1–2 个月做出可玩 Demo；联机是加分项不是必需",
+    "partner": "3816030",
+    "partnerNote": "同为僵尸题材，96% vs 63%：一个把范围缩到「一张图十波」，一个铺到 267 平方公里"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "3977340",
+   "name": "百变格斗家",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3977340/2643c4409f0545a2416300c05c5e4d31ddb979b5/header_schinese.jpg?t=1791926797",
+   "desc": "百变格斗家 是一款单人肉鸽格斗游戏。击败对手，习得他们的招式，打造属于你的独特战斗风格。在紧张刺激的复古街机对决中，凭借简单易上手的操作逐步精通招式，最终夺得冠军头衔！",
+   "releaseText": "2026 年 10 月 13 日",
+   "release": "2026-10-13",
+   "comingSoon": false,
+   "developers": [
+    "HeartLoop Games"
+   ],
+   "publishers": [
+    "HeartLoop Games"
+   ],
+   "genres": [
+    "动作",
+    "独立",
+    "抢先体验"
+   ],
+   "categories": [
+    "单人",
+    "完全支持控制器",
+    "推荐使用手柄",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "家庭共享"
+   ],
+   "priceUsd": 17.99,
+   "priceInitial": 19.99,
+   "discount": 10,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3977340/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 93,
+    "positive": 90,
+    "negative": 3,
+    "score": "特别好评",
+    "positivePct": 97
+   },
+   "days": 3,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 30.23,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 2790,
+    "low": 1674,
+    "high": 4464,
+    "basis": "Boxleiter 法 · 评论数 × 30（$17.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 10136,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "basis": "细分标签「Action Roguelike」全站 10,136 款"
+    },
+    "niche": "Action Roguelike"
+   },
+   "tags": [
+    {
+     "name": "Action Roguelike",
+     "total": 10136,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Roguelite",
+     "total": 14562,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 122875,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Roguelike",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Fighting",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "2.5D",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "2D Fighter",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 69,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3977340/",
+     "本站抓取：好评率 97%（93 条）· 估算 2,790 · 10% 折 $19.99→$17.99 · 抢先体验"
+    ],
+    "sells": [
+     {
+      "t": "学会对手招式的成长",
+      "d": "「击败对手，习得他们的招式」—— 收集即变强"
+     },
+     {
+      "t": "单人肉鸽格斗",
+      "d": "把格斗做进 Roguelike，不需要对手在线"
+     },
+     {
+      "t": "复古街机视觉",
+      "d": "一眼 90 年代"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "招式组合自由",
+      "d": "打造自己的战斗风格是核心爽点"
+     },
+     {
+      "t": "上手简单精通难",
+      "d": "商店页明确写「简单易上手的操作逐步精通」"
+     }
+    ],
+    "pains": [
+     {
+      "t": "格斗游戏没人陪练",
+      "d": "单人肉鸽，不需要网络对手"
+     },
+     {
+      "t": "格斗上手门槛",
+      "d": "简化操作，深度放在招式组合"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "学会三连击，打赢第一个对手"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "偷到第一个招式，发现能组合"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "搭出一套自己的连招，爽感爆发"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "被 Boss 打断，想再刷一套"
+     }
+    ],
+    "loop": {
+     "core": "打对手 → 偷招式 → 组连招 → 打更强的对手",
+     "steps": [
+      "选人",
+      "对局",
+      "偷招式/选词条",
+      "组连招打 Boss"
+     ],
+     "mins": 10,
+     "note": "素材剪「同一套连招越打越长」的进化对比，格斗视频卖的是变强"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 4,
+     "visual": 3,
+     "price": 3,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "格斗游戏对帧数据、输入缓冲、判定框的精度要求极高，UE5 不是格斗的主流选择（多为 Unity/自研 2D）",
+    "artScale": {
+     "level": 3,
+     "note": "角色数量决定成本；复古像素/低模可压低，但每角色都要成套动作"
+    },
+    "mvp": "3 个角色 + 20 个招式 + 一个 Boss，先把「偷招式组连招」玩通",
+    "ue5": {
+     "pick": [
+      "Paper2D（若做 2D）",
+      "Enhanced Input 做输入缓冲"
+     ],
+     "build": [
+      "帧数据与判定框系统",
+      "招式组合/连段验证",
+      "输入缓冲与取消窗口"
+     ],
+     "vs": "格斗品类 UE5 少见，帧同步与手感要自己搭；原作更可能是 Unity/自研",
+     "learn": [
+      {
+       "t": "Enhanced Input",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/enhanced-input-in-unreal-engine"
+      },
+      {
+       "t": "动画蒙太奇（连招）",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/animation-montages-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-13",
+      "x": "抢先体验上架，10% 折 $19.99→$17.99 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-13",
+      "x": "97% 好评（93 条）—— EA 阶段小样本高口碑",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "格斗内容靠「连招演示」传播，片子贡献高但要剪得极快（前 2 秒必须出招）",
+    "trailerImpact": 4,
+    "action": "本周在 UE5 做一条「三招连成一套」的最小验证：只做判定与取消窗口，不管美术",
+    "pricing": [
+     {
+      "d": "2026-10-13",
+      "price": "$17.99",
+      "off": "10%",
+      "note": "EA 10% 折"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "系统不难但动作资产贵；一人做建议只做 3 个角色 + 招式组合",
+    "partner": "3569420",
+    "partnerNote": "同为「战斗 + 构筑」，一个靠格斗帧精度，一个靠锁链物理；都在 10–18 美元档"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4415380",
+   "name": "Market is Fine",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4415380/f10f04db5d36174ce3075e94da0ea971074c7ab3/header.jpg?t=1792097105",
+   "desc": "四个朋友，一家超市，零计划。一款黑色幽默超市模拟游戏，支持 1-4 人在线合作，也能单人游玩：一起上货，把收银机里的钱输光在赌场，揪出私吞货款的内鬼，再在门口顶住对手连锁店的突袭。晚上你们就上新闻了。一切正常。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Vortexon Studios"
+   ],
+   "publishers": [
+    "Vortexon Studios"
+   ],
+   "genres": [
+    "独立",
+    "模拟",
+    "策略"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "Steam 成就",
+    "自定义音量控制",
+    "无需应对快速反应事件",
+    "随时保存",
+    "立体声",
+    "字幕选项",
+    "家庭共享"
+   ],
+   "priceUsd": 5.03,
+   "priceInitial": 6.99,
+   "discount": 28,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4415380/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 25,
+    "positive": 22,
+    "negative": 3,
+    "score": "好评",
+    "positivePct": 88
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 29.25,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 950,
+    "low": 570,
+    "high": 1520,
+    "basis": "Boxleiter 法 · 评论数 × 38（$5.03 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": null,
+    "niche": null
+   },
+   "tags": [
+    {
+     "name": "Job Simulator",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Shop Keeper",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Economy",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Capitalism",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Management",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Party Game",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Character Customization",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "3D",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 1,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4415380/",
+     "本站抓取：好评率 88%（25 条）· 估算 950 · 28% 折 $6.99→$5.03"
+    ],
+    "sells": [
+     {
+      "t": "四人超市合作的混乱喜剧",
+      "d": "商店页写「四个朋友，一家超市，零计划」"
+     },
+     {
+      "t": "黑色幽默 + 内鬼",
+      "d": "揪出私吞货款的人，天然产生戏剧"
+     },
+     {
+      "t": "$5 的派对价",
+      "d": "四人凑一局成本极低"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "上货/收银的手忙脚乱",
+      "d": "合作类最经典的混乱源"
+     },
+     {
+      "t": "去赌场把钱输光",
+      "d": "反经济设计，天然好笑"
+     }
+    ],
+    "pains": [
+     {
+      "t": "派对游戏缺题材新意",
+      "d": "超市 + 内鬼，比纯搬运多一层社交博弈"
+     },
+     {
+      "t": "朋友少",
+      "d": "支持单人游玩"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "四个人抢一个收银台，全是事故"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "开始分工，效率上来了"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "发现有人偷钱，开始互相怀疑"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "被对手连锁店打崩，笑着重开"
+     }
+    ],
+    "loop": {
+     "core": "上货 → 收银 → 分钱（或偷钱）→ 顶住对手连锁店",
+     "steps": [
+      "进货上架",
+      "收银结算",
+      "分配/偷窃",
+      "防守反击"
+     ],
+     "mins": 15,
+     "note": "素材剪「内鬼被抓现行」的争吵片段，派对游戏只卖社交事故"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 4,
+     "visual": 2,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "小场景 + 联机合作，UE5 的复制与物理够用；难点是联机稳定性",
+    "artScale": {
+     "level": 2,
+     "note": "一个超市场景 + 商品模型，美术量最低档"
+    },
+    "mvp": "一间超市 + 上货/收银两个动作 + 四人联机，就能出所有笑点",
+    "ue5": {
+     "pick": [
+      "Lyra 复制框架",
+      "物理交互",
+      "UMG"
+     ],
+     "build": [
+      "联机稳定与延迟补偿",
+      "经济与偷窃判定"
+     ],
+     "vs": "同类多为 Unity 小项目；UE5 包体大，派对游戏要权衡",
+     "learn": [
+      {
+       "t": "网络复制",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      },
+      {
+       "t": "Chaos 物理",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-physics-overview-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，28% 折 $6.99→$5.03 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "88% 好评（25 条）—— 样本太小，口碑还没成形",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "派对游戏几乎全靠片子：四个人笑场就是广告。没有真人/联机录屏就没有传播",
+    "trailerImpact": 4,
+    "action": "本周写三个「能让人吵起来」的玩法机制，选一个塞进自己的原型（派对游戏卖的是吵架）",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$5.03",
+      "off": "28%",
+      "note": "$6.99 原价，首发深折"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "玩法简单但联机是硬门槛；先做本地/单人版验证笑点",
+    "partner": "4798110",
+    "partnerNote": "同为打工模拟，88% vs 71%：它多了「内鬼」这一层社交博弈，笑点从动作转到人"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4971130",
+   "name": "废土求生日志",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4971130/ba70def8a8e7d43f535f5eeca8445f22a968f216/header_schinese.jpg?t=1792107348",
+   "desc": "末日背包塔防 × 肉鸽合成 × 美女副官。 在有限背包格中搭配 12 种武器，合成进化超级武器，招募美女副官守住防线。100 章节关卡，每一局都是全新的策略构筑。",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "HotPlay Studio"
+   ],
+   "publishers": [
+    "HotPlay Studio"
+   ],
+   "genres": [
+    "休闲",
+    "策略"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "家庭共享"
+   ],
+   "priceUsd": 3.49,
+   "priceInitial": 4.99,
+   "discount": 30,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4971130/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 21,
+    "positive": 21,
+    "negative": 0,
+    "score": "好评",
+    "positivePct": 100
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 27.3,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 945,
+    "low": 567,
+    "high": 1512,
+    "basis": "Boxleiter 法 · 评论数 × 45（$3.49 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Strategy",
+    "label": "策略",
+    "saturation": {
+     "total": 91958,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "basis": "细分标签「Casual」全站 91,958 款"
+    },
+    "niche": "Casual"
+   },
+   "tags": [
+    {
+     "name": "Casual",
+     "total": 91958,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 122875,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Strategy",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Bullet Hell",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Tower Defense",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Roguelike",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Wargame",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "2D",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 3,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4971130/",
+     "本站抓取：好评率 100%（21 条）· 估算 945 · 30% 折 $4.99→$3.49 · 商店页写明 12 种武器 / 100 章节"
+    ],
+    "sells": [
+     {
+      "t": "背包格子的空间策略",
+      "d": "有限格子放 12 种武器，位置即策略"
+     },
+     {
+      "t": "塔防 + 肉鸽合成的叠加",
+      "d": "三种玩法标签叠在一起"
+     },
+     {
+      "t": "$3.49 的超低价",
+      "d": "比一杯奶茶便宜"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "合成进化超级武器",
+      "d": "合成的瞬间爆点"
+     },
+     {
+      "t": "100 章节的进度条",
+      "d": "内容量看起来很多"
+     }
+    ],
+    "pains": [
+     {
+      "t": "塔防后期无聊",
+      "d": "用背包摆放 + 合成给每局变化"
+     },
+     {
+      "t": "肉鸽没构筑深度",
+      "d": "12 种武器 × 合成路线"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "第一次摆格子、打退第一波"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "凑出第一次合成，看到质变"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "找到强势构筑，连续通关几章"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "发现关卡重复，考虑要不要继续"
+     }
+    ],
+    "loop": {
+     "core": "摆格子 → 打波次 → 合成武器 → 过章节",
+     "steps": [
+      "摆放武器",
+      "波次战斗",
+      "合成/升级",
+      "进入下一章"
+     ],
+     "mins": 8,
+     "note": "素材剪「合成瞬间全屏爆炸」，这类游戏只卖那 0.5 秒"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 4,
+     "visual": 2,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "数值向的小体量塔防，UE5 是杀鸡用牛刀；网页/Cocos/Unity 更合适",
+    "artScale": {
+     "level": 1,
+     "note": "背包格子 + 图标 + 简单怪，美术量最低档（也是它能卖 $3.49 的原因）"
+    },
+    "mvp": "一个背包界面 + 6 种武器 + 10 波敌人，先验证「摆格子好不好玩」",
+    "ue5": {
+     "pick": [
+      "UMG 做背包网格"
+     ],
+     "build": [
+      "背包网格与摆放判定",
+      "合成表与数值"
+     ],
+     "vs": "不推荐 UE5；这类游戏 2D 框架效率高一个数量级",
+     "learn": [
+      {
+       "t": "UMG UI 设计器",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架，30% 折 $4.99→$3.49 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "100% 好评但只有 21 条 —— 低价小体量，样本不足以说明质量",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "合成爆点的短视频是唯一入口，且极易被模仿（同质化高）",
+    "trailerImpact": 3,
+    "action": "本周记一条：$3.49 档要靠量或靠长线更新，别指望单品回本",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$3.49",
+      "off": "30%",
+      "note": "$4.99 原价"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "纯 2D 数值玩法，一人可做；美术需求极低",
+    "partner": "3977340",
+    "partnerNote": "同为「构筑 + 局内成长」，一个卖 $3.49 卖量，一个卖 $17.99 卖深度"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "3026770",
+   "name": "Hunt Me",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3026770/header.jpg?t=1792083759",
+   "desc": "《HUNT ME》是一款第一人称 1-4 人合作恐怖生存游戏。体验充满氛围的在线合作狩猎：收集仪式材料，利用红外视觉削弱恶魔威胁，并在自己成为猎物前将它们驱逐！",
+   "releaseText": "2026 年 10 月 15 日",
+   "release": "2026-10-15",
+   "comingSoon": false,
+   "developers": [
+    "Nuci"
+   ],
+   "publishers": [
+    "Nuci"
+   ],
+   "genres": [
+    "动作",
+    "独立"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "Steam 成就",
+    "完全支持控制器",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 9.99,
+   "priceInitial": 9.99,
+   "discount": 0,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3026770/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 22,
+    "positive": 21,
+    "negative": 1,
+    "score": "好评",
+    "positivePct": 95
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 25.74,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 836,
+    "low": 502,
+    "high": 1338,
+    "basis": "Boxleiter 法 · 评论数 × 38（$9.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Action",
+    "label": "动作",
+    "saturation": {
+     "total": 5085,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Stealth」全站 5,085 款"
+    },
+    "niche": "Stealth"
+   },
+   "tags": [
+    {
+     "name": "Stealth",
+     "total": 5085,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 13285,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 16974,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Multiplayer",
+     "total": 27759,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "First-Person",
+     "total": 29545,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Action",
+     "total": 91362,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Horror",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Survival Horror",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 0,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3026770/",
+     "本站抓取：好评率 95%（22 条）· 估算 836 · $9.99 无折扣"
+    ],
+    "sells": [
+     {
+      "t": "1–4 人合作恐怖狩猎",
+      "d": "商店页写「收集仪式材料、红外视觉削弱恶魔」"
+     },
+     {
+      "t": "红外视觉的机制差异",
+      "d": "不是手电筒，是「看得见就弱」"
+     },
+     {
+      "t": "$9.99 的合作恐怖档",
+      "d": "同档位里价格克制"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "被反过来猎杀的压力",
+      "d": "标题就是「Hunt Me」"
+     },
+     {
+      "t": "仪式材料的收集循环",
+      "d": "有明确目标，不只是跑"
+     }
+    ],
+    "pains": [
+     {
+      "t": "恐怖合作缺目标",
+      "d": "用仪式材料 + 驱逐机制给流程"
+     },
+     {
+      "t": "一个人不敢玩",
+      "d": "合作人数弹性"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "进图，学会红外视觉"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "收集第一批材料，第一次被追"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "完成一次驱逐，理解流程"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "被反杀，想换队友再来"
+     }
+    ],
+    "loop": {
+     "core": "进图 → 收集材料 → 用红外削弱 → 驱逐/逃",
+     "steps": [
+      "进图",
+      "收集",
+      "削弱",
+      "驱逐或逃跑"
+     ],
+     "mins": 20,
+     "note": "素材剪「红外里看见东西靠近」的那一秒，恐怖游戏只卖未知"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 3,
+     "visual": 2,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "恐怖场景 + 联机 UE5 能做，但氛围靠音频与光照细节，是「会做的人很快、不会的人很慢」的活",
+    "artScale": {
+     "level": 2,
+     "note": "一座宅邸 + 少量敌人；成本在音频与灯光"
+    },
+    "mvp": "一栋房子 + 一个敌人 + 一套材料收集，先把「被追」做出来",
+    "ue5": {
+     "pick": [
+      "Lumen 做室内暗光",
+      "MetaSounds 做环境音",
+      "AI Perception"
+     ],
+     "build": [
+      "红外视觉后处理",
+      "追逐 AI 与听觉感知"
+     ],
+     "vs": "同类多为 Unity；UE5 的 Lumen 在暗场里更好看",
+     "learn": [
+      {
+       "t": "后处理与材质",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/post-process-materials-in-unreal-engine"
+      },
+      {
+       "t": "MetaSounds",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/metasounds-overview-in-unreal-engine"
+      },
+      {
+       "t": "AI 感知",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/ai-perception-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-15",
+      "x": "上架 $9.99 无折扣 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-15",
+      "x": "95% 好评（22 条）—— 样本太小，不能当结论",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "恐怖游戏靠「反应视频」，片子贡献高，但要真人出镜才有传播",
+    "trailerImpact": 3,
+    "action": "本周剪一条 20 秒「不开灯的房间 + 红外画面」的氛围测试，看能不能让人屏住呼吸",
+    "pricing": [
+     {
+      "d": "2026-10-15",
+      "price": "$9.99",
+      "off": "0%",
+      "note": "不打折"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "场景小但氛围（音频/灯光）要求高；一人可做单人恐怖版",
+    "partner": "5363350",
+    "partnerNote": "同为合作恐怖/僵尸，一个卖「射击波次」，一个卖「被猎」——都在 10 美元档抢同一批人"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4516190",
+   "name": "My Beautiful Faraway, Please Don't Be Cruel To Me",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4516190/032ad543750ba1b9f8913ed191e4353b8b616888/header.jpg?t=1791910757",
+   "desc": "一段忧伤的第一人称冒险，穿行于如梦般朦胧、近乎遗忘的虚无之境。探索其中，邂逅奇异的居民，解开谜题，逐步拼凑出一段关于存在之脆弱的故事。",
+   "releaseText": "2026 年 10 月 13 日",
+   "release": "2026-10-13",
+   "comingSoon": false,
+   "developers": [
+    "arch1t3ct"
+   ],
+   "publishers": [
+    "arch1t3ct"
+   ],
+   "genres": [
+    "冒险",
+    "休闲",
+    "独立"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "完全支持控制器",
+    "自定义音量控制",
+    "#category_playable_at_your_own_pace",
+    "无需应对快速反应事件",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "字幕选项",
+    "Steam 云",
+    "在电视上远程畅玩",
+    "家庭共享"
+   ],
+   "priceUsd": 9.89,
+   "priceInitial": 10.99,
+   "discount": 10,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4516190/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 63,
+    "positive": 56,
+    "negative": 7,
+    "score": "特别好评",
+    "positivePct": 89
+   },
+   "days": 3,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 24.57,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 2394,
+    "low": 1436,
+    "high": 3830,
+    "basis": "Boxleiter 法 · 评论数 × 38（$9.89 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Adventure",
+    "label": "冒险",
+    "saturation": {
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "basis": "细分标签「Adventure」全站 84,335 款"
+    },
+    "niche": "Adventure"
+   },
+   "tags": [
+    {
+     "name": "Adventure",
+     "total": 84335,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Puzzle",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Mystery",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Psychological Horror",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Exploration",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Atmospheric",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Surreal",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    },
+    {
+     "name": "Dark",
+     "total": null,
+     "verdict": null,
+     "idKnown": false
+    }
+   ],
+   "playersCurrent": 21,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4516190/",
+     "本站抓取：好评率 89%（63 条）· 估算 2,394 · 10% 折 $10.99→$9.89"
+    ],
+    "sells": [
+     {
+      "t": "诗意的第一人称叙事",
+      "d": "商店页写「关于存在之脆弱的忧伤冒险」"
+     },
+     {
+      "t": "梦境地景 + 谜题",
+      "d": "Atmospheric + Puzzle 组合"
+     },
+     {
+      "t": "短篇完整体验",
+      "d": "不承诺几十小时，反而好卖"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "氛围与美术",
+      "d": "Atmospheric 是第一标签"
+     },
+     {
+      "t": "拼凑故事的解谜",
+      "d": "叙事碎片化，玩家自己拼"
+     }
+    ],
+    "pains": [
+     {
+      "t": "叙事游戏同质化",
+      "d": "用「心理恐怖 + 梦境」的调性区分"
+     },
+     {
+      "t": "玩家怕买到烂尾",
+      "d": "短篇体量承诺完整"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "走进第一个梦境地景，学会观察"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "解开第一个谜题，遇到奇异居民"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "开始拼出故事线，情绪被牵动"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "到一个安静的收束点，想继续走完"
+     }
+    ],
+    "loop": {
+     "core": "走进新场景 → 观察/解谜 → 触发独白 → 走向下一个场景",
+     "steps": [
+      "探索",
+      "解谜",
+      "听独白",
+      "场景转换"
+     ],
+     "mins": 10,
+     "note": "素材剪「一个漂亮场景 + 一句独白」的 8 秒片段，叙事游戏的片子要克制"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 2,
+     "visual": 4,
+     "price": 3,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "小场景 + 步行模拟 + 谜题，UE5 的 Lumen 能让「氛围」这一项直接到位",
+    "artScale": {
+     "level": 3,
+     "note": "场景少但每处都要精修；美术成本在光照与后处理"
+    },
+    "mvp": "三个场景 + 两个谜题 + 一段完整独白，把「情绪」验证出来再扩",
+    "ue5": {
+     "pick": [
+      "Lumen 做柔光氛围",
+      "Level Sequencer 做演出",
+      "Niagara 做粒子"
+     ],
+     "build": [
+      "交互与谜题状态机",
+      "叙事触发系统"
+     ],
+     "vs": "同类多为 Unity/虚幻混合；UE5 在氛围这块优势明显",
+     "learn": [
+      {
+       "t": "Lumen",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
+      },
+      {
+       "t": "Level Sequencer",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/level-sequencer-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-10-13",
+      "x": "上架，10% 折 $10.99→$9.89 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-10-13",
+      "x": "89% 好评（63 条）—— 叙事品类正常口碑区间",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "叙事游戏的片子就是「氛围片」，贡献高但转化慢；它更像一部可互动的预告片",
+    "trailerImpact": 4,
+    "action": "本周写 5 句「主角独白」，选一句当素材标题，测哪种情绪能带来点击",
+    "pricing": [
+     {
+      "d": "2026-10-13",
+      "price": "$9.89",
+      "off": "10%",
+      "note": "$10.99 原价"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "单场景步行模拟，无战斗无联机；一人可做，成本在美术与文案",
+    "partner": "4870960",
+    "partnerNote": "同为叙事驱动，一个靠真人实拍，一个靠氛围地景——都不是玩法驱动，靠「情绪记忆点」"
+   },
+   "__src": "seed"
+  },
+  {
+   "appid": "4019220",
+   "name": "针影裁梦",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1794041965",
+   "desc": "来成为一名制衣师吧！挑选布料、裁出各类布样再将其缝在一起，制成你梦中之裙！这是一款画风温暖的手工类游戏，灵感来源于真正的裙装制作工艺。",
+   "releaseText": "2026 年 9 月 21 日",
+   "release": "2026-09-21",
+   "comingSoon": false,
+   "developers": [
+    "Cozy Lives"
+   ],
+   "publishers": [
+    "Free Lives"
+   ],
+   "genres": [
+    "休闲",
+    "模拟"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "自定义音量控制",
+    "可以仅用鼠标",
+    "无需应对快速反应事件",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 11.99,
+   "priceInitial": 14.99,
+   "discount": 20,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4019220/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 25856,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 66,
+   "team": {
+    "selfPub": false,
+    "devCount": 1,
+    "solo": false,
+    "tier": 2
+   },
+   "burst": {
+    "score": 293.82,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 775680,
+    "low": 465408,
+    "high": 1241088,
+    "basis": "Boxleiter 法 · 评论数 × 30（$11.99 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Job Simulator」全站 1,630 款"
+    },
+    "niche": "Job Simulator"
+   },
+   "tags": [
+    {
+     "name": "Job Simulator",
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 57902,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Casual",
+     "total": 97489,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 131042,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Crafting",
+     "total": null,
+     "verdict": null,
+     "idKnown": true
+    },
+    {
+     "name": "Design & Illustration",
+     "total": null,
+     "verdict": null,
+     "idKnown": true
+    },
+    {
+     "name": "Cozy",
+     "total": null,
+     "verdict": null,
+     "idKnown": true
+    },
+    {
+     "name": "Relaxing",
+     "total": null,
+     "verdict": null,
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 10626,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4019220/",
+     "本站抓取：好评数据 25,856 条评测 · 定价 $11.99 · 标签 Job Simulator / Crafting / Cozy"
+    ],
+    "sells": [
+     {
+      "t": "真手工：剪布 → 裁样 → 缝制",
+      "d": "商店页把流程写得很实：挑布、裁样、缝在一起，成品是一条裙子"
+     },
+     {
+      "t": "Cozy 品类 + 制衣题材空白",
+      "d": "Job Simulator 大类很卷，「制衣」这个具体岗位几乎没人做"
+     },
+     {
+      "t": "2.5 万条评测的口碑底座",
+      "d": "同价位里口碑厚度罕见，靠的是「做出来的东西能看」"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "从零到成品的可视成果",
+      "d": "布料变成裙子的瞬间，就是这类游戏的爆点"
+     },
+     {
+      "t": "手感与音效的解压",
+      "d": "剪刀 / 缝纫机的声音反馈是 Cozy 品类的核心"
+     }
+    ],
+    "pains": [
+     {
+      "t": "手作游戏容易假",
+      "d": "把真实制衣工艺搬进流程（裁片、缝合顺序），让懂行的人认"
+     },
+     {
+      "t": "Cozy 品类缺乏目标",
+      "d": "用订单/设计委托给长线目标"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "挑第一块布，裁出第一片裙样"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "缝合失败一次，学会顺序"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "做出第一条完整裙子，想拍照分享"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "解锁新布料，为下一条裙子选材"
+     }
+    ],
+    "loop": {
+     "core": "挑布 → 裁样 → 缝合 → 完成一条裙子 → 解锁新布料",
+     "steps": [
+      "选布料与版型",
+      "裁剪",
+      "缝合",
+      "完成与展示"
+     ],
+     "mins": 12,
+     "note": "素材剪「一块布 → 一条裙子」的延时对比，前 3 秒必须是布，后 3 秒必须是成品"
+    },
+    "f7": {
+     "niche": 5,
+     "hook": 3,
+     "visual": 4,
+     "price": 4,
+     "publisher": 3,
+     "festival": 0,
+     "viral": 4
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "布料模拟（Chaos Cloth）是 UE5 的强项，但「剪刀裁片」这类网格切割要自己写",
+    "artScale": {
+     "level": 3,
+     "note": "布料材质 + 版型资产是主要工作量，场景可以很小"
+    },
+    "mvp": "一块布 + 一个版型 + 一次缝合判定，先把「做出来能看」验证掉",
+    "ue5": {
+     "pick": [
+      "Chaos Cloth 布料模拟",
+      "Lumen 做柔和室内光"
+     ],
+     "build": [
+      "网格切割（裁片）",
+      "缝合判定与顺序校验"
+     ],
+     "vs": "原作（Free Lives 发行）偏轻量引擎；UE5 的布料更真但性能开销大",
+     "learn": [
+      {
+       "t": "Chaos Cloth",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/cloth-simulation-in-unreal-engine"
+      },
+      {
+       "t": "Lumen",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-global-illumination-and-reflections-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-09-21",
+      "x": "上线（商店页标注），$11.99",
+      "cost": "low"
+     },
+     {
+      "d": "2026-11-26",
+      "x": "累计 25,856 条评测 —— Cozy 品类的长尾曲线上得很稳",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "制衣题材天然适合短视频（成品展示），片子贡献高，属「看一眼就想买」的类型",
+    "trailerImpact": 5,
+    "action": "本周拍一条 20 秒「一块布变一条裙子」的实拍/游戏内对比，测「前后对比」这个结构在你受众里的完播率",
+    "pricing": [
+     {
+      "d": "2026-09-21",
+      "price": "$11.99",
+      "off": "0%",
+      "note": "不打折，靠口碑长尾"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "单场景 + 布料系统，一人可做；难在布料切割的手感调校",
+    "partner": "4995030",
+    "partnerNote": "同为 Cozy 手工/整理，Folded Fables 靠「5,648 件收集」卖量，它靠「做出一条裙子」卖成果"
+   },
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
+  },
+  {
+   "appid": "5527800",
+   "name": "No Asteroids",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5527800/d62c870790fcce767edd856ce3e7e6df2a9b1395/header.jpg?t=1795542925",
+   "desc": "90 天后，一颗小行星将撞上地球。政府招标，来投标的只有一个矿工，自带矿镐。他分文不取，说小行星会自己买单。以第一人称挖掉 500 万立方米，卖掉矿石，给飞船买舰炮，让它们在你挖矿时一起开火。可单人游玩，也支持最多 8 人在线合作。",
+   "releaseText": "2026 年 11 月 24 日",
+   "release": "2026-11-24",
+   "comingSoon": false,
+   "developers": [
+    "Unruled Games"
+   ],
+   "publishers": [
+    "Unruled Games"
+   ],
+   "genres": [
+    "休闲",
+    "独立",
+    "模拟"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "跨平台多人",
+    "Steam 成就",
+    "完全支持控制器",
+    "视角舒适度",
+    "自定义音量控制",
+    "无需应对快速反应事件",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 6.39,
+   "priceInitial": 7.99,
+   "discount": 20,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/5527800/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 464,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 271.44,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 17632,
+    "low": 10579,
+    "high": 28211,
+    "basis": "Boxleiter 法 · 评论数 × 38（$6.39 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Job Simulator」全站 1,630 款"
+    },
+    "niche": "Job Simulator"
+   },
+   "tags": [
+    {
+     "name": "Job Simulator",
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Mining",
+     "total": 1911,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Destruction",
+     "total": 2871,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Incremental",
+     "total": 9588,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Space",
+     "total": 10342,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Online Co-Op",
+     "total": 14322,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Co-op",
+     "total": 18068,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 57902,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 10626,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/5527800/",
+     "本站抓取：464 条评测 · $6.39 · 标签 Job Simulator / Mining / Destruction / Online Co-Op · 最多 8 人"
+    ],
+    "sells": [
+     {
+      "t": "挖掉 500 万立方米的小行星",
+      "d": "商店页把目标量化到「立方米」，进度可见"
+     },
+     {
+      "t": "挖矿养舰炮，舰炮帮你挖",
+      "d": "自动化反馈：赚的钱直接变成火力"
+     },
+     {
+      "t": "$6.39 + 8 人合作",
+      "d": "低价 + 人多，适合当「和朋友一起胡闹」的入口"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "破坏即反馈",
+      "d": "Destruction 标签：每一镐都在改变地形"
+     },
+     {
+      "t": "数值滚雪球",
+      "d": "矿石卖钱买炮，炮越多挖得越快"
+     }
+    ],
+    "pains": [
+     {
+      "t": "挖矿游戏后期重复",
+      "d": "用舰炮自动化和 90 天倒计时做压力"
+     },
+     {
+      "t": "合作游戏没人凑",
+      "d": "单人也能玩"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "学会挖矿与卖矿"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "买第一门炮，看它自动开火"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "和队友分工：一人挖一人守"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "倒计时逼近，想再刷一轮"
+     }
+    ],
+    "loop": {
+     "core": "挖矿 → 卖钱 → 买炮 → 挖得更快",
+     "steps": [
+      "挖",
+      "卖",
+      "升级火力",
+      "再挖"
+     ],
+     "mins": 8,
+     "note": "素材剪「一镐挖出巨大空洞」的破坏瞬间，Destruction 是唯一卖点"
+    },
+    "f7": {
+     "niche": 3,
+     "hook": 4,
+     "visual": 3,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "可破坏地形 + 合作，UE5 的 Chaos 破坏与复制够用，规模也在一人可做范围",
+    "artScale": {
+     "level": 2,
+     "note": "小行星 = 程序化地形，美术量低，成本在破坏系统"
+    },
+    "mvp": "一块可挖的地形 + 卖矿 + 一门炮，先验证「破坏手感」",
+    "ue5": {
+     "pick": [
+      "Chaos Destruction",
+      "Niagara 碎石特效"
+     ],
+     "build": [
+      "体素/网格破坏与存档",
+      "经济与升级数值"
+     ],
+     "vs": "同类多为 Unity 小项目；UE5 破坏更真但存档体积大",
+     "learn": [
+      {
+       "t": "Chaos Destruction",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/chaos-destruction-in-unreal-engine"
+      },
+      {
+       "t": "Niagara",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/niagara-visual-effects-system-in-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-11-24",
+      "x": "上线，$6.39 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-11-26",
+      "x": "两天 464 条评测 —— 低价挖矿有自然流量",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "破坏类只卖「挖穿」的画面，素材极易剪；这也是它上线两天就有量的原因",
+    "trailerImpact": 4,
+    "action": "本周在 UE5 里做 10 秒「一镐挖出球形空洞」的测试，看破坏反馈够不够爽",
+    "pricing": [
+     {
+      "d": "2026-11-24",
+      "price": "$6.39",
+      "off": "0%",
+      "note": "低价直接上，不打折"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "破坏系统 + 联机是双难点；砍成单人后一人可做",
+    "partner": "3569420",
+    "partnerNote": "同为「合作 + 破坏」的小体量，链兽靠锁链制造事故，它靠挖穿地形制造爽感"
+   },
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
+  },
+  {
+   "appid": "5568320",
+   "name": "中国式考试",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5568320/38e7c619685cb25224ef2c643ded825db0d9bfae/header_schinese.jpg?t=1795530424",
+   "desc": "如果今天再考一次，你还能拿多少分？《中国式考试》是一款单人考试模拟游戏。从小学一年级一路考到高考，看拼音写汉字、听英语录音、写作文，在数学卷上列出解题步骤。每学期交齐试卷，翻开批好的答卷，看看哪一步拿了分。",
+   "releaseText": "2026 年 11 月 24 日",
+   "release": "2026-11-24",
+   "comingSoon": false,
+   "developers": [
+    "Style Studio"
+   ],
+   "publishers": [
+    "Style Studio"
+   ],
+   "genres": [
+    "独立",
+    "模拟"
+   ],
+   "categories": [
+    "单人",
+    "Steam 成就",
+    "Steam 创意工坊",
+    "Steam 云",
+    "家庭共享"
+   ],
+   "priceUsd": 0.79,
+   "priceInitial": 0.99,
+   "discount": 20,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/5568320/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 204,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 132.6,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 9180,
+    "low": 5508,
+    "high": 14688,
+    "basis": "Boxleiter 法 · 评论数 × 45（$0.79 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 7492,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Text-Based」全站 7,492 款"
+    },
+    "niche": "Text-Based"
+   },
+   "tags": [
+    {
+     "name": "Text-Based",
+     "total": 7492,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Education",
+     "total": 7853,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Immersive Sim",
+     "total": 10561,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 57902,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Indie",
+     "total": 127055,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Singleplayer",
+     "total": 131042,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 154,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/5568320/",
+     "本站抓取：204 条评测 · $0.79 · 标签 Text-Based / Education"
+    ],
+    "sells": [
+     {
+      "t": "从一年级考到高考",
+      "d": "商店页直接给「一条人生时间线」的钩子"
+     },
+     {
+      "t": "$0.79 的话题价",
+      "d": "比一瓶水便宜，买来图一乐"
+     },
+     {
+      "t": "中式教育梗的公共记忆",
+      "d": "看拼音写汉字、听英语录音、写作文，全是共同经历"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "「我还能考多少分」",
+      "d": "自尊心驱动的自我测试，天然想分享分数"
+     },
+     {
+      "t": "批改与得分反馈",
+      "d": "翻开批好的答卷，看到哪一步拿了分"
+     }
+    ],
+    "pains": [
+     {
+      "t": "教育类同质化",
+      "d": "不做「学习工具」，做「考试回忆」"
+     },
+     {
+      "t": "文本游戏缺乏视觉",
+      "d": "用试卷/答题卡的界面感补"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "做第一份小学卷子，发现忘光了"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "连做几学期，分数开始稳定"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "到高考卷卡住，想截图吐槽"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "看完总分，想发给朋友比一比"
+     }
+    ],
+    "loop": {
+     "core": "做卷子 → 批改得分 → 进入下一学期",
+     "steps": [
+      "选学期",
+      "答题",
+      "批改",
+      "看排名/分享"
+     ],
+     "mins": 10,
+     "note": "素材剪「成年人做小学题翻车」的反应镜头，这类内容靠共鸣传播"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 3,
+     "visual": 1,
+     "price": 5,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 5
+    },
+    "ue5Fit": "red",
+    "ue5FitWhy": "纯文本答题，网页技术栈就够，UE5 完全是浪费",
+    "artScale": {
+     "level": 1,
+     "note": "试卷排版 + 少量 UI 资产，美术量最低档"
+    },
+    "mvp": "一个学期的卷子 + 批改逻辑 + 分数页，就够验证传播力",
+    "ue5": {
+     "pick": [
+      "UMG（若一定要用 UE）"
+     ],
+     "build": [
+      "题库与批改规则"
+     ],
+     "vs": "建议直接做网页版；这类游戏的成本全在题库与文案",
+     "learn": [
+      {
+       "t": "UMG UI 设计器",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-11-24",
+      "x": "上线 $0.79（超低价换传播）· 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-11-26",
+      "x": "两天 204 条评测 —— 话题型产品的典型曲线",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "这类游戏 100% 靠「反应视频 + 分数截图」传播，片子就是产品",
+    "trailerImpact": 5,
+    "action": "本周剪一条「我（29 岁）做小学语文卷子」的实拍反应，标题带分数，测共鸣度",
+    "pricing": [
+     {
+      "d": "2026-11-24",
+      "price": "$0.79",
+      "off": "0%",
+      "note": "定价即为传播服务"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "题库 + 批改逻辑，一人一周能出可玩版（难点是题库版权与量）",
+    "partner": "3098060",
+    "partnerNote": "同为「模拟一段人生流程」的低价小品，一个卖共鸣、一个卖经营"
+   },
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
+  },
+  {
+   "appid": "4990940",
+   "name": "PC Store Together",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4990940/ed4ad9ac6b819d4ea1a94ea3cbfdc919713ab0da/header.jpg?t=1795654457",
+   "desc": "和朋友一起经营电脑商店！组装和维修电脑，诊断故障，补充货架库存，制定价格，销售硬件和定制电脑，服务顾客，管理订单，升级店铺，解锁新配件，一起发展你们的生意。",
+   "releaseText": "2026 年 11 月 24 日",
+   "release": "2026-11-24",
+   "comingSoon": false,
+   "developers": [
+    "Sykes Games",
+    "Nightmare Studios"
+   ],
+   "publishers": [
+    "Sykes Games",
+    "Nightmare Studios"
+   ],
+   "genres": [
+    "独立"
+   ],
+   "categories": [
+    "单人",
+    "多人",
+    "合作",
+    "在线合作",
+    "Steam 成就",
+    "完全支持控制器",
+    "可选颜色",
+    "自定义音量控制",
+    "#category_playable_at_your_own_pace",
+    "无需应对快速反应事件",
+    "DUALSHOCK 控制器支持",
+    "DUALSHOCK 控制器支持",
+    "DualSense 控制器支持",
+    "DualSense 控制器支持",
+    "立体声",
+    "家庭共享"
+   ],
+   "priceUsd": 11.04,
+   "priceInitial": 12.99,
+   "discount": 15,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/4990940/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 117,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 2,
+   "team": {
+    "selfPub": true,
+    "devCount": 2,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 57.04,
+    "key": "dark",
+    "label": "⚡ 黑马",
+    "rank": 2
+   },
+   "sales": {
+    "mid": 3510,
+    "low": 2106,
+    "high": 5616,
+    "basis": "Boxleiter 法 · 评论数 × 30（$11.04 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Indie",
+    "label": "Indie",
+    "saturation": {
+     "total": 6813,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Life Sim」全站 6,813 款"
+    },
+    "niche": "Life Sim"
+   },
+   "tags": [
+    {
+     "name": "Life Sim",
+     "total": 6813,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Immersive Sim",
+     "total": 10561,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Management",
+     "total": 13828,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Sandbox",
+     "total": 14471,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "First-Person",
+     "total": 31514,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "3D",
+     "total": 52774,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 57902,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Casual",
+     "total": 97489,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 1159,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/4990940/",
+     "本站抓取：117 条评测 · $11.04 · 标签 Life Sim / Management / Co-op / First-Person"
+    ],
+    "sells": [
+     {
+      "t": "和朋友一起开电脑店",
+      "d": "装机、诊断、补货、定价、卖整机，全流程"
+     },
+     {
+      "t": "「装机」这个真实技能映射",
+      "d": "目标用户是 PC 玩家自己，天然懂行"
+     },
+     {
+      "t": "合作经营",
+      "d": "多人分工：一人装机一人接待"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "诊断故障的解谜感",
+      "d": "找出坏件的那一刻有成就感"
+     },
+     {
+      "t": "店铺升级的成长线",
+      "d": "解锁新配件、扩大店面"
+     }
+    ],
+    "pains": [
+     {
+      "t": "模拟经营同质化",
+      "d": "把题材锁死在「电脑店」，比超市/餐厅更垂直"
+     },
+     {
+      "t": "合作类内容消耗快",
+      "d": "用配件解锁与订单难度拉长"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "装第一台机，装错一次"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "学会诊断流程，开始定价赚钱"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "和队友分工，效率翻倍"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "解锁高端配件，想接更贵的单"
+     }
+    ],
+    "loop": {
+     "core": "接单 → 装机/诊断 → 定价卖出 → 升级店铺",
+     "steps": [
+      "接单",
+      "装机/诊断",
+      "定价成交",
+      "升级与解锁"
+     ],
+     "mins": 12,
+     "note": "素材剪「装错内存被队友骂」的混乱片段，合作类只卖事故"
+    },
+    "f7": {
+     "niche": 4,
+     "hook": 3,
+     "visual": 2,
+     "price": 3,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 3
+    },
+    "ue5Fit": "green",
+    "ue5FitWhy": "单店铺场景 + 交互物 + 简单合作，UE5 完全够用，一周能出原型",
+    "artScale": {
+     "level": 2,
+     "note": "配件模型是主要资产，可用现成市场素材"
+    },
+    "mvp": "一间店 + 10 种配件 + 装机判定，先把「装对了」的爽感做出来",
+    "ue5": {
+     "pick": [
+      "UMG + 交互组件",
+      "网络复制"
+     ],
+     "build": [
+      "配件兼容性规则",
+      "订单与经济系统"
+     ],
+     "vs": "同类多为 Unity；UE5 包体大，模拟经营类要权衡",
+     "learn": [
+      {
+       "t": "网络复制",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/networking-overview-for-unreal-engine"
+      },
+      {
+       "t": "UMG",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-11-24",
+      "x": "上线 $11.04 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-11-26",
+      "x": "两天 117 条评测 —— 垂直题材的自然量",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "装机是 PC 玩家的共同语言，短片「装错件」比「装对」更容易传播",
+    "trailerImpact": 3,
+    "action": "本周列出「装机最容易搞错的 5 个点」，做成 3 条 15 秒短片，为未来同类选题存素材",
+    "pricing": [
+     {
+      "d": "2026-11-24",
+      "price": "$11.04",
+      "off": "0%",
+      "note": "11 美元档，合作小游戏常见价位"
+     }
+    ],
+    "soloFit": "yellow",
+    "soloWhy": "玩法简单但联机是门槛；单人版可先做",
+    "partner": "4798110",
+    "partnerNote": "同为「打工/经营模拟」，Order Picker 71% 好评说明：没有题材共鸣就只是重复劳动"
+   },
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
+  },
+  {
+   "appid": "3098060",
+   "name": "商业模拟器",
+   "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3098060/5d760359372cbeef8a44c631cb9809172d301821/header.jpg?t=1795630175",
+   "desc": "在这款游戏中，您将以少量资金为起点，通过决定在哪家商店开设哪种业务以及决定价格，在城市中建立一个商业帝国。商业奥德赛》是一款商业模拟游戏，将考验您的商业头脑和战略规划能力。",
+   "releaseText": "2026 年 11 月 25 日",
+   "release": "2026-11-25",
+   "comingSoon": false,
+   "developers": [
+    "HOGO Games"
+   ],
+   "publishers": [
+    "HOGO Games"
+   ],
+   "genres": [
+    "休闲",
+    "独立",
+    "模拟",
+    "策略"
+   ],
+   "categories": [
+    "单人",
+    "家庭共享"
+   ],
+   "priceUsd": 7.19,
+   "priceInitial": 11.99,
+   "discount": 40,
+   "isFree": false,
+   "url": "https://store.steampowered.com/app/3098060/",
+   "requiredAge": 0,
+   "reviews": {
+    "total": 187,
+    "positive": 0,
+    "negative": 0,
+    "score": "",
+    "positivePct": null,
+    "src": "appdetails"
+   },
+   "days": 1,
+   "team": {
+    "selfPub": true,
+    "devCount": 1,
+    "solo": false,
+    "tier": 0
+   },
+   "burst": {
+    "score": 218.79,
+    "key": "burst",
+    "label": "🔥 现象级",
+    "rank": 3
+   },
+   "sales": {
+    "mid": 7106,
+    "low": 4264,
+    "high": 11370,
+    "basis": "Boxleiter 法 · 评论数 × 38（$7.19 价格带）",
+    "confidence": 2,
+    "note": "第三方估算，非官方数据。评论率随类型/地区/促销波动，误差可达 ±60%，只看量级不看精度"
+   },
+   "track": {
+    "primary": "Simulation",
+    "label": "模拟经营",
+    "saturation": {
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "basis": "细分标签「Job Simulator」全站 1,630 款"
+    },
+    "niche": "Job Simulator"
+   },
+   "tags": [
+    {
+     "name": "Job Simulator",
+     "total": 1630,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Capitalism",
+     "total": 3425,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Time Management",
+     "total": 5925,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Economy",
+     "total": 7430,
+     "verdict": {
+      "key": "empty",
+      "label": "🐟 空旷"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Immersive Sim",
+     "total": 10561,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Management",
+     "total": 13828,
+     "verdict": {
+      "key": "fish",
+      "label": "🐠 一般"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Strategy",
+     "total": 56665,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    },
+    {
+     "name": "Simulation",
+     "total": 57902,
+     "verdict": {
+      "key": "shark",
+      "label": "🦈 红海"
+     },
+     "idKnown": true
+    }
+   ],
+   "playersCurrent": 31,
+   "analysis": {
+    "src": [
+     "Steam 商店页 https://store.steampowered.com/app/3098060/",
+     "本站抓取：187 条评测 · $7.19 · 标签 Job Simulator / Economy / Management"
+    ],
+    "sells": [
+     {
+      "t": "从一家小店到商业帝国",
+      "d": "商店页写「以少量资金为起点，在城市里建帝国」"
+     },
+     {
+      "t": "定价决策权",
+      "d": "决定卖什么、卖多少钱，是核心玩法"
+     },
+     {
+      "t": "$7.19 的经营小品",
+      "d": "低价试错"
+     }
+    ],
+    "hooks": [
+     {
+      "t": "看着现金流变正",
+      "d": "经营类最原始的爽点"
+     },
+     {
+      "t": "选址与品类搭配",
+      "d": "城市里不同位置的组合策略"
+     }
+    ],
+    "pains": [
+     {
+      "t": "经营游戏上手门槛",
+      "d": "用「小店」起步，一步步加复杂度"
+     },
+     {
+      "t": "同类太多",
+      "d": "用城市级扩张拉开差异"
+     }
+    ],
+    "flow": [
+     {
+      "s": "0–10 分钟",
+      "d": "开第一家店，选品类"
+     },
+     {
+      "s": "10–30 分钟",
+      "d": "第一次亏钱，调价格"
+     },
+     {
+      "s": "30–50 分钟",
+      "d": "开第二家店，开始算协同"
+     },
+     {
+      "s": "50–60 分钟",
+      "d": "现金流稳定，想再扩一座城"
+     }
+    ],
+    "loop": {
+     "core": "选址开店 → 定价 → 看流水 → 扩张",
+     "steps": [
+      "选址",
+      "选品类与定价",
+      "结算",
+      "扩张店铺"
+     ],
+     "mins": 15,
+     "note": "素材剪「从空空店面到排队」的快进，经营类只卖成长曲线"
+    },
+    "f7": {
+     "niche": 2,
+     "hook": 2,
+     "visual": 2,
+     "price": 4,
+     "publisher": 1,
+     "festival": 0,
+     "viral": 2
+    },
+    "ue5Fit": "yellow",
+    "ue5FitWhy": "经营类核心是数值与 UI，UE5 能做但偏重；更适合 2D/轻量引擎",
+    "artScale": {
+     "level": 2,
+     "note": "商铺与货架模块化，可复用"
+    },
+    "mvp": "一家店 + 3 个品类 + 定价与客流公式，先验证「调价有反馈」",
+    "ue5": {
+     "pick": [
+      "UMG 做经营面板"
+     ],
+     "build": [
+      "经济模型与客流模拟",
+      "存档与扩张解锁"
+     ],
+     "vs": "经营类的成败在数值曲线，不在引擎",
+     "learn": [
+      {
+       "t": "UMG",
+       "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
+      }
+     ]
+    },
+    "timeline": [
+     {
+      "d": "2026-11-25",
+      "x": "上线 $7.19 · 商店页",
+      "cost": "low"
+     },
+     {
+      "d": "2026-11-26",
+      "x": "一天 187 条评测 —— 低价经营品类有稳定基本盘",
+      "cost": "free"
+     }
+    ],
+    "videoEdge": "经营类片子卖「翻身」：从亏损到赚钱的对比，情绪比画面重要",
+    "trailerImpact": 2,
+    "action": "本周写 3 条「亏损 → 调价 → 盈利」的数值曲线，挑一条做成原型核心循环",
+    "pricing": [
+     {
+      "d": "2026-11-25",
+      "price": "$7.19",
+      "off": "0%",
+      "note": "7 美元档"
+     }
+    ],
+    "soloFit": "green",
+    "soloWhy": "数值 + UI 为主，一人可做",
+    "partner": "5568320",
+    "partnerNote": "同为 11 月底上线的低价小品，一个卖「共鸣梗」，一个卖「经营」，都是靠低价换量的路子"
+   },
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
+  }
+ ]
 }
