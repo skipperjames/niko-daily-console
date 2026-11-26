@@ -804,7 +804,7 @@ async function main() {
             indieTagId: INDIE_TAG_ID,
             metric: 'ccu+hotRank'
         },
-        hotText: hotTop.list.slice(0, 100),   // 文字版热销榜（不做卡片，纯榜单，含大厂）
+        hotText: hotTop.list.filter(x => !/^Steam\s*(Frame|Machine|Deck|Link|Controller)/i.test(x.name || '')).slice(0, 100),   // 文字版热销榜（含大厂；剔掉 Steam 自家硬件条目）
         games: picked
     };
 
