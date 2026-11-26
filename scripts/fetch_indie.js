@@ -69,7 +69,10 @@ async function fetchRaw(url, headers = {}, timeoutMs = 15000, retries = 3) {
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), timeoutMs);
         try {
-            const res = await fetch(url, { headers: { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8', ...headers }, signal: ctrl.signal });
+            const hdrs = { 'User-Agent': UA, 'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8', ...headers };
+            // 2026-11-26：store.steampowered.com 全站对无 Cookie 请求回年龄门 HTML，统一带上会话 Cookie
+            if (!hdrs.Cookie && /store\.steampowered\.com/.test(String(url))) hdrs.Cookie = STEAM_COOKIE;
+            const res = await fetch(url, { headers: hdrs, signal: ctrl.signal });
             clearTimeout(timer);
             if (res.ok) return await res.text();
             lastErr = new Error('HTTP ' + res.status);
@@ -214,27 +217,58 @@ async function collectCandidates() {
 const DIAG = { shown: 0 };
 function diag(msg) { if (DIAG.shown >= 6) return; DIAG.shown++; console.log('  🔎 诊断: ' + msg); }
 
+// 2026-11-26：Steam 对「不带会话 Cookie」的 appreviews 请求直接回年龄门 HTML（不是 JSON），
+// 导致 551 个候选全灭。带上 birthtime / mature_content 过年龄门；仍失败则回退 SteamSpy。
+const STEAM_COOKIE = 'birthtime=283993201; lastagecheckage=1-0-1990; wants_mature_content=1; mature_content=1; Steam_Language=schinese';
+function scoreFromPct(p) {
+    if (p == null) return '';
+    if (p >= 95) return '好评如潮';
+    if (p >= 80) return '特别好评';
+    if (p >= 70) return '好评';
+    if (p >= 40) return '褒贬不一';
+    return '差评';
+}
+
 async function fetchReviews(appid) {
+    // ① 官方 appreviews（带 Cookie 过年龄门）
     const url = `https://store.steampowered.com/appreviews/${appid}?json=1&num_per_page=0&language=all&purchase_type=all&filter=summary`;
     let d = null;
     try {
-        const t = await fetchRaw(url);
-        try { d = JSON.parse(t); } catch (e) { diag(appid + ' JSON 解析失败：' + String(t).slice(0, 140)); return null; }
+        const t = await fetchRaw(url, { Cookie: STEAM_COOKIE, Accept: 'application/json, text/plain, */*' });
+        if (String(t).trim().charAt(0) === '<') {
+            diag(appid + ' 官方接口返回 HTML（年龄门/风控）：' + String(t).replace(/\s+/g, ' ').slice(0, 120));
+        } else {
+            try { d = JSON.parse(t); } catch (e) { diag(appid + ' JSON 解析失败：' + String(t).slice(0, 120)); }
+        }
     } catch (e) {
-        diag(appid + ' 请求失败：' + (e && e.message));
-        return null;
+        diag(appid + ' 官方接口失败：' + (e && e.message));
     }
     const q = d && d.query_summary;
-    if (!q || !q.total_reviews) { diag(appid + ' 无 query_summary：' + JSON.stringify(d).slice(0, 160)); return null; }
-    const total = q.total_reviews || 0;
-    const pos = q.total_positive || 0;
-    return {
-        total,
-        positive: pos,
-        negative: q.total_negative || 0,
-        score: q.review_score_desc || '',
-        positivePct: total ? Math.round((pos / total) * 100) : null
-    };
+    if (q && (q.total_reviews || (q.total_positive || 0) + (q.total_negative || 0))) {
+        const total = q.total_reviews || (q.total_positive || 0) + (q.total_negative || 0);
+        const pos = q.total_positive || 0;
+        return {
+            total,
+            positive: pos,
+            negative: q.total_negative || 0,
+            score: q.review_score_desc || scoreFromPct(total ? Math.round((pos / total) * 100) : null),
+            positivePct: total ? Math.round((pos / total) * 100) : null,
+            src: 'steam'
+        };
+    }
+    // ② 回退 SteamSpy（同样公开、不需要 key，字段就是 Steam 评论正负票）
+    try {
+        const s = JSON.parse(await fetchRaw('https://steamspy.com/api.php?request=appdetails&appid=' + appid, {}, 20000, 2));
+        const pos = Number(s && s.positive) || 0, neg = Number(s && s.negative) || 0;
+        const total = pos + neg;
+        if (total > 0) {
+            const pct = Math.round((pos / total) * 100);
+            return { total, positive: pos, negative: neg, score: scoreFromPct(pct), positivePct: pct, src: 'steamspy' };
+        }
+    } catch (e) {
+        diag('steamspy ' + appid + ' 失败：' + (e && e.message));
+    }
+    return null;
 }
 
 // ---------- 3. 游戏详情 ----------
