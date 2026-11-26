@@ -5096,8 +5096,10 @@ body.dark-mode .wal-set-row input{background:#14141c}
             color: #1f2937;
             position: relative;
             overflow: visible;            /* 跨天连接桥需要伸出格子 */
-            padding-right: 72px;          /* 2026-11-26：右侧状态圈 20 + 产能胶囊 ~44 + 间隙 */
+            padding-right: 24px;          /* 2026-11-26 S1定稿：默认只留状态圈空间；有产能胶囊才加宽到 72（见下方 [data-cd]）——无标记任务恢复一行正常显示 */
         }
+        /* 公共底座（2026-11-26 用户定稿）：没有 C/D 标记的任务不再被预留 72px 右侧空间 */
+        .event-item[data-cd] { padding-right: 72px; }   /* 状态圈 20 + 产能胶囊 ~40 + 间隙 */
         .event-item:active {
             cursor: grabbing;
             opacity: 0.8;
@@ -5279,7 +5281,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             align-items: center;
             gap: 4px;
             height: 24px;                       /* 与短事件 item 等高（checkbox 撑出的 24px） */
-            padding: 0 72px 0 5px;              /* 与 event-item 完全一致（右侧状态圈 + 产能胶囊） */
+            padding: 0 24px 0 5px;              /* 2026-11-26 S1定稿：与 event-item 同步——默认只留状态圈，有胶囊才加宽（下方 [data-cd]） */
             font-size: 12px;                    /* 与 event-item 同字号 */
             border-radius: 3px;                 /* 与 event-item 一致 */
             white-space: nowrap;
@@ -5288,6 +5290,8 @@ body.dark-mode .wal-set-row input{background:#14141c}
             box-sizing: border-box;
         }
         body.dark-mode .gantt-bar { color: inherit; }   /* 深色下与 chip 同源继承（此前漏配 → 深灰字在暗背景上不可读） */
+        /* 公共底座（2026-11-26）：跨天长条同样「有胶囊才预留 72px」（铁律：与 event-item 两路一起改） */
+        .gantt-bar[data-cd] { padding-right: 72px; }
         .gantt-bar .event-checkbox {
             pointer-events: auto;               /* 覆盖层默认透传，单独启勾选点击 */
             cursor: pointer;
@@ -5379,28 +5383,31 @@ body.dark-mode .wal-set-row input{background:#14141c}
         /* ===== C / D 需求标记（2026-11-26 用户定稿：胶囊 + 带数量）=====
            用户原话：「我核心就是不想让游戏名太长导致我看不到后面是多少 D 之类的」。
            旧版只渲染一个字母 C / D，数量只进 tooltip —— 游戏名一长就永远读不到数量（实测 0/6 可见）。
-           现在徽章写「1C5D」，做成描边胶囊：C 存在时金胶囊，只有 D 时灰胶囊。
+           现在徽章写「1C5D」，S1 实底胶囊：C 金底黑字，只有 D 时灰底白字。
            颜色不新增语义位：胶囊不碰右上角状态圈，也不碰左侧项目色条。 */
+        /* ===== S1 实底高对比胶囊（2026-11-26 用户定稿）=====
+           旧版 9px 半透明金字暗底，D 被读成 0 → 改实色：金底黑字 / 灰底白字，
+           浅色 / 深色主题同一套实色，字号 9→10。 */
         .cd-badge {
             flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
-            height: 15px; padding: 0 5px; border-radius: 8px; white-space: nowrap;
-            font-size: 9px; font-weight: 800; line-height: 1; letter-spacing: 0;
+            height: 16px; padding: 0 6px; border-radius: 8px; white-space: nowrap;
+            font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: 0;
             margin-right: 4px; vertical-align: -1px;
-            background: rgba(251, 191, 36, .16); color: #b45309;
-            box-shadow: inset 0 0 0 1px rgba(180, 83, 9, .62);
+            background: #fbbf24; color: #1c1917;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
         }
         body.dark-mode .cd-badge {
-            background: rgba(251, 191, 36, .16); color: #fbbf24;
-            box-shadow: inset 0 0 0 1px rgba(251, 191, 36, .55);
+            background: #fbbf24; color: #1c1917;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
         }
         /* 只有 D（没有 C）：灰胶囊 */
         .cd-badge.cd-d {
-            background: rgba(107, 114, 128, .14); color: #525b69;
-            box-shadow: inset 0 0 0 1px rgba(107, 114, 128, .5);
+            background: #6b7280; color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
         }
         body.dark-mode .cd-badge.cd-d {
-            background: rgba(140, 150, 170, .16); color: #c3cbd9;
-            box-shadow: inset 0 0 0 1px rgba(140, 150, 170, .45);
+            background: #6b7280; color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
         }
         /* ★ 日历任务条（单日 + 跨天）：胶囊焊死在右端，名字独占左边全部宽度。
            名字允许折两行也不会把胶囊挤走 —— 这是这一版的核心。 */
@@ -5424,7 +5431,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
         .board-card .cd-badge { height: 16px; font-size: 10px; padding: 0 6px; }
         .day-task-item .cd-badge { height: 16px; font-size: 10px; padding: 0 6px; margin-right: 5px; }
         /* 跨天甘特长条（gantt-bar）独立渲染路径 —— 胶囊右端定位已在上方统一处理，这里只调小一档（2026-11-24 铁律） */
-        .gantt-bar .cd-badge { height: 14px; font-size: 8.5px; padding: 0 4px; }
+        .gantt-bar .cd-badge { height: 15px; font-size: 9.5px; padding: 0 5px; }
         /* 标题主体（2026-09-18 用户要求「优先保障需求全名能显示完整」）：
            桌面也折两行——短名字仍占一行（line-clamp 自动），只有长名字才多占一行；
            悬停 item.title 仍给「项目·全名·状态」完整信息 */
@@ -24016,6 +24023,9 @@ if (document.readyState === 'loading') {
                     const bar = document.createElement('div');
                     // 2026-09-09：挂与 chip 同款状态类——勾选框按状态上色（todo 橙框/进行中蓝框/完成绿勾）完全复用 event-item 的规则
                     bar.className = 'gantt-bar status-' + ev.status + (isDone ? ' completed' : '');
+                    // C/D 标记（2026-11-26 铁律：跨天路径与 event-item 同步挂 data-cd → 「有胶囊才预留 72px」两路都生效）
+                    const cdKind = cdAttr(ev);
+                    if (cdKind) bar.dataset.cd = cdKind;
                     bar.style.background = hexToRgba(project.color, 0.22);
                     bar.style.color = getComputedStyle(firstSeg).color;   // 2026-09-09：字色直接取 chip 计算值，任何主题下与任务条逐像素一致
                     bar.style.left = (a.left - gridRect.left) + 'px';
@@ -48146,7 +48156,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261410";
+        window.NIKO_VERSION = "202611261428";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
