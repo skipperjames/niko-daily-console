@@ -302,7 +302,8 @@ async function fetchDetails(appid) {
         discount: price ? price.discount_percent : 0,
         isFree: !!g.is_free,
         url: `https://store.steampowered.com/app/${appid}/`,
-        requiredAge: g.required_age || 0
+        requiredAge: g.required_age || 0,
+        type: g.type || 'game'   // 2026-11-26：hardware / dlc / video 这类条目要能挡掉（Steam Frame 就是硬件页）
     };
 }
 
@@ -595,7 +596,14 @@ async function main() {
     //   ② 团队范围：只保留「1-3 人可做」（自研自发，或开发商 ≤ MAX_TEAM 家）。
     //   顺序：先判体量（信息更硬），再判范围（兜底挡掉「发行商 + 多开发商」的大体量组合）。
     let tooBigTeam = 0, outScope = 0;
+    const NOT_GAME = new Set(['hardware', 'dlc', 'video', 'music', 'advertising', 'mod', 'series', 'episode']);
     const detailedKept = detailed.filter(g => {
+        // 2026-11-26：热销榜里混着硬件页 / DLC / 视频，不是游戏，直接剔
+        if (g.type && NOT_GAME.has(String(g.type).toLowerCase())) {
+            outScope++;
+            console.log(`   ⛔ 非游戏条目: ${g.name}（type=${g.type}）`);
+            return false;
+        }
         // AAA 定价护栏（v2 口径）：进了热销前 50 且售价 ≥$30 → 大制作，不是「1-3 人能打」的参照物
         if (Number(g.priceUsd) >= 30 && g.hotRank && g.hotRank <= 50 && !isSoloDev(g)) {
             tooBigTeam++;
