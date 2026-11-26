@@ -5096,7 +5096,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             color: #1f2937;
             position: relative;
             overflow: visible;            /* 跨天连接桥需要伸出格子 */
-            padding-right: 32px;          /* 留出右上角状态图标+操作按钮空间 */
+            padding-right: 72px;          /* 2026-11-26：右侧状态圈 20 + 产能胶囊 ~44 + 间隙 */
         }
         .event-item:active {
             cursor: grabbing;
@@ -5279,7 +5279,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
             align-items: center;
             gap: 4px;
             height: 24px;                       /* 与短事件 item 等高（checkbox 撑出的 24px） */
-            padding: 0 32px 0 5px;              /* 与 event-item 完全一致（右 32 留状态图标位） */
+            padding: 0 72px 0 5px;              /* 与 event-item 完全一致（右侧状态圈 + 产能胶囊） */
             font-size: 12px;                    /* 与 event-item 同字号 */
             border-radius: 3px;                 /* 与 event-item 一致 */
             white-space: nowrap;
@@ -5376,19 +5376,39 @@ body.dark-mode .wal-set-row input{background:#14141c}
         /* 项目旗帜（2026-09-07）：任务条标题前的地区旗 */
         .ev-flag { flex-shrink: 0; font-size: 11px; line-height: 1; }
 
-        /* ===== C / D 需求标记（2026-11-23 定稿 C6）=====
-           C = 金色实心块 + 当天置顶；D = 灰字母，刻意不缩小、不降透明度（用户点名：缩了看不清字）。
-           颜色不新增语义位：金块只落在标题前，不碰右上角状态圈，也不碰左侧项目色条。 */
+        /* ===== C / D 需求标记（2026-11-26 用户定稿：胶囊 + 带数量）=====
+           用户原话：「我核心就是不想让游戏名太长导致我看不到后面是多少 D 之类的」。
+           旧版只渲染一个字母 C / D，数量只进 tooltip —— 游戏名一长就永远读不到数量（实测 0/6 可见）。
+           现在徽章写「1C5D」，做成描边胶囊：C 存在时金胶囊，只有 D 时灰胶囊。
+           颜色不新增语义位：胶囊不碰右上角状态圈，也不碰左侧项目色条。 */
         .cd-badge {
             flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
-            height: 14px; min-width: 14px; padding: 0 3px; border-radius: 3px;
-            font-size: 9.5px; font-weight: 800; line-height: 1; letter-spacing: .2px;
+            height: 15px; padding: 0 5px; border-radius: 8px; white-space: nowrap;
+            font-size: 9px; font-weight: 800; line-height: 1; letter-spacing: 0;
             margin-right: 4px; vertical-align: -1px;
+            background: rgba(251, 191, 36, .16); color: #b45309;
+            box-shadow: inset 0 0 0 1px rgba(180, 83, 9, .62);
         }
-        .cd-badge.cd-c { background: #eab308; color: #1b1b1b; }
-        .cd-badge.cd-d { background: transparent; color: #6b7280; font-size: 11px; font-weight: 700; padding: 0; margin-right: 3px; min-width: 0; }
-        body.dark-mode .cd-badge.cd-c { background: #fbbf24; color: #16161f; }
-        body.dark-mode .cd-badge.cd-d { color: #9aa8bb; }
+        body.dark-mode .cd-badge {
+            background: rgba(251, 191, 36, .16); color: #fbbf24;
+            box-shadow: inset 0 0 0 1px rgba(251, 191, 36, .55);
+        }
+        /* 只有 D（没有 C）：灰胶囊 */
+        .cd-badge.cd-d {
+            background: rgba(107, 114, 128, .14); color: #525b69;
+            box-shadow: inset 0 0 0 1px rgba(107, 114, 128, .5);
+        }
+        body.dark-mode .cd-badge.cd-d {
+            background: rgba(140, 150, 170, .16); color: #c3cbd9;
+            box-shadow: inset 0 0 0 1px rgba(140, 150, 170, .45);
+        }
+        /* ★ 日历任务条（单日 + 跨天）：胶囊焊死在右端，名字独占左边全部宽度。
+           名字允许折两行也不会把胶囊挤走 —— 这是这一版的核心。 */
+        .event-item .cd-badge,
+        .gantt-bar .cd-badge {
+            position: absolute; right: 25px; top: 50%; transform: translateY(-50%);
+            margin: 0; z-index: 2;
+        }
 
         /* C 区 / D 区分隔：C 置顶之后，其余任务整体下沉并画一条淡金细线 */
         .event-item.cd-sep { margin-top: 9px; }
@@ -5400,14 +5420,11 @@ body.dark-mode .wal-set-row input{background:#14141c}
         body.dark-mode .event-item.cd-sep::before {
             background: linear-gradient(90deg, rgba(251,191,36,.50), rgba(255,255,255,.12) 55%, transparent);
         }
-        /* 看板卡 / 今日看板：标记跟着字重放大一档 */
-        .board-card .cd-badge { height: 15px; min-width: 15px; font-size: 10px; }
-        .board-card .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
-        .day-task-item .cd-badge { height: 15px; min-width: 15px; font-size: 10px; margin-right: 5px; }
-        .day-task-item .cd-badge.cd-d { height: auto; min-width: 0; font-size: 12px; }
-        /* 跨天甘特长条（gantt-bar）同款标记 —— 它是独立渲染路径，别只改 event-item（2026-11-24 铁律） */
-        .gantt-bar .cd-badge { height: 14px; min-width: 14px; font-size: 9.5px; }
-        .gantt-bar .cd-badge.cd-d { height: auto; min-width: 0; font-size: 11px; padding: 0; margin-right: 3px; }
+        /* 看板卡 / 今日看板：空间够，胶囊跟着字重放大一档（不走右端定位） */
+        .board-card .cd-badge { height: 16px; font-size: 10px; padding: 0 6px; }
+        .day-task-item .cd-badge { height: 16px; font-size: 10px; padding: 0 6px; margin-right: 5px; }
+        /* 跨天甘特长条（gantt-bar）独立渲染路径 —— 胶囊右端定位已在上方统一处理，这里只调小一档（2026-11-24 铁律） */
+        .gantt-bar .cd-badge { height: 14px; font-size: 8.5px; padding: 0 4px; }
         /* 标题主体（2026-09-18 用户要求「优先保障需求全名能显示完整」）：
            桌面也折两行——短名字仍占一行（line-clamp 自动），只有长名字才多占一行；
            悬停 item.title 仍给「项目·全名·状态」完整信息 */
@@ -23854,7 +23871,7 @@ if (document.readyState === 'loading') {
                     item.title = `${projFlag ? projFlag + ' ' : ''}${project.name} · ${ev.title || ''} · ${statusNames[displayStatus] || displayStatus}${ev.status === 'done' && ev.doneDate ? ' · 完成于 ' + ev.doneDate : ''}`;
                     const repeatIcon = isRepeatEvent ? '🔄 ' : '';
                     const timePrefix = (planTimeShow && ev.startTime) ? ev.startTime + ' ' : '';
-                    const safeTitle = escapeHtml(ev.title || '');
+                    const safeTitle = escapeHtml(stripCD(ev.title || ''));
                     // 2026-09-11 用户点名：备注（desc）只在「右边看板」显示，日历视图任务条一律不显示
                     // 曾经这里渲染过 .event-desc（绝对定位压条底），会把任务条压字、撑高 → 已删，勿再加回
                     // ③ 逾期史莱姆：逾期未完成粘一只小史莱姆在标题后（完成后消失）
@@ -24013,7 +24030,7 @@ if (document.readyState === 'loading') {
                     // 文字颜色按项目色亮度自动取深/浅
                     const gFlag = getProjectFlag(project);
                     bar.title = `${gFlag ? gFlag + ' ' : ''}${project.name} · ${ev.title || ''} · ${statusNames[displayStatus] || displayStatus}`;
-                    const safeTitle = escapeHtml(ev.title || '');
+                    const safeTitle = escapeHtml(stripCD(ev.title || ''));
                     const repeatIcon = (ev.repeat || ev.repeatInstance) ? '🔄 ' : '';
                     const statusMarkHtml = `<span class="status-mark ${displayStatus}" title="${isOverdue ? '已延期 · 点击切换状态' : (statusNames[ev.status] || ev.status) + ' · 点击切换状态'}" onclick="cycleEventStatus('${ev.id}', event)">${GANTT_MARK_SVG[displayStatus] || ''}</span>`;
                     // 勾选小方块 + 标题 + 右上角状态图标；点击 ✓ 触发完成；状态图标点击循环切换；其余区域点击穿透到 ghost 占位打开编辑
@@ -24163,7 +24180,7 @@ function renderDayDetail() {
                 item.innerHTML = `${inBatch ? `<div class="batch-check${sel ? ' on' : ''}"></div>` : ''}<div class="task-check ${isDone ? 'checked' : ''}" onclick="toggleComplete('${ev.id}', event)">✓</div>
                     <div class="task-content">
                         <div class="task-row-main">
-                            <div class="task-title${isDone ? ' completed-title' : ''}">${cdBadgeHtml(ev)}${escapeHtml(ev.title)}</div>
+                            <div class="task-title${isDone ? ' completed-title' : ''}">${cdBadgeHtml(ev)}${escapeHtml(stripCD(ev.title))}</div>
                         </div>
                         <div class="task-row-meta">
                             <span class="task-project-pill"><span class="project-dot" style="background:${project.color};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${escapeHtml(project.name)}</span>
@@ -24243,12 +24260,24 @@ function renderDayDetail() {
             var p = parseCD(ev && ev.title);
             return (p && p.c > 0) ? 0 : 1;
         }
-        // C = 金色实心块；D = 灰字母（不缩不降，保证字看得清 —— 2026-11-23 用户点名）
+        // C = 金胶囊；D = 灰胶囊。★ 2026-11-26 用户定稿：徽章必须带数量（1C5D），
+        // 之前只写字母 C / D，数字藏在 tooltip 里，游戏名一长就永远看不到多少 D（实测 0/6 可见）。
+        function cdText(p) {
+            if (!p) return '';
+            return (p.c > 0 ? p.c + 'C' : '') + p.d + 'D';
+        }
+        // 名字里那段产能后缀要剥掉 —— 否则「Screw Project-1C5D」+ 胶囊 1C5D 重复两遍。
+        // 只影响显示，ev.title 原值不动（排期解析、排序、tooltip 全靠它）。
+        function stripCD(title) {
+            var s = String(title || '');
+            var stripped = s.replace(/(?:(?:\d+)\s*C)?\s*(?:\d+)\s*D\s*$/i, '').replace(/[\s\-_·]+$/, '').trim();
+            return stripped || s;
+        }
         function cdBadgeHtml(ev) {
             var p = parseCD(ev && ev.title);
             if (!p) return '';
-            if (p.c > 0) return '<span class="cd-badge cd-c" title="含 ' + p.c + ' 个 C 需求">C</span>';
-            return '<span class="cd-badge cd-d" title="只有 D 需求（' + p.d + ' 个）">D</span>';
+            var t = cdText(p);
+            return '<span class="cd-badge ' + (p.c > 0 ? 'cd-c' : 'cd-d') + '" title="含 ' + p.c + ' 个 C｜' + p.d + ' 个 D">' + t + '</span>';
         }
         function cdAttr(ev) {
             var p = parseCD(ev && ev.title);
@@ -24265,7 +24294,7 @@ function renderDayDetail() {
                         <button onclick="openEventModal('${ev.id}'); event.stopPropagation();" title="编辑">✏️</button>
                         <button onclick="deleteEventById('${ev.id}'); event.stopPropagation();" title="删除">🗑️</button>
                     </div>
-                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${cdBadgeHtml(ev)}${ev.title}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
+                    <div class="card-title"><span class="status-dot" style="background:${isOverdue ? (statusColorMap['overdue']||'#ef4444') : statusColorMap[ev.status]};"></span>${getProjectFlag(project) ? `<span class="ev-flag">${nikoFlagImg(getProjectFlag(project))}</span> ` : ''}${cdBadgeHtml(ev)}${escapeHtml(stripCD(ev.title))}${isDone ? `<span class="stamp-mark stamp-corner" title="完成于 ${ev.doneDate || '更早前'}">✓ ${ev.doneDate || ''}</span>` : ''}</div>
                     ${ev.desc ? `<div class="card-desc">${ev.desc}</div>` : ''}
                     <div class="card-meta">
                         <span class="tag" style="background:${project.color}22;color:${project.color};border-color:${project.color}55;">${project.name}</span>
@@ -48117,7 +48146,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261024";
+        window.NIKO_VERSION = "202611261410";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
