@@ -210,11 +210,22 @@ async function collectCandidates() {
 }
 
 // ---------- 2. 评论数 ----------
+// 诊断：第一轮全灭时，把前几条真实原因打出来（2026-11-26 新增，避免「0 款达标」时无从下手）
+const DIAG = { shown: 0 };
+function diag(msg) { if (DIAG.shown >= 6) return; DIAG.shown++; console.log('  🔎 诊断: ' + msg); }
+
 async function fetchReviews(appid) {
     const url = `https://store.steampowered.com/appreviews/${appid}?json=1&num_per_page=0&language=all&purchase_type=all&filter=summary`;
-    const d = await getJSON(url);
+    let d = null;
+    try {
+        const t = await fetchRaw(url);
+        try { d = JSON.parse(t); } catch (e) { diag(appid + ' JSON 解析失败：' + String(t).slice(0, 140)); return null; }
+    } catch (e) {
+        diag(appid + ' 请求失败：' + (e && e.message));
+        return null;
+    }
     const q = d && d.query_summary;
-    if (!q || !q.total_reviews) return null;
+    if (!q || !q.total_reviews) { diag(appid + ' 无 query_summary：' + JSON.stringify(d).slice(0, 160)); return null; }
     const total = q.total_reviews || 0;
     const pos = q.total_positive || 0;
     return {
