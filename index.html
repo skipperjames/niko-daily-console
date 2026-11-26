@@ -4263,6 +4263,10 @@ body.dark-mode .wal-set-row input{background:#14141c}
         .day-task-item.status-done .task-checkbox {
             background: #10b981;
             border-color: #10b981;
+            /* 2026-11-26 修复（用户截图：棋子通缉完成瞬间折两行）：todo/in-progress 用 2px 简写
+               （盒 18px），done 只改 border-color 保留基础 5px 透明边（盒 24px）→ 勾选框完成瞬间
+               胖 6px，标题被挤 6px 折行。统一 2px，完成前后行宽完全一致 */
+            border-width: 2px;
             position: relative;
         }
         .event-item.status-done .event-checkbox::after,
@@ -48225,7 +48229,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261523";
+        window.NIKO_VERSION = "202611261551";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
