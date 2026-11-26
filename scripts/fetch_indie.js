@@ -50,6 +50,7 @@ const MAX_REVIEWS = 60000;
 //   真正的大小判定挪到详情之后，因为那时才拿得到 developers / publishers，才能做「个人制作豁免」。
 const MAX_REVIEWS_PREFILTER = 250000;
 const TOP_N = 20;             // 最终保留款数（用户要求雷达墙展示 20 款）
+const MAX_R1_CANDIDATES = 220; // 第一轮最多查多少款（SteamSpy 1 req/s，再大 15 分钟跑不完）
 const MIN_BURST = 1.5;        // 爆款指数下限
 const SEARCH_PAGES = 4;       // 全站新作倒序翻页数 6→4（2026-11-26：Steam 收紧限流，850 候选抓评论数跑不进 15 分钟 job 时限，主动收池）
 const INDIE_PAGES = 4;        // ★ 新增：Indie 标签（tag 492）倒序翻页数 —— 直接搜独立游戏，而不是全站新游
@@ -517,6 +518,12 @@ async function main() {
     // 候选池
     let candidates = await collectCandidates();
     console.log(`\n📋 候选池去重后: ${candidates.length} 款`);
+    // 2026-11-26：SteamSpy 约 1 req/s，560 个候选 15 分钟跑不完且大量 429 → 只取「最新」的前 N 款。
+    // collectCandidates 的顺序是「新品榜 → 全站新作倒序 → Indie 标签倒序」，天然按新旧排列，截断等于「只看最近的」。
+    if (candidates.length > MAX_R1_CANDIDATES) {
+        console.log(`✂️ 按新旧顺序只保留前 ${MAX_R1_CANDIDATES} 款（原 ${candidates.length}）`);
+        candidates = candidates.slice(0, MAX_R1_CANDIDATES);
+    }
 
     // 第一轮：抓评论数，过滤出有基本体量的
     console.log('⏳ 第一轮：抓评论数…');
@@ -524,7 +531,7 @@ async function main() {
     const revResults = await pool(candidates, async (appid) => {
         const r = await fetchReviews(appid);
         return r ? { appid, reviews: r } : null;
-    }, 2, 300);   // 2026-11-26：SteamSpy 限速约 1 req/s，降到并发 2 + 300ms 间隔，避免 429 全灭
+    }, 1, 900);   // 2026-11-26：SteamSpy 限速约 1 req/s，串行 + 900ms 间隔，宁可慢也不 429 全灭
     let tooBig = 0, tooSmall = 0;
     revResults.forEach(x => {
         if (!x || !x.reviews) return;
@@ -560,6 +567,13 @@ async function main() {
     let tooBigTeam = 0, outScope = 0;
     const detailedKept = detailed.filter(g => {
         const n = (g.reviews && g.reviews.total) || 0;
+        // 2026-11-26：AAA 定价护栏 —— 评论 ≥3000 且售价 ≥$30 的，不是「1-3 人能打」的参照物
+        //   （《星球大战：银河赛车手》$47.99 / 8419 评论就是这么漏进雷达的）
+        if (n >= 3000 && Number(g.priceUsd) >= 30 && !isSoloDev(g)) {
+            tooBigTeam++;
+            console.log(`   ⛔ 排除 AAA 定价作品: ${g.name}（评论 ${n} · $${g.priceUsd}）`);
+            return false;
+        }
         if (n > MAX_REVIEWS && !isSoloDev(g)) {
             tooBigTeam++;
             console.log(`   ⛔ 排除大体量作品: ${g.name}（评论 ${n} · ${(g.publishers || g.developers || []).join('/') || '—'}）`);
