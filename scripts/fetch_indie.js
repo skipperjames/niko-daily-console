@@ -51,8 +51,8 @@ const MAX_REVIEWS = 60000;
 const MAX_REVIEWS_PREFILTER = 250000;
 const TOP_N = 20;             // 最终保留款数（用户要求雷达墙展示 20 款）
 const MIN_BURST = 1.5;        // 爆款指数下限
-const SEARCH_PAGES = 6;       // 全站新作倒序翻页数 4→6
-const INDIE_PAGES = 6;        // ★ 新增：Indie 标签（tag 492）倒序翻页数 —— 直接搜独立游戏，而不是全站新游
+const SEARCH_PAGES = 4;       // 全站新作倒序翻页数 6→4（2026-11-26：Steam 收紧限流，850 候选抓评论数跑不进 15 分钟 job 时限，主动收池）
+const INDIE_PAGES = 4;        // ★ 新增：Indie 标签（tag 492）倒序翻页数 —— 直接搜独立游戏，而不是全站新游
 const CONCURRENCY = 3;        // 并发数（8→3：扩池后触发 Steam 限流，主动降速）
 const REQ_GAP = 320;          // 单请求之间的主动间隔（ms），标签总数这类串行请求用
 
