@@ -145,6 +145,21 @@ function parseAppIds(html) {
     return ids;
 }
 
+// 2026-11-26：搜索结果连名字一起取（文字版热销榜要用；多抓一次详情太贵）
+function parseResultRows(html) {
+    const out = [];
+    const parts = String(html || '').split('data-ds-appid="');
+    for (let i = 1; i < parts.length; i++) {
+        const seg = parts[i];
+        const id = (seg.match(/^(\d+)/) || [])[1];
+        if (!id) continue;
+        const nm = seg.match(/<span class="title">([\s\S]*?)<\/span>/);
+        const name = nm ? nm[1].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/\s+/g, ' ').trim() : '';
+        out.push({ appid: id, name: name || ('appid ' + id) });
+    }
+    return out;
+}
+
 async function fetchFromFeatured() {
     const d = await getJSON('https://store.steampowered.com/api/featuredcategories?cc=us&l=english');
     const ids = [];
@@ -344,17 +359,22 @@ async function fetchPlayers(appid) {
 // 用搜索结果的 topsellers 排序翻页，appid → 名次（1 起）；拿不到就返回空 Map，不影响主流程。
 async function fetchTopSellersRanks(pages = 3) {
     const map = new Map();
+    const list = [];
     let rank = 0;
     for (let p = 0; p < pages; p++) {
         const url = `https://store.steampowered.com/search/results/?query&start=${p * 100}&count=100&filter=topsellers&infinite=1&cc=us&l=schinese`;
         try {
             const d = await getJSON(url);
-            const ids = parseAppIds(d && d.results_html);
-            ids.forEach(id => { rank++; if (!map.has(String(id))) map.set(String(id), rank); });
+            const rows = parseResultRows(d && d.results_html);
+            rows.forEach(r => {
+                rank++;
+                if (!map.has(String(r.appid))) map.set(String(r.appid), rank);
+                list.push({ rank, appid: String(r.appid), name: r.name });
+            });
         } catch (e) { console.warn(`⚠️ 热销榜第 ${p + 1} 页失败: ${e.message}`); }
         await sleep(400);
     }
-    return map;
+    return { map, list };
 }
 
 // ---------- 5. 销量估算（Boxleiter 评论数反推）----------
@@ -556,8 +576,9 @@ async function main() {
     // 第一轮：抓「当前在线人数」（Steam 官方 GetNumberOfCurrentPlayers：免费、无 key、对新作也准）
     //   2026-11-26 指标 v2：评论数不再作为门槛（新作常年为 0），改用 在线人数 + 热销榜排名
     console.log('⏳ 第一轮：抓在线人数 + 热销排名…');
-    const hotRankMap = await fetchTopSellersRanks(3);
-    console.log(`✅ 热销榜排名: ${hotRankMap.size} 款`);
+    const hotTop = await fetchTopSellersRanks(4);
+    const hotRankMap = hotTop.map;
+    console.log(`✅ 热销榜排名: ${hotRankMap.size} 款（文字榜单取前 100）`);
     const withSignal = [];
     const sigResults = await pool(candidates, async (appid) => {
         const ccu = await fetchPlayers(appid);
@@ -604,10 +625,11 @@ async function main() {
             console.log(`   ⛔ 非游戏条目: ${g.name}（type=${g.type}）`);
             return false;
         }
-        // AAA 定价护栏（v2 口径）：进了热销前 50 且售价 ≥$30 → 大制作，不是「1-3 人能打」的参照物
-        if (Number(g.priceUsd) >= 30 && g.hotRank && g.hotRank <= 50 && !isSoloDev(g)) {
+        // 2026-11-26 老板要求：卡片墙只聚焦「独立 / 小型」，大厂大型游戏没有参考价值（007 这种根本做不了）
+        //   → 定价 ≥ $25 一律不进卡片墙；它们仍然会出现在页面顶部的「文字版热销榜」里
+        if (Number(g.priceUsd) >= 25) {
             tooBigTeam++;
-            console.log(`   ⛔ 排除 AAA 定价作品: ${g.name}（热销 #${g.hotRank} · $${g.priceUsd}）`);
+            console.log(`   ⛔ 大制作不进卡片墙（≥$25）: ${g.name}（$${g.priceUsd}）`);
             return false;
         }
         if (!inTeamScope(g)) {
@@ -775,12 +797,14 @@ async function main() {
             minCcu: MIN_CCU,
             hotRankGate: HOT_RANK_GATE,
             hotRankTracked: hotRankMap.size,
+            hotTextCount: hotTop.list.length,
             maxTeam: MAX_TEAM,
             soloDev: picked.filter(isSoloDev).length,
             selfPublished: picked.filter(g => g.team && g.team.selfPub).length,
             indieTagId: INDIE_TAG_ID,
             metric: 'ccu+hotRank'
         },
+        hotText: hotTop.list.slice(0, 100),   // 文字版热销榜（不做卡片，纯榜单，含大厂）
         games: picked
     };
 
