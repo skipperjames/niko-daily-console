@@ -5392,6 +5392,8 @@ body.dark-mode .wal-set-row input{background:#14141c}
             flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
             height: 16px; padding: 0 6px; border-radius: 8px; white-space: nowrap;
             font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: 0;
+            /* F1 等宽码农体（2026-11-26 用户定稿）：数字逐位对齐互不混淆——6 上钩、5 平顶、2 底横平 */
+            font-family: ui-monospace, 'Cascadia Mono', Consolas, Menlo, monospace;
             margin-right: 4px; vertical-align: -1px;
             background: #fbbf24; color: #1c1917;
             box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
@@ -48156,7 +48158,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261428";
+        window.NIKO_VERSION = "202611261441";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
