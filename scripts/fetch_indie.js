@@ -12,7 +12,7 @@
  * === 数据源（全部 Steam 官方公开接口，无需 API key）===
  *   候选发现  store.steampowered.com/api/featuredcategories   （新作 / 热销榜）
  *             store.steampowered.com/search/results/          （按发行日期倒序翻页）
- *   评论数    store.steampowered.com/appreviews/{appid}       （销量反推的基石）
+ *   [已停用 2026-11-26] 评论数 store.steampowered.com/appreviews —— 现在回年龄门 HTML，且新作评论常年为 0；改看在线上线人数 + 热销排名
  *   详情      store.steampowered.com/api/appdetails           （名称/价格/厂商/分类/描述）
  *   当前在线  api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers
  *   赛道密度  store.steampowered.com/tagdata/populartags/english + 带 tags 的搜索
@@ -50,8 +50,12 @@ const MAX_REVIEWS = 60000;
 //   真正的大小判定挪到详情之后，因为那时才拿得到 developers / publishers，才能做「个人制作豁免」。
 const MAX_REVIEWS_PREFILTER = 250000;
 const TOP_N = 20;             // 最终保留款数（用户要求雷达墙展示 20 款）
-const MAX_R1_CANDIDATES = 220; // 第一轮最多查多少款（SteamSpy 1 req/s，再大 15 分钟跑不完）
-const MIN_BURST = 1.5;        // 爆款指数下限
+const MAX_R1_CANDIDATES = 220; // 第一轮最多查多少款
+// 2026-11-26 指标口径 v2（老板拍板）：不看评论数，改用「当前在线人数 + 热销榜排名」。
+//   原因：新作评论数在公开源上常年为 0（Steam 接口风控 + SteamSpy 未索引），拿评论做门槛等于把新游戏全筛掉。
+const MIN_CCU = 30;           // 在线人数门槛（低于这个数基本是没人玩的）
+const HOT_RANK_GATE = 150;    // 热销榜前 N 名可豁免在线门槛（卖得好但单人玩的人少也算）
+const MIN_BURST = 0.5;        // 指数下限（v2 口径下 30 在线≈0.5 分，门槛必须跟着降，否则第一轮放进来的全被这一步筛掉）
 const SEARCH_PAGES = 4;       // 全站新作倒序翻页数 6→4（2026-11-26：Steam 收紧限流，850 候选抓评论数跑不进 15 分钟 job 时限，主动收池）
 const INDIE_PAGES = 4;        // ★ 新增：Indie 标签（tag 492）倒序翻页数 —— 直接搜独立游戏，而不是全站新游
 const CONCURRENCY = 3;        // 并发数（8→3：扩池后触发 Steam 限流，主动降速）
@@ -335,6 +339,23 @@ async function fetchPlayers(appid) {
     return (d && d.response && d.response.result === 1) ? d.response.player_count : null;
 }
 
+// ---------- 4b. 热销榜排名（2026-11-26 指标 v2 新增）----------
+// 用搜索结果的 topsellers 排序翻页，appid → 名次（1 起）；拿不到就返回空 Map，不影响主流程。
+async function fetchTopSellersRanks(pages = 3) {
+    const map = new Map();
+    let rank = 0;
+    for (let p = 0; p < pages; p++) {
+        const url = `https://store.steampowered.com/search/results/?query&start=${p * 100}&count=100&filter=topsellers&infinite=1&cc=us&l=schinese`;
+        try {
+            const d = await getJSON(url);
+            const ids = parseAppIds(d && d.results_html);
+            ids.forEach(id => { rank++; if (!map.has(String(id))) map.set(String(id), rank); });
+        } catch (e) { console.warn(`⚠️ 热销榜第 ${p + 1} 页失败: ${e.message}`); }
+        await sleep(400);
+    }
+    return map;
+}
+
 // ---------- 5. 销量估算（Boxleiter 评论数反推）----------
 function estimateSales(reviews, priceUsd, isFree) {
     const n = reviews && reviews.total;
@@ -367,12 +388,12 @@ function priceFactor(priceUsd, isFree) {
     return 0.6;
 }
 
-function burstScore(reviews, days, priceUsd, isFree) {
-    const n = reviews && reviews.total;
-    if (!n || !days) return null;
-    const daily = n / days;
-    const fresh = days <= 30 ? 1.3 : 1.0;
-    return +(daily * priceFactor(priceUsd, isFree) * fresh).toFixed(2);
+// 爆款指数 v2（2026-11-26）：在线人数 50 分封顶 + 热销榜排名 40 分，不看评论数
+function burstScore(ccu, hotRank) {
+    const play = Math.min(50, (Number(ccu) || 0) / 60);                    // 3000 在线 = 50 分
+    const hot = hotRank ? Math.max(0, 40 - Number(hotRank) / 5) : 0;        // 热销 #1 = +40，#200 = 0
+    const s = play + hot;
+    return s > 0 ? +s.toFixed(2) : null;
 }
 
 function tierOf(score) {
@@ -508,6 +529,12 @@ function trackLabel(genre) { return TRACK_HINT[genre] || genre || '未归类'; }
 
 // ---------- main ----------
 async function main() {
+    // 2026-11-26 老板拍板：「每周自动抓没必要，我想看的时候让你刷新一下」→ 定时触发直接退出。
+    // 工作流里的 schedule 保留不动（改 yml 需要 workflow 权限），这里在脚本层做闸门；手动 Run / NIKO 触发照常跑。
+    if (process.env.GITHUB_EVENT_NAME === 'schedule' && process.env.NIKO_FORCE_FETCH !== '1') {
+        console.log('⏸ 定时抓取已停用（改为按需手动刷新）。要跑请 workflow_dispatch，或设 NIKO_FORCE_FETCH=1。');
+        process.exit(0);
+    }
     // 读旧文件：保留人工/AI 补的分析，以及官方销量公告
     let old = null;
     try { if (fs.existsSync(OUTPUT)) old = JSON.parse(fs.readFileSync(OUTPUT, 'utf-8')); }
@@ -525,39 +552,42 @@ async function main() {
         candidates = candidates.slice(0, MAX_R1_CANDIDATES);
     }
 
-    // 第一轮：抓评论数，过滤出有基本体量的
-    console.log('⏳ 第一轮：抓评论数…');
-    const withReviews = [];
-    const revResults = await pool(candidates, async (appid) => {
-        const r = await fetchReviews(appid);
-        return r ? { appid, reviews: r } : null;
-    }, 1, 900);   // 2026-11-26：SteamSpy 限速约 1 req/s，串行 + 900ms 间隔，宁可慢也不 429 全灭
-    let tooBig = 0, tooSmall = 0;
-    revResults.forEach(x => {
-        if (!x || !x.reviews) return;
-        const n = x.reviews.total;
-        // 第一轮只做「粗筛」：砍掉明显的大厂巨制，省掉一轮详情请求。
-        // （真正的体量判定挪到第二轮之后 —— 那时才拿得到 developers / publishers，才能做「个人制作豁免」）
-        if (n > MAX_REVIEWS_PREFILTER) { tooBig++; return; }
-        if (n < MIN_REVIEWS) { tooSmall++; return; }
-        withReviews.push(x);
+    // 第一轮：抓「当前在线人数」（Steam 官方 GetNumberOfCurrentPlayers：免费、无 key、对新作也准）
+    //   2026-11-26 指标 v2：评论数不再作为门槛（新作常年为 0），改用 在线人数 + 热销榜排名
+    console.log('⏳ 第一轮：抓在线人数 + 热销排名…');
+    const hotRankMap = await fetchTopSellersRanks(3);
+    console.log(`✅ 热销榜排名: ${hotRankMap.size} 款`);
+    const withSignal = [];
+    const sigResults = await pool(candidates, async (appid) => {
+        const ccu = await fetchPlayers(appid);
+        if (ccu == null) return null;
+        return { appid, ccu, hotRank: hotRankMap.get(String(appid)) || null };
+    }, 4, 120);
+    let tooQuiet = 0, hotRescue = 0;
+    sigResults.forEach(x => {
+        if (!x) return;
+        const isHot = x.hotRank && x.hotRank <= HOT_RANK_GATE;
+        if (x.ccu < MIN_CCU) {
+            if (!isHot) { tooQuiet++; return; }
+            hotRescue++;
+        }
+        withSignal.push(x);
     });
-    console.log(`✅ 评论数 ≥ ${MIN_REVIEWS} 的: ${withReviews.length} 款（粗筛上限 ${MAX_REVIEWS_PREFILTER}）`);
-    console.log(`   ↳ 数据源：SteamSpy 成功 ${R1_STATS.steamspy_ok} / 失败 ${R1_STATS.steamspy_err} · appdetails 成功 ${R1_STATS.appdetails_ok} / HTML ${R1_STATS.appdetails_html} / 失败 ${R1_STATS.appdetails_err} · 两源皆空 ${R1_STATS.none}`);
-    console.log(`   ↳ 剔除：粗筛巨制 ${tooBig} 款（评论 > ${MAX_REVIEWS_PREFILTER}）· 过于冷门 ${tooSmall} 款（< ${MIN_REVIEWS}）`);
+    console.log(`✅ 达标（在线 ≥ ${MIN_CCU} 人或热销前 ${HOT_RANK_GATE}）: ${withSignal.length} 款`);
+    console.log(`   ↳ 剔除：在线过低 ${tooQuiet} 款 · 无在线数据 ${sigResults.filter(x => !x).length} 款 · 靠热销榜捞回 ${hotRescue} 款`);
 
-    if (!withReviews.length) {
+    if (!withSignal.length) {
         console.error('❌ 没有抓到任何达标游戏，保留旧文件不覆盖');
         process.exit(1);
     }
 
     // 第二轮：抓详情（并发）
     console.log('⏳ 第二轮：抓游戏详情…');
-    const detailed = (await pool(withReviews, async (item) => {
+    const detailed = (await pool(withSignal, async (item) => {
         const d = await fetchDetails(item.appid);
         if (!d) return null;
-        return { ...d, reviews: item.reviews };
-    }, 2, 400)).filter(Boolean);   // 2026-09-28：并发 3→2、间隔 150→400ms —— 上一轮 17 款详情挂了 9 款，是限流
+        return { ...d, ccu: item.ccu, hotRank: item.hotRank };
+    }, 2, 400)).filter(Boolean);
     console.log(`✅ 详情抓取成功: ${detailed.length} 款`);
 
     // ★ 2026-09-28 三改（核心）：拿到 developers / publishers 之后再定「体量 + 团队范围」
@@ -566,17 +596,10 @@ async function main() {
     //   顺序：先判体量（信息更硬），再判范围（兜底挡掉「发行商 + 多开发商」的大体量组合）。
     let tooBigTeam = 0, outScope = 0;
     const detailedKept = detailed.filter(g => {
-        const n = (g.reviews && g.reviews.total) || 0;
-        // 2026-11-26：AAA 定价护栏 —— 评论 ≥3000 且售价 ≥$30 的，不是「1-3 人能打」的参照物
-        //   （《星球大战：银河赛车手》$47.99 / 8419 评论就是这么漏进雷达的）
-        if (n >= 3000 && Number(g.priceUsd) >= 30 && !isSoloDev(g)) {
+        // AAA 定价护栏（v2 口径）：进了热销前 50 且售价 ≥$30 → 大制作，不是「1-3 人能打」的参照物
+        if (Number(g.priceUsd) >= 30 && g.hotRank && g.hotRank <= 50 && !isSoloDev(g)) {
             tooBigTeam++;
-            console.log(`   ⛔ 排除 AAA 定价作品: ${g.name}（评论 ${n} · $${g.priceUsd}）`);
-            return false;
-        }
-        if (n > MAX_REVIEWS && !isSoloDev(g)) {
-            tooBigTeam++;
-            console.log(`   ⛔ 排除大体量作品: ${g.name}（评论 ${n} · ${(g.publishers || g.developers || []).join('/') || '—'}）`);
+            console.log(`   ⛔ 排除 AAA 定价作品: ${g.name}（热销 #${g.hotRank} · $${g.priceUsd}）`);
             return false;
         }
         if (!inTeamScope(g)) {
@@ -589,19 +612,20 @@ async function main() {
     console.log(`✅ 体量 + 1-3 人范围过滤后: ${detailedKept.length} 款（剔：大体量 ${tooBigTeam} · 超范围 ${outScope}）`);
     console.log(`   ↳ 其中个人制作（1 家开发商 + 自研自发）${detailedKept.filter(isSoloDev).length} 款 —— 已豁免体量上限`);
 
-    // 计算爆款指数 + 销量估算 + 排序
+    // 计算爆款指数（v2：在线 + 热销排名）+ 排序
     const scoredAll = detailedKept.map(g => {
         const days = daysSince(g.release);
-        const score = burstScore(g.reviews, days, g.priceUsd, g.isFree);
+        const score = burstScore(g.ccu, g.hotRank);
         return {
             ...g,
             days,
             team: teamSignal(g),   // ★ 小团队信号（自研自发 + 开发商数），用于排序优先级
             burst: { score, ...tierOf(score) },
-            sales: estimateSales(g.reviews, g.priceUsd, g.isFree),
+            reviews: null,        // 2026-11-26：评论数口径停用（不再抓、也不再当门槛）
+            sales: null,          // 销量估算依赖评论数 → 同步停用，UI 显示「未知」
             track: { primary: pickTrackGenre(g.genres), label: trackLabel(pickTrackGenre(g.genres)), saturation: null, niche: null },
             tags: [],            // 社区标签（第三轮补），[{ name, total, verdict, idKnown }]
-            playersCurrent: null,
+            playersCurrent: g.ccu,
             analysis: (oldByAppid[g.appid] && oldByAppid[g.appid].analysis) || null
         };
     });
@@ -730,23 +754,24 @@ async function main() {
     }
 
     const next = {
-        version: 1,
+        version: 2,
         fetchedAt: nowCST(),
         date: localDateStr(),
-        source: 'Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 评论数 / 当前在线）',
-        caveat: '销量为 Boxleiter 法评论数反推，属第三方估算，非官方数字；官方销量公告见各游戏 analysis.officialSales',
+        source: 'Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 当前在线 / 热销榜排名）',
+        caveat: '排序口径 v2（2026-11-26）：爆款指数 = 当前在线人数 + 热销榜排名；评论数与销量不再参与（新作评论常年为 0，拿它当门槛会把新游戏全筛掉）',
         stats: {
             candidates: candidates.length,
-            passedReviews: withReviews.length,
+            passedSignal: withSignal.length,
             detailed: detailed.length,
             picked: picked.length,
-            minReviews: MIN_REVIEWS,
-            maxReviews: MAX_REVIEWS,
-            maxReviewsPrefilter: MAX_REVIEWS_PREFILTER,
+            minCcu: MIN_CCU,
+            hotRankGate: HOT_RANK_GATE,
+            hotRankTracked: hotRankMap.size,
             maxTeam: MAX_TEAM,
             soloDev: picked.filter(isSoloDev).length,
             selfPublished: picked.filter(g => g.team && g.team.selfPub).length,
-            indieTagId: INDIE_TAG_ID
+            indieTagId: INDIE_TAG_ID,
+            metric: 'ccu+hotRank'
         },
         games: picked
     };
@@ -756,7 +781,7 @@ async function main() {
     picked.forEach((g, i) => {
         const t = g.team || {};
         const who = t.selfPub ? `自研自发(${t.devCount}家)` : `发行:${(g.publishers || []).join('/') || '—'}`;
-        console.log(`  ${i + 1}. [${g.burst.label}] ${g.name} | 评论 ${g.reviews.total} | ${who} | 开发商 ${(g.developers || []).join('/') || '—'} | 估算 ${g.sales && g.sales.mid ? g.sales.mid.toLocaleString() : '—'} 份 | ${g.release}`);
+        console.log(`  ${i + 1}. [${g.burst.label}] ${g.name} | 在线 ${g.playersCurrent == null ? '—' : g.playersCurrent} | 热销 ${g.hotRank ? '#' + g.hotRank : '—'} | 指数 ${g.burst.score == null ? '—' : g.burst.score} | ${who} | ${g.release}`);
     });
     console.log('📅 日期:', next.date, '| 抓取时间:', next.fetchedAt);
 }
