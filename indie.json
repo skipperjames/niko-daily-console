@@ -16,16 +16,6 @@
    "name": "Apex Legends™"
   },
   {
-   "rank": 3,
-   "appid": "4165890",
-   "name": "Steam Frame"
-  },
-  {
-   "rank": 4,
-   "appid": "4165910",
-   "name": "Steam Machine"
-  },
-  {
    "rank": 5,
    "appid": "216150",
    "name": "MapleStory"
@@ -49,11 +39,6 @@
    "rank": 9,
    "appid": "1174180",
    "name": "Red Dead Redemption 2"
-  },
-  {
-   "rank": 10,
-   "appid": "1675200",
-   "name": "Steam Deck"
   },
   {
    "rank": 11,
@@ -84,11 +69,6 @@
    "rank": 16,
    "appid": "4262460",
    "name": "ROB RUN"
-  },
-  {
-   "rank": 17,
-   "appid": "4165870",
-   "name": "Steam Controller"
   },
   {
    "rank": 18,
@@ -520,7 +500,7 @@
   "selfPublished": 12,
   "indieTagId": 492,
   "metric": "ccu+hotRank",
-  "seedKept": 21,
+  "seedKept": 0,
   "note": "cloud = 本次按需抓取；seed = 历史带分析案例（不因一次抓取缺失而消失）"
  },
  "games": [
@@ -1518,7 +1498,8 @@
     "partner": "1203620",
     "partnerNote": "同标签 1,086 款的细分里，它的价格低一档但好评低 5 个点——差别就在「建造自由度的爽感」"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "2929250",
@@ -1827,7 +1808,8 @@
     "partner": "1203620",
     "partnerNote": "同样是「自研自发 + 开放世界」，它用 1/10 的美术量换来 93% 好评——小体量的干净口碑也是活法"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "5155360",
@@ -2115,7 +2097,8 @@
     "partner": "3816030",
     "partnerNote": "同为「低价 + 联机」，DayZ Badlands 63% 好评说明：题材不够、完成度不够时，低价也救不回来"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "3569420",
@@ -2411,7 +2394,8 @@
     "partner": "4660920",
     "partnerNote": "同为「合作 + 打怪」，DREGS 走恐怖打工路线，它走角斗表演路线——差别在「笑的还是怕的」"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4990940",
@@ -2706,7 +2690,7 @@
     "partner": "4798110",
     "partnerNote": "同为「打工/经营模拟」，Order Picker 71% 好评说明：没有题材共鸣就只是重复劳动"
    },
-   "__src": "seed",
+   "__src": "cloud",
    "firstSeen": "2026-11-26"
   },
   {
@@ -3398,7 +3382,8 @@
     "partner": "3816030",
     "partnerNote": "同为僵尸题材，96% vs 63%：一个把范围缩到「一张图十波」，一个铺到 267 平方公里"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4193300",
@@ -3812,7 +3797,8 @@
     "partner": "4798110",
     "partnerNote": "同为整理/打工，97% vs 71%：一边给「收集欲」，一边只给「重复劳动」"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "5568320",
@@ -4071,7 +4057,7 @@
     "partner": "3098060",
     "partnerNote": "同为「模拟一段人生流程」的低价小品，一个卖共鸣、一个卖经营"
    },
-   "__src": "seed",
+   "__src": "cloud",
    "firstSeen": "2026-11-26"
   },
   {
@@ -4652,7 +4638,8 @@
     "partner": "4516190",
     "partnerNote": "同为「叙事驱动的小体量」，那边 89% 好评 63 条评测，说明叙事品类没口碑就没量"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "5169710",
@@ -5320,7 +5307,8 @@
     "partner": "3569420",
     "partnerNote": "同为「战斗 + 构筑」，一个靠格斗帧精度，一个靠锁链物理；都在 10–18 美元档"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4989110",
@@ -6132,7 +6120,7 @@
     "partner": "5568320",
     "partnerNote": "同为 11 月底上线的低价小品，一个卖「共鸣梗」，一个卖「经营」，都是靠低价换量的路子"
    },
-   "__src": "seed",
+   "__src": "cloud",
    "firstSeen": "2026-11-26"
   },
   {
@@ -6405,7 +6393,8 @@
     "partner": "4870960",
     "partnerNote": "同为叙事驱动，一个靠真人实拍，一个靠氛围地景——都不是玩法驱动，靠「情绪记忆点」"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "5075110",
@@ -6674,7 +6663,8 @@
     "partner": "5363350",
     "partnerNote": "同为免费入场，Mortuus Demo 用「试玩 Demo」换愿望单，它用「无首充」换下载——两条完全不同的免费策略"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4798110",
@@ -6936,7 +6926,8 @@
     "partner": "4995030",
     "partnerNote": "同为「整理/整理癖」赛道，Folded Fables 97% 好评：差别在「有手绘世界与收集欲」，不是「打工」"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4971130",
@@ -7193,7 +7184,8 @@
     "partner": "3977340",
     "partnerNote": "同为「构筑 + 局内成长」，一个卖 $3.49 卖量，一个卖 $17.99 卖深度"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4660920",
@@ -7466,7 +7458,8 @@
     "partner": "3569420",
     "partnerNote": "同为 10 美元档合作小游戏，它靠「解压」卖，链兽靠「翻车」卖——都是把人设成笑点"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4415380",
@@ -7725,7 +7718,8 @@
     "partner": "4798110",
     "partnerNote": "同为打工模拟，88% vs 71%：它多了「内鬼」这一层社交博弈，笑点从动作转到人"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "3816030",
@@ -8013,7 +8007,8 @@
      "lesson": "IP 加成的品类，玩家容忍度反而更低——别用大 IP 卖未完成品"
     }
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4951850",
@@ -8190,7 +8185,8 @@
     "soloFit": "red",
     "soloWhy": "DLC 依附本体"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "4841320",
@@ -8339,7 +8335,8 @@
     "soloFit": "red",
     "soloWhy": "依附本体"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   },
   {
    "appid": "3026770",
@@ -8623,7 +8620,8 @@
     "partner": "5363350",
     "partnerNote": "同为合作恐怖/僵尸，一个卖「射击波次」，一个卖「被猎」——都在 10 美元档抢同一批人"
    },
-   "__src": "seed"
+   "__src": "cloud",
+   "firstSeen": "2026-11-26"
   }
  ]
 }
