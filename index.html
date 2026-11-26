@@ -7381,6 +7381,25 @@ body.dark-mode .wal-set-row input{background:#14141c}
         body.dark-mode .hot-rank-item.read .rank-title { color: #666; }
         body.dark-mode .hot-fav-card.read .hot-fav-title { color: #666; }
 
+
+        /* ===== 2026-11-26 文字版热销榜（含大厂，不做卡片） ===== */
+        .iht { border: 1px solid var(--card-border, #e5e7eb); border-radius: 12px; padding: 10px 12px; }
+        .iht-hd { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+        .iht-hd b { font-size: 13px; }
+        .iht-sub { font-size: 11.5px; opacity: .62; }
+        .iht-lnk { margin-left: auto; font-size: 11.5px; color: #7c3aed; cursor: pointer; user-select: none; }
+        body.dark-mode .iht-lnk { color: #c4b5fd; }
+        .iht-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(228px, 1fr)); gap: 1px 14px; }
+        .iht-row { display: flex; gap: 7px; align-items: baseline; font-size: 12.5px; text-decoration: none; color: inherit; padding: 3px 3px; border-radius: 5px; overflow: hidden; }
+        .iht-row:hover { background: rgba(124, 58, 237, .10); }
+        .iht-row i { font-style: normal; width: 26px; text-align: right; opacity: .5; font-variant-numeric: tabular-nums; flex-shrink: 0; font-size: 11.5px; }
+        .iht-row .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .iht-row .in { font-size: 10px; opacity: .45; flex-shrink: 0; }
+        .iht-row.top3 i { color: #e11d48; font-weight: 700; opacity: 1; }
+        body.dark-mode .iht-row.top3 i { color: #fb7185; }
+        #indieHotText { margin: 10px 0 14px; }
+        #indieHotText:empty { display: none; }
+
         /* ===== AI 行业快报 ===== */
         .ai-head { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; padding:14px 18px; background:linear-gradient(135deg,#eef2ff,#f5f3ff); border:1px solid #e0e7ff; border-radius:12px; }
         body.dark-mode .ai-head { background:linear-gradient(135deg,#1e2a4a,#2a2340); border-color:#334; }
@@ -14761,8 +14780,10 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                 <div id="indieViewMain" class="comp-view active">
                     <div id="indieTools" class="indie-tools"></div>
                     <div id="indiePanels" class="indie-panels"></div>
-                    <div id="indieBoard" class="indie-board"></div>
-                    <div id="indieList" class="indie-waterfall"></div>
+<div id="indieBoard" class="indie-board"></div>
+<!-- 2026-11-26：文字版热销榜（含大厂大型游戏，不做卡片，只看趋势） -->
+<div id="indieHotText"></div>
+<div id="indieList" class="indie-waterfall"></div>
                     <div id="indieEmpty" style="display:none;padding:44px 20px;text-align:center;color:#999;font-size:13px;line-height:1.9;"></div>
                 </div>
 
@@ -28191,12 +28212,36 @@ function renderDayDetail() {
         }
 
         // ---------- 渲染：列表 ----------
+        // ===== 2026-11-26：文字版 Steam 热销榜（含大厂大型游戏；卡片墙只放小体量，这里只放榜）=====
+        let indieHotExpanded = false;
+        function indieHotToggle() { indieHotExpanded = !indieHotExpanded; renderIndieHotText(); }
+        function renderIndieHotText() {
+            var box = document.getElementById('indieHotText');
+            if (!box) return;
+            var list = (indieData && indieData.hotText) || [];
+            if (!list.length) { box.innerHTML = ''; return; }
+            var wall = {};
+            ((indieData && indieData.games) || []).forEach(function (g) { wall[String(g.appid)] = 1; });
+            var show = indieHotExpanded ? list.length : Math.min(25, list.length);
+            var rows = list.slice(0, show).map(function (it) {
+                var inWall = wall[String(it.appid)];
+                return '<a class="iht-row' + (it.rank <= 3 ? ' top3' : '') + '" href="https://store.steampowered.com/app/' + it.appid + '/" target="_blank" rel="noopener">'
+                    + '<i>' + it.rank + '</i><span class="nm">' + escapeHtml(it.name || '') + '</span>'
+                    + (inWall ? '<span class="in">已收录</span>' : '') + '</a>';
+            }).join('');
+            box.innerHTML = '<div class="iht"><div class="iht-hd"><b>📊 Steam 热销榜</b>'
+                + '<span class="iht-sub">文字版 · 含大厂大型游戏（只做趋势参考，不做卡片）</span>'
+                + '<span class="iht-lnk" onclick="indieHotToggle()">' + (indieHotExpanded ? '收起 ▲' : '展开全部 ' + list.length + ' ▾') + '</span></div>'
+                + '<div class="iht-list">' + rows + '</div></div>';
+        }
+
         function renderIndie() {
             var host = document.getElementById('indieList');
             var empty = document.getElementById('indieEmpty');
             if (!host) return;
             renderIndieTools();
             renderIndiePanels();
+            renderIndieHotText();
             var all = (indieData && indieData.games) || [];
             if (!all.length) {
                 host.innerHTML = '';
@@ -48072,7 +48117,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261012";
+        window.NIKO_VERSION = "202611261024";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
