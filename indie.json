@@ -1,20 +1,20 @@
 {
   "version": 2,
-  "fetchedAt": "2026-11-26T10:03:20+08:00",
+  "fetchedAt": "2026-11-26T10:09:23+08:00",
   "date": "2026-11-26",
   "source": "Steam 官方公开接口（商店榜单 / 搜索 / 详情 / 当前在线 / 热销榜排名）",
   "caveat": "排序口径 v2（2026-11-26）：爆款指数 = 当前在线人数 + 热销榜排名；评论数与销量不再参与（新作评论常年为 0，拿它当门槛会把新游戏全筛掉）",
   "stats": {
     "candidates": 220,
-    "passedSignal": 29,
-    "detailed": 29,
-    "picked": 20,
+    "passedSignal": 28,
+    "detailed": 28,
+    "picked": 17,
     "minCcu": 30,
     "hotRankGate": 150,
     "hotRankTracked": 300,
     "maxTeam": 3,
-    "soloDev": 14,
-    "selfPublished": 16,
+    "soloDev": 12,
+    "selfPublished": 13,
     "indieTagId": 492,
     "metric": "ccu+hotRank"
   },
@@ -56,6 +56,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/3768760/",
       "requiredAge": "13",
+      "type": "game",
       "ccu": 3289,
       "hotRank": 15,
       "days": 184,
@@ -342,6 +343,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/5527800/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 10677,
       "hotRank": 22,
       "days": 2,
@@ -438,7 +440,7 @@
         },
         {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -617,6 +619,7 @@
       "isFree": true,
       "url": "https://store.steampowered.com/app/5045040/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 3124,
       "hotRank": null,
       "days": 1,
@@ -722,196 +725,6 @@
       "analysis": null
     },
     {
-      "appid": "4165890",
-      "name": "Steam Frame",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4165890/866449b5fb3696b4c869e954c1e98d1e19df0721/header.jpg?t=1793923703",
-      "desc": "您的游戏，跨越维度 无线、舒适、轻便的 VR 设备，专为您的 Steam 库打造",
-      "releaseText": "2026 年 9 月 14 日",
-      "release": "2026-09-14",
-      "comingSoon": false,
-      "developers": [
-        "Valve"
-      ],
-      "publishers": [
-        "Valve"
-      ],
-      "genres": [],
-      "categories": [],
-      "priceUsd": 1059,
-      "priceInitial": 1059,
-      "discount": 0,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4165890/",
-      "requiredAge": 0,
-      "ccu": 0,
-      "hotRank": 2,
-      "days": 73,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 39.6,
-        "key": "dark",
-        "label": "⚡ 黑马",
-        "rank": 2
-      },
-      "reviews": null,
-      "sales": null,
-      "track": {
-        "primary": null,
-        "label": "未归类",
-        "saturation": null,
-        "niche": null
-      },
-      "tags": [],
-      "playersCurrent": 0,
-      "analysis": null
-    },
-    {
-      "appid": "5210790",
-      "name": "Company of Heroes 3: Operation Torch",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5210790/d46c7d5418e1019c75cbeeaa2ca640e40a569b1c/header.jpg?t=1795630203",
-      "desc": "1942年，北非。初抵地中海战场的美军尚未经受战火洗礼，也未做好战争的准备。带领你的部队踏上这场叙事驱动型战役，攻克独特的战术难题，在一次次挫折与胜利中不断磨砺，最终锻造出一支久经沙场的劲旅。",
-      "releaseText": "2026 年 11 月 25 日",
-      "release": "2026-11-25",
-      "comingSoon": false,
-      "developers": [
-        "Relic Entertainment",
-        "C Prompt Games"
-      ],
-      "publishers": [
-        "Relic Entertainment "
-      ],
-      "genres": [
-        "动作",
-        "策略"
-      ],
-      "categories": [
-        "单人",
-        "DLC",
-        "Steam 成就",
-        "Steam 集换式卡牌",
-        "Steam 创意工坊",
-        "统计数据",
-        "家庭共享"
-      ],
-      "priceUsd": 19.99,
-      "priceInitial": 19.99,
-      "discount": 0,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/5210790/",
-      "requiredAge": "18",
-      "ccu": 0,
-      "hotRank": 84,
-      "days": 1,
-      "team": {
-        "selfPub": true,
-        "devCount": 2,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 23.2,
-        "key": "dark",
-        "label": "⚡ 黑马",
-        "rank": 2
-      },
-      "reviews": null,
-      "sales": null,
-      "track": {
-        "primary": "Action",
-        "label": "动作",
-        "saturation": {
-          "total": 1426,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Action RTS」全站 1,426 款"
-        },
-        "niche": "Action RTS"
-      },
-      "tags": [
-        {
-          "name": "Action RTS",
-          "total": 1426,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "World War II",
-          "total": 1546,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Wargame",
-          "total": 3851,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "RTS",
-          "total": 4596,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Co-op",
-          "total": 18068,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Multiplayer",
-          "total": 29654,
-          "verdict": {
-            "key": "fish",
-            "label": "🐠 一般"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Strategy",
-          "total": 56665,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Singleplayer",
-          "total": 131041,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        }
-      ],
-      "playersCurrent": 0,
-      "analysis": null
-    },
-    {
       "appid": "5057800",
       "name": "When Chests Rain Tons of Loot",
       "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/5057800/b5d39447154225bb636567d630130f43ab161c7c/header.jpg?t=1795645131",
@@ -942,6 +755,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/5057800/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 717,
       "hotRank": 187,
       "days": 1,
@@ -1084,6 +898,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4193300/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 309,
       "hotRank": 293,
       "days": 1,
@@ -1171,7 +986,7 @@
         },
         {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1180,7 +995,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1237,6 +1052,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4933500/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 151,
       "hotRank": null,
       "days": 1,
@@ -1297,7 +1113,7 @@
         },
         {
           "name": "Multiplayer",
-          "total": 29654,
+          "total": 29655,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -1324,7 +1140,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1376,6 +1192,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/3109590/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 136,
       "hotRank": 251,
       "days": 1,
@@ -1397,16 +1214,43 @@
         "primary": "Adventure",
         "label": "冒险",
         "saturation": {
-          "total": 57901,
+          "total": 1786,
           "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
+            "key": "empty",
+            "label": "🐟 空旷"
           },
-          "basis": "细分标签「Simulation」全站 57,901 款"
+          "basis": "细分标签「Shop Keeper」全站 1,786 款"
         },
-        "niche": "Simulation"
+        "niche": "Shop Keeper"
       },
       "tags": [
+        {
+          "name": "Shop Keeper",
+          "total": 1786,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Cats",
+          "total": 4234,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Early Access",
+          "total": 14981,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
         {
           "name": "Cute",
           "total": 34629,
@@ -1417,37 +1261,22 @@
           "idKnown": true
         },
         {
+          "name": "Exploration",
+          "total": 35135,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
           "idKnown": true
-        },
-        {
-          "name": "Early Access",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Exploration",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Shop Keeper",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Cats",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
         },
         {
           "name": "Life Sim",
@@ -1496,7 +1325,8 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/5169710/",
       "requiredAge": 0,
-      "ccu": 88,
+      "type": "game",
+      "ccu": 92,
       "hotRank": null,
       "days": 1,
       "team": {
@@ -1506,7 +1336,7 @@
         "tier": 0
       },
       "burst": {
-        "score": 1.47,
+        "score": 1.53,
         "key": "low",
         "label": "—",
         "rank": 0
@@ -1622,6 +1452,7 @@
       "isFree": true,
       "url": "https://store.steampowered.com/app/5561170/",
       "requiredAge": 0,
+      "type": "demo",
       "ccu": 65,
       "hotRank": null,
       "days": 1,
@@ -1663,8 +1494,17 @@
           "idKnown": true
         },
         {
+          "name": "Exploration",
+          "total": 35135,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1673,7 +1513,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -1688,12 +1528,6 @@
         },
         {
           "name": "Relaxing",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Exploration",
           "total": null,
           "verdict": null,
           "idKnown": false
@@ -1747,6 +1581,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/5423890/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 63,
       "hotRank": null,
       "days": 1,
@@ -1834,6 +1669,140 @@
       "analysis": null
     },
     {
+      "appid": "4989110",
+      "name": "TCG Shop Life",
+      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4989110/b8d89d455707476f307722dbc754f04a278a7778/header.jpg?t=1795618829",
+      "desc": "经营你梦想中的 TCG 卡牌商店！上架商品、拆开卡包、自由装修店铺并招募员工。收集卡牌、构筑强力卡组，甚至还能参加各级赛事，一路向世界冠军发起挑战！",
+      "releaseText": "2026 年 11 月 25 日",
+      "release": "2026-11-25",
+      "comingSoon": false,
+      "developers": [
+        "Fandoor Studio"
+      ],
+      "publishers": [
+        "Fandoor Studio",
+        "True Blue Game Studios"
+      ],
+      "genres": [
+        "休闲",
+        "独立",
+        "模拟"
+      ],
+      "categories": [
+        "单人",
+        "Steam 成就",
+        "完全支持控制器",
+        "自定义音量控制",
+        "#category_playable_at_your_own_pace",
+        "无需应对快速反应事件",
+        "DUALSHOCK 控制器支持",
+        "DualSense 控制器支持",
+        "随时保存",
+        "家庭共享"
+      ],
+      "priceUsd": 6.29,
+      "priceInitial": 6.99,
+      "discount": 10,
+      "isFree": false,
+      "url": "https://store.steampowered.com/app/4989110/",
+      "requiredAge": 0,
+      "type": "game",
+      "ccu": 63,
+      "hotRank": null,
+      "days": 1,
+      "team": {
+        "selfPub": true,
+        "devCount": 1,
+        "solo": false,
+        "tier": 0
+      },
+      "burst": {
+        "score": 1.05,
+        "key": "low",
+        "label": "—",
+        "rank": 0
+      },
+      "reviews": null,
+      "sales": null,
+      "track": {
+        "primary": "Simulation",
+        "label": "模拟经营",
+        "saturation": {
+          "total": 1631,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "basis": "细分标签「Job Simulator」全站 1,631 款"
+        },
+        "niche": "Job Simulator"
+      },
+      "tags": [
+        {
+          "name": "Job Simulator",
+          "total": 1631,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Shop Keeper",
+          "total": 1786,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Trading",
+          "total": 2175,
+          "verdict": {
+            "key": "empty",
+            "label": "🐟 空旷"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Simulation",
+          "total": 57902,
+          "verdict": {
+            "key": "shark",
+            "label": "🦈 红海"
+          },
+          "idKnown": true
+        },
+        {
+          "name": "Collectathon",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Trading Card Game",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Deckbuilding",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        },
+        {
+          "name": "Economy",
+          "total": null,
+          "verdict": null,
+          "idKnown": false
+        }
+      ],
+      "playersCurrent": 63,
+      "analysis": null
+    },
+    {
       "appid": "4941160",
       "name": "A Sector Darkly",
       "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4941160/5385b154cd1bcd1e004aa2c5d30a1658a5efa496/header.jpg?t=1795622489",
@@ -1874,6 +1843,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4941160/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 61,
       "hotRank": null,
       "days": 1,
@@ -1915,6 +1885,15 @@
           "idKnown": true
         },
         {
+          "name": "Exploration",
+          "total": 35135,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
+        },
+        {
           "name": "Open World",
           "total": null,
           "verdict": null,
@@ -1928,12 +1907,6 @@
         },
         {
           "name": "Sci-fi",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Exploration",
           "total": null,
           "verdict": null,
           "idKnown": false
@@ -1958,136 +1931,6 @@
         }
       ],
       "playersCurrent": 61,
-      "analysis": null
-    },
-    {
-      "appid": "4989110",
-      "name": "TCG Shop Life",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4989110/b8d89d455707476f307722dbc754f04a278a7778/header.jpg?t=1795618829",
-      "desc": "经营你梦想中的 TCG 卡牌商店！上架商品、拆开卡包、自由装修店铺并招募员工。收集卡牌、构筑强力卡组，甚至还能参加各级赛事，一路向世界冠军发起挑战！",
-      "releaseText": "2026 年 11 月 25 日",
-      "release": "2026-11-25",
-      "comingSoon": false,
-      "developers": [
-        "Fandoor Studio"
-      ],
-      "publishers": [
-        "Fandoor Studio",
-        "True Blue Game Studios"
-      ],
-      "genres": [
-        "休闲",
-        "独立",
-        "模拟"
-      ],
-      "categories": [
-        "单人",
-        "Steam 成就",
-        "完全支持控制器",
-        "自定义音量控制",
-        "#category_playable_at_your_own_pace",
-        "无需应对快速反应事件",
-        "DUALSHOCK 控制器支持",
-        "DualSense 控制器支持",
-        "随时保存",
-        "家庭共享"
-      ],
-      "priceUsd": 6.29,
-      "priceInitial": 6.99,
-      "discount": 10,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/4989110/",
-      "requiredAge": 0,
-      "ccu": 60,
-      "hotRank": null,
-      "days": 1,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 1,
-        "key": "low",
-        "label": "—",
-        "rank": 0
-      },
-      "reviews": null,
-      "sales": null,
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 1631,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Job Simulator」全站 1,631 款"
-        },
-        "niche": "Job Simulator"
-      },
-      "tags": [
-        {
-          "name": "Job Simulator",
-          "total": 1631,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Trading",
-          "total": 2175,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57901,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Shop Keeper",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Collectathon",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Trading Card Game",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Deckbuilding",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Economy",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        }
-      ],
-      "playersCurrent": 60,
       "analysis": null
     },
     {
@@ -2121,6 +1964,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4823250/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 37,
       "hotRank": null,
       "days": 1,
@@ -2142,19 +1986,19 @@
         "primary": "Simulation",
         "label": "模拟经营",
         "saturation": {
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
           },
-          "basis": "细分标签「Simulation」全站 57,901 款"
+          "basis": "细分标签「Simulation」全站 57,902 款"
         },
         "niche": "Simulation"
       },
       "tags": [
         {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2172,7 +2016,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2220,255 +2064,6 @@
       "analysis": null
     },
     {
-      "appid": "3098060",
-      "name": "商业模拟器",
-      "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3098060/5d760359372cbeef8a44c631cb9809172d301821/header.jpg?t=1795630175",
-      "desc": "在这款游戏中，您将以少量资金为起点，通过决定在哪家商店开设哪种业务以及决定价格，在城市中建立一个商业帝国。商业奥德赛》是一款商业模拟游戏，将考验您的商业头脑和战略规划能力。",
-      "releaseText": "2026 年 11 月 25 日",
-      "release": "2026-11-25",
-      "comingSoon": false,
-      "developers": [
-        "HOGO Games"
-      ],
-      "publishers": [
-        "HOGO Games"
-      ],
-      "genres": [
-        "休闲",
-        "独立",
-        "模拟",
-        "策略"
-      ],
-      "categories": [
-        "单人",
-        "家庭共享"
-      ],
-      "priceUsd": 7.19,
-      "priceInitial": 11.99,
-      "discount": 40,
-      "isFree": false,
-      "url": "https://store.steampowered.com/app/3098060/",
-      "requiredAge": 0,
-      "ccu": 30,
-      "hotRank": null,
-      "days": 1,
-      "team": {
-        "selfPub": true,
-        "devCount": 1,
-        "solo": false,
-        "tier": 0
-      },
-      "burst": {
-        "score": 0.5,
-        "key": "low",
-        "label": "—",
-        "rank": 0
-      },
-      "reviews": null,
-      "sales": null,
-      "track": {
-        "primary": "Simulation",
-        "label": "模拟经营",
-        "saturation": {
-          "total": 1631,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "basis": "细分标签「Job Simulator」全站 1,631 款"
-        },
-        "niche": "Job Simulator"
-      },
-      "tags": [
-        {
-          "name": "Job Simulator",
-          "total": 1631,
-          "verdict": {
-            "key": "empty",
-            "label": "🐟 空旷"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Strategy",
-          "total": 56665,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Simulation",
-          "total": 57901,
-          "verdict": {
-            "key": "shark",
-            "label": "🦈 红海"
-          },
-          "idKnown": true
-        },
-        {
-          "name": "Economy",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Capitalism",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Management",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Time Management",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        },
-        {
-          "name": "Immersive Sim",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
-        }
-      ],
-      "playersCurrent": 29,
-      "analysis": {
-        "src": [
-          "Steam 商店页 https://store.steampowered.com/app/3098060/",
-          "本站抓取：187 条评测 · $7.19 · 标签 Job Simulator / Economy / Management"
-        ],
-        "sells": [
-          {
-            "t": "从一家小店到商业帝国",
-            "d": "商店页写「以少量资金为起点，在城市里建帝国」"
-          },
-          {
-            "t": "定价决策权",
-            "d": "决定卖什么、卖多少钱，是核心玩法"
-          },
-          {
-            "t": "$7.19 的经营小品",
-            "d": "低价试错"
-          }
-        ],
-        "hooks": [
-          {
-            "t": "看着现金流变正",
-            "d": "经营类最原始的爽点"
-          },
-          {
-            "t": "选址与品类搭配",
-            "d": "城市里不同位置的组合策略"
-          }
-        ],
-        "pains": [
-          {
-            "t": "经营游戏上手门槛",
-            "d": "用「小店」起步，一步步加复杂度"
-          },
-          {
-            "t": "同类太多",
-            "d": "用城市级扩张拉开差异"
-          }
-        ],
-        "flow": [
-          {
-            "s": "0–10 分钟",
-            "d": "开第一家店，选品类"
-          },
-          {
-            "s": "10–30 分钟",
-            "d": "第一次亏钱，调价格"
-          },
-          {
-            "s": "30–50 分钟",
-            "d": "开第二家店，开始算协同"
-          },
-          {
-            "s": "50–60 分钟",
-            "d": "现金流稳定，想再扩一座城"
-          }
-        ],
-        "loop": {
-          "core": "选址开店 → 定价 → 看流水 → 扩张",
-          "steps": [
-            "选址",
-            "选品类与定价",
-            "结算",
-            "扩张店铺"
-          ],
-          "mins": 15,
-          "note": "素材剪「从空空店面到排队」的快进，经营类只卖成长曲线"
-        },
-        "f7": {
-          "niche": 2,
-          "hook": 2,
-          "visual": 2,
-          "price": 4,
-          "publisher": 1,
-          "festival": 0,
-          "viral": 2
-        },
-        "ue5Fit": "yellow",
-        "ue5FitWhy": "经营类核心是数值与 UI，UE5 能做但偏重；更适合 2D/轻量引擎",
-        "artScale": {
-          "level": 2,
-          "note": "商铺与货架模块化，可复用"
-        },
-        "mvp": "一家店 + 3 个品类 + 定价与客流公式，先验证「调价有反馈」",
-        "ue5": {
-          "pick": [
-            "UMG 做经营面板"
-          ],
-          "build": [
-            "经济模型与客流模拟",
-            "存档与扩张解锁"
-          ],
-          "vs": "经营类的成败在数值曲线，不在引擎",
-          "learn": [
-            {
-              "t": "UMG",
-              "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine/umg-ui-designer-for-unreal-engine"
-            }
-          ]
-        },
-        "timeline": [
-          {
-            "d": "2026-11-25",
-            "x": "上线 $7.19 · 商店页",
-            "cost": "low"
-          },
-          {
-            "d": "2026-11-26",
-            "x": "一天 187 条评测 —— 低价经营品类有稳定基本盘",
-            "cost": "free"
-          }
-        ],
-        "videoEdge": "经营类片子卖「翻身」：从亏损到赚钱的对比，情绪比画面重要",
-        "trailerImpact": 2,
-        "action": "本周写 3 条「亏损 → 调价 → 盈利」的数值曲线，挑一条做成原型核心循环",
-        "pricing": [
-          {
-            "d": "2026-11-25",
-            "price": "$7.19",
-            "off": "0%",
-            "note": "7 美元档"
-          }
-        ],
-        "soloFit": "green",
-        "soloWhy": "数值 + UI 为主，一人可做",
-        "partner": "5568320",
-        "partnerNote": "同为 11 月底上线的低价小品，一个卖「共鸣梗」，一个卖「经营」，都是靠低价换量的路子"
-      }
-    },
-    {
       "appid": "4019220",
       "name": "针影裁梦",
       "header": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4019220/5e595cd60fb58b5d312be21ba4aa03d4a0131547/header_schinese.jpg?t=1794041965",
@@ -2501,6 +2096,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4019220/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 10936,
       "hotRank": 26,
       "days": 66,
@@ -2543,7 +2139,7 @@
         },
         {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2552,7 +2148,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -2766,6 +2362,7 @@
       "isFree": false,
       "url": "https://store.steampowered.com/app/4009490/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 364,
       "hotRank": 148,
       "days": 1,
@@ -2807,8 +2404,8 @@
           "idKnown": true
         },
         {
-          "name": "Co-op",
-          "total": 18068,
+          "name": "Early Access",
+          "total": 14981,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -2816,10 +2413,13 @@
           "idKnown": true
         },
         {
-          "name": "Early Access",
-          "total": null,
-          "verdict": null,
-          "idKnown": false
+          "name": "Co-op",
+          "total": 18068,
+          "verdict": {
+            "key": "fish",
+            "label": "🐠 一般"
+          },
+          "idKnown": true
         },
         {
           "name": "Driving",
@@ -2890,6 +2490,7 @@
       "isFree": true,
       "url": "https://store.steampowered.com/app/4264980/",
       "requiredAge": 0,
+      "type": "demo",
       "ccu": 390,
       "hotRank": null,
       "days": 1,
@@ -2941,7 +2542,7 @@
         },
         {
           "name": "Multiplayer",
-          "total": 29654,
+          "total": 29655,
           "verdict": {
             "key": "fish",
             "label": "🐠 一般"
@@ -3016,6 +2617,7 @@
       "isFree": true,
       "url": "https://store.steampowered.com/app/3058500/",
       "requiredAge": 0,
+      "type": "game",
       "ccu": 53,
       "hotRank": null,
       "days": 1,
@@ -3067,7 +2669,7 @@
         },
         {
           "name": "Simulation",
-          "total": 57901,
+          "total": 57902,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
@@ -3076,7 +2678,7 @@
         },
         {
           "name": "Casual",
-          "total": 97490,
+          "total": 97491,
           "verdict": {
             "key": "shark",
             "label": "🦈 红海"
