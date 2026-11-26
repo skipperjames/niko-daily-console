@@ -229,45 +229,47 @@ function scoreFromPct(p) {
     return '差评';
 }
 
+// 数据源统计（每轮打印，一眼看出哪条源还活着）
+const R1_STATS = { steamspy_ok: 0, steamspy_err: 0, appdetails_ok: 0, appdetails_html: 0, appdetails_err: 0, none: 0 };
+
 async function fetchReviews(appid) {
-    // ① 官方 appreviews（带 Cookie 过年龄门）
-    const url = `https://store.steampowered.com/appreviews/${appid}?json=1&num_per_page=0&language=all&purchase_type=all&filter=summary`;
-    let d = null;
-    try {
-        const t = await fetchRaw(url, { Cookie: STEAM_COOKIE, Accept: 'application/json, text/plain, */*' });
-        if (String(t).trim().charAt(0) === '<') {
-            diag(appid + ' 官方接口返回 HTML（年龄门/风控）：' + String(t).replace(/\s+/g, ' ').slice(0, 120));
-        } else {
-            try { d = JSON.parse(t); } catch (e) { diag(appid + ' JSON 解析失败：' + String(t).slice(0, 120)); }
-        }
-    } catch (e) {
-        diag(appid + ' 官方接口失败：' + (e && e.message));
-    }
-    const q = d && d.query_summary;
-    if (q && (q.total_reviews || (q.total_positive || 0) + (q.total_negative || 0))) {
-        const total = q.total_reviews || (q.total_positive || 0) + (q.total_negative || 0);
-        const pos = q.total_positive || 0;
-        return {
-            total,
-            positive: pos,
-            negative: q.total_negative || 0,
-            score: q.review_score_desc || scoreFromPct(total ? Math.round((pos / total) * 100) : null),
-            positivePct: total ? Math.round((pos / total) * 100) : null,
-            src: 'steam'
-        };
-    }
-    // ② 回退 SteamSpy（同样公开、不需要 key，字段就是 Steam 评论正负票）
+    // ① SteamSpy：字段直接是 Steam 评论正负票，还带百分比（首选，不需要 key）
     try {
         const s = JSON.parse(await fetchRaw('https://steamspy.com/api.php?request=appdetails&appid=' + appid, {}, 20000, 2));
         const pos = Number(s && s.positive) || 0, neg = Number(s && s.negative) || 0;
         const total = pos + neg;
         if (total > 0) {
+            R1_STATS.steamspy_ok++;
             const pct = Math.round((pos / total) * 100);
             return { total, positive: pos, negative: neg, score: scoreFromPct(pct), positivePct: pct, src: 'steamspy' };
         }
+        R1_STATS.steamspy_err++;
+        diag('steamspy ' + appid + ' 无评论数据：' + JSON.stringify(s).slice(0, 120));
     } catch (e) {
+        R1_STATS.steamspy_err++;
         diag('steamspy ' + appid + ' 失败：' + (e && e.message));
     }
+    // ② 官方 appdetails + filters=recommendations（JSON 接口，只有总数没有百分比）
+    try {
+        const t = await fetchRaw('https://store.steampowered.com/api/appdetails?appids=' + appid + '&cc=us&l=schinese&filters=recommendations', { Accept: 'application/json' }, 20000, 1);
+        if (String(t).trim().charAt(0) === '<') {
+            R1_STATS.appdetails_html++;
+            diag('appdetails ' + appid + ' 返回 HTML（风控）');
+        } else {
+            const j = JSON.parse(t);
+            const node = j && j[appid];
+            const rec = node && node.success && node.data && node.data.recommendations;
+            if (rec && rec.total) {
+                R1_STATS.appdetails_ok++;
+                return { total: rec.total, positive: 0, negative: 0, score: '', positivePct: null, src: 'appdetails' };
+            }
+            R1_STATS.appdetails_err++;
+        }
+    } catch (e) {
+        R1_STATS.appdetails_err++;
+        diag('appdetails ' + appid + ' 失败：' + (e && e.message));
+    }
+    R1_STATS.none++;
     return null;
 }
 
@@ -522,7 +524,7 @@ async function main() {
     const revResults = await pool(candidates, async (appid) => {
         const r = await fetchReviews(appid);
         return r ? { appid, reviews: r } : null;
-    }, 3, 120);
+    }, 2, 300);   // 2026-11-26：SteamSpy 限速约 1 req/s，降到并发 2 + 300ms 间隔，避免 429 全灭
     let tooBig = 0, tooSmall = 0;
     revResults.forEach(x => {
         if (!x || !x.reviews) return;
@@ -534,6 +536,7 @@ async function main() {
         withReviews.push(x);
     });
     console.log(`✅ 评论数 ≥ ${MIN_REVIEWS} 的: ${withReviews.length} 款（粗筛上限 ${MAX_REVIEWS_PREFILTER}）`);
+    console.log(`   ↳ 数据源：SteamSpy 成功 ${R1_STATS.steamspy_ok} / 失败 ${R1_STATS.steamspy_err} · appdetails 成功 ${R1_STATS.appdetails_ok} / HTML ${R1_STATS.appdetails_html} / 失败 ${R1_STATS.appdetails_err} · 两源皆空 ${R1_STATS.none}`);
     console.log(`   ↳ 剔除：粗筛巨制 ${tooBig} 款（评论 > ${MAX_REVIEWS_PREFILTER}）· 过于冷门 ${tooSmall} 款（< ${MIN_REVIEWS}）`);
 
     if (!withReviews.length) {
