@@ -5472,7 +5472,7 @@ body.dark-mode .wal-set-row input{background:#14141c}
         }
 
         .day-detail-panel {
-            width: 320px;
+            width: 280px;                 /* 2026-11-26 用户（1920×1080）：320 太占 → 默认收窄到 280；拖左缘拉手可自定义（niko_plan_detail_w，本机态） */
             background: #fff;
             border-radius: 10px;
             border: 1px solid #e8e6e1;
@@ -5480,8 +5480,21 @@ body.dark-mode .wal-set-row input{background:#14141c}
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;           /* 承载左缘拖宽拉手 */
             transition: background 0.3s ease, border-color 0.3s ease;
         }
+        /* ===== 右栏拖宽拉手（2026-11-26）：贴左缘 6px 竖条，hover 显指示条；双击恢复默认 280 ===== */
+        .detail-resizer {
+            position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+            cursor: col-resize; z-index: 5; user-select: none; -webkit-user-select: none;
+        }
+        .detail-resizer::after {
+            content: ''; position: absolute; left: 2px; top: 50%; transform: translateY(-50%);
+            width: 2px; height: 40px; border-radius: 2px;
+            background: rgba(102, 126, 234, 0); transition: background 0.15s;
+        }
+        .detail-resizer:hover::after { background: rgba(102, 126, 234, .55); }
+        body.dark-mode .detail-resizer:hover::after { background: rgba(142, 168, 255, .55); }
         /* ===== 右侧「当天任务」栏 收起/展开（2026-09-18 用户要求：核心只看日历，右栏可关）=====
            收起后日历多出 320px + 12px 间距 → 格子变宽，长任务名更容易整条放下 */
         .detail-panel-handle {
@@ -14366,6 +14379,7 @@ body.dark-mode .lbak-err { color: #fca5a5; }
                     </div>
                 </div>
                 <div id="dayDetailPanel" class="day-detail-panel">
+                    <div class="detail-resizer" id="detailResizer" title="拖拽调宽 · 双击恢复默认 280"></div>
                     <div class="panel-header">
                         <h3 id="detailDateTitle">选中日期</h3>
                         <div class="panel-stats" id="detailStats"><span>共 <strong>0</strong> 项</span><span>已完成 <strong>0</strong> 项</span></div>
@@ -22462,6 +22476,58 @@ if (document.readyState === 'loading') {
         (function initDayDetailPanelState() {
             function apply() { applyDayDetailPanel(planIsCalendarView()); }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply); else apply();
+        })();
+
+        // ===== 右栏宽度自定义（2026-11-26 用户定稿）：1920×1080 纵向/横向空间都紧，右栏默认 280，
+        //       左缘拉手可拖 220~520px 自由微调，双击恢复默认。宽度是本机显示偏好 → niko_plan_detail_w，
+        //       已列入云同步 EXCLUDE_KEYS（与 niko_notes_sort 同类，绝不跨设备同步）。 =====
+        var DETAIL_W_KEY = 'niko_plan_detail_w', DETAIL_W_DEFAULT = 280, DETAIL_W_MIN = 220, DETAIL_W_MAX = 520;
+        function getDetailW() {
+            try { var v = parseInt(localStorage.getItem(DETAIL_W_KEY) || '', 10); if (v >= DETAIL_W_MIN && v <= DETAIL_W_MAX) return v; } catch (e) {}
+            return DETAIL_W_DEFAULT;
+        }
+        function applyDetailW(w, skipRender) {
+            var panel = document.getElementById('dayDetailPanel');
+            if (panel && w >= DETAIL_W_MIN && w <= DETAIL_W_MAX) panel.style.width = w + 'px';
+            // 宽度变了 → 日历可用宽度变，跨天甘特覆盖层必须重算（与 applyDayDetailPanel 同一坑，见上方注释）。
+            // 拖拽过程 skipRender，松手才重绘一次（整网格重绘不便宜，不能跟着 mousemove 跑）
+            if (!skipRender && typeof renderFourWeekGrid === 'function') requestAnimationFrame(function () { try { renderFourWeekGrid(); } catch (e) {} });
+        }
+        (function initDayDetailResize() {
+            function bind() {
+                var rz = document.getElementById('detailResizer');
+                if (!rz || rz.dataset.rzBound) return;
+                rz.dataset.rzBound = '1';
+                applyDetailW(getDetailW());
+                var dragging = false, startX = 0, startW = 0;
+                var panel = document.getElementById('dayDetailPanel');
+                rz.addEventListener('pointerdown', function (e) {
+                    if (e.button !== 0) return;
+                    dragging = true; startX = e.clientX; startW = panel.getBoundingClientRect().width;
+                    rz.setPointerCapture(e.pointerId);
+                    document.body.style.cursor = 'col-resize';
+                    document.body.style.userSelect = 'none';
+                    e.preventDefault();
+                });
+                rz.addEventListener('pointermove', function (e) {
+                    if (!dragging) return;
+                    applyDetailW(Math.round(Math.max(DETAIL_W_MIN, Math.min(DETAIL_W_MAX, startW + (startX - e.clientX)))), true);
+                });
+                function stop() {
+                    if (!dragging) return;
+                    dragging = false;
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    try { localStorage.setItem(DETAIL_W_KEY, String(Math.round(panel.getBoundingClientRect().width))); } catch (e) {}
+                }
+                rz.addEventListener('pointerup', stop);
+                rz.addEventListener('pointercancel', stop);
+                rz.addEventListener('dblclick', function () {
+                    try { localStorage.removeItem(DETAIL_W_KEY); } catch (e) {}
+                    applyDetailW(DETAIL_W_DEFAULT);
+                });
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind); else bind();
         })();
 
         // ===== 每周起始日（2026-09-06 v2）：日历网格固定周一→周日排列（周末置尾）；统计口径（本周副本/任务量/底片）按 nikoWeekStartDay（当前流程周期 = 周五 → 下周四） =====
@@ -36489,6 +36555,7 @@ function renderDayDetail() {
         'niko_nb_paper',                 // 便签纸样式
         'niko_plan_show_time',           // 计划面板显示时间
         'niko_plan_tools_open',          // 计划页工具抽屉开合
+        'niko_plan_detail_w',            // 计划页右栏宽度（2026-11-26 拖拽自定义，屏幕尺寸因机器而异 → 本机态）
         // 2026-10-12 用户拍板：「这种问题和 bug 以后都不用申请，你自己修好告诉我」——
         // 于是按本清单既有口径（① 本机进行中/当日状态 ② 显示与视图偏好 ③ 种子/迁移标记 ④ 更新时间戳）
         // 把其余漏网的同类 key 一次清干净，杜绝「设置记不住 / 跨设备串扰」这一整类 bug。
@@ -48158,7 +48225,7 @@ if(typeof window !== 'undefined'){
 
         // ===== 新版本检测（合并时自动注入版本号，发现新版右下角小绿点提示，点一下即更新） =====
         // 该版本号由 verify_merge.py 合并时自动替换注入，形如 202608200839（可数值比较）
-        window.NIKO_VERSION = "202611261441";
+        window.NIKO_VERSION = "202611261523";
         // 版本号 → 可读时间（如 202609081941 → 2026-09-08 19:41），用于同步区展示最新版本更新时间
         function nikoFmtBuildVer(v) {
             if (!v || !/^\d{12}$/.test(v)) return v || '—';
